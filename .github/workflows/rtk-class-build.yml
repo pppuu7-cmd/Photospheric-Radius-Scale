@@ -24,6 +24,7 @@ jobs:
           cp rtk/khronon_perturbations.h class_public/include/
           python3 rtk/apply_rtk_class_patch.py class_public
           python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
           cp rtk/rtk_lambda15000.ini class_public/rtk_lambda15000.ini
           cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
@@ -39,6 +40,7 @@ jobs:
           nm class | grep khr_perturb_derivs_newtonian
           grep -q 'lambda_D' include/background.h
           grep -q 'Omega_khronon' source/input.c
+          grep -q 'RT+DBI-Khronon currently supports adiabatic initial conditions only' source/perturbations.c
       - name: Run stock smoke test
         working-directory: class_public
         run: |
