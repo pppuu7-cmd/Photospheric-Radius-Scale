@@ -27,6 +27,7 @@ jobs:
           python3 rtk/upgrade_rtk_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
           cp rtk/rtk_lambda8000.ini class_public/rtk_lambda8000.ini
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
           cp rtk/rtk_lambda12500.ini class_public/rtk_lambda12500.ini
@@ -38,7 +39,7 @@ jobs:
       - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
-      - name: Verify Khronon integration points and positive gamma path
+      - name: Verify Khronon integration points and precision guards
         working-directory: class_public
         run: |
           nm class | grep khr_background
@@ -48,6 +49,7 @@ jobs:
           grep -q 'RT+DBI-Khronon currently supports adiabatic initial conditions only' source/perturbations.c
           grep -q 'delta rho_m,K=delta rho_K-3 delta P_K' source/perturbations.c
           grep -q 'RTK_LOG_GAMMA_ROOT' source/background.c
+          grep -q 'RTK precision guard' source/spectra.c
           ! grep -q 'pba->gnl > 0. ? pba->gnl : 1.e-14' source/background.c
           ! grep -q 'pba->gnl>0.?pba->gnl:1.e-14' source/perturbations.c
       - name: Run stock smoke test
