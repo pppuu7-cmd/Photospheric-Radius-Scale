@@ -55,7 +55,7 @@ jobs:
           grep -q 'RTK precision guard' source/spectra.c
           ! grep -q 'pba->gnl > 0. ? pba->gnl : 1.e-14' source/background.c
           ! grep -q 'pba->gnl>0.?pba->gnl:1.e-14' source/perturbations.c
-          grep -q 'write_background = yes' rtk_baseline.ini
+          grep -q 'write background = yes' rtk_baseline.ini
       - name: Run stock smoke test
         working-directory: class_public
         run: |
