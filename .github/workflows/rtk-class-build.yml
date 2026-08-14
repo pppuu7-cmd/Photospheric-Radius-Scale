@@ -27,11 +27,14 @@ jobs:
           python3 rtk/upgrade_rtk_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
+          cp rtk/rtk_lambda8000.ini class_public/rtk_lambda8000.ini
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
+          cp rtk/rtk_lambda12500.ini class_public/rtk_lambda12500.ini
           cp rtk/rtk_lambda15000.ini class_public/rtk_lambda15000.ini
+          cp rtk/rtk_lambda20000.ini class_public/rtk_lambda20000.ini
           cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
           cp rtk/compare_outputs.py class_public/compare_outputs.py
-          cp rtk/compare_scan.py class_public/compare_scan.py
+          cp rtk/analyze_growth_scan.py class_public/analyze_growth_scan.py
       - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
@@ -52,50 +55,56 @@ jobs:
         run: |
           mkdir -p output
           ./class explanatory.ini > ../class_smoke.log 2>&1
-      - name: Run RT+DBI-Khronon lambda 10000
+      - name: Run RT+DBI-Khronon lambda grid
         working-directory: class_public
+        shell: bash
         run: |
-          ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
-          grep 'RTK_LOG_GAMMA_ROOT' ../rtk_run.log
-      - name: Run RT+DBI-Khronon lambda 15000
-        working-directory: class_public
-        run: |
-          ./class rtk_lambda15000.ini > ../rtk15_run.log 2>&1 || (cat ../rtk15_run.log; exit 1)
-          grep 'RTK_LOG_GAMMA_ROOT' ../rtk15_run.log
+          set -euo pipefail
+          ./class rtk_lambda8000.ini  > ../rtk8_run.log   2>&1 || (cat ../rtk8_run.log; exit 1)
+          ./class rtk_baseline.ini    > ../rtk_run.log    2>&1 || (cat ../rtk_run.log; exit 1)
+          ./class rtk_lambda12500.ini > ../rtk125_run.log 2>&1 || (cat ../rtk125_run.log; exit 1)
+          ./class rtk_lambda15000.ini > ../rtk15_run.log  2>&1 || (cat ../rtk15_run.log; exit 1)
+          ./class rtk_lambda20000.ini > ../rtk20_run.log  2>&1 || (cat ../rtk20_run.log; exit 1)
+          for f in ../rtk8_run.log ../rtk_run.log ../rtk125_run.log ../rtk15_run.log ../rtk20_run.log; do
+            grep 'RTK_LOG_GAMMA_ROOT' "$f"
+          done
       - name: Assert explicit Khronon inputs were consumed
         working-directory: class_public
         run: |
-          for f in output/rtk_unused_parameters output/rtk15_unused_parameters; do
+          for f in output/rtk8_unused_parameters output/rtk_unused_parameters output/rtk125_unused_parameters output/rtk15_unused_parameters output/rtk20_unused_parameters; do
             if test -f "$f"; then ! grep -qE '^(Omega_khronon|lambda_D)' "$f"; fi
           done
       - name: Run matched LCDM control
         working-directory: class_public
         run: ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
-      - name: Compare RTK baseline with LCDM
+      - name: Compare lambda 10000 baseline with LCDM
         working-directory: class_public
         run: |
           python3 compare_outputs.py > ../comparison.txt
           cat ../comparison.txt
-      - name: Compare lambda_D scan
+      - name: Analyze P(k,z) and growth scan
         working-directory: class_public
         run: |
-          python3 compare_scan.py > ../lambda_scan.txt
-          cat ../lambda_scan.txt
+          python3 analyze_growth_scan.py > ../growth_analysis.txt
+          cat ../growth_analysis.txt
       - name: Inventory outputs
         working-directory: class_public
         run: find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
-      - name: Upload logs, spectra and binary
+      - name: Upload logs, spectra and growth tables
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-class-build
+          name: rtk-class-growth-scan
           path: |
             class_public/class
             class_smoke.log
+            rtk8_run.log
             rtk_run.log
+            rtk125_run.log
             rtk15_run.log
+            rtk20_run.log
             lcdm_run.log
             comparison.txt
-            lambda_scan.txt
+            growth_analysis.txt
             rtk_outputs.txt
             class_public/output/
