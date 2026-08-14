@@ -1,0 +1,86 @@
+name: RTK corrected lower scan and covariance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rtk-corrected-covariance.yml'
+
+jobs:
+  corrected:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Fetch RT-CLASS and Pantheon
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+      - name: Patch and stage
+        shell: bash
+        run: |
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          for f in rtk_lambda1000.ini rtk_lambda2000.ini rtk_lambda3000.ini rtk_lambda4000.ini rtk_lambda5000.ini rtk_lambda6000.ini rtk_lambda7000.ini rtk_lambda8000.ini rtk_baseline.ini rtk_lambda12500.ini rtk_lambda15000.ini rtk_lambda20000.ini lcdm_baseline.ini; do cp rtk/$f class_public/$f; done
+          python3 rtk/normalize_primordial_inputs.py class_public
+          python3 rtk/enable_background_output.py class_public
+          cp rtk/analyze_growth_scan.py rtk/coarse_likelihood.py rtk/covariance_likelihood.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          python3 rtk/extend_lower_lambda_scan.py class_public
+          cp rtk/data/pantheon_binned_lcparam_DS17f.txt class_public/
+          grep -q '^A_s = 2.1e-9' class_public/rtk_lambda1000.ini
+          grep -q '^n_s = 0.965' class_public/rtk_lambda1000.ini
+          ! grep -q 'A_s_ad\|n_s_ad' class_public/rtk_lambda1000.ini
+      - name: Build
+        working-directory: class_public
+        run: make -j2 class
+      - name: Run corrected lambda grid
+        working-directory: class_public
+        shell: bash
+        run: |
+          mkdir -p output
+          declare -a jobs=(
+            'rtk_lambda1000.ini ../rtk1_run.log' 'rtk_lambda2000.ini ../rtk2_run.log' 'rtk_lambda3000.ini ../rtk3_run.log'
+            'rtk_lambda4000.ini ../rtk4_run.log' 'rtk_lambda5000.ini ../rtk5_run.log' 'rtk_lambda6000.ini ../rtk6_run.log'
+            'rtk_lambda7000.ini ../rtk7_run.log' 'rtk_lambda8000.ini ../rtk8_run.log' 'rtk_baseline.ini ../rtk_run.log'
+            'rtk_lambda12500.ini ../rtk125_run.log' 'rtk_lambda15000.ini ../rtk15_run.log' 'rtk_lambda20000.ini ../rtk20_run.log'
+          )
+          for item in "${jobs[@]}"; do set -- $item; ./class "$1" > "$2" 2>&1 || (cat "$2"; exit 1); done
+          ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
+          for f in output/rtk1_unused_parameters output/rtk2_unused_parameters output/rtk3_unused_parameters output/lcdm_unused_parameters; do
+            if test -f "$f"; then ! grep -qE '^(A_s|n_s)' "$f"; fi
+          done
+      - name: Corrected growth and covariance
+        working-directory: class_public
+        run: |
+          python3 analyze_growth_scan.py > ../growth_corrected.txt
+          cat ../growth_corrected.txt
+          python3 covariance_likelihood.py > ../covariance_corrected.txt
+          cat ../covariance_corrected.txt
+          grep -q COVARIANCE_LIKELIHOOD_PASS ../covariance_corrected.txt
+      - name: Upload corrected results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-corrected-covariance-results
+          path: |
+            growth_corrected.txt
+            covariance_corrected.txt
+            rtk1_run.log
+            rtk2_run.log
+            rtk3_run.log
+            lcdm_run.log
+            class_public/output/growth_scan.csv
+            class_public/output/lambda_scan_summary.csv
+            class_public/output/pk_ratio_scan.csv
+            class_public/output/covariance_likelihood_summary.csv
+            class_public/output/boss_fullcov_predictions.csv
