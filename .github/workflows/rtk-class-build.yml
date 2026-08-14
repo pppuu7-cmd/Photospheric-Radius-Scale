@@ -34,8 +34,11 @@ jobs:
           cp rtk/rtk_lambda15000.ini class_public/rtk_lambda15000.ini
           cp rtk/rtk_lambda20000.ini class_public/rtk_lambda20000.ini
           cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
+          python3 rtk/enable_background_output.py class_public
           cp rtk/compare_outputs.py class_public/compare_outputs.py
           cp rtk/analyze_growth_scan.py class_public/analyze_growth_scan.py
+          cp rtk/coarse_likelihood.py class_public/coarse_likelihood.py
+          cp rtk/data/pantheon_binned_lcparam_DS17f.txt class_public/pantheon_binned_lcparam_DS17f.txt
       - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
@@ -52,6 +55,7 @@ jobs:
           grep -q 'RTK precision guard' source/spectra.c
           ! grep -q 'pba->gnl > 0. ? pba->gnl : 1.e-14' source/background.c
           ! grep -q 'pba->gnl>0.?pba->gnl:1.e-14' source/perturbations.c
+          grep -q 'write_background = yes' rtk_baseline.ini
       - name: Run stock smoke test
         working-directory: class_public
         run: |
@@ -89,14 +93,20 @@ jobs:
         run: |
           python3 analyze_growth_scan.py > ../growth_analysis.txt
           cat ../growth_analysis.txt
+      - name: Run coarse CMB BAO SN RSD likelihood diagnostic
+        working-directory: class_public
+        run: |
+          python3 coarse_likelihood.py > ../coarse_likelihood.txt
+          cat ../coarse_likelihood.txt
+          grep -q 'COARSE_LIKELIHOOD_PASS' ../coarse_likelihood.txt
       - name: Inventory outputs
         working-directory: class_public
         run: find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
-      - name: Upload logs, spectra and growth tables
+      - name: Upload logs, spectra, growth and coarse likelihood tables
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-class-growth-scan
+          name: rtk-class-coarse-likelihood
           path: |
             class_public/class
             class_smoke.log
@@ -108,5 +118,6 @@ jobs:
             lcdm_run.log
             comparison.txt
             growth_analysis.txt
+            coarse_likelihood.txt
             rtk_outputs.txt
             class_public/output/
