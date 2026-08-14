@@ -47,7 +47,9 @@ jobs:
         run: ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
       - name: Compare RTK with LCDM
         working-directory: class_public
-        run: python3 compare_outputs.py | tee ../comparison.txt
+        run: |
+          python3 compare_outputs.py > ../comparison.txt
+          cat ../comparison.txt
       - name: Inventory outputs
         working-directory: class_public
         run: find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
