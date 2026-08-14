@@ -14,7 +14,7 @@ files = [
 for name in files:
     path = root / name
     text = path.read_text()
-    if 'write_background' not in text:
-        text += '\nwrite_background = yes\n'
+    if 'write background' not in text:
+        text += '\nwrite background = yes\n'
     path.write_text(text)
 print('RTK_BACKGROUND_OUTPUT_ENABLED')
