@@ -56,6 +56,9 @@ jobs:
           ! grep -q 'pba->gnl > 0. ? pba->gnl : 1.e-14' source/background.c
           ! grep -q 'pba->gnl>0.?pba->gnl:1.e-14' source/perturbations.c
           grep -q 'write background = yes' rtk_baseline.ini
+          grep -q 'Z_DRAG_APPROX = 1059.0' coarse_likelihood.py
+          ! grep -q 'import numpy' coarse_likelihood.py
+          ! grep -q 'import pandas' coarse_likelihood.py
       - name: Run stock smoke test
         working-directory: class_public
         run: |
@@ -93,7 +96,7 @@ jobs:
         run: |
           python3 analyze_growth_scan.py > ../growth_analysis.txt
           cat ../growth_analysis.txt
-      - name: Run coarse CMB BAO SN RSD likelihood diagnostic
+      - name: Run dependency-free coarse CMB BAO SN RSD diagnostic
         working-directory: class_public
         run: |
           python3 coarse_likelihood.py > ../coarse_likelihood.txt
