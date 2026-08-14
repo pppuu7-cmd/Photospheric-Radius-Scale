@@ -1,0 +1,80 @@
+name: RTK Stage 4B basin recovery
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4b-basin.yml'
+
+jobs:
+  basin:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        model: [RTK, LCDM]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+
+      - name: Fetch and patch CLASS likelihood tree
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/basin_hessian_runner.py class_public/basin_hessian_runner.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          grep -q 'f"A_s = {p' inference_core.py
+          grep -q 'f"n_s = {p' inference_core.py
+          grep -q 'RTK_CLASS_TIMEOUT' inference_core.py
+
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+
+      - name: Install official Planck evaluator
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' scipy
+
+      - name: Download official Planck 2018 baseline package
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+          test -e planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+
+      - name: Run exact basin recovery
+        working-directory: class_public
+        run: |
+          python3 basin_hessian_runner.py planck_data '${{ matrix.model }}' | tee ../basin_${{ matrix.model }}.log
+          grep -q STAGE4B_PASS ../basin_${{ matrix.model }}.log
+          cat output/basin/$(echo '${{ matrix.model }}' | tr '[:upper:]' '[:lower:]')/basin_summary.json
+
+      - name: Upload basin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4b-basin-${{ matrix.model }}
+          path: |
+            basin_${{ matrix.model }}.log
+            class_public/output/basin/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/basin_summary.json
+            class_public/output/basin/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/basin_points.csv
+            class_public/output/basin/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/proposal.json
+          if-no-files-found: error
