@@ -28,6 +28,9 @@ jobs:
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
           python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/rtk_lambda1000.ini class_public/rtk_lambda1000.ini
+          cp rtk/rtk_lambda2000.ini class_public/rtk_lambda2000.ini
+          cp rtk/rtk_lambda3000.ini class_public/rtk_lambda3000.ini
           cp rtk/rtk_lambda4000.ini class_public/rtk_lambda4000.ini
           cp rtk/rtk_lambda5000.ini class_public/rtk_lambda5000.ini
           cp rtk/rtk_lambda6000.ini class_public/rtk_lambda6000.ini
@@ -60,10 +63,10 @@ jobs:
           grep -q 'RTK precision guard' source/spectra.c
           ! grep -q 'pba->gnl > 0. ? pba->gnl : 1.e-14' source/background.c
           ! grep -q 'pba->gnl>0.?pba->gnl:1.e-14' source/perturbations.c
-          grep -q 'write background = yes' rtk_lambda4000.ini
-          grep -q 'thermodynamics_verbose = 1' rtk_lambda4000.ini
-          grep -q "('RTK', 4000.0, 'rtk4'" coarse_likelihood.py
-          grep -q '(4000,  "rtk4_"' analyze_growth_scan.py
+          grep -q 'write background = yes' rtk_lambda1000.ini
+          grep -q 'thermodynamics_verbose = 1' rtk_lambda1000.ini
+          grep -q "('RTK', 1000.0, 'rtk1'" coarse_likelihood.py
+          grep -q '(1000,  "rtk1_"' analyze_growth_scan.py
           grep -q 'parse_drag_horizon' coarse_likelihood.py
           ! grep -q 'import numpy' coarse_likelihood.py
           ! grep -q 'import pandas' coarse_likelihood.py
@@ -77,6 +80,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          ./class rtk_lambda1000.ini  > ../rtk1_run.log   2>&1 || (cat ../rtk1_run.log; exit 1)
+          ./class rtk_lambda2000.ini  > ../rtk2_run.log   2>&1 || (cat ../rtk2_run.log; exit 1)
+          ./class rtk_lambda3000.ini  > ../rtk3_run.log   2>&1 || (cat ../rtk3_run.log; exit 1)
           ./class rtk_lambda4000.ini  > ../rtk4_run.log   2>&1 || (cat ../rtk4_run.log; exit 1)
           ./class rtk_lambda5000.ini  > ../rtk5_run.log   2>&1 || (cat ../rtk5_run.log; exit 1)
           ./class rtk_lambda6000.ini  > ../rtk6_run.log   2>&1 || (cat ../rtk6_run.log; exit 1)
@@ -86,7 +92,7 @@ jobs:
           ./class rtk_lambda12500.ini > ../rtk125_run.log 2>&1 || (cat ../rtk125_run.log; exit 1)
           ./class rtk_lambda15000.ini > ../rtk15_run.log  2>&1 || (cat ../rtk15_run.log; exit 1)
           ./class rtk_lambda20000.ini > ../rtk20_run.log  2>&1 || (cat ../rtk20_run.log; exit 1)
-          for f in ../rtk4_run.log ../rtk5_run.log ../rtk6_run.log ../rtk7_run.log ../rtk8_run.log ../rtk_run.log ../rtk125_run.log ../rtk15_run.log ../rtk20_run.log; do
+          for f in ../rtk1_run.log ../rtk2_run.log ../rtk3_run.log ../rtk4_run.log ../rtk5_run.log ../rtk6_run.log ../rtk7_run.log ../rtk8_run.log ../rtk_run.log ../rtk125_run.log ../rtk15_run.log ../rtk20_run.log; do
             grep 'RTK_LOG_GAMMA_ROOT' "$f"
             grep 'baryon drag stops at z' "$f"
             grep 'with comoving sound horizon rs' "$f"
@@ -94,7 +100,7 @@ jobs:
       - name: Assert explicit Khronon inputs were consumed
         working-directory: class_public
         run: |
-          for f in output/rtk4_unused_parameters output/rtk5_unused_parameters output/rtk6_unused_parameters output/rtk7_unused_parameters output/rtk8_unused_parameters output/rtk_unused_parameters output/rtk125_unused_parameters output/rtk15_unused_parameters output/rtk20_unused_parameters; do
+          for f in output/rtk1_unused_parameters output/rtk2_unused_parameters output/rtk3_unused_parameters output/rtk4_unused_parameters output/rtk5_unused_parameters output/rtk6_unused_parameters output/rtk7_unused_parameters output/rtk8_unused_parameters output/rtk_unused_parameters output/rtk125_unused_parameters output/rtk15_unused_parameters output/rtk20_unused_parameters; do
             if test -f "$f"; then ! grep -qE '^(Omega_khronon|lambda_D)' "$f"; fi
           done
       - name: Run matched LCDM control
@@ -130,6 +136,9 @@ jobs:
           path: |
             class_public/class
             class_smoke.log
+            rtk1_run.log
+            rtk2_run.log
+            rtk3_run.log
             rtk4_run.log
             rtk5_run.log
             rtk6_run.log
