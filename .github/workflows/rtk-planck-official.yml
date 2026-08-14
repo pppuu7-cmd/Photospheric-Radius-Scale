@@ -65,10 +65,10 @@ jobs:
           ls -lh planck_baseline_R3.00.tar.gz
           mkdir -p planck_data
           tar -xzf planck_baseline_R3.00.tar.gz -C planck_data
-          find planck_data -maxdepth 8 -type d -name '*.clik' | sort | tee ../planck_clik_inventory.txt
-          test -d planck_data/plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik
-          test -d planck_data/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik
-          test -d planck_data/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+          find planck_data -maxdepth 9 -type d -name '*.clik' | sort | tee ../planck_clik_inventory.txt
+          test -d planck_data/baseline/plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik
+          test -d planck_data/baseline/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik
+          test -d planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
       - name: Evaluate official Planck fixed-parameter likelihood
         working-directory: class_public
         env:
