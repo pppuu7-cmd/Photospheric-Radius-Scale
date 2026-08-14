@@ -1,0 +1,51 @@
+name: RTK CLASS build
+
+on:
+  push:
+    branches: [rtk-class-build]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout integration repo
+        uses: actions/checkout@v4
+      - name: Fetch public RT-CLASS nonlocal branch
+        run: git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+      - name: Stage Khronon modules
+        shell: bash
+        run: |
+          cp rtk/khronon_background.c class_public/source/
+          cp rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h class_public/include/
+          cp rtk/khronon_perturbations.h class_public/include/
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('class_public/Makefile')
+          s=p.read_text()
+          old='SOURCE = input.o background.o thermodynamics.o perturbations.o primordial.o nonlinear.o transfer.o spectra.o lensing.o'
+          new=old+' khronon_background.o khronon_perturbations.o'
+          if old not in s:
+              raise SystemExit('SOURCE line not found')
+          p.write_text(s.replace(old,new,1))
+          PY
+      - name: Build CLASS with Khronon objects
+        working-directory: class_public
+        run: make -j2 class
+      - name: Verify objects linked
+        working-directory: class_public
+        run: |
+          test -f build/khronon_background.o
+          test -f build/khronon_perturbations.o
+          nm class | grep -E 'khr_(background|perturb_derivs_newtonian)' || true
+      - name: Smoke-run stock RT-CLASS parser
+        working-directory: class_public
+        run: ./class explanatory.ini > ../class_smoke.log 2>&1 || (cat ../class_smoke.log; exit 1)
+      - name: Upload logs and binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-class-build
+          path: |
+            class_public/class
+            class_smoke.log
