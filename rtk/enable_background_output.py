@@ -4,6 +4,9 @@ import sys
 
 root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path('.')
 files = [
+    'rtk_lambda1000.ini',
+    'rtk_lambda2000.ini',
+    'rtk_lambda3000.ini',
     'rtk_lambda4000.ini',
     'rtk_lambda5000.ini',
     'rtk_lambda6000.ini',
