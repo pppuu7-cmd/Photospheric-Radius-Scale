@@ -54,7 +54,7 @@ jobs:
             tail -1 "$f"
           done
       - name: Install pure-Python Planck likelihood implementation
-        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15'
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' scipy
       - name: Download official Planck 2018 baseline likelihood data
         working-directory: class_public
         shell: bash
