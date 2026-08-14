@@ -23,17 +23,20 @@ jobs:
           cp rtk/khronon_background.h class_public/include/
           cp rtk/khronon_perturbations.h class_public/include/
           python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
           cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
           cp rtk/compare_outputs.py class_public/compare_outputs.py
       - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
-      - name: Verify Khronon symbols
+      - name: Verify Khronon symbols and explicit inputs
         working-directory: class_public
         run: |
           nm class | grep khr_background
           nm class | grep khr_perturb_derivs_newtonian
+          grep -q 'lambda_D' include/background.h
+          grep -q 'Omega_khronon' source/input.c
       - name: Run stock smoke test
         working-directory: class_public
         run: |
@@ -42,6 +45,12 @@ jobs:
       - name: Run RT+DBI-Khronon baseline
         working-directory: class_public
         run: ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
+      - name: Assert explicit Khronon inputs were consumed
+        working-directory: class_public
+        run: |
+          if test -f output/rtk_unused_parameters; then
+            ! grep -qE '^(Omega_khronon|lambda_D)' output/rtk_unused_parameters
+          fi
       - name: Run matched LCDM control
         working-directory: class_public
         run: ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
