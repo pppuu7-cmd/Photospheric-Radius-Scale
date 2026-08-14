@@ -1,0 +1,93 @@
+name: RTK Stage 4A nested pilot
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-nested-pilot.yml'
+
+jobs:
+  nested:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        model: [RTK, LCDM]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_RSD_MAPPING: eff
+      RTK_NLIVE: '24'
+      RTK_MAXCALL: '260'
+      RTK_DLOGZ: '5.0'
+      RTK_SEED: '20260815'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+
+      - name: Fetch and patch CLASS likelihood tree
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/nested_sampler_runner.py class_public/nested_sampler_runner.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('joint_profile_runner.py').read_text()
+          # Correct legacy primordial input names before extracting the tested
+          # likelihood core, and remove the deterministic coordinate-search tail.
+          s=s.replace('A_s_ad','A_s').replace('n_s_ad','n_s')
+          marker='\nRTK0='
+          if marker not in s:
+              raise SystemExit('joint-profile split marker not found')
+          Path('inference_core.py').write_text(s.split(marker,1)[0]+'\n')
+          PY
+          grep -q 'f"A_s = {p' inference_core.py
+          grep -q 'f"n_s = {p' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+
+      - name: Install official-likelihood evaluator and sampler
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' scipy 'dynesty==3.1.0'
+
+      - name: Download official Planck 2018 baseline package
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+          test -f planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+
+      - name: Run bounded nested-sampling pilot
+        working-directory: class_public
+        run: |
+          python3 nested_sampler_runner.py planck_data '${{ matrix.model }}' eff | tee ../nested_${{ matrix.model }}.log
+          grep -q NESTED_PILOT_PASS ../nested_${{ matrix.model }}.log
+          cat output/nested/$(echo '${{ matrix.model }}' | tr '[:upper:]' '[:lower:]')/summary.json
+
+      - name: Upload nested pilot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4a-nested-${{ matrix.model }}
+          path: |
+            nested_${{ matrix.model }}.log
+            class_public/output/nested/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/summary.json
+            class_public/output/nested/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/samples.csv
+            class_public/output/nested/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/likelihood_history.csv
+          if-no-files-found: error
