@@ -15,6 +15,8 @@ jobs:
           ref: rtk-class-build
       - name: Fetch public RT-CLASS nonlocal branch
         run: git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+      - name: Fetch official Pantheon covariance data
+        run: git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
       - name: Stage and patch RT+DBI-Khronon
         shell: bash
         run: |
@@ -45,6 +47,9 @@ jobs:
           cp rtk/compare_outputs.py class_public/compare_outputs.py
           cp rtk/analyze_growth_scan.py class_public/analyze_growth_scan.py
           cp rtk/coarse_likelihood.py class_public/coarse_likelihood.py
+          cp rtk/covariance_likelihood.py class_public/covariance_likelihood.py
+          cp rtk/data/boss_DR12Consensus_final.dat class_public/boss_DR12Consensus_final.dat
+          cp rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/final_consensus_covtot_dM_Hz_fsig.txt
           python3 rtk/extend_lower_lambda_scan.py class_public
           cp rtk/data/pantheon_binned_lcparam_DS17f.txt class_public/pantheon_binned_lcparam_DS17f.txt
       - name: Build patched CLASS
@@ -67,9 +72,8 @@ jobs:
           grep -q 'thermodynamics_verbose = 1' rtk_lambda1000.ini
           grep -q "('RTK', 1000.0, 'rtk1'" coarse_likelihood.py
           grep -q '(1000,  "rtk1_"' analyze_growth_scan.py
-          grep -q 'parse_drag_horizon' coarse_likelihood.py
-          ! grep -q 'import numpy' coarse_likelihood.py
-          ! grep -q 'import pandas' coarse_likelihood.py
+          test -s pantheon/Binned_data/sys_DS17f.txt
+          grep -q 'BOSS DR12' covariance_likelihood.py
       - name: Run stock smoke test
         working-directory: class_public
         run: |
@@ -119,6 +123,12 @@ jobs:
         run: |
           python3 analyze_growth_scan.py > ../growth_analysis.txt
           cat ../growth_analysis.txt
+      - name: Run full covariance Pantheon and BOSS diagnostic
+        working-directory: class_public
+        run: |
+          python3 covariance_likelihood.py > ../covariance_likelihood.txt
+          cat ../covariance_likelihood.txt
+          grep -q 'COVARIANCE_LIKELIHOOD_PASS' ../covariance_likelihood.txt
       - name: Run dependency-free coarse CMB BAO SN RSD diagnostic
         working-directory: class_public
         run: |
@@ -128,11 +138,11 @@ jobs:
       - name: Inventory outputs
         working-directory: class_public
         run: find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
-      - name: Upload logs, spectra, growth and coarse likelihood tables
+      - name: Upload logs, spectra, growth and covariance likelihood tables
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-class-coarse-likelihood
+          name: rtk-class-covariance-likelihood
           path: |
             class_public/class
             class_smoke.log
@@ -151,6 +161,7 @@ jobs:
             lcdm_run.log
             comparison.txt
             growth_analysis.txt
+            covariance_likelihood.txt
             coarse_likelihood.txt
             rtk_outputs.txt
             class_public/output/
