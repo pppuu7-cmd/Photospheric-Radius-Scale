@@ -25,8 +25,10 @@ jobs:
           python3 rtk/apply_rtk_class_patch.py class_public
           python3 rtk/upgrade_rtk_inputs.py class_public
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
+          cp rtk/rtk_lambda15000.ini class_public/rtk_lambda15000.ini
           cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
           cp rtk/compare_outputs.py class_public/compare_outputs.py
+          cp rtk/compare_scan.py class_public/compare_scan.py
       - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
@@ -42,23 +44,31 @@ jobs:
         run: |
           mkdir -p output
           ./class explanatory.ini > ../class_smoke.log 2>&1
-      - name: Run RT+DBI-Khronon baseline
+      - name: Run RT+DBI-Khronon lambda 10000
         working-directory: class_public
         run: ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
+      - name: Run RT+DBI-Khronon lambda 15000
+        working-directory: class_public
+        run: ./class rtk_lambda15000.ini > ../rtk15_run.log 2>&1 || (cat ../rtk15_run.log; exit 1)
       - name: Assert explicit Khronon inputs were consumed
         working-directory: class_public
         run: |
-          if test -f output/rtk_unused_parameters; then
-            ! grep -qE '^(Omega_khronon|lambda_D)' output/rtk_unused_parameters
-          fi
+          for f in output/rtk_unused_parameters output/rtk15_unused_parameters; do
+            if test -f "$f"; then ! grep -qE '^(Omega_khronon|lambda_D)' "$f"; fi
+          done
       - name: Run matched LCDM control
         working-directory: class_public
         run: ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
-      - name: Compare RTK with LCDM
+      - name: Compare RTK baseline with LCDM
         working-directory: class_public
         run: |
           python3 compare_outputs.py > ../comparison.txt
           cat ../comparison.txt
+      - name: Compare lambda_D scan
+        working-directory: class_public
+        run: |
+          python3 compare_scan.py > ../lambda_scan.txt
+          cat ../lambda_scan.txt
       - name: Inventory outputs
         working-directory: class_public
         run: find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
@@ -71,7 +81,9 @@ jobs:
             class_public/class
             class_smoke.log
             rtk_run.log
+            rtk15_run.log
             lcdm_run.log
             comparison.txt
+            lambda_scan.txt
             rtk_outputs.txt
             class_public/output/
