@@ -1,0 +1,96 @@
+name: RTK official Planck 2018 likelihood
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rtk-planck-official.yml'
+
+jobs:
+  planck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout RTK integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Fetch public RT-CLASS nonlocal branch
+        run: git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+      - name: Patch RT+DBI-Khronon and prepare Planck inputs
+        shell: bash
+        run: |
+          cp rtk/khronon_background.c class_public/source/
+          cp rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h class_public/include/
+          cp rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/lcdm_baseline.ini class_public/
+          cp rtk/rtk_lambda1000.ini class_public/
+          cp rtk/rtk_lambda2000.ini class_public/
+          cp rtk/rtk_lambda3000.ini class_public/
+          python3 rtk/prepare_planck_inputs.py class_public
+          cp rtk/planck_official_eval.py class_public/
+      - name: Build patched CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Run lensed CMB spectra to ell 2600
+        working-directory: class_public
+        shell: bash
+        run: |
+          mkdir -p output
+          ./class planck_lcdm.ini > ../planck_lcdm.log 2>&1 || (cat ../planck_lcdm.log; exit 1)
+          ./class planck_rtk1.ini > ../planck_rtk1.log 2>&1 || (cat ../planck_rtk1.log; exit 1)
+          ./class planck_rtk2.ini > ../planck_rtk2.log 2>&1 || (cat ../planck_rtk2.log; exit 1)
+          ./class planck_rtk3.ini > ../planck_rtk3.log 2>&1 || (cat ../planck_rtk3.log; exit 1)
+          for f in output/planck_lcdm_cl_lensed.dat output/planck_rtk1_cl_lensed.dat output/planck_rtk2_cl_lensed.dat output/planck_rtk3_cl_lensed.dat; do
+            test -s "$f"
+            tail -1 "$f"
+          done
+      - name: Install pure-Python Planck likelihood implementation
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15'
+      - name: Download official Planck 2018 baseline likelihood data
+        working-directory: class_public
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          curl -L --fail --retry 3 --retry-delay 5 -o planck_baseline_R3.00.tar.gz "$URL"
+          ls -lh planck_baseline_R3.00.tar.gz
+          mkdir -p planck_data
+          tar -xzf planck_baseline_R3.00.tar.gz -C planck_data
+          find planck_data -maxdepth 8 -type d -name '*.clik' | sort | tee ../planck_clik_inventory.txt
+          test -d planck_data/plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik
+          test -d planck_data/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik
+          test -d planck_data/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+      - name: Evaluate official Planck fixed-parameter likelihood
+        working-directory: class_public
+        env:
+          CLIPY_NOJAX: '1'
+        run: |
+          python3 planck_official_eval.py planck_data > ../planck_official_fixed.txt
+          cat ../planck_official_fixed.txt
+          grep -q 'PLANCK_OFFICIAL_FIXED_PASS' ../planck_official_fixed.txt
+      - name: Upload Planck results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-planck-official-results
+          path: |
+            planck_lcdm.log
+            planck_rtk1.log
+            planck_rtk2.log
+            planck_rtk3.log
+            planck_clik_inventory.txt
+            planck_official_fixed.txt
+            class_public/output/planck_official_fixed_summary.csv
+            class_public/output/planck_lcdm_cl_lensed.dat
+            class_public/output/planck_rtk1_cl_lensed.dat
+            class_public/output/planck_rtk2_cl_lensed.dat
+            class_public/output/planck_rtk3_cl_lensed.dat
