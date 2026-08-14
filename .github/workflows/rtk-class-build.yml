@@ -56,7 +56,8 @@ jobs:
           ! grep -q 'pba->gnl > 0. ? pba->gnl : 1.e-14' source/background.c
           ! grep -q 'pba->gnl>0.?pba->gnl:1.e-14' source/perturbations.c
           grep -q 'write background = yes' rtk_baseline.ini
-          grep -q 'Z_DRAG_APPROX = 1059.0' coarse_likelihood.py
+          grep -q 'thermodynamics_verbose = 1' rtk_baseline.ini
+          grep -q 'parse_drag_horizon' coarse_likelihood.py
           ! grep -q 'import numpy' coarse_likelihood.py
           ! grep -q 'import pandas' coarse_likelihood.py
       - name: Run stock smoke test
@@ -76,6 +77,8 @@ jobs:
           ./class rtk_lambda20000.ini > ../rtk20_run.log  2>&1 || (cat ../rtk20_run.log; exit 1)
           for f in ../rtk8_run.log ../rtk_run.log ../rtk125_run.log ../rtk15_run.log ../rtk20_run.log; do
             grep 'RTK_LOG_GAMMA_ROOT' "$f"
+            grep 'baryon drag stops at z' "$f"
+            grep 'with comoving sound horizon rs' "$f"
           done
       - name: Assert explicit Khronon inputs were consumed
         working-directory: class_public
@@ -85,7 +88,10 @@ jobs:
           done
       - name: Run matched LCDM control
         working-directory: class_public
-        run: ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
+        run: |
+          ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
+          grep 'baryon drag stops at z' ../lcdm_run.log
+          grep 'with comoving sound horizon rs' ../lcdm_run.log
       - name: Compare lambda 10000 baseline with LCDM
         working-directory: class_public
         run: |
