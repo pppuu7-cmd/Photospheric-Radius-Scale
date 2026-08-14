@@ -1,0 +1,77 @@
+name: RTK joint Planck Pantheon BOSS profile
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rtk-joint-profile.yml'
+
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout RTK integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Fetch RT-CLASS and Pantheon
+        shell: bash
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+      - name: Patch RT+DBI-Khronon
+        shell: bash
+        run: |
+          cp rtk/khronon_background.c class_public/source/
+          cp rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h class_public/include/
+          cp rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat class_public/
+          cp rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+      - name: Build patched CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install Planck evaluator dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' scipy
+      - name: Download official Planck 2018 baseline likelihood data
+        working-directory: class_public
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          curl -L --fail --retry 3 --retry-delay 5 -o planck_baseline_R3.00.tar.gz "$URL"
+          mkdir -p planck_data
+          tar -xzf planck_baseline_R3.00.tar.gz -C planck_data
+          test -d planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+          test -d planck_data/baseline/plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik
+          test -d planck_data/baseline/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik
+      - name: Run joint coordinate profile
+        working-directory: class_public
+        env:
+          CLIPY_NOJAX: '1'
+          OMP_NUM_THREADS: '2'
+        run: |
+          mkdir -p output/profile
+          python3 joint_profile_runner.py planck_data > ../joint_profile.txt
+          tail -100 ../joint_profile.txt
+          grep -q 'JOINT_PROFILE_PASS' ../joint_profile.txt
+      - name: Upload joint-profile results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-joint-profile-results
+          path: |
+            joint_profile.txt
+            class_public/output/profile/joint_profile_history.csv
+            class_public/output/profile/joint_profile_best.csv
+            class_public/profile_*.log
+            class_public/profile_*.ini
