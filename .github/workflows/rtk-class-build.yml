@@ -26,6 +26,7 @@ jobs:
           python3 rtk/upgrade_rtk_inputs.py class_public
           python3 rtk/upgrade_rtk_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
           cp rtk/rtk_lambda15000.ini class_public/rtk_lambda15000.ini
           cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
@@ -43,6 +44,7 @@ jobs:
           grep -q 'Omega_khronon' source/input.c
           grep -q 'RT+DBI-Khronon currently supports adiabatic initial conditions only' source/perturbations.c
           grep -q 'delta rho_m,K=delta rho_K-3 delta P_K' source/perturbations.c
+          grep -q 'RTK_LOG_GAMMA_ROOT' source/background.c
       - name: Run stock smoke test
         working-directory: class_public
         run: |
@@ -50,10 +52,14 @@ jobs:
           ./class explanatory.ini > ../class_smoke.log 2>&1
       - name: Run RT+DBI-Khronon lambda 10000
         working-directory: class_public
-        run: ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
+        run: |
+          ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
+          grep 'RTK_LOG_GAMMA_ROOT' ../rtk_run.log
       - name: Run RT+DBI-Khronon lambda 15000
         working-directory: class_public
-        run: ./class rtk_lambda15000.ini > ../rtk15_run.log 2>&1 || (cat ../rtk15_run.log; exit 1)
+        run: |
+          ./class rtk_lambda15000.ini > ../rtk15_run.log 2>&1 || (cat ../rtk15_run.log; exit 1)
+          grep 'RTK_LOG_GAMMA_ROOT' ../rtk15_run.log
       - name: Assert explicit Khronon inputs were consumed
         working-directory: class_public
         run: |
