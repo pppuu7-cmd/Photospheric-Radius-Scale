@@ -1,0 +1,73 @@
+name: RTK corrected official Planck 2018
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rtk-planck-corrected.yml'
+
+jobs:
+  planck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Fetch and patch RT-CLASS
+        shell: bash
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/lcdm_baseline.ini rtk/rtk_lambda1000.ini rtk/rtk_lambda2000.ini rtk/rtk_lambda3000.ini class_public/
+          python3 rtk/normalize_primordial_inputs.py class_public
+          python3 rtk/prepare_planck_inputs.py class_public
+          python3 rtk/normalize_primordial_inputs.py class_public
+          cp rtk/planck_official_eval.py class_public/
+          grep -q '^A_s = 2.1e-9' class_public/planck_rtk1.ini
+          grep -q '^n_s = 0.965' class_public/planck_rtk1.ini
+          ! grep -q 'A_s_ad\|n_s_ad' class_public/planck_rtk1.ini
+      - name: Build and run spectra
+        working-directory: class_public
+        shell: bash
+        run: |
+          make -j2 class
+          mkdir -p output
+          for m in lcdm rtk1 rtk2 rtk3; do ./class planck_${m}.ini > ../planck_${m}.log 2>&1 || (cat ../planck_${m}.log; exit 1); done
+      - name: Install evaluator
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' scipy
+      - name: Download Planck baseline and evaluate
+        working-directory: class_public
+        shell: bash
+        env:
+          CLIPY_NOJAX: '1'
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+          python3 planck_official_eval.py planck_data > ../planck_corrected.txt
+          cat ../planck_corrected.txt
+          grep -q PLANCK_OFFICIAL_FIXED_PASS ../planck_corrected.txt
+      - name: Upload corrected Planck result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-planck-corrected-results
+          path: |
+            planck_corrected.txt
+            planck_lcdm.log
+            planck_rtk1.log
+            planck_rtk2.log
+            planck_rtk3.log
+            class_public/output/planck_official_fixed_summary.csv
+            class_public/output/planck_lcdm_cl_lensed.dat
+            class_public/output/planck_rtk1_cl_lensed.dat
+            class_public/output/planck_rtk2_cl_lensed.dat
+            class_public/output/planck_rtk3_cl_lensed.dat
