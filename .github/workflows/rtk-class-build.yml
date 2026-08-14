@@ -24,6 +24,8 @@ jobs:
           cp rtk/khronon_perturbations.h class_public/include/
           python3 rtk/apply_rtk_class_patch.py class_public
           cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
+          cp rtk/lcdm_baseline.ini class_public/lcdm_baseline.ini
+          cp rtk/compare_outputs.py class_public/compare_outputs.py
       - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
@@ -39,11 +41,16 @@ jobs:
           ./class explanatory.ini > ../class_smoke.log 2>&1
       - name: Run RT+DBI-Khronon baseline
         working-directory: class_public
-        run: |
-          mkdir -p output
-          ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
-          test -f output/rtk_cl.dat || test -f output/rtk_cl_lensed.dat || true
-          find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
+        run: ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
+      - name: Run matched LCDM control
+        working-directory: class_public
+        run: ./class lcdm_baseline.ini > ../lcdm_run.log 2>&1 || (cat ../lcdm_run.log; exit 1)
+      - name: Compare RTK with LCDM
+        working-directory: class_public
+        run: python3 compare_outputs.py | tee ../comparison.txt
+      - name: Inventory outputs
+        working-directory: class_public
+        run: find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
       - name: Upload logs, spectra and binary
         if: always()
         uses: actions/upload-artifact@v4
@@ -53,5 +60,7 @@ jobs:
             class_public/class
             class_smoke.log
             rtk_run.log
+            lcdm_run.log
+            comparison.txt
             rtk_outputs.txt
             class_public/output/
