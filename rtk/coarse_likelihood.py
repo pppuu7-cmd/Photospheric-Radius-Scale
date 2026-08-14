@@ -17,30 +17,28 @@ Data used:
   * CMB TT shape-consistency proxy versus the matched LCDM run. This is NOT a
     Planck likelihood; it only measures displacement from the matched control.
 
-The old CLASS 2.4.5 background table contains the comoving sound horizon r_s(z)
-as its eighth column.  BAO needs r_d=r_s(z_d), not r_s(z=0).  For this coarse
-pass we evaluate r_s at z_d=1059, which is appropriate for this matched early
-cosmology; a later official-likelihood pass should read the exact CLASS drag
-redshift and full covariance matrices.
+For BAO the exact CLASS baryon-drag redshift z_d and comoving sound horizon r_d
+are parsed from each model's own thermodynamics log. Full BOSS covariance and
+official Planck/Pantheon likelihoods remain for the next-stage implementation.
 """
 
 from pathlib import Path
 from bisect import bisect_left
 import csv
 import math
+import re
 
 OUT = Path('output')
 C_KM_S = 299792.458
 R_FID = 147.78
-Z_DRAG_APPROX = 1059.0
 
 MODELS = [
-    ('LCDM', None, 'lcdm'),
-    ('RTK', 8000.0, 'rtk8'),
-    ('RTK', 10000.0, 'rtk'),
-    ('RTK', 12500.0, 'rtk125'),
-    ('RTK', 15000.0, 'rtk15'),
-    ('RTK', 20000.0, 'rtk20'),
+    ('LCDM', None, 'lcdm', Path('../lcdm_run.log')),
+    ('RTK', 8000.0, 'rtk8', Path('../rtk8_run.log')),
+    ('RTK', 10000.0, 'rtk', Path('../rtk_run.log')),
+    ('RTK', 12500.0, 'rtk125', Path('../rtk125_run.log')),
+    ('RTK', 15000.0, 'rtk15', Path('../rtk15_run.log')),
+    ('RTK', 20000.0, 'rtk20', Path('../rtk20_run.log')),
 ]
 
 BAO = [
@@ -91,6 +89,24 @@ def interp_rows(rows, col, z):
     return y0 + t*(y1-y0)
 
 
+def parse_drag_horizon(log_path):
+    z_d = None
+    r_d = None
+    z_re = re.compile(r'baryon drag stops at z\s*=\s*([0-9eE+\-.]+)')
+    r_re = re.compile(r'with comoving sound horizon rs\s*=\s*([0-9eE+\-.]+)\s*Mpc')
+    with open(log_path) as f:
+        for line in f:
+            mz = z_re.search(line)
+            if mz:
+                z_d = float(mz.group(1))
+            mr = r_re.search(line)
+            if mr and z_d is not None:
+                r_d = float(mr.group(1))
+    if z_d is None or r_d is None:
+        raise RuntimeError(f'Could not parse exact CLASS z_d/r_d from {log_path}')
+    return z_d, r_d
+
+
 def sn_chi2(bg):
     dat = load_numeric('pantheon_binned_lcparam_DS17f.txt', 6)
     ys, ws, residual_inputs = [], [], []
@@ -109,22 +125,22 @@ def sn_chi2(bg):
     return chi2, offset, max_abs
 
 
-def bao_chi2(bg):
-    rd = interp_rows(bg, 7, Z_DRAG_APPROX)
+def bao_chi2(bg, z_d, r_d):
     chi2 = 0.0
     pred_rows = []
     for z, dm_obs, dm_err, h_obs, h_err in BAO:
         dm = interp_rows(bg, 4, z)
         h_km = interp_rows(bg, 3, z)*C_KM_S
-        pred_dm = dm*R_FID/rd
-        pred_h = h_km*rd/R_FID
+        pred_dm = dm*R_FID/r_d
+        pred_h = h_km*r_d/R_FID
         term = ((pred_dm-dm_obs)/dm_err)**2 + ((pred_h-h_obs)/h_err)**2
         chi2 += term
         pred_rows.append({
             'z': z,
             'DM_rfid_over_rd_pred': pred_dm,
             'H_rd_over_rfid_pred': pred_h,
-            'rd_mpc_approx': rd,
+            'z_drag_CLASS': z_d,
+            'rd_mpc_CLASS': r_d,
         })
     return chi2, pred_rows
 
@@ -202,14 +218,14 @@ summary = []
 bao_rows = []
 rsd_rows = []
 
-for model, lam, prefix in MODELS:
+for model, lam, prefix, log_path in MODELS:
     bg = load_background(prefix)
+    z_d, r_d = parse_drag_horizon(log_path)
     c2_sn, sn_offset, max_sn_res = sn_chi2(bg)
-    c2_bao, bp = bao_chi2(bg)
+    c2_bao, bp = bao_chi2(bg, z_d, r_d)
     c2_rsd_eff, pred_eff = rsd_chi2(growth, model, lam, 'fs8_eff')
     c2_rsd_k01, pred_k01 = rsd_chi2(growth, model, lam, 'fs8_k0p1')
     c2_cmb, cmb_max, cmb_rms = cmb_shape_proxy(prefix)
-    rd = bp[0]['rd_mpc_approx']
 
     row = {
         'model': model,
@@ -222,7 +238,8 @@ for model, lam, prefix in MODELS:
         'chi2_data_eff': c2_sn+c2_bao+c2_rsd_eff,
         'chi2_data_k0p1': c2_sn+c2_bao+c2_rsd_k01,
         'score_eff_plus_cmb_proxy': c2_sn+c2_bao+c2_rsd_eff+c2_cmb,
-        'rd_mpc_approx_z1059': rd,
+        'z_drag_CLASS': z_d,
+        'rd_mpc_CLASS': r_d,
         'sn_nuisance_offset': sn_offset,
         'sn_max_abs_residual_mag': max_sn_res,
         'cmb_max_abs_frac_shift': cmb_max,
@@ -257,12 +274,13 @@ write_csv(OUT/'coarse_rsd_predictions.csv', rsd_rows)
 print('COARSE LIKELIHOOD DIAGNOSTIC')
 print('IMPORTANT: CMB term is a matched-LCDM TT-shape proxy, NOT the official Planck likelihood.')
 print('Pantheon: diagonal binned errors + 0.02 mag floor. BOSS BAO/RSD: diagonal approximations.')
-print('BAO ruler: r_d approximated by CLASS r_s(z=1059); exact z_d/full covariance remain for the official pass.')
-print('model lambda   chi2_SN  chi2_BAO chi2_RSD_eff chi2_RSD_k01 CMB_proxy dchi2_data_eff dscore_with_CMBproxy')
+print('BAO ruler: exact z_d and r_d parsed from each CLASS thermodynamics run.')
+print('model lambda z_drag rd_Mpc chi2_SN chi2_BAO chi2_RSD_eff chi2_RSD_k01 CMB_proxy dchi2_data_eff dscore_with_CMBproxy')
 for r in summary:
     lam = '-' if r['lambda_D']=='' else f"{float(r['lambda_D']):.0f}"
-    print(f"{r['model']:4s} {lam:6s} {r['chi2_sn_diag_floor']:9.4f} {r['chi2_bao_diag']:9.4f} "
-          f"{r['chi2_rsd_eff_diag']:12.4f} {r['chi2_rsd_k0p1_diag']:12.4f} {r['cmb_tt_shape_proxy']:9.3f} "
+    print(f"{r['model']:4s} {lam:6s} {r['z_drag_CLASS']:8.3f} {r['rd_mpc_CLASS']:8.4f} "
+          f"{r['chi2_sn_diag_floor']:8.4f} {r['chi2_bao_diag']:9.4f} {r['chi2_rsd_eff_diag']:12.4f} "
+          f"{r['chi2_rsd_k0p1_diag']:12.4f} {r['cmb_tt_shape_proxy']:9.3f} "
           f"{r['delta_chi2_data_eff']:15.4f} {r['delta_score_eff_plus_cmb_proxy']:20.4f}")
 
 rtk = [r for r in summary if r['model']=='RTK']
