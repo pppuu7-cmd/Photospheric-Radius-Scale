@@ -72,7 +72,7 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data
           tar -xzf planck.tar.gz -C planck_data
-          test -f planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+          test -e planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
 
       - name: Run bounded nested-sampling pilot
         working-directory: class_public
