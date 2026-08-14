@@ -12,6 +12,7 @@ import numpy as np
 import clipy
 
 PLANCK=Path(sys.argv[1]) if len(sys.argv)>1 else Path('planck_data')
+BASE=PLANCK/'baseline'
 OUT=Path('output')
 TCMB=2.7255
 UK2=(TCMB*1.0e6)**2
@@ -22,9 +23,9 @@ MODELS=[
  ('RTK',3000.0,'planck_rtk3_'),
 ]
 FILES={
- 'lowT': PLANCK/'plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik',
- 'lowE': PLANCK/'plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik',
- 'high': PLANCK/'plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik',
+ 'lowT': BASE/'plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik',
+ 'lowE': BASE/'plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik',
+ 'high': BASE/'plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik',
 }
 for name,p in FILES.items():
     if not p.exists(): raise SystemExit(f'MISSING_PLANCK_LIKELIHOOD {name} {p}')
@@ -40,10 +41,10 @@ def load_cls(prefix):
         s=line.strip()
         if not s or s.startswith('#'): continue
         a=s.split(); ell=int(float(a[0]))
-        # CLASS format stores dimensionless D_l=l(l+1)C_l/(2pi).
         dl=[float(x) for x in a[1:5]]
         fac=2.0*math.pi/(ell*(ell+1.0))*UK2
-        vals[ell]=(dl[0]*fac,dl[1]*fac,dl[3]*fac,dl[2]*fac,0.0,0.0) # TT EE BB TE TB EB
+        # CLASS columns are TT, EE, TE, BB; clik ordering is TT, EE, BB, TE, TB, EB.
+        vals[ell]=(dl[0]*fac,dl[1]*fac,dl[3]*fac,dl[2]*fac,0.0,0.0)
     if max(vals)<2508: raise RuntimeError(f'CLASS lmax too small: {max(vals)}')
     return vals
 
@@ -59,7 +60,6 @@ def clik_vector(L,cls):
             arr[ell]=cls[ell][spec]
         v[off:off+lm+1]=arr
         off += lm+1
-    # Preserve all official default nuisance values from the likelihood file.
     return v
 
 rows=[]
