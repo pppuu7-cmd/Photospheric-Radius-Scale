@@ -44,8 +44,11 @@ jobs:
           nm class | grep khr_perturb_derivs_newtonian
       - name: Smoke-run stock CLASS
         working-directory: class_public
-        run: ./class explanatory.ini > ../class_smoke.log 2>&1 || (cat ../class_smoke.log; exit 1)
+        run: |
+          mkdir -p output
+          ./class explanatory.ini > ../class_smoke.log 2>&1
       - name: Upload logs and binary
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rtk-class-build
