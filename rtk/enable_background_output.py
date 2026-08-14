@@ -16,5 +16,8 @@ for name in files:
     text = path.read_text()
     if 'write background' not in text:
         text += '\nwrite background = yes\n'
+    if 'thermodynamics_verbose' not in text:
+        text += 'thermodynamics_verbose = 1\n'
     path.write_text(text)
 print('RTK_BACKGROUND_OUTPUT_ENABLED')
+print('RTK_DRAG_HORIZON_LOGGING_ENABLED')
