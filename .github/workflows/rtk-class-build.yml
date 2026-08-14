@@ -15,39 +15,36 @@ jobs:
           ref: rtk-class-build
       - name: Fetch public RT-CLASS nonlocal branch
         run: git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
-      - name: Stage Khronon modules
+      - name: Stage and patch RT+DBI-Khronon
         shell: bash
         run: |
           cp rtk/khronon_background.c class_public/source/
           cp rtk/khronon_perturbations.c class_public/source/
           cp rtk/khronon_background.h class_public/include/
           cp rtk/khronon_perturbations.h class_public/include/
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('class_public/Makefile')
-          s=p.read_text()
-          old='SOURCE = input.o background.o thermodynamics.o perturbations.o primordial.o nonlinear.o transfer.o spectra.o lensing.o'
-          new=old+' khronon_background.o khronon_perturbations.o'
-          if old not in s:
-              raise SystemExit('SOURCE line not found')
-          p.write_text(s.replace(old,new,1))
-          PY
-      - name: Build CLASS with Khronon objects
+          python3 rtk/apply_rtk_class_patch.py class_public
+          cp rtk/rtk_baseline.ini class_public/rtk_baseline.ini
+      - name: Build patched CLASS
         working-directory: class_public
         run: make -j2 class
       - name: Verify Khronon symbols
         working-directory: class_public
         run: |
-          test -f build/khronon_background.o
-          test -f build/khronon_perturbations.o
           nm class | grep khr_background
           nm class | grep khr_perturb_derivs_newtonian
-      - name: Smoke-run stock CLASS
+      - name: Run stock smoke test
         working-directory: class_public
         run: |
           mkdir -p output
           ./class explanatory.ini > ../class_smoke.log 2>&1
-      - name: Upload logs and binary
+      - name: Run RT+DBI-Khronon baseline
+        working-directory: class_public
+        run: |
+          mkdir -p output
+          ./class rtk_baseline.ini > ../rtk_run.log 2>&1 || (cat ../rtk_run.log; exit 1)
+          test -f output/rtk_cl.dat || test -f output/rtk_cl_lensed.dat || true
+          find output -maxdepth 1 -type f -printf '%f\n' | sort > ../rtk_outputs.txt
+      - name: Upload logs, spectra and binary
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -55,3 +52,6 @@ jobs:
           path: |
             class_public/class
             class_smoke.log
+            rtk_run.log
+            rtk_outputs.txt
+            class_public/output/
