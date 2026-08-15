@@ -1,0 +1,119 @@
+name: RTK Pantheon covariance audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-pantheon-covariance-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Fetch official Pantheon data repository
+        run: git clone --depth 1 https://github.com/dscolnic/Pantheon.git pantheon
+      - name: Install numerical dependency
+        run: python3 -m pip install --disable-pip-version-check numpy
+      - name: Audit covariance and analytic offset profiling
+        run: |
+          python3 - <<'PY' | tee pantheon_audit.log
+          from pathlib import Path
+          import json, math
+          import numpy as np
+
+          root=Path('pantheon/Binned_data')
+          dat=[]
+          for line in (root/'lcparam_DS17f.txt').read_text().splitlines():
+              s=line.strip()
+              if not s or s.startswith('#'): continue
+              vals=[float(x) for x in s.split()]
+              if len(vals)>=6: dat.append(vals)
+          raw=[]
+          for line in (root/'sys_DS17f.txt').read_text().splitlines():
+              s=line.strip()
+              if s and not s.startswith('#'): raw.extend(float(x) for x in s.split())
+          n=int(raw[0]); vals=np.asarray(raw[1:],dtype=float)
+          if vals.size != n*n: raise SystemExit(f'bad covariance payload {vals.size} != {n*n}')
+          C=vals.reshape(n,n)
+          if len(dat)!=n: raise SystemExit(f'data/cov dimension mismatch {len(dat)} != {n}')
+          for i,r in enumerate(dat): C[i,i]+=r[5]*r[5]
+
+          # Independent linear-algebra checks.
+          asym=float(np.max(np.abs(C-C.T)))
+          eig=np.linalg.eigvalsh(C)
+          Lnp=np.linalg.cholesky(C)
+
+          def chol(A):
+              A=np.asarray(A,float); nn=len(A); L=np.zeros_like(A)
+              for i in range(nn):
+                  for j in range(i+1):
+                      s=float(np.dot(L[i,:j],L[j,:j]))
+                      if i==j:
+                          v=A[i,i]-s
+                          if not v>0: raise RuntimeError('non-positive covariance')
+                          L[i,j]=math.sqrt(v)
+                      else: L[i,j]=(A[i,j]-s)/L[j,j]
+              return L
+          L=chol(C)
+          chol_max=float(np.max(np.abs(L-Lnp)))
+
+          sig=np.sqrt(np.diag(C)); R=C/np.outer(sig,sig)
+          cond_corr=float(np.linalg.cond(R))
+          cond_raw=float(np.linalg.cond(C))
+          Ci=np.linalg.inv(C); one=np.ones(n)
+          denom=float(one@Ci@one)
+
+          rng=np.random.default_rng(20260816)
+          worst_chi=0.0; worst_offset=0.0
+          cases=[]
+          # Include actual observed magnitudes relative to a smooth deterministic reference,
+          # plus synthetic residuals. Only the nuisance-offset algebra is under test here.
+          z=np.asarray([r[1] for r in dat]); mb=np.asarray([r[4] for r in dat])
+          refs=[mb-(5*np.log10((1+z)*(z+0.5*z*z))+43.0)]
+          refs += [rng.normal(size=n), rng.normal(scale=.2,size=n), np.linspace(-1,1,n)]
+          for idx,d in enumerate(refs):
+              d=np.asarray(d,float)
+              off=float((one@Ci@d)/denom)
+              r=d-off*one
+              chi_direct=float(r@Ci@r)
+              chi_projection=float(d@Ci@d-(one@Ci@d)**2/denom)
+              # Normal-equation optimum must make derivative exactly zero numerically.
+              grad=float(one@Ci@r)
+              # Cross-check offset against solving the one-parameter normal equation explicitly.
+              off2=float(np.linalg.solve(np.array([[denom]]),np.array([one@Ci@d]))[0])
+              dc=abs(chi_direct-chi_projection); do=abs(off-off2)
+              worst_chi=max(worst_chi,dc); worst_offset=max(worst_offset,do)
+              cases.append({'case':idx,'offset':off,'chi2':chi_direct,'projection_diff':dc,'normal_grad':grad,'offset_diff':do})
+
+          summary={
+            'n':n,'symmetry_max_abs':asym,'eig_min':float(eig[0]),'eig_max':float(eig[-1]),
+            'condition_raw':cond_raw,'condition_correlation':cond_corr,
+            'custom_vs_numpy_cholesky_max_abs':chol_max,
+            'offset_projection_worst_chi2_abs_diff':worst_chi,
+            'offset_normal_eq_worst_abs_diff':worst_offset,'cases':cases,
+            'scope':'Pantheon covariance/data-integrity and additive-offset profiling algebra only'
+          }
+          print('PANTHEON_AUDIT_RESULT',json.dumps(summary,sort_keys=True))
+          # Strict but architecture-safe gates.
+          assert n==40
+          assert asym < 1e-13
+          assert eig[0] > 0
+          assert chol_max < 1e-12
+          assert worst_chi < 1e-9
+          assert worst_offset < 1e-12
+          assert max(abs(c['normal_grad']) for c in cases) < 1e-9
+          Path('pantheon_audit_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          print('PANTHEON_AUDIT_PASS')
+          PY
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-pantheon-covariance-audit
+          path: |
+            pantheon_audit.log
+            pantheon_audit_summary.json
+          if-no-files-found: error
