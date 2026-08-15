@@ -29,11 +29,13 @@ jobs:
           python3 rtk/upgrade_rtk_gamma_root.py class_public
           python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
           cp rtk/boss_mapping_convergence.py class_public/boss_mapping_convergence.py
+          sed -i 's/A_s_ad =/A_s =/g; s/n_s_ad =/n_s =/g' class_public/boss_mapping_convergence.py
+          ! grep -q 'A_s_ad\|n_s_ad' class_public/boss_mapping_convergence.py
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
-      - name: Run numerical convergence audit
+      - name: Run production-equivalent numerical convergence audit
         working-directory: class_public
         run: |
           python3 boss_mapping_convergence.py | tee ../boss_mapping_convergence.log
