@@ -51,9 +51,9 @@ jobs:
         working-directory: class_public
         run: |
           python3 stage4d0_fixed_lambda_stationarity.py planck_data 30000 eff \
-            0.6894847623963938 0.04698961834643647 0.2543493197461319 \
-            2.0604944100919008e-9 0.9635293974885859 6.571580973046507 \
-            1051.609231026803 | tee ../stage4d0_fixedlambda_30000_eff.log
+            0.6905802910391277 0.04684163640622535 0.2529201285589534 \
+            2.0630563560740213e-9 0.9640474757333444 6.6839724497605335 \
+            1051.0755927897148 | tee ../stage4d0_fixedlambda_30000_eff.log
           grep -q STAGE4D0_FIXED_LAMBDA_PASS ../stage4d0_fixedlambda_30000_eff.log
           cat output/stage4d0_fixed_lambda/eff/30000/stationarity_summary.json
       - name: Upload artifact
