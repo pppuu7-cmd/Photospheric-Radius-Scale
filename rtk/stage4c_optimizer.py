@@ -22,8 +22,9 @@ if MODEL not in ('RTK','LCDM'):
 if MAPPING not in ('eff','k01'):
     raise SystemExit('mapping must be eff or k01')
 
-# Stage 4B best exact points.  The boxes below are intentionally local and
-# must never be reinterpreted as global priors.
+# Stage 4B best exact points read from the archived basin_summary.json files.
+# The boxes below are intentionally local and must never be reinterpreted as
+# global priors.
 if MODEL=='RTK':
     CENTER={'lam':1322.8148686858115,'h':0.6840,'Ob':0.0475,'Om':0.260,
             'As':2.037e-9,'ns':0.9630,'zre':6.0}
@@ -38,8 +39,11 @@ if MODEL=='RTK':
     ]
     STAGE4B={'eff':1059.9993684340136,'k01':1058.9852759905964}
 else:
-    CENTER={'lam':0.0,'h':0.6765,'Ob':0.0480,'Om':0.255,
-            'As':2.100e-9,'ns':0.9675,'zre':8.0}
+    # Actual Stage 4B best exact point was the exact newton_eff evaluation.
+    # Earlier prose accidentally copied a different stencil coordinate.
+    CENTER={'lam':0.0,'h':0.6750,'Ob':0.04897309644923192,
+            'Om':0.26553983931210706,'As':2.0983169046423643e-9,
+            'ns':0.9636847246752313,'zre':7.558399298038399}
     COORDS=[
       ('h',CENTER['h'],0.0100),
       ('Ob',CENTER['Ob'],0.0020),
@@ -48,7 +52,7 @@ else:
       ('ns',CENTER['ns'],0.0100),
       ('zre',CENTER['zre'],2.0),
     ]
-    STAGE4B={'eff':1051.26174152,'k01':1051.26277814}
+    STAGE4B={'eff':1051.264741454995,'k01':1051.2653441551797}
 
 N=len(COORDS)
 OUT=Path('output/stage4c')/MODEL.lower()/MAPPING
@@ -96,7 +100,6 @@ def evaluate_y(y,label='opt'):
     try:
         r=L.evaluate(MODEL,p)
     except Exception as e:
-        FAILED+=1
         r={'ok':False,'reason':repr(e)}
     if not r.get('ok'):
         FAILED+=1
