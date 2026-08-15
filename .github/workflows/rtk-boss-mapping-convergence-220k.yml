@@ -1,0 +1,79 @@
+name: RTK BOSS mapping convergence 220k
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-boss-mapping-convergence-220k.yml'
+
+jobs:
+  convergence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare RTK CLASS tree and exact 220k audit point
+        shell: bash
+        run: |
+          set -o pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/boss_mapping_convergence.py class_public/boss_mapping_convergence.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('class_public/boss_mapping_convergence.py')
+          s=p.read_text()
+          point="""P={'lam':220000.0,'h':0.6906796196096703,'Ob':0.046823881895342395,
+             'Om':0.2528128218401867,'As':2.069637685674054e-9,
+             'ns':0.9643765456647233,'zre':6.860028734987336}"""
+          s,n=re.subn(r"P=\{.*?\}\n\nSETTINGS=",point+'\n\nSETTINGS=',s,count=1,flags=re.S)
+          if n!=1: raise SystemExit('failed to replace audit point')
+          s=s.replace('A_s_ad =','A_s =').replace('n_s_ad =','n_s =')
+          p.write_text(s)
+          PY
+          ! grep -q 'A_s_ad\|n_s_ad' class_public/boss_mapping_convergence.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Run 220k production-equivalent convergence audit
+        shell: bash
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 boss_mapping_convergence.py | tee ../boss_mapping_convergence_220k.log
+          grep -q BOSS_MAPPING_CONVERGENCE_COMPLETE ../boss_mapping_convergence_220k.log
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          q=json.loads(Path('output/boss_convergence/boss_convergence_summary.json').read_text())
+          b=q['settings'][0]
+          expected={'rd':146.973345,'chi2_eff':7.420251224563941,'chi2_k01':7.432903273999241}
+          for k,v in expected.items():
+              d=abs(b[k]-v)
+              print('BOSS_220K_BASELINE',k,b[k],v,d)
+              if d>1e-9: raise SystemExit(f'baseline mismatch {k}: {d}')
+          print('BOSS_220K_BASELINE_PASS')
+          PY
+          cat output/boss_convergence/boss_convergence_summary.json
+      - name: Upload convergence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-boss-mapping-convergence-220k
+          path: |
+            boss_mapping_convergence_220k.log
+            class_public/output/boss_convergence/boss_convergence_summary.json
+            class_public/output/boss_convergence/boss_convergence.csv
+          if-no-files-found: error
