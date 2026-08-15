@@ -1,0 +1,56 @@
+name: RTK inference source integrity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-inference-source-integrity.yml'
+
+jobs:
+  integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Generate production inference core
+        run: python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py inference_core.generated.py
+      - name: Enforce production-critical invariants
+        run: |
+          python3 - <<'PY' | tee inference_source_integrity.log
+          from pathlib import Path
+          import ast, json
+          src=Path('rtk/joint_profile_runner.py').read_text()
+          out=Path('inference_core.generated.py').read_text()
+          checks={
+            'generated_parses': False,
+            'exact_float_cache_present': "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" in out,
+            'rounded_cache_absent': 'round(float(p[k]),12)' not in out,
+            'A_s_modern_present': 'A_s =' in out,
+            'n_s_modern_present': 'n_s =' in out,
+            'A_s_ad_absent': 'A_s_ad' not in out,
+            'n_s_ad_absent': 'n_s_ad' not in out,
+            'class_timeout_present': "timeout=float(os.environ.get('RTK_CLASS_TIMEOUT','120'))" in out,
+            'legacy_search_tail_removed': '\nRTK0=' not in out,
+            'source_contains_transform_anchor_cache': 'round(float(p[k]),12)' in src,
+            'source_contains_transform_anchor_As': 'A_s_ad' in src,
+            'source_contains_transform_anchor_ns': 'n_s_ad' in src,
+          }
+          ast.parse(out); checks['generated_parses']=True
+          failed=[k for k,v in checks.items() if not v]
+          summary={'checks':checks,'failed':failed,'scope':'production inference-core generation regression gate'}
+          print('INFERENCE_SOURCE_INTEGRITY_RESULT',json.dumps(summary,sort_keys=True))
+          Path('inference_source_integrity_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          if failed: raise SystemExit('FAILED: '+','.join(failed))
+          print('INFERENCE_SOURCE_INTEGRITY_PASS')
+          PY
+      - name: Upload integrity artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-inference-source-integrity
+          path: |
+            inference_source_integrity.log
+            inference_source_integrity_summary.json
+            inference_core.generated.py
+          if-no-files-found: error
