@@ -1,4 +1,4 @@
-name: RTK Stage 4D3 joint stationarity eff
+name: RTK Stage 4D3 joint stationarity eff high-lambda
 
 on:
   workflow_dispatch:
@@ -56,21 +56,21 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data
           tar -xzf planck.tar.gz -C planck_data
-      - name: Run exact 7D Hessian at shared correlated descent point
+      - name: Run strict exact 7D Hessian at 300k poll-improved point
         working-directory: class_public
         run: |
-          python3 stage4d3_joint_stationarity.py planck_data eff 54804.51998233707 \
-            0.6905121965689395 0.046831928061712685 0.2529636778757895 \
-            2.069477450200849e-9 0.9641699662731723 6.855358068811081 \
-            1050.660797850245 '${{ matrix.scale }}' | tee '../joint_eff_descent_${{ matrix.scale }}.log'
-          grep -E 'STAGE4D3_JOINT_STATIONARITY_(PASS|FAIL)' '../joint_eff_descent_${{ matrix.scale }}.log'
+          python3 stage4d3_joint_stationarity.py planck_data eff 300000 \
+            0.6906430189065689 0.046822913729452804 0.25278507230249403 \
+            2.0695004530982282e-9 0.9644419669945631 6.8611290543096395 \
+            1050.610628798525 '${{ matrix.scale }}' | tee '../joint_eff_300k_${{ matrix.scale }}.log'
+          grep -E 'STAGE4D3_JOINT_STATIONARITY_(PASS|FAIL)' '../joint_eff_300k_${{ matrix.scale }}.log'
           find output/stage4d3_joint_stationarity -name joint_stationarity_summary.json -print -exec cat {} \;
       - name: Upload Hessian artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-stage4d3-joint-eff-descent-s${{ matrix.scale }}
+          name: rtk-stage4d3-joint-eff-300k-s${{ matrix.scale }}
           path: |
-            joint_eff_descent_${{ matrix.scale }}.log
+            joint_eff_300k_${{ matrix.scale }}.log
             class_public/output/stage4d3_joint_stationarity/**/joint_stationarity_summary.json
             class_public/output/stage4d3_joint_stationarity/**/joint_stationarity_points.csv
           if-no-files-found: error
