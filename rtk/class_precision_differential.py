@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Differential CLASS-precision audit across exact RTK descent points.
 
-Absolute likelihood values can move when CLASS precision changes.  The quantity
-of scientific interest here is whether *relative* score differences between the
-old 300k center, the first Newton record, and the current t4 ray record converge.
-No optimization is performed.
+Absolute likelihood values can move when CLASS precision changes. The primary
+scientific question here is whether *relative* score improvements converge as
+CLASS precision is tightened. No optimization is performed.
 """
 from pathlib import Path
 import json
@@ -15,22 +14,25 @@ POINTS={
     'p': {'lam':300000.0,'h':0.6906430189065689,'Ob':0.046822913729452804,
           'Om':0.25278507230249403,'As':2.0695004530982282e-9,
           'ns':0.9644419669945631,'zre':6.8611290543096395},
-    'expected_eff':1050.610628798525,
-    'expected_k01':1050.623296036079,
+    'expected_eff':1050.610628798525,'expected_k01':1050.623296036079,
   },
   'newton05': {
     'p': {'lam':298455.3134754306,'h':0.6905797422628458,'Ob':0.04682137133353283,
           'Om':0.2528733571517577,'As':2.070926109910583e-9,
           'ns':0.9644793293301599,'zre':6.89612905430964},
-    'expected_eff':1050.5562518398717,
-    'expected_k01':1050.5691351225128,
+    'expected_eff':1050.5562518398717,'expected_k01':1050.5691351225128,
   },
   'ray_t4': {
     'p': {'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046816744145772894,
           'Om':0.25313821169954864,'As':2.0752030803476467e-9,
           'ns':0.9645914163369503,'zre':7.00112905430964},
-    'expected_eff':1050.453791769174,
-    'expected_k01':1050.4673245097958,
+    'expected_eff':1050.453791769174,'expected_k01':1050.4673245097958,
+  },
+  'ray125': {
+    'p': {'lam':292355.6941224321,'h':0.6903266356879535,'Ob':0.04681520174985292,
+          'Om':0.2532264965488123,'As':2.0766287371600014e-9,
+          'ns':0.9646287786725471,'zre':7.03612905430964},
+    'expected_eff':1050.4444187294202,'expected_k01':1050.4581685583998,
   },
 }
 
@@ -92,31 +94,33 @@ for level,overrides in LEVELS:
 by={(r['level'],r['point']):r for r in rows}
 comparisons=[]
 for level,_ in LEVELS:
-    old=by[(level,'old300k')]; n=by[(level,'newton05')]; t=by[(level,'ray_t4')]
+    old=by[(level,'old300k')]; n=by[(level,'newton05')]
+    t=by[(level,'ray_t4')]; b=by[(level,'ray125')]
     c={
       'level':level,
+      'delta_eff_best_minus_old300k':b['score_eff']-old['score_eff'],
+      'delta_k01_best_minus_old300k':b['score_k01']-old['score_k01'],
+      'delta_eff_best_minus_t4':b['score_eff']-t['score_eff'],
+      'delta_k01_best_minus_t4':b['score_k01']-t['score_k01'],
       'delta_eff_t4_minus_old300k':t['score_eff']-old['score_eff'],
       'delta_k01_t4_minus_old300k':t['score_k01']-old['score_k01'],
       'delta_eff_newton_minus_old300k':n['score_eff']-old['score_eff'],
       'delta_k01_newton_minus_old300k':n['score_k01']-old['score_k01'],
-      'delta_eff_t4_minus_newton':t['score_eff']-n['score_eff'],
-      'delta_k01_t4_minus_newton':t['score_k01']-n['score_k01'],
-      'delta_planck_term_t4_minus_old300k':-2*(t['logL_planck']-old['logL_planck']),
-      'delta_SN_t4_minus_old300k':t['chi2_SN']-old['chi2_SN'],
-      'delta_BOSS_eff_t4_minus_old300k':t['chi2_BOSS_eff']-old['chi2_BOSS_eff'],
-      'delta_BOSS_k01_t4_minus_old300k':t['chi2_BOSS_k01']-old['chi2_BOSS_k01'],
+      'delta_planck_term_best_minus_old300k':-2*(b['logL_planck']-old['logL_planck']),
+      'delta_SN_best_minus_old300k':b['chi2_SN']-old['chi2_SN'],
+      'delta_BOSS_eff_best_minus_old300k':b['chi2_BOSS_eff']-old['chi2_BOSS_eff'],
+      'delta_BOSS_k01_best_minus_old300k':b['chi2_BOSS_k01']-old['chi2_BOSS_k01'],
     }
     comparisons.append(c)
     print('CLASS_DIFF_COMPARISON',json.dumps(c,sort_keys=True),flush=True)
 
-# Precision convergence of the relative descent, not of absolute scores.
 for i in range(1,len(comparisons)):
     a,b=comparisons[i-1],comparisons[i]
-    b['change_delta_eff_vs_previous_precision']=b['delta_eff_t4_minus_old300k']-a['delta_eff_t4_minus_old300k']
-    b['change_delta_k01_vs_previous_precision']=b['delta_k01_t4_minus_old300k']-a['delta_k01_t4_minus_old300k']
+    b['change_delta_eff_best_vs_previous_precision']=b['delta_eff_best_minus_old300k']-a['delta_eff_best_minus_old300k']
+    b['change_delta_k01_best_vs_previous_precision']=b['delta_k01_best_minus_old300k']-a['delta_k01_best_minus_old300k']
 
 summary={
- 'stage':'CLASS-differential-precision-audit',
+ 'stage':'CLASS-differential-precision-audit-current-best',
  'points':POINTS,'levels':rows,'comparisons':comparisons,
  'scope':'Fixed-point differential precision only; no optimization, posterior, interval or significance claim.',
 }
