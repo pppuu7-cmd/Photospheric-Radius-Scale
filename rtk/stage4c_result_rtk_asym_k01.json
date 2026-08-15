@@ -1,0 +1,38 @@
+{
+  "stage": "4C",
+  "status": "local_minimum_candidate",
+  "scope": "fixed_lambda_1e8_asymptotic_local_exact_profile_not_global",
+  "model": "RTK",
+  "mapping": "k01",
+  "best_S": 1051.786604255933,
+  "best_params": {
+    "lam": 100000000.0,
+    "h": 0.689009022393018,
+    "Ob": 0.04702645348629918,
+    "Om": 0.25483311550468146,
+    "As": 2.058494763207974e-9,
+    "ns": 0.963116623172502,
+    "zre": 6.517401124751232
+  },
+  "best_components": {
+    "chi2_BOSS_eff": 7.391594140064243,
+    "chi2_BOSS_k01": 7.402845165779634,
+    "chi2_SN": 39.46316947768081,
+    "logL_planck": -502.46029480623633,
+    "rd": 146.887432,
+    "score": 1051.7753532302177,
+    "score_k01": 1051.786604255933
+  },
+  "coordinates": [
+    {"center_coordinate":0.6876415412107025,"halfwidth":0.006,"name":"h","normalized_bounds":[-1,1]},
+    {"center_coordinate":0.04713370853636241,"halfwidth":0.0012,"name":"Ob","normalized_bounds":[-1,1]},
+    {"center_coordinate":0.2563078649786827,"halfwidth":0.012,"name":"Om","normalized_bounds":[-1,1]},
+    {"center_coordinate":2.052560909053839e-9,"halfwidth":7.0e-11,"name":"As","normalized_bounds":[-1,1]},
+    {"center_coordinate":0.9627323451269592,"halfwidth":0.006,"name":"ns","normalized_bounds":[-1,1]},
+    {"center_coordinate":6.35470443812342,"halfwidth":1.2,"name":"zre","normalized_bounds":[-1,1]}
+  ],
+  "boundary_axes": [],
+  "poll_improvement_before_optional_refine": 0.009855061861344439,
+  "exact_likelihood_calls": 144,
+  "provenance": {"workflow_run_id":31854687961,"artifact_id":9238867140,"artifact_name":"rtk-stage4c-asymptotic-k01","lambda_D_fixed":100000000.0}
+}
