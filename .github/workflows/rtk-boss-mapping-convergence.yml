@@ -1,0 +1,49 @@
+name: RTK BOSS mapping convergence
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-boss-mapping-convergence.yml'
+
+jobs:
+  convergence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare RTK CLASS tree
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/boss_mapping_convergence.py class_public/boss_mapping_convergence.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Run numerical convergence audit
+        working-directory: class_public
+        run: |
+          python3 boss_mapping_convergence.py | tee ../boss_mapping_convergence.log
+          grep -q BOSS_MAPPING_CONVERGENCE_COMPLETE ../boss_mapping_convergence.log
+          cat output/boss_convergence/boss_convergence_summary.json
+      - name: Upload convergence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-boss-mapping-convergence
+          path: |
+            boss_mapping_convergence.log
+            class_public/output/boss_convergence/boss_convergence_summary.json
+            class_public/output/boss_convergence/boss_convergence.csv
+          if-no-files-found: error
