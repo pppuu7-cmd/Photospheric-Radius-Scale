@@ -1,0 +1,61 @@
+name: RTK workflow pipefail audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-workflow-pipefail-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit Python tee pipelines for failure masking
+        run: |
+          python3 - <<'PY' | tee workflow_pipefail_audit.log
+          from pathlib import Path
+          import json,re
+          critical={
+            'rtk-stage4d3-joint-stationarity-eff.yml',
+            'rtk-stage4d3-joint-stationarity-eff-220k.yml',
+            'rtk-stage4d2-dense-lambda.yml',
+            'rtk-stage4d2-warm-high-tail.yml',
+            'rtk-boss-mapping-convergence.yml',
+            'rtk-boss-mapping-convergence-220k.yml',
+            'rtk-pantheon-covariance-audit.yml',
+            'rtk-inference-source-integrity.yml',
+          }
+          rows=[]
+          for p in sorted(Path('.github/workflows').glob('rtk-*.yml')):
+              lines=p.read_text().splitlines()
+              for i,line in enumerate(lines):
+                  if '| tee' not in line: continue
+                  # A shell step is considered protected if pipefail is explicitly enabled
+                  # earlier in the same nearby run block. This is intentionally conservative.
+                  lo=max(0,i-12)
+                  ctx='\n'.join(lines[lo:i+1])
+                  protected=('set -o pipefail' in ctx or 'set -euo pipefail' in ctx)
+                  pythonish=('python' in line)
+                  rows.append({'file':p.name,'line':i+1,'python_pipeline':pythonish,
+                               'protected':protected,'critical':p.name in critical,
+                               'text':line.strip()})
+          unsafe=[r for r in rows if r['python_pipeline'] and not r['protected']]
+          unsafe_critical=[r for r in unsafe if r['critical']]
+          summary={'tee_pipelines':len(rows),'unsafe_python_tee':len(unsafe),
+                   'unsafe_critical_python_tee':len(unsafe_critical),
+                   'unsafe_critical':unsafe_critical,'unsafe_all':unsafe,
+                   'scope':'static CI failure-masking audit; no scientific result'}
+          Path('workflow_pipefail_audit.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          print('WORKFLOW_PIPEFAIL_AUDIT_RESULT',json.dumps(summary,sort_keys=True))
+          print('WORKFLOW_PIPEFAIL_AUDIT_COMPLETE')
+          PY
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-workflow-pipefail-audit
+          path: |
+            workflow_pipefail_audit.log
+            workflow_pipefail_audit.json
+          if-no-files-found: error
