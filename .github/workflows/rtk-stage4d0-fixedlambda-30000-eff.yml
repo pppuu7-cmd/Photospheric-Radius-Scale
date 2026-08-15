@@ -40,7 +40,7 @@ jobs:
         working-directory: class_public
         run: make -j2 class
       - name: Install likelihood dependencies
-        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
       - name: Download Planck package
         working-directory: class_public
         run: |
