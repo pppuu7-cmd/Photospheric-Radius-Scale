@@ -1,0 +1,87 @@
+name: RTK Stage 4D3 joint lambda
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d3-joint-lambda.yml'
+
+jobs:
+  optimize:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - mapping: eff
+            lambda0: '30000'
+            h: '0.6906228451'
+            Ob: '0.04682481963'
+            Om: '0.25284181742'
+            As: '2.0671578968e-9'
+            ns: '0.9643135679'
+            zre: '6.793035785'
+          - mapping: k01
+            lambda0: '30000'
+            h: '0.6905753054807667'
+            Ob: '0.04684117523101159'
+            Om: '0.25292600226600576'
+            As: '2.0668677478550237e-9'
+            ns: '0.9642197720163028'
+            zre: '6.782258283087977'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 140
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare exact likelihood tree
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d3_joint_lambda_refine.py class_public/stage4d3_joint_lambda_refine.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download Planck package
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+      - name: Run seven-dimensional optimization
+        working-directory: class_public
+        run: |
+          python3 stage4d3_joint_lambda_refine.py planck_data '${{ matrix.mapping }}' '${{ matrix.lambda0 }}' \
+            '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' \
+            | tee '../joint_lambda_${{ matrix.mapping }}.log'
+          grep -q STAGE4D3_JOINT_LAMBDA_PASS '../joint_lambda_${{ matrix.mapping }}.log'
+          cat output/stage4d3_joint_lambda/${{ matrix.mapping }}/joint_lambda_summary.json
+      - name: Upload joint-lambda artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d3-joint-lambda-${{ matrix.mapping }}
+          path: |
+            joint_lambda_${{ matrix.mapping }}.log
+            class_public/output/stage4d3_joint_lambda/${{ matrix.mapping }}/joint_lambda_summary.json
+            class_public/output/stage4d3_joint_lambda/${{ matrix.mapping }}/joint_lambda_trace.csv
+          if-no-files-found: error
