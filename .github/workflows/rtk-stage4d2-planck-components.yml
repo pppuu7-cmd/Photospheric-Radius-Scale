@@ -8,29 +8,6 @@ on:
 
 jobs:
   evaluate:
-    strategy:
-      fail-fast: false
-      max-parallel: 2
-      matrix:
-        include:
-          - label: current-eff-40436
-            model: RTK
-            lambda_D: '40436.338970991375'
-            h: '0.6906274201064062'
-            Ob: '0.046826324144271854'
-            Om: '0.25285216262766413'
-            As: '2.069111596683301e-9'
-            ns: '0.9642946574432717'
-            zre: '6.826647411438569'
-          - label: current-k01-54433
-            model: RTK
-            lambda_D: '54433.14880490279'
-            h: '0.6905397901741095'
-            Ob: '0.04683753398237637'
-            Om: '0.2529584071658237'
-            As: '2.0692391697144382e-9'
-            ns: '0.9641151317062118'
-            zre: '6.82802874142963'
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     env:
@@ -72,19 +49,20 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data
           tar -xzf planck.tar.gz -C planck_data
-      - name: Evaluate twice and record components
+      - name: Evaluate shared descent point twice and record components
         working-directory: class_public
         run: |
-          python3 stage4d1_repeatability.py planck_data '${{ matrix.model }}' '${{ matrix.lambda_D }}' \
-            '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' 2 \
-            | tee ../planck_components_${{ matrix.label }}.log
-          grep -q STAGE4D1_REPEATABILITY_PASS ../planck_components_${{ matrix.label }}.log
+          python3 stage4d1_repeatability.py planck_data RTK 54804.51998233707 \
+            0.6905121965689395 0.046831928061712685 0.2529636778757895 \
+            2.069477450200849e-9 0.9641699662731723 6.855358068811081 2 \
+            | tee ../planck_components_shared_descent.log
+          grep -q STAGE4D1_REPEATABILITY_PASS ../planck_components_shared_descent.log
           cat repeatability_summary.json
       - name: Upload component artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-stage4d2-planck-components-${{ matrix.label }}
+          name: rtk-stage4d2-planck-components-shared-descent
           path: |
-            planck_components_${{ matrix.label }}.log
+            planck_components_shared_descent.log
             class_public/repeatability_summary.json
           if-no-files-found: error
