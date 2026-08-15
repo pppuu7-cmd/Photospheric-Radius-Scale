@@ -24,7 +24,6 @@ if model=='LCDM': p['lam']=0.0
 
 rows=[]
 for i in range(nrep):
-    # evaluate() caches by physical parameters, so clear it intentionally.
     L.CACHE.clear()
     r=L.evaluate(model,p)
     if not r.get('ok'):
@@ -32,13 +31,15 @@ for i in range(nrep):
     row={'rep':i,
          'score_eff':float(r['score']),
          'score_k01':float(r['score_k01']),
+         'logL_lowT':float(r['logL_lowT']),
+         'logL_lowE':float(r['logL_lowE']),
+         'logL_high':float(r['logL_high']),
          'logL_planck':float(r['logL_planck']),
          'chi2_SN':float(r['chi2_SN']),
          'chi2_BOSS_eff':float(r['chi2_BOSS_eff']),
          'chi2_BOSS_k01':float(r['chi2_BOSS_k01']),
          'rd':float(r['rd'])}
     rows.append(row)
-    # remove heavy CLASS products from this repeat; scalar row is retained here.
     tag=r.get('tag')
     if tag:
         for q in L.OUT.glob(tag+'_*'):
@@ -54,9 +55,10 @@ def stats(name):
     return {'min':min(x),'max':max(x),'range':max(x)-min(x),
             'mean':statistics.fmean(x),
             'stdev':statistics.stdev(x) if len(x)>1 else 0.0}
+fields=('score_eff','score_k01','logL_lowT','logL_lowE','logL_high','logL_planck',
+        'chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')
 summary={'stage':'4D1-exact-repeatability','model':model,'params':p,'nrep':nrep,
-         'stats':{k:stats(k) for k in ('score_eff','score_k01','logL_planck','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')},
-         'rows':rows}
+         'stats':{k:stats(k) for k in fields},'rows':rows}
 Path('repeatability_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print('STAGE4D1_REPEATABILITY_RESULT',json.dumps(summary,sort_keys=True),flush=True)
 print('STAGE4D1_REPEATABILITY_PASS',flush=True)
