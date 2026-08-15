@@ -1,0 +1,58 @@
+name: RTK Stage 4D1 aggregate
+
+on:
+  workflow_run:
+    workflows: ['RTK Stage 4D1 lambda profile']
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  aggregate:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+
+      - name: Download all Stage 4D1 artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          mkdir -p downloads
+          gh run download "$RUN_ID" --repo "${{ github.repository }}" --dir downloads
+          find downloads -maxdepth 4 -type f -print | sort
+
+      - name: Validate complete fixed-lambda grid
+        run: |
+          mapfile -t summaries < <(find downloads -name profile_summary.json -type f | sort)
+          echo "Found ${#summaries[@]} profile summaries"
+          test "${#summaries[@]}" -eq 14
+          for mapping in eff k01; do
+            for lam in 1000 3000 10000 30000 100000 1000000 100000000; do
+              n=$(find downloads -path "*rtk-stage4d1-${mapping}-${lam}*" -name profile_summary.json -type f | wc -l)
+              test "$n" -eq 1 || { echo "Expected one summary for ${mapping}/${lam}, got $n"; exit 1; }
+            done
+          done
+
+      - name: Assemble profile
+        run: |
+          mapfile -t summaries < <(find downloads -name profile_summary.json -type f | sort)
+          python3 rtk/aggregate_stage4d1_profile.py "${summaries[@]}" --out stage4d1_profile | tee stage4d1_aggregate.log
+          cat stage4d1_profile/STAGE4D1_PROFILE.md
+          cat stage4d1_profile/stage4d1_profile.json
+
+      - name: Upload assembled profile
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d1-aggregate
+          path: |
+            stage4d1_aggregate.log
+            stage4d1_profile/STAGE4D1_PROFILE.md
+            stage4d1_profile/stage4d1_profile.csv
+            stage4d1_profile/stage4d1_profile.json
+          if-no-files-found: error
