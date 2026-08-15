@@ -11,7 +11,7 @@ This proves at most a local numerical minimum of the current likelihood
 harness; it is not a posterior, significance, evidence, or observational proof.
 """
 from pathlib import Path
-import csv,json,math,sys
+import csv,json,math,os,sys
 import numpy as np
 import inference_core as L
 
@@ -24,6 +24,12 @@ vals=list(map(float,sys.argv[4:10])); EXPECT=float(sys.argv[10])
 STEP_SCALE=float(sys.argv[11]) if len(sys.argv)==12 else 1.0
 if not math.isfinite(STEP_SCALE) or STEP_SCALE<=0:
     raise SystemExit('STEP_SCALE must be finite and > 0')
+GRAD_TOL=float(os.environ.get('RTK_STATIONARITY_GRAD_TOL','0.03'))
+IMPROVE_TOL=float(os.environ.get('RTK_STATIONARITY_IMPROVEMENT_TOL','0.005'))
+if not (math.isfinite(GRAD_TOL) and GRAD_TOL>0):
+    raise SystemExit('RTK_STATIONARITY_GRAD_TOL must be finite and > 0')
+if not (math.isfinite(IMPROVE_TOL) and IMPROVE_TOL>=0):
+    raise SystemExit('RTK_STATIONARITY_IMPROVEMENT_TOL must be finite and >= 0')
 CENTER={'lam':LAM,**dict(zip(('h','Ob','Om','As','ns','zre'),vals))}
 # Base finite-difference scales. loglam=0.05 is about a 5% multiplicative step.
 BASE=[('loglam',0.0,0.05),
@@ -104,6 +110,16 @@ delta=-np.linalg.pinv(H,rcond=1e-10)@g
 trust=np.clip(delta,-1.,1.)
 rnew=ev(trust,'newton_trust');Snew=score(rnew)
 best=min(EVALS.values(),key=score);Sbest=score(best)
+best_improvement=S0-Sbest
+newton_improvement=S0-Snew
+max_grad_base=float(np.max(np.abs(gbase)))
+gates={
+ 'positive_definite_hessian':pd,
+ 'gradient_within_tolerance':bool(max_grad_base<=GRAD_TOL),
+ 'no_exact_improvement_beyond_tolerance':bool(best_improvement<=IMPROVE_TOL),
+ 'correlated_newton_not_improving_beyond_tolerance':bool(newton_improvement<=IMPROVE_TOL),
+}
+stationarity_pass=bool(all(gates.values()))
 summary={
  'stage':'4D3-seven-dimensional-stationarity','scope':'local_exact_hessian_including_log_lambda',
  'mapping':MAPPING,'lambda_D':LAM,'step_scale':STEP_SCALE,'center':CENTER,
@@ -112,15 +128,19 @@ summary={
  'base_coordinates':[{'name':n,'base_step':s} for n,_,s in BASE],
  'gradient_y':g.tolist(),'gradient_base_scaled':gbase.tolist(),
  'max_abs_gradient_y':float(np.max(np.abs(g))),
- 'max_abs_gradient_base_scaled':float(np.max(np.abs(gbase))),
+ 'max_abs_gradient_base_scaled':max_grad_base,
+ 'gradient_tolerance_base_scaled':GRAD_TOL,
  'hessian_y':H.tolist(),'hessian_base_scaled':Hbase.tolist(),
  'eigenvalues_y':eigval.tolist(),'eigenvalues_base_scaled':eigbase.tolist(),
  'positive_definite':pd,
  'newton_delta_y_unclipped':delta.tolist(),'newton_delta_y_used':trust.tolist(),
- 'S_newton':Snew,'newton_improvement':S0-Snew,
+ 'S_newton':Snew,'newton_improvement':newton_improvement,
  'best_exact_S_including_newton':Sbest,'best_exact_params':best['params'],
- 'best_improvement_from_center':S0-Sbest,
+ 'best_improvement_from_center':best_improvement,
+ 'improvement_tolerance':IMPROVE_TOL,
  'center_is_best_within_0p005':bool(Sbest>=S0-0.005),
+ 'acceptance_gates':gates,
+ 'stationarity_pass':stationarity_pass,
  'warning':'Local numerical Hessian only; not a global statistical or observational proof.'
 }
 (OUT/'joint_stationarity_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
@@ -131,4 +151,4 @@ for r in ROWS:
 with (OUT/'joint_stationarity_points.csv').open('w',newline='') as f:
     w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(ROWS)
 print('STAGE4D3_JOINT_STATIONARITY_RESULT',json.dumps(summary,sort_keys=True),flush=True)
-print('STAGE4D3_JOINT_STATIONARITY_PASS',flush=True)
+print('STAGE4D3_JOINT_STATIONARITY_'+('PASS' if stationarity_pass else 'FAIL'),flush=True)
