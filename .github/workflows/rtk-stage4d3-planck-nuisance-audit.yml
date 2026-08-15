@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install clipy
-        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
       - name: Download Planck package
         run: |
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
