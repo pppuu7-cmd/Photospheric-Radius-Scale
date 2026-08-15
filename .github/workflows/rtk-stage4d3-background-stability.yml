@@ -1,0 +1,30 @@
+name: RTK Stage 4D3 background stability
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d3-background-stability.yml'
+
+jobs:
+  stability:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Build DBI stability stress test
+        run: |
+          gcc -std=c11 -O2 -Wall -Wextra -pedantic \
+            -I rtk rtk/stage4d3_background_stability.c rtk/khronon_background.c \
+            -lm -o stage4d3_background_stability
+      - name: Run DBI stability stress test
+        run: |
+          ./stage4d3_background_stability | tee stage4d3_background_stability.log
+          grep -q '^STAGE4D3_STABILITY_PASS$' stage4d3_background_stability.log
+      - name: Upload stability artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d3-background-stability
+          path: stage4d3_background_stability.log
+          if-no-files-found: error
