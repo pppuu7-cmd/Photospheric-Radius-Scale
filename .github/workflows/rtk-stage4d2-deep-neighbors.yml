@@ -1,4 +1,4 @@
-name: RTK Stage 4D2 deep finite neighbors
+name: RTK Stage 4D2 high-lambda tail refinements
 
 on:
   workflow_dispatch:
@@ -10,43 +10,26 @@ jobs:
   refine:
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 6
       matrix:
         include:
-          - lambda_D: '20000'
-            h: '0.6905146673998096'
-            Ob: '0.046842449595150014'
-            Om: '0.2529845098101792'
-            As: '2.066396842316831e-9'
-            ns: '0.9643023366035026'
-            zre: '6.772038348387266'
-          - lambda_D: '25000'
-            h: '0.6905502309919213'
-            Ob: '0.0468308138960744'
-            Om: '0.25293573979567496'
-            As: '2.066444115837013e-9'
-            ns: '0.9643635421887894'
-            zre: '6.772980133084281'
-          - lambda_D: '40000'
-            h: '0.6904868200114935'
-            Ob: '0.046841227166592225'
-            Om: '0.2530003603586838'
-            As: '2.066749267941382e-9'
-            ns: '0.9642644322829059'
-            zre: '6.783044272867548'
-          - lambda_D: '60000'
-            h: '0.6905556998813828'
-            Ob: '0.04684380921739893'
-            Om: '0.2529350024559574'
-            As: '2.0663630028650534e-9'
-            ns: '0.9642801686801264'
-            zre: '6.772045408673688'
+          - {mapping: eff, lambda_D: '200000', h: '0.6906274201064062', Ob: '0.046826324144271854', Om: '0.25285216262766413', As: '2.069111596683301e-9', ns: '0.9642946574432717', zre: '6.826647411438569'}
+          - {mapping: eff, lambda_D: '300000', h: '0.6906274201064062', Ob: '0.046826324144271854', Om: '0.25285216262766413', As: '2.069111596683301e-9', ns: '0.9642946574432717', zre: '6.826647411438569'}
+          - {mapping: eff, lambda_D: '1000000', h: '0.6906274201064062', Ob: '0.046826324144271854', Om: '0.25285216262766413', As: '2.069111596683301e-9', ns: '0.9642946574432717', zre: '6.826647411438569'}
+          - {mapping: eff, lambda_D: '10000000', h: '0.6906274201064062', Ob: '0.046826324144271854', Om: '0.25285216262766413', As: '2.069111596683301e-9', ns: '0.9642946574432717', zre: '6.826647411438569'}
+          - {mapping: eff, lambda_D: '100000000', h: '0.6906274201064062', Ob: '0.046826324144271854', Om: '0.25285216262766413', As: '2.069111596683301e-9', ns: '0.9642946574432717', zre: '6.826647411438569'}
+          - {mapping: k01, lambda_D: '200000', h: '0.6905397901741095', Ob: '0.04683753398237637', Om: '0.2529584071658237', As: '2.0692391697144382e-9', ns: '0.9641151317062118', zre: '6.82802874142963'}
+          - {mapping: k01, lambda_D: '300000', h: '0.6905397901741095', Ob: '0.04683753398237637', Om: '0.2529584071658237', As: '2.0692391697144382e-9', ns: '0.9641151317062118', zre: '6.82802874142963'}
+          - {mapping: k01, lambda_D: '1000000', h: '0.6905397901741095', Ob: '0.04683753398237637', Om: '0.2529584071658237', As: '2.0692391697144382e-9', ns: '0.9641151317062118', zre: '6.82802874142963'}
+          - {mapping: k01, lambda_D: '10000000', h: '0.6905397901741095', Ob: '0.04683753398237637', Om: '0.2529584071658237', As: '2.0692391697144382e-9', ns: '0.9641151317062118', zre: '6.82802874142963'}
+          - {mapping: k01, lambda_D: '100000000', h: '0.6905397901741095', Ob: '0.04683753398237637', Om: '0.2529584071658237', As: '2.0692391697144382e-9', ns: '0.9641151317062118', zre: '6.82802874142963'}
     runs-on: ubuntu-24.04
     timeout-minutes: 100
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
       RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -69,6 +52,7 @@ jobs:
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
           cd class_public
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q "round(float(p\[k\]),12)" inference_core.py
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
@@ -80,20 +64,19 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data
           tar -xzf planck.tar.gz -C planck_data
-      - name: Run second-pass COBYQA
+      - name: Run exact-float high-lambda COBYQA refinement
         working-directory: class_public
         run: |
-          python3 stage4d1_cobyqa_refine.py planck_data '${{ matrix.lambda_D }}' eff \
+          python3 stage4d1_cobyqa_refine.py planck_data '${{ matrix.lambda_D }}' '${{ matrix.mapping }}' \
             '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' \
-            | tee ../deep_neighbor_${{ matrix.lambda_D }}.log
-          grep -q STAGE4D1_COBYQA_PASS ../deep_neighbor_${{ matrix.lambda_D }}.log
-          cat output/stage4d1_cobyqa/eff/${{ matrix.lambda_D }}/cobyqa_summary.json || find output/stage4d1_cobyqa/eff -name cobyqa_summary.json -exec cat {} \;
-      - name: Upload deep-neighbor artifact
+            | tee ../tail_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+          find output/stage4d1_cobyqa/${{ matrix.mapping }} -name cobyqa_summary.json -print -exec cat {} \;
+      - name: Upload high-lambda artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-stage4d2-deep-eff-${{ matrix.lambda_D }}
+          name: rtk-stage4d2-tail-${{ matrix.mapping }}-${{ matrix.lambda_D }}
           path: |
-            deep_neighbor_${{ matrix.lambda_D }}.log
-            class_public/output/stage4d1_cobyqa/eff/**/cobyqa_summary.json
-            class_public/output/stage4d1_cobyqa/eff/**/cobyqa_trace.csv
+            tail_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+            class_public/output/stage4d1_cobyqa/${{ matrix.mapping }}/**/cobyqa_summary.json
+            class_public/output/stage4d1_cobyqa/${{ matrix.mapping }}/**/cobyqa_trace.csv
           if-no-files-found: error
