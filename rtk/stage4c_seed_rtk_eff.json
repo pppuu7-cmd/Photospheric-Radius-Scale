@@ -1,0 +1,33 @@
+{
+  "provenance": {
+    "workflow_run_id": 31852573366,
+    "artifact_id": 9238435321,
+    "artifact_name": "rtk-stage4c-RTK-eff",
+    "stage": "4C",
+    "status": "boundary_hit_expand_local_box"
+  },
+  "model": "RTK",
+  "mapping": "eff",
+  "best_S": 1053.4487655321716,
+  "best_params": {
+    "lam": 1877.1636529486852,
+    "h": 0.6875328470069375,
+    "Ob": 0.047139435833781454,
+    "Om": 0.2563454835564767,
+    "As": 2.0534202049956847e-9,
+    "ns": 0.9623987030279104,
+    "zre": 6.365733981713082
+  },
+  "previous_halfwidths": {
+    "loglam": 0.35,
+    "h": 0.01,
+    "Ob": 0.002,
+    "Om": 0.02,
+    "As": 1.2e-10,
+    "ns": 0.01,
+    "zre": 2.0
+  },
+  "boundary_axes": ["loglam"],
+  "poll_improvement": 0.004414142226323747,
+  "exact_likelihood_calls": 229
+}
