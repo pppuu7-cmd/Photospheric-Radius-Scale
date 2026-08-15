@@ -10,11 +10,11 @@ Active workflow run: `31856275702` (`RTK Stage 4D1 lambda profile`). It contains
 
 The earlier dedicated large-lambda Stage 4C candidate at `lambda_D=1e8` had `S_eff=1051.91604846` and `S_k01=1051.78660426`. Stage 4D1 uses three deterministic optimizer starts at every fixed lambda and has found a substantially deeper `eff` basin. The old `S_eff=1051.91605` must therefore not be used as the asymptotic profile reference.
 
-## Completed `eff` profile points
+## Completed raw `eff` profile points
 
 Reference stationarity-checked local LCDM candidate: `S_LCDM,eff=1050.17772999`.
 
-| lambda_D | S_eff | Delta S vs local LCDM | boundary hit | Stage-4D1 poll improvement |
+| lambda_D | raw Stage-4D1 S_eff | Delta S vs local LCDM | boundary hit | Stage-4D1 poll improvement |
 |---:|---:|---:|---|---:|
 | 1e3 | 1054.57486 | +4.39713 | no | 0 |
 | 3e3 | 1052.0558287744 | +1.87810 | no | 0 |
@@ -23,9 +23,9 @@ Reference stationarity-checked local LCDM candidate: `S_LCDM,eff=1050.17772999`.
 | 1e5 | **1051.5371767423** | **+1.35945** | no | **0** |
 | 1e6 | 1051.5598569515 | +1.38213 | no | 0.0049113 |
 
-The current best completed `eff` point is therefore finite, at `lambda_D=1e5`, not `1e6`. Since `S_eff(1e5)` is lower than both `S_eff(3e4)` and `S_eff(1e6)`, the completed grid now shows a shallow finite-lambda dip rather than a strictly monotonic approach to the dust limit. The new `1e8` Stage 4D1 point is still required to classify the high-lambda tail and determine whether this dip survives the full multi-start profile.
+The raw completed grid has a shallow finite-lambda dip at `lambda_D=1e5`. However, the independent 73-point check at `3e4` demonstrates that the raw Stage-4D1 optimizer/poll accuracy is not yet sufficient to classify a dip at the `Delta S~0.01-0.05` level. Tight refinements are therefore required before a preferred finite lambda is claimed.
 
-### Current best completed eff candidate: lambda_D = 100000
+### Current raw best completed eff candidate: lambda_D = 100000
 
 Artifact: `rtk-stage4d1-eff-100000`, artifact id `9239499318`.
 
@@ -41,16 +41,44 @@ Artifact: `rtk-stage4d1-eff-100000`, artifact id `9239499318`.
 - `chi2_BOSS_eff = 7.369644744392044`
 - `r_d = 146.903945 Mpc`
 - no parameter-box boundary hit
-- independent Stage 4D1 poll improvement: `0`
+- independent Stage 4D1 coordinate poll improvement: `0`
 - exact likelihood calls: `228`
 
-Relative to the stationarity-checked local LCDM candidate,
+Relative to the stationarity-checked local LCDM candidate, the raw difference is `Delta S_eff(1e5)=+1.35944675`.
 
-`Delta S_eff(lambda_D=1e5) = +1.35944675`.
+## Independent exact check at lambda_D = 30000
+
+The corrected Stage 4D0 fixed-lambda workflow (run `31857396800`) completed the physical 73-point symmetric stencil and exact Newton diagnostic. The raw Stage-4D1 center reproduced at
+
+`S_center = 1051.6092310268014`.
+
+It was **not stationary** at the requested numerical precision:
+
+- `max_abs_gradient_y = 0.37904065`,
+- Hessian in normalized coordinates was not positive definite (two negative eigenvalues),
+- clipped exact Newton diagnostic found `S_newton = 1051.5536376413036`,
+- exact improvement from the raw Stage-4D1 center: `0.0555933855`.
+
+The improved exact point is
+
+- `h = 0.6898347623963937`,
+- `Omega_b = 0.046919618346436466`,
+- `Omega_K0 = 0.2536493197461319`,
+- `A_s = 2.060369176646841e-9`,
+- `n_s = 0.9631793974885859`,
+- `z_reio = 6.591837261867912`.
+
+This gives an improved conditional difference `Delta S_eff(3e4) ~= +1.37591`, only about `0.01646` above the raw `1e5` candidate. Therefore the finite-lambda dip is currently unresolved at the required optimization precision.
+
+## Tight refinement now running
+
+A new dedicated `stage4d1_tight_refine.py` uses a smaller trust box, tighter Powell tolerances, five deterministic correlated starts and two exact coordinate-poll radii. It is being run for `lambda_D=30000` from the exact Newton-improved point and for `lambda_D=100000` from the current raw best point. Workflow: `RTK Stage 4D1 tight eff refinement`, run `31857823623`.
+
+A separate 73-point stationarity/Hessian check is also running directly at the raw `lambda_D=100000` candidate: run `31857719173`.
 
 ## Why multi-start coverage matters
 
-At several completed Stage 4D1 points the positive correlated optimizer start found a much deeper objective than the center or negative start. This confirms a multi-basin likelihood surface and means the earlier single/local-basin asymptotic candidate was insufficient to establish the profile.
+At several completed Stage 4D1 points a correlated optimizer start found a much deeper objective than the center or opposite start. This confirms a multi-basin likelihood surface and means single-basin/asymptotic fits are insufficient for the profile.
 
 ## Large-lambda analytic coordinate
 
@@ -58,19 +86,10 @@ At fixed `A=Omega_K0/(6 gamma)`, with `epsilon_D=lambda_D^(-1/2)`, the normalize
 
 `x(1+t) = A/a^3 - (a^3-1)/a^3 * epsilon_D^2 + O(epsilon_D^3)`.
 
-Hence the leading density and equation-of-state departure from dust is naturally parameterized by `delta_D=1/lambda_D`, while `c_a^2` starts at `lambda_D^(-3/2)`. The Stage 4D1 aggregator records both `epsilon_D` and `delta_D` and includes only a diagnostic high-lambda fit `S=S_inf+C/lambda_D`; it is not used as a confidence construction.
+Hence the leading density and equation-of-state departure from dust is naturally parameterized by `delta_D=1/lambda_D`, while `c_a^2` starts at `lambda_D^(-3/2)`. The Stage 4D1 aggregator records both `epsilon_D` and `delta_D`; high-lambda fits are diagnostics only and are not confidence constructions.
 
-## Independent validation now running
+## Remaining Stage 4D1 / Stage 4D2 work
 
-Two conditional fixed-lambda exact stationarity/Hessian checks are active:
+The new `eff,1e8` point and the full `k01` sequence are still running/queued. After all 14 jobs finish, the automatic aggregate workflow will assemble the profile and check boundary hits. A Stage-4D2 interpretation scaffold has also been added: it works in the physical coordinate `delta_D=1/lambda_D >= 0`, distinguishes an interior sampled minimum from a dust-boundary minimum, and deliberately reports threshold crossings only as shape diagnostics until stationarity and boundary-aware coverage/posterior calibration are complete.
 
-1. `lambda_D=30000`, `eff`: the first attempt failed before physics evaluation because `scipy` was missing for `clipy` in NOJAX mode. The workflow dependency was corrected and the same center was re-launched as run `31857396800`.
-2. `lambda_D=100000`, `eff`: a new exact 73-point symmetric stencil/Hessian check was launched directly at the current best completed Stage-4D1 point as run `31857719173`.
-
-These tests check stationarity in the six reoptimized cosmological coordinates at fixed lambda. They do not test the derivative along the lambda direction; that is supplied by the assembled Stage-4D1 profile.
-
-## Remaining Stage 4D1 work
-
-The new `eff,1e8` point and the full `k01` sequence are still running/queued. After all 14 jobs finish, the automatic `RTK Stage 4D1 aggregate` workflow will require the complete set of summaries, assemble CSV/JSON/Markdown outputs, check boundary hits, and evaluate the high-lambda tail.
-
-Because a preferred finite-deviation coordinate may lie near a physical/profile boundary, nominal Delta-S threshold crossings are shape diagnostics only until boundary-aware calibration or a declared-prior posterior analysis is performed.
+No confidence interval, significance or Bayesian evidence should be inferred from the current raw/tight profile until those checks are complete.
