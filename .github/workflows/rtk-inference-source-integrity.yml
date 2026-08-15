@@ -17,7 +17,9 @@ jobs:
       - name: Generate production inference core
         run: python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py inference_core.generated.py
       - name: Enforce production-critical invariants
+        shell: bash
         run: |
+          set -o pipefail
           python3 - <<'PY' | tee inference_source_integrity.log
           from pathlib import Path
           import ast, json
