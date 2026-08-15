@@ -36,8 +36,10 @@ jobs:
         working-directory: class_public
         run: make -j2 class
       - name: Run production-equivalent numerical convergence audit
+        shell: bash
         working-directory: class_public
         run: |
+          set -o pipefail
           python3 boss_mapping_convergence.py | tee ../boss_mapping_convergence.log
           grep -q BOSS_MAPPING_CONVERGENCE_COMPLETE ../boss_mapping_convergence.log
           cat output/boss_convergence/boss_convergence_summary.json
