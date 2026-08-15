@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Numerical convergence audit for RTK BOSS eff/k01 growth mappings.
 
-Runs CLASS repeatedly at one RTK parameter point while varying the redshift
-sampling used for d/d ln(a) and P_k_max_h/Mpc used in the sigma8 integral.
+Runs CLASS repeatedly at one RTK parameter point while varying only the
+redshift sampling used for d/d ln(a) and P_k_max_h/Mpc used in the sigma8
+integral.  All other CLASS settings match the production likelihood harness.
 The BAO distance convention and the full 9x9 covariance are kept fixed.
 This is a numerical-systematics test, not a fit or significance calculation.
 """
@@ -15,7 +16,6 @@ BOSS_DATA=Path('boss_DR12Consensus_final.dat')
 BOSS_COV=Path('final_consensus_covtot_dM_Hz_fsig.txt')
 C_KM_S=299792.458; R_FID=147.78
 
-# Current exact shared-descent point.
 P={'lam':54804.51998233707,'h':0.6905121965689395,'Ob':0.046831928061712685,
    'Om':0.2529636778757895,'As':2.069477450200849e-9,
    'ns':0.9641699662731723,'zre':6.855358068811081}
@@ -149,12 +149,13 @@ def parse_drag(log):
     return zd,rd
 
 def make_ini(tag,pmax,zgrid):
+    # Match joint_profile_runner.make_ini exactly except for pmax and z_pk.
     lines=[f"h = {P['h']}","T_cmb = 2.7255",f"Omega_b = {P['Ob']}",
       f"Omega_khronon = {P['Om']}",f"lambda_D = {P['lam']}","Omega_Lambda = 0.","model = 2.",
       "N_ur = 3.046","N_ncdm = 0","Omega_k = 0.","Omega_fld = 0.","Omega_scf = 0.",
       "recombination = RECFAST","reio_parametrization = reio_camb",f"z_reio = {P['zre']}",
-      "output = mPk","gauge = newtonian",f"A_s_ad = {P['As']}",f"n_s_ad = {P['ns']}",
-      f"P_k_max_h/Mpc = {pmax}","z_pk = "+','.join(str(z) for z in zgrid),
+      "output = tCl,pCl,lCl,mPk","lensing = yes","gauge = newtonian",f"A_s_ad = {P['As']}",f"n_s_ad = {P['ns']}",
+      "l_max_scalars = 2600",f"P_k_max_h/Mpc = {pmax}","z_pk = "+','.join(str(z) for z in zgrid),
       "z_max_pk = 1.0",f"root = output/boss_convergence/{tag}_",
       "background_verbose = 1","thermodynamics_verbose = 1","perturbations_verbose = 0","write background = yes"]
     f=Path('bossconv_'+tag+'.ini');f.write_text('\n'.join(lines)+'\n');return f
@@ -190,6 +191,7 @@ finest=rows[-1]
 summary={'stage':'BOSS-growth-mapping-numerical-convergence','params':P,'settings':rows,
  'legacy_vs_finest':{'delta_chi2_eff':finest['chi2_eff']-base['chi2_eff'],
                      'delta_chi2_k01':finest['chi2_k01']-base['chi2_k01']},
+ 'production_baseline_expected':{'rd':146.967497,'chi2_eff':7.419950339366178,'chi2_k01':7.431368670906675},
  'warning':'Numerical-systematics audit only; eff/k01 remain alternative model-specific RSD mappings.'}
 (OUT/'boss_convergence_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 with (OUT/'boss_convergence.csv').open('w',newline='') as f:
