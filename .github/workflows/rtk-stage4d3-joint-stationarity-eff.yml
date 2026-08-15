@@ -56,21 +56,21 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data
           tar -xzf planck.tar.gz -C planck_data
-      - name: Run exact 7D Hessian at recentered best point
+      - name: Run exact 7D Hessian at lower cross-mapping point
         working-directory: class_public
         run: |
-          python3 stage4d3_joint_stationarity.py planck_data eff 40436.338970991375 \
-            0.6906274201064062 0.046826324144271854 0.25285216262766413 \
-            2.069111596683301e-9 0.9642946574432717 6.826647411438569 \
-            1050.7330609991448 '${{ matrix.scale }}' | tee '../joint_eff_${{ matrix.scale }}.log'
-          grep -E 'STAGE4D3_JOINT_STATIONARITY_(PASS|FAIL)' '../joint_eff_${{ matrix.scale }}.log'
+          python3 stage4d3_joint_stationarity.py planck_data eff 54433.14880490279 \
+            0.6905397901741095 0.04683753398237637 0.2529584071658237 \
+            2.0692391697144382e-9 0.9641151317062118 6.82802874142963 \
+            1050.7254524423033 '${{ matrix.scale }}' | tee '../joint_eff_cross_${{ matrix.scale }}.log'
+          grep -E 'STAGE4D3_JOINT_STATIONARITY_(PASS|FAIL)' '../joint_eff_cross_${{ matrix.scale }}.log'
           find output/stage4d3_joint_stationarity -name joint_stationarity_summary.json -print -exec cat {} \;
       - name: Upload Hessian artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rtk-stage4d3-joint-eff-recenter-s${{ matrix.scale }}
+          name: rtk-stage4d3-joint-eff-cross-s${{ matrix.scale }}
           path: |
-            joint_eff_${{ matrix.scale }}.log
+            joint_eff_cross_${{ matrix.scale }}.log
             class_public/output/stage4d3_joint_stationarity/**/joint_stationarity_summary.json
             class_public/output/stage4d3_joint_stationarity/**/joint_stationarity_points.csv
           if-no-files-found: error
