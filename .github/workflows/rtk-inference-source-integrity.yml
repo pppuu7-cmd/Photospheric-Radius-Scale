@@ -14,17 +14,23 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: rtk-class-build
-      - name: Generate production inference core
-        run: python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py inference_core.generated.py
+      - name: Generate production inference core twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py inference_core.generated.py
+          python3 rtk/prepare_inference_core.py inference_core.generated.py inference_core.regenerated.py
+          cmp inference_core.generated.py inference_core.regenerated.py
       - name: Enforce production-critical invariants
         shell: bash
         run: |
           set -o pipefail
           python3 - <<'PY' | tee inference_source_integrity.log
           from pathlib import Path
-          import ast, json
+          import ast, hashlib, json
           src=Path('rtk/joint_profile_runner.py').read_text()
           out=Path('inference_core.generated.py').read_text()
+          out2=Path('inference_core.regenerated.py').read_text()
           checks={
             'generated_parses': False,
             'exact_float_cache_present': "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" in out,
@@ -38,10 +44,17 @@ jobs:
             'source_contains_transform_anchor_cache': 'round(float(p[k]),12)' in src,
             'source_contains_transform_anchor_As': 'A_s_ad' in src,
             'source_contains_transform_anchor_ns': 'n_s_ad' in src,
+            'preparation_byte_idempotent': out == out2,
           }
-          ast.parse(out); checks['generated_parses']=True
+          ast.parse(out); ast.parse(out2); checks['generated_parses']=True
           failed=[k for k,v in checks.items() if not v]
-          summary={'checks':checks,'failed':failed,'scope':'production inference-core generation regression gate'}
+          summary={
+            'checks':checks,
+            'generated_sha256':hashlib.sha256(out.encode()).hexdigest(),
+            'regenerated_sha256':hashlib.sha256(out2.encode()).hexdigest(),
+            'failed':failed,
+            'scope':'production inference-core generation and idempotence regression gate'
+          }
           print('INFERENCE_SOURCE_INTEGRITY_RESULT',json.dumps(summary,sort_keys=True))
           Path('inference_source_integrity_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
           if failed: raise SystemExit('FAILED: '+','.join(failed))
@@ -55,4 +68,5 @@ jobs:
             inference_source_integrity.log
             inference_source_integrity_summary.json
             inference_core.generated.py
+            inference_core.regenerated.py
           if-no-files-found: error
