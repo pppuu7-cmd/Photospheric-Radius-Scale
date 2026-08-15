@@ -19,7 +19,9 @@ jobs:
       - name: Install numerical dependency
         run: python3 -m pip install --disable-pip-version-check numpy
       - name: Audit covariance and analytic offset profiling
+        shell: bash
         run: |
+          set -o pipefail
           python3 - <<'PY' | tee pantheon_audit.log
           from pathlib import Path
           import json, math
@@ -42,7 +44,6 @@ jobs:
           if len(dat)!=n: raise SystemExit(f'data/cov dimension mismatch {len(dat)} != {n}')
           for i,r in enumerate(dat): C[i,i]+=r[5]*r[5]
 
-          # Independent linear-algebra checks.
           asym=float(np.max(np.abs(C-C.T)))
           eig=np.linalg.eigvalsh(C)
           Lnp=np.linalg.cholesky(C)
@@ -68,10 +69,8 @@ jobs:
           denom=float(one@Ci@one)
 
           rng=np.random.default_rng(20260816)
-          worst_chi=0.0; worst_offset=0.0
+          worst_abs=0.0; worst_rel=0.0; worst_offset=0.0
           cases=[]
-          # Include actual observed magnitudes relative to a smooth deterministic reference,
-          # plus synthetic residuals. Only the nuisance-offset algebra is under test here.
           z=np.asarray([r[1] for r in dat]); mb=np.asarray([r[4] for r in dat])
           refs=[mb-(5*np.log10((1+z)*(z+0.5*z*z))+43.0)]
           refs += [rng.normal(size=n), rng.normal(scale=.2,size=n), np.linspace(-1,1,n)]
@@ -81,32 +80,33 @@ jobs:
               r=d-off*one
               chi_direct=float(r@Ci@r)
               chi_projection=float(d@Ci@d-(one@Ci@d)**2/denom)
-              # Normal-equation optimum must make derivative exactly zero numerically.
               grad=float(one@Ci@r)
-              # Cross-check offset against solving the one-parameter normal equation explicitly.
               off2=float(np.linalg.solve(np.array([[denom]]),np.array([one@Ci@d]))[0])
-              dc=abs(chi_direct-chi_projection); do=abs(off-off2)
-              worst_chi=max(worst_chi,dc); worst_offset=max(worst_offset,do)
-              cases.append({'case':idx,'offset':off,'chi2':chi_direct,'projection_diff':dc,'normal_grad':grad,'offset_diff':do})
+              dc=abs(chi_direct-chi_projection)
+              dr=dc/max(1.0,abs(chi_direct),abs(chi_projection))
+              do=abs(off-off2)
+              worst_abs=max(worst_abs,dc); worst_rel=max(worst_rel,dr); worst_offset=max(worst_offset,do)
+              cases.append({'case':idx,'offset':off,'chi2':chi_direct,'projection_diff_abs':dc,'projection_diff_rel':dr,'normal_grad':grad,'offset_diff':do})
 
           summary={
             'n':n,'symmetry_max_abs':asym,'eig_min':float(eig[0]),'eig_max':float(eig[-1]),
             'condition_raw':cond_raw,'condition_correlation':cond_corr,
             'custom_vs_numpy_cholesky_max_abs':chol_max,
-            'offset_projection_worst_chi2_abs_diff':worst_chi,
+            'offset_projection_worst_chi2_abs_diff':worst_abs,
+            'offset_projection_worst_chi2_rel_diff':worst_rel,
             'offset_normal_eq_worst_abs_diff':worst_offset,'cases':cases,
             'scope':'Pantheon covariance/data-integrity and additive-offset profiling algebra only'
           }
+          Path('pantheon_audit_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
           print('PANTHEON_AUDIT_RESULT',json.dumps(summary,sort_keys=True))
-          # Strict but architecture-safe gates.
           assert n==40
           assert asym < 1e-13
           assert eig[0] > 0
           assert chol_max < 1e-12
-          assert worst_chi < 1e-9
+          # Projection form subtracts two O(large) numbers; use a scale-aware gate.
+          assert worst_rel < 1e-10
           assert worst_offset < 1e-12
           assert max(abs(c['normal_grad']) for c in cases) < 1e-9
-          Path('pantheon_audit_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
           print('PANTHEON_AUDIT_PASS')
           PY
       - name: Upload audit artifact
