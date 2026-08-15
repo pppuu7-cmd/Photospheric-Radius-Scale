@@ -4,6 +4,9 @@ on:
   workflow_run:
     workflows: ['RTK Stage 4D1 lambda profile']
     types: [completed]
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d1-aggregate.yml'
 
 permissions:
   actions: read
@@ -11,7 +14,7 @@ permissions:
 
 jobs:
   aggregate:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +24,7 @@ jobs:
       - name: Download all Stage 4D1 artifacts
         env:
           GH_TOKEN: ${{ github.token }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ID: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || '31856275702' }}
         run: |
           mkdir -p downloads
           gh run download "$RUN_ID" --repo "${{ github.repository }}" --dir downloads
@@ -34,7 +37,9 @@ jobs:
           test "${#summaries[@]}" -eq 14
           for mapping in eff k01; do
             for lam in 1000 3000 10000 30000 100000 1000000 100000000; do
-              n=$(find downloads -path "*rtk-stage4d1-${mapping}-${lam}*" -name profile_summary.json -type f | wc -l)
+              dir="downloads/rtk-stage4d1-${mapping}-${lam}"
+              test -d "$dir" || { echo "Missing artifact directory $dir"; exit 1; }
+              n=$(find "$dir" -name profile_summary.json -type f | wc -l)
               test "$n" -eq 1 || { echo "Expected one summary for ${mapping}/${lam}, got $n"; exit 1; }
             done
           done
