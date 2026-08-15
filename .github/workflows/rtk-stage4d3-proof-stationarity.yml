@@ -1,0 +1,170 @@
+name: RTK Stage 4D3 proof stationarity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d3-proof-stationarity.yml'
+
+jobs:
+  stationarity:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - label: finite-eff-s1
+            lambda_D: '30000'
+            mapping: eff
+            scale: '1.0'
+            h: '0.6906228451'
+            Ob: '0.04682481963'
+            Om: '0.25284181742'
+            As: '2.0671578968e-9'
+            ns: '0.9643135679'
+            zre: '6.793035785'
+            expected: '1050.776178982213'
+          - label: finite-eff-s05
+            lambda_D: '30000'
+            mapping: eff
+            scale: '0.5'
+            h: '0.6906228451'
+            Ob: '0.04682481963'
+            Om: '0.25284181742'
+            As: '2.0671578968e-9'
+            ns: '0.9643135679'
+            zre: '6.793035785'
+            expected: '1050.776178982213'
+          - label: finite-eff-s025
+            lambda_D: '30000'
+            mapping: eff
+            scale: '0.25'
+            h: '0.6906228451'
+            Ob: '0.04682481963'
+            Om: '0.25284181742'
+            As: '2.0671578968e-9'
+            ns: '0.9643135679'
+            zre: '6.793035785'
+            expected: '1050.776178982213'
+          - label: finite-k01-s1
+            lambda_D: '30000'
+            mapping: k01
+            scale: '1.0'
+            h: '0.6905753054807667'
+            Ob: '0.04684117523101159'
+            Om: '0.25292600226600576'
+            As: '2.0668677478550237e-9'
+            ns: '0.9642197720163028'
+            zre: '6.782258283087977'
+            expected: '1050.810365168584'
+          - label: finite-k01-s05
+            lambda_D: '30000'
+            mapping: k01
+            scale: '0.5'
+            h: '0.6905753054807667'
+            Ob: '0.04684117523101159'
+            Om: '0.25292600226600576'
+            As: '2.0668677478550237e-9'
+            ns: '0.9642197720163028'
+            zre: '6.782258283087977'
+            expected: '1050.810365168584'
+          - label: finite-k01-s025
+            lambda_D: '30000'
+            mapping: k01
+            scale: '0.25'
+            h: '0.6905753054807667'
+            Ob: '0.04684117523101159'
+            Om: '0.25292600226600576'
+            As: '2.0668677478550237e-9'
+            ns: '0.9642197720163028'
+            zre: '6.782258283087977'
+            expected: '1050.810365168584'
+          - label: tail-eff-s1
+            lambda_D: '100000000'
+            mapping: eff
+            scale: '1.0'
+            h: '0.6904813425341079'
+            Ob: '0.04684625815416762'
+            Om: '0.2530060418070343'
+            As: '2.0645619851910467e-9'
+            ns: '0.9638750405142277'
+            zre: '6.720161485773084'
+            expected: '1050.969995804388'
+          - label: tail-eff-s05
+            lambda_D: '100000000'
+            mapping: eff
+            scale: '0.5'
+            h: '0.6904813425341079'
+            Ob: '0.04684625815416762'
+            Om: '0.2530060418070343'
+            As: '2.0645619851910467e-9'
+            ns: '0.9638750405142277'
+            zre: '6.720161485773084'
+            expected: '1050.969995804388'
+          - label: tail-eff-s025
+            lambda_D: '100000000'
+            mapping: eff
+            scale: '0.25'
+            h: '0.6904813425341079'
+            Ob: '0.04684625815416762'
+            Om: '0.2530060418070343'
+            As: '2.0645619851910467e-9'
+            ns: '0.9638750405142277'
+            zre: '6.720161485773084'
+            expected: '1050.969995804388'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare exact likelihood tree
+        run: |
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d0_fixed_lambda_stationarity.py class_public/stage4d0_fixed_lambda_stationarity.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download Planck package
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+      - name: Run multiscale exact stationarity test
+        working-directory: class_public
+        run: |
+          python3 stage4d0_fixed_lambda_stationarity.py planck_data '${{ matrix.lambda_D }}' '${{ matrix.mapping }}' \
+            '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' \
+            '${{ matrix.expected }}' '${{ matrix.scale }}' | tee '../proof_${{ matrix.label }}.log'
+          grep -q STAGE4D0_FIXED_LAMBDA_PASS '../proof_${{ matrix.label }}.log'
+          find output/stage4d0_fixed_lambda/'${{ matrix.mapping }}'/'${{ matrix.lambda_D }}' -name stationarity_summary.json -print -exec cat {} \;
+      - name: Upload proof artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d3-proof-${{ matrix.label }}
+          path: |
+            proof_${{ matrix.label }}.log
+            class_public/output/stage4d0_fixed_lambda/${{ matrix.mapping }}/${{ matrix.lambda_D }}/scale_*/stationarity_summary.json
+            class_public/output/stage4d0_fixed_lambda/${{ matrix.mapping }}/${{ matrix.lambda_D }}/scale_*/stationarity_points.csv
+          if-no-files-found: error
