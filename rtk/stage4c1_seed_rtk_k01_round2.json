@@ -1,0 +1,33 @@
+{
+  "provenance": {
+    "workflow_run_id": 31853740060,
+    "artifact_id": 9238503057,
+    "artifact_name": "rtk-stage4c1-RTK-k01",
+    "stage": "4C.1",
+    "status": "boundary_hit_expand_again"
+  },
+  "model": "RTK",
+  "mapping": "k01",
+  "best_S": 1052.7999530100087,
+  "best_params": {
+    "lam": 3253.599566504292,
+    "h": 0.6876415412107025,
+    "Ob": 0.04713370853636241,
+    "Om": 0.2563078649786827,
+    "As": 2.052560909053839e-9,
+    "ns": 0.9627323451269592,
+    "zre": 6.35470443812342
+  },
+  "previous_halfwidths": {
+    "loglam": 0.55,
+    "h": 0.0055,
+    "Ob": 0.0011,
+    "Om": 0.011,
+    "As": 6.6e-11,
+    "ns": 0.0055,
+    "zre": 1.1
+  },
+  "boundary_axes": ["loglam"],
+  "poll_improvement": 0.0026622150894581864,
+  "exact_likelihood_calls": 71
+}
