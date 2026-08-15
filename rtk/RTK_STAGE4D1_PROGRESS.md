@@ -1,95 +1,123 @@
 # RT+DBI-Khronon — Stage 4D1 progress
 
-## Status
+## Scope
 
-Stage 4D1 is an exact fixed-`lambda_D` local profile grid. For each declared `lambda_D`, the other six cosmological parameters are reoptimized against the same CLASS + Planck + Pantheon + BOSS objective used in Stage 4C. These are local fixed-lambda profile candidates, not a global profile likelihood, posterior, confidence interval, or Bayesian evidence.
+Stage 4D1 profiles the exact objective
 
-Active workflow run: `31856275702` (`RTK Stage 4D1 lambda profile`). It contains 14 jobs: seven `lambda_D` values for each of the `eff` and `k01` BOSS/RSD mappings.
+`S = -2 ln L_Planck + chi2_Pantheon + chi2_BOSS`
 
-## Important correction to the earlier asymptotic interpretation
+at fixed `lambda_D`, reoptimizing the remaining six cosmological parameters. Two BOSS/RSD mappings are retained: `eff` and `k01`. All results below are local profile candidates, not a global posterior, confidence interval, significance, or Bayesian evidence.
 
-The earlier dedicated large-lambda Stage 4C candidate at `lambda_D=1e8` had `S_eff=1051.91604846` and `S_k01=1051.78660426`. Stage 4D1 uses three deterministic optimizer starts at every fixed lambda and has found a substantially deeper `eff` basin. The old `S_eff=1051.91605` must therefore not be used as the asymptotic profile reference.
+Reference stationarity-checked local LCDM candidates:
 
-## Completed raw `eff` profile points
+- `S_LCDM,eff = 1050.17772999`
+- `S_LCDM,k01 = 1050.15993541`
 
-Reference stationarity-checked local LCDM candidate: `S_LCDM,eff=1050.17772999`.
+## Completed 14-point raw profile
 
-| lambda_D | raw Stage-4D1 S_eff | Delta S vs local LCDM | boundary hit | Stage-4D1 poll improvement |
-|---:|---:|---:|---|---:|
-| 1e3 | 1054.57486 | +4.39713 | no | 0 |
-| 3e3 | 1052.0558287744 | +1.87810 | no | 0 |
-| 1e4 | 1051.7946846876 | +1.61695 | no | 0 |
-| 3e4 | 1051.6092310268 | +1.43150 | no | 0.0018556 |
-| 1e5 | **1051.5371767423** | **+1.35945** | no | **0** |
-| 1e6 | 1051.5598569515 | +1.38213 | no | 0.0049113 |
+Workflow `31856275702` completed all seven lambda values for both mappings. The corrected aggregate workflow `31898432252` succeeded after exact artifact-directory validation was fixed.
 
-The raw completed grid has a shallow finite-lambda dip at `lambda_D=1e5`. However, the independent 73-point check at `3e4` demonstrates that the raw Stage-4D1 optimizer/poll accuracy is not yet sufficient to classify a dip at the `Delta S~0.01-0.05` level. Tight refinements are therefore required before a preferred finite lambda is claimed.
+### eff raw profile
 
-### Current raw best completed eff candidate: lambda_D = 100000
+| lambda_D | raw S_eff |
+|---:|---:|
+| 1e3 | 1054.57485623 |
+| 3e3 | 1052.05582877 |
+| 1e4 | 1051.79468469 |
+| 3e4 | 1051.60923103 |
+| 1e5 | 1051.53717674 |
+| 1e6 | 1051.55985695 |
+| 1e8 | 1051.32449549 |
 
-Artifact: `rtk-stage4d1-eff-100000`, artifact id `9239499318`.
+### k01 raw profile
 
-- `S_eff = 1051.5371767423296`
-- `h = 0.6896156938454194`
-- `Omega_b = 0.046969011141089693`
-- `Omega_K0 = 0.25414311872101175`
-- `A_s = 2.0602067886760265e-9`
-- `n_s = 0.9633856082218082`
-- `z_reio = 6.568446193824527`
-- `log L_Planck = -502.33569200248445`
-- `chi2_SN = 39.496147992968844`
-- `chi2_BOSS_eff = 7.369644744392044`
-- `r_d = 146.903945 Mpc`
+| lambda_D | raw S_k01 |
+|---:|---:|
+| 1e3 | 1052.99098948 |
+| 3e3 | 1052.01395410 |
+| 1e4 | 1051.78242627 |
+| 3e4 | 1051.72035633 |
+| 1e5 | 1051.60600015 |
+| 1e6 | 1051.51907405 |
+| 1e8 | 1051.24650973 |
+
+At raw Stage-4D1 optimizer accuracy both mappings look approximately monotonic toward large lambda. This raw conclusion is **not** reliable at the sub-unit level because tighter searches have already found a substantially deeper finite-lambda basin.
+
+## Tight eff refinement
+
+A dedicated five-start tight Powell search with smaller trust boxes and two exact coordinate-poll radii completed for `lambda_D=3e4` and `1e5`.
+
+### lambda_D = 30000
+
+- `S_eff = 1051.0755927897148`
+- `S_k01` evaluated at the same point = `1051.0835197820677`
+- `h = 0.6905802910391277`
+- `Omega_b = 0.04684163640622535`
+- `Omega_K0 = 0.2529201285589534`
+- `A_s = 2.0630563560740213e-9`
+- `n_s = 0.9640474757333444`
+- `z_reio = 6.6839724497605335`
+- `r_d = 146.965498 Mpc`
 - no parameter-box boundary hit
-- independent Stage 4D1 coordinate poll improvement: `0`
-- exact likelihood calls: `228`
+- exact likelihood calls = `626`
+- post-optimizer exact poll improvement = `0.0705213`
 
-Relative to the stationarity-checked local LCDM candidate, the raw difference is `Delta S_eff(1e5)=+1.35944675`.
+Relative to the stable local LCDM eff candidate,
 
-## Independent exact check at lambda_D = 30000
+`Delta S_eff(3e4) = +0.89786280`.
 
-The corrected Stage 4D0 fixed-lambda workflow (run `31857396800`) completed the physical 73-point symmetric stencil and exact Newton diagnostic. The raw Stage-4D1 center reproduced at
+The sizeable post-optimizer poll improvement means this point is not yet accepted as stationary.
 
-`S_center = 1051.6092310268014`.
+### lambda_D = 100000
 
-It was **not stationary** at the requested numerical precision:
+- `S_eff = 1051.1778474864889`
+- `S_k01` at the same point = `1051.1887989863240`
+- `h = 0.6901873895028806`
+- `Omega_b = 0.04688758336412194`
+- `Omega_K0 = 0.253421603515163`
+- `A_s = 2.062306350250812e-9`
+- `n_s = 0.9638955372522343`
+- `z_reio = 6.647719070471404`
+- `r_d = 146.943558 Mpc`
+- no parameter-box boundary hit
+- exact likelihood calls = `563`
+- post-optimizer poll improvement = `0.0006143`
 
-- `max_abs_gradient_y = 0.37904065`,
-- Hessian in normalized coordinates was not positive definite (two negative eigenvalues),
-- clipped exact Newton diagnostic found `S_newton = 1051.5536376413036`,
-- exact improvement from the raw Stage-4D1 center: `0.0555933855`.
+Relative to the stable local LCDM eff candidate,
 
-The improved exact point is
+`Delta S_eff(1e5) = +1.00011750`.
 
-- `h = 0.6898347623963937`,
-- `Omega_b = 0.046919618346436466`,
-- `Omega_K0 = 0.2536493197461319`,
-- `A_s = 2.060369176646841e-9`,
-- `n_s = 0.9631793974885859`,
-- `z_reio = 6.591837261867912`.
+## Consequence for the raw large-lambda interpretation
 
-This gives an improved conditional difference `Delta S_eff(3e4) ~= +1.37591`, only about `0.01646` above the raw `1e5` candidate. Therefore the finite-lambda dip is currently unresolved at the required optimization precision.
+The raw `lambda_D=1e8` points are
 
-## Tight refinement now running
+- `S_eff = 1051.32449549`
+- `S_k01 = 1051.24650973`.
 
-A new dedicated `stage4d1_tight_refine.py` uses a smaller trust box, tighter Powell tolerances, five deterministic correlated starts and two exact coordinate-poll radii. It is being run for `lambda_D=30000` from the exact Newton-improved point and for `lambda_D=100000` from the current raw best point. Workflow: `RTK Stage 4D1 tight eff refinement`, run `31857823623`.
+The tight `lambda_D=3e4` point is already lower than both raw high-lambda objectives, even before a mapping-specific `k01` tight optimization. Therefore it is currently invalid to conclude from the raw 14-point curve that the likelihood prefers the dust boundary. Finite-lambda and asymptotic points must be optimized to the **same numerical depth** before the lambda profile can be classified.
 
-A separate 73-point stationarity/Hessian check is also running directly at the raw `lambda_D=100000` candidate: run `31857719173`.
+## Validation now running
 
-## Why multi-start coverage matters
+1. Exact 73-point stationarity/Hessian test at the tight `eff, lambda_D=3e4` center: workflow `31898477269`.
+2. Exact 73-point stationarity/Hessian test at the tight `eff, lambda_D=1e5` center: workflow `31898491296`.
+3. Symmetric tight refinement workflow `31898624907` for:
+   - `eff, lambda_D=1e8`,
+   - `k01, lambda_D=1e8`,
+   - `k01, lambda_D=3e4`,
+   - `k01, lambda_D=1e5`.
 
-At several completed Stage 4D1 points a correlated optimizer start found a much deeper objective than the center or opposite start. This confirms a multi-basin likelihood surface and means single-basin/asymptotic fits are insufficient for the profile.
+These checks are designed to determine whether the finite-lambda dip survives equal-depth optimization and whether it is present in both RSD mappings.
 
 ## Large-lambda analytic coordinate
 
-At fixed `A=Omega_K0/(6 gamma)`, with `epsilon_D=lambda_D^(-1/2)`, the normalized density has a first-order cancellation:
+For fixed positive `A=Omega_K0/(6 gamma)` and `delta_D=1/lambda_D`, the exact normalized Khronon density has no `O(lambda_D^-1/2)` correction:
 
-`x(1+t) = A/a^3 - (a^3-1)/a^3 * epsilon_D^2 + O(epsilon_D^3)`.
+`x(1+t) = A/a^3 - (a^3-1)/a^3 * lambda_D^-1 + O(lambda_D^-3/2)`.
 
-Hence the leading density and equation-of-state departure from dust is naturally parameterized by `delta_D=1/lambda_D`, while `c_a^2` starts at `lambda_D^(-3/2)`. The Stage 4D1 aggregator records both `epsilon_D` and `delta_D`; high-lambda fits are diagnostics only and are not confidence constructions.
+Thus the leading background departure from dust is naturally linear in `delta_D=1/lambda_D`, while `c_a^2 ~ lambda_D^-3/2` and `k_* ~ lambda_D^3/4`.
 
-## Remaining Stage 4D1 / Stage 4D2 work
+If the equal-depth numerical profile ultimately minimizes at `delta_D=0`, boundary-aware inference is required. If a stable interior finite-lambda minimum survives, an interior profile/posterior analysis becomes appropriate. In neither case should nominal Delta-S crossings be called confidence limits before numerical stationarity and statistical calibration are established.
 
-The new `eff,1e8` point and the full `k01` sequence are still running/queued. After all 14 jobs finish, the automatic aggregate workflow will assemble the profile and check boundary hits. A Stage-4D2 interpretation scaffold has also been added: it works in the physical coordinate `delta_D=1/lambda_D >= 0`, distinguishes an interior sampled minimum from a dust-boundary minimum, and deliberately reports threshold crossings only as shape diagnostics until stationarity and boundary-aware coverage/posterior calibration are complete.
+## Immediate next decision
 
-No confidence interval, significance or Bayesian evidence should be inferred from the current raw/tight profile until those checks are complete.
+Do not launch production MCMC yet. First obtain equal-depth, stationarity-checked fixed-lambda minima for the finite basin and the large-lambda tail. Only then construct the refined profile in `delta_D=1/lambda_D` and decide whether the next stage is an interior finite-lambda posterior or a boundary-aware lower bound on `lambda_D`.
