@@ -45,68 +45,93 @@ At raw Stage-4D1 optimizer accuracy both mappings look approximately monotonic t
 
 ## Tight eff refinement
 
-A dedicated five-start tight Powell search with smaller trust boxes and two exact coordinate-poll radii completed for `lambda_D=3e4` and `1e5`.
-
 ### lambda_D = 30000
 
+Five-start tight Powell plus exact polls reached
+
 - `S_eff = 1051.0755927897148`
-- `S_k01` evaluated at the same point = `1051.0835197820677`
-- `h = 0.6905802910391277`
-- `Omega_b = 0.04684163640622535`
-- `Omega_K0 = 0.2529201285589534`
-- `A_s = 2.0630563560740213e-9`
-- `n_s = 0.9640474757333444`
-- `z_reio = 6.6839724497605335`
-- `r_d = 146.965498 Mpc`
-- no parameter-box boundary hit
-- exact likelihood calls = `626`
-- post-optimizer exact poll improvement = `0.0705213`
+- `S_k01 = 1051.0835197820677` at the same parameters,
+- `h = 0.6905802910391277`,
+- `Omega_b = 0.04684163640622535`,
+- `Omega_K0 = 0.2529201285589534`,
+- `A_s = 2.0630563560740213e-9`,
+- `n_s = 0.9640474757333444`,
+- `z_reio = 6.6839724497605335`,
+- `r_d = 146.965498 Mpc`.
 
-Relative to the stable local LCDM eff candidate,
+No parameter-box boundary was hit. Relative to the stable local LCDM eff candidate, this gives `Delta S_eff=+0.89786280`.
 
-`Delta S_eff(3e4) = +0.89786280`.
+The independent 73-point exact fixed-lambda check (workflow `31898477269`) reproduced the center exactly and showed that the point is inside a **locally convex** basin: all six normalized-Hessian eigenvalues are positive,
 
-The sizeable post-optimizer poll improvement means this point is not yet accepted as stationary.
+`0.04668, 0.05988, 0.09514, 0.31004, 3.08656, 7.37635`.
+
+However the center is not yet stationary. The largest normalized finite-difference gradient component is about `0.1472`, dominated by the correlated amplitude/reionization direction. A stencil cross-step increasing both `A_s` and `z_reio` found the current best exact point
+
+- `S_eff = 1051.026338142692`,
+- `S_k01 = 1051.035699794882`,
+- `A_s = 2.0670563560740213e-9`,
+- `z_reio = 6.753972449760534`,
+- all other six-parameter coordinates unchanged from the tight center.
+
+This improves the tight center by `0.04925465` and gives the current best exact conditional difference
+
+`Delta S_eff(3e4) = +0.84860815`
+
+relative to the stationarity-checked local LCDM eff candidate. A clipped Newton diagnostic also improved the center, to `S_eff=1051.04126124`, but not as much as the exact cross-step. Therefore `lambda_D=3e4` remains an **unconverged but locally convex** finite-lambda candidate.
 
 ### lambda_D = 100000
 
-- `S_eff = 1051.1778474864889`
-- `S_k01` at the same point = `1051.1887989863240`
-- `h = 0.6901873895028806`
-- `Omega_b = 0.04688758336412194`
-- `Omega_K0 = 0.253421603515163`
-- `A_s = 2.062306350250812e-9`
-- `n_s = 0.9638955372522343`
-- `z_reio = 6.647719070471404`
-- `r_d = 146.943558 Mpc`
-- no parameter-box boundary hit
-- exact likelihood calls = `563`
-- post-optimizer poll improvement = `0.0006143`
+Tight Powell reached
 
-Relative to the stable local LCDM eff candidate,
+- `S_eff = 1051.1778474864889`,
+- `S_k01 = 1051.1887989863240`,
+- `h = 0.6901873895028806`,
+- `Omega_b = 0.04688758336412194`,
+- `Omega_K0 = 0.253421603515163`,
+- `A_s = 2.062306350250812e-9`,
+- `n_s = 0.9638955372522343`,
+- `z_reio = 6.647719070471404`,
+- `r_d = 146.943558 Mpc`.
 
-`Delta S_eff(1e5) = +1.00011750`.
+The exact 73-point stationarity check (workflow `31898491296`) found no stencil point that improves this center. Its normalized Hessian is positive definite with eigenvalues
+
+`0.04381, 0.09288, 0.11346, 0.33251, 3.07095, 7.37725`.
+
+The formal central finite-difference gradient is still non-negligible (`max |g_y| ~= 0.2205`) and the clipped Newton extrapolation worsens the exact objective by about `0.0941`. This means the local surface is non-quadratic at the chosen stencil scale; the point is a stable finite-stencil candidate, but a smaller-trust-region optimizer is still required for a stronger stationarity statement.
+
+Relative to the stable local LCDM eff candidate, `Delta S_eff(1e5)=+1.00011750`.
+
+## Component origin of the finite-lambda improvement
+
+Comparing the tight `lambda_D=3e4` center with the raw `lambda_D=1e8` eff point, the finite point improves the total objective by about `0.24890`. This improvement is driven almost entirely by the Planck primary-CMB term:
+
+- Planck contribution to Delta objective (`3e4 - 1e8`): `-0.28093`,
+- Pantheon: `+0.01765`,
+- BOSS eff: `+0.01438`,
+- total: `-0.24890`.
+
+Thus the present hint of a finite-lambda basin is **not** being created by the approximate RSD mapping. Individual Planck lowT/lowE/high-l components are being audited separately before physical interpretation of the CMB improvement.
 
 ## Consequence for the raw large-lambda interpretation
 
 The raw `lambda_D=1e8` points are
 
-- `S_eff = 1051.32449549`
+- `S_eff = 1051.32449549`,
 - `S_k01 = 1051.24650973`.
 
-The tight `lambda_D=3e4` point is already lower than both raw high-lambda objectives, even before a mapping-specific `k01` tight optimization. Therefore it is currently invalid to conclude from the raw 14-point curve that the likelihood prefers the dust boundary. Finite-lambda and asymptotic points must be optimized to the **same numerical depth** before the lambda profile can be classified.
+The finite `3e4` basin is already lower than these raw high-lambda objectives, but this is not yet an equal-depth comparison. Large-lambda points must receive the same tight/trust-region optimization before the lambda profile can be classified.
 
-## Validation now running
+## Equal-depth numerical validation now running
 
-1. Exact 73-point stationarity/Hessian test at the tight `eff, lambda_D=3e4` center: workflow `31898477269`.
-2. Exact 73-point stationarity/Hessian test at the tight `eff, lambda_D=1e5` center: workflow `31898491296`.
-3. Symmetric tight refinement workflow `31898624907` for:
-   - `eff, lambda_D=1e8`,
-   - `k01, lambda_D=1e8`,
-   - `k01, lambda_D=3e4`,
-   - `k01, lambda_D=1e5`.
+1. Symmetric five-start tight refinement workflow `31898624907`:
+   - `eff @ 1e8`,
+   - `k01 @ 1e8`,
+   - `k01 @ 3e4`,
+   - `k01 @ 1e5`.
+2. Independent bounded COBYQA trust-region workflow `31898756573` for both mappings at `3e4`, `1e5`, and `1e8`.
+3. Exact repeated-evaluation diagnostic to measure the numerical noise floor of CLASS+Planck at the deep RTK and LCDM points.
 
-These checks are designed to determine whether the finite-lambda dip survives equal-depth optimization and whether it is present in both RSD mappings.
+The purpose is to separate true profile structure from optimizer-family bias and numerical noise.
 
 ## Large-lambda analytic coordinate
 
@@ -116,8 +141,8 @@ For fixed positive `A=Omega_K0/(6 gamma)` and `delta_D=1/lambda_D`, the exact no
 
 Thus the leading background departure from dust is naturally linear in `delta_D=1/lambda_D`, while `c_a^2 ~ lambda_D^-3/2` and `k_* ~ lambda_D^3/4`.
 
-If the equal-depth numerical profile ultimately minimizes at `delta_D=0`, boundary-aware inference is required. If a stable interior finite-lambda minimum survives, an interior profile/posterior analysis becomes appropriate. In neither case should nominal Delta-S crossings be called confidence limits before numerical stationarity and statistical calibration are established.
+If equal-depth optimization ultimately minimizes at `delta_D=0`, boundary-aware inference is required. If a stable interior finite-lambda minimum survives, an interior profile/posterior analysis becomes appropriate. Nominal Delta-S crossings must not be called confidence limits before numerical stationarity and statistical calibration are established.
 
 ## Immediate next decision
 
-Do not launch production MCMC yet. First obtain equal-depth, stationarity-checked fixed-lambda minima for the finite basin and the large-lambda tail. Only then construct the refined profile in `delta_D=1/lambda_D` and decide whether the next stage is an interior finite-lambda posterior or a boundary-aware lower bound on `lambda_D`.
+Do not launch production MCMC yet. First compare the finite basin and large-lambda tail with the same numerical optimization depth and an independent optimizer family. If the `~3e4` basin survives, build a dense refined fixed-lambda grid around it and then reparameterize the final profile in `delta_D=1/lambda_D`. If the large-lambda tail drops below it, revert to the dust-boundary interpretation.
