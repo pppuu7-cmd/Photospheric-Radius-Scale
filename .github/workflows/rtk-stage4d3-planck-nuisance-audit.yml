@@ -1,0 +1,53 @@
+name: RTK Stage 4D3 Planck nuisance audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d3-planck-nuisance-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    env:
+      CLIPY_NOJAX: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clipy
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy
+      - name: Download Planck package
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+      - name: Inspect likelihood parameter vectors
+        run: |
+          python3 - <<'PY' | tee planck_nuisance_audit.log
+          import os
+          os.environ.setdefault('CLIPY_NOJAX','1')
+          import clipy, numpy as np
+          base='planck_data/baseline/plc_3.0'
+          paths={
+            'lowT':base+'/low_l/commander/commander_dx12_v3_2_29.clik',
+            'lowE':base+'/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik',
+            'high':base+'/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik',
+          }
+          for name,path in paths.items():
+            L=clipy.clik(path)
+            print('LIKE',name)
+            print('LMAX',list(L.get_lmax()))
+            print('DEFAULT_PAR_LEN',len(L.default_par))
+            print('DEFAULT_PAR',np.asarray(L.default_par,dtype=float).tolist())
+            for attr in ('extra_parameter_names','extra_parameter_names_int','parname','parameter_names','nuisance_names'):
+              try:
+                print(attr,getattr(L,attr))
+              except Exception as e:
+                print(attr,'UNAVAILABLE',type(e).__name__)
+          print('STAGE4D3_PLANCK_NUISANCE_AUDIT_PASS')
+          PY
+          grep -q STAGE4D3_PLANCK_NUISANCE_AUDIT_PASS planck_nuisance_audit.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d3-planck-nuisance-audit
+          path: planck_nuisance_audit.log
+          if-no-files-found: error
