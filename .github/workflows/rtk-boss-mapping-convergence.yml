@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/rtk-boss-mapping-convergence.yml'
 
+# The audit script must match production CLASS settings except z_pk and P_k_max.
 jobs:
   convergence:
     runs-on: ubuntu-24.04
