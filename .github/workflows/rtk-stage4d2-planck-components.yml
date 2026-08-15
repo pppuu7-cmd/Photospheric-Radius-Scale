@@ -10,41 +10,34 @@ jobs:
   evaluate:
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         include:
-          - label: finite30000
+          - label: current-eff-40436
             model: RTK
-            lambda_D: '30000'
-            h: '0.6905802910391277'
-            Ob: '0.04684163640622535'
-            Om: '0.2529201285589534'
-            As: '2.0670563560740213e-9'
-            ns: '0.9640474757333444'
-            zre: '6.753972449760534'
-          - label: tail1e8
+            lambda_D: '40436.338970991375'
+            h: '0.6906274201064062'
+            Ob: '0.046826324144271854'
+            Om: '0.25285216262766413'
+            As: '2.069111596683301e-9'
+            ns: '0.9642946574432717'
+            zre: '6.826647411438569'
+          - label: current-k01-54433
             model: RTK
-            lambda_D: '100000000'
-            h: '0.6903999733570492'
-            Ob: '0.04686535523606006'
-            Om: '0.2531815678716658'
-            As: '2.060919520966148e-9'
-            ns: '0.9640395240000837'
-            zre: '6.614666929484214'
-          - label: lcdm
-            model: LCDM
-            lambda_D: '0'
-            h: '0.67806754'
-            Ob: '0.04876337'
-            Om: '0.26191682'
-            As: '2.1098745e-9'
-            ns: '0.96487590'
-            zre: '7.84743'
+            lambda_D: '54433.14880490279'
+            h: '0.6905397901741095'
+            Ob: '0.04683753398237637'
+            Om: '0.2529584071658237'
+            As: '2.0692391697144382e-9'
+            ns: '0.9641151317062118'
+            zre: '6.82802874142963'
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
       RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -67,6 +60,7 @@ jobs:
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
           cd class_public
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q "round(float(p\[k\]),12)" inference_core.py
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
