@@ -1,0 +1,31 @@
+name: RTK quantum quadratic EFT proxy audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-quantum-quadratic-proxy.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Syntax check quadratic proxy audit
+        run: python3 -m py_compile rtk/quantum_quadratic_proxy_audit.py
+      - name: Run quadratic EFT proxy grid
+        run: python3 rtk/quantum_quadratic_proxy_audit.py | tee quantum_quadratic_proxy.json
+      - name: Verify strict interpretation boundary
+        run: |
+          grep -q '"status": "PASS"' quantum_quadratic_proxy.json
+          grep -q '"classification": "PROXY_ONLY_NOT_QUADRATIC_ACTION_PROOF"' quantum_quadratic_proxy.json
+          grep -q '"pure_two_derivative_PX_for_full_finite_k_sector": "INCOMPATIBLE_WITH_EXPLICIT_K_DEPENDENCE"' quantum_quadratic_proxy.json
+          grep -q '"ghost_free_quadratic_action": "NOT_YET_DERIVED"' quantum_quadratic_proxy.json
+          grep -q '"uv_completion": "NOT_CLAIMED"' quantum_quadratic_proxy.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-quantum-quadratic-eft-proxy
+          path: quantum_quadratic_proxy.json
+          if-no-files-found: error
