@@ -1,0 +1,26 @@
+# RTK + DBI-Khronon — persistent maturity ledger
+
+This table is carried forward across research iterations. `Achieved this iteration` records only completed results, never plans. Significance scale: **5/5** fundamental or publication-enabling; **4/5** major new capability; **3/5** significant validation; **2/5** incremental; **1/5** housekeeping.
+
+| Development question | State before this iteration | Achieved this iteration | Current status | Significance of this iteration | Next scientific gate |
+|---|---|---|---|---:|---|
+| Exact likelihood/runtime | Official Planck baseline + clipy-like 0.15 and exact-float cache already operational | Re-used unchanged in final-objective smoke and new matched reoptimization; Planck distributed self-tests continue to pass | ✅ closed infrastructure | 3/5 | Keep fingerprint frozen |
+| Negative-lambda local geometry | v6 negative curvature led to lambda≈2.84357e5 deep point; finest 7D Hessian gates subsequently passed | Independent correlated multiray found only tiny exact lower points: ΔS_eff=6.13e-5 and ΔS_k01=7.08e-5; no improvement larger than 0.005 | 🟡 strict sparse-objective local acceptance not exact because lower points exist; tolerance-stable and sufficient as navigation seed | **5/5** | Carry best/current deep basin into final-objective optimization rather than over-optimize obsolete sparse objective |
+| Final CLASS precision | matched-ultra settings converged well; l_linstep=1 unresolved | l_linstep=1 timed out after 1800 s for **both RTK and LCDM**, while l_linstep=2 succeeds for both; therefore freeze practical precision at matched-ultra + l_linstep=2 | ✅ frozen practical precision v1 | **5/5** | Preserve manifest and regression |
+| Dense BOSS in production objective | Dense growth convergence measured but previously treated partly as control/postprocessing | `prepare_final_inference_core.py` production core confirmed dense BOSS z grid + l_linstep=2; final-objective smoke passed RTK and LCDM fixed-point regression at 1e-9 | ✅ production objective implemented and regression-tested | **5/5** | Optimize both models on this core |
+| Final objective provenance | Different branches/precision states made absolute S incomparable | Added `rtk/final_objective_manifest.json`, explicit RTK_final_objective_v1 fingerprint and comparison rule | ✅ implemented | **4/5** | Attach fingerprint to all final results |
+| RTK vs LCDM matched reoptimization | Prior comparisons mixed navigation/fixed/precision states | Launched four simultaneous final-objective COBYQA jobs: RTK/LCDM × eff/k01, identical final core; RTK lambda is free | 🟡 in progress; no comparison claim yet | — | Consume results, recenter any improving polls, then independent optimizer/stationarity |
+| Fixed-lambda 3e4/1e5/1e6/1e8 profile | Multiple exact recenter rounds showed persistent correlated descent | No duplicate work added; preserved as separate profile-certification stream | 🟡 still incomplete for some branches | — | Resume only where it adds information after final-objective deep basin is understood |
+| Capability contract / scientific utility | Manifest existed but dense BOSS still marked pending_validation | Promoted only validated final objective/dense BOSS capabilities; added conservative CI validator preventing unjustified theory promotion; validation workflow passed | ✅ capability contract CI-protected | **4/5** | Build common observable export using implemented/derivable_now quantities only |
+| Growth scale-dependence utility | eff and k01 existed mainly as likelihood mappings | Formalized `growth_f_of_k_z` and `growth_scale_dependence_delta_f` as derivable-now capabilities | 🟡 derivation/export still pending | 3/5 | Implement f(k,z) / Δf(k,z) export with provenance |
+| EFT/PPF common language | Not derived | No false promotion; mu, Sigma, eta, EFT/ADM and PPF dictionary remain explicitly pending_derivation | 🔴 open theory work | — | Derive from action/equations before code |
+| Theory consistency | Runtime 1+w and finite-cs2 guards exist | No false promotion; Qs, full scalar/vector/tensor stability, DOF count, hyperbolicity and EFT cutoff remain explicitly pending_derivation | 🔴 major maturation block | — | Start analytic DOF/constraint and quadratic-action derivation |
+| GW/local/strong-field utility | Not yet derived | Capability contract now explicitly tracks cT, damping, polarizations, PPN, spherical sector, NS/BH/binary tests | 🔴 open | 2/5 | Derive tensor sector and static spherical equations |
+
+## Frozen numerical rules
+
+1. Scores from different objective/precision/code fingerprints must not be compared as physics.
+2. `RTK_final_objective_v1` = official Planck R3.00 + clipy-like 0.15 + Pantheon full covariance + BOSS DR12 full covariance + dense BOSS growth sampling + matched-ultra CLASS + `l_linstep=2` + exact-float cache.
+3. Any positive exact post-optimizer poll improvement triggers recenter.
+4. Stationarity requires explicit scaled gradient, positive-definite Hessian, no lower exact stencil point and non-improving Newton/correlated test as applicable.
+5. A numerical local minimum is not significance, posterior preference or Bayesian evidence.
