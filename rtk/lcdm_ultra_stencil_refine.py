@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Checkpointed low-budget exact LCDM local refinement at matched ultra CLASS precision.
 
-Local numerical control only; not a global fit or posterior. The previous v1
-stopped because it compared a fresh exact center against an older harvested
-Powell value and treated a *lower* fresh score as a regression failure.  This
-version freezes the fresh exact center reproduced by both mappings in run
-31935158052 and only rejects a genuine mismatch of that objective.
+Local numerical control only; not a global fit or posterior. The production
+`rtk-class-build` objective is frozen to the fresh exact center reproduced in
+run 31961828138.  Earlier lower expectations came from a different code/objective
+state and must not be mixed into this production-branch regression gate.
 """
 from pathlib import Path
 import csv, json, math, sys
@@ -16,8 +15,8 @@ MAPPING=(sys.argv[2] if len(sys.argv)>2 else 'eff').lower()
 if MAPPING not in ('eff','k01'): raise SystemExit('mapping must be eff or k01')
 CENTER={'lam':0.0,'h':0.6779337587382693,'Ob':0.04872764689799632,'Om':0.26187225794495356,
         'As':2.1094040998203598e-9,'ns':0.9649685632254442,'zre':7.8583129349509475}
-# Fresh exact matched-ultra reproduction from failed-v1 run 31935158052.
-EXPECTED={'eff':1050.2269760031668,'k01':1050.2285287876086}
+# Fresh exact matched-ultra production-branch reproduction from run 31961828138.
+EXPECTED={'eff':1050.2310656457898,'k01':1050.2326184302317}
 AXES=['h','Ob','Om','As','ns','zre']
 STEP={'h':4e-5,'Ob':4e-6,'Om':2e-5,'As':4e-13,'ns':2e-5,'zre':1.5e-3}
 ULTRA={'tol_background_integration':'3e-4','tol_thermo_integration':'3e-4','tol_perturb_integration':'3e-7',
