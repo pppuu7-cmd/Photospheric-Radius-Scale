@@ -1,0 +1,71 @@
+name: RTK As-zre exact fine scan
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-as-zre-fine-scan.yml'
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare exact likelihood tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/as_zre_fine_scan.py class_public/as_zre_fine_scan.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download Planck package
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+      - name: Run exact fine As-zre map
+        shell: bash
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 as_zre_fine_scan.py planck_data | tee ../as_zre_fine_scan.log
+          grep -q AS_ZRE_FINE_COMPLETE ../as_zre_fine_scan.log
+          cat output/as_zre_fine_scan/as_zre_fine_summary.json
+      - name: Upload scan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-as-zre-fine-scan
+          path: |
+            as_zre_fine_scan.log
+            class_public/output/as_zre_fine_scan/as_zre_fine_summary.json
+            class_public/output/as_zre_fine_scan/as_zre_fine_scan.csv
+          if-no-files-found: error
