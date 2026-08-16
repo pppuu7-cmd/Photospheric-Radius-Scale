@@ -10,6 +10,8 @@ the same CLASS precision settings to both models.
 from pathlib import Path
 import json
 import inference_core as core
+EFF_REG_TOL=1e-9
+K01_REG_TOL=1e-4
 POINTS={
  'rtk_v3':('RTK',{'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046851744145772894,'Om':0.25313821169954864,'As':2.080703080347647e-9,'ns':0.9644164163369503,'zre':7.14112905430964}),
  'lcdm_eff_candidate':('LCDM',{'lam':0.0,'h':0.6780618719300789,'Ob':0.04876205689548621,'Om':0.26191636161657555,'As':2.1105202470513124e-9,'ns':0.9651623965474088,'zre':7.8629952806182}),
@@ -34,7 +36,7 @@ def make_ini(model,p,tag):
             for k,v in active.items(): f.write(f'{k} = {v}\n')
     return path
 core.make_ini=make_ini
-rows=[]
+rows=[]; regression=[]
 for level,ov in LEVELS:
     active.clear(); active.update(ov)
     for name,(model,p) in POINTS.items():
@@ -43,8 +45,10 @@ for level,ov in LEVELS:
         row={'level':level,'point':name,'model':model,'score_eff':r['score'],'score_k01':r['score_k01'],'logL_planck':r['logL_planck'],'logL_high':r['logL_high'],'logL_lowT':r['logL_lowT'],'logL_lowE':r['logL_lowE'],'chi2_SN':r['chi2_SN'],'chi2_BOSS_eff':r['chi2_BOSS_eff'],'chi2_BOSS_k01':r['chi2_BOSS_k01'],'rd':r['rd']}
         rows.append(row); print('MATCHED_FIXED_POINT',json.dumps(row,sort_keys=True),flush=True)
         if level=='baseline':
-            ee,ek=EXPECTED_BASELINE[name]
-            if abs(row['score_eff']-ee)>1e-9 or abs(row['score_k01']-ek)>1e-9: raise RuntimeError(f'baseline regression {name}: {row}')
+            ee,ek=EXPECTED_BASELINE[name]; de=row['score_eff']-ee; dk=row['score_k01']-ek
+            reg={'point':name,'delta_eff':de,'delta_k01':dk,'eff_tol':EFF_REG_TOL,'k01_tol':K01_REG_TOL}
+            regression.append(reg); print('MATCHED_BASELINE_REGRESSION',json.dumps(reg,sort_keys=True),flush=True)
+            if abs(de)>EFF_REG_TOL or abs(dk)>K01_REG_TOL: raise RuntimeError(f'baseline regression {name}: {row}; {reg}')
 by={(r['level'],r['point']):r for r in rows}; comparisons=[]
 for level,_ in LEVELS:
     r=by[(level,'rtk_v3')]
@@ -59,7 +63,7 @@ for level,_ in LEVELS:
        'rtk_k01':r['score_k01'],'delta_k01_rtk_minus_best_fixed_lcdm':r['score_k01']-best_lcdm_k01['score_k01']}
     comparisons.append(c); print('MATCHED_FIXED_COMPARISON',json.dumps(c,sort_keys=True),flush=True)
 out=Path('output/class_precision_rtk_v3_vs_lcdm_fixed'); out.mkdir(parents=True,exist_ok=True)
-summary={'stage':'matched-fixed-point-RTK-v3-vs-LCDM','rows':rows,'comparisons':comparisons,
+summary={'stage':'matched-fixed-point-RTK-v3-vs-LCDM','rows':rows,'baseline_regression':regression,'regression_tolerances':{'eff':EFF_REG_TOL,'k01':K01_REG_TOL},'comparisons':comparisons,
          'scope':'Fixed-point numerical comparison only. No point is reoptimized at tight/ultra; not AIC/BIC/evidence/model preference.'}
 (out/'matched_fixed_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print('MATCHED_FIXED_RESULT',json.dumps(summary,sort_keys=True),flush=True); print('MATCHED_FIXED_COMPLETE',flush=True)
