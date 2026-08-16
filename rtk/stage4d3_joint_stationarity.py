@@ -40,7 +40,7 @@ N=len(BASE)
 scale_tag=(f'{STEP_SCALE:.8g}').replace('.','p').replace('-','m').replace('+','p')
 OUT=Path('output/stage4d3_joint_stationarity')/MAPPING/f'{LAM:.0f}'/f'scale_{scale_tag}'
 OUT.mkdir(parents=True,exist_ok=True)
-EVALS={}; ROWS=[]
+EVALS={}; ROWS=[]; RETRIES=0
 
 def cleanup(tag):
     if not tag:return
@@ -59,13 +59,22 @@ def y_to_params(y):
         p[n]=c+float(yi)*s*STEP_SCALE
     return p
 
-def key(y):return tuple(float(f'{float(v):.10g}') for v in y)
+def key(y):return tuple(float(v) for v in np.asarray(y,float))
 def score(r):return float(r['score'] if MAPPING=='eff' else r['score_k01'])
+def is_timeout(r):return r.get('error')=='CLASS_TIMEOUT' or r.get('reason')=='CLASS_TIMEOUT' or 'CLASS_TIMEOUT' in str(r.get('reason',''))
 
 def ev(y,label):
+    global RETRIES
     y=np.asarray(y,float); k=key(y)
     if k in EVALS:return EVALS[k]
     p=y_to_params(y); r=L.evaluate('RTK',p)
+    if not r.get('ok') and is_timeout(r):
+        RETRIES+=1; cleanup(r.get('tag'))
+        try:
+            ikey=('RTK',)+tuple(float(p[q]) for q in ['lam','h','Ob','Om','As','ns','zre'])
+            L.CACHE.pop(ikey,None)
+        except Exception: pass
+        r=L.evaluate('RTK',p)
     if not r.get('ok'):raise RuntimeError(f'{label}: {r}')
     rr=dict(r);rr['params']=p;rr['y']=y.tolist();EVALS[k]=rr
     row={'label':label,'mapping':MAPPING,'step_scale':STEP_SCALE,'S':score(rr)}
@@ -79,8 +88,6 @@ def ev(y,label):
 z=np.zeros(N);r0=ev(z,'center');S0=score(r0)
 if abs(S0-EXPECT)>0.03:
     raise SystemExit(f'center regression failed: exact={S0} expected={EXPECT}')
-
-# 2*N^2+1 = 99 design points for N=7.
 for i in range(N):
     for sgn in (-1.,1.):
         y=np.zeros(N);y[i]=sgn;ev(y,f'axis_{i}_{int(sgn):+d}')
@@ -141,6 +148,7 @@ summary={
  'center_is_best_within_0p005':bool(Sbest>=S0-0.005),
  'acceptance_gates':gates,
  'stationarity_pass':stationarity_pass,
+ 'memoization_key':'exact_float_normalized_coordinates','timeout_retries':RETRIES,
  'warning':'Local numerical Hessian only; not a global statistical or observational proof.'
 }
 (OUT/'joint_stationarity_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
