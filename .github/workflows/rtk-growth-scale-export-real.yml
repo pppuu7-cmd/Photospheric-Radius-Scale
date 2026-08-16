@@ -1,0 +1,85 @@
+name: RTK real growth scale-dependence export
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-growth-scale-export-real.yml'
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare final objective tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/prepare_final_inference_core.py class_public/prepare_final_inference_core.py
+          cp rtk/export_growth_scale_dependence.py class_public/export_growth_scale_dependence.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_final_inference_core.py joint_profile_runner.py inference_core_final.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install exact likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+      - name: Evaluate RTK seed and export real f(k,z)
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,sys
+          sys.argv=['probe','planck_data']
+          import inference_core_final as L
+          p={'lam':284357.3770256277,'h':0.6904692350128682,'Ob':0.04683552900298674,'Om':0.25301548428566323,'As':2.083631213860309e-9,'ns':0.9644009156458047,'zre':7.218996521149225}
+          r=L.evaluate('RTK',p)
+          if not r.get('ok'): raise SystemExit(r)
+          open('real_growth_eval.json','w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          open('tag.txt','w').write(r['tag']+'_')
+          print('REAL_RTK_FINAL_OBJECTIVE_SCORE',r['score'],r['score_k01'])
+          PY
+          PREFIX=$(cat tag.txt)
+          python3 export_growth_scale_dependence.py output/profile "$PREFIX" real_growth.json '0.01,0.03,0.05,0.1,0.2,0.5'
+          python3 - <<'PY'
+          import json,math
+          d=json.load(open('real_growth.json'))
+          vals=[abs(r['delta_f_vs_kref']) for r in d['rows']]
+          if not vals or any(not math.isfinite(x) for x in vals): raise SystemExit('invalid growth export')
+          print('REAL_GROWTH_MAX_ABS_DELTA_F',max(vals))
+          print('REAL_GROWTH_EXPORT_PASS',len(d['rows']))
+          PY
+      - name: Upload real observable export
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-real-growth-scale-export
+          path: |
+            class_public/real_growth.json
+            class_public/real_growth_eval.json
+          if-no-files-found: error
