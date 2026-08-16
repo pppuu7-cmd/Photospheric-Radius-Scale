@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Checkpointed, low-budget exact LCDM local refinement at provisional ultra CLASS precision.
+"""Checkpointed, low-budget exact LCDM local refinement at matched ultra CLASS precision.
 
 This is deliberately a local numerical refinement, not a global fit or posterior scan.
 It replaces a slow two-start Powell run that hit the Actions timeout after finding a
@@ -40,6 +40,7 @@ STEP={
  'ns':2.0e-5,
  'zre':1.5e-3,
 }
+# Must remain byte-for-byte equivalent in values to lcdm_ultra_local_refine.py.
 ULTRA={
  'tol_background_integration':'3e-4',
  'tol_thermo_integration':'3e-4',
@@ -49,7 +50,7 @@ ULTRA={
  'k_per_decade_for_bao':'180',
  'k_max_tau0_over_l_max':'4.0',
  'l_logstep':'1.02',
- 'l_linstep':'5',
+ 'l_linstep':'2',
 }
 
 OUT=Path('output/lcdm_ultra_stencil_refine')/MAPPING
@@ -61,7 +62,7 @@ orig_make_ini=L.make_ini
 def make_ini(model,p,tag):
     path=orig_make_ini(model,p,tag)
     with Path(path).open('a') as f:
-        f.write('\n# provisional ultra precision overrides\n')
+        f.write('\n# matched ultra precision overrides\n')
         for k,v in ULTRA.items(): f.write(f'{k} = {v}\n')
     return path
 L.make_ini=make_ini
@@ -147,8 +148,9 @@ def quadratic_proposal(center,steps,vals,max_norm=0.8):
         diag[a]={'used':True,'g_step':g,'h_step':hess,'x_norm':x}
     return p,diag
 
-# Center regression is intentionally strict enough to detect a changed objective,
-# but wider than bit-level because the source point was harvested from a timed-out log.
+# The center came from the timed-out matched-ultra Powell run. This gate is
+# intentionally strict: any mismatch at the millesimal level means the numerical
+# objective is not actually matched and the refinement must stop.
 r0=evaluate(CENTER,'initial')
 if not r0.get('ok'):raise SystemExit('initial center failed')
 reg=target(r0)-EXPECTED[MAPPING]
