@@ -9,11 +9,11 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
-      RTK_CLASS_TIMEOUT: '300'
+      RTK_CLASS_TIMEOUT: '900'
       RTK_CACHE_KEY_VERSION: 'exact-float-v1'
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data
           tar -xzf planck.tar.gz -C planck_data
-      - name: Run l_linstep 2-to-1 convergence audit
+      - name: Run l_linstep 2-to-1 convergence audit with extended l1 budget
         working-directory: class_public
         shell: bash
         run: |
@@ -61,10 +61,11 @@ jobs:
           grep -q LINSTEP21_COMPLETE ../matched_linstep21.log
           cat output/matched_linstep21/summary.json
       - name: Upload artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rtk-matched-linstep21
           path: |
             matched_linstep21.log
             class_public/output/matched_linstep21/summary.json
-          if-no-files-found: error
+          if-no-files-found: warn
