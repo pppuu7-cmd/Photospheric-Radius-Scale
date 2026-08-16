@@ -4,9 +4,9 @@
 Usage:
   python3 stage4d3_7d_stationarity.py PLANCK_DIR eff|k01 lambda_D h Ob Om As ns zre EXPECTED_S [STEP_SCALE]
 
-The first coordinate is q=ln(lambda/lambda0), so positivity is exact.  The
+The first coordinate is q=ln(lambda/lambda0), so positivity is exact. The
 remaining six coordinates use the validated Stage-4D0 physical finite-
-difference steps.  The full quadratic design has 2*N^2+1 = 99 points for N=7,
+difference steps. The full quadratic design has 2*N^2+1 = 99 points for N=7,
 followed by one exact trust-clipped Newton point.
 """
 from pathlib import Path
@@ -14,15 +14,12 @@ import csv,json,math,sys
 import numpy as np
 import inference_core as L
 
-if len(sys.argv) not in (12,13): raise SystemExit(__doc__)
+if len(sys.argv) not in (11,12): raise SystemExit(__doc__)
 MAPPING=sys.argv[2].lower(); LAM0=float(sys.argv[3])
 if MAPPING not in ('eff','k01') or not (LAM0>0 and math.isfinite(LAM0)):
     raise SystemExit('invalid mapping/lambda')
-vals=list(map(float,sys.argv[4:10])); EXPECT=float(sys.argv[10]); SCALE=float(sys.argv[11]) if len(sys.argv)==12 else float(sys.argv[12])
-# Compatibility: workflow always supplies explicit scale; if called without it, argv[11] is EXPECTED_S and default below is not reachable.
-if len(sys.argv)==12:
-    # Correct positional interpretation for PLANCK,mapping,lambda,h,Ob,Om,As,ns,zre,EXPECTED,STEP_SCALE
-    EXPECT=float(sys.argv[10]); SCALE=float(sys.argv[11])
+vals=list(map(float,sys.argv[4:10])); EXPECT=float(sys.argv[10])
+SCALE=float(sys.argv[11]) if len(sys.argv)==12 else 1.0
 if not math.isfinite(SCALE) or SCALE<=0: raise SystemExit('STEP_SCALE must be >0')
 CENTER={'lam':LAM0,**dict(zip(('h','Ob','Om','As','ns','zre'),vals))}
 BASE=[('loglam',0.0,0.012),('h',CENTER['h'],0.00035),('Ob',CENTER['Ob'],0.00007),
