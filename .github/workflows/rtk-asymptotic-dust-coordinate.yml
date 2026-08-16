@@ -1,0 +1,30 @@
+name: RTK asymptotic dust coordinate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-asymptotic-dust-coordinate.yml'
+
+jobs:
+  symbolic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Install symbolic dependency
+        run: python3 -m pip install --disable-pip-version-check sympy
+      - name: Verify large-lambda physical expansion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 rtk/asymptotic_dust_coordinate.py | tee asymptotic_dust_coordinate.log
+          grep -q ASYMPTOTIC_DUST_COORDINATE_PASS asymptotic_dust_coordinate.log
+      - name: Upload symbolic audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-asymptotic-dust-coordinate
+          path: asymptotic_dust_coordinate.log
+          if-no-files-found: error
