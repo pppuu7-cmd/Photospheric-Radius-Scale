@@ -1,0 +1,53 @@
+name: RTK growth scale-dependence export
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-growth-scale-export-test.yml'
+
+jobs:
+  synthetic-regression:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Build analytic synthetic P(k,z) family
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import math
+          d=Path('synthetic_pk');d.mkdir()
+          zs=[0.0,0.25,0.5,0.75,1.0]
+          ks=[0.005,0.01,0.03,0.05,0.1,0.2,0.5,0.8]
+          for i,z in enumerate(zs):
+              a=1/(1+z)
+              lines=[f'# synthetic linear matter power; redshift z={z}']
+              for k in ks:
+                  g=0.80+0.05*math.log(k/0.1)
+                  p=(k**0.96)*(a**(2*g))*1e4
+                  lines.append(f'{k:.12g} {p:.16e}')
+              (d/f'test_z{i}_pk.dat').write_text('\n'.join(lines)+'\n')
+          PY
+      - name: Export and verify f(k,z)
+        run: |
+          set -euo pipefail
+          python3 rtk/export_growth_scale_dependence.py synthetic_pk test_ growth.json '0.01,0.03,0.05,0.1,0.2,0.5'
+          python3 - <<'PY'
+          import json,math
+          d=json.load(open('growth.json'))
+          err=0.0
+          for r in d['rows']:
+              k=r['k_h_Mpc']; expected=0.80+0.05*math.log(k/0.1)
+              err=max(err,abs(r['f']-expected))
+          print('MAX_ABS_F_ERROR',err)
+          if err>2e-10: raise SystemExit('growth exporter regression failed')
+          print('GROWTH_SCALE_EXPORT_REGRESSION_PASS')
+          PY
+      - name: Upload example export
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-growth-scale-export-example
+          path: growth.json
+          if-no-files-found: error
