@@ -75,6 +75,31 @@ At the finest 7D scale=0.25:
 
 Therefore v6 is a near-stationary but locally indefinite / flat navigation point, **not an accepted minimum**.
 
+### v6 negative-curvature continuation
+
+Exact symmetric scan run `31961816831` followed the most-negative v6 Hessian eigenvector at t = {-16,-12,-8,-6,-4,-2,-1,0,1,2,4,6,8,12,16}. The same CLASS evaluations supplied both BOSS mappings.
+
+The best point for both mappings occurs at **t=-1**, not at the old center:
+
+- lambda_D = **284357.3770256277**
+- h = 0.6904692350128682
+- Omega_b = 0.04683552900298674
+- Omega_m = 0.25301548428566323
+- A_s = 2.083631213860309e-9
+- n_s = 0.9644009156458047
+- z_re = 7.218996521149225
+- S_eff = **1050.045724929783**
+- S_k01 = **1050.0601104098123**
+- chi2_BOSS_eff = 7.559889906650282
+- chi2_BOSS_k01 = 7.574275386679554
+- chi2_SN = 39.55807432331117
+- logL_Planck = -501.4638803499108
+- r_d = 146.976511 Mpc
+
+Improvement relative to the v6 center is ~**0.00177896** for both mappings. This proves that the v6 indefinite mode contains a real exact descent, although the gain is shallow. It triggers mandatory recentering rather than any minimum claim.
+
+A new six-job multiscale 73-point Hessian run (`31962435655`; eff/k01 x scales 1,0.5,0.25) is active at this negative-curvature best point.
+
 ## 4. Numerical precision evidence recovered
 
 Two independent differential precision audits are now joined to this checkpoint.
@@ -88,7 +113,7 @@ Two independent differential precision audits are now joined to this checkpoint.
 
 ### Exact v4 -> v5 audit, run 31935040222
 
-The baseline points reproduce to the configured 1e-9 regression gate.  The same v4 -> v5 move gives:
+The baseline points reproduce to the configured 1e-9 regression gate. The same v4 -> v5 move gives:
 
 - baseline: Delta S_eff = **-0.063119618973**, Delta S_k01 = **-0.062999447355**
 - tight: Delta S_eff = **-0.072806814371**, Delta S_k01 = **-0.072686704908**
@@ -105,49 +130,74 @@ Absolute production precision is nevertheless not yet fully frozen, so these are
 
 Sparse vs denser redshift-growth evaluation shifts BOSS chi2 by O(0.02-0.03) in the audited points. Dense BOSS evaluation therefore remains a required production-objective upgrade before final model comparison.
 
-## 6. Matched LCDM control recovered and corrected
+A candidate final-objective builder already exists on the production branch. It combines exact-float cache semantics, matched-ultra CLASS settings with `l_linstep=2`, and dense BOSS `z_pk` growth sampling. Its smoke workflow `31935950335` completed successfully. This is a **candidate** objective, not yet the frozen final inference target.
+
+## 6. Matched LCDM control and production code-state distinction
 
 The original two-start ultra Powell run `31919368067` hit the 120-minute job timeout after finding a lower common LCDM point; this was an infrastructure timeout, not a likelihood failure.
 
-A deterministic replacement run `31935158052` then stopped for a **false regression failure**: the fresh exact matched-ultra center was *lower* than the older harvested expectation by 0.0040896426. Fresh reproduced center:
+A later investigation revealed that `main` and `rtk-class-build` are substantially diverged code histories. Most production likelihood workflows explicitly check out `rtk-class-build`. Therefore absolute objective values produced from different branch/code states must not be mixed.
 
-- S_eff = **1050.2269760031668**
-- S_k01 = **1050.2285287876086**
+For the current `rtk-class-build` production state, matched-ultra center run `31961828138` reproduced:
 
-The science script has now been corrected to freeze this fresh center rather than reject the improvement. A v2 matched-ultra LCDM stencil workflow has been launched.
+- S_eff = **1050.2310656457898**
+- S_k01 = **1050.2326184302317**
+- chi2_BOSS_eff = 6.901163589356042
+- chi2_BOSS_k01 = 6.9027163737979205
+- chi2_SN = 39.80582793778543
+- logL_Planck = -501.7620370593242
+- r_d = 146.974624 Mpc
 
-No RTK-vs-LCDM preference may be claimed until both models are locally reoptimized on one final precision/objective definition.
+The production-branch stencil script has been updated to freeze these values, and failed jobs in run `31961828138` were rerun as attempt 2. They are active.
 
-## 7. Active compute allocation after reconciliation
+The previously quoted lower fresh center 1050.2269760031668 / 1050.2285287876086 belongs to a different code/objective state and is retained only as provenance evidence, not as the current production baseline.
+
+No RTK-vs-LCDM preference may be claimed until both models are locally reoptimized on one final branch, one final CLASS precision, and one final dense-BOSS objective.
+
+## 7. Production provenance rule
+
+Until the branch histories are collapsed for publication freeze:
+
+1. `rtk-class-build` is the numerical source of truth for workflows that explicitly check it out.
+2. Every absolute S value must carry branch/code-state and precision provenance.
+3. Cross-branch absolute score differences are **not physics**.
+4. Differential precision tests within a fixed code state remain valid numerical-convergence evidence.
+5. Before final model selection, canonical source and production source must be collapsed or cryptographically fingerprinted as one frozen objective.
+
+## 8. Active compute allocation after reconciliation
 
 Three complementary streams are maintained, with concurrency chosen to avoid redundant expensive Planck work:
 
-1. **Deep RTK geometry/navigation (primary frontier):** exact symmetric scan along the most-negative v6 7D Hessian eigenvector. Because the v6 gradient is small but Hessian is indefinite, this is more informative than another coordinate poll.
-2. **Matched-ultra LCDM control:** corrected two-mapping deterministic stencil refinement, max parallel 2.
+1. **Deep RTK geometry/navigation (primary frontier):** six active 73-point stationarity jobs centered on the negative-curvature best `S_eff=1050.045724929783`, `S_k01=1050.0601104098123`.
+2. **Matched-ultra LCDM control:** corrected production-branch deterministic stencil refinement, two mappings in parallel, attempt 2 of run `31961828138`.
 3. **Fixed-lambda Stage4D1 acceptance:** existing 8-point profile/certification stream continues independently; it is not duplicated.
 
 Lightweight source-integrity/repeatability audits are already closed and are not rerun unless code/objective changes.
 
-## 8. Acceptance / inference status
+## 9. Acceptance / inference status
 
 ✅ Exact Planck runtime, cache-safe production core, component algebra and repeatability are established.
 
 ✅ A much deeper RTK navigation basin around lambda_D ~ 2.8-3.0e5 is established by multiple exact runs.
 
-✅ v6 explicit gradient is small enough to pass the configured gradient tolerance.
+✅ v6 explicit gradient was small enough to pass the configured gradient tolerance.
 
-❌ v6 Hessian is indefinite, so no local-minimum certificate exists.
+✅ Exact negative-curvature continuation found a further shallow descent and supplied a new recenter target.
 
-❌ Final dense-BOSS production objective is not locked.
+❌ A positive-definite recentered Hessian certificate has not yet been obtained.
 
-❌ Absolute CLASS production precision is not fully locked.
+🟡 Matched-ultra LCDM production-branch refinement is active.
 
-❌ RTK and LCDM are not yet both reoptimized on the same final objective.
+🟡 Candidate final dense-BOSS + matched-ultra objective builder exists and its smoke test passes.
+
+❌ Final dense-BOSS production objective is not yet frozen for both-model reoptimization.
+
+❌ RTK and LCDM are not yet both reoptimized on the same frozen final objective.
 
 ❌ Finite-lambda interior optimum versus the dust boundary is not established.
 
 ❌ No valid final significance, posterior preference, AIC/BIC interpretation, or Bayes factor is claimed.
 
-## 9. Decision rule
+## 10. Decision rule
 
-Use the deepest directly evaluated point, not the older fixed-lambda frontier, for global navigation. If the negative-curvature exact scan finds a material descent, recenter on that direction and rebuild local 7D geometry. If it does not, characterize the flat lambda direction with a denser lambda/dust profile. In parallel finish the corrected LCDM control and retain fixed-lambda certification for profile shape. Final comparison requires one common precision + dense-BOSS objective and matched local reoptimization of both models.
+Use the deepest directly evaluated point with matching code-state provenance, not the older fixed-lambda frontier, for global navigation. If the recentered 73-point Hessian becomes positive definite while the scaled gradient and exact-improvement gates pass, launch the independent correlated-direction ray. If it remains indefinite or finds a new exact descent, recenter/trace the corresponding mode again. In parallel finish the production-branch LCDM control. Final comparison requires one common production branch, final precision + dense-BOSS objective, and matched local reoptimization of both models.
