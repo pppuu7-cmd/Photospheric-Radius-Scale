@@ -1,0 +1,101 @@
+name: RTK Stage 4D1 iteration6 repeatability plus source integrity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d1-iteration6-repeatability-integrity.yml'
+
+jobs:
+  integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Verify inference-core transformation and idempotence
+        run: |
+          set -euo pipefail
+          python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py inference_core.generated.py
+          python3 rtk/prepare_inference_core.py inference_core.generated.py inference_core.regenerated.py
+          cmp inference_core.generated.py inference_core.regenerated.py
+          grep -Fq "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" inference_core.generated.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.generated.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.generated.py
+          grep -Fq "timeout=float(os.environ.get('RTK_CLASS_TIMEOUT','120'))" inference_core.generated.py
+          sha256sum inference_core.generated.py inference_core.regenerated.py | tee inference_integrity_sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d1-iteration6-source-integrity
+          path: |
+            inference_core.generated.py
+            inference_core.regenerated.py
+            inference_integrity_sha256.txt
+          if-no-files-found: error
+
+  repeatability:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - {label: eff1e6, lambda_D: '1000000', h: '0.6924412470503701', Ob: '0.04666488916124337', Om: '0.2508372257635462', As: '2.070654405154798e-9', ns: '0.9648104077201295', zre: '6.905417772702634'}
+          - {label: eff1e8, lambda_D: '100000000', h: '0.6926515812539762', Ob: '0.04665181387457756', Om: '0.2506395506864848', As: '2.071432795803292e-9', ns: '0.965033210294227', zre: '6.924878048218663'}
+          - {label: k013e4, lambda_D: '30000', h: '0.6925804878501572', Ob: '0.046640210737978964', Om: '0.25061563396813435', As: '2.075988394891211e-9', ns: '0.9651157251639984', zre: '7.052199706447346'}
+          - {label: eff3e4, lambda_D: '30000', h: '0.6924506094722548', Ob: '0.046662425462622975', Om: '0.2507969038353458', As: '2.0745155591708036e-9', ns: '0.9650000900570339', zre: '7.0117632549360165'}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Prepare cache-safe exact tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d1_repeatability.py class_public/stage4d1_repeatability.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install exact likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Repeat exact point five times with cache cleared
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 stage4d1_repeatability.py planck_data RTK '${{ matrix.lambda_D }}' \
+            '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' 5 | tee ../repeat_${{ matrix.label }}.log
+          grep -q STAGE4D1_REPEATABILITY_PASS ../repeat_${{ matrix.label }}.log
+          cat repeatability_summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d1-iteration6-repeatability-${{ matrix.label }}
+          path: |
+            repeat_${{ matrix.label }}.log
+            class_public/repeatability_summary.json
+          if-no-files-found: error
