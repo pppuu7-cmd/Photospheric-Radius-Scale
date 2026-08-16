@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "stage": "4D3",
+  "mode": "verification_and_cleanroom_rediscovery",
+  "best": {
+    "S_eff": 1050.0338294787366,
+    "S_k01": 1050.048211166066,
+    "lambda_D": 217225.01601516694,
+    "h": 0.6904831253428524,
+    "Ob": 0.046836300417955265,
+    "Om": 0.25300743080221694,
+    "As": 2.0837288833768707e-9,
+    "ns": 0.9643603115669437,
+    "zre": 7.21843542110055
+  },
+  "last_processed_run_id": 31976475404,
+  "frontier_workflows": [
+    "RTK clean-room fixed-lambda rediscovery grid",
+    "RTK Stage 4D3 Round5 finest 7D stationarity",
+    "RTK current-pair linstep1 precision rescue v3 long"
+  ],
+  "allowed_actions": [
+    "WAIT",
+    "RECENTER",
+    "STATIONARITY",
+    "REDISCOVERY_FOLLOWUP"
+  ],
+  "gate_rules": {
+    "recenter_if_exact_poll_improvement_positive": true,
+    "stationarity_only_after_poll_zero_or_negligible": true,
+    "never_claim_global_minimum_from_local_optimizer": true,
+    "never_advance_on_failed_or_incomplete_run": true
+  }
+}
