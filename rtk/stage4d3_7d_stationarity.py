@@ -29,7 +29,8 @@ COORDS=[(n,c,s*SCALE) for n,c,s in BASE]; N=len(COORDS)
 OUT=Path('output/stage4d3_7d_stationarity')/MAPPING
 OUT=OUT/('scale_'+(f'{SCALE:.8g}').replace('.','p').replace('-','m'))
 OUT.mkdir(parents=True,exist_ok=True)
-EVALS={}; ROWS=[]
+EVALS={}; ROWS=[]; TRANSIENT_RETRIES=0
+MAX_TRANSIENT_RETRIES=1
 
 def cleanup(tag):
     if not tag:return
@@ -50,10 +51,20 @@ def key(y): return tuple(float(v) for v in np.asarray(y,float))
 def score(r): return float(r['score'] if MAPPING=='eff' else r['score_k01'])
 
 def ev(y,label):
+    global TRANSIENT_RETRIES
     y=np.asarray(y,float); k=key(y)
     if k in EVALS:return EVALS[k]
-    p=params(y); r=L.evaluate('RTK',p)
-    if not r.get('ok'): raise RuntimeError(f'{label}: {r}')
+    p=params(y); r=None
+    for attempt in range(MAX_TRANSIENT_RETRIES+1):
+        r=L.evaluate('RTK',p)
+        if r.get('ok'): break
+        reason=r.get('error',r.get('reason',str(r)))
+        cleanup(r.get('tag'))
+        if reason=='CLASS_TIMEOUT' and attempt<MAX_TRANSIENT_RETRIES:
+            TRANSIENT_RETRIES+=1
+            print('STENCIL7_RETRY_TIMEOUT',label,'attempt',attempt+1,flush=True)
+            continue
+        raise RuntimeError(f'{label}: {r}')
     rr=dict(r); rr['params']=p; rr['y']=y.tolist(); EVALS[k]=rr
     row={'label':label,'mapping':MAPPING,'step_scale':SCALE,'S':score(rr),**p}
     for i,(n,_,_) in enumerate(COORDS): row['y_'+n]=float(y[i])
@@ -90,6 +101,7 @@ summary={'stage':'4D3-seven-dimensional-stationarity','scope':'local_7d_check_in
  'mapping':MAPPING,'lambda_D':LAM0,'step_scale':SCALE,'center':CENTER,'S_center':S0,'expected_S':EXPECT,
  'coordinates':[{'name':n,'base_step':bs,'step':s} for (n,_,bs),(_,_,s) in zip(BASE,COORDS)],
  'design_points_before_newton':2*N*N+1,'exact_likelihood_calls':int(L.COUNTER),
+ 'transient_retries':TRANSIENT_RETRIES,
  'gradient_y':g.tolist(),'max_abs_gradient_y':float(np.max(np.abs(g))),
  'hessian_y':H.tolist(),'eigenvalues_y':eigval.tolist(),'positive_definite':pd,
  'newton_delta_y_unclipped':delta.tolist(),'newton_delta_y_used':trust.tolist(),
