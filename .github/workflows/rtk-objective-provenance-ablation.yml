@@ -1,0 +1,112 @@
+name: RTK objective provenance ablation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-objective-provenance-ablation.yml'
+
+jobs:
+  ablation:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - {model: RTK, label: rtk_negcurv, lam: '284357.3770256277', h: '0.6904692350128682', Ob: '0.04683552900298674', Om: '0.25301548428566323', As: '2.083631213860309e-9', ns: '0.9644009156458047', zre: '7.218996521149225'}
+          - {model: LCDM, label: lcdm_partial, lam: '0.0', h: '0.6779337587382693', Ob: '0.04872764689799632', Om: '0.26187225794495356', As: '2.1094040998203598e-9', ns: '0.9649685632254442', zre: '7.8583129349509475'}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Prepare exact likelihood tree and four objective variants
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/prepare_final_inference_core.py class_public/prepare_final_inference_core.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core_canonical.py
+          python3 prepare_final_inference_core.py joint_profile_runner.py inference_core_final.py
+          python3 - <<'PY'
+          from pathlib import Path
+          src=Path('inference_core_canonical.py').read_text()
+          sparse='"z_pk = 0.,0.25,0.3,0.4,0.5,0.6,0.7,0.75,1.0"'
+          dense='"z_pk = 0.,0.25,0.30,0.34,0.36,0.37,0.38,0.39,0.40,0.42,0.47,0.49,0.50,0.51,0.52,0.53,0.55,0.57,0.59,0.60,0.61,0.62,0.63,0.65,0.70,0.75,1.0"'
+          assert src.count(sparse)==1
+          Path('inference_core_dense.py').write_text(src.replace(sparse,dense,1))
+          anchor='"z_max_pk = 1.0",'
+          precision=[
+            '"tol_background_integration = 3e-4",',
+            '"tol_thermo_integration = 3e-4",',
+            '"tol_perturb_integration = 3e-7",',
+            '"perturb_sampling_stepsize = 0.0125",',
+            '"k_per_decade_for_pk = 40",',
+            '"k_per_decade_for_bao = 180",',
+            '"k_max_tau0_over_l_max = 4.0",',
+            '"l_logstep = 1.02",',
+            '"l_linstep = 2",',
+          ]
+          assert src.count(anchor)==1
+          Path('inference_core_precision.py').write_text(src.replace(anchor,anchor+'\n      '+'\n      '.join(precision),1))
+          PY
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install exact likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Evaluate canonical dense-only precision-only and final
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 - '${{ matrix.model }}' '${{ matrix.label }}' '${{ matrix.lam }}' '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' <<'PY' | tee ../ablation_${{ matrix.label }}.log
+          import importlib, json, sys
+          from pathlib import Path
+          args=sys.argv[1:]
+          model,label=args[:2]
+          nums=list(map(float,args[2:]))
+          p=dict(zip(['lam','h','Ob','Om','As','ns','zre'],nums))
+          sys.argv=['ablation','planck_data']
+          rows={}
+          for key,modname in [('canonical','inference_core_canonical'),('dense_only','inference_core_dense'),('precision_only','inference_core_precision'),('final','inference_core_final')]:
+              M=importlib.import_module(modname)
+              r=M.evaluate(model,p)
+              if not r.get('ok'): raise SystemExit({key:r})
+              rows[key]={q:r.get(q) for q in ('score','score_k01','logL_planck','logL_high','logL_lowT','logL_lowE','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')}
+          base=rows['canonical']
+          delta={k:{q:v[q]-base[q] for q in ('score','score_k01','logL_planck','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')} for k,v in rows.items() if k!='canonical'}
+          out={'stage':'objective-provenance-ablation','model':model,'point':label,'params':p,'rows':rows,'delta_from_canonical':delta}
+          Path(f'ablation_{label}.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('RTK_OBJECTIVE_ABLATION_RESULT',json.dumps(out,sort_keys=True),flush=True)
+          print('RTK_OBJECTIVE_ABLATION_PASS',flush=True)
+          PY
+          grep -q RTK_OBJECTIVE_ABLATION_PASS ../ablation_${{ matrix.label }}.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-objective-provenance-ablation-${{ matrix.label }}
+          path: |
+            ablation_${{ matrix.label }}.log
+            class_public/ablation_${{ matrix.label }}.json
+          if-no-files-found: error
