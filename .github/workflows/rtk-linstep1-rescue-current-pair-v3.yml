@@ -1,0 +1,96 @@
+name: RTK current-pair linstep1 precision rescue v3 long
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-linstep1-rescue-current-pair-v3.yml'
+
+jobs:
+  audit:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - {model: RTK, label: rtk_negcurv, lam: '284357.3770256277', h: '0.6904692350128682', Ob: '0.04683552900298674', Om: '0.25301548428566323', As: '2.083631213860309e-9', ns: '0.9644009156458047', zre: '7.218996521149225'}
+          - {model: LCDM, label: lcdm_partial, lam: '0.0', h: '0.6779337587382693', Ob: '0.04872764689799632', Om: '0.26187225794495356', As: '2.1094040998203598e-9', ns: '0.9649685632254442', zre: '7.8583129349509475'}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 110
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '5400'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Prepare exact cache-safe likelihood tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install exact likelihood
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Run fresh-cache ultra linstep1 only
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          cat > linstep1_v3.py <<'PY'
+          import json,sys
+          from pathlib import Path
+          argv=sys.argv[:]
+          model,label=argv[1],argv[2]
+          p={'lam':float(argv[3]),'h':float(argv[4]),'Ob':float(argv[5]),'Om':float(argv[6]),'As':float(argv[7]),'ns':float(argv[8]),'zre':float(argv[9])}
+          sys.argv=['linstep1_v3','planck_data']
+          import inference_core as L
+          ultra={'tol_background_integration':'3e-4','tol_thermo_integration':'3e-4','tol_perturb_integration':'3e-7','perturb_sampling_stepsize':'0.0125','k_per_decade_for_pk':'40','k_per_decade_for_bao':'180','k_max_tau0_over_l_max':'4.0','l_logstep':'1.02'}
+          orig=L.make_ini
+          def make_ini(m,pp,tag):
+              path=orig(m,pp,tag)
+              with Path(path).open('a') as f:
+                  f.write('\n# matched ultra linstep1 long rescue v3\n')
+                  for k,v in ultra.items(): f.write(f'{k} = {v}\n')
+                  f.write('l_linstep = 1\n')
+              return path
+          L.make_ini=make_ini
+          L.CACHE.clear()
+          r=L.evaluate(model,p)
+          if not r.get('ok'): raise SystemExit(f'{model}/{label}/l1 failed: {r}')
+          row={'stage':'current-pair-linstep1-rescue-v3','model':model,'point':label,'l_linstep':1,**{q:r.get(q) for q in ('score','score_k01','logL_planck','logL_high','logL_lowT','logL_lowE','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')}}
+          Path(f'linstep1_v3_{label}.json').write_text(json.dumps(row,indent=2,sort_keys=True)+'\n')
+          print('LINSTEP1_V3_RESULT',json.dumps(row,sort_keys=True),flush=True)
+          print('LINSTEP1_V3_COMPLETE',flush=True)
+          PY
+          python3 linstep1_v3.py '${{ matrix.model }}' '${{ matrix.label }}' '${{ matrix.lam }}' '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' | tee '../linstep1_v3_${{ matrix.label }}.log'
+          grep -q LINSTEP1_V3_COMPLETE '../linstep1_v3_${{ matrix.label }}.log'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-linstep1-rescue-v3-${{ matrix.label }}
+          path: |
+            linstep1_v3_${{ matrix.label }}.log
+            class_public/linstep1_v3_${{ matrix.label }}.json
+          if-no-files-found: error
