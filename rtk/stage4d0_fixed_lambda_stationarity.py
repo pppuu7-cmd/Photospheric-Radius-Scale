@@ -11,11 +11,6 @@ same argv layout as the validated exact-likelihood runners.
 This checks stationarity only in the six reoptimized cosmological coordinates
 at fixed lambda_D.  It does not test the derivative along lambda_D and is not a
 global profile, posterior, confidence construction, or evidence calculation.
-
-STEP_SCALE rescales the validated Stage-4D0 finite-difference stencil.  The
-default 1.0 preserves the original workflow behavior; explicit scales write to
-separate output directories so 1, 1/2, 1/4 ... checks cannot overwrite each
-other.
 """
 from pathlib import Path
 import csv,json,math,sys
@@ -31,7 +26,6 @@ STEP_SCALE=float(sys.argv[11]) if len(sys.argv)==12 else 1.0
 if not math.isfinite(STEP_SCALE) or STEP_SCALE<=0:
     raise SystemExit('STEP_SCALE must be finite and > 0')
 CENTER={'lam':LAM,**dict(zip(('h','Ob','Om','As','ns','zre'),vals))}
-# Base steps equal the original 0.05 normalized independent poll used by Stage 4D1.
 BASE_COORDS=[('h',CENTER['h'],0.00035),('Ob',CENTER['Ob'],0.00007),
              ('Om',CENTER['Om'],0.00070),('As',CENTER['As'],4.0e-12),
              ('ns',CENTER['ns'],0.00035),('zre',CENTER['zre'],0.070)]
@@ -42,7 +36,7 @@ if len(sys.argv)==12:
     scale_tag=(f'{STEP_SCALE:.8g}').replace('.','p').replace('-','m').replace('+','p')
     OUT=OUT/f'scale_{scale_tag}'
 OUT.mkdir(parents=True,exist_ok=True)
-EVALS={}; ROWS=[]
+EVALS={}; ROWS=[]; RETRIES=0
 
 def cleanup(tag):
     if not tag:return
@@ -58,13 +52,22 @@ def y_to_params(y):
     for yi,(n,c,s) in zip(y,COORDS):p[n]=c+float(yi)*s
     return p
 
-def key(y):return tuple(float(f'{float(v):.10g}') for v in y)
+def key(y):return tuple(float(v) for v in np.asarray(y,float))
 def score(r):return float(r['score'] if MAPPING=='eff' else r['score_k01'])
+def is_timeout(r):return r.get('error')=='CLASS_TIMEOUT' or r.get('reason')=='CLASS_TIMEOUT' or 'CLASS_TIMEOUT' in str(r.get('reason',''))
 
 def ev(y,label):
+    global RETRIES
     y=np.asarray(y,float); k=key(y)
     if k in EVALS:return EVALS[k]
     p=y_to_params(y); r=L.evaluate('RTK',p)
+    if not r.get('ok') and is_timeout(r):
+        RETRIES+=1; cleanup(r.get('tag'))
+        try:
+            ikey=('RTK',)+tuple(float(p[q]) for q in ['lam','h','Ob','Om','As','ns','zre'])
+            L.CACHE.pop(ikey,None)
+        except Exception: pass
+        r=L.evaluate('RTK',p)
     if not r.get('ok'):raise RuntimeError(f'{label}: {r}')
     rr=dict(r);rr['params']=p;rr['y']=y.tolist();EVALS[k]=rr
     row={'label':label,'lambda_D':LAM,'mapping':MAPPING,'step_scale':STEP_SCALE,'S':score(rr)}
@@ -78,8 +81,6 @@ def ev(y,label):
 z=np.zeros(N);r0=ev(z,'center');S0=score(r0)
 if abs(S0-EXPECT)>0.03:
     raise SystemExit(f'center regression failed: exact={S0} expected={EXPECT}')
-
-# 1 + 2N + 4*N*(N-1)/2 = 2N^2+1 = 73 points for N=6.
 for i in range(N):
     for sgn in (-1.,1.):
         y=np.zeros(N);y[i]=sgn;ev(y,f'axis_{i}_{int(sgn):+d}')
@@ -121,6 +122,7 @@ summary={
  'S_newton':Snew,'newton_improvement':S0-Snew,
  'best_exact_S_including_newton':Sbest,'best_exact_params':best['params'],
  'best_improvement_from_center':S0-Sbest,'center_is_best_within_0p005':center_is_best_stencil,
+ 'memoization_key':'exact_float_normalized_coordinates','timeout_retries':RETRIES,
  'warning':'This is conditional on fixed lambda_D and does not test the lambda direction or establish a global profile/posterior.'
 }
 (OUT/'stationarity_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
