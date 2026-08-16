@@ -77,12 +77,25 @@ Therefore v6 is a near-stationary but locally indefinite / flat navigation point
 
 ## 4. Numerical precision evidence recovered
 
-The v2 -> v3 RTK descent survives CLASS precision tightening:
+Two independent differential precision audits are now joined to this checkpoint.
+
+### Earlier v2 -> v3 descent
 
 - Delta S_eff baseline = -0.0718158774705
 - Delta S_eff tight = -0.0710021317734
 - Delta S_eff provisional-ultra = -0.0709006160891
 - tight -> ultra changes the differential by only ~1.0e-4
+
+### Exact v4 -> v5 audit, run 31935040222
+
+The baseline points reproduce to the configured 1e-9 regression gate.  The same v4 -> v5 move gives:
+
+- baseline: Delta S_eff = **-0.063119618973**, Delta S_k01 = **-0.062999447355**
+- tight: Delta S_eff = **-0.072806814371**, Delta S_k01 = **-0.072686704908**
+- ultra: Delta S_eff = **-0.072544614566**, Delta S_k01 = **-0.072424487505**
+- tight -> ultra differential change = **+2.621998e-4** (`eff`) and **+2.622174e-4** (`k01`)
+
+For reference, absolute v5 scores are 1050.072580002519 / 1050.086916749916 at baseline, 1050.398153378145 / 1050.412424594242 at tight, and 1050.392110639593 / 1050.406389087194 at ultra. Thus absolute scores are precision-level dependent, while the deep local descent is much more stable.
 
 Focused ultra ell-sampling changes the relative RTK descent by only about 0.00123 across the tested corner; at `l_linstep=2` the tested `l_logstep` values agree.
 
