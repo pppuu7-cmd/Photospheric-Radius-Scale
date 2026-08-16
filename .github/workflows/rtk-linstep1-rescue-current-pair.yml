@@ -83,8 +83,8 @@ jobs:
           import json, sys
           from pathlib import Path
           import inference_core as L
-          model,label=sys.argv[1],sys.argv[2]
-          p={'lam':float(sys.argv[3]),'h':float(sys.argv[4]),'Ob':float(sys.argv[5]),'Om':float(sys.argv[6]),'As':float(sys.argv[7]),'ns':float(sys.argv[8]),'zre':float(sys.argv[9])}
+          model,label=sys.argv[2],sys.argv[3]
+          p={'lam':float(sys.argv[4]),'h':float(sys.argv[5]),'Ob':float(sys.argv[6]),'Om':float(sys.argv[7]),'As':float(sys.argv[8]),'ns':float(sys.argv[9]),'zre':float(sys.argv[10])}
           ultra={'tol_background_integration':'3e-4','tol_thermo_integration':'3e-4','tol_perturb_integration':'3e-7','perturb_sampling_stepsize':'0.0125','k_per_decade_for_pk':'40','k_per_decade_for_bao':'180','k_max_tau0_over_l_max':'4.0','l_logstep':'1.02'}
           orig=L.make_ini
           def cleanup(tag):
@@ -115,7 +115,7 @@ jobs:
           print('LINSTEP_RESCUE_RESULT',json.dumps(result,sort_keys=True),flush=True)
           print('LINSTEP_RESCUE_COMPLETE',flush=True)
           PY
-          python3 linstep_rescue.py '${{ matrix.model }}' '${{ matrix.label }}' '${{ matrix.lam }}' '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' | tee '../linstep_rescue_${{ matrix.label }}.log'
+          python3 linstep_rescue.py planck_data '${{ matrix.model }}' '${{ matrix.label }}' '${{ matrix.lam }}' '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' | tee '../linstep_rescue_${{ matrix.label }}.log'
           grep -q LINSTEP_RESCUE_COMPLETE '../linstep_rescue_${{ matrix.label }}.log'
       - name: Upload precision rescue artifact
         uses: actions/upload-artifact@v4
