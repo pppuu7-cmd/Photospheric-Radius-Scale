@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "project": "RTK + DBI-Khronon",
   "purpose": "Machine-readable separation of implemented observables, derivable diagnostics, and theory work still pending. This file is a capability contract, not a claim that pending quantities have been derived.",
   "status_vocabulary": {
@@ -34,7 +34,8 @@
       "BOSS_DR12_full_covariance": {"status": "implemented"},
       "eff_growth_mapping": {"status": "implemented"},
       "k01_growth_mapping": {"status": "implemented"},
-      "dense_BOSS_growth_sampling": {"status": "pending_validation", "note": "Final-objective infrastructure exists; matched final reoptimization remains required."}
+      "dense_BOSS_growth_sampling": {"status": "implemented", "note": "Production final-objective builder includes dense BOSS z sampling and passed a 1e-9 RTK/LCDM fixed-point regression in Actions run 31935950335."},
+      "final_objective_v1": {"status": "implemented", "note": "Frozen practical precision: matched-ultra CLASS with l_linstep=2 plus dense BOSS; exact-float cache and official Planck baseline."}
     },
     "common_modified_gravity_language": {
       "mu_k_a": {"status": "pending_derivation"},
@@ -84,6 +85,7 @@
       "common_observable_export": {"status": "pending_validation"},
       "capability_manifest": {"status": "implemented"},
       "reproducible_exact_likelihood_workflows": {"status": "implemented"},
+      "objective_provenance_manifest": {"status": "implemented", "note": "rtk/final_objective_manifest.json"},
       "container_or_lockfile": {"status": "pending_validation"},
       "one_command_benchmark": {"status": "pending_validation"}
     }
