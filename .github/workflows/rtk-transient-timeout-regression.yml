@@ -1,0 +1,53 @@
+name: RTK transient-timeout regression audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-transient-timeout-regression.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Compile updated scientific scripts
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            rtk/prepare_inference_core.py \
+            rtk/stage4d3_joint_lambda_refine.py \
+            rtk/stage4d3_joint_lambda_wide.py \
+            rtk/stage4d3_7d_stationarity.py
+      - name: Generate inference core and verify timeout cache policy
+        run: |
+          set -euo pipefail
+          python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py /tmp/inference_core.py
+          python3 - <<'PY'
+          from pathlib import Path
+          text=Path('/tmp/inference_core.py').read_text()
+          assert 'except subprocess.TimeoutExpired:' in text
+          block=text.split('except subprocess.TimeoutExpired:',1)[1].split('if cp.returncode!=0:',1)[0]
+          assert 'CACHE[key]' not in block, block
+          assert 'CLASS_TIMEOUT' in block
+          assert "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" in text
+          print('TIMEOUT_CACHE_POLICY_PASS')
+          PY
+      - name: Verify deterministic optimizer failure policy
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          for p in ['rtk/stage4d3_joint_lambda_refine.py','rtk/stage4d3_joint_lambda_wide.py']:
+              t=Path(p).read_text()
+              assert '1e9+FAILED' not in t
+              assert 'MAX_TRANSIENT_RETRIES=1' in t
+              assert "reason=='CLASS_TIMEOUT'" in t
+              assert 'FAIL_PENALTY=1.0e9' in t
+          h=Path('rtk/stage4d3_7d_stationarity.py').read_text()
+          assert 'MAX_TRANSIENT_RETRIES=1' in h
+          assert "reason=='CLASS_TIMEOUT'" in h
+          print('OPTIMIZER_TIMEOUT_RETRY_POLICY_PASS')
+          PY
