@@ -6,6 +6,11 @@ canonicalized source.  It guarantees modern A_s/n_s names, an exact-float cache
 key, a CLASS timeout, and removal of the standalone deterministic-search tail.
 This idempotence lets the source-of-truth be modernized later without changing
 the generated inference core or breaking production workflows.
+
+Transient CLASS timeouts are deliberately *not* memoized.  A timeout is an
+execution-state failure, not a property of the cosmological point; caching it
+would turn a temporary runner/timeout event into a permanent artificial wall in
+derivative-free optimizers.  Deterministic non-zero CLASS returns remain cached.
 """
 from pathlib import Path
 import sys
@@ -38,9 +43,12 @@ if 'def evaluate(' not in s or 'def make_ini(' not in s:
     raise SystemExit('likelihood core functions not found')
 
 old="    cp=subprocess.run(['./class',str(ini)],stdout=log.open('w'),stderr=subprocess.STDOUT)\n    if cp.returncode!=0:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag};CACHE[key]=r;HISTORY.append(r);return r\n"
-new="    try:\n        with log.open('w') as lf:\n            cp=subprocess.run(['./class',str(ini)],stdout=lf,stderr=subprocess.STDOUT,timeout=float(os.environ.get('RTK_CLASS_TIMEOUT','120')))\n    except subprocess.TimeoutExpired:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag,'error':'CLASS_TIMEOUT'};CACHE[key]=r;HISTORY.append(r);print('EVAL_TIMEOUT',model,tag,'params',p,flush=True);return r\n    if cp.returncode!=0:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag,'error':'CLASS_RETURN_'+str(cp.returncode)};CACHE[key]=r;HISTORY.append(r);return r\n"
+old_timeout_cached="    try:\n        with log.open('w') as lf:\n            cp=subprocess.run(['./class',str(ini)],stdout=lf,stderr=subprocess.STDOUT,timeout=float(os.environ.get('RTK_CLASS_TIMEOUT','120')))\n    except subprocess.TimeoutExpired:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag,'error':'CLASS_TIMEOUT'};CACHE[key]=r;HISTORY.append(r);print('EVAL_TIMEOUT',model,tag,'params',p,flush=True);return r\n    if cp.returncode!=0:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag,'error':'CLASS_RETURN_'+str(cp.returncode)};CACHE[key]=r;HISTORY.append(r);return r\n"
+new="    try:\n        with log.open('w') as lf:\n            cp=subprocess.run(['./class',str(ini)],stdout=lf,stderr=subprocess.STDOUT,timeout=float(os.environ.get('RTK_CLASS_TIMEOUT','120')))\n    except subprocess.TimeoutExpired:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag,'error':'CLASS_TIMEOUT'};HISTORY.append(r);print('EVAL_TIMEOUT',model,tag,'params',p,flush=True);return r\n    if cp.returncode!=0:\n        r={'ok':False,'score':1e30,'score_k01':1e30,'model':model,**p,'tag':tag,'error':'CLASS_RETURN_'+str(cp.returncode)};CACHE[key]=r;HISTORY.append(r);return r\n"
 if old in s:
     s=s.replace(old,new,1)
+elif old_timeout_cached in s:
+    s=s.replace(old_timeout_cached,new,1)
 elif "timeout=float(os.environ.get('RTK_CLASS_TIMEOUT','120'))" not in s:
     raise SystemExit('neither legacy nor timeout-protected subprocess block found')
 
@@ -51,4 +59,7 @@ assert 'timeout=float(os.environ.get' in text
 assert 'round(float(p[k]),12)' not in text
 assert "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" in text
 assert 'def evaluate(' in text and 'def make_ini(' in text
+# A transient timeout must never poison the exact cache.
+timeout_block=text.split('except subprocess.TimeoutExpired:',1)[1].split('if cp.returncode!=0:',1)[0]
+assert 'CACHE[key]' not in timeout_block
 print('INFERENCE_CORE_PREPARED',out)
