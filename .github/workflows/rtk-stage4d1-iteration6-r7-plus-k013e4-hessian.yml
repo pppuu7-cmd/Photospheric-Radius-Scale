@@ -1,0 +1,141 @@
+name: RTK Stage 4D1 iteration6 round7 plus k01 3e4 Hessian
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d1-iteration6-r7-plus-k013e4-hessian.yml'
+
+jobs:
+  recenter:
+    strategy:
+      fail-fast: false
+      max-parallel: 7
+      matrix:
+        include:
+          - {mapping: eff, lambda_D: '30000', h: '0.6924708356360382', Ob: '0.04665810433870654', Om: '0.25077471699793014', As: '2.0743261144755662e-9', ns: '0.9649695746782992', zre: '7.001592465517791'}
+          - {mapping: eff, lambda_D: '100000', h: '0.6922353954130536', Ob: '0.04667838681273983', Om: '0.25101545089555727', As: '2.0706141776170144e-9', ns: '0.9647731387800634', zre: '6.903707482248704'}
+          - {mapping: k01, lambda_D: '100000', h: '0.6925294214966426', Ob: '0.046645562379476375', Om: '0.2506999487137119', As: '2.0710890206150054e-9', ns: '0.9650680265293093', zre: '6.930555761347984'}
+          - {mapping: eff, lambda_D: '1000000', h: '0.6927886503420497', Ob: '0.046608172531327194', Om: '0.2503778770467733', As: '2.0704346653196146e-9', ns: '0.9651758006979794', zre: '6.921655288172621'}
+          - {mapping: k01, lambda_D: '1000000', h: '0.6928337996182332', Ob: '0.04661510692025552', Om: '0.25031369463920095', As: '2.0705457761035333e-9', ns: '0.9652278526013629', zre: '6.928205033838181'}
+          - {mapping: eff, lambda_D: '100000000', h: '0.693002210355673', Ob: '0.046614204480844044', Om: '0.2501875314984147', As: '2.0718324983796308e-9', ns: '0.9652782898255394', zre: '6.945697329538634'}
+          - {mapping: k01, lambda_D: '100000000', h: '0.6923813035912763', Ob: '0.046672928711627926', Om: '0.25089218756132015', As: '2.0719711018103234e-9', ns: '0.9648426395126201', zre: '6.93762886140468'}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 115
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Prepare exact cache-safe tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d1_tight_refine.py class_public/stage4d1_tight_refine.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Run five-start Powell plus two exact polls
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 stage4d1_tight_refine.py planck_data '${{ matrix.lambda_D }}' '${{ matrix.mapping }}' \
+            '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' | tee ../r7_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+          grep -q STAGE4D1_TIGHT_PASS ../r7_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d1-iteration6-r7-${{ matrix.mapping }}-${{ matrix.lambda_D }}
+          path: |
+            r7_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+            class_public/output/stage4d1_tight/${{ matrix.mapping }}/**/refine_summary.json
+            class_public/output/stage4d1_tight/${{ matrix.mapping }}/**/refine_trace.csv
+          if-no-files-found: error
+
+  hessian_k013e4:
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: {scale: ['1.0','0.5','0.25']}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Prepare exact cache-safe tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d0_fixed_lambda_stationarity.py class_public/stage4d0_fixed_lambda_stationarity.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Run 73-point stationarity stencil
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 stage4d0_fixed_lambda_stationarity.py planck_data '30000' 'k01' \
+            '0.6926207397976346' '0.04664682725375674' '0.2506224593768638' '2.0752834816722338e-9' '0.9649042041604012' '7.029324539439327' \
+            '1050.3959251230137' '${{ matrix.scale }}' | tee ../hessian_k01_30000_s${{ matrix.scale }}.log
+          grep -q STAGE4D0_FIXED_LAMBDA_PASS ../hessian_k01_30000_s${{ matrix.scale }}.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d1-iteration6-hessian-k01-30000-s${{ matrix.scale }}
+          path: |
+            hessian_k01_30000_s${{ matrix.scale }}.log
+            class_public/output/stage4d0_fixed_lambda/k01/30000/scale_*/stationarity_summary.json
+            class_public/output/stage4d0_fixed_lambda/k01/30000/scale_*/stationarity_points.csv
+          if-no-files-found: error
