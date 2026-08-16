@@ -3,10 +3,10 @@ from pathlib import Path
 import json
 import inference_core as core
 EFF_REG_TOL=1e-9
-K01_REG_TOL=1e-4
+K01_REG_TOL=1e-9
 POINTS={
  'v2best':{'p':{'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046851744145772894,'Om':0.25313821169954864,'As':2.079203080347647e-9,'ns':0.9644164163369503,'zre':7.10612905430964},'eff':1050.2204635306726,'k01':1050.2343198896031},
- 'v3best':{'p':{'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046851744145772894,'Om':0.25313821169954864,'As':2.080703080347647e-9,'ns':0.9644164163369503,'zre':7.14112905430964},'eff':1050.1486476532043,'k01':1050.1627089601635},
+ 'v3best':{'p':{'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046851744145772894,'Om':0.25313821169954864,'As':2.080703080347647e-9,'ns':0.9644164163369503,'zre':7.14112905430964},'eff':1050.1486476532043,'k01':1050.162683960708},
 }
 LEVELS=[('baseline',{}),('tight',{'tol_background_integration':'1e-3','tol_thermo_integration':'1e-3','tol_perturb_integration':'1e-6','perturb_sampling_stepsize':'0.025','k_per_decade_for_pk':'30','k_per_decade_for_bao':'140','k_max_tau0_over_l_max':'3.5','l_logstep':'1.04','l_linstep':'10'}),('ultra',{'tol_background_integration':'3e-4','tol_thermo_integration':'3e-4','tol_perturb_integration':'3e-7','perturb_sampling_stepsize':'0.0125','k_per_decade_for_pk':'40','k_per_decade_for_bao':'180','k_max_tau0_over_l_max':'4.0','l_logstep':'1.02','l_linstep':'5'})]
 orig=core.make_ini; active={}
