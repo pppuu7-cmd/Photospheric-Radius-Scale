@@ -1,0 +1,81 @@
+name: RTK Stage 4D1 iteration6 early round4 recenter
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-stage4d1-iteration6-r4-early.yml'
+
+jobs:
+  refine:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - {mapping: eff, lambda_D: '30000', h: '0.6918512050173163', Ob: '0.04670847361244287', Om: '0.25145056051465586', As: '2.071249336591726e-09', ns: '0.964721140821721', zre: '6.91796856021386'}
+          - {mapping: k01, lambda_D: '30000', h: '0.6923317145575923', Ob: '0.04666014626943158', Om: '0.2508828026184385', As: '2.0731601833579474e-09', ns: '0.965001773034356', zre: '6.980444107862488'}
+          - {mapping: k01, lambda_D: '1000000', h: '0.6916421032831662', Ob: '0.04672444309214029', Om: '0.25166668408444093', As: '2.0664239061744417e-09', ns: '0.9646547860701727', zre: '6.79285597642898'}
+          - {mapping: eff, lambda_D: '100000000', h: '0.692786034069755', Ob: '0.046617084948477286', Om: '0.2504093738259827', As: '2.0700738228114295e-09', ns: '0.9651865285082607', zre: '6.901114067340155'}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 115
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '120'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Prepare cache-safe exact likelihood tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d1_tight_refine.py class_public/stage4d1_tight_refine.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data
+          tar -xzf planck.tar.gz -C planck_data
+      - name: Run five-start tight Powell plus two exact polls
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 stage4d1_tight_refine.py planck_data '${{ matrix.lambda_D }}' '${{ matrix.mapping }}' \
+            '${{ matrix.h }}' '${{ matrix.Ob }}' '${{ matrix.Om }}' '${{ matrix.As }}' '${{ matrix.ns }}' '${{ matrix.zre }}' \
+            | tee ../iteration6_r4_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+          grep -q STAGE4D1_TIGHT_PASS ../iteration6_r4_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+          find output/stage4d1_tight/${{ matrix.mapping }} -name refine_summary.json -print -exec cat {} \;
+      - name: Upload exact recenter artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-stage4d1-iteration6-r4-${{ matrix.mapping }}-${{ matrix.lambda_D }}
+          path: |
+            iteration6_r4_${{ matrix.mapping }}_${{ matrix.lambda_D }}.log
+            class_public/output/stage4d1_tight/${{ matrix.mapping }}/**/refine_summary.json
+            class_public/output/stage4d1_tight/${{ matrix.mapping }}/**/refine_trace.csv
+          if-no-files-found: error
