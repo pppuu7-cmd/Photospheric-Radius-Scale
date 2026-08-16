@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "project": "RTK + DBI-Khronon",
+  "purpose": "Machine-readable separation of implemented observables, derivable diagnostics, and theory work still pending. This file is a capability contract, not a claim that pending quantities have been derived.",
+  "status_vocabulary": {
+    "implemented": "Produced by the current code path and numerically exercised.",
+    "derivable_now": "Can be constructed from existing numerical outputs without introducing new theory assumptions, but is not yet a stable public export.",
+    "pending_derivation": "Requires an analytic/theoretical derivation before implementation.",
+    "pending_validation": "Implemented or sketched, but not yet scientifically certified.",
+    "out_of_scope_current_stage": "Deliberately deferred from current linear-cosmology stage."
+  },
+  "capabilities": {
+    "background": {
+      "H_of_z": {"status": "implemented"},
+      "distances": {"status": "implemented"},
+      "sound_horizon_rd": {"status": "implemented"},
+      "khronon_w": {"status": "implemented"},
+      "khronon_ca2": {"status": "implemented"},
+      "khronon_cs2": {"status": "implemented"},
+      "k_star": {"status": "implemented"}
+    },
+    "linear_perturbations": {
+      "delta_theta_newtonian": {"status": "implemented"},
+      "sync_newtonian_transform": {"status": "implemented"},
+      "delta_rho_delta_p_momentum": {"status": "implemented"},
+      "anisotropic_shear": {"status": "implemented", "note": "Current Khronon CLASS source sets shear_class=0; this is a model implementation statement, not a generic modified-gravity assumption."},
+      "matter_power_Pk": {"status": "implemented"},
+      "growth_f_of_k_z": {"status": "derivable_now"},
+      "growth_scale_dependence_delta_f": {"status": "derivable_now"}
+    },
+    "likelihood": {
+      "Planck_2018_Commander_SimAll_PlikLite": {"status": "implemented"},
+      "Pantheon_full_covariance": {"status": "implemented"},
+      "BOSS_DR12_full_covariance": {"status": "implemented"},
+      "eff_growth_mapping": {"status": "implemented"},
+      "k01_growth_mapping": {"status": "implemented"},
+      "dense_BOSS_growth_sampling": {"status": "pending_validation", "note": "Final-objective infrastructure exists; matched final reoptimization remains required."}
+    },
+    "common_modified_gravity_language": {
+      "mu_k_a": {"status": "pending_derivation"},
+      "Sigma_k_a": {"status": "pending_derivation"},
+      "eta_slip_k_a": {"status": "pending_derivation"},
+      "EFT_ADM_dictionary": {"status": "pending_derivation"},
+      "PPF_dictionary": {"status": "pending_derivation"}
+    },
+    "theory_consistency": {
+      "positive_one_plus_w_runtime_guard": {"status": "implemented"},
+      "finite_cs2_runtime_guard": {"status": "implemented"},
+      "no_ghost_coefficient_Qs": {"status": "pending_derivation"},
+      "scalar_gradient_stability": {"status": "pending_derivation", "note": "Runtime cs2 is available, but a complete action-level stability proof is not yet claimed."},
+      "vector_stability": {"status": "pending_derivation"},
+      "tensor_stability": {"status": "pending_derivation"},
+      "hyperbolicity_characteristic_cones": {"status": "pending_derivation"},
+      "strong_coupling_or_EFT_cutoff": {"status": "pending_derivation"},
+      "degrees_of_freedom_constraint_count": {"status": "pending_derivation"}
+    },
+    "gravitational_waves": {
+      "tensor_speed_cT": {"status": "pending_derivation"},
+      "GW_damping": {"status": "pending_derivation"},
+      "extra_polarizations": {"status": "pending_derivation"},
+      "GW_luminosity_distance": {"status": "pending_derivation"}
+    },
+    "local_and_strong_field": {
+      "PPN": {"status": "pending_derivation"},
+      "spherical_static_sector": {"status": "pending_derivation"},
+      "TOV_neutron_stars": {"status": "pending_derivation"},
+      "compact_object_sensitivities": {"status": "pending_derivation"},
+      "black_holes": {"status": "pending_derivation"},
+      "binary_pulsar_predictions": {"status": "pending_derivation"}
+    },
+    "early_universe": {
+      "radiation_era_background": {"status": "pending_validation"},
+      "adiabatic_initial_condition_helper": {"status": "implemented"},
+      "BBN_consistency": {"status": "pending_derivation"},
+      "early_time_attractors": {"status": "pending_derivation"}
+    },
+    "nonlinear_structure": {
+      "quasistatic_limit": {"status": "pending_derivation"},
+      "spherical_collapse": {"status": "pending_derivation"},
+      "screening_or_force_law": {"status": "pending_derivation"},
+      "N_body_interface": {"status": "out_of_scope_current_stage"}
+    },
+    "community_interface": {
+      "common_observable_export": {"status": "pending_validation"},
+      "capability_manifest": {"status": "implemented"},
+      "reproducible_exact_likelihood_workflows": {"status": "implemented"},
+      "container_or_lockfile": {"status": "pending_validation"},
+      "one_command_benchmark": {"status": "pending_validation"}
+    }
+  },
+  "scientific_rules": [
+    "Never infer a pending_derivation quantity by naming analogy to another theory.",
+    "Do not compare absolute likelihood scores across unmatched code or precision states.",
+    "A numerical local minimum is not observational preference or global evidence.",
+    "Every public observable should carry provenance, numerical precision, and validity-domain metadata."
+  ]
+}
