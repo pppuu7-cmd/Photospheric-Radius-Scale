@@ -1,0 +1,163 @@
+name: RTK agent scientific gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'RECENTER, STATIONARITY, or REDISCOVERY_FOLLOWUP'
+        required: true
+        type: choice
+        options: [RECENTER, STATIONARITY, REDISCOVERY_FOLLOWUP]
+      mapping:
+        description: 'eff or k01'
+        required: true
+        type: choice
+        options: [eff, k01]
+      lambda_D: {required: true, type: string}
+      h: {required: true, type: string}
+      Ob: {required: true, type: string}
+      Om: {required: true, type: string}
+      As: {required: true, type: string}
+      ns: {required: true, type: string}
+      zre: {required: true, type: string}
+      expected_s:
+        description: 'Required for STATIONARITY; ignored otherwise'
+        required: false
+        default: '0'
+        type: string
+      scale:
+        description: 'Stationarity step scale'
+        required: false
+        default: '0.25'
+        type: string
+
+concurrency:
+  group: rtk-agent-scientific-${{ inputs.action }}-${{ inputs.mapping }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  CLIPY_NOJAX: '1'
+  OMP_NUM_THREADS: '2'
+  RTK_CLASS_TIMEOUT: '300'
+  RTK_CACHE_KEY_VERSION: 'agent-exact-float-v1'
+
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+
+      - name: Validate agent-selected action and numerical inputs
+        env:
+          ACTION: ${{ inputs.action }}
+          MAPPING: ${{ inputs.mapping }}
+          LAMBDA_D: ${{ inputs.lambda_D }}
+          H: ${{ inputs.h }}
+          OB: ${{ inputs.Ob }}
+          OM: ${{ inputs.Om }}
+          AS: ${{ inputs.As }}
+          NS: ${{ inputs.ns }}
+          ZRE: ${{ inputs.zre }}
+          EXPECTED_S: ${{ inputs.expected_s }}
+          SCALE: ${{ inputs.scale }}
+        run: |
+          python3 - <<'PY'
+          import math, os
+          action=os.environ['ACTION']; mapping=os.environ['MAPPING']
+          assert action in {'RECENTER','STATIONARITY','REDISCOVERY_FOLLOWUP'}
+          assert mapping in {'eff','k01'}
+          x={k:float(os.environ[k]) for k in ['LAMBDA_D','H','OB','OM','AS','NS','ZRE','EXPECTED_S','SCALE']}
+          assert all(math.isfinite(v) for v in x.values())
+          assert 1e2 <= x['LAMBDA_D'] <= 1e10
+          assert 0.50 <= x['H'] <= 0.90
+          assert 0.02 <= x['OB'] <= 0.08
+          assert 0.10 <= x['OM'] <= 0.50
+          assert 1e-10 <= x['AS'] <= 1e-8
+          assert 0.80 <= x['NS'] <= 1.20
+          assert 0.0 <= x['ZRE'] <= 30.0
+          assert 0.03125 <= x['SCALE'] <= 2.0
+          if action == 'STATIONARITY': assert 900.0 <= x['EXPECTED_S'] <= 1200.0
+          print('RTK_AGENT_INPUT_VALIDATION_PASS', action, mapping, x)
+          PY
+
+      - name: Prepare exact cache-safe tree
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/stage4d3_joint_lambda_refine.py class_public/stage4d3_joint_lambda_refine.py
+          cp rtk/stage4d3_joint_lambda_wide.py class_public/stage4d3_joint_lambda_wide.py
+          cp rtk/stage4d3_7d_stationarity.py class_public/stage4d3_7d_stationarity.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+
+      - name: Install exact likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
+
+      - name: Download official Planck baseline
+        working-directory: class_public
+        run: |
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
+      - name: Execute validated scientific gate
+        working-directory: class_public
+        env:
+          ACTION: ${{ inputs.action }}
+          MAPPING: ${{ inputs.mapping }}
+          LAMBDA_D: ${{ inputs.lambda_D }}
+          H: ${{ inputs.h }}
+          OB: ${{ inputs.Ob }}
+          OM: ${{ inputs.Om }}
+          AS: ${{ inputs.As }}
+          NS: ${{ inputs.ns }}
+          ZRE: ${{ inputs.zre }}
+          EXPECTED_S: ${{ inputs.expected_s }}
+          SCALE: ${{ inputs.scale }}
+        run: |
+          set -euo pipefail
+          if [ "$ACTION" = "RECENTER" ]; then
+            python3 stage4d3_joint_lambda_refine.py planck_data "$MAPPING" "$LAMBDA_D" "$H" "$OB" "$OM" "$AS" "$NS" "$ZRE" | tee ../agent_gate.log
+            grep -q STAGE4D3_JOINT_LAMBDA_PASS ../agent_gate.log
+          elif [ "$ACTION" = "REDISCOVERY_FOLLOWUP" ]; then
+            python3 stage4d3_joint_lambda_wide.py planck_data "$MAPPING" "$LAMBDA_D" "$H" "$OB" "$OM" "$AS" "$NS" "$ZRE" | tee ../agent_gate.log
+            grep -q STAGE4D3_JOINT_LAMBDA_PASS ../agent_gate.log
+          else
+            python3 stage4d3_7d_stationarity.py planck_data "$MAPPING" "$LAMBDA_D" "$H" "$OB" "$OM" "$AS" "$NS" "$ZRE" "$EXPECTED_S" "$SCALE" | tee ../agent_gate.log
+            grep -q STAGE4D3_7D_STATIONARITY_PASS ../agent_gate.log
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-agent-gate-${{ inputs.action }}-${{ inputs.mapping }}
+          path: |
+            agent_gate.log
+            class_public/output/stage4d3_joint_lambda/**/*.json
+            class_public/output/stage4d3_joint_lambda/**/*.csv
+            class_public/output/stage4d3_joint_lambda_wide/**/*.json
+            class_public/output/stage4d3_joint_lambda_wide/**/*.csv
+            class_public/output/stage4d3_7d_stationarity/**/*.json
+            class_public/output/stage4d3_7d_stationarity/**/*.csv
+          if-no-files-found: error
