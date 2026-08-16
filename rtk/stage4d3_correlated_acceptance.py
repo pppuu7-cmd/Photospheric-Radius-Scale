@@ -5,11 +5,8 @@ Usage:
   python3 stage4d3_correlated_acceptance.py PLANCK_DIR LAMBDA h Ob Om As ns zre S_EFF S_K01
 
 The test evaluates multiple deterministic non-axis directions in normalized
-(log lambda,h,Ob,Om,As,ns,zre) coordinates.  Both eff and k01 objectives are
+(log lambda,h,Ob,Om,As,ns,zre) coordinates. Both eff and k01 objectives are
 recorded from every exact CLASS+Planck+Pantheon+BOSS evaluation.
-
-This is a local numerical acceptance diagnostic only.  It is not a global-fit,
-posterior, evidence, or significance statement.
 """
 from pathlib import Path
 import csv,json,math,os,sys
@@ -24,9 +21,6 @@ TOL=float(os.environ.get('RTK_CORRELATED_IMPROVEMENT_TOL','0.005'))
 if not (math.isfinite(TOL) and TOL>=0): raise SystemExit('invalid tolerance')
 BASE=np.array([0.05,0.00035,0.00007,0.00070,4e-12,0.00035,0.070],float)
 N=7
-# Deterministic correlated directions. None is a coordinate axis.  The first
-# seven form a balanced sign basis; the last is the previously observed
-# log-lambda-dominated descent direction with small compensating components.
 raw=np.array([
  [ 1, 1, 1, 1, 1, 1, 1],
  [ 1, 1, 1,-1,-1,-1, 1],
@@ -40,7 +34,7 @@ raw=np.array([
 dirs=raw/np.linalg.norm(raw,axis=1)[:,None]
 alphas=(-1.0,-0.5,-0.25,0.25,0.5,1.0)
 OUT=Path('output/stage4d3_correlated_acceptance');OUT.mkdir(parents=True,exist_ok=True)
-rows=[]
+rows=[]; RETRIES=0
 
 def params(y):
     y=np.asarray(y,float);p=dict(CENTER)
@@ -57,8 +51,18 @@ def cleanup(tag):
         try:q.unlink()
         except OSError:pass
 
+def is_timeout(r):return r.get('error')=='CLASS_TIMEOUT' or r.get('reason')=='CLASS_TIMEOUT' or 'CLASS_TIMEOUT' in str(r.get('reason',''))
+
 def evaluate(y,label,di=None,a=0.0):
+    global RETRIES
     p=params(y);r=L.evaluate('RTK',p)
+    if not r.get('ok') and is_timeout(r):
+        RETRIES+=1; cleanup(r.get('tag'))
+        try:
+            ikey=('RTK',)+tuple(float(p[q]) for q in ['lam','h','Ob','Om','As','ns','zre'])
+            L.CACHE.pop(ikey,None)
+        except Exception:pass
+        r=L.evaluate('RTK',p)
     if not r.get('ok'):raise RuntimeError(f'{label}: {r}')
     row={'label':label,'direction':di,'alpha':a,**p}
     for q in ('score','score_k01','logL_planck','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd'):row[q]=r.get(q)
@@ -78,7 +82,7 @@ summary={
  'stage':'4D3-independent-correlated-multiray-acceptance',
  'scope':'local_exact_correlated_direction_test_not_global_or_statistical',
  'center':CENTER,'S_center_eff':center['score'],'S_center_k01':center['score_k01'],
- 'directions':dirs.tolist(),'alphas':list(alphas),'exact_likelihood_calls':int(L.COUNTER),
+ 'directions':dirs.tolist(),'alphas':list(alphas),'exact_likelihood_calls':int(L.COUNTER),'timeout_retries':RETRIES,
  'best_eff':be,'best_k01':bk,'improvement_eff':ie,'improvement_k01':ik,
  'strict_no_lower_eff':bool(ie<=0.0),'strict_no_lower_k01':bool(ik<=0.0),
  'tolerance':TOL,'pass_eff':bool(ie<=TOL),'pass_k01':bool(ik<=TOL),
