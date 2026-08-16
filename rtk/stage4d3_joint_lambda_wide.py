@@ -30,7 +30,9 @@ COORDS=[('loglam',0.0,LOG_LAM_HALFWIDTH)]+[(n,CENTER[n],width[n]) for n in names
 N=len(COORDS)
 OUT=Path('output/stage4d3_joint_lambda_wide')/MAPPING
 OUT.mkdir(parents=True,exist_ok=True)
-EVALS={}; ROWS=[]; FAILED=0
+EVALS={}; ROWS=[]; FAILED=0; TRANSIENT_RETRIES=0
+MAX_TRANSIENT_RETRIES=1
+FAIL_PENALTY=1.0e9
 
 def cleanup(tag):
     if not tag:return
@@ -51,17 +53,28 @@ def key(y): return tuple(float(v) for v in np.asarray(y,float))
 def target(r): return float(r['score'] if MAPPING=='eff' else r['score_k01'])
 
 def ev(y,tag='opt'):
-    global FAILED
+    global FAILED,TRANSIENT_RETRIES
     y=np.asarray(y,float)
     if np.any(~np.isfinite(y)) or np.any(y<-1.0000001) or np.any(y>1.0000001):
         return {'ok':False,'penalty':1e12,'reason':'outside_box'}
     k=key(y)
     if k in EVALS:return EVALS[k]
     p=y_to_params(y)
-    try:r=L.evaluate('RTK',p)
-    except Exception as e:r={'ok':False,'reason':repr(e)}
+    r=None
+    for attempt in range(MAX_TRANSIENT_RETRIES+1):
+        try:r=L.evaluate('RTK',p)
+        except Exception as e:r={'ok':False,'reason':repr(e)}
+        if r.get('ok'):break
+        reason=r.get('error',r.get('reason',str(r)))
+        cleanup(r.get('tag'))
+        if reason=='CLASS_TIMEOUT' and attempt<MAX_TRANSIENT_RETRIES:
+            TRANSIENT_RETRIES+=1
+            print('EVAL_RETRY_TIMEOUT',MAPPING,tag,'attempt',attempt+1,'params',p,flush=True)
+            continue
+        break
     if not r.get('ok'):
-        FAILED+=1; rr={'ok':False,'penalty':1e9+FAILED,'reason':r.get('reason',str(r)),'params':p,'y':y.tolist()}
+        FAILED+=1
+        rr={'ok':False,'penalty':FAIL_PENALTY,'reason':r.get('error',r.get('reason',str(r))),'params':p,'y':y.tolist()}
         EVALS[k]=rr; print('EVAL_FAIL',MAPPING,tag,rr['reason'],flush=True); return rr
     rr=dict(r); rr['params']=p; rr['y']=y.tolist(); EVALS[k]=rr
     row={'label':tag,'mapping':MAPPING}; row.update(p)
@@ -85,7 +98,8 @@ except Exception as e:
 ev(np.clip(res.x,-1,1),'cobyqa_result')
 valid=[r for r in EVALS.values() if r.get('ok')]
 best=min(valid,key=target); before=target(best)
-# Wider diagnostic polls first, then fine polls. These are exact likelihood calls.
+# Wider diagnostic polls first, then fine polls.  Each finer poll recenters on
+# the best exact point found by the previous poll.
 for poll in (0.050,0.015,0.004):
     seed=np.asarray(min([r for r in EVALS.values() if r.get('ok')],key=target)['y'])
     for i in range(N):
@@ -107,7 +121,8 @@ summary={
  'boundary_axes':boundary,'poll_improvement_from_pre_poll_best':before-after,
  'optimizer':{'method':'COBYQA','success':bool(res.success),'message':str(res.message),
               'fun':float(res.fun),'nfev':int(res.nfev),'nit':int(res.nit),'x':np.asarray(res.x).tolist()},
- 'memoization_key':'exact_float_normalized_coordinates','exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,
+ 'memoization_key':'exact_float_normalized_coordinates','failure_policy':'one_retry_for_CLASS_TIMEOUT_then_constant_penalty',
+ 'exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,'transient_retries':TRANSIENT_RETRIES,
  'coordinates':[{'name':n,'center':c,'halfwidth':w} for n,c,w in COORDS],
  'warning':'Wide deterministic basin search only. Any candidate must be recentered and certified by exact polls and a local 7D Hessian/stationarity check.'
 }
