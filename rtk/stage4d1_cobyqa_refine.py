@@ -27,7 +27,7 @@ N=len(COORDS)
 label=(f'{LAM:.0f}' if LAM<1e7 else f'{LAM:.0e}').replace('+','')
 OUT=Path('output/stage4d1_cobyqa')/MAPPING/label
 OUT.mkdir(parents=True,exist_ok=True)
-EVALS={}; ROWS=[]; FAILED=0
+EVALS={}; ROWS=[]; FAILED=0; RETRIES=0
 
 def cleanup(tag):
     if not tag:return
@@ -43,21 +43,32 @@ def y_to_params(y):
     for yi,(n,c,w) in zip(y,COORDS): p[n]=c+float(yi)*w
     return p
 
-def key(y): return tuple(float(f'{float(v):.12g}') for v in y)
+def key(y): return tuple(float(v) for v in np.asarray(y,float))
 def target(r): return float(r['score'] if MAPPING=='eff' else r['score_k01'])
+def is_timeout(r): return r.get('error')=='CLASS_TIMEOUT' or r.get('reason')=='CLASS_TIMEOUT' or 'CLASS_TIMEOUT' in str(r.get('reason',''))
+
+def evaluate_once(p):
+    try:return L.evaluate('RTK',p)
+    except Exception as e:return {'ok':False,'reason':repr(e)}
 
 def ev(y,tag='opt'):
-    global FAILED
+    global FAILED,RETRIES
     y=np.asarray(y,float)
     if np.any(~np.isfinite(y)) or np.any(y<-1.0000001) or np.any(y>1.0000001):
         return {'ok':False,'penalty':1e12,'reason':'outside_box'}
     k=key(y)
     if k in EVALS:return EVALS[k]
     p=y_to_params(y)
-    try:r=L.evaluate('RTK',p)
-    except Exception as e:r={'ok':False,'reason':repr(e)}
+    r=evaluate_once(p)
+    if not r.get('ok') and is_timeout(r):
+        RETRIES+=1; cleanup(r.get('tag'))
+        try:
+            ikey=('RTK',)+tuple(float(p[q]) for q in ['lam','h','Ob','Om','As','ns','zre'])
+            L.CACHE.pop(ikey,None)
+        except Exception: pass
+        r=evaluate_once(p)
     if not r.get('ok'):
-        FAILED+=1; rr={'ok':False,'penalty':1e9+FAILED,'reason':r.get('reason',str(r)),'params':p,'y':y.tolist()}; EVALS[k]=rr
+        FAILED+=1; rr={'ok':False,'penalty':1e9,'reason':r.get('reason',r.get('error',str(r))),'params':p,'y':y.tolist()}; EVALS[k]=rr
         print('EVAL_FAIL',LAM,MAPPING,tag,rr['reason'],flush=True); return rr
     rr=dict(r); rr['params']=p; rr['y']=y.tolist(); EVALS[k]=rr
     row={'label':tag,'lambda_D':LAM,'mapping':MAPPING}; row.update(p)
@@ -81,7 +92,6 @@ except Exception as e:
 ev(np.clip(res.x,-1,1),'cobyqa_result')
 valid=[r for r in EVALS.values() if r.get('ok')]
 best=min(valid,key=target); before=target(best)
-# Exact local polls after the quadratic trust-region search.
 for poll in (0.010,0.003):
     seed=np.asarray(min([r for r in EVALS.values() if r.get('ok')],key=target)['y'])
     for i in range(N):
@@ -102,7 +112,8 @@ summary={
  'boundary_axes':boundary,'poll_improvement_from_pre_poll_best':before-after,
  'optimizer':{'method':'COBYQA','success':bool(res.success),'message':str(res.message),
               'fun':float(res.fun),'nfev':int(res.nfev),'nit':int(res.nit),'x':np.asarray(res.x).tolist()},
- 'exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,
+ 'exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,'timeout_retries':RETRIES,
+ 'memoization_key':'exact_float_normalized_coordinates',
  'coordinates':[{'name':n,'center':c,'halfwidth':w} for n,c,w in COORDS],
  'warning':'Independent local optimizer cross-check only. Acceptance still requires exact stationarity/profile validation.'
 }
