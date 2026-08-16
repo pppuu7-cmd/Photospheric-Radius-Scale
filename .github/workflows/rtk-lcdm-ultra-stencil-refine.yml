@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/rtk-lcdm-ultra-stencil-refine.yml'
 
+# Science checkout must include rtk-class-build commit 188568d or later,
+# which matches the timed-out Powell ultra settings including l_linstep=2.
 jobs:
   refine:
     strategy:
@@ -46,6 +48,7 @@ jobs:
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
           ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+          grep -q "'l_linstep':'2'" lcdm_ultra_stencil_refine.py
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
