@@ -27,17 +27,14 @@ if MODEL=='RTK':
 else:
     lam=0.0
 CENTER={'lam':lam,'h':h,'Ob':Ob,'Om':Om,'As':As,'ns':ns,'zre':zre}
-
-# Conservative local widths inherited from the accepted Stage4D1 refinement
-# scale; RTK adds a multiplicative log-lambda coordinate.
 width={'h':0.0020,'Ob':0.00040,'Om':0.0040,'As':2.5e-11,'ns':0.0020,'zre':0.40}
 names=(['loglam'] if MODEL=='RTK' else [])+['h','Ob','Om','As','ns','zre']
 N=len(names)
 OUT=Path('output/final_objective_cobyqa')/MODEL.lower()/MAPPING
 OUT.mkdir(parents=True,exist_ok=True)
-EVALS={}; ROWS=[]; FAILED=0
+EVALS={}; ROWS=[]; FAILED=0; RETRIES=0
 
-def key(y): return tuple(float(f'{float(v):.13g}') for v in np.asarray(y,float))
+def key(y): return tuple(float(v) for v in np.asarray(y,float))
 def target(r): return float(r['score'] if MAPPING=='eff' else r['score_k01'])
 def y_to_params(y):
     y=np.asarray(y,float); p=dict(CENTER); j=0
@@ -56,18 +53,29 @@ def cleanup(tag):
         try:q.unlink()
         except OSError:pass
 
+def is_timeout(r): return r.get('error')=='CLASS_TIMEOUT' or r.get('reason')=='CLASS_TIMEOUT' or 'CLASS_TIMEOUT' in str(r.get('reason',''))
+def evaluate_once(p):
+    try:return L.evaluate(MODEL,p)
+    except Exception as e:return {'ok':False,'error':repr(e)}
+
 def ev(y,label='opt'):
-    global FAILED
+    global FAILED,RETRIES
     y=np.asarray(y,float)
     if np.any(~np.isfinite(y)) or np.any(y<-1.0000001) or np.any(y>1.0000001):
         return {'ok':False,'penalty':1e12,'reason':'outside_box'}
     k=key(y)
     if k in EVALS:return EVALS[k]
     p=y_to_params(y)
-    try:r=L.evaluate(MODEL,p)
-    except Exception as e:r={'ok':False,'error':repr(e)}
+    r=evaluate_once(p)
+    if not r.get('ok') and is_timeout(r):
+        RETRIES+=1; cleanup(r.get('tag'))
+        try:
+            ikey=(MODEL,)+tuple(float(p[q]) for q in ['lam','h','Ob','Om','As','ns','zre'])
+            L.CACHE.pop(ikey,None)
+        except Exception: pass
+        r=evaluate_once(p)
     if not r.get('ok'):
-        FAILED+=1; rr={'ok':False,'penalty':1e9+FAILED,'reason':r.get('error',r.get('reason','failed')),'params':p,'y':y.tolist()}; EVALS[k]=rr
+        FAILED+=1; rr={'ok':False,'penalty':1e9,'reason':r.get('error',r.get('reason','failed')),'params':p,'y':y.tolist()}; EVALS[k]=rr
         print('FINAL_NAV_FAIL',MODEL,MAPPING,label,rr['reason'],flush=True); return rr
     rr=dict(r); rr['params']=p; rr['y']=y.tolist(); EVALS[k]=rr
     row={'label':label,'model':MODEL,'mapping':MAPPING}; row.update(p)
@@ -88,7 +96,6 @@ res=minimize(obj,z,method='COBYQA',bounds=[(-1.,1.)]*N,
 ev(np.clip(res.x,-1,1),'cobyqa_result')
 valid=[r for r in EVALS.values() if r.get('ok')]
 best=min(valid,key=target); pre_poll=target(best)
-# Two exact local poll levels. Any positive improvement requires recenter.
 for poll in (0.010,0.003):
     seed=np.asarray(min([r for r in EVALS.values() if r.get('ok')],key=target)['y'])
     for i in range(N):
@@ -106,7 +113,8 @@ summary={
  'best_components':{q:best.get(q) for q in ('score','score_k01','logL_planck','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')},
  'poll_improvement_from_pre_poll_best':pre_poll-final,
  'optimizer':{'method':'COBYQA','success':bool(res.success),'message':str(res.message),'fun':float(res.fun),'nfev':int(res.nfev),'nit':int(res.nit),'x':np.asarray(res.x).tolist()},
- 'exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,
+ 'exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,'timeout_retries':RETRIES,
+ 'memoization_key':'exact_float_normalized_coordinates',
  'strict_status':'recenter_required' if pre_poll-final>0 else 'poll_stable_candidate',
  'scope':'matched local navigation only; no global minimum, significance, posterior or evidence claim'
 }
