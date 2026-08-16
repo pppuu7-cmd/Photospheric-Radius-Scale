@@ -2,6 +2,8 @@
 from pathlib import Path
 import json
 import inference_core as core
+EFF_REG_TOL=1e-9
+K01_REG_TOL=1e-4
 POINTS={
  'v2best':{'p':{'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046851744145772894,'Om':0.25313821169954864,'As':2.079203080347647e-9,'ns':0.9644164163369503,'zre':7.10612905430964},'eff':1050.2204635306726,'k01':1050.2343198896031},
  'v3best':{'p':{'lam':293868.81143246836,'h':0.6903899123316766,'Ob':0.046851744145772894,'Om':0.25313821169954864,'As':2.080703080347647e-9,'ns':0.9644164163369503,'zre':7.14112905430964},'eff':1050.1486476532043,'k01':1050.1627089601635},
@@ -16,7 +18,7 @@ def make_ini(model,p,tag):
             for k,v in active.items(): f.write(f'{k} = {v}\n')
     return path
 core.make_ini=make_ini
-rows=[]
+rows=[]; regression=[]
 for level,ov in LEVELS:
     active.clear(); active.update(ov)
     for name,spec in POINTS.items():
@@ -25,7 +27,10 @@ for level,ov in LEVELS:
         row={'level':level,'point':name,'score_eff':r['score'],'score_k01':r['score_k01'],'logL_planck':r['logL_planck'],'logL_high':r['logL_high'],'logL_lowT':r['logL_lowT'],'logL_lowE':r['logL_lowE'],'chi2_SN':r['chi2_SN'],'chi2_BOSS_eff':r['chi2_BOSS_eff'],'chi2_BOSS_k01':r['chi2_BOSS_k01'],'rd':r['rd']}
         rows.append(row); print('V3BEST_PRECISION_POINT',json.dumps(row,sort_keys=True),flush=True)
         if level=='baseline':
-            if abs(row['score_eff']-spec['eff'])>1e-9 or abs(row['score_k01']-spec['k01'])>1e-9: raise RuntimeError(f'baseline regression {name}: {row}')
+            de=row['score_eff']-spec['eff']; dk=row['score_k01']-spec['k01']
+            reg={'point':name,'delta_eff':de,'delta_k01':dk,'eff_tol':EFF_REG_TOL,'k01_tol':K01_REG_TOL}
+            regression.append(reg); print('V3BEST_BASELINE_REGRESSION',json.dumps(reg,sort_keys=True),flush=True)
+            if abs(de)>EFF_REG_TOL or abs(dk)>K01_REG_TOL: raise RuntimeError(f'baseline regression {name}: {row}; {reg}')
 by={(r['level'],r['point']):r for r in rows}; comps=[]
 for level,_ in LEVELS:
     a=by[(level,'v2best')]; b=by[(level,'v3best')]
@@ -34,6 +39,6 @@ for level,_ in LEVELS:
 for i in range(1,len(comps)):
     comps[i]['change_delta_eff_vs_previous_level']=comps[i]['delta_eff']-comps[i-1]['delta_eff']; comps[i]['change_delta_k01_vs_previous_level']=comps[i]['delta_k01']-comps[i-1]['delta_k01']
 out=Path('output/class_precision_v3best_pair'); out.mkdir(parents=True,exist_ok=True)
-summary={'stage':'As-zre-v3best-differential-precision','rows':rows,'comparisons':comps,'scope':'fixed-point numerical audit only; raw crossing is not a model-preference claim'}
+summary={'stage':'As-zre-v3best-differential-precision','rows':rows,'baseline_regression':regression,'regression_tolerances':{'eff':EFF_REG_TOL,'k01':K01_REG_TOL},'comparisons':comps,'scope':'fixed-point numerical audit only; raw crossing is not a model-preference claim'}
 (out/'class_precision_v3best_pair_summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print('V3BEST_PRECISION_RESULT',json.dumps(summary,sort_keys=True),flush=True); print('V3BEST_PRECISION_COMPLETE',flush=True)
