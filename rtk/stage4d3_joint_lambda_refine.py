@@ -50,7 +50,7 @@ def y_to_params(y):
         p[n]=c+float(yi)*w
     return p
 
-def key(y): return tuple(float(f'{float(v):.12g}') for v in y)
+def key(y): return tuple(float(v) for v in np.asarray(y,float))
 def target(r): return float(r['score'] if MAPPING=='eff' else r['score_k01'])
 
 def ev(y,tag='opt'):
@@ -114,6 +114,7 @@ summary={
  'boundary_axes':boundary,'poll_improvement_from_pre_poll_best':before-after,
  'optimizer':{'method':'COBYQA','success':bool(res.success),'message':str(res.message),
               'fun':float(res.fun),'nfev':int(res.nfev),'nit':int(res.nit),'x':np.asarray(res.x).tolist()},
+ 'memoization_key':'exact_float_normalized_coordinates',
  'exact_likelihood_calls':int(L.COUNTER),'failed_points':FAILED,
  'coordinates':[{'name':n,'center':c,'halfwidth':w} for n,c,w in COORDS],
  'warning':'Local 7-D optimization only. A numerical interior minimum still requires a local Hessian/stationarity check including the lambda direction.'
