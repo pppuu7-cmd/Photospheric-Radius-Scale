@@ -1,0 +1,29 @@
+name: RTK quantum consistency baseline audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-quantum-consistency-baseline.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Syntax check quantum audit
+        run: python3 -m py_compile rtk/quantum_consistency_audit.py
+      - name: Run broad-grid algebraic stability audit
+        run: python3 rtk/quantum_consistency_audit.py | tee quantum_consistency_baseline.json
+      - name: Verify explicit non-claims
+        run: |
+          grep -q '"status": "PASS"' quantum_consistency_baseline.json
+          grep -q '"ghost_free_quadratic_action": "NOT_YET_DERIVED"' quantum_consistency_baseline.json
+          grep -q '"uv_completion": "NOT_CLAIMED"' quantum_consistency_baseline.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-quantum-consistency-baseline
+          path: quantum_consistency_baseline.json
+          if-no-files-found: error
