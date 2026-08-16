@@ -1,0 +1,88 @@
+name: RTK numerical integrity regression v2
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-numerical-integrity-regression-v2.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Compile numerical scripts
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            rtk/prepare_inference_core.py \
+            rtk/stage4d1_fixed_lambda_profile.py \
+            rtk/stage4d1_tight_refine.py \
+            rtk/stage4d1_cobyqa_refine.py \
+            rtk/stage4d0_fixed_lambda_stationarity.py \
+            rtk/stage4d3_joint_lambda_refine.py \
+            rtk/stage4d3_joint_lambda_wide.py \
+            rtk/stage4d3_joint_stationarity.py \
+            rtk/stage4d3_7d_stationarity.py \
+            rtk/stage4d3_correlated_acceptance.py \
+            rtk/stage4d3_ray_scan.py \
+            rtk/stage4d3_v6_negative_curvature_scan.py \
+            rtk/final_objective_cobyqa_refine.py
+      - name: Verify optimizer memoization semantics
+        run: |
+          set -euo pipefail
+          files=(
+            rtk/stage4d1_fixed_lambda_profile.py
+            rtk/stage4d1_tight_refine.py
+            rtk/stage4d1_cobyqa_refine.py
+            rtk/stage4d0_fixed_lambda_stationarity.py
+            rtk/stage4d3_joint_lambda_refine.py
+            rtk/stage4d3_joint_lambda_wide.py
+            rtk/stage4d3_joint_stationarity.py
+            rtk/stage4d3_7d_stationarity.py
+            rtk/final_objective_cobyqa_refine.py
+          )
+          for f in "${files[@]}"; do
+            ! grep -Eq "float\(f['\"]\{float\(v\):\.[0-9]+g\}" "$f"
+            ! grep -q '1e9+FAILED' "$f"
+          done
+          grep -q "tuple(float(v) for v in np.asarray(y,float))" rtk/stage4d1_tight_refine.py
+          grep -q "tuple(float(v) for v in np.asarray(y,float))" rtk/stage4d3_joint_lambda_refine.py
+          grep -q "tuple(float(v) for v in np.asarray(y,float))" rtk/stage4d3_joint_stationarity.py
+      - name: Verify transient timeout policy in generated core
+        run: |
+          set -euo pipefail
+          cp rtk/joint_profile_runner.py /tmp/joint_profile_runner.py
+          python3 rtk/prepare_inference_core.py /tmp/joint_profile_runner.py /tmp/inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' /tmp/inference_core.py
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('/tmp/inference_core.py').read_text()
+          a=s.index('except subprocess.TimeoutExpired:')
+          b=s.index('if cp.returncode!=0:',a)
+          block=s[a:b]
+          assert 'CACHE[key]=r' not in block, block
+          assert "'error':'CLASS_TIMEOUT'" in block
+          print('TIMEOUT_CACHE_POLICY_OK')
+          PY
+      - name: Verify timeout retries in proof/navigation scripts
+        run: |
+          set -euo pipefail
+          for f in \
+            rtk/stage4d1_fixed_lambda_profile.py \
+            rtk/stage4d1_tight_refine.py \
+            rtk/stage4d1_cobyqa_refine.py \
+            rtk/stage4d0_fixed_lambda_stationarity.py \
+            rtk/stage4d3_joint_lambda_refine.py \
+            rtk/stage4d3_joint_lambda_wide.py \
+            rtk/stage4d3_joint_stationarity.py \
+            rtk/stage4d3_7d_stationarity.py \
+            rtk/stage4d3_correlated_acceptance.py \
+            rtk/stage4d3_ray_scan.py \
+            rtk/stage4d3_v6_negative_curvature_scan.py \
+            rtk/final_objective_cobyqa_refine.py; do
+            grep -q 'CLASS_TIMEOUT' "$f"
+          done
+          echo NUMERICAL_INTEGRITY_REGRESSION_V2_PASS
