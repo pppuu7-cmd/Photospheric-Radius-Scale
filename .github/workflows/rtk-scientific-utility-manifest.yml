@@ -1,0 +1,27 @@
+name: RTK scientific utility manifest
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-scientific-utility-manifest.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+      - name: Validate capability contract
+        run: |
+          set -euo pipefail
+          python3 rtk/validate_scientific_utility_manifest.py rtk/scientific_utility_manifest.json | tee utility_manifest.log
+          grep -q SCIENTIFIC_UTILITY_MANIFEST_PASS utility_manifest.log
+          cat rtk/final_objective_manifest.json
+      - name: Upload contract audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-scientific-utility-manifest
+          path: utility_manifest.log
+          if-no-files-found: error
