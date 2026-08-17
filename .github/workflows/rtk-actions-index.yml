@@ -1,0 +1,80 @@
+name: RTK lightweight Actions run index
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-actions-index.yml'
+      - '.github/rtk-actions-index-trigger.txt'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: rtk-actions-index
+  cancel-in-progress: true
+
+jobs:
+  index:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Capture recent Actions runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p research/runtime
+          python3 - <<'PY'
+          import json, os, subprocess, datetime
+          repo=os.environ['GITHUB_REPOSITORY']
+          raw=subprocess.check_output([
+              'gh','api',f'repos/{repo}/actions/runs?per_page=100'
+          ],text=True)
+          data=json.loads(raw)
+          wanted={
+              'RTK autonomous dense RTK half-stencil proof gate',
+              'RTK current exact mixed negative-mode ray profile',
+              'RTK current-center standard-siren prediction',
+              'RTK minimal-neutrino current-center robustness',
+              'RTK Route A1 background interaction ratios',
+              'RTK quantum Route A1 D4 identifiability no-go',
+              'RTK quantum Route A1 D5 dispersive no-go',
+              'RTK quantum Route A1 complete D5 cubic basis audit',
+              'RTK autonomous dense RTK 7D stationarity',
+              'RTK autonomous research orchestrator',
+          }
+          rows=[]
+          for r in data.get('workflow_runs',[]):
+              if r.get('name') in wanted:
+                  rows.append({k:r.get(k) for k in (
+                      'id','name','run_number','event','status','conclusion',
+                      'head_branch','head_sha','created_at','updated_at','html_url')})
+          out={
+              'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'repository':repo,
+              'runs':rows,
+          }
+          open('research/runtime/actions_index.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Commit index to research branch
+        run: |
+          set -euo pipefail
+          git config user.name 'rtk-actions-index'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/runtime/actions_index.json
+          if git diff --cached --quiet; then
+            echo 'No index change'
+          else
+            git commit -m 'Update RTK Actions runtime index'
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
