@@ -2,15 +2,10 @@
   "audit": {
     "last_reconciliation": [
       {
-        "adopted_replacement": "rtk.hessian_run",
-        "new_run_id": 32047204215,
-        "old_run_id": 31998282437
-      },
-      {
-        "improvement": 0.002496099298923582,
-        "new": 1049.966118347761,
-        "normalized_frozen_score": "lcdm",
-        "old": 1049.96861444706
+        "repaired_raw_candidate_certification": {
+          "new": "pending_stationarity_after_mixed_mode_recenter",
+          "old": "matched_dense_recenter_clear"
+        }
       }
     ]
   },
@@ -32,8 +27,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 48,
-  "last_iteration": "research/iterations/000048_20260817T233524Z.json",
+  "iteration": 49,
+  "last_iteration": "research/iterations/000049_20260817T234133Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -370,8 +365,10 @@
     "axis_result": null,
     "axis_run": {
       "artifact": "rtk-autonomous-dense-rtk-axis",
-      "run_id": null,
-      "status": "requested",
+      "conclusion": null,
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32081135646",
+      "run_id": 32081135646,
+      "status": "in_progress",
       "workflow": "rtk-autonomous-dense-rtk-axis.yml"
     },
     "base_steps": {
@@ -1214,7 +1211,7 @@
     ],
     "multiscale_curvature": null,
     "quarter_hessian_run": null,
-    "raw_candidate_certification": "matched_dense_recenter_clear",
+    "raw_candidate_certification": "pending_stationarity_after_mixed_mode_recenter",
     "stale_half_hessian_runs": [
       {
         "artifact": "rtk-autonomous-dense-rtk-half-stencil",
@@ -1240,5 +1237,5 @@
   "schema_version": 1,
   "stage": "rtk_axis_recenter_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-17T23:35:24Z"
+  "updated_at": "2026-08-17T23:41:33Z"
 }

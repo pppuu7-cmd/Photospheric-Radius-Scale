@@ -1,0 +1,22 @@
+{
+  "actions": [
+    "observe_and_wait_no_duplicate_heavy_dispatch"
+  ],
+  "comparison": {
+    "dense_raw_delta_S": null,
+    "status": "pending_matched_stationarity"
+  },
+  "iteration": 49,
+  "next_dispatch": {
+    "iteration": 48,
+    "reason": "exact mixed-mode ray improvement 0.0272101619576 > 0.005",
+    "ref": "main",
+    "status": "submitted_by_mixed_ray_transition",
+    "target": "rtk_axis",
+    "workflow": "rtk-autonomous-dense-rtk-axis.yml"
+  },
+  "observations": [],
+  "schema_version": 1,
+  "stage": "rtk_axis_recenter_running",
+  "time": "2026-08-17T23:41:33Z"
+}
