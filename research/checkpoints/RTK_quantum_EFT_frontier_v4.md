@@ -79,6 +79,8 @@ Therefore **background thermodynamics plus the complete linear CLASS target cann
 
 Science code: `rtk/quantum_route_a1_d4_identifiability.py`.
 
+Reproducible CI: workflow run `32076655060` — success.
+
 ## 6. D5 dispersive layer and complete cubic basis
 
 The quadratic dispersive term
@@ -90,6 +92,10 @@ has total derivative order D=4. A valid shift-symmetric preferred-frame nonlinea
 `alpha K/(2 M^2) dot(pi) (grad dot(pi))^2`,
 
 which is cubic derivative order D=5. Different `alpha` give exactly the same quadratic `K,M` but different nonlinear scattering. Thus linear `M_K/k_star` cannot identify the nonlinear dispersive coupling or physical cutoff.
+
+Science code for the identifiability theorem: `rtk/quantum_route_a1_d5_dispersive_nogo.py`.
+
+Reproducible CI: workflow run `32076756787` — success.
 
 The complete Route-A1 cubic D=5 basis can nevertheless be enumerated without choosing those coefficients. Parity and the one-time-derivative-per-field rule imply total time-derivative count `T=1` or `T=3`.
 
@@ -103,7 +109,15 @@ For `T=1,S=4`, exhaustive SO(3) tensor contractions for spatial derivative parti
 - `dot(pi) (d_i d_j pi)(d_i d_j pi)`,
 - `Laplacian(dot(pi)) (grad pi)^2`.
 
-Therefore the complete cubic D=5 Route-A1 basis has four representatives. Science code: `rtk/quantum_route_a1_d5_basis_audit.py`. The independent local symbolic rank check passes; CI workflow `rtk-quantum-route-a1-d5-basis.yml` has been launched for repository provenance.
+Therefore the complete cubic D=5 Route-A1 basis has four representatives.
+
+Science code: `rtk/quantum_route_a1_d5_basis_audit.py`.
+
+Reproducible CI:
+- original run `32077059115` — success;
+- provenance-refresh run `32081906314` — success;
+- artifact `rtk-route-a1-d5-basis`, ID `9305376622`;
+- artifact digest `sha256:2e2d45f0ba62d53cdc9b874a94e9a5d25f5693d147b7bc196d154c7dceb996d0`.
 
 This closes the D5 **basis-enumeration** problem under Route A1, but not the coefficient determination or finite-k nonlinear completion.
 
@@ -121,7 +135,7 @@ For the example dispersive nonlinearization `(1+alpha dot(pi))(grad dot(pi))^2`,
 
 Since `alpha` is not fixed by the linear target, this relation illustrates rather than removes the strong-coupling non-identifiability.
 
-A pinned one-point background diagnostic at the current RTK center has already solved the RT root `gamma=0.05166338653500` to printed precision. The first run failed only while opening a missing output directory after the background calculation had succeeded; the workflow was fixed and hardened to report coefficient proxies with an explicit non-cutoff interpretation boundary.
+A pinned background diagnostic at the pre-ray accepted RTK center solved the RT root `gamma=0.05166338653500` and verified the dust-limit interaction ratios. Because the cosmological center has since moved along an exact mixed-mode ray, these numerical background ratios should be refreshed after the new center passes its exact axis gate; the theorem-level identities are unaffected.
 
 ## 8. RT nonlocal sector theorem boundary
 
@@ -147,7 +161,7 @@ The project therefore separates:
 
 ✅ Closed as a methodology result: linear dispersive M/k_star does not determine the D5 nonlinear coupling or physical cutoff.
 
-✅ Closed under Route A1: complete cubic D=5 operator-basis enumeration modulo spatial IBP.
+✅ Closed under Route A1: complete cubic D=5 operator-basis enumeration modulo spatial IBP, now CI-reproduced.
 
 🔴 Open: choose or derive the actual D4/D5 finite-k nonlinear coefficient functions.
 
