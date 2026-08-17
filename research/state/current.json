@@ -23,6 +23,7 @@
     "iteration": 33,
     "reason": "RTK Hessian exact improvement 0.0304897673 > 0.005",
     "ref": "main",
+    "status": "submitted",
     "target": "rtk_axis",
     "workflow": "rtk-autonomous-dense-rtk-axis.yml"
   },
