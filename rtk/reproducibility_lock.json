@@ -1,11 +1,18 @@
 {
-  "schema_version": 2,
-  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; this file does not retroactively alter already-running Actions jobs.",
+  "schema_version": 3,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations. This file does not retroactively alter already-running Actions jobs.",
   "external_git": {
     "class_public": {
       "repository": "dirian/class_public",
       "branch": "nonlocal",
-      "commit": "36cf283628c4a3330ec9fd3d84239bf775f77317"
+      "commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+      "model_mapping": {
+        "0": "LCDM",
+        "1": "RR_R_Box^-2_R",
+        "2": "RT_transverse_(gmunu_Box^-1_R)^T"
+      },
+      "mapping_audit": "research/audits/20260817_upstream_nonlocal_model_mapping.md",
+      "warning": "Pinned source/input.c contains a stale contradictory comment; branch identity is locked from the implemented equations/background.h, not that comment."
     },
     "pantheon": {
       "repository": "dscolnic/Pantheon",
@@ -38,9 +45,11 @@
     }
   },
   "production_constraints": {
+    "nonlocal_model_id": 2,
+    "nonlocal_model_name": "RT",
     "gauge": "newtonian",
     "mapping": "eff",
-    "cache_semantics": "exact-float",
+    "cache_semantics": "exact-float-success-only",
     "objective": "matched-ultra-linstep2+dense-BOSS"
   },
   "workflow_wiring_status": "lock_complete_but_heavy_workflow_not_yet_rewired_to_all_pins"
