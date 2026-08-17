@@ -1,0 +1,34 @@
+name: RTK local quadratic EFT reconstruction audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-quantum-local-quadratic-eft.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Install symbolic dependency
+        run: python3 -m pip install --disable-pip-version-check sympy
+      - name: Syntax check
+        run: python3 -m py_compile rtk/quantum_local_quadratic_eft_reconstruction.py
+      - name: Run constructive local quadratic EFT audit
+        run: python3 rtk/quantum_local_quadratic_eft_reconstruction.py | tee quantum_local_quadratic_eft.json
+      - name: Verify interpretation boundary
+        run: |
+          grep -q '"status": "PASS"' quantum_local_quadratic_eft.json
+          grep -q '"classification": "CONSTRUCTIVE_LOCAL_QUADRATIC_EFT_EXISTENCE_AT_LINEAR_LEVEL"' quantum_local_quadratic_eft.json
+          grep -q '"background_ca2_equals_dpdrho": true' quantum_local_quadratic_eft.json
+          grep -q '"fundamental_action_uniqueness": "NOT_CLAIMED"' quantum_local_quadratic_eft.json
+          grep -q '"strong_coupling_scale": "NOT_YET_DERIVED"' quantum_local_quadratic_eft.json
+          grep -q '"uv_completion": "NOT_CLAIMED"' quantum_local_quadratic_eft.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-quantum-local-quadratic-eft
+          path: quantum_local_quadratic_eft.json
+          if-no-files-found: error
