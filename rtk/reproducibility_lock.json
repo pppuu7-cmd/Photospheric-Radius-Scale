@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. This file does not retroactively alter already-running Actions jobs.",
+  "schema_version": 2,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; this file does not retroactively alter already-running Actions jobs.",
   "external_git": {
     "class_public": {
       "repository": "dirian/class_public",
@@ -15,16 +15,33 @@
   },
   "likelihood": {
     "clipy_like": "0.15",
-    "planck_baseline_file_id": "COM_Likelihood_Data-baseline_R3.00.tar.gz"
+    "planck_baseline_file_id": "COM_Likelihood_Data-baseline_R3.00.tar.gz",
+    "planck_baseline_sha256": "0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6"
+  },
+  "runtime": {
+    "runner": "ubuntu-24.04",
+    "python": "3.12.3"
   },
   "python_packages": {
-    "numpy": "capture-exact-version-in-run-provenance-before-pinning",
-    "scipy": "capture-exact-version-in-run-provenance-before-pinning"
+    "numpy": "2.5.2",
+    "scipy": "1.18.0"
+  },
+  "measurement_provenance": {
+    "workflow_run_id": 32055127966,
+    "job_id": 95463407115,
+    "rtk_source_commit": "c6b9bc37fbc61bbac66ed64efc0d11dea6e1f547",
+    "artifact_id": 9296189767,
+    "artifact_sha256": "b51d3f1ffe72856ec4d7d3a6090ff1e00d6bdcda93d0591ac75acff8ffbdd661",
+    "score_reproduction": {
+      "rtk_eff": 1050.3327078658551,
+      "lcdm_eff": 1049.9661183477613
+    }
   },
   "production_constraints": {
     "gauge": "newtonian",
     "mapping": "eff",
     "cache_semantics": "exact-float",
     "objective": "matched-ultra-linstep2+dense-BOSS"
-  }
+  },
+  "workflow_wiring_status": "lock_complete_but_heavy_workflow_not_yet_rewired_to_all_pins"
 }
