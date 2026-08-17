@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-17T01:54:00Z",
+  "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
+  "state_branch": "rtk-class-build",
+  "production_mapping": "eff",
+  "stage": "await_dense_axis_and_lcdm_hessian",
+  "objective": {
+    "name": "matched-ultra-linstep2+dense-BOSS",
+    "recenter_tolerance_S": 0.005,
+    "dense_z_pk": "0.,0.25,0.30,0.34,0.36,0.37,0.38,0.39,0.40,0.42,0.47,0.49,0.50,0.51,0.52,0.53,0.55,0.57,0.59,0.60,0.61,0.62,0.63,0.65,0.70,0.75,1.0",
+    "ultra": {
+      "tol_background_integration": "3e-4",
+      "tol_thermo_integration": "3e-4",
+      "tol_perturb_integration": "3e-7",
+      "perturb_sampling_stepsize": "0.0125",
+      "k_per_decade_for_pk": "40",
+      "k_per_decade_for_bao": "180",
+      "k_max_tau0_over_l_max": "4.0",
+      "l_logstep": "1.02",
+      "l_linstep": "2"
+    }
+  },
+  "rtk": {
+    "accepted_center": {
+      "lam": 217225.01601516694,
+      "h": 0.6904831253428524,
+      "Ob": 0.046836300417955265,
+      "Om": 0.25300743080221694,
+      "As": 2.0837288833768707e-9,
+      "ns": 0.9643603115669437,
+      "zre": 7.21843542110055
+    },
+    "base_steps": {
+      "loglam": 0.05,
+      "h": 0.00035,
+      "Ob": 0.00007,
+      "Om": 0.00070,
+      "As": 4e-12,
+      "ns": 0.00035,
+      "zre": 0.070
+    },
+    "axis_run": {
+      "run_id": 31985345036,
+      "artifact": "rtk-dense-7d-axis-gate",
+      "status": "in_progress"
+    },
+    "hessian_run": null,
+    "axis_result": null,
+    "hessian_result": null
+  },
+  "lcdm": {
+    "accepted_center": {
+      "lam": 0.0,
+      "h": 0.6779337587382693,
+      "Ob": 0.04872764689799632,
+      "Om": 0.26187225794495356,
+      "As": 2.1094040998203598e-9,
+      "ns": 0.9649685632254442,
+      "zre": 7.8583129349509475
+    },
+    "hessian_run": {
+      "run_id": 31985735749,
+      "artifact": "rtk-dense-lcdm-stationarity",
+      "status": "in_progress"
+    },
+    "hessian_result": null
+  },
+  "comparison": {
+    "dense_raw_delta_S": null,
+    "status": "pending_matched_stationarity"
+  },
+  "dispatch": null,
+  "iteration": 0,
+  "last_iteration": null,
+  "research_queue": [
+    "close_dense_RTK_axis_gate",
+    "close_dense_LCDM_6D_stationarity",
+    "run_dense_RTK_7D_stationarity",
+    "freeze_matched_dense_minima",
+    "compute_raw_matched_delta_S",
+    "only_then_consider_model_selection_protocol"
+  ],
+  "guardrails": [
+    "never_compare_sparse_and_dense_scores_as_same_objective",
+    "keep_eff_and_k01_separate",
+    "do_not_claim_global_minimum_from_local_hessian",
+    "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
+  ]
+}
