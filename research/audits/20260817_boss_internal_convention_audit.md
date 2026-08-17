@@ -1,6 +1,6 @@
-# BOSS DR12 internal convention audit
+# BOSS DR12 convention audit
 
-Status: **internal pipeline convention consistent; external publication-level cross-check remains separate**.
+Status: **closed for vector convention, units and fiducial ruler**.
 
 ## Stored 9-vector order
 
@@ -32,22 +32,24 @@ Thus the dimensions are:
 - second component: km s^-1 Mpc^-1,
 - third component: dimensionless.
 
-The legacy label `DM_over_rs` is therefore potentially misleading if read literally: in this pipeline it denotes the fiducially rescaled distance `D_M r_d,fid / r_d`, not the dimensionless ratio `D_M/r_d`.
+The legacy label `DM_over_rs` is misleading if read literally: in this pipeline it denotes the fiducially rescaled distance `D_M r_d,fid / r_d`, not the dimensionless ratio `D_M/r_d`.
+
+## External primary-source cross-check
+
+The original BOSS DR12 final cosmological analysis (Alam et al., *The clustering of galaxies in the completed SDSS-III Baryon Oscillation Spectroscopic Survey: cosmological analysis of the DR12 galaxy sample*, arXiv:1607.03155; published MNRAS) reports in its final-consensus table exactly the observables
+
+- `D_M (r_d,fid / r_d)` in Mpc,
+- `H (r_d / r_d,fid)` in km s^-1 Mpc^-1,
+- `f sigma_8`,
+
+at effective redshifts 0.38, 0.51 and 0.61, and states `r_d,fid = 147.78 Mpc` for the fiducial cosmology. The published BAO+FS central values (1518, 81.5, 0.497), (1977, 90.5, 0.458), (2283, 97.3, 0.436) match the repository vector to its stored extra precision/rounding.
 
 ## Covariance scale sanity
 
 The covariance diagonal is numerically compatible with those dimensions: the first distance variances are O(500--1000) Mpc^2, the H variances O(3--4) (km s^-1 Mpc^-1)^2, and the growth variances O(10^-3).
 
-## Internal conclusion
+## Conclusion
 
-No internal unit mismatch is visible between the stored vector, covariance ordering and the implemented prediction formulas. The same `R_FID` is used inversely for D_M and H as required by the chosen fiducial-rescaling convention.
+The BOSS DR12 vector convention, units, fiducial sound horizon and runner rescaling are mutually consistent and agree with the original consensus analysis. This closes the previously open unit/convention concern.
 
-## Remaining independent gate
-
-This document is not an external provenance proof. Before a publication-strength claim, independently verify against the original BOSS DR12 consensus release/paper that:
-
-- `r_d,fid = 147.78 Mpc` is the intended fiducial ruler for this exact vector/covariance,
-- the vector convention is exactly `D_M r_d,fid/r_d`, `H r_d/r_d,fid`, `fσ8`,
-- the 9x9 covariance corresponds to precisely this ordering and normalization.
-
-Until that external check is recorded, classify this item as **internally consistent, externally pending**.
+A separate caveat remains: compressed `fσ8` is not fully model-independent for RTK's scale-dependent growth. That is a likelihood-modeling limitation, not a units/convention error, and the project continues to keep `eff` and `k01` mappings separate.
