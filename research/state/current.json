@@ -1,78 +1,61 @@
 {
-  "schema_version": 1,
-  "updated_at": "2026-08-17T01:54:00Z",
-  "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
-  "state_branch": "rtk-class-build",
-  "production_mapping": "eff",
-  "stage": "await_dense_axis_and_lcdm_hessian",
-  "objective": {
-    "name": "matched-ultra-linstep2+dense-BOSS",
-    "recenter_tolerance_S": 0.005,
-    "dense_z_pk": "0.,0.25,0.30,0.34,0.36,0.37,0.38,0.39,0.40,0.42,0.47,0.49,0.50,0.51,0.52,0.53,0.55,0.57,0.59,0.60,0.61,0.62,0.63,0.65,0.70,0.75,1.0",
-    "ultra": {
-      "tol_background_integration": "3e-4",
-      "tol_thermo_integration": "3e-4",
-      "tol_perturb_integration": "3e-7",
-      "perturb_sampling_stepsize": "0.0125",
-      "k_per_decade_for_pk": "40",
-      "k_per_decade_for_bao": "180",
-      "k_max_tau0_over_l_max": "4.0",
-      "l_logstep": "1.02",
-      "l_linstep": "2"
-    }
-  },
-  "rtk": {
-    "accepted_center": {
-      "lam": 217225.01601516694,
-      "h": 0.6904831253428524,
-      "Ob": 0.046836300417955265,
-      "Om": 0.25300743080221694,
-      "As": 2.0837288833768707e-9,
-      "ns": 0.9643603115669437,
-      "zre": 7.21843542110055
-    },
-    "base_steps": {
-      "loglam": 0.05,
-      "h": 0.00035,
-      "Ob": 0.00007,
-      "Om": 0.00070,
-      "As": 4e-12,
-      "ns": 0.00035,
-      "zre": 0.070
-    },
-    "axis_run": {
-      "run_id": 31985345036,
-      "artifact": "rtk-dense-7d-axis-gate",
-      "status": "in_progress"
-    },
-    "hessian_run": null,
-    "axis_result": null,
-    "hessian_result": null
-  },
-  "lcdm": {
-    "accepted_center": {
-      "lam": 0.0,
-      "h": 0.6779337587382693,
-      "Ob": 0.04872764689799632,
-      "Om": 0.26187225794495356,
-      "As": 2.1094040998203598e-9,
-      "ns": 0.9649685632254442,
-      "zre": 7.8583129349509475
-    },
-    "hessian_run": {
-      "run_id": 31985735749,
-      "artifact": "rtk-dense-lcdm-stationarity",
-      "status": "in_progress"
-    },
-    "hessian_result": null
-  },
   "comparison": {
     "dense_raw_delta_S": null,
     "status": "pending_matched_stationarity"
   },
-  "dispatch": null,
-  "iteration": 0,
-  "last_iteration": null,
+  "dispatch": {
+    "created_at": "2026-08-17T02:09:52Z",
+    "iteration": 1,
+    "reason": "RTK eff axis clear at tolerance 0.005",
+    "ref": "main",
+    "target": "rtk_hessian",
+    "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
+  },
+  "guardrails": [
+    "never_compare_sparse_and_dense_scores_as_same_objective",
+    "keep_eff_and_k01_separate",
+    "do_not_claim_global_minimum_from_local_hessian",
+    "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
+  ],
+  "iteration": 1,
+  "last_iteration": "research/iterations/000001_20260817T020952Z.json",
+  "lcdm": {
+    "accepted_center": {
+      "As": 2.1094040998203598e-09,
+      "Ob": 0.04872764689799632,
+      "Om": 0.26187225794495356,
+      "h": 0.6779337587382693,
+      "lam": 0.0,
+      "ns": 0.9649685632254442,
+      "zre": 7.8583129349509475
+    },
+    "hessian_result": null,
+    "hessian_run": {
+      "artifact": "rtk-dense-lcdm-stationarity",
+      "conclusion": null,
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/31985735749",
+      "run_id": 31985735749,
+      "status": "in_progress"
+    }
+  },
+  "objective": {
+    "dense_z_pk": "0.,0.25,0.30,0.34,0.36,0.37,0.38,0.39,0.40,0.42,0.47,0.49,0.50,0.51,0.52,0.53,0.55,0.57,0.59,0.60,0.61,0.62,0.63,0.65,0.70,0.75,1.0",
+    "name": "matched-ultra-linstep2+dense-BOSS",
+    "recenter_tolerance_S": 0.005,
+    "ultra": {
+      "k_max_tau0_over_l_max": "4.0",
+      "k_per_decade_for_bao": "180",
+      "k_per_decade_for_pk": "40",
+      "l_linstep": "2",
+      "l_logstep": "1.02",
+      "perturb_sampling_stepsize": "0.0125",
+      "tol_background_integration": "3e-4",
+      "tol_perturb_integration": "3e-7",
+      "tol_thermo_integration": "3e-4"
+    }
+  },
+  "production_mapping": "eff",
+  "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "research_queue": [
     "close_dense_RTK_axis_gate",
     "close_dense_LCDM_6D_stationarity",
@@ -81,10 +64,213 @@
     "compute_raw_matched_delta_S",
     "only_then_consider_model_selection_protocol"
   ],
-  "guardrails": [
-    "never_compare_sparse_and_dense_scores_as_same_objective",
-    "keep_eff_and_k01_separate",
-    "do_not_claim_global_minimum_from_local_hessian",
-    "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
-  ]
+  "rtk": {
+    "accepted_center": {
+      "As": 2.0837288833768707e-09,
+      "Ob": 0.046836300417955265,
+      "Om": 0.25300743080221694,
+      "h": 0.6904831253428524,
+      "lam": 217225.01601516694,
+      "ns": 0.9643603115669437,
+      "zre": 7.21843542110055
+    },
+    "axis_result": {
+      "axis_stats": {
+        "As": {
+          "eff": {
+            "central_difference": 0.11590993099252955,
+            "diagonal_curvature": 3.1065217247896726,
+            "minus_score": 1051.8634661117087,
+            "plus_score": 1052.0952859736938
+          },
+          "k01": {
+            "central_difference": 0.11596952079264611,
+            "diagonal_curvature": 3.1065217820835187,
+            "minus_score": 1051.8636462060645,
+            "plus_score": 1052.0955852476498
+          }
+        },
+        "Ob": {
+          "eff": {
+            "central_difference": -0.1560488556852988,
+            "diagonal_curvature": 0.47286672539053143,
+            "minus_score": 1050.818597398687,
+            "plus_score": 1050.5064996873164
+          },
+          "k01": {
+            "central_difference": -0.1560780363078038,
+            "diagonal_curvature": 0.4728667840665821,
+            "minus_score": 1050.8188662641564,
+            "plus_score": 1050.5067101915408
+          }
+        },
+        "Om": {
+          "eff": {
+            "central_difference": 0.2924274131622724,
+            "diagonal_curvature": 4.512864276671962,
+            "minus_score": 1052.39011990548,
+            "plus_score": 1052.9749747318047
+          },
+          "k01": {
+            "central_difference": 0.2925318890938797,
+            "diagonal_curvature": 4.512862890848282,
+            "minus_score": 1052.3902543921456,
+            "plus_score": 1052.9753181703334
+          }
+        },
+        "h": {
+          "eff": {
+            "central_difference": 0.08607050044474818,
+            "diagonal_curvature": 1.1632351859648224,
+            "minus_score": 1050.921662272844,
+            "plus_score": 1051.0938032737336
+          },
+          "k01": {
+            "central_difference": 0.0861126880009806,
+            "diagonal_curvature": 1.1632352023559633,
+            "minus_score": 1050.9218597489923,
+            "plus_score": 1051.0940851249943
+          }
+        },
+        "loglam": {
+          "eff": {
+            "central_difference": -1.3736751611759246e-05,
+            "diagonal_curvature": -0.00023444037947228935,
+            "minus_score": 1050.4260116968683,
+            "plus_score": 1050.425984223365
+          },
+          "k01": {
+            "central_difference": -1.7304475818491483e-05,
+            "diagonal_curvature": -0.00023402173360409506,
+            "minus_score": 1050.4262551294244,
+            "plus_score": 1050.4262205204727
+          }
+        },
+        "ns": {
+          "eff": {
+            "central_difference": 0.014744687653660549,
+            "diagonal_curvature": 0.06318178699098098,
+            "minus_score": 1050.4429613861482,
+            "plus_score": 1050.4724507614555
+          },
+          "k01": {
+            "central_difference": 0.014753123486229924,
+            "diagonal_curvature": 0.06318179742606844,
+            "minus_score": 1050.4431926110422,
+            "plus_score": 1050.4726988580146
+          }
+        },
+        "zre": {
+          "eff": {
+            "central_difference": -0.14702830747262396,
+            "diagonal_curvature": 1.5177342192221204,
+            "minus_score": 1051.33201059739,
+            "plus_score": 1051.0379539824448
+          },
+          "k01": {
+            "central_difference": -0.14702830919873122,
+            "diagonal_curvature": 1.5177342165611662,
+            "minus_score": 1051.3322502532947,
+            "plus_score": 1051.0381936348972
+          }
+        }
+      },
+      "base_steps": {
+        "As": 4e-12,
+        "Ob": 7e-05,
+        "Om": 0.0007,
+        "h": 0.00035,
+        "loglam": 0.05,
+        "ns": 0.00035,
+        "zre": 0.07
+      },
+      "best_eff": {
+        "As": 2.0837288833768707e-09,
+        "Ob": 0.046836300417955265,
+        "Om": 0.25300743080221694,
+        "axis": "loglam",
+        "chi2_BOSS_eff": 7.592381643035536,
+        "chi2_BOSS_k01": 7.592617940143066,
+        "chi2_SN": 39.55843172103175,
+        "h": 0.6904831253428524,
+        "label": "loglam_+1",
+        "lam": 228362.38074656395,
+        "logL_planck": -501.6375854296489,
+        "ns": 0.9643603115669437,
+        "rd": 146.974804,
+        "score_eff": 1050.425984223365,
+        "score_k01": 1050.4262205204727,
+        "sign": 1,
+        "zre": 7.21843542110055
+      },
+      "best_improvement_eff": 0.00013095694134790392,
+      "best_improvement_k01": 0.000134315342620539,
+      "best_k01": {
+        "As": 2.0837288833768707e-09,
+        "Ob": 0.046836300417955265,
+        "Om": 0.25300743080221694,
+        "axis": "loglam",
+        "chi2_BOSS_eff": 7.592381643035536,
+        "chi2_BOSS_k01": 7.592617940143066,
+        "chi2_SN": 39.55843172103175,
+        "h": 0.6904831253428524,
+        "label": "loglam_+1",
+        "lam": 228362.38074656395,
+        "logL_planck": -501.6375854296489,
+        "ns": 0.9643603115669437,
+        "rd": 146.974804,
+        "score_eff": 1050.425984223365,
+        "score_k01": 1050.4262205204727,
+        "sign": 1,
+        "zre": 7.21843542110055
+      },
+      "center": {
+        "As": 2.0837288833768707e-09,
+        "Ob": 0.046836300417955265,
+        "Om": 0.25300743080221694,
+        "h": 0.6904831253428524,
+        "lam": 217225.01601516694,
+        "ns": 0.9643603115669437,
+        "zre": 7.21843542110055
+      },
+      "center_score_eff": 1050.4261151803064,
+      "center_score_k01": 1050.4263548358153,
+      "gate": "NO_RECENTER_AXIS_CLEAR",
+      "improvement_tolerance": 0.005,
+      "objective": "matched-ultra-linstep2+dense-BOSS",
+      "points": 15,
+      "recenter_allowed_eff": false,
+      "recenter_allowed_k01": false,
+      "stage": "dense-7d-axis-gate",
+      "warning": "Axis-only local exact gate; not a full Hessian, posterior, evidence, or global proof."
+    },
+    "axis_run": {
+      "artifact": "rtk-dense-7d-axis-gate",
+      "conclusion": "success",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/31985345036",
+      "parsed": true,
+      "run_id": 31985345036,
+      "status": "completed"
+    },
+    "base_steps": {
+      "As": 4e-12,
+      "Ob": 7e-05,
+      "Om": 0.0007,
+      "h": 0.00035,
+      "loglam": 0.05,
+      "ns": 0.00035,
+      "zre": 0.07
+    },
+    "hessian_result": null,
+    "hessian_run": {
+      "artifact": "rtk-autonomous-dense-rtk-stationarity",
+      "run_id": null,
+      "status": "requested",
+      "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
+    }
+  },
+  "schema_version": 1,
+  "stage": "rtk_hessian_running",
+  "state_branch": "rtk-class-build",
+  "updated_at": "2026-08-17T02:09:52Z"
 }

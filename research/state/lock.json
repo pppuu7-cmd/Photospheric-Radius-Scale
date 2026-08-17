@@ -1,7 +1,8 @@
 {
-  "schema_version": 1,
-  "holder": null,
   "acquired_at": null,
   "expires_at": null,
-  "note": "Human-readable lease mirror. GitHub Actions concurrency is the authoritative overlap guard."
+  "holder": null,
+  "note": "Human-readable mirror; workflow concurrency is authoritative.",
+  "released_at": "2026-08-17T02:09:52Z",
+  "schema_version": 1
 }
