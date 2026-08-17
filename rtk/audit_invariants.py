@@ -8,6 +8,8 @@ runner=(ROOT/'rtk/joint_profile_runner.py').read_text()
 prep=(ROOT/'rtk/prepare_inference_core.py').read_text()
 protocol=(ROOT/'rtk/FINAL_MATCHED_COMPARISON_PROTOCOL.md').read_text()
 inputs=(ROOT/'rtk/upgrade_rtk_inputs.py').read_text()
+lock=json.loads((ROOT/'rtk/reproducibility_lock.json').read_text())
+identity=(ROOT/'rtk/validate_artifact_identity.py').read_text()
 
 checks=[]
 def ok(name, cond, detail=''):
@@ -23,6 +25,23 @@ ok('production_mapping_eff', state.get('production_mapping')=='eff')
 ok('matched_dense_objective', state.get('objective',{}).get('name')=='matched-ultra-linstep2+dense-BOSS')
 ok('lambda_is_real_input', 'class_read_double("lambda_D",pba->lambda_D)' in inputs)
 ok('mapping_separation_protocol', 'eff` and `k01`' in protocol and 'treated as separate objective variants' in protocol)
+
+# Likelihood algebra invariants: preserve the audited definitions used by the
+# matched objective. These are implementation guards, not statistical claims.
+ok('fs8_eff_is_dsigma8_dloga', 'fs=derivative3(' in runner and 'result[z0]=(fs,f01*s8)' in runner,
+   'eff mapping must remain d sigma8 / d ln a; k01 is stored separately')
+ok('k01_mapping_separate', 'f01=.5*derivative3(' in runner and "0 if which=='eff' else 1" in runner)
+ok('pantheon_offset_profile', 'off=sum(Cid)/sum(Ci1)' in runner and "quad(L_SN,[x-off for x in d])" in runner,
+   'Pantheon additive magnitude zero-point must be profiled with full covariance')
+ok('boss_bao_rescaling', "*R_FID/rd" in runner and "*C_KM_S*rd/R_FID" in runner,
+   'BOSS DM and H observables must use the same fiducial sound-horizon convention')
+
+# Reproducibility/provenance lock and fail-closed artifact identity validation.
+ok('class_upstream_pinned_target', lock['external_git']['class_public']['commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317')
+ok('pantheon_pinned_target', lock['external_git']['pantheon']['commit']=='7eb29dc87ba223b4ec8457cd3cccba1216c36fb7')
+ok('clipy_pinned', lock['likelihood']['clipy_like']=='0.15')
+ok('artifact_identity_checks_objective', "summary.get(\"objective\") != expected_objective" in identity)
+ok('artifact_identity_checks_center', 'exact_center_equal(summary.get("center"), expected_center)' in identity)
 
 tol=float(state['objective']['recenter_tolerance_S'])
 for model in ('lcdm','rtk'):
