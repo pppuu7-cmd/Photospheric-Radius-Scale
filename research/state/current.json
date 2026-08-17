@@ -16,16 +16,15 @@
   },
   "comparison": {
     "dense_raw_delta_S": null,
-    "status": "pending_matched_stationarity"
+    "status": "pending_multiscale_stationarity"
   },
   "dispatch": {
-    "created_at": "2026-08-17T20:28:37Z",
-    "iteration": 35,
-    "reason": "RTK eff axis clear at tolerance 0.005",
+    "created_at": "2026-08-17T23:13:58Z",
+    "iteration": 46,
+    "reason": "Stage4D3 N5 requires 1/2-stencil stability after base RTK Hessian",
     "ref": "main",
-    "status": "submitted",
-    "target": "rtk_hessian",
-    "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
+    "target": "rtk_half_hessian",
+    "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
   },
   "guardrails": [
     "never_compare_sparse_and_dense_scores_as_same_objective",
@@ -33,8 +32,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 45,
-  "last_iteration": "research/iterations/000045_20260817T230855Z.json",
+  "iteration": 46,
+  "last_iteration": "research/iterations/000046_20260817T231358Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -365,6 +364,17 @@
       "ns": 0.9644273896355182,
       "zre": 7.317081734823917
     },
+    "accepted_score_eff": 1050.3022180985636,
+    "accepted_score_params": {
+      "As": 2.0874341676903437e-09,
+      "Ob": 0.046834883174647964,
+      "Om": 0.25274346988872953,
+      "h": 0.6906937726797984,
+      "lam": 219966.90504044993,
+      "ns": 0.9644273896355182,
+      "zre": 7.317081734823917
+    },
+    "accepted_score_semantics": "best_exact_base_stencil_within_recenter_tolerance",
     "axis_result": {
       "best_eff": {
         "axis": "",
@@ -448,6 +458,14 @@
       "loglam": 0.05,
       "ns": 0.00035,
       "zre": 0.07
+    },
+    "certification": "pending_half_stencil",
+    "half_hessian_run": {
+      "artifact": "rtk-autonomous-dense-rtk-half-stencil",
+      "expected_stencil_scale": 0.5,
+      "run_id": null,
+      "status": "requested",
+      "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
     },
     "hessian_history": [
       {
@@ -975,18 +993,295 @@
         "warning": "Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection."
       }
     ],
-    "hessian_result": null,
+    "hessian_result": {
+      "base_steps": {
+        "As": 4e-12,
+        "Ob": 7e-05,
+        "Om": 0.0007,
+        "h": 0.00035,
+        "loglam": 0.05,
+        "ns": 0.00035,
+        "zre": 0.07
+      },
+      "center": {
+        "As": 2.0874341676903437e-09,
+        "Ob": 0.046834883174647964,
+        "Om": 0.25274346988872953,
+        "h": 0.6906937726797984,
+        "lam": 219966.90504044993,
+        "ns": 0.9644273896355182,
+        "zre": 7.317081734823917
+      },
+      "center_fingerprint": "78171ac0528a3436969a6d5c58f6db376c0643aee736d1b1b2c0c7633066fbef",
+      "eff": {
+        "S_center": 1050.3022180985636,
+        "S_newton": 1050.510577624275,
+        "best_exact_S": 1050.3022180985636,
+        "best_improvement": 0.0,
+        "best_label": "center",
+        "best_params": {
+          "As": 2.0874341676903437e-09,
+          "Ob": 0.046834883174647964,
+          "Om": 0.25274346988872953,
+          "h": 0.6906937726797984,
+          "lam": 219966.90504044993,
+          "ns": 0.9644273896355182,
+          "zre": 7.317081734823917
+        },
+        "eigenvalues_y": [
+          -0.0044758233976694844,
+          0.00014469889940377578,
+          0.0336156235369222,
+          0.07123211780980822,
+          0.2472028959256006,
+          3.0710463945625275,
+          7.327945929821453
+        ],
+        "gradient_y": [
+          -5.826738436098822e-05,
+          -0.010367084519884884,
+          -0.0026597869756415093,
+          0.01947532371491434,
+          -0.03271428582002045,
+          0.00809675290645373,
+          -0.022058970887428586
+        ],
+        "hessian_y": [
+          [
+            0.00014474270551545487,
+            -0.0002063932282112546,
+            7.825552938811597e-05,
+            -0.0004373740133019055,
+            0.00013048610071564326,
+            2.7850169317389373e-06,
+            -8.559253535622702e-05
+          ],
+          [
+            -0.0002063932282112546,
+            1.149700058286271,
+            -0.1559175407575708,
+            2.2012725039615475,
+            -0.9507738376257748,
+            -0.039272332656935305,
+            0.6624866597642836
+          ],
+          [
+            7.825552938811597e-05,
+            -0.1559175407575708,
+            0.4429053215742442,
+            -0.6250269982015197,
+            -0.3991539326580096,
+            -0.0010178907085105493,
+            0.2884287735561202
+          ],
+          [
+            -0.0004373740133019055,
+            2.2012725039615475,
+            -0.6250269982015197,
+            4.486873510339137,
+            -1.5337728345066353,
+            -0.04414927940854341,
+            1.0651112163130279
+          ],
+          [
+            0.00013048610071564326,
+            -0.9507738376257748,
+            -0.3991539326580096,
+            -1.5337728345066353,
+            3.0525946574830414,
+            0.10941007414839987,
+            -2.1229373866839296
+          ],
+          [
+            2.7850169317389373e-06,
+            -0.039272332656935305,
+            -0.0010178907085105493,
+            -0.04414927940854341,
+            0.10941007414839987,
+            0.031436534920203485,
+            -0.07637537481576828
+          ],
+          [
+            -8.559253535622702e-05,
+            0.6624866597642836,
+            0.2884287735561202,
+            1.0651112163130279,
+            -2.1229373866839296,
+            -0.07637537481576828,
+            1.5830570118496325
+          ]
+        ],
+        "max_abs_gradient_y": 0.03271428582002045,
+        "newton_delta": [
+          0.3644877262678061,
+          -1.5231412576802679,
+          0.8720590956348083,
+          0.903592194605851,
+          0.40414061947886815,
+          -1.3973146490777841,
+          0.3590790551769472
+        ],
+        "newton_params": {
+          "As": 2.089050730168259e-09,
+          "Ob": 0.0468959273113424,
+          "Om": 0.2533759844249536,
+          "h": 0.6903437726797984,
+          "lam": 224012.4184249564,
+          "ns": 0.9640773896355183,
+          "zre": 7.342217268686303
+        },
+        "positive_definite": false
+      },
+      "k01": {
+        "S_center": 1050.302499618449,
+        "S_newton": 1050.5119397299425,
+        "best_exact_S": 1050.302499618449,
+        "best_improvement": 0.0,
+        "best_label": "center",
+        "best_params": {
+          "As": 2.0874341676903437e-09,
+          "Ob": 0.046834883174647964,
+          "Om": 0.25274346988872953,
+          "h": 0.6906937726797984,
+          "lam": 219966.90504044993,
+          "ns": 0.9644273896355182,
+          "zre": 7.317081734823917
+        },
+        "eigenvalues_y": [
+          -0.004475901731588823,
+          0.0001453143743264099,
+          0.03361559680183601,
+          0.07123213539613844,
+          0.24720289345173732,
+          3.07104595258582,
+          7.327945255431999
+        ],
+        "gradient_y": [
+          -6.45665123784056e-05,
+          -0.01032544075678743,
+          -0.0026886316373975205,
+          0.019578400256818895,
+          -0.032655523886433,
+          0.008105099390490977,
+          -0.02205897159331016
+        ],
+        "hessian_y": [
+          [
+            0.00014535948889715655,
+            -0.0002091834634825318,
+            8.01763713411674e-05,
+            -0.00044428314345168474,
+            0.00012657673784133294,
+            2.227878155736107e-06,
+            -8.559193167911872e-05
+          ],
+          [
+            -0.0002091834634825318,
+            1.1497000822005248,
+            -0.15591760186265446,
+            2.2012723738332625,
+            -0.9507737408815728,
+            -0.03927230094728884,
+            0.6624866598415338
+          ],
+          [
+            8.01763713411674e-05,
+            -0.15591760186265446,
+            0.4429053878236573,
+            -0.6250269441079013,
+            -0.3991540247181433,
+            -0.0010179118985433888,
+            0.28842877356669305
+          ],
+          [
+            -0.00044428314345168474,
+            2.2012723738332625,
+            -0.6250269441079013,
+            4.486872145737152,
+            -1.5337729373325146,
+            -0.04414925837795636,
+            1.0651112164202914
+          ],
+          [
+            0.00012657673784133294,
+            -0.9507737408815728,
+            -0.3991540247181433,
+            -1.5337729373325146,
+            3.052594713014969,
+            0.10941011397250122,
+            -2.1229373865554066
+          ],
+          [
+            2.227878155736107e-06,
+            -0.03927230094728884,
+            -0.0010179118985433888,
+            -0.04414925837795636,
+            0.10941011397250122,
+            0.031436544454436444,
+            -0.07637537494719027
+          ],
+          [
+            -8.559193167911872e-05,
+            0.6624866598415338,
+            0.28842877356669305,
+            1.0651112164202914,
+            -2.1229373865554066,
+            -0.07637537494719027,
+            1.5830570135906328
+          ]
+        ],
+        "max_abs_gradient_y": 0.032655523886433,
+        "newton_delta": [
+          0.4139214062856179,
+          -1.5231738101673082,
+          0.8720700032544277,
+          0.9035808043094602,
+          0.40385335631474245,
+          -1.3975414170799358,
+          0.3587048557724345
+        ],
+        "newton_params": {
+          "As": 2.0890495811156025e-09,
+          "Ob": 0.046895928074875776,
+          "Om": 0.25337597645174614,
+          "h": 0.6903437726797984,
+          "lam": 224566.79117046887,
+          "ns": 0.9640773896355183,
+          "zre": 7.342191074727988
+        },
+        "positive_definite": false
+      },
+      "objective": "matched-ultra-linstep2+dense-BOSS",
+      "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+      "points": 101,
+      "provenance": {
+        "center_fingerprint": "78171ac0528a3436969a6d5c58f6db376c0643aee736d1b1b2c0c7633066fbef",
+        "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+        "numpy_version": "2.5.2",
+        "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+        "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+        "rtk_source_commit": "99e0fb0e4a3b4ea8573a871f14a7ffc12e2e085c",
+        "state_iteration": 35,
+        "stencil_scale": 1.0
+      },
+      "stage": "autonomous-dense-rtk-7d-stationarity",
+      "stencil_scale": 1.0,
+      "warning": "Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection."
+    },
     "hessian_run": {
       "artifact": "rtk-autonomous-dense-rtk-stationarity",
-      "conclusion": null,
+      "conclusion": "success",
       "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32065998894",
+      "parsed": true,
       "run_id": 32065998894,
-      "status": "in_progress",
+      "status": "completed",
       "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
-    }
+    },
+    "interior_minimum_certification": "N5_PENDING_HALF_STENCIL",
+    "raw_candidate_certification": "matched_dense_recenter_clear"
   },
   "schema_version": 1,
-  "stage": "rtk_hessian_running",
+  "stage": "rtk_half_stencil_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-17T23:08:55Z"
+  "updated_at": "2026-08-17T23:13:58Z"
 }

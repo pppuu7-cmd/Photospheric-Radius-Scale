@@ -1,0 +1,35 @@
+{
+  "actions": [
+    "freeze_RTK_local_dense_candidate_best_exact",
+    "compute_matched_dense_raw_delta_S"
+  ],
+  "comparison": {
+    "S_LCDM": 1049.966118347761,
+    "S_RTK": 1050.3022180985636,
+    "dense_raw_delta_S": 0.33609975080253207,
+    "mapping": "eff",
+    "numerically_indistinguishable_at_0p005": false,
+    "status": "matched_local_dense_raw_fit_ready",
+    "warning": "Raw local objective comparison only; not AIC/BIC/Bayes evidence/significance."
+  },
+  "iteration": 46,
+  "next_dispatch": {
+    "created_at": "2026-08-17T20:28:37Z",
+    "iteration": 35,
+    "reason": "RTK eff axis clear at tolerance 0.005",
+    "ref": "main",
+    "status": "submitted",
+    "target": "rtk_hessian",
+    "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
+  },
+  "observations": [
+    {
+      "best_improvement_eff": 0.0,
+      "positive_definite": false,
+      "rtk_hessian_run": 32065998894
+    }
+  ],
+  "schema_version": 1,
+  "stage": "matched_dense_ready",
+  "time": "2026-08-17T23:13:58Z"
+}
