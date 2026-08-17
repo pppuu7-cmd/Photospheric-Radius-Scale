@@ -42,7 +42,7 @@ jobs:
               'RTK autonomous dense RTK half-stencil proof gate',
               'RTK current exact mixed negative-mode ray profile',
               'RTK current-center standard-siren prediction',
-              'RTK minimal-neutrino current-center robustness',
+              'RTK matched minimal-neutrino robustness',
               'RTK Route A1 background interaction ratios',
               'RTK quantum Route A1 D4 identifiability no-go',
               'RTK quantum Route A1 D5 dispersive no-go',
