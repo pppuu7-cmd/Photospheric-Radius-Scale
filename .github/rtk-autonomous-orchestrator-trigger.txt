@@ -1,2 +1,2 @@
-trigger: 2026-08-17T01:56:00Z
-reason: bootstrap autonomous 10-minute research loop
+trigger: 2026-08-17T16:55:00Z
+reason: audit reconciliation of replacement RTK Hessian run and frozen-score semantics
