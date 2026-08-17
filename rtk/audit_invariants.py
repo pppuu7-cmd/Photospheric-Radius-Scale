@@ -67,6 +67,16 @@ ok('pantheon_pinned_target', lock['external_git']['pantheon']['commit']=='7eb29d
 ok('clipy_pinned', lock['likelihood']['clipy_like']=='0.15')
 ok('artifact_identity_checks_objective', "summary.get(\"objective\") != expected_objective" in identity)
 ok('artifact_identity_checks_center', 'exact_center_equal(summary.get("center"), expected_center)' in identity)
+ok('artifact_identity_checks_objective_fingerprint', 'objective_fingerprint' in identity and 'canonical_hash(state["objective"])' in identity,
+   'RTK Hessian artifacts must match the canonical frozen-objective fingerprint')
+ok('artifact_identity_checks_center_fingerprint', 'center_fingerprint' in identity and '"model": "RTK"' in identity and '"mapping": state.get("production_mapping", "eff")' in identity,
+   'RTK Hessian artifacts must match the canonical model/center/objective/mapping fingerprint')
+ok('artifact_identity_checks_locked_class_sha', 'class_upstream_commit' in identity and 'repro["external_git"]["class_public"]["commit"]' in identity,
+   'RTK Hessian artifact must declare the locked CLASS upstream commit')
+ok('artifact_identity_checks_locked_pantheon_sha', 'pantheon_commit' in identity and 'repro["external_git"]["pantheon"]["commit"]' in identity,
+   'RTK Hessian artifact must declare the locked Pantheon commit')
+ok('artifact_identity_checks_locked_numpy', 'numpy_version' in identity and 'repro["python_packages"]["numpy"]' in identity,
+   'RTK Hessian artifact runtime NumPy must match the measured lock')
 
 tol=float(state['objective']['recenter_tolerance_S'])
 for model in ('lcdm','rtk'):
