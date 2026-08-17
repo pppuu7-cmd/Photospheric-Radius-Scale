@@ -3,8 +3,17 @@
 
 Inputs are the physical closure parameters used by khronon_background.c.
 This is a conditional Route-A1/P(X) diagnostic, not a full RTK cutoff theorem.
+The reported Lambda_i values are canonical coefficient-suppression proxies for
+D3 operators only; they are explicitly not identified with the physical strong-
+coupling cutoff because small-c_s/dispersive D4 effects and c3,c4 remain open.
 """
 import argparse, json, math
+
+# Fixed unit conventions used only for the coefficient proxies.
+MPC_M=3.0856775814913673e22
+HBARC_EV_M=1.973269804e-7
+INV_MPC_EV=HBARC_EV_M/MPC_M
+MPL_REDUCED_EV=2.435e27
 
 p=argparse.ArgumentParser()
 p.add_argument('--gamma',type=float,required=True)
@@ -19,6 +28,7 @@ A=a.Om/(6*a.gamma)
 D=1+2*A+a.lam*A*A
 x0=A*(2+a.lam*A)/(1+a.lam*A+math.sqrt(D))
 mu=3*a.H0*math.sqrt(a.gamma)
+H0_eV=a.H0*INV_MPC_EV
 
 def vals(scale):
     x=x0/scale**3
@@ -32,7 +42,8 @@ def vals(scale):
     c2_over_K=-0.5*(1-G/K)
     # c1/K=[(d ln K/d ln x)/(2 ca2)-1]/3.
     # Evaluate d ln K/d ln x with a symmetric log derivative; the exact
-    # thermodynamic identity has already been proved symbolically in CI.
+    # thermodynamic identity and its dust-limit asymptotics are proved
+    # symbolically by quantum_route_a1_px_reconstruction.py.
     eps=1e-5
     def kval(xx):
         ss=math.hypot(1.0,math.sqrt(a.lam)*xx)
@@ -47,18 +58,37 @@ def vals(scale):
     w=pr/rho
     Q=1+r
     MK=mu*Q*s*math.sqrt(s)
+
+    # Code K is 8*pi*G times the physical kinetic density, with units Mpc^-2.
+    # K_phys=Mpl_bar^2*K.  For L3=c_i O_i and chi=sqrt(K_phys)*pi,
+    # coefficient 1/Lambda_i^2=|c_i,phys|/K_phys^(3/2), hence
+    # Lambda_i^2=Mpl_bar*sqrt(K_8piG)/|c_i/K|.
+    sqrtK_eV=math.sqrt(K)*INV_MPC_EV
+    lambda1_eV=math.sqrt(MPL_REDUCED_EV*sqrtK_eV/abs(c1_over_K))
+    lambda2_eV=math.sqrt(MPL_REDUCED_EV*sqrtK_eV/abs(c2_over_K))
     return {'a':scale,'z':1/scale-1,'x':x,'w':w,'ca2':ca2,
+            'K_over_H0sq':K/(a.H0*a.H0),
             'c1_over_K':c1_over_K,'c2_over_K':c2_over_K,
+            'ca2_times_c1_over_K':ca2*c1_over_K,
+            'Lambda1_D3_coefficient_proxy_eV':lambda1_eV,
+            'Lambda2_D3_coefficient_proxy_eV':lambda2_eV,
+            'Lambda1_over_H0':lambda1_eV/H0_eV,
+            'Lambda2_over_H0':lambda2_eV/H0_eV,
             'M_K_over_H0':MK/a.H0,'dbi_margin':1/(s*s)}
 
 scales=[1.0,0.8,0.67,0.5,1/3,0.2,0.1,0.01,0.001]
 rows=[vals(s) for s in scales]
 out={'classification':'RTK_ROUTE_A1_BACKGROUND_RATIOS_COMPLETE',
      'gamma':a.gamma,'lambda_D':a.lam,'Omega_K0':a.Om,'H0_class':a.H0,
-     'x0':x0,'mu_over_H0':mu/a.H0,'rows':rows,
+     'H0_eV':H0_eV,'x0':x0,'mu_over_H0':mu/a.H0,'rows':rows,
+     'proxy_conventions':{'reduced_Planck_mass_eV':MPL_REDUCED_EV,
+                          'inverse_Mpc_eV':INV_MPC_EV,
+                          'Lambda_i_definition':'Lambda_i^2=Mpl_bar*sqrt(K_8piG)/abs(c_i/K)'},
      'interpretation_boundary':{
        'D3_longwave_only':True,
        'c3_c4_known':False,
+       'finite_k_completion_reconstructed':False,
        'full_strong_coupling_cutoff_known':False,
+       'Lambda1_Lambda2_are_not_declared_cutoffs':True,
        'M_K_is_not_declared_cutoff':True}}
 print('RTK_ROUTE_A1_BACKGROUND_RATIOS_COMPLETE',json.dumps(out,sort_keys=True))
