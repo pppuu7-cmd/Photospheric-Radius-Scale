@@ -1,0 +1,125 @@
+name: RTK nonlocal auxiliary IC A-B control
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-nonlocal-ic-ab-control.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ab-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Prepare identical old and explicit-Vprime trees
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee nonlocal_ic_ab_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_old
+          git -C class_old reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_old/pantheon
+          git -C class_old/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_old rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_old/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_old/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_old/include/
+          python3 rtk/apply_rtk_class_patch.py class_old
+          python3 rtk/upgrade_rtk_inputs.py class_old
+          python3 rtk/upgrade_rtk_initial_conditions.py class_old
+          python3 rtk/upgrade_rtk_matter_sources.py class_old
+          python3 rtk/upgrade_rtk_gamma_root.py class_old
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_old
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/nonlocal_ic_score_probe.py class_old/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_old/
+          (cd class_old && python3 prepare_inference_core.py joint_profile_runner.py inference_core.py)
+
+          cp -a class_old class_fixed
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_fixed | tee -a nonlocal_ic_ab_provenance.txt
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_fixed/source/input.c
+          ! grep -q 'pba->V_prime_ini_nlde = 0.;' class_old/source/input.c
+
+      - name: Build both CLASS variants
+        run: |
+          set -euo pipefail
+          make -C class_old -j2 class
+          make -C class_fixed -j2 class
+
+      - name: Install pinned likelihood dependencies
+        run: |
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2' 'scipy==1.18.0'
+          python3 --version | tee -a nonlocal_ic_ab_provenance.txt
+          python3 - <<'PY' | tee -a nonlocal_ic_ab_provenance.txt
+          import numpy,scipy
+          print('NUMPY='+numpy.__version__)
+          print('SCIPY='+scipy.__version__)
+          PY
+
+      - name: Download and verify Planck baseline once
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+          ln -s ../planck_data class_old/planck_data
+          ln -s ../planck_data class_fixed/planck_data
+
+      - name: Evaluate old upstream-typo variant
+        working-directory: class_old
+        env:
+          RTK_IC_VARIANT: old_uninitialized_Vprime
+        run: |
+          set -o pipefail
+          python3 nonlocal_ic_score_probe.py | tee ../probe_old.log
+          grep -q RTK_NONLOCAL_IC_SCORE_PROBE_PASS ../probe_old.log
+
+      - name: Evaluate explicit zero-Vprime variant
+        working-directory: class_fixed
+        env:
+          RTK_IC_VARIANT: fixed_explicit_zero_Vprime
+        run: |
+          set -o pipefail
+          python3 nonlocal_ic_score_probe.py | tee ../probe_fixed.log
+          grep -q RTK_NONLOCAL_IC_SCORE_PROBE_PASS ../probe_fixed.log
+
+      - name: Compare exact likelihood outputs
+        run: |
+          python3 - <<'PY' | tee nonlocal_ic_ab_summary.json
+          import json
+          a=json.load(open('class_old/probe_old_uninitialized_Vprime.json'))
+          b=json.load(open('class_fixed/probe_fixed_explicit_zero_Vprime.json'))
+          keys=['score_eff','score_k01','logL_planck','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd']
+          delta={k:b[k]-a[k] for k in keys}
+          out={'old':a,'fixed':b,'delta_fixed_minus_old':delta,
+               'max_abs_component_delta':max(abs(v) for v in delta.values()),
+               'score_equivalent_1e-8':abs(delta['score_eff'])<=1e-8}
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-nonlocal-ic-ab-control
+          path: |
+            nonlocal_ic_ab_provenance.txt
+            probe_old.log
+            probe_fixed.log
+            nonlocal_ic_ab_summary.json
+            class_old/probe_old_uninitialized_Vprime.json
+            class_fixed/probe_fixed_explicit_zero_Vprime.json
+          if-no-files-found: error
