@@ -1,0 +1,24 @@
+name: RTK galactic flat-curve falsification audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-galactic-rotation-falsification.yml'
+
+jobs:
+  analytic-audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Run analytic galactic necessary-condition audit
+        run: |
+          set -euo pipefail
+          python3 rtk/galactic_rotation_curve_falsification.py | tee galactic_rotation_falsification.log
+          grep -q RTK_GALACTIC_ROTATION_FALSIFICATION_PASS galactic_rotation_falsification.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-galactic-rotation-falsification
+          path: galactic_rotation_falsification.log
+          if-no-files-found: error
