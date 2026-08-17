@@ -19,22 +19,35 @@ jobs:
       OMP_NUM_THREADS: '2'
       RTK_CLASS_TIMEOUT: '300'
       RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
     steps:
       - uses: actions/checkout@v4
-        with: {ref: rtk-class-build}
-      - name: Prepare exact cache-safe tree
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Prepare pinned exact cache-safe tree
         run: |
           set -euo pipefail
-          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
-          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee axis_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
           cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
           cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
           python3 rtk/apply_rtk_class_patch.py class_public
           python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
           python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
           cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
           cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
           cp rtk/autonomous_dense_rtk_axis.py class_public/autonomous_dense_rtk_axis.py
@@ -42,27 +55,43 @@ jobs:
           cd class_public
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
-      - name: Install exact likelihood dependencies
-        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
-      - name: Download official Planck baseline
+
+      - name: Install pinned likelihood dependencies
+        run: |
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2' 'scipy==1.18.0'
+          python3 -m pip freeze | sort | tee axis_pip_freeze.txt
+          python3 --version | tee axis_python_version.txt
+
+      - name: Download and verify official Planck baseline
         working-directory: class_public
         run: |
+          set -euo pipefail
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          sha256sum planck.tar.gz | tee ../axis_planck_sha256.txt
           mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
       - name: Run state-driven RTK axis gate
         working-directory: class_public
         run: |
           set -o pipefail
           python3 autonomous_dense_rtk_axis.py | tee ../autonomous_dense_rtk_axis.log
           grep -q AUTO_DENSE_RTK_AXIS_COMPLETE ../autonomous_dense_rtk_axis.log
+
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: rtk-autonomous-dense-rtk-axis
           path: |
             autonomous_dense_rtk_axis.log
+            axis_provenance.txt
+            axis_pip_freeze.txt
+            axis_python_version.txt
+            axis_planck_sha256.txt
             class_public/output/autonomous_dense_rtk_axis/summary.json
             class_public/output/autonomous_dense_rtk_axis/points.csv
           if-no-files-found: error
