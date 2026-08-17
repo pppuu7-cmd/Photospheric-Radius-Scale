@@ -1,0 +1,106 @@
+name: RTK current exact mixed negative-mode ray profile
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-current-mixed-mode-ray.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ray-profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Prepare pinned hardened exact-likelihood tree
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee mixed_mode_ray_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
+          cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
+          cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
+          cp rtk/rtk_mixed_mode_ray_profile.py class_public/rtk_mixed_mode_ray_profile.py
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+
+      - name: Build CLASS and install pinned likelihood dependencies
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          python3 -m pip install --disable-pip-version-check \
+            'clipy-like==0.15' \
+            "numpy==$RTK_NUMPY_VERSION" \
+            "scipy==$RTK_SCIPY_VERSION"
+          python3 - <<'PY'
+          import numpy, scipy, os
+          assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
+          assert scipy.__version__==os.environ['RTK_SCIPY_VERSION']
+          PY
+
+      - name: Download and verify official Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
+      - name: Run exact mixed-mode ray profile
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 rtk_mixed_mode_ray_profile.py | tee ../mixed_mode_ray.log
+          grep -q RTK_MIXED_MODE_RAY_PROFILE_COMPLETE ../mixed_mode_ray.log
+          python3 - <<'PY'
+          import json, math
+          s=json.load(open('output/rtk_mixed_mode_ray_profile/summary.json'))
+          assert s['center_fingerprint']=='78171ac0528a3436969a6d5c58f6db376c0643aee736d1b1b2c0c7633066fbef'
+          assert s['base_hessian_run']==32065998894
+          assert len(s['points'])==11
+          assert math.isfinite(s['best_improvement'])
+          print('RTK_MIXED_MODE_RAY_FAIL_CLOSED_CHECKS_PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-current-mixed-mode-ray
+          path: |
+            mixed_mode_ray.log
+            mixed_mode_ray_provenance.txt
+            class_public/output/rtk_mixed_mode_ray_profile/summary.json
+          if-no-files-found: error
