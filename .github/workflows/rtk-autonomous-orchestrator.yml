@@ -31,6 +31,14 @@ jobs:
           git config user.name 'rtk-autonomous-orchestrator'
           git config user.email 'actions@users.noreply.github.com'
 
+      - name: Reconcile control-plane state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 rtk/reconcile_autonomous_state.py | tee autonomous_reconcile.log
+          grep -q RTK_STATE_RECONCILE autonomous_reconcile.log
+
       - name: Run one synchronized research-control iteration
         env:
           GH_TOKEN: ${{ github.token }}
