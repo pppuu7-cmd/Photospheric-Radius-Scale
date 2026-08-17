@@ -3,8 +3,8 @@
 
 This does not make scientific decisions. It repairs control-plane metadata that
 can otherwise strand a valid replacement Actions run behind an older failed
-run_id, and normalizes frozen local raw-fit scores to the best exact stencil
-score required by FINAL_MATCHED_COMPARISON_PROTOCOL.md.
+run_id, normalizes frozen local raw-fit scores to the best exact stencil score,
+and removes stale certification labels after an already-recorded recenter.
 """
 from __future__ import annotations
 
@@ -48,10 +48,8 @@ def adopt_newer_replacement(state, model, key, changes):
     new_id = int(r.get("id") or 0)
     if new_id <= old_id or r.get("head_branch") != "main":
         return
-    # Only adopt a replacement that is not itself already a failed terminal run.
     if r.get("status") == "completed" and r.get("conclusion") not in (None, "success"):
         return
-    old = dict(slot)
     slot["adopted_replacement_of"] = old_id
     slot["run_id"] = new_id
     slot["status"] = r.get("status")
@@ -91,6 +89,27 @@ def normalize_frozen_minimum(state, model, changes):
         changes.append({"normalized_frozen_score": model, "old": old, "new": best, "improvement": imp})
 
 
+def repair_pending_recenter_labels(state, changes):
+    """Remove only labels contradicted by an already-committed recenter state."""
+    rtk=state.get('rtk',{})
+    pending=(
+        rtk.get('certification')=='needs_recenter_from_exact_mixed_mode_ray'
+        and rtk.get('accepted_score_eff') is None
+        and isinstance(rtk.get('axis_run'),dict)
+    )
+    if not pending:
+        return
+    want='pending_stationarity_after_mixed_mode_recenter'
+    old=rtk.get('raw_candidate_certification')
+    if old!=want:
+        rtk['raw_candidate_certification']=want
+        changes.append({'repaired_raw_candidate_certification':{'old':old,'new':want}})
+    if state.get('comparison',{}).get('dense_raw_delta_S') is not None:
+        oldcmp=dict(state['comparison'])
+        state['comparison']={'status':'pending_matched_stationarity','dense_raw_delta_S':None}
+        changes.append({'cleared_stale_comparison_after_recenter':oldcmp})
+
+
 def main():
     state = json.loads(STATE.read_text())
     changes = []
@@ -98,6 +117,7 @@ def main():
         adopt_newer_replacement(state, model, key, changes)
     normalize_frozen_minimum(state, "lcdm", changes)
     normalize_frozen_minimum(state, "rtk", changes)
+    repair_pending_recenter_labels(state, changes)
     if changes:
         state.setdefault("audit", {})["last_reconciliation"] = changes
         STATE.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
