@@ -1,2 +1,2 @@
-trigger: 2026-08-17T23:14:30Z
-reason: attach the newly dispatched RTK half-stencil Stage4D3 run ID; do not parse it in the same control iteration
+trigger: 2026-08-17T23:41:00Z
+reason: repair post-mixed-ray recenter labels, attach the new exact axis run, and ensure no duplicate heavy dispatch
