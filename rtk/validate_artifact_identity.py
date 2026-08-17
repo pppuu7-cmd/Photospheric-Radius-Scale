@@ -158,7 +158,7 @@ def validate_slot(state, repro, model, key):
     row = {"slot": f"{model}.{key}", "run_id": run_id,
            "objective": expected_objective, "center_match": True,
            "stencil_scale": summary.get("stencil_scale")}
-    if model == "rtk" and key in ("hessian_run", "half_hessian_run"):
+    if model == "rtk" and key in ("hessian_run", "half_hessian_run", "quarter_hessian_run"):
         row["locked_provenance"] = validate_rtk_hessian_provenance(state, repro, key, run_id, summary)
     return row
 
@@ -168,7 +168,8 @@ def main():
     repro = json.loads(REPRO.read_text())
     checked = []
     for model, key in (("rtk", "axis_run"), ("rtk", "hessian_run"),
-                       ("rtk", "half_hessian_run"), ("lcdm", "hessian_run")):
+                       ("rtk", "half_hessian_run"), ("rtk", "quarter_hessian_run"),
+                       ("lcdm", "hessian_run")):
         row = validate_slot(state, repro, model, key)
         if row:
             checked.append(row)
