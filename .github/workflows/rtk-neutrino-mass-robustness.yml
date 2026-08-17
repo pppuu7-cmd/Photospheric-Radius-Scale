@@ -1,0 +1,104 @@
+name: RTK matched minimal-neutrino robustness
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-neutrino-mass-robustness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  robustness:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Prepare pinned hardened tree
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee neutrino_robustness_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/neutrino_mass_robustness.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q 'all_failures_uncached' inference_core.py
+          grep -q 'pba->V_prime_ini_nlde = 0.;' source/input.c
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install pinned likelihood dependencies
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check \
+            'clipy-like==0.15' \
+            "numpy==$RTK_NUMPY_VERSION" \
+            "scipy==$RTK_SCIPY_VERSION"
+          python3 - <<'PY'
+          import numpy,scipy,os
+          assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
+          assert scipy.__version__==os.environ['RTK_SCIPY_VERSION']
+          PY
+      - name: Download and verify Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Evaluate massless and 0.06 eV fixed-center robustness modes
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 neutrino_mass_robustness.py | tee ../neutrino_mass_robustness.log
+          grep -q RTK_NEUTRINO_FIXED_CENTER_ROBUSTNESS_COMPLETE ../neutrino_mass_robustness.log
+          python3 - <<'PY'
+          import json
+          s=json.load(open('../neutrino_mass_robustness_summary.json'))
+          assert s['frozen_production_unchanged'] is True
+          assert s['objective']=='matched-ultra-linstep2+dense-BOSS'
+          assert len(s['rows'])==6
+          # Frozen-mode self-reproduction must remain at the already-audited scale.
+          r={x['model']:x for x in s['rows'] if x['mode']=='massless'}
+          assert abs(r['RTK']['score_eff']-1050.3022180985636)<1e-6
+          assert abs(r['LCDM']['score_eff']-1049.966118347761)<1e-6
+          print('RTK_NEUTRINO_ROBUSTNESS_FROZEN_BASELINE_REPRODUCED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-neutrino-mass-robustness
+          path: |
+            neutrino_robustness_provenance.txt
+            neutrino_mass_robustness.log
+            neutrino_mass_robustness_summary.json
+          if-no-files-found: error
