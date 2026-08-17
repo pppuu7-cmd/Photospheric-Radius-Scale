@@ -1,0 +1,99 @@
+name: RTK Route A1 background interaction ratios
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-route-a1-background-ratios.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      RTK_CLASS_UPSTREAM_SHA: 36cf283628c4a3330ec9fd3d84239bf775f77317
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Prepare pinned hardened CLASS tree
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_a1_background_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/quantum_route_a1_background_ratios.py class_public/
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Solve current-center gamma and evaluate D3 ratios
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          cat > route_a1_center.ini <<'EOF'
+          h = 0.6906937726797984
+          T_cmb = 2.7255
+          Omega_b = 0.046834883174647964
+          Omega_khronon = 0.25274346988872953
+          lambda_D = 219966.90504044993
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = 7.317081734823917
+          output = tCl
+          lensing = no
+          gauge = newtonian
+          A_s = 2.0874341676903437e-09
+          n_s = 0.9644273896355182
+          l_max_scalars = 30
+          root = output/route_a1_center_
+          background_verbose = 1
+          thermodynamics_verbose = 0
+          perturbations_verbose = 0
+          write background = yes
+          EOF
+          ./class route_a1_center.ini > route_a1_center.log 2>&1
+          grep 'RTK_LOG_GAMMA_ROOT' route_a1_center.log | tail -1 | tee gamma_line.txt
+          python3 - <<'PY'
+          import re, subprocess
+          s=open('gamma_line.txt').read()
+          m=re.search(r'gamma=([0-9.eE+\-]+)',s)
+          if not m: raise SystemExit('gamma parse failed')
+          gamma=m.group(1)
+          H0=100*0.6906937726797984/299792.458
+          cmd=['python3','quantum_route_a1_background_ratios.py','--gamma',gamma,'--lambda-D','219966.90504044993','--Omega-K0','0.25274346988872953','--H0',repr(H0)]
+          with open('../route_a1_background_ratios.log','w') as f:
+              subprocess.run(cmd,check=True,stdout=f,text=True)
+          print(open('../route_a1_background_ratios.log').read(),end='')
+          PY
+          grep -q RTK_ROUTE_A1_BACKGROUND_RATIOS_COMPLETE ../route_a1_background_ratios.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-a1-background-ratios
+          path: |
+            route_a1_background_provenance.txt
+            route_a1_background_ratios.log
+            class_public/gamma_line.txt
+            class_public/route_a1_center.log
+          if-no-files-found: error
