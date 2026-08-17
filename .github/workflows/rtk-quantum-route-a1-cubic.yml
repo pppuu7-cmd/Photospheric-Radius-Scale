@@ -1,0 +1,36 @@
+name: RTK quantum Route A1 cubic EFT audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-quantum-route-a1-cubic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  symbolic-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Install pinned symbolic dependency
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+
+      - name: Verify Route A1 cubic basis and reduced-scalar DOF algebra
+        run: |
+          set -euo pipefail
+          python3 rtk/quantum_route_a1_cubic_audit.py | tee rtk_route_a1_cubic_audit.log
+          grep -q RTK_ROUTE_A1_CUBIC_AUDIT_PASS rtk_route_a1_cubic_audit.log
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-quantum-route-a1-cubic
+          path: rtk_route_a1_cubic_audit.log
+          if-no-files-found: error
