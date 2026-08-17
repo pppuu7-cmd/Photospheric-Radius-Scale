@@ -20,7 +20,7 @@ def make_ini(model,p,tag):
     lines=[f"h = {p['h']}","T_cmb = 2.7255",f"Omega_b = {p['Ob']}"]
     if model=='RTK':lines += [f"Omega_khronon = {p['Om']}",f"lambda_D = {p['lam']}","Omega_Lambda = 0.","model = 2."]
     else:lines += [f"Omega_cdm = {p['Om']}","model = 0."]
-    lines += ["N_ur = 3.046","N_ncdm = 0","Omega_k = 0.","Omega_fld = 0.","Omega_scf = 0.","recombination = RECFAST","reio_parametrization = reio_camb",f"z_reio = {p['zre']}","output = tCl,pCl,lCl,mPk","lensing = yes","gauge = newtonian",f"A_s_ad = {p['As']}",f"n_s_ad = {p['ns']}","l_max_scalars = 2600","P_k_max_h/Mpc = 5.0",f"z_pk = {DENSE}","z_max_pk = 1.0",f"root = output/signature_atlas/{tag}_","background_verbose = 1","thermodynamics_verbose = 1","perturbations_verbose = 0","write background = yes"]
+    lines += ["N_ur = 3.046","N_ncdm = 0","Omega_k = 0.","Omega_fld = 0.","Omega_scf = 0.","recombination = RECFAST","reio_parametrization = reio_camb",f"z_reio = {p['zre']}","output = tCl,pCl,lCl,mPk","lensing = yes","gauge = newtonian",f"A_s = {p['As']}",f"n_s = {p['ns']}","l_max_scalars = 2600","P_k_max_h/Mpc = 5.0",f"z_pk = {DENSE}","z_max_pk = 1.0",f"root = output/signature_atlas/{tag}_","background_verbose = 1","thermodynamics_verbose = 1","perturbations_verbose = 0","write background = yes"]
     lines += [f"{k} = {v}" for k,v in ULTRA.items()]
     path=Path(f'signature_{tag}.ini');path.write_text('\n'.join(lines)+'\n');return path
 
