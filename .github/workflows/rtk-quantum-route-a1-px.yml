@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
       - name: Install pinned SymPy
         run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
-      - name: Verify barotropic P(X) reconstruction and D3 cubic coefficients
+      - name: Verify robust thermodynamic plus P(X) cubic theorem
         run: |
           set -euo pipefail
           echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_a1_px_provenance.txt
