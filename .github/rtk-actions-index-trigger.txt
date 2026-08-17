@@ -1,2 +1,2 @@
-trigger: 2026-08-17T23:58:00Z
-reason: index current axis, negative-eigenray control-plane validation, and D5-basis symbolic provenance refresh
+trigger: 2026-08-18T00:13:00Z
+reason: index latest autonomous control result with quote-robust invariants and negative-eigenray state-machine unit regression
