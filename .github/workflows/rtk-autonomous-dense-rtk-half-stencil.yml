@@ -44,10 +44,12 @@ jobs:
           cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
           python3 rtk/apply_rtk_class_patch.py class_public
           python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
           python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
           cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
           cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
           cp rtk/autonomous_dense_rtk_stationarity.py class_public/autonomous_dense_rtk_stationarity.py
