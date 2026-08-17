@@ -4,6 +4,7 @@
 The scientific orchestrator must never parse a successful artifact merely
 because its workflow/run ID looks plausible. Before parsing, require the
 artifact-declared objective and center to match the current accepted state.
+For multiscale proof-gate runs, also require the declared stencil scale.
 """
 from __future__ import annotations
 
@@ -75,14 +76,27 @@ def validate_slot(state, model, key):
             f"artifact identity mismatch {model}.{key} run={run_id}: "
             f"summary center does not equal current accepted_center"
         )
+    expected_scale = slot.get("expected_stencil_scale")
+    if expected_scale is not None:
+        actual = summary.get("stencil_scale")
+        try:
+            scale_match = float(actual) == float(expected_scale)
+        except (TypeError, ValueError):
+            scale_match = False
+        if not scale_match:
+            raise RuntimeError(
+                f"artifact identity mismatch {model}.{key} run={run_id}: "
+                f"stencil_scale={actual!r} expected={expected_scale!r}"
+            )
     return {"slot": f"{model}.{key}", "run_id": run_id, "objective": expected_objective,
-            "center_match": True}
+            "center_match": True, "stencil_scale": summary.get("stencil_scale")}
 
 
 def main():
     state = json.loads(STATE.read_text())
     checked = []
-    for model, key in (("rtk", "axis_run"), ("rtk", "hessian_run"), ("lcdm", "hessian_run")):
+    for model, key in (("rtk", "axis_run"), ("rtk", "hessian_run"),
+                       ("rtk", "half_hessian_run"), ("lcdm", "hessian_run")):
         row = validate_slot(state, model, key)
         if row:
             checked.append(row)
