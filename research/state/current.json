@@ -8,6 +8,7 @@
     "iteration": 5,
     "reason": "RTK eff axis clear at tolerance 0.005",
     "ref": "main",
+    "status": "submitted",
     "target": "rtk_hessian",
     "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
   },
