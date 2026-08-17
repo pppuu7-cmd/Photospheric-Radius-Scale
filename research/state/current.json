@@ -18,8 +18,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 5,
-  "last_iteration": "research/iterations/000005_20260817T053256Z.json",
+  "iteration": 6,
+  "last_iteration": "research/iterations/000006_20260817T060347Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -691,13 +691,15 @@
     "hessian_result": null,
     "hessian_run": {
       "artifact": "rtk-autonomous-dense-rtk-stationarity",
-      "run_id": null,
-      "status": "requested",
+      "conclusion": null,
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/31998282437",
+      "run_id": 31998282437,
+      "status": "in_progress",
       "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
     }
   },
   "schema_version": 1,
   "stage": "rtk_hessian_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-17T05:32:56Z"
+  "updated_at": "2026-08-17T06:03:47Z"
 }
