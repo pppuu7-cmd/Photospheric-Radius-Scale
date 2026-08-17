@@ -23,6 +23,8 @@ ok('production_gauge_newtonian', '"gauge = newtonian"' in runner,
    'production likelihood must not enter the unsupported Khronon synchronous dynamics branch')
 ok('exact_float_cache_preparation', "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" in prep and 'round(float(p[k]),12)' in prep,
    'preparation script must explicitly replace legacy rounded cache keys with exact-float keys')
+ok('success_only_likelihood_cache', "if r.get('ok')" in prep and 'all_failures_uncached' in prep,
+   'failed CLASS/post-processing evaluations must not poison the exact likelihood cache')
 ok('production_mapping_eff', state.get('production_mapping')=='eff')
 ok('matched_dense_objective', state.get('objective',{}).get('name')=='matched-ultra-linstep2+dense-BOSS')
 ok('lambda_is_real_input', 'class_read_double("lambda_D",pba->lambda_D)' in inputs)
