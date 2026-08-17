@@ -1,0 +1,2 @@
+trigger: 2026-08-17T23:37:00Z
+reason: index post-mixed-ray recenter axis and minimal-neutrino rerun
