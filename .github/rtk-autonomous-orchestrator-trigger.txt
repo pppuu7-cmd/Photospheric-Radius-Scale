@@ -1,2 +1,2 @@
-trigger: 2026-08-17T23:41:00Z
-reason: repair post-mixed-ray recenter labels, attach the new exact axis run, and ensure no duplicate heavy dispatch
+trigger: 2026-08-17T23:56:00Z
+reason: validate new negative-eigenray Stage4D3 control logic while axis 32081135646 is still the only active stationarity compute; no duplicate dispatch allowed
