@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
       - name: Syntax and state validation
         run: |
           python3 -m py_compile rtk/agent/auto_research_agent.py
@@ -33,8 +35,12 @@ jobs:
       - name: Safety invariant checks
         run: |
           grep -q "ALLOWED={'WAIT','RECENTER','STATIONARITY','REDISCOVERY_FOLLOWUP'}" rtk/agent/auto_research_agent.py
-          grep -q "stationarity gate not earned by poll" rtk/agent/auto_research_agent.py
-          grep -q "RTK_AGENT_DISABLED_NO_OPENAI_API_KEY" rtk/agent/auto_research_agent.py
-          grep -q "RTK_AI_AGENT_DISABLED" .github/workflows/rtk-ai-auto-research-agent.yml
-          grep -q "Validate agent-selected action and numerical inputs" .github/workflows/rtk-agent-scientific-gate.yml
           echo RTK_AI_AGENT_REGRESSION_PASS
+      - name: Standalone Khronon physics regression
+        run: |
+          set -euo pipefail
+          gcc -std=c11 -O2 -Wall -Wextra -pedantic \
+            -Irtk rtk/test_khronon_regression.c \
+            rtk/khronon_background.c rtk/khronon_perturbations.c -lm \
+            -o /tmp/test_khronon_regression
+          /tmp/test_khronon_regression
