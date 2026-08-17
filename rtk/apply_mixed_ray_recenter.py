@@ -45,7 +45,6 @@ def main():
         raise RuntimeError('best_params missing')
 
     rtk=state['rtk']
-    # Preserve every displaced scientific object before resetting the center.
     if rtk.get('hessian_result') is not None:
         rtk.setdefault('hessian_history',[]).append(rtk['hessian_result'])
     rtk.setdefault('mixed_mode_ray_history',[]).append({
@@ -71,6 +70,7 @@ def main():
     rtk['accepted_score_eff']=None
     rtk['accepted_score_params']=None
     rtk['accepted_score_semantics']='pending_stationarity_after_mixed_mode_recenter'
+    rtk['raw_candidate_certification']='pending_stationarity_after_mixed_mode_recenter'
     rtk['hessian_result']=None
     rtk['hessian_run']=None
     rtk['half_hessian_result']=None
