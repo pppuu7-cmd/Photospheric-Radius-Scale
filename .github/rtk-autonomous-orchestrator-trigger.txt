@@ -1,2 +1,2 @@
-trigger: 2026-08-17T21:58:00Z
-reason: validate explicit zero RT auxiliary IC lock and A/B equivalence while Hessian run 32065998894 remains active
+trigger: 2026-08-17T22:05:00Z
+reason: validate locked Hessian provenance and causal RT auxiliary IC invariants while run 32065998894 remains active
