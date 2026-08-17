@@ -1,2 +1,2 @@
-trigger: 2026-08-17T23:37:00Z
-reason: index post-mixed-ray recenter axis and minimal-neutrino rerun
+trigger: 2026-08-17T23:58:00Z
+reason: index current axis, negative-eigenray control-plane validation, and D5-basis symbolic provenance refresh
