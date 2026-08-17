@@ -9,7 +9,11 @@ import inference_core as L
 
 STATE=json.loads(Path('../research/state/current.json').read_text())
 CENTER=dict(STATE['lcdm']['accepted_center'])
-bs=STATE['rtk']['base_steps']
+# LCDM owns its finite-difference scale.  Do not silently inherit scientific
+# settings from the RTK block just because the six shared coordinates happen
+# to use the same numerical steps today.
+DEFAULT_LCDM_STEPS={'h':0.00035,'Ob':0.00007,'Om':0.0007,'As':4e-12,'ns':0.00035,'zre':0.07}
+bs=dict(STATE.get('lcdm',{}).get('base_steps',DEFAULT_LCDM_STEPS))
 BASE=[('h',float(bs['h'])),('Ob',float(bs['Ob'])),('Om',float(bs['Om'])),('As',float(bs['As'])),('ns',float(bs['ns'])),('zre',float(bs['zre']))]
 SPARSE='0.,0.25,0.3,0.4,0.5,0.6,0.7,0.75,1.0'
 DENSE=STATE['objective']['dense_z_pk']
