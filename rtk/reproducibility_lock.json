@@ -1,6 +1,6 @@
 {
-  "schema_version": 4,
-  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866.",
+  "schema_version": 5,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866; the historical production neutrino/recombination baseline is now made explicit rather than changed.",
   "external_git": {
     "class_public": {
       "repository": "dirian/class_public",
@@ -32,6 +32,13 @@
   "python_packages": {
     "numpy": "2.5.2",
     "scipy": "1.18.0"
+  },
+  "cosmology_baseline": {
+    "N_ur": 3.046,
+    "N_ncdm": 0,
+    "massive_neutrino_baseline": "none in frozen matched objective",
+    "recombination": "RECFAST",
+    "interpretation": "This records the historical production baseline used by the frozen matched objective. Any m_nu != 0 analysis is a separate robustness objective and must not be mixed with the frozen Delta-S comparison."
   },
   "measurement_provenance": {
     "workflow_run_id": 32055127966,
