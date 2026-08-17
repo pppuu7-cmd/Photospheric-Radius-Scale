@@ -1,2 +1,2 @@
-trigger: 2026-08-17T17:36:00Z
-reason: validate Stage4D3 multiscale gate while base RTK Hessian is still running
+trigger: 2026-08-17T18:31:00Z
+reason: validate hardened observable-signature invariants while base RTK Hessian remains active
