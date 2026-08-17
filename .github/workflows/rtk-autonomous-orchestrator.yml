@@ -45,6 +45,14 @@ jobs:
           python3 rtk/audit_invariants.py | tee autonomous_audit.log
           grep -q RTK_AUDIT_INVARIANTS_PASS autonomous_audit.log
 
+      - name: Validate completed artifact identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 rtk/validate_artifact_identity.py | tee autonomous_identity.log
+          grep -q RTK_ARTIFACT_IDENTITY_PASS autonomous_identity.log
+
       - name: Run one synchronized research-control iteration
         env:
           GH_TOKEN: ${{ github.token }}
