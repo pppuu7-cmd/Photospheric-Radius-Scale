@@ -1,2 +1,2 @@
-trigger: 2026-08-17T18:51:00Z
-reason: validate success-only likelihood cache invariant while base RTK Hessian remains active
+trigger: 2026-08-17T21:40:00Z
+reason: validate same-iteration best-exact freeze invariant while RTK Hessian run 32065998894 remains active
