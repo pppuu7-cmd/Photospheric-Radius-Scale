@@ -49,23 +49,39 @@ The `eff` Hessian eigenvalues are
 
 Therefore the base Hessian is **not positive definite**.
 
-Crucially, the negative mode is no longer the almost-pure `log(lambda_D)` direction.  In coordinate order
+Crucially, the negative mode is no longer the almost-pure `log(lambda_D)` direction. In coordinate order
 
 `[loglam, h, Ob, Om, As, ns, zre]`
 
 the normalized negative eigenvector (sign chosen with positive h component) is approximately
 
-`[+8.65e-05, +0.71564, -0.37664, -0.41625, -0.03308, +0.41355, +0.02472]`.
+`[+8.6519e-05, +0.715640, -0.376643, -0.416254, -0.033081, +0.413553, +0.024722]`.
 
 The next-smallest eigenvector is instead almost pure `loglam` and has a small **positive** eigenvalue `+1.44699e-4`.
 
+## Eigenbasis continuity from the preceding PD Hessian
+
+The preceding Hessian at the previous accepted center was positive definite, with its two smallest eigenvalues
+
+- `+3.721256e-4` — almost pure `loglam`;
+- `+3.182353e-2` — a mixed standard-cosmological direction.
+
+Direct eigenvector overlaps show:
+
+- current almost-pure `loglam` mode vs previous smallest mode: `|v_now . v_prev| = 0.9999998411`;
+- current **negative mixed mode** vs previous second-smallest mode: `|v_now . v_prev| = 0.9844578001`.
+
+Thus the current non-PD result is not explained by a rotation of the old lambda direction. The lambda direction is extraordinarily stable as a vector and remains weakly positive at the current center. Instead, a previously moderately positive mixed cosmological direction has retained nearly the same orientation while its inferred curvature changed sign from roughly `+0.03182` to `-0.004476` after recentering.
+
+This makes smaller-stencil and direct-ray tests mandatory: the observed sign change can reflect genuine non-quadratic local geometry, a saddle that is invisible on coordinate axes/corners, or finite-stencil curvature sensitivity.
+
 ## Interpretation
 
-This invalidates the earlier working hypothesis that all residual curvature ambiguity at the final RTK center is merely the near-flat `lambda_D` direction.  The current base Hessian contains a distinct mixed standard-cosmological negative-curvature combination dominated by `h`, `Ob`, `Om`, and `ns`.
+This invalidates the earlier working hypothesis that all residual curvature ambiguity at the final RTK center is merely the near-flat `lambda_D` direction. The current base Hessian contains a distinct mixed standard-cosmological negative-curvature combination dominated by `h`, `Ob`, `Om`, and `ns`.
 
-At the same time, no one of the 101 exact tested stencil points is downhill.  Therefore the negative Hessian eigenvalue must be tested directly along its eigenvector and at a smaller stencil before being interpreted as a physical saddle.
+At the same time, no one of the 101 exact tested stencil points is downhill. Therefore the negative Hessian eigenvalue must be tested directly along its eigenvector and at a smaller stencil before being interpreted as a physical saddle.
 
-Two independent follow-ups are now required and have been launched:
+Two independent follow-ups are now active:
 
 1. Stage4D3 half-stencil Hessian (`0.5` scale), run `32079555818`;
 2. exact mixed-mode ray profile along the negative eigenvector.
@@ -74,7 +90,7 @@ Two independent follow-ups are now required and have been launched:
 
 Allowed now:
 
-> The current RTK center is exact-point recenter-clear on the full base stencil, but its base local Hessian is non-PD because of a mixed cosmological negative mode.  Interior-minimum certification is therefore still unresolved.
+> The current RTK center is exact-point recenter-clear on the full base stencil, but its base local Hessian is non-PD because of a mixed cosmological negative mode. Interior-minimum certification is therefore still unresolved.
 
 Not allowed:
 
