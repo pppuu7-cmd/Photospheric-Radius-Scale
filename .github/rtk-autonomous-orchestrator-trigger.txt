@@ -1,0 +1,2 @@
+trigger: 2026-08-17T01:56:00Z
+reason: bootstrap autonomous 10-minute research loop
