@@ -10,9 +10,11 @@ protocol=(ROOT/'rtk/FINAL_MATCHED_COMPARISON_PROTOCOL.md').read_text()
 inputs=(ROOT/'rtk/upgrade_rtk_inputs.py').read_text()
 lock=json.loads((ROOT/'rtk/reproducibility_lock.json').read_text())
 identity=(ROOT/'rtk/validate_artifact_identity.py').read_text()
+identity_norm=''.join(identity.split()).replace('"',"'")
 signature=(ROOT/'rtk/build_signature_atlas_pair.py').read_text()
 lcdm_stationarity=(ROOT/'rtk/autonomous_dense_lcdm_stationarity.py').read_text()
 orchestrator=(ROOT/'rtk/autonomous_orchestrator.py').read_text()
+multiscale=(ROOT/'rtk/enforce_stage4d3_multiscale_gate.py').read_text()
 
 checks=[]
 def ok(name, cond, detail=''):
@@ -38,8 +40,6 @@ ok('orchestrator_same_iteration_freeze_uses_best_exact',
    orchestrator.count('accepted_score_semantics"] = "best_exact_stencil_within_recenter_tolerance"') >= 2,
    'generic orchestrator must freeze best exact local scores, not center scores, before same-iteration raw comparison')
 
-# Likelihood algebra invariants: preserve the audited definitions used by the
-# matched objective. These are implementation guards, not statistical claims.
 ok('fs8_eff_is_dsigma8_dloga', 'fs=derivative3(' in runner and 'result[z0]=(fs,f01*s8)' in runner,
    'eff mapping must remain d sigma8 / d ln a; k01 is stored separately')
 ok('k01_mapping_separate', 'f01=.5*derivative3(' in runner and "0 if which=='eff' else 1" in runner)
@@ -48,8 +48,6 @@ ok('pantheon_offset_profile', 'off=sum(Cid)/sum(Ci1)' in runner and "quad(L_SN,[
 ok('boss_bao_rescaling', "*R_FID/rd" in runner and "*C_KM_S*rd/R_FID" in runner,
    'BOSS DM and H observables must use the same fiducial sound-horizon convention')
 
-# Standalone observable-signature pipeline must remain on the same legacy
-# nonlocal CLASS input conventions and baseline as the production likelihood.
 ok('signature_uses_legacy_As_ns', 'f"A_s = {p[\'As\']}"' in signature and 'f"n_s = {p[\'ns\']}"' in signature,
    'legacy nonlocal CLASS must receive A_s/n_s directly in standalone signature runs')
 ok('signature_rejects_As_ad_ns_ad', 'A_s_ad =' not in signature and 'n_s_ad =' not in signature,
@@ -61,22 +59,32 @@ ok('signature_gauge_newtonian', '"gauge = newtonian"' in signature)
 ok('signature_exact_pk_redshift_gate', 'required exact P(k,z) output' in signature)
 ok('signature_drag_epoch_gate', 'baryon drag stops at z' in signature)
 
-# Reproducibility/provenance lock and fail-closed artifact identity validation.
 ok('class_upstream_pinned_target', lock['external_git']['class_public']['commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317')
 ok('pantheon_pinned_target', lock['external_git']['pantheon']['commit']=='7eb29dc87ba223b4ec8457cd3cccba1216c36fb7')
 ok('clipy_pinned', lock['likelihood']['clipy_like']=='0.15')
-ok('artifact_identity_checks_objective', "summary.get(\"objective\") != expected_objective" in identity)
-ok('artifact_identity_checks_center', 'exact_center_equal(summary.get("center"), expected_center)' in identity)
-ok('artifact_identity_checks_objective_fingerprint', 'objective_fingerprint' in identity and 'canonical_hash(state["objective"])' in identity,
-   'RTK Hessian artifacts must match the canonical frozen-objective fingerprint')
-ok('artifact_identity_checks_center_fingerprint', 'center_fingerprint' in identity and '"model": "RTK"' in identity and '"mapping": state.get("production_mapping", "eff")' in identity,
-   'RTK Hessian artifacts must match the canonical model/center/objective/mapping fingerprint')
-ok('artifact_identity_checks_locked_class_sha', 'class_upstream_commit' in identity and 'repro["external_git"]["class_public"]["commit"]' in identity,
-   'RTK Hessian artifact must declare the locked CLASS upstream commit')
-ok('artifact_identity_checks_locked_pantheon_sha', 'pantheon_commit' in identity and 'repro["external_git"]["pantheon"]["commit"]' in identity,
-   'RTK Hessian artifact must declare the locked Pantheon commit')
-ok('artifact_identity_checks_locked_numpy', 'numpy_version' in identity and 'repro["python_packages"]["numpy"]' in identity,
-   'RTK Hessian artifact runtime NumPy must match the measured lock')
+# Normalize whitespace and quote style before inspecting source-level semantics;
+# the audit must not fail just because a refactor switched single/double quotes.
+ok('artifact_identity_checks_objective', "summary.get('objective')!=expected_objective" in identity_norm)
+ok('artifact_identity_checks_center', "exact_center_equal(summary.get('center'),expected_center)" in identity_norm)
+ok('artifact_identity_checks_objective_fingerprint', "'objective_fingerprint'" in identity_norm and "canonical_hash(state['objective'])" in identity_norm,
+   'RTK proof artifacts must match the canonical frozen-objective fingerprint')
+ok('artifact_identity_checks_center_fingerprint', "'center_fingerprint'" in identity_norm and "'model':'RTK'" in identity_norm and "'mapping':state.get('production_mapping','eff')" in identity_norm,
+   'RTK proof artifacts must match the canonical model/center/objective/mapping fingerprint')
+ok('artifact_identity_checks_locked_class_sha', "'class_upstream_commit'" in identity_norm and "repro['external_git']['class_public']['commit']" in identity_norm,
+   'RTK proof artifact must declare the locked CLASS upstream commit')
+ok('artifact_identity_checks_locked_pantheon_sha', "'pantheon_commit'" in identity_norm and "repro['external_git']['pantheon']['commit']" in identity_norm,
+   'RTK proof artifact must declare the locked Pantheon commit')
+ok('artifact_identity_checks_locked_numpy', "'numpy_version'" in identity_norm and "repro['python_packages']['numpy']" in identity_norm,
+   'RTK proof artifact runtime NumPy must match the measured lock')
+ok('artifact_identity_includes_negative_eigenray', "('rtk','negative_eigenray_run')" in identity_norm and "'negative_eigenray_run'" in identity_norm,
+   'exact negative-eigenray artifacts must pass the same identity/provenance gate')
+
+# A non-PD recenter-clear base Hessian must be falsified by exact eigen-rays
+# before a half-stencil Hessian is allowed to consume compute.
+ok('stage4d3_negative_eigenray_before_half',
+   'process_negative_ray' in multiscale and 'rtk-autonomous-negative-eigenray.yml' in multiscale and
+   multiscale.find('ray_status=process_negative_ray') < multiscale.find("half=rtk.get('half_hessian_run')"),
+   'Stage4D3 must run exact negative-eigenray gate before half-stencil for non-PD base Hessians')
 
 tol=float(state['objective']['recenter_tolerance_S'])
 for model in ('lcdm','rtk'):
@@ -84,11 +92,8 @@ for model in ('lcdm','rtk'):
     if m.get('certification')!='local_dense_accepted':
         continue
     result=m.get('hessian_result') or {}
-    if model=='rtk':
-        result=result.get('eff',{})
-    imp=float(result.get('best_improvement',1e99))
-    best=result.get('best_exact_S')
-    accepted=m.get('accepted_score_eff')
+    if model=='rtk':result=result.get('eff',{})
+    imp=float(result.get('best_improvement',1e99));best=result.get('best_exact_S');accepted=m.get('accepted_score_eff')
     if imp<=tol and best is not None and accepted is not None:
         ok(f'{model}_freeze_uses_best_exact', abs(float(accepted)-float(best))<=1e-12,
            f'accepted={accepted} best_exact={best} improvement={imp}')
