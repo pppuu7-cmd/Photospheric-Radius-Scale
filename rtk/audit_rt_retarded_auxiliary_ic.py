@@ -36,29 +36,34 @@ require('Vprime_consumed_by_background',
         'pba->V_prime_ini_nlde' in bg_c and 'index_bi_V_prime_nlde' in bg_c,
         'background evolution must consume the explicitly initialized V prime')
 
-# The adiabatic nonlocal perturbation IC block in the pinned implementation
-# fixes localized auxiliary perturbations to zero. Check all RT/model-2 slots.
-patterns={
- 'deltaU':'index_pt_deltaU_nlde',
- 'deltaUprime':'index_pt_deltaU_prime_nlde',
- 'deltaV':'index_pt_deltaV_nlde',
- 'deltaVprime':'index_pt_deltaV_prime_nlde',
- 'deltaZ':'index_pt_deltaZ_nlde',
- 'deltaZprime':'index_pt_deltaZ_prime_nlde',
+# The pinned adiabatic nonlocal perturbation IC block uses a nested workspace
+# index, e.g. ppw->pv->y[ppw->pv->index_pt_deltaU_nlde] = 0.; . Require the
+# exact audited direct-zero statements instead of guessing a simplified index
+# syntax. This remains fail-closed if upstream changes the implementation.
+common_zero_snippets={
+ 'deltaU':'ppw->pv->y[ppw->pv->index_pt_deltaU_nlde] = 0.;',
+ 'deltaUprime':'ppw->pv->y[ppw->pv->index_pt_deltaU_prime_nlde] = 0.;',
+ 'deltaV':'ppw->pv->y[ppw->pv->index_pt_deltaV_nlde] = 0.;',
+ 'deltaVprime':'ppw->pv->y[ppw->pv->index_pt_deltaV_prime_nlde] = 0.;',
 }
-for name,index in patterns.items():
-    # Accept whitespace and integer/float zero spellings, but require a direct
-    # assignment in perturbations.c to the relevant perturbation vector slot.
-    pat=rf'\[{re.escape(index)}\]\s*=\s*0(?:\.0*)?\s*;'
-    require('perturbation_'+name+'_zero', bool(re.search(pat,pert_c)),
-            f'missing explicit zero assignment for {index}')
+for name,snippet in common_zero_snippets.items():
+    require('perturbation_'+name+'_zero', pert_c.count(snippet)==1,
+            f'expected exact pinned zero assignment once: {snippet}')
 
-# Z auxiliaries belong to the RT/model-2 branch in this pinned implementation;
-# require that the source contains the model-2 condition near their IC use.
-for index in ('index_pt_deltaZ_nlde','index_pt_deltaZ_prime_nlde'):
-    pos=pert_c.find(index)
-    require('rt_model2_context_'+index, pos>=0 and 'model == 2.' in pert_c[max(0,pos-1200):pos+300],
-            f'{index} not found in expected model==2 context')
+rt_block='''if(pba->model == 2.){
+              ppw->pv->y[ppw->pv->index_pt_deltaZ_nlde] = 0.;
+              ppw->pv->y[ppw->pv->index_pt_deltaZ_prime_nlde] = 0.;
+          }'''
+require('rt_model2_Z_Zprime_zero_block', pert_c.count(rt_block)==1,
+        'RT/model-2 deltaZ and deltaZ_prime must both be explicitly zero in the adiabatic IC block')
+
+# Also require the indices themselves are allocated only inside the RT/model-2
+# condition, preventing accidental use of Z auxiliaries as generic RR fields.
+allocation_block='''if(pba->model == 2.){
+            class_define_index(ppv->index_pt_deltaZ_nlde,pba->has_nlde,index_pt,1);
+            class_define_index(ppv->index_pt_deltaZ_prime_nlde,pba->has_nlde,index_pt,1);'''
+require('rt_model2_Z_index_allocation', allocation_block in pert_c,
+        'RT Z auxiliary perturbation indices must be allocated in model==2 branch')
 
 result={
  'classification':'RTK_RETARDED_AUX_IC_IMPLEMENTATION_PASS',
