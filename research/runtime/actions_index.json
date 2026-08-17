@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-17T23:23:16.768974+00:00",
+  "generated_at_utc": "2026-08-17T23:30:48.160511+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
@@ -92,6 +92,19 @@
       "run_number": 44,
       "status": "completed",
       "updated_at": "2026-08-17T22:49:57Z"
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-17T22:44:47Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "c620515765909f09eda09a2ff102970565fd1d45",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32077387860",
+      "id": 32077387860,
+      "name": "RTK matched minimal-neutrino robustness",
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-17T22:45:03Z"
     },
     {
       "conclusion": "success",
@@ -209,19 +222,6 @@
       "run_number": 39,
       "status": "completed",
       "updated_at": "2026-08-17T21:50:24Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-17T21:41:17Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "36418879cdaca9bb4084a42275b8da61be71ced5",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32072385577",
-      "id": 32072385577,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 38,
-      "status": "completed",
-      "updated_at": "2026-08-17T21:41:30Z"
     }
   ]
 }
