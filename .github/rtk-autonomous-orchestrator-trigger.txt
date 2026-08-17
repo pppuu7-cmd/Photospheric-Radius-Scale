@@ -1,2 +1,2 @@
-trigger: 2026-08-17T23:11:30Z
-reason: consume completed RTK Hessian 32065998894, validate provenance, and advance Stage4D3 to half-stencil or curvature-unresolved state without duplicate dispatch
+trigger: 2026-08-17T23:14:30Z
+reason: attach the newly dispatched RTK half-stencil Stage4D3 run ID; do not parse it in the same control iteration
