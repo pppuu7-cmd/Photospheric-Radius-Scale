@@ -1,2 +1,2 @@
-trigger: 2026-08-17T18:43:00Z
-reason: validate measured reproducibility extensions while base RTK Hessian remains active
+trigger: 2026-08-17T18:51:00Z
+reason: validate success-only likelihood cache invariant while base RTK Hessian remains active
