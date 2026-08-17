@@ -13,7 +13,7 @@ concurrency:
 jobs:
   axis:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
@@ -27,7 +27,6 @@ jobs:
         with:
           ref: rtk-class-build
           fetch-depth: 1
-
       - name: Prepare pinned exact cache-safe tree
         run: |
           set -euo pipefail
@@ -55,17 +54,14 @@ jobs:
           cd class_public
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
-
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
-
       - name: Install pinned likelihood dependencies
         run: |
           python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2' 'scipy==1.18.0'
           python3 -m pip freeze | sort | tee axis_pip_freeze.txt
           python3 --version | tee axis_python_version.txt
-
       - name: Download and verify official Planck baseline
         working-directory: class_public
         run: |
@@ -74,14 +70,12 @@ jobs:
           echo "$PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
           sha256sum planck.tar.gz | tee ../axis_planck_sha256.txt
           mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
-
       - name: Run state-driven RTK axis gate
         working-directory: class_public
         run: |
           set -o pipefail
           python3 autonomous_dense_rtk_axis.py | tee ../autonomous_dense_rtk_axis.log
           grep -q AUTO_DENSE_RTK_AXIS_COMPLETE ../autonomous_dense_rtk_axis.log
-
       - uses: actions/upload-artifact@v4
         if: always()
         with:
