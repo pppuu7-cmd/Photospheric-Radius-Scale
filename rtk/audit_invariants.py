@@ -11,6 +11,7 @@ inputs=(ROOT/'rtk/upgrade_rtk_inputs.py').read_text()
 lock=json.loads((ROOT/'rtk/reproducibility_lock.json').read_text())
 identity=(ROOT/'rtk/validate_artifact_identity.py').read_text()
 signature=(ROOT/'rtk/build_signature_atlas_pair.py').read_text()
+lcdm_stationarity=(ROOT/'rtk/autonomous_dense_lcdm_stationarity.py').read_text()
 
 checks=[]
 def ok(name, cond, detail=''):
@@ -26,6 +27,8 @@ ok('production_mapping_eff', state.get('production_mapping')=='eff')
 ok('matched_dense_objective', state.get('objective',{}).get('name')=='matched-ultra-linstep2+dense-BOSS')
 ok('lambda_is_real_input', 'class_read_double("lambda_D",pba->lambda_D)' in inputs)
 ok('mapping_separation_protocol', 'eff` and `k01`' in protocol and 'treated as separate objective variants' in protocol)
+ok('lcdm_steps_decoupled_from_rtk', "STATE['rtk']['base_steps']" not in lcdm_stationarity and 'DEFAULT_LCDM_STEPS' in lcdm_stationarity,
+   'LCDM Hessian finite-difference scale must not silently inherit the RTK state block')
 
 # Likelihood algebra invariants: preserve the audited definitions used by the
 # matched objective. These are implementation guards, not statistical claims.
