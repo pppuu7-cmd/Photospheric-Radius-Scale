@@ -2,6 +2,9 @@ name: RTK autonomous dense RTK 7D stationarity
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-autonomous-dense-rtk-stationarity.yml'
 
 permissions:
   contents: read
@@ -59,9 +62,12 @@ jobs:
           python3 autonomous_dense_rtk_stationarity.py | tee ../autonomous_dense_rtk_stationarity.log
           grep -q AUTO_DENSE_RTK_STATIONARITY_COMPLETE ../autonomous_dense_rtk_stationarity.log
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: rtk-autonomous-dense-rtk-stationarity
           path: |
             autonomous_dense_rtk_stationarity.log
             class_public/output/autonomous_dense_rtk_stationarity/summary.json
-          if-no-files-found: error
+            class_public/output/autonomous_dense_rtk_stationarity/points.jsonl
+            class_public/output/autonomous_dense_rtk_stationarity/failures.jsonl
+          if-no-files-found: warn
