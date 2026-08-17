@@ -34,9 +34,7 @@ jobs:
           python3 - <<'PY'
           import json, os, subprocess, datetime
           repo=os.environ['GITHUB_REPOSITORY']
-          raw=subprocess.check_output([
-              'gh','api',f'repos/{repo}/actions/runs?per_page=100'
-          ],text=True)
+          raw=subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs?per_page=100'],text=True)
           data=json.loads(raw)
           wanted={
               'RTK autonomous dense RTK axis',
@@ -47,21 +45,15 @@ jobs:
               'RTK Route A1 background interaction ratios',
               'RTK Route A1 D4 identifiability theorem',
               'RTK Route A1 D5 dispersive identifiability theorem',
-              'RTK Route A1 complete D5 cubic basis audit',
+              'RTK Route A1 complete cubic D5 basis audit',
               'RTK autonomous dense RTK 7D stationarity',
               'RTK autonomous research orchestrator',
           }
           rows=[]
           for r in data.get('workflow_runs',[]):
               if r.get('name') in wanted:
-                  rows.append({k:r.get(k) for k in (
-                      'id','name','run_number','event','status','conclusion',
-                      'head_branch','head_sha','created_at','updated_at','html_url')})
-          out={
-              'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              'repository':repo,
-              'runs':rows,
-          }
+                  rows.append({k:r.get(k) for k in ('id','name','run_number','event','status','conclusion','head_branch','head_sha','created_at','updated_at','html_url')})
+          out={'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repository':repo,'runs':rows}
           open('research/runtime/actions_index.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
           print(json.dumps(out,indent=2,sort_keys=True))
           PY
