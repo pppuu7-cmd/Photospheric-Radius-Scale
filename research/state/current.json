@@ -8,6 +8,7 @@
     "iteration": 2,
     "reason": "LCDM exact improvement 0.274135062 > 0.005",
     "ref": "main",
+    "status": "submitted",
     "target": "lcdm_hessian",
     "workflow": "rtk-autonomous-dense-lcdm-stationarity.yml"
   },
