@@ -1,6 +1,6 @@
 {
-  "schema_version": 3,
-  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations. This file does not retroactively alter already-running Actions jobs.",
+  "schema_version": 4,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866.",
   "external_git": {
     "class_public": {
       "repository": "dirian/class_public",
@@ -12,7 +12,7 @@
         "2": "RT_transverse_(gmunu_Box^-1_R)^T"
       },
       "mapping_audit": "research/audits/20260817_upstream_nonlocal_model_mapping.md",
-      "warning": "Pinned source/input.c contains a stale contradictory comment; branch identity is locked from the implemented equations/background.h, not that comment."
+      "warning": "Pinned source/input.c contains a stale contradictory model-mapping comment and a duplicated U_prime background-IC assignment. Production hardening must use the audited mapping and the explicit-zero auxiliary-IC patch."
     },
     "pantheon": {
       "repository": "dscolnic/Pantheon",
@@ -44,13 +44,35 @@
       "lcdm_eff": 1049.9661183477613
     }
   },
+  "nonlocal_initial_conditions": {
+    "background": {
+      "U_ini_nlde": 0.0,
+      "U_prime_ini_nlde": 0.0,
+      "V_ini_nlde": 0.0,
+      "V_prime_ini_nlde": 0.0
+    },
+    "perturbations": "minimal adiabatic nonlocal auxiliary perturbations explicitly zero in pinned CLASS; RT/model-2 also sets deltaZ and deltaZ_prime to zero",
+    "patch": "rtk/upgrade_rtk_nonlocal_initial_conditions.py",
+    "ab_control": {
+      "workflow_run_id": 32073306866,
+      "job_id": 95521033176,
+      "artifact_id": 9302567450,
+      "artifact_sha256": "08d7f2f8dc6f5407c027bd0fccd23ff4c97277dd2e4aebf21939c7c11ceedc56",
+      "center_score_eff": 1050.302218098562,
+      "delta_fixed_minus_old_score_eff": 0.0,
+      "max_abs_reported_component_delta": 0.0,
+      "interpretation": "historical scores are numerically unchanged on the audited runner, but all future RT production trees must initialize V_prime_ini_nlde explicitly"
+    }
+  },
   "production_constraints": {
     "nonlocal_model_id": 2,
     "nonlocal_model_name": "RT",
+    "nonlocal_inverse_semantics": "retarded causal minimal homogeneous solution",
+    "explicit_zero_nonlocal_aux_background_ic": true,
     "gauge": "newtonian",
     "mapping": "eff",
     "cache_semantics": "exact-float-success-only",
     "objective": "matched-ultra-linstep2+dense-BOSS"
   },
-  "workflow_wiring_status": "lock_complete_but_heavy_workflow_not_yet_rewired_to_all_pins"
+  "workflow_wiring_status": "axis_and_half_stencil_hardened; active base Hessian predates explicit-zero IC patch but A/B score equivalence is exact on audited point; heavy workflow must be rewired after active run completes to avoid self-trigger duplication"
 }
