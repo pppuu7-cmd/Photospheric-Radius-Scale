@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.github/workflows/rtk-current-standard-siren.yml'
+      - '.github/rtk-post-axis-diagnostics-trigger.txt'
 
 permissions:
   contents: read
@@ -22,6 +22,20 @@ jobs:
         with:
           ref: rtk-class-build
           fetch-depth: 1
+
+      - name: Require axis-certified current RTK center
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          s=json.load(open('research/state/current.json'))
+          a=s['rtk'].get('axis_result')
+          assert isinstance(a,dict), 'axis_result missing'
+          assert a.get('center')==s['rtk']['accepted_center'], 'axis center != accepted center'
+          assert a.get('objective')==s['objective']['name'], 'axis objective mismatch'
+          assert float(a.get('best_improvement_eff',1e99))<=float(s['objective']['recenter_tolerance_S'])
+          print('RTK_STANDARD_SIREN_AXIS_CERTIFIED_CENTER_PASS', (s['rtk'].get('axis_run') or {}).get('run_id'))
+          PY
 
       - name: Prepare pinned hardened RTK CLASS tree
         run: |
@@ -97,6 +111,7 @@ jobs:
               'state_iteration':s.get('iteration'),
               'objective':s['objective']['name'],
               'center':p,
+              'axis_run_id':(s['rtk'].get('axis_run') or {}).get('run_id'),
           },indent=2,sort_keys=True)+'\n')
           PY
 
