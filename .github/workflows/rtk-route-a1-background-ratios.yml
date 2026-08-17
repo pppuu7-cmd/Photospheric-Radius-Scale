@@ -95,8 +95,15 @@ jobs:
           assert payload['x0']>0
           row=payload['rows'][0]
           assert row['Lambda1_over_H0']>1 and row['Lambda2_over_H0']>1
+          assert row['homogeneous_safe_abs_dotpi']>0
+          # Present branch is already close to the exact DBI dust asymptotic
+          # safe radius c_a^2/3; allow a conservative 5% numerical band.
+          ratio=row['homogeneous_safe_abs_dotpi_over_ca2']
+          assert abs(ratio-1/3)<0.05
           b=payload['interpretation_boundary']
           assert b['full_strong_coupling_cutoff_known'] is False
+          assert b['homogeneous_safe_dotpi_is_not_energy_cutoff'] is True
+          assert b['fluid_to_pi_mapping_established'] is False
           assert b['Lambda1_Lambda2_are_not_declared_cutoffs'] is True
           assert b['M_K_is_not_declared_cutoff'] is True
           print('RTK_ROUTE_A1_COEFFICIENT_PROXY_BOUNDARY_CONFIRMED')
