@@ -8,10 +8,13 @@ point improves, but it is not a fully reoptimized boundary likelihood.
 """
 from pathlib import Path
 import json, math, sys
-import inference_core as L
 
 LAM=float(sys.argv[1])
 if not (LAM>0 and math.isfinite(LAM)): raise SystemExit('lambda must be finite and positive')
+# inference_core expects argv[1] to be the Planck directory.
+sys.argv=['dense_dust_boundary_poll','planck_data']
+import inference_core as L
+
 CENTER={'lam':LAM,'h':0.6904831253428524,'Ob':0.046836300417955265,'Om':0.25300743080221694,
         'As':2.0837288833768707e-9,'ns':0.9643603115669437,'zre':7.21843542110055}
 STEPS={'h':0.00070,'Ob':0.00014,'Om':0.00140,'As':8e-12,'ns':0.00070,'zre':0.14}
