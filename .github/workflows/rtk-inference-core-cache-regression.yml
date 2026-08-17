@@ -1,0 +1,38 @@
+name: RTK inference-core cache regression
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-inference-core-cache-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  cache-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Generate and audit inference core
+        run: |
+          set -euo pipefail
+          python3 rtk/prepare_inference_core.py rtk/joint_profile_runner.py /tmp/inference_core.py | tee cache_regression.log
+          grep -q INFERENCE_CORE_PREPARED cache_regression.log
+          grep -q "if r.get('ok')" /tmp/inference_core.py
+          python3 - <<'PY'
+          from pathlib import Path
+          t=Path('/tmp/inference_core.py').read_text()
+          timeout=t.split('except subprocess.TimeoutExpired:',1)[1].split('if cp.returncode!=0:',1)[0]
+          ret=t.split('if cp.returncode!=0:',1)[1].split('prefix=tag',1)[0]
+          post=t.split('except Exception as e:',1)[1].split("print('EVAL'",1)[0]
+          assert 'CACHE[key]' not in timeout
+          assert 'CACHE[key]' not in ret
+          assert "if r.get('ok')" in post
+          assert 'round(float(p[k]),12)' not in t
+          print('RTK_SUCCESS_ONLY_CACHE_REGRESSION_PASS')
+          PY
