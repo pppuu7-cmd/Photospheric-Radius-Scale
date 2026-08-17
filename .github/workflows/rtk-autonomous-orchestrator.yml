@@ -1,0 +1,78 @@
+name: RTK autonomous research orchestrator
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: rtk-autonomous-research-orchestrator
+  cancel-in-progress: false
+
+jobs:
+  iterate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Configure repository writer
+        run: |
+          git config user.name 'rtk-autonomous-orchestrator'
+          git config user.email 'actions@users.noreply.github.com'
+
+      - name: Run one synchronized research-control iteration
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 rtk/autonomous_orchestrator.py | tee autonomous_iteration.log
+          grep -q RTK_AUTONOMOUS_ITERATION autonomous_iteration.log
+
+      - name: Commit centralized state and journal
+        run: |
+          set -euo pipefail
+          git add research/state research/iterations
+          if git diff --cached --quiet; then
+            echo 'No state changes to commit'
+          else
+            git commit -m "RTK autonomous iteration state update"
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
+
+      - name: Dispatch at most one requested heavy worker
+        id: dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ ! -f research/state/dispatch_request.json ]; then
+            echo 'No heavy dispatch requested this iteration'
+            exit 0
+          fi
+          WF=$(python3 -c "import json;print(json.load(open('research/state/dispatch_request.json'))['workflow'])")
+          REF=$(python3 -c "import json;print(json.load(open('research/state/dispatch_request.json')).get('ref','main'))")
+          echo "Dispatching $WF at $REF"
+          gh workflow run "$WF" --repo "$GITHUB_REPOSITORY" --ref "$REF"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/state/current.json')
+          s=json.loads(p.read_text())
+          if isinstance(s.get('dispatch'),dict):
+              s['dispatch']['status']='submitted'
+          p.write_text(json.dumps(s,indent=2,sort_keys=True)+'\n')
+          Path('research/state/dispatch_request.json').unlink(missing_ok=True)
+          PY
+          git add research/state
+          git commit -m "RTK autonomous dispatch consumed"
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
