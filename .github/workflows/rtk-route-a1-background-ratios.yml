@@ -88,6 +88,19 @@ jobs:
           print(open('../route_a1_background_ratios.log').read(),end='')
           PY
           grep -q RTK_ROUTE_A1_BACKGROUND_RATIOS_COMPLETE ../route_a1_background_ratios.log
+          python3 - <<'PY'
+          import json
+          line=open('../route_a1_background_ratios.log').read().strip()
+          payload=json.loads(line.split(' ',1)[1])
+          assert payload['x0']>0
+          row=payload['rows'][0]
+          assert row['Lambda1_over_H0']>1 and row['Lambda2_over_H0']>1
+          b=payload['interpretation_boundary']
+          assert b['full_strong_coupling_cutoff_known'] is False
+          assert b['Lambda1_Lambda2_are_not_declared_cutoffs'] is True
+          assert b['M_K_is_not_declared_cutoff'] is True
+          print('RTK_ROUTE_A1_COEFFICIENT_PROXY_BOUNDARY_CONFIRMED')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
