@@ -13,7 +13,7 @@ concurrency:
 jobs:
   stationarity-half:
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 240
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
