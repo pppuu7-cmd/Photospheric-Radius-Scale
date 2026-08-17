@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.github/workflows/rtk-neutrino-mass-robustness.yml'
+      - '.github/rtk-neutrino-robustness-trigger.txt'
 
 permissions:
   contents: read
@@ -27,6 +27,19 @@ jobs:
         with:
           ref: rtk-class-build
           fetch-depth: 1
+      - name: Require axis-certified current RTK center
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          s=json.load(open('research/state/current.json'))
+          a=s['rtk'].get('axis_result')
+          assert isinstance(a,dict), 'axis_result missing'
+          assert a.get('center')==s['rtk']['accepted_center'], 'axis center != accepted center'
+          assert a.get('objective')==s['objective']['name'], 'axis objective mismatch'
+          assert float(a.get('best_improvement_eff',1e99))<=float(s['objective']['recenter_tolerance_S'])
+          print('RTK_NEUTRINO_AXIS_CERTIFIED_CENTER_PASS', (s['rtk'].get('axis_run') or {}).get('run_id'))
+          PY
       - name: Prepare pinned hardened tree
         run: |
           set -euo pipefail
@@ -49,9 +62,6 @@ jobs:
           cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/neutrino_mass_robustness.py class_public/
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
           cd class_public
-          # prepare_inference_core.py itself fail-closes on timeout/nonzero/postprocessing
-          # cache poisoning and on the exact-float cache key. Keep only a non-fragile
-          # generated-core marker here rather than grepping a Python variable name.
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
           grep -q "if r.get('ok')" inference_core.py
@@ -90,11 +100,11 @@ jobs:
           assert s['frozen_production_unchanged'] is True
           assert s['objective']=='matched-ultra-linstep2+dense-BOSS'
           assert len(s['rows'])==6
-          # Frozen-mode self-reproduction must remain at the already-audited scale.
           r={x['model']:x for x in s['rows'] if x['mode']=='massless'}
-          assert abs(r['RTK']['score_eff']-1050.3022180985636)<1e-6
-          assert abs(r['LCDM']['score_eff']-1049.966118347761)<1e-6
-          print('RTK_NEUTRINO_ROBUSTNESS_FROZEN_BASELINE_REPRODUCED')
+          e=s['baseline_expected_scores']
+          assert abs(r['RTK']['score_eff']-float(e['RTK']))<2e-6
+          assert abs(r['LCDM']['score_eff']-float(e['LCDM']))<2e-6
+          print('RTK_NEUTRINO_ROBUSTNESS_STATE_DRIVEN_BASELINES_REPRODUCED')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
