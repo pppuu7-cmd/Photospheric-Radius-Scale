@@ -1,0 +1,36 @@
+name: RTK Route A1 complete cubic D5 basis audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-quantum-route-a1-d5-basis.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  symbolic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Install pinned SymPy
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Enumerate and rank all Route A1 cubic D5 contractions
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_a1_d5_basis_provenance.txt
+          python3 rtk/quantum_route_a1_d5_basis_audit.py | tee route_a1_d5_basis.log
+          grep -q RTK_ROUTE_A1_D5_BASIS_PASS route_a1_d5_basis.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-a1-d5-basis
+          path: |
+            route_a1_d5_basis_provenance.txt
+            route_a1_d5_basis.log
+          if-no-files-found: error
