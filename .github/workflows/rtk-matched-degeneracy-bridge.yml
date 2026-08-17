@@ -1,0 +1,76 @@
+name: RTK matched degeneracy bridge
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-matched-degeneracy-bridge.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Prepare pinned exact likelihood tree
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee bridge_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/matched_degeneracy_bridge.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          grep -q "if r.get('ok')" inference_core.py
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Install pinned likelihood dependencies
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2' 'scipy==1.18.0'
+      - name: Download verified Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6  planck.tar.gz' | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Trace both models along shared-parameter bridge
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 matched_degeneracy_bridge.py | tee ../degeneracy_bridge.log
+          grep -q RTK_DEGENERACY_BRIDGE_COMPLETE ../degeneracy_bridge.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-matched-degeneracy-bridge
+          path: |
+            degeneracy_bridge.log
+            bridge_provenance.txt
+            class_public/output/matched_degeneracy_bridge/summary.json
+          if-no-files-found: warn
