@@ -26,6 +26,9 @@ jobs:
         run: |
           set -euo pipefail
           echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee signature_provenance.txt
+          grep -q 'required exact P(k,z) output' rtk/build_signature_atlas_pair.py
+          grep -q 'baryon drag stops at z' rtk/build_signature_atlas_pair.py
+          echo 'HARDENED_SIGNATURE_BUILDER=exact-z+drag-epoch-v1' | tee -a signature_provenance.txt
           git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
           git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
           test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
