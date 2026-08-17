@@ -1,2 +1,2 @@
-trigger: 2026-08-17T21:40:00Z
-reason: validate same-iteration best-exact freeze invariant while RTK Hessian run 32065998894 remains active
+trigger: 2026-08-17T21:58:00Z
+reason: validate explicit zero RT auxiliary IC lock and A/B equivalence while Hessian run 32065998894 remains active
