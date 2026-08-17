@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-08-17T03:12:13Z",
+  "iteration": 2,
+  "reason": "LCDM exact improvement 0.274135062 > 0.005",
+  "ref": "main",
+  "target": "lcdm_hessian",
+  "workflow": "rtk-autonomous-dense-lcdm-stationarity.yml"
+}

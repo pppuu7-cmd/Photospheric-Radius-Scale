@@ -1,0 +1,28 @@
+{
+  "actions": [
+    "recenter_LCDM_and_redispatch_hessian"
+  ],
+  "comparison": {
+    "dense_raw_delta_S": null,
+    "status": "pending_matched_stationarity"
+  },
+  "iteration": 2,
+  "next_dispatch": {
+    "created_at": "2026-08-17T03:12:13Z",
+    "iteration": 2,
+    "reason": "LCDM exact improvement 0.274135062 > 0.005",
+    "ref": "main",
+    "target": "lcdm_hessian",
+    "workflow": "rtk-autonomous-dense-lcdm-stationarity.yml"
+  },
+  "observations": [
+    {
+      "best_improvement": 0.27413506218317707,
+      "lcdm_hessian_run": 31985735749,
+      "positive_definite": true
+    }
+  ],
+  "schema_version": 1,
+  "stage": "rtk_hessian_running",
+  "time": "2026-08-17T03:12:13Z"
+}
