@@ -39,6 +39,12 @@ jobs:
           python3 rtk/reconcile_autonomous_state.py | tee autonomous_reconcile.log
           grep -q RTK_STATE_RECONCILE autonomous_reconcile.log
 
+      - name: Enforce scientific invariants
+        run: |
+          set -euo pipefail
+          python3 rtk/audit_invariants.py | tee autonomous_audit.log
+          grep -q RTK_AUDIT_INVARIANTS_PASS autonomous_audit.log
+
       - name: Run one synchronized research-control iteration
         env:
           GH_TOKEN: ${{ github.token }}
