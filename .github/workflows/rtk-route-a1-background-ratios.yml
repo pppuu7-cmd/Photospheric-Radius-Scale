@@ -44,6 +44,7 @@ jobs:
         working-directory: class_public
         run: |
           set -euo pipefail
+          mkdir -p output
           cat > route_a1_center.ini <<'EOF'
           h = 0.6906937726797984
           T_cmb = 2.7255
