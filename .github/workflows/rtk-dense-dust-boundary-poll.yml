@@ -20,6 +20,7 @@ jobs:
       OMP_NUM_THREADS: '2'
       RTK_CLASS_TIMEOUT: '300'
       RTK_CACHE_KEY_VERSION: 'exact-float-v1'
+      RTK_DUST_POLL_VERSION: 'planck-path-fix-v2'
     steps:
       - uses: actions/checkout@v4
         with: {ref: rtk-class-build}
