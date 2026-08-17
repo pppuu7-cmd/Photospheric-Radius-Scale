@@ -10,6 +10,7 @@ protocol=(ROOT/'rtk/FINAL_MATCHED_COMPARISON_PROTOCOL.md').read_text()
 inputs=(ROOT/'rtk/upgrade_rtk_inputs.py').read_text()
 lock=json.loads((ROOT/'rtk/reproducibility_lock.json').read_text())
 identity=(ROOT/'rtk/validate_artifact_identity.py').read_text()
+signature=(ROOT/'rtk/build_signature_atlas_pair.py').read_text()
 
 checks=[]
 def ok(name, cond, detail=''):
@@ -35,6 +36,19 @@ ok('pantheon_offset_profile', 'off=sum(Cid)/sum(Ci1)' in runner and "quad(L_SN,[
    'Pantheon additive magnitude zero-point must be profiled with full covariance')
 ok('boss_bao_rescaling', "*R_FID/rd" in runner and "*C_KM_S*rd/R_FID" in runner,
    'BOSS DM and H observables must use the same fiducial sound-horizon convention')
+
+# Standalone observable-signature pipeline must remain on the same legacy
+# nonlocal CLASS input conventions and baseline as the production likelihood.
+ok('signature_uses_legacy_As_ns', 'f"A_s = {p[\'As\']}"' in signature and 'f"n_s = {p[\'ns\']}"' in signature,
+   'legacy nonlocal CLASS must receive A_s/n_s directly in standalone signature runs')
+ok('signature_rejects_As_ad_ns_ad', 'A_s_ad =' not in signature and 'n_s_ad =' not in signature,
+   'A_s_ad/n_s_ad previously produced incorrect absolute amplitudes in this legacy CLASS branch')
+ok('signature_neutrino_baseline_matches_production', '"N_ur = 3.046"' in signature and '"N_ncdm = 0"' in signature,
+   'signature diagnostic must not silently change the production neutrino baseline')
+ok('signature_recfast_matches_production', '"recombination = RECFAST"' in signature)
+ok('signature_gauge_newtonian', '"gauge = newtonian"' in signature)
+ok('signature_exact_pk_redshift_gate', 'required exact P(k,z) output' in signature)
+ok('signature_drag_epoch_gate', 'baryon drag stops at z' in signature)
 
 # Reproducibility/provenance lock and fail-closed artifact identity validation.
 ok('class_upstream_pinned_target', lock['external_git']['class_public']['commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317')
