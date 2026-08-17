@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """State-driven matched-ultra+dense RTK 7D Hessian/stationarity worker."""
 from pathlib import Path
-import hashlib, json, math, subprocess, sys, time
+import hashlib, json, math, os, subprocess, sys, time
 import numpy as np
 
 sys.argv=['autonomous_dense_rtk_stationarity','planck_data']
@@ -9,8 +9,11 @@ import inference_core as L
 
 STATE=json.loads(Path('../research/state/current.json').read_text())
 CENTER=dict(STATE['rtk']['accepted_center'])
+STENCIL_SCALE=float(os.environ.get('RTK_STENCIL_SCALE','1.0'))
+if not (math.isfinite(STENCIL_SCALE) and STENCIL_SCALE>0.):
+    raise RuntimeError(f'invalid RTK_STENCIL_SCALE={STENCIL_SCALE!r}')
 bs=STATE['rtk']['base_steps']
-BASE=[('loglam',float(bs['loglam'])),('h',float(bs['h'])),('Ob',float(bs['Ob'])),('Om',float(bs['Om'])),('As',float(bs['As'])),('ns',float(bs['ns'])),('zre',float(bs['zre']))]
+BASE=[('loglam',float(bs['loglam'])*STENCIL_SCALE),('h',float(bs['h'])*STENCIL_SCALE),('Ob',float(bs['Ob'])*STENCIL_SCALE),('Om',float(bs['Om'])*STENCIL_SCALE),('As',float(bs['As'])*STENCIL_SCALE),('ns',float(bs['ns'])*STENCIL_SCALE),('zre',float(bs['zre'])*STENCIL_SCALE)]
 SPARSE='0.,0.25,0.3,0.4,0.5,0.6,0.7,0.75,1.0'
 DENSE=STATE['objective']['dense_z_pk']
 ULTRA={k:str(v) for k,v in STATE['objective']['ultra'].items()}
@@ -27,7 +30,7 @@ OBJECTIVE_FINGERPRINT=canonical_hash(STATE['objective'])
 def git_head(path):
     try:return subprocess.check_output(['git','-C',str(path),'rev-parse','HEAD'],text=True,stderr=subprocess.DEVNULL).strip()
     except Exception:return None
-PROVENANCE={'state_iteration':STATE.get('iteration'),'center_fingerprint':CENTER_FINGERPRINT,'objective_fingerprint':OBJECTIVE_FINGERPRINT,'rtk_source_commit':git_head('..'),'class_upstream_commit':git_head('.'),'pantheon_commit':git_head('pantheon'),'numpy_version':np.__version__}
+PROVENANCE={'state_iteration':STATE.get('iteration'),'center_fingerprint':CENTER_FINGERPRINT,'objective_fingerprint':OBJECTIVE_FINGERPRINT,'stencil_scale':STENCIL_SCALE,'rtk_source_commit':git_head('..'),'class_upstream_commit':git_head('.'),'pantheon_commit':git_head('pantheon'),'numpy_version':np.__version__}
 (OUT/'provenance.json').write_text(json.dumps(PROVENANCE,indent=2,sort_keys=True)+'\n')
 
 def make_ini(model,p,tag):
@@ -35,7 +38,7 @@ def make_ini(model,p,tag):
     if 'z_pk = '+SPARSE not in text:raise RuntimeError('production sparse z_pk line not found')
     text=text.replace('z_pk = '+SPARSE,'z_pk = '+DENSE,1)
     with Path(path).open('w') as f:
-        f.write(text);f.write('\n# autonomous matched-ultra+dense RTK 7D Hessian\n')
+        f.write(text);f.write(f'\n# autonomous matched-ultra+dense RTK 7D Hessian stencil_scale={STENCIL_SCALE}\n')
         for k,v in ULTRA.items():f.write(f'{k} = {v}\n')
     return path
 L.make_ini=make_ini
@@ -69,10 +72,10 @@ def ev(y,label):
         try:r=L.evaluate('RTK',pars(y))
         except Exception as exc:r={'ok':False,'exception':repr(exc)}
         if r.get('ok'):
-            rr={'label':label,'attempt':attempt,'center_fingerprint':CENTER_FINGERPRINT,'y':y.tolist(),'score_eff':float(r['score']),'score_k01':float(r['score_k01']),'params':pars(y)}
+            rr={'label':label,'attempt':attempt,'center_fingerprint':CENTER_FINGERPRINT,'stencil_scale':STENCIL_SCALE,'y':y.tolist(),'score_eff':float(r['score']),'score_k01':float(r['score_k01']),'params':pars(y)}
             E[k]=rr;rows.append(rr);cleanup(r.get('tag'));append_jsonl(POINTS,rr)
             print('AUTO_DENSE_RTK_HESSIAN_POINT',json.dumps(rr,sort_keys=True),flush=True);return rr
-        last=r;failure={'label':label,'attempt':attempt,'center_fingerprint':CENTER_FINGERPRINT,'y':y.tolist(),'params':pars(y),'result':r};append_jsonl(FAILURES,failure)
+        last=r;failure={'label':label,'attempt':attempt,'center_fingerprint':CENTER_FINGERPRINT,'stencil_scale':STENCIL_SCALE,'y':y.tolist(),'params':pars(y),'result':r};append_jsonl(FAILURES,failure)
         print('AUTO_DENSE_RTK_HESSIAN_RETRY',json.dumps(failure,sort_keys=True,default=str),flush=True);cleanup(r.get('tag') if isinstance(r,dict) else None)
         if attempt<3:time.sleep(2*attempt)
     raise RuntimeError(f'{label}: failed after 3 exact retries: {last}')
@@ -104,7 +107,7 @@ def geom(field):
 ge,He,ee,de=geom('score_eff');gk,Hk,ek,dk=geom('score_k01')
 rne=ev(np.clip(de,-1,1),'newton_trust_eff');rnk=ev(np.clip(dk,-1,1),'newton_trust_k01')
 best_eff=min(E.values(),key=lambda r:r['score_eff']);best_k01=min(E.values(),key=lambda r:r['score_k01'])
-summary={'stage':'autonomous-dense-rtk-7d-stationarity','objective':STATE['objective']['name'],'center':CENTER,'center_fingerprint':CENTER_FINGERPRINT,'objective_fingerprint':OBJECTIVE_FINGERPRINT,'provenance':PROVENANCE,'base_steps':dict(BASE),'points':len(E),'eff':{'S_center':r0['score_eff'],'gradient_y':ge.tolist(),'max_abs_gradient_y':float(np.max(np.abs(ge))),'hessian_y':He.tolist(),'eigenvalues_y':ee.tolist(),'positive_definite':bool(np.all(ee>1e-8)),'newton_delta':de.tolist(),'S_newton':rne['score_eff'],'newton_params':rne['params'],'best_exact_S':best_eff['score_eff'],'best_improvement':r0['score_eff']-best_eff['score_eff'],'best_label':best_eff['label'],'best_params':best_eff['params']},'k01':{'S_center':r0['score_k01'],'gradient_y':gk.tolist(),'max_abs_gradient_y':float(np.max(np.abs(gk))),'hessian_y':Hk.tolist(),'eigenvalues_y':ek.tolist(),'positive_definite':bool(np.all(ek>1e-8)),'newton_delta':dk.tolist(),'S_newton':rnk['score_k01'],'newton_params':rnk['params'],'best_exact_S':best_k01['score_k01'],'best_improvement':r0['score_k01']-best_k01['score_k01'],'best_label':best_k01['label'],'best_params':best_k01['params']},'warning':'Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection.'}
+summary={'stage':'autonomous-dense-rtk-7d-stationarity','objective':STATE['objective']['name'],'center':CENTER,'center_fingerprint':CENTER_FINGERPRINT,'objective_fingerprint':OBJECTIVE_FINGERPRINT,'provenance':PROVENANCE,'stencil_scale':STENCIL_SCALE,'base_steps':dict(BASE),'points':len(E),'eff':{'S_center':r0['score_eff'],'gradient_y':ge.tolist(),'max_abs_gradient_y':float(np.max(np.abs(ge))),'hessian_y':He.tolist(),'eigenvalues_y':ee.tolist(),'positive_definite':bool(np.all(ee>1e-8)),'newton_delta':de.tolist(),'S_newton':rne['score_eff'],'newton_params':rne['params'],'best_exact_S':best_eff['score_eff'],'best_improvement':r0['score_eff']-best_eff['score_eff'],'best_label':best_eff['label'],'best_params':best_eff['params']},'k01':{'S_center':r0['score_k01'],'gradient_y':gk.tolist(),'max_abs_gradient_y':float(np.max(np.abs(gk))),'hessian_y':Hk.tolist(),'eigenvalues_y':ek.tolist(),'positive_definite':bool(np.all(ek>1e-8)),'newton_delta':dk.tolist(),'S_newton':rnk['score_k01'],'newton_params':rnk['params'],'best_exact_S':best_k01['score_k01'],'best_improvement':r0['score_k01']-best_k01['score_k01'],'best_label':best_k01['label'],'best_params':best_k01['params']},'warning':'Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection.'}
 (OUT/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print('AUTO_DENSE_RTK_STATIONARITY_RESULT',json.dumps(summary,sort_keys=True),flush=True)
 print('AUTO_DENSE_RTK_STATIONARITY_COMPLETE',flush=True)
