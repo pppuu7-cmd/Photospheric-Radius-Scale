@@ -1,2 +1,2 @@
-trigger: 2026-08-18T00:03:00Z
-reason: rerun control after quote-robust invariant repair; validate negative-eigenray-before-half ordering and keep axis 32081135646 as the only stationarity compute
+trigger: 2026-08-18T00:08:00Z
+reason: validate quote-robust invariants plus synthetic negative-eigenray state-machine regression while axis 32081135646 remains the only stationarity compute
