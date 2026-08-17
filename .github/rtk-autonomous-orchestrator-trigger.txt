@@ -1,2 +1,2 @@
-trigger: 2026-08-17T23:56:00Z
-reason: validate new negative-eigenray Stage4D3 control logic while axis 32081135646 is still the only active stationarity compute; no duplicate dispatch allowed
+trigger: 2026-08-18T00:03:00Z
+reason: rerun control after quote-robust invariant repair; validate negative-eigenray-before-half ordering and keep axis 32081135646 as the only stationarity compute
