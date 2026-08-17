@@ -1,12 +1,12 @@
 # RTK nonlinear EFT completion gate
 
-Date: 2026-08-17
+Date: 2026-08-18
 
 ## Purpose
 
-The implemented RTK/Khronon linear scalar sector already admits a healthy local quadratic preferred-frame EFT reconstruction. The next theorem step is **not** to guess a cubic interaction and quote a cutoff. A nonlinear completion is underdetermined by the linear equations, so its symmetry and degree-of-freedom assumptions must be frozen before cubic coefficients or a strong-coupling scale can be meaningful.
+The implemented RTK/Khronon linear scalar sector already admits a healthy local quadratic preferred-frame EFT reconstruction. The linear equations do not determine a unique nonlinear completion, so the research program separates an explicit reduced preferred-frame EFT route from any future fundamental/covariant completion.
 
-This document defines the minimum gate for that next step.
+The first nonlinear symmetry/operator gate is now advanced by the validated **Route A1** defined in `PREFERRED_FRAME_EFT_ROUTE_A1.md`.
 
 ## 1. Quadratic target that every completion must reproduce
 
@@ -24,7 +24,7 @@ so that
 
 `omega^2 = (G/K) q^2/[1+q^2/M^2]`.
 
-This target is fixed by the successful local quadratic EFT reconstruction audit, workflow run `31982347734`.
+This target is fixed by the successful local quadratic EFT reconstruction audit, workflow run `31982347734`, and its later current-branch rerun.
 
 ## 2. Non-negotiable linear properties
 
@@ -37,84 +37,104 @@ A nonlinear candidate is rejected if its quadratic expansion changes any of the 
 5. the exact implemented finite-k dispersion;
 6. the current background equation of state and `c_a^2 = dp/drho` identity.
 
-## 3. Symmetries that are established vs not established
+## 3. Symmetry status
 
-### Established by the present cosmological implementation
+### Established by the cosmological implementation
 
-The implemented perturbation sector is constructed on a homogeneous/isotropic background and is rotationally invariant in Fourier magnitude `k`. The quadratic representative is local in position space and uses a preferred cosmological time slicing.
+The implemented perturbation sector is homogeneous/isotropic at background level, rotationally invariant in Fourier magnitude `k`, and naturally represented in a preferred cosmological foliation.
 
-### NOT determined by the linear implementation
+### Explicitly selected for Route A1
 
-The current CLASS equations do **not** uniquely establish which of the following must be fundamental nonlinear symmetries:
+Route A1 is now frozen as a research EFT class with:
 
-- constant shift symmetry `pi -> pi + const`;
-- full clock-field reparameterization symmetry;
-- time-reversal symmetry;
-- Lorentz invariance away from the preferred cosmological frame;
-- a covariant Stueckelberg completion;
-- an auxiliary-field completion;
-- a specific nonlinear DBI determinant structure.
+- locality in preferred-frame coordinates;
+- spatial translations and SO(3) rotations;
+- spatial parity;
+- an explicitly **postulated** constant internal shift `pi -> pi + const`;
+- no imposed Lorentz invariance away from the preferred frame;
+- no imposed time-reversal symmetry;
+- slowly background-time-dependent EFT coefficients;
+- no more than one time derivative on an individual `pi` field through the cubic truncation;
+- cubic truncation at three fields and total derivative order `D <= 4`.
 
-These cannot be silently assumed merely because the quadratic action depends on derivatives.
+This is a chosen EFT symmetry class, not a derivation of the unique fundamental DBI/Khronon symmetry.
 
-## 4. Required choice before constructing cubic basis
+### Still not established fundamentally
 
-At least one explicit nonlinear symmetry class must be selected and named. Two logically distinct routes are allowed:
+The present CLASS equations do not establish a unique covariant Stueckelberg completion, auxiliary-field completion, nonlinear DBI determinant structure, or fundamental clock-field reparameterization symmetry.
 
-### Route A — preferred-frame EFT
+## 4. Nonlinear routes
 
-Treat the quadratic reconstruction as the low-energy scalar EFT in a preferred foliation. Freeze a symmetry set (for example spatial diffeomorphism/rotation invariance plus an explicitly stated internal symmetry) and enumerate all independent cubic operators up to a declared derivative order.
+### Route A1 — preferred-frame EFT: SELECTED AND FIRST GATE PASSED
 
-### Route B — fundamental/covariant completion
+The project now has an explicit reduced scalar EFT route. Its first cubic theorem layer is defined in `PREFERRED_FRAME_EFT_ROUTE_A1.md` and validated by workflow run `32072791555`.
 
-Start from a proposed nonlinear Khronon/DBI action, expand it around the cosmological solution, solve the lapse/shift or other nondynamical constraints, and demonstrate that its reduced quadratic scalar action maps to the established `K,G,M` form.
+### Route B — fundamental/covariant completion: OPEN
 
-Route B is stronger because the constraint algebra and number of degrees of freedom follow from the nonlinear theory rather than being imposed at the reduced scalar level.
+A stronger future route must start from a proposed fundamental nonlinear Khronon/DBI action, expand it around the cosmological solution, solve lapse/shift or other nondynamical constraints, and demonstrate that its reduced quadratic scalar action maps to the established `K,G,M` form.
+
+Route B is required before claiming a full-theory Hassan-Rosen-style ghost theorem.
 
 ## 5. Cubic operator gate
 
-A cubic analysis is accepted only if it provides:
+Within the explicitly frozen Route A1 assumptions and derivative truncation, the complete cubic basis modulo spatial integration by parts is
 
-1. the frozen symmetry assumptions;
-2. a complete operator basis to a stated derivative order, modulo integrations by parts and linear equations/redefinitions where appropriate;
-3. coefficients with dimensions and normalization conventions explicitly stated;
-4. proof that no unintended additional propagating time degree of freedom is introduced in the regime being used;
-5. canonical normalization using the actual background-dependent quadratic kinetic coefficient;
-6. interaction scales derived from the canonically normalized operators.
+`O1 = dot(pi)^3`,
 
-An arbitrary representative cubic term is sufficient to prove **non-identifiability**, but is not sufficient to determine the physical RTK strong-coupling scale. Workflow run `31982495371` has already proved that distinction.
+`O2 = dot(pi) (grad pi)^2`,
 
-## 6. Constraint/ghost gate
+`O3 = dot(pi)^2 Laplacian(pi)`,
 
-To make a Hassan-Rosen-style statement such as “the nonlinear RTK theory is ghost-free”, the project must go beyond positivity of the reduced scalar quadratic Hamiltonian.
+`O4 = (grad pi)^2 Laplacian(pi)`.
 
-Required:
+The symbolic audit verifies the two nontrivial integration-by-parts reductions used to obtain this basis and verifies that no basis representative contains a second time derivative.
 
-- state the nonlinear field content;
-- count configuration variables and primary constraints;
-- derive secondary constraints where applicable;
-- identify first/second-class constraints or an equivalent reduced-Hamiltonian argument;
-- count physical propagating degrees of freedom;
-- show that the candidate completion does not activate an unwanted extra scalar/Ostrogradsky mode in its intended EFT regime.
+Workflow evidence:
 
-Until this is done, the allowed statement remains:
+- run `32072791555`: success;
+- job `95519466034`;
+- checked-out research commit `d19612c4586441f4d5ab23bb1993886cabbf3edd`;
+- artifact `rtk-quantum-route-a1-cubic`, ID `9302328178`;
+- artifact ZIP SHA256 `cccd7034ec94ab05fb2f880163dd015bac9b5e2b242e8b12f39e1daae6be17a9`;
+- SymPy `1.14.0`.
 
-> a healthy local quadratic preferred-frame EFT representative exists for the implemented linear scalar sector.
+The numerical coefficients `c1...c4` are **not** determined by the linear implementation.
+
+## 6. Reduced-scalar DOF result vs full ghost gate
+
+Route A1 now has a reduced-scalar perturbative DOF result through cubic order. The generalized momentum is
+
+`P = K(1-Laplacian/M^2) dot(pi) + 3 c1 dot(pi)^2 + c2 (grad pi)^2 + 2 c3 dot(pi) Laplacian(pi)`.
+
+The velocity Hessian/operator is
+
+`K(1-Laplacian/M^2) + 6 c1 dot(pi) + 2 c3 Laplacian(pi)`.
+
+At the background its Fourier eigenvalue is
+
+`K(1+q^2/M^2) > 0`.
+
+Thus, in the perturbative neighborhood where cubic corrections do not make the velocity operator singular, the reduced A1 scalar retains one canonical pair and does not acquire an Ostrogradsky mode from higher time derivatives.
+
+This does **not** close the full gravity constraint/ghost gate. A full claim still requires:
+
+- nonlinear field content including metric/lapse/shift and RT auxiliary/nonlocal sector;
+- primary/secondary constraints;
+- first/second-class classification or equivalent reduced-Hamiltonian proof;
+- complete physical DOF count;
+- proof that coupling to the rest of the theory does not activate an unwanted extra mode.
 
 ## 7. Strong-coupling gate
 
-A physical strong-coupling scale may be quoted only after:
+At low momentum `pi_c=sqrt(K) pi`. The four canonical Route A1 cubic operators have coefficient mass dimensions `[-2,-2,-3,-3]`, so they may be parameterized by interaction scales such as `Lambda_1^-2`, `Lambda_2^-2`, `Lambda_3^-3`, `Lambda_4^-3`.
 
-1. a nonlinear completion/operator basis is fixed;
-2. cubic operators are canonically normalized;
-3. the lowest interaction suppression scale is identified for the relevant background;
-4. that scale is compared with cosmological frequencies and physical wavenumbers used by the CLASS likelihood calculation.
+Their numerical values remain underdetermined because `c1...c4` are new nonlinear data. At `q ~ M`, the full momentum-dependent kinetic normalization must be used.
 
-`M_K` or `k_*` must not be renamed as a strong-coupling cutoff without this derivation.
+`M_K` or `k_*` therefore remains a dispersive scale, not a derived strong-coupling cutoff.
 
 ## 8. Radiative-stability gate
 
-Only after a nonlinear basis exists is it meaningful to ask whether loops regenerate operators outside the assumed basis or destabilize the hierarchy. Required future checks include power counting, counterterm closure to the declared EFT order, and technical naturalness of any small dimensionless coefficients.
+Only after nonlinear coefficients or a more fundamental Route B action are specified is it meaningful to test loop-generated operators, counterterm closure, and technical naturalness.
 
 ## 9. Current status
 
@@ -126,11 +146,17 @@ Only after a nonlinear basis exists is it meaningful to ask whether loops regene
 
 ✅ Strong-coupling non-identifiability from linear equations proved.
 
-🔴 Fundamental nonlinear symmetry class not yet frozen.
+🚀 **Route A1 preferred-frame nonlinear EFT symmetry class is now explicitly frozen.**
 
-🔴 Complete cubic basis not yet derived.
+🚀 **Complete Route A1 cubic operator basis through `D <= 4` is derived and symbolic-CI verified.**
 
-🔴 Nonlinear constraint algebra / full DOF count not yet derived.
+✅ Reduced Route A1 scalar retains one perturbative canonical pair through cubic order while its velocity Hessian remains invertible.
+
+🔴 Unique fundamental/covariant DBI-Khronon action not yet selected/derived.
+
+🔴 Full metric + RT + Khronon nonlinear constraint algebra / total DOF count not yet derived.
+
+🔴 Physical values of the cubic coefficients are not fixed.
 
 🔴 Physical strong-coupling scale not yet derived.
 
@@ -138,4 +164,10 @@ Only after a nonlinear basis exists is it meaningful to ask whether loops regene
 
 ## 10. Immediate next theorem task
 
-The highest-value theoretical next step is to choose between Route A and Route B using the intended fundamental interpretation of the Khronon sector. The project should not manufacture a unique nonlinear completion from linear data alone.
+The next non-redundant theoretical task is no longer “choose a nonlinear symmetry class”. For Route A1 it is now:
+
+1. couple the A1 scalar completion consistently to the metric/RT sector or derive a Route B fundamental action;
+2. perform the full constraint/DOF analysis of that coupled theory;
+3. determine or constrain `c1...c4` from the chosen nonlinear completion;
+4. canonically normalize at finite `q/M` and derive the actual lowest interaction scale;
+5. only then perform radiative-stability analysis.
