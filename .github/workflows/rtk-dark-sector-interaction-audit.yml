@@ -1,0 +1,30 @@
+name: RTK dark-sector interaction audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-dark-sector-interaction-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Syntax check
+        run: python3 -m py_compile rtk/dark_sector_interaction_audit.py
+      - name: Run implemented linear interaction audit
+        run: python3 rtk/dark_sector_interaction_audit.py | tee rtk_dark_sector_interaction.json
+      - name: Verify interpretation boundary
+        run: |
+          grep -q '"status": "PASS"' rtk_dark_sector_interaction.json
+          grep -q '"direct_matter_exchange_in_khronon_continuity_euler": "NOT_PRESENT_EXPLICITLY"' rtk_dark_sector_interaction.json
+          grep -q '"metric_gravitational_coupling": "PRESENT"' rtk_dark_sector_interaction.json
+          grep -q '"all_nonlinear_direct_interactions": "NOT_PROVEN_ABSENT"' rtk_dark_sector_interaction.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-dark-sector-interaction-audit
+          path: rtk_dark_sector_interaction.json
+          if-no-files-found: error
