@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Fixed-center minimal-neutrino robustness check for RTK and LCDM.
 
-This does NOT alter the frozen matched objective/minimum protocol.  It evaluates
-both accepted centers in one pinned environment under three neutrino baselines:
+This does NOT alter the frozen matched objective/minimum protocol. It evaluates
+an axis-certified RTK center and the frozen LCDM accepted-score point under:
   1) frozen massless baseline (N_ncdm=0, N_ur=3.046),
   2) one 0.06 eV species added at fixed dark coordinate,
   3) one 0.06 eV species while subtracting Omega_nu from Om so today's
@@ -11,6 +11,10 @@ both accepted centers in one pinned environment under three neutrino baselines:
 The legacy pinned CLASS explanatory.ini states that T_ncdm=0.71611 gives
 m/omega=93.14 eV and recommends N_ur=2.0328 for one massive neutrino when
 matching early N_eff=3.046.
+
+The script fails closed if the current RTK center has not yet passed an exact
+axis gate.  This prevents a robustness side-run from racing ahead of the
+stationarity state machine after a recenter.
 """
 from pathlib import Path
 import copy, json, math, os
@@ -23,9 +27,21 @@ DENSE=STATE['objective']['dense_z_pk']
 ULTRA={k:str(v) for k,v in STATE['objective']['ultra'].items()}
 SPARSE='0.,0.25,0.3,0.4,0.5,0.6,0.7,0.75,1.0'
 ORIG=L.make_ini
+TOL=float(STATE['objective']['recenter_tolerance_S'])
 
 RTK=dict(STATE['rtk']['accepted_center'])
-LCDM=dict(STATE['lcdm']['accepted_center'])
+LCDM=dict(STATE['lcdm']['accepted_score_params'])
+AX=STATE['rtk'].get('axis_result')
+if not isinstance(AX,dict):
+    raise RuntimeError('RTK axis_result is not yet available; robustness run must wait for axis certification')
+if AX.get('objective')!=STATE['objective']['name']:
+    raise RuntimeError('RTK axis objective mismatch')
+if AX.get('center')!=RTK:
+    raise RuntimeError('RTK axis_result center is not the current accepted_center')
+if float(AX.get('best_improvement_eff',1e99))>TOL:
+    raise RuntimeError('RTK axis center is not recenter-clear')
+RTK_EXPECTED=float(AX['center_score_eff'])
+LCDM_EXPECTED=float(STATE['lcdm']['accepted_score_eff'])
 
 
 def patch_common(text):
@@ -61,7 +77,8 @@ def evaluate_mode(mode,model,center):
     omnu=omega_nu(float(p['h'])) if mode!='massless' else 0.0
     if mode=='mnu006_fixed_total_nonbaryonic':
         p['Om']=float(p['Om'])-omnu
-        if not p['Om']>0: raise RuntimeError('Om became non-positive')
+        if not p['Om']>0:
+            raise RuntimeError('Om became non-positive')
     L.CACHE.clear()
     L.make_ini=make_mode(mode)
     r=L.evaluate(model,p)
@@ -83,12 +100,18 @@ for mode in modes:
         print('RTK_NEUTRINO_ROBUSTNESS_POINT',json.dumps(rows[-1],sort_keys=True),flush=True)
 
 by={(r['mode'],r['model']):r for r in rows}
-summary={'classification':'RTK_NEUTRINO_FIXED_CENTER_ROBUSTNESS_COMPLETE',
-         'objective':STATE['objective']['name'],
-         'state_iteration':STATE.get('iteration'),
-         'frozen_production_unchanged':True,
-         'mnu_eV':0.06,'massive_N_ur':2.0328,'T_ncdm':0.71611,'deg_ncdm':1.0,
-         'rows':rows,'comparisons':{}}
+summary={
+    'classification':'RTK_NEUTRINO_FIXED_CENTER_ROBUSTNESS_COMPLETE',
+    'objective':STATE['objective']['name'],
+    'state_iteration':STATE.get('iteration'),
+    'frozen_production_unchanged':True,
+    'rtk_axis_run_id':(STATE['rtk'].get('axis_run') or {}).get('run_id'),
+    'rtk_center':RTK,
+    'lcdm_accepted_score_params':LCDM,
+    'baseline_expected_scores':{'RTK':RTK_EXPECTED,'LCDM':LCDM_EXPECTED},
+    'mnu_eV':0.06,'massive_N_ur':2.0328,'T_ncdm':0.71611,'deg_ncdm':1.0,
+    'rows':rows,'comparisons':{}
+}
 for mode in modes:
     rr=by[(mode,'RTK')]; ll=by[(mode,'LCDM')]
     summary['comparisons'][mode]={
