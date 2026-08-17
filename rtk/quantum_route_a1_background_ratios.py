@@ -5,7 +5,7 @@ Inputs are the physical closure parameters used by khronon_background.c.
 This is a conditional Route-A1/P(X) diagnostic, not a full RTK cutoff theorem.
 The reported Lambda_i values are canonical coefficient-suppression proxies for
 D3 operators only; they are explicitly not identified with the physical strong-
-coupling cutoff because small-c_s/dispersive D4 effects and c3,c4 remain open.
+coupling cutoff because small-c_s/dispersive D4/D5 effects remain open.
 """
 import argparse, json, math
 
@@ -59,8 +59,16 @@ def vals(scale):
     Q=1+r
     MK=mu*Q*s*math.sqrt(s)
 
+    # For a spatially homogeneous long-wave fluctuation, all D4/D5 spatial
+    # vertices vanish and the Route-A1/P(X) velocity Hessian is K+6*c1*dot(pi).
+    # The symmetric sufficient positivity region is therefore
+    # |dot(pi)| < 1/(6|c1/K|). This is a dimensionless Legendre-map radius,
+    # NOT an energy cutoff and NOT a statement about the mapping of CLASS fluid
+    # perturbations to pi.
+    homogeneous_safe_abs_dotpi=1.0/(6.0*abs(c1_over_K))
+
     # Code K is 8*pi*G times the physical kinetic density, with units Mpc^-2.
-    # K_phys=Mpl_bar^2*K.  For L3=c_i O_i and chi=sqrt(K_phys)*pi,
+    # K_phys=Mpl_bar^2*K. For L3=c_i O_i and chi=sqrt(K_phys)*pi,
     # coefficient 1/Lambda_i^2=|c_i,phys|/K_phys^(3/2), hence
     # Lambda_i^2=Mpl_bar*sqrt(K_8piG)/|c_i/K|.
     sqrtK_eV=math.sqrt(K)*INV_MPC_EV
@@ -70,6 +78,8 @@ def vals(scale):
             'K_over_H0sq':K/(a.H0*a.H0),
             'c1_over_K':c1_over_K,'c2_over_K':c2_over_K,
             'ca2_times_c1_over_K':ca2*c1_over_K,
+            'homogeneous_safe_abs_dotpi':homogeneous_safe_abs_dotpi,
+            'homogeneous_safe_abs_dotpi_over_ca2':homogeneous_safe_abs_dotpi/ca2,
             'Lambda1_D3_coefficient_proxy_eV':lambda1_eV,
             'Lambda2_D3_coefficient_proxy_eV':lambda2_eV,
             'Lambda1_over_H0':lambda1_eV/H0_eV,
@@ -83,12 +93,15 @@ out={'classification':'RTK_ROUTE_A1_BACKGROUND_RATIOS_COMPLETE',
      'H0_eV':H0_eV,'x0':x0,'mu_over_H0':mu/a.H0,'rows':rows,
      'proxy_conventions':{'reduced_Planck_mass_eV':MPL_REDUCED_EV,
                           'inverse_Mpc_eV':INV_MPC_EV,
-                          'Lambda_i_definition':'Lambda_i^2=Mpl_bar*sqrt(K_8piG)/abs(c_i/K)'},
+                          'Lambda_i_definition':'Lambda_i^2=Mpl_bar*sqrt(K_8piG)/abs(c_i/K)',
+                          'homogeneous_legendre_radius':'abs(dot(pi)) < 1/(6 abs(c1/K))'},
      'interpretation_boundary':{
        'D3_longwave_only':True,
        'c3_c4_known':False,
        'finite_k_completion_reconstructed':False,
        'full_strong_coupling_cutoff_known':False,
+       'homogeneous_safe_dotpi_is_not_energy_cutoff':True,
+       'fluid_to_pi_mapping_established':False,
        'Lambda1_Lambda2_are_not_declared_cutoffs':True,
        'M_K_is_not_declared_cutoff':True}}
 print('RTK_ROUTE_A1_BACKGROUND_RATIOS_COMPLETE',json.dumps(out,sort_keys=True))
