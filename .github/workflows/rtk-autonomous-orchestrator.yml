@@ -45,6 +45,12 @@ jobs:
           python3 rtk/audit_invariants.py | tee autonomous_audit.log
           grep -q RTK_AUDIT_INVARIANTS_PASS autonomous_audit.log
 
+      - name: Enforce measured reproducibility extensions
+        run: |
+          set -euo pipefail
+          python3 rtk/audit_reproducibility_extensions.py | tee autonomous_repro_ext.log
+          grep -q RTK_REPRO_EXT_AUDIT_PASS autonomous_repro_ext.log
+
       - name: Validate completed artifact identity
         env:
           GH_TOKEN: ${{ github.token }}
