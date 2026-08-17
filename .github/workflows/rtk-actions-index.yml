@@ -39,6 +39,7 @@ jobs:
           wanted={
               'RTK autonomous dense RTK axis',
               'RTK autonomous dense RTK half-stencil proof gate',
+              'RTK autonomous exact negative-eigenray gate',
               'RTK current exact mixed negative-mode ray profile',
               'RTK current-center standard-siren prediction',
               'RTK matched minimal-neutrino robustness',
