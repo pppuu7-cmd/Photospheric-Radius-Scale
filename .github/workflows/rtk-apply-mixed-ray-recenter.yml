@@ -1,0 +1,105 @@
+name: RTK apply exact mixed-ray recenter
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-apply-mixed-ray-recenter.yml'
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: rtk-autonomous-research-orchestrator
+  cancel-in-progress: false
+
+jobs:
+  recenter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      RAY_RUN: '32079620601'
+      STALE_HALF_RUN: '32079555818'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Download and validate exact mixed-ray artifact
+        run: |
+          set -euo pipefail
+          rm -rf mixed_ray_artifact mixed_ray_download
+          mkdir -p mixed_ray_download mixed_ray_artifact
+          gh run download "$RAY_RUN" -R "$REPO" -n rtk-current-mixed-mode-ray -D mixed_ray_download
+          f="$(find mixed_ray_download -name summary.json -type f | head -1)"
+          test -n "$f"
+          cp "$f" mixed_ray_artifact/summary.json
+          python3 - <<'PY'
+          import json
+          s=json.load(open('mixed_ray_artifact/summary.json'))
+          assert s['classification']=='RTK_EXACT_MIXED_NEGATIVE_MODE_RAY_PROFILE'
+          assert s['base_hessian_run']==32065998894
+          assert s['center_fingerprint']=='78171ac0528a3436969a6d5c58f6db376c0643aee736d1b1b2c0c7633066fbef'
+          assert float(s['best_improvement'])>0.005
+          assert float(s['best_t'])==1.5
+          print('RTK_MIXED_RAY_ARTIFACT_TRANSITION_IDENTITY_PASS')
+          PY
+
+      - name: Apply frozen recenter rule to research state
+        run: |
+          set -euo pipefail
+          python3 rtk/apply_mixed_ray_recenter.py | tee mixed_ray_recenter_transition.log
+          grep -q RTK_MIXED_RAY_RECENTER_APPLIED mixed_ray_recenter_transition.log
+          python3 - <<'PY'
+          import json
+          s=json.load(open('research/state/current.json'))
+          assert s['stage']=='rtk_axis_recenter_running'
+          assert s['comparison']['dense_raw_delta_S'] is None
+          assert s['rtk']['axis_run']['status']=='requested'
+          assert s['rtk']['accepted_center']['h']==0.6910694838209896
+          assert s['rtk']['hessian_result'] is None
+          assert s['rtk']['half_hessian_run'] is None
+          print('RTK_MIXED_RAY_STATE_TRANSITION_PASS')
+          PY
+
+      - name: Commit recentered state atomically
+        run: |
+          set -euo pipefail
+          git config user.name 'rtk-mixed-ray-transition'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/state/current.json
+          git commit -m 'Recenter RTK from exact mixed-mode downhill ray'
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
+
+      - name: Cancel stale half-stencil compute if still active
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          status="$(gh api "repos/$REPO/actions/runs/$STALE_HALF_RUN" --jq .status)"
+          echo "stale half run status: $status"
+          if [ "$status" != completed ]; then
+            gh api -X POST "repos/$REPO/actions/runs/$STALE_HALF_RUN/cancel"
+            echo RTK_STALE_HALF_CANCEL_REQUESTED
+          else
+            echo RTK_STALE_HALF_ALREADY_COMPLETED
+          fi
+
+      - name: Dispatch exact axis gate at the new center
+        run: |
+          set -euo pipefail
+          gh workflow run rtk-autonomous-dense-rtk-axis.yml -R "$REPO" --ref main
+          echo RTK_NEW_CENTER_AXIS_DISPATCHED
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-mixed-ray-recenter-transition
+          path: |
+            mixed_ray_recenter_transition.log
+            mixed_ray_artifact/summary.json
+          if-no-files-found: warn
