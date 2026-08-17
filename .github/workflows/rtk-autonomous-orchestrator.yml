@@ -45,6 +45,12 @@ jobs:
           python3 rtk/audit_invariants.py | tee autonomous_audit.log
           grep -q RTK_AUDIT_INVARIANTS_PASS autonomous_audit.log
 
+      - name: Test Stage4D3 negative-eigenray state machine
+        run: |
+          set -euo pipefail
+          python3 rtk/test_stage4d3_negative_eigenray_gate.py | tee autonomous_negative_eigenray_unit.log
+          grep -q RTK_STAGE4D3_NEGATIVE_EIGENRAY_UNIT_PASS autonomous_negative_eigenray_unit.log
+
       - name: Enforce measured reproducibility extensions
         run: |
           set -euo pipefail
