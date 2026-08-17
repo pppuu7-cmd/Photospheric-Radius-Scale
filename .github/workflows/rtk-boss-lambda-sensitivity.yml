@@ -1,0 +1,60 @@
+name: RTK BOSS lambda sensitivity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-boss-lambda-sensitivity.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  lambda-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Prepare pinned patched CLASS
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee boss_lambda_provenance.txt
+          grep -q 'A_s = ' rtk/build_signature_atlas_pair.py
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          echo "CLASS_UPSTREAM_SHA=$(git -C class_public rev-parse HEAD)" | tee -a boss_lambda_provenance.txt
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/build_signature_atlas_pair.py rtk/boss_residual_pair.py rtk/boss_lambda_sensitivity.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Run lambda sensitivity
+        working-directory: class_public
+        run: |
+          set -o pipefail
+          python3 boss_lambda_sensitivity.py | tee ../boss_lambda_sensitivity.log
+          grep -q BOSS_LAMBDA_SENSITIVITY_COMPLETE ../boss_lambda_sensitivity.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-boss-lambda-sensitivity
+          path: |
+            boss_lambda_sensitivity.log
+            boss_lambda_provenance.txt
+            class_public/output/boss_lambda_sensitivity/summary.json
+          if-no-files-found: warn
