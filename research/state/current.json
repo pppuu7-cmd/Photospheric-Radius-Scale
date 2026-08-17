@@ -19,13 +19,12 @@
     "status": "pending_matched_stationarity"
   },
   "dispatch": {
-    "created_at": "2026-08-17T19:36:35Z",
-    "iteration": 33,
-    "reason": "RTK Hessian exact improvement 0.0304897673 > 0.005",
+    "created_at": "2026-08-17T20:28:37Z",
+    "iteration": 35,
+    "reason": "RTK eff axis clear at tolerance 0.005",
     "ref": "main",
-    "status": "submitted",
-    "target": "rtk_axis",
-    "workflow": "rtk-autonomous-dense-rtk-axis.yml"
+    "target": "rtk_hessian",
+    "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
   },
   "guardrails": [
     "never_compare_sparse_and_dense_scores_as_same_objective",
@@ -33,8 +32,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 34,
-  "last_iteration": "research/iterations/000034_20260817T195641Z.json",
+  "iteration": 35,
+  "last_iteration": "research/iterations/000035_20260817T202837Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -368,59 +367,59 @@
     "axis_result": {
       "best_eff": {
         "axis": "",
-        "chi2_BOSS_eff": 7.612172203431612,
-        "chi2_BOSS_k01": 7.612436958788178,
-        "chi2_SN": 39.569091752353074,
+        "chi2_BOSS_eff": 7.624379690209919,
+        "chi2_BOSS_k01": 7.624661210095429,
+        "chi2_SN": 39.572361470981605,
         "label": "center",
-        "logL_planck": -501.5757219550357,
+        "logL_planck": -501.552738468686,
         "params": {
-          "As": 2.0861636473889185e-09,
-          "Ob": 0.0468383529208629,
-          "Om": 0.25280179929864605,
-          "h": 0.6906389756067448,
-          "lam": 217644.75828347108,
-          "ns": 0.9644338738454856,
-          "zre": 7.2858785499075225
+          "As": 2.0874341676903437e-09,
+          "Ob": 0.046834883174647964,
+          "Om": 0.25274346988872953,
+          "h": 0.6906937726797984,
+          "lam": 219966.90504044993,
+          "ns": 0.9644273896355182,
+          "zre": 7.317081734823917
         },
-        "rd": 146.974039,
-        "score_eff": 1050.332707865856,
-        "score_k01": 1050.3329726212125,
+        "rd": 146.974253,
+        "score_eff": 1050.3022180985636,
+        "score_k01": 1050.302499618449,
         "sign": 0
       },
       "best_improvement_eff": 0.0,
       "best_improvement_k01": 0.0,
       "best_k01": {
         "axis": "",
-        "chi2_BOSS_eff": 7.612172203431612,
-        "chi2_BOSS_k01": 7.612436958788178,
-        "chi2_SN": 39.569091752353074,
+        "chi2_BOSS_eff": 7.624379690209919,
+        "chi2_BOSS_k01": 7.624661210095429,
+        "chi2_SN": 39.572361470981605,
         "label": "center",
-        "logL_planck": -501.5757219550357,
+        "logL_planck": -501.552738468686,
         "params": {
-          "As": 2.0861636473889185e-09,
-          "Ob": 0.0468383529208629,
-          "Om": 0.25280179929864605,
-          "h": 0.6906389756067448,
-          "lam": 217644.75828347108,
-          "ns": 0.9644338738454856,
-          "zre": 7.2858785499075225
+          "As": 2.0874341676903437e-09,
+          "Ob": 0.046834883174647964,
+          "Om": 0.25274346988872953,
+          "h": 0.6906937726797984,
+          "lam": 219966.90504044993,
+          "ns": 0.9644273896355182,
+          "zre": 7.317081734823917
         },
-        "rd": 146.974039,
-        "score_eff": 1050.332707865856,
-        "score_k01": 1050.3329726212125,
+        "rd": 146.974253,
+        "score_eff": 1050.3022180985636,
+        "score_k01": 1050.302499618449,
         "sign": 0
       },
       "center": {
-        "As": 2.0861636473889185e-09,
-        "Ob": 0.0468383529208629,
-        "Om": 0.25280179929864605,
-        "h": 0.6906389756067448,
-        "lam": 217644.75828347108,
-        "ns": 0.9644338738454856,
-        "zre": 7.2858785499075225
+        "As": 2.0874341676903437e-09,
+        "Ob": 0.046834883174647964,
+        "Om": 0.25274346988872953,
+        "h": 0.6906937726797984,
+        "lam": 219966.90504044993,
+        "ns": 0.9644273896355182,
+        "zre": 7.317081734823917
       },
-      "center_score_eff": 1050.332707865856,
-      "center_score_k01": 1050.3329726212125,
+      "center_score_eff": 1050.3022180985636,
+      "center_score_k01": 1050.302499618449,
       "gate_eff": "NO_RECENTER_AXIS_CLEAR",
       "gate_k01": "NO_RECENTER_AXIS_CLEAR",
       "improvement_tolerance": 0.005,
@@ -433,10 +432,11 @@
     },
     "axis_run": {
       "artifact": "rtk-autonomous-dense-rtk-axis",
-      "conclusion": null,
+      "conclusion": "success",
       "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32061300433",
+      "parsed": true,
       "run_id": 32061300433,
-      "status": "in_progress",
+      "status": "completed",
       "workflow": "rtk-autonomous-dense-rtk-axis.yml"
     },
     "base_steps": {
@@ -975,10 +975,15 @@
       }
     ],
     "hessian_result": null,
-    "hessian_run": null
+    "hessian_run": {
+      "artifact": "rtk-autonomous-dense-rtk-stationarity",
+      "run_id": null,
+      "status": "requested",
+      "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
+    }
   },
   "schema_version": 1,
-  "stage": "rtk_axis_recenter_running",
+  "stage": "rtk_hessian_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-17T19:56:41Z"
+  "updated_at": "2026-08-17T20:28:37Z"
 }

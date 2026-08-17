@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-08-17T20:28:37Z",
+  "iteration": 35,
+  "reason": "RTK eff axis clear at tolerance 0.005",
+  "ref": "main",
+  "target": "rtk_hessian",
+  "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
+}
