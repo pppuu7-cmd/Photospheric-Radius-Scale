@@ -1,0 +1,67 @@
+name: RTK BOSS RSD scale-dependence diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-boss-rsd-scale-dependence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Prepare pinned hardened CLASS tree
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee boss_rsd_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/boss_rsd_scale_dependence.py class_public/
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
+
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+
+      - name: Run RTK and LCDM scale-dependence probe
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 boss_rsd_scale_dependence.py | tee ../boss_rsd_scale_dependence.log
+          grep -q RTK_BOSS_RSD_SCALE_DEPENDENCE_COMPLETE ../boss_rsd_scale_dependence.log
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-boss-rsd-scale-dependence
+          path: |
+            boss_rsd_provenance.txt
+            boss_rsd_scale_dependence.log
+            class_public/boss_rsd_scale_dependence_summary.json
+          if-no-files-found: error
