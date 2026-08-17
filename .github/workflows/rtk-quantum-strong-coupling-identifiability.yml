@@ -1,0 +1,31 @@
+name: RTK quantum strong-coupling identifiability audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-quantum-strong-coupling-identifiability.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build}
+      - name: Install symbolic dependency
+        run: python3 -m pip install --disable-pip-version-check sympy
+      - name: Run identifiability theorem audit
+        run: python3 rtk/quantum_strong_coupling_identifiability.py | tee quantum_strong_coupling_identifiability.json
+      - name: Verify theorem boundary
+        run: |
+          grep -q '"status": "PASS"' quantum_strong_coupling_identifiability.json
+          grep -q '"classification": "STRONG_COUPLING_NOT_IDENTIFIABLE_FROM_LINEAR_SECTOR"' quantum_strong_coupling_identifiability.json
+          grep -q '"strong_coupling_scale_from_current_CLASS_linear_equations": "UNDERDETERMINED"' quantum_strong_coupling_identifiability.json
+          grep -q '"M_K_or_k_star_equals_strong_coupling_cutoff": "NOT_DERIVABLE"' quantum_strong_coupling_identifiability.json
+          grep -q '"uv_completion": "NOT_CLAIMED"' quantum_strong_coupling_identifiability.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-quantum-strong-coupling-identifiability
+          path: quantum_strong_coupling_identifiability.json
+          if-no-files-found: error
