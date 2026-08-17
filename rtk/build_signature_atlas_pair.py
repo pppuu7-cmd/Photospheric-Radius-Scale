@@ -116,15 +116,22 @@ def run_model(model,p,tag):
     for z in PK_Z_TARGETS:exact_fam(fam,z)
     cls=parse_cls(OUT/f'{tag}_cl_lensed.dat');drag=parse_drag(log)
     return {'params':p,'z_drag':drag['z_drag'],'rd_Mpc':drag['rd_Mpc'],'background':{str(z):{'H_over_c_Mpc_inv':interp_rows(bg,3,z),'D_M_Mpc':interp_rows(bg,4,z)} for z in Z_TARGETS},'cmb':{str(ell):cls[ell] for ell in ELL_TARGETS},'pk':{str(z):{str(k):interp_pk(exact_fam(fam,z),k) for k in K_TARGETS} for z in PK_Z_TARGETS},'growth':growth(fam),'available_pk_redshifts':sorted(fam)}
-def ratio(a,b):return a/b-1.0
+def ratio_or_delta(a,b):
+    if b == 0.0:
+        return {'kind':'absolute_delta','value':a-b}
+    return {'kind':'fractional','value':a/b-1.0}
+def scalar_ratio(a,b):
+    if b == 0.0:raise ZeroDivisionError('zero reference in quantity expected to be non-zero')
+    return a/b-1.0
 def build_residuals(rtk,lcdm):
-    out={'background':{},'cmb':{},'pk':{},'growth':{},'rd_fractional':ratio(rtk['rd_Mpc'],lcdm['rd_Mpc'])}
-    for z in rtk['background']:out['background'][z]={k:ratio(rtk['background'][z][k],lcdm['background'][z][k]) for k in rtk['background'][z]}
+    out={'background':{},'cmb':{},'pk':{},'growth':{},'rd_fractional':scalar_ratio(rtk['rd_Mpc'],lcdm['rd_Mpc'])}
+    for z in rtk['background']:
+        out['background'][z]={k:ratio_or_delta(rtk['background'][z][k],lcdm['background'][z][k]) for k in rtk['background'][z]}
     for ell in rtk['cmb']:
         a=rtk['cmb'][ell];b=lcdm['cmb'][ell];norm=math.sqrt(abs(b['TT']*b['EE'])) if b['TT'] and b['EE'] else float('nan')
-        out['cmb'][ell]={'TT_fractional':ratio(a['TT'],b['TT']),'EE_fractional':ratio(a['EE'],b['EE']),'TE_delta_over_LCDM_sqrt_TT_EE':(a['TE']-b['TE'])/norm}
-    for z in rtk['pk']:out['pk'][z]={k:ratio(rtk['pk'][z][k],lcdm['pk'][z][k]) for k in rtk['pk'][z]}
-    for z in rtk['growth']:out['growth'][z]={k:ratio(rtk['growth'][z][k],lcdm['growth'][z][k]) for k in rtk['growth'][z]}
+        out['cmb'][ell]={'TT_fractional':scalar_ratio(a['TT'],b['TT']),'EE_fractional':scalar_ratio(a['EE'],b['EE']),'TE_delta_over_LCDM_sqrt_TT_EE':(a['TE']-b['TE'])/norm}
+    for z in rtk['pk']:out['pk'][z]={k:scalar_ratio(rtk['pk'][z][k],lcdm['pk'][z][k]) for k in rtk['pk'][z]}
+    for z in rtk['growth']:out['growth'][z]={k:scalar_ratio(rtk['growth'][z][k],lcdm['growth'][z][k]) for k in rtk['growth'][z]}
     return out
 def main():
     rtk=run_model('RTK',dict(STATE['rtk']['accepted_center']),'rtk');lcdm=run_model('LCDM',dict(STATE['lcdm']['accepted_center']),'lcdm')
