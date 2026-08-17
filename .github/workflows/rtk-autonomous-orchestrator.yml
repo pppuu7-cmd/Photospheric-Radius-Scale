@@ -61,6 +61,14 @@ jobs:
           python3 rtk/autonomous_orchestrator.py | tee autonomous_iteration.log
           grep -q RTK_AUTONOMOUS_ITERATION autonomous_iteration.log
 
+      - name: Enforce Stage4D3 multiscale stationarity gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 rtk/enforce_stage4d3_multiscale_gate.py | tee autonomous_multiscale.log
+          grep -q RTK_STAGE4D3_MULTISCALE_GATE autonomous_multiscale.log
+
       - name: Commit centralized state and journal
         run: |
           set -euo pipefail
