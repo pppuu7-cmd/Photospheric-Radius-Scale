@@ -18,9 +18,9 @@ jobs:
             gradient: '0.03863574724528007 0.09292078127145942 0.06457168941778946 -0.14334497812888003 0.11819173779440462 -0.09037965637617162 -0.12232515311370662'
           - mapping: k01
             expected: '1050.0482111660676'
-            gradient: '0 0 0 0 0 0 0'
+            gradient: '0.038637653460682486 0.093278257523707 0.06431527866334363 -0.14254808888472326 0.11869243951514363 -0.09030884878484358 -0.12232604848941264'
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 45
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
@@ -49,6 +49,7 @@ jobs:
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
           cd class_public
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
       - name: Build CLASS
         working-directory: class_public
         run: make -j2 class
@@ -60,7 +61,6 @@ jobs:
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
           mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
       - name: Run exact correlated ray
-        if: matrix.mapping == 'eff'
         working-directory: class_public
         run: |
           set -o pipefail
@@ -68,8 +68,8 @@ jobs:
             '0.6904831253428524' '0.046836300417955265' '0.25300743080221694' \
             '2.0837288833768707e-9' '0.9643603115669437' '7.21843542110055' '${{ matrix.expected }}' \
             ${{ matrix.gradient }} | tee ../correlated_ray_${{ matrix.mapping }}.log
+          grep -q 'STAGE4D3_CORRELATED_RAY_RESULT' ../correlated_ray_${{ matrix.mapping }}.log
       - uses: actions/upload-artifact@v4
-        if: matrix.mapping == 'eff'
         with:
           name: rtk-stage4d3-correlated-ray-${{ matrix.mapping }}
           path: |
