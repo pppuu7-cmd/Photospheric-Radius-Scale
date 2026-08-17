@@ -246,8 +246,12 @@ def main():
                     actions.append("halt_LCDM_recenter_missing_best_params")
             else:
                 state["lcdm"]["certification"] = "local_dense_accepted"
-                state["lcdm"]["accepted_score_eff"] = float(summary["S_center"])
-                actions.append("freeze_LCDM_local_dense_candidate")
+                best_s = float(summary.get("best_exact_S", summary["S_center"]))
+                best_params = summary.get("best_params") or point_params(best_log) or dict(state["lcdm"]["accepted_center"])
+                state["lcdm"]["accepted_score_eff"] = best_s
+                state["lcdm"]["accepted_score_params"] = best_params
+                state["lcdm"]["accepted_score_semantics"] = "best_exact_stencil_within_recenter_tolerance"
+                actions.append("freeze_LCDM_local_dense_candidate_best_exact")
         if td:
             shutil.rmtree(td, ignore_errors=True)
 
@@ -282,8 +286,12 @@ def main():
                     actions.append("halt_RTK_hessian_recenter_missing_params")
             else:
                 state["rtk"]["certification"] = "local_dense_accepted"
-                state["rtk"]["accepted_score_eff"] = float(eff["S_center"])
-                actions.append("freeze_RTK_local_dense_candidate")
+                best_s = float(eff.get("best_exact_S", eff["S_center"]))
+                best_params = eff.get("best_params") or dict(state["rtk"]["accepted_center"])
+                state["rtk"]["accepted_score_eff"] = best_s
+                state["rtk"]["accepted_score_params"] = best_params
+                state["rtk"]["accepted_score_semantics"] = "best_exact_stencil_within_recenter_tolerance"
+                actions.append("freeze_RTK_local_dense_candidate_best_exact")
         if td:
             shutil.rmtree(td, ignore_errors=True)
 
