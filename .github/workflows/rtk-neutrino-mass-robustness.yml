@@ -49,9 +49,12 @@ jobs:
           cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/neutrino_mass_robustness.py class_public/
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
           cd class_public
+          # prepare_inference_core.py itself fail-closes on timeout/nonzero/postprocessing
+          # cache poisoning and on the exact-float cache key. Keep only a non-fragile
+          # generated-core marker here rather than grepping a Python variable name.
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
-          grep -q 'all_failures_uncached' inference_core.py
+          grep -q "if r.get('ok')" inference_core.py
           grep -q 'pba->V_prime_ini_nlde = 0.;' source/input.c
       - name: Build CLASS
         working-directory: class_public
