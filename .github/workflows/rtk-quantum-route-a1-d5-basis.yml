@@ -26,6 +26,7 @@ jobs:
           echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_a1_d5_basis_provenance.txt
           python3 rtk/quantum_route_a1_d5_basis_audit.py | tee route_a1_d5_basis.log
           grep -q RTK_ROUTE_A1_D5_BASIS_PASS route_a1_d5_basis.log
+          echo RTK_ROUTE_A1_D5_BASIS_PROVENANCE_REFRESH_PASS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
