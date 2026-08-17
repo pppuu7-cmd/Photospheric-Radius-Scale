@@ -1,0 +1,47 @@
+name: RTK audit retarded auxiliary initial conditions
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-audit-retarded-aux-ic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Prepare pinned nonlocal CLASS source
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee retarded_aux_ic_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public | tee retarded_aux_ic_patch.log
+
+      - name: Enforce background and perturbation minimal auxiliary ICs
+        run: |
+          set -euo pipefail
+          python3 rtk/audit_rt_retarded_auxiliary_ic.py class_public | tee retarded_aux_ic_audit.log
+          grep -q RTK_RETARDED_AUX_IC_AUDIT_PASS retarded_aux_ic_audit.log
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-retarded-auxiliary-ic-audit
+          path: |
+            retarded_aux_ic_provenance.txt
+            retarded_aux_ic_patch.log
+            retarded_aux_ic_audit.log
+          if-no-files-found: error
