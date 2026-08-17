@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 1
       - name: Install pinned SymPy
         run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
-      - name: Verify robust thermodynamic plus P(X) cubic theorem
+      - name: Verify thermodynamics, P(X) cubic theorem, and dust-limit asymptotics
         run: |
           set -euo pipefail
           echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_a1_px_provenance.txt
