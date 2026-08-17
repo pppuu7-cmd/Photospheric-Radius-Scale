@@ -79,7 +79,7 @@ Therefore **background thermodynamics plus the complete linear CLASS target cann
 
 Science code: `rtk/quantum_route_a1_d4_identifiability.py`.
 
-## 6. D5 dispersive identifiability no-go
+## 6. D5 dispersive layer and complete cubic basis
 
 The quadratic dispersive term
 
@@ -89,23 +89,37 @@ has total derivative order D=4. A valid shift-symmetric preferred-frame nonlinea
 
 `alpha K/(2 M^2) dot(pi) (grad dot(pi))^2`,
 
-which is cubic derivative order D=5. Different `alpha` give exactly the same quadratic `K,M` but different nonlinear scattering.
+which is cubic derivative order D=5. Different `alpha` give exactly the same quadratic `K,M` but different nonlinear scattering. Thus linear `M_K/k_star` cannot identify the nonlinear dispersive coupling or physical cutoff.
 
-Therefore:
+The complete Route-A1 cubic D=5 basis can nevertheless be enumerated without choosing those coefficients. Parity and the one-time-derivative-per-field rule imply total time-derivative count `T=1` or `T=3`.
 
-- the closed cubic basis at `D<=4` is not sufficient for a physical strong-coupling analysis at `q~M`;
-- linear `M_K/k_star` cannot identify the first nonlinear dispersive coupling;
-- `M_K/k_star` cannot be promoted to a physical cutoff from the linear target.
+For `T=3,S=2`, spatial integration by parts leaves one independent representative:
 
-Science code: `rtk/quantum_route_a1_d5_dispersive_nogo.py`.
+- `dot(pi) (grad dot(pi))^2`.
 
-## 7. Canonical D3 coefficient proxies
+For `T=1,S=4`, exhaustive SO(3) tensor contractions for spatial derivative partitions `(0,1,3)`, `(0,2,2)`, `(1,1,2)`, `(2,1,1)` give seven candidate contractions. Momentum conservation, equivalent to spatial IBP for a local cubic vertex, reduces their rank to three. A convenient independent set is:
+
+- `dot(pi) (Laplacian(pi))^2`,
+- `dot(pi) (d_i d_j pi)(d_i d_j pi)`,
+- `Laplacian(dot(pi)) (grad pi)^2`.
+
+Therefore the complete cubic D=5 Route-A1 basis has four representatives. Science code: `rtk/quantum_route_a1_d5_basis_audit.py`. The independent local symbolic rank check passes; CI workflow `rtk-quantum-route-a1-d5-basis.yml` has been launched for repository provenance.
+
+This closes the D5 **basis-enumeration** problem under Route A1, but not the coefficient determination or finite-k nonlinear completion.
+
+## 7. Canonical coefficient proxies
 
 At `q<<M`, with `pi_c=sqrt(K_phys) pi`, the D3 coefficient-suppression proxies satisfy
 
 `Lambda_i^2 = K_phys^(3/2)/|c_i,phys| = Mpl_bar sqrt(K_8piG)/|c_i/K|`.
 
-These `Lambda_1,Lambda_2` are useful bookkeeping scales for the long-wave D3 coefficients only. They are **not** declared strong-coupling cutoffs because small sound speed, momentum-dependent normalization and unknown D4/D5 nonlinear interactions remain relevant.
+These `Lambda_1,Lambda_2` are useful bookkeeping scales for the long-wave D3 coefficients only. They are **not** declared strong-coupling cutoffs because small sound speed, momentum-dependent normalization and unknown D4/D5 nonlinear coefficients remain relevant.
+
+For the example dispersive nonlinearization `(1+alpha dot(pi))(grad dot(pi))^2`, the D5 canonical coefficient scale obeys
+
+`Lambda_5^4 = sqrt(K_phys) M^2/|alpha|`.
+
+Since `alpha` is not fixed by the linear target, this relation illustrates rather than removes the strong-coupling non-identifiability.
 
 A pinned one-point background diagnostic at the current RTK center has already solved the RT root `gamma=0.05166338653500` to printed precision. The first run failed only while opening a missing output directory after the background calculation had succeeded; the workflow was fixed and hardened to report coefficient proxies with an explicit non-cutoff interpretation boundary.
 
@@ -133,9 +147,11 @@ The project therefore separates:
 
 ✅ Closed as a methodology result: linear dispersive M/k_star does not determine the D5 nonlinear coupling or physical cutoff.
 
-🔴 Open: choose/derive the finite-k nonlinear completion, including the D5 dispersive layer relevant near q~M.
+✅ Closed under Route A1: complete cubic D=5 operator-basis enumeration modulo spatial IBP.
 
-🔴 Open: physical strong-coupling scale using the full momentum-dependent canonical normalization.
+🔴 Open: choose or derive the actual D4/D5 finite-k nonlinear coefficient functions.
+
+🔴 Open: physical strong-coupling scale using full momentum-dependent canonical normalization and the actual D5 coefficients.
 
 🔴 Open: full coupled metric/lapse/shift + causal RT + Khronon constraint algebra and total physical DOF count.
 
@@ -145,4 +161,4 @@ The project therefore separates:
 
 ## 10. Next valid theory step
 
-The next non-redundant theorem layer is to enumerate the cubic `D=5` preferred-frame basis relevant to the dispersive quadratic operator and then choose or derive a concrete nonlinear dispersive subroute. Only after that should interaction scales be promoted beyond the present long-wave D3 coefficient proxies.
+The next non-redundant Route-A1 theory task is no longer basis enumeration. It is to choose or derive a concrete nonlinear dispersive subroute that fixes the D4/D5 coefficient functions while preserving the already-proven quadratic target and reduced-scalar DOF conditions. Only after that should a physical strong-coupling calculation be attempted.
