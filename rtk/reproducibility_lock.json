@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. This file does not retroactively alter already-running Actions jobs.",
+  "external_git": {
+    "class_public": {
+      "repository": "dirian/class_public",
+      "branch": "nonlocal",
+      "commit": "36cf283628c4a3330ec9fd3d84239bf775f77317"
+    },
+    "pantheon": {
+      "repository": "dscolnic/Pantheon",
+      "branch": "master",
+      "commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7"
+    }
+  },
+  "likelihood": {
+    "clipy_like": "0.15",
+    "planck_baseline_file_id": "COM_Likelihood_Data-baseline_R3.00.tar.gz"
+  },
+  "python_packages": {
+    "numpy": "capture-exact-version-in-run-provenance-before-pinning",
+    "scipy": "capture-exact-version-in-run-provenance-before-pinning"
+  },
+  "production_constraints": {
+    "gauge": "newtonian",
+    "mapping": "eff",
+    "cache_semantics": "exact-float",
+    "objective": "matched-ultra-linstep2+dense-BOSS"
+  }
+}
