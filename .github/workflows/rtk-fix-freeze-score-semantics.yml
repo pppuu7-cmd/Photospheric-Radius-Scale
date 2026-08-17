@@ -1,0 +1,59 @@
+name: RTK fix freeze score semantics
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rtk-fix-freeze-score-semantics.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Patch best-exact freeze semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('rtk/autonomous_orchestrator.py')
+          s = p.read_text()
+
+          old_lcdm = '''            else:\n                state["lcdm"]["certification"] = "local_dense_accepted"\n                state["lcdm"]["accepted_score_eff"] = float(summary["S_center"])\n                actions.append("freeze_LCDM_local_dense_candidate")'''
+          new_lcdm = '''            else:\n                state["lcdm"]["certification"] = "local_dense_accepted"\n                best_s = float(summary.get("best_exact_S", summary["S_center"]))\n                best_params = summary.get("best_params") or point_params(best_log) or dict(state["lcdm"]["accepted_center"])\n                state["lcdm"]["accepted_score_eff"] = best_s\n                state["lcdm"]["accepted_score_params"] = best_params\n                state["lcdm"]["accepted_score_semantics"] = "best_exact_stencil_within_recenter_tolerance"\n                actions.append("freeze_LCDM_local_dense_candidate_best_exact")'''
+
+          old_rtk = '''            else:\n                state["rtk"]["certification"] = "local_dense_accepted"\n                state["rtk"]["accepted_score_eff"] = float(eff["S_center"])\n                actions.append("freeze_RTK_local_dense_candidate")'''
+          new_rtk = '''            else:\n                state["rtk"]["certification"] = "local_dense_accepted"\n                best_s = float(eff.get("best_exact_S", eff["S_center"]))\n                best_params = eff.get("best_params") or dict(state["rtk"]["accepted_center"])\n                state["rtk"]["accepted_score_eff"] = best_s\n                state["rtk"]["accepted_score_params"] = best_params\n                state["rtk"]["accepted_score_semantics"] = "best_exact_stencil_within_recenter_tolerance"\n                actions.append("freeze_RTK_local_dense_candidate_best_exact")'''
+
+          if s.count(old_lcdm) != 1:
+              raise SystemExit(f'LCDM freeze block count={s.count(old_lcdm)}')
+          if s.count(old_rtk) != 1:
+              raise SystemExit(f'RTK freeze block count={s.count(old_rtk)}')
+          s = s.replace(old_lcdm, new_lcdm).replace(old_rtk, new_rtk)
+          p.write_text(s)
+          PY
+          python3 -m py_compile rtk/autonomous_orchestrator.py
+          grep -q 'freeze_LCDM_local_dense_candidate_best_exact' rtk/autonomous_orchestrator.py
+          grep -q 'freeze_RTK_local_dense_candidate_best_exact' rtk/autonomous_orchestrator.py
+
+      - name: Commit patch to research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'rtk-autonomous-bot'
+          git config user.email 'rtk-autonomous-bot@users.noreply.github.com'
+          git add rtk/autonomous_orchestrator.py
+          if git diff --cached --quiet; then
+            echo 'NO_CHANGE_NEEDED'
+            exit 0
+          fi
+          git commit -m 'Use best exact score for same-iteration freeze'
+          git push origin HEAD:rtk-class-build
