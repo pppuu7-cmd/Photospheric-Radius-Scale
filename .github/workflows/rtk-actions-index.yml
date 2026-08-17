@@ -39,14 +39,15 @@ jobs:
           ],text=True)
           data=json.loads(raw)
           wanted={
+              'RTK autonomous dense RTK axis',
               'RTK autonomous dense RTK half-stencil proof gate',
               'RTK current exact mixed negative-mode ray profile',
               'RTK current-center standard-siren prediction',
               'RTK matched minimal-neutrino robustness',
               'RTK Route A1 background interaction ratios',
-              'RTK quantum Route A1 D4 identifiability no-go',
-              'RTK quantum Route A1 D5 dispersive no-go',
-              'RTK quantum Route A1 complete D5 cubic basis audit',
+              'RTK Route A1 D4 identifiability theorem',
+              'RTK Route A1 D5 dispersive identifiability theorem',
+              'RTK Route A1 complete D5 cubic basis audit',
               'RTK autonomous dense RTK 7D stationarity',
               'RTK autonomous research orchestrator',
           }
