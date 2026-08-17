@@ -24,11 +24,14 @@ Its physical conclusion remains valid: because the implemented sector has explic
 
 a pure local two-derivative `P(X)` scalar is insufficient for the full finite-k implementation. Preferred-frame higher-spatial-derivative or auxiliary EFT structure is required.
 
-### Q3 — constructive local quadratic EFT reconstruction: PASS
+### Q3 — constructive local quadratic EFT reconstruction: PASS + current-branch rerun PASS
 
-Workflow run `31982347734` completed successfully.
-Artifact `rtk-quantum-local-quadratic-eft`, artifact ID `9272723493`, uploaded ZIP SHA256
-`b8b45113e267825fdc9676a4f95f5839d157e8e80e7ec970bbed008050d429a4`.
+Workflow run `31982347734` completed successfully originally and was re-run successfully on 2026-08-17 against actual checkout `rtk-class-build@1c630cc5d573790c91b8e1c3433ac0337d60bd5f`.
+
+Latest artifact:
+- name `rtk-quantum-local-quadratic-eft`;
+- artifact ID `9294942720`;
+- ZIP SHA256 `1c72166a55e6ac12961dc7a81f7ce46286c74974750e042fc40c176287cd8524`.
 
 The symbolic audit proves exactly
 
@@ -56,7 +59,7 @@ The corresponding Fourier-mode Hamiltonian
 
 `H = P^2/[2 K(1+q^2/M^2)] + G q^2 pi^2/2`
 
-is positive for `G>0`, `K>0`, `M^2>0`. The CI run scanned 3430 points and found no sign violations, with minimum scanned `G=1.000000000001e-12`, minimum `K=1.0000000000020002`, and minimum mode kinetic coefficient `1.0000000000020002`.
+is positive for `G>0`, `K>0`, `M^2>0`. The current-branch CI rerun again scanned 3430 points and found no sign violations, with minimum scanned `G=1.000000000001e-12`, minimum `K=1.0000000000020002`, and minimum mode kinetic coefficient `1.0000000000020002`.
 
 The candidate contains higher spatial derivatives but no higher time derivative.
 
@@ -66,11 +69,22 @@ Classification:
 
 This is an existence result for a healthy quadratic representative of the implemented linear sector. It is not a claim that this representative is the unique or fundamental nonlinear action.
 
-### Q4 — strong-coupling identifiability theorem: PASS
+### Q4 — strong-coupling identifiability theorem: PASS + current-branch rerun PASS
 
-Workflow run `31982495371` completed successfully.
+Workflow run `31982495371` completed successfully originally and was re-run successfully against actual checkout `rtk-class-build@1c630cc5d573790c91b8e1c3433ac0337d60bd5f`.
+
+Latest artifact:
+- name `rtk-quantum-strong-coupling-identifiability`;
+- artifact ID `9294947265`;
+- ZIP SHA256 `06220071b547a981f31da2ccdf8fb10e77c5d552680f668d0bdc15dd4e55ce74`.
 
 The symbolic construction shows that arbitrary cubic and higher operators can leave the quadratic Hessian unchanged. Therefore the current linear CLASS implementation cannot determine a unique strong-coupling scale.
+
+The rerun again established:
+- quadratic Hessian unchanged by the representative cubic completion;
+- cubic coefficient depends on arbitrary nonlinear data;
+- `strong_coupling_scale_from_current_CLASS_linear_equations = UNDERDETERMINED`;
+- `M_K_or_k_star_equals_strong_coupling_cutoff = NOT_DERIVABLE`.
 
 Consequences:
 
@@ -97,6 +111,8 @@ Consequences:
 ✅ Pure two-derivative `P(X)` is insufficient for the full finite-k sector.
 
 ✅ Strong-coupling scale is proven **not identifiable** from the linear sector alone.
+
+✅ The two strongest theorem-level audits were independently re-run successfully on the current research branch state used after the multiscale/protocol hardening.
 
 🔴 No unique fundamental nonlinear RTK/Khronon action has yet been selected/derived from this reconstruction.
 
@@ -135,5 +151,7 @@ The next non-redundant theorem task is not another linear sign scan. It is to sp
 3. canonically normalize the propagating mode;
 4. derive interaction scales and the actual strong-coupling bound;
 5. only then study loop closure/radiative stability.
+
+The required symmetry/DOF decision gate is now formalized in `rtk/NONLINEAR_EFT_COMPLETION_GATE.md`.
 
 This is the precise remaining gap between the current RTK evidence and a Hassan-Rosen-style nonlinear ghost/constraint theorem.
