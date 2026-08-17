@@ -1,2 +1,2 @@
-trigger: 2026-08-18T00:08:00Z
-reason: validate quote-robust invariants plus synthetic negative-eigenray state-machine regression while axis 32081135646 remains the only stationarity compute
+trigger: 2026-08-18T00:18:00Z
+reason: re-run synthetic negative-eigenray state-machine regression after direct-module import fix; axis 32081135646 remains the only stationarity compute
