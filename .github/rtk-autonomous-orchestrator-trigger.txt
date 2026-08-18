@@ -1,2 +1,2 @@
-trigger: 2026-08-18T13:31:00Z
-reason: validate repeated adaptive quarter N5 stabilization regression plus current scientific/provenance invariants; preserve half-stencil 32133215190 as the only heavy worker
+trigger: 2026-08-18T13:58:00Z
+reason: validate artifact runtime-sidecar fail-closed checks plus repeated adaptive-quarter N5 stabilization; preserve half-stencil 32133215190 as the only heavy worker
