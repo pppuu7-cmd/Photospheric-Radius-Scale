@@ -1,2 +1,2 @@
-trigger: 2026-08-19T01:47:00+03:00
-reason: capture generalized Stage4D3 scale-ladder regression run and active B4 neutrino reoptimization
+trigger: 2026-08-19T01:56:00+03:00
+reason: capture second D5 generalized scale-ladder CI with locked eighth-ray invariants plus active B4 status
