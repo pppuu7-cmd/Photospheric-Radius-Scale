@@ -1,7 +1,33 @@
 {
-  "generated_at_utc": "2026-08-18T23:38:26.110799+00:00",
+  "generated_at_utc": "2026-08-18T23:43:57.593825+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-18T23:42:58Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "a0b88a0fdf630dbeb9e26d14b0e1c1e386d12f41",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32198331764",
+      "id": 32198331764,
+      "name": "RTK Route-B preferred-foliation metric-Khronon benchmark",
+      "run_number": 2,
+      "status": "completed",
+      "updated_at": "2026-08-18T23:43:27Z"
+    },
+    {
+      "conclusion": "cancelled",
+      "created_at": "2026-08-18T23:42:49Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "bc891ecfdb98ddca8b57762d9641940b1d34c8d1",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32198320988",
+      "id": 32198320988,
+      "name": "RTK Route-B preferred-foliation metric-Khronon benchmark",
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-18T23:43:00Z"
+    },
     {
       "conclusion": "success",
       "created_at": "2026-08-18T23:34:46Z",
@@ -222,32 +248,6 @@
       "run_number": 2,
       "status": "in_progress",
       "updated_at": "2026-08-18T22:04:56Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T21:50:13Z",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "5fdfb6f01f5bd60f1bdce20210face501140d26d",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32189775263",
-      "id": 32189775263,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 101,
-      "status": "completed",
-      "updated_at": "2026-08-18T21:50:30Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T21:28:39Z",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "5fdfb6f01f5bd60f1bdce20210face501140d26d",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32187911603",
-      "id": 32187911603,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 100,
-      "status": "completed",
-      "updated_at": "2026-08-18T21:28:52Z"
     }
   ]
 }
