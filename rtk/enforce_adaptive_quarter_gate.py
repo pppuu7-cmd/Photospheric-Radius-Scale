@@ -9,7 +9,6 @@ half results across later cron iterations.
 from __future__ import annotations
 import json, os, shutil, subprocess, tempfile
 from pathlib import Path
-import numpy as np
 
 ROOT=Path(__file__).resolve().parents[1]
 STATE=ROOT/'research/state/current.json'
@@ -62,6 +61,10 @@ def comparison(state,tol):
       'warning':'Raw local objective comparison only; not AIC/BIC/Bayes evidence/significance. Adaptive Stage4D3 used adjacent 1/2 and 1/4 PD stencils after exact negative-eigenray falsification of the coarse non-PD scale.'}
 
 def normalized_hessian_diagnostics(half,quarter):
+    # NumPy is only needed when a real parsed half+quarter pair exists. Keep it
+    # out of import-time control flow so synthetic state-machine tests remain
+    # dependency-free on the lightweight orchestrator runner.
+    import numpy as np
     he=np.asarray(half['eff']['hessian_y'],float)/(0.5**2)
     qe=np.asarray(quarter['eff']['hessian_y'],float)/(0.25**2)
     rel=float(np.linalg.norm(qe-he)/max(np.linalg.norm(he),1e-300))
@@ -109,8 +112,6 @@ def main():
     if not ray_clear:
         print('RTK_ADAPTIVE_QUARTER_GATE',json.dumps(changes));return
 
-    # Stabilize the ordinary accepted base+half case if the upstream gate is
-    # revisited on a later cron after the half artifact was already parsed.
     if base_pd and half_pd:
         set_best_score(state,[base,half],'best_exact_across_base_and_half_stencils_within_recenter_tolerance')
         rtk['certification']='local_dense_accepted';rtk['interior_minimum_certification']='N5_BASE_AND_HALF_STENCIL_PASS';state['stage']='matched_dense_ready'
@@ -120,8 +121,6 @@ def main():
         comparison(state,tol);changes.append('stabilize_parsed_base_half_N5_pass')
         STATE.write_text(json.dumps(state,indent=2,sort_keys=True)+'\n');print('RTK_ADAPTIVE_QUARTER_GATE',json.dumps(changes));return
 
-    # The pre-registered adaptive case: coarse base is non-PD, but the exact
-    # negative ray is clear and the 1/2 stencil is PD.  Require 1/4.
     if (not base_pd) and half_pd:
         qslot=rtk.get('quarter_hessian_run')
         if qslot is None:
@@ -157,7 +156,6 @@ def main():
         elif qslot.get('status')=='completed' and qslot.get('conclusion') not in (None,'success'):
             rtk['certification']='quarter_stencil_compute_failure';rtk['interior_minimum_certification']='N5_BLOCKED_BY_QUARTER_COMPUTE_FAILURE';state['stage']='rtk_quarter_stencil_compute_failure';changes.append('record_quarter_compute_failure')
         elif qslot.get('parsed') and isinstance(rtk.get('quarter_hessian_result'),dict):
-            # Preserve a prior adaptive decision across later cron iterations.
             quarter=rtk['quarter_hessian_result'];qe=quarter['eff']
             if float(qe['best_improvement'])<=tol and bool(qe.get('positive_definite')):
                 set_best_score(state,[base,half,quarter],'best_exact_across_base_half_quarter_stencils_within_recenter_tolerance')
