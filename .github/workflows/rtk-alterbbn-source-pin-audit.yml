@@ -23,113 +23,110 @@ jobs:
           ref: rtk-class-build
           fetch-depth: 1
 
-      - name: Probe published AlterBBN v2.2 source endpoints and public frontend API
+      - name: Resolve and download the published AlterBBN v2.2 archive
         run: |
           set -euo pipefail
           mkdir -p output/alterbbn_source_pin
           python3 - <<'PY'
-          import json, subprocess, re, hashlib, pathlib, urllib.parse
+          import json, subprocess, hashlib, pathlib, os
           out=pathlib.Path('output/alterbbn_source_pin')
           base='https://data.mendeley.com'
-          dataset='k7j3b9zyvf'; version='1'
+          dataset='k7j3b9zyvf'; version='1'; expected='alterbbn_v2.2.tar.xz'
+          public_files=f'{base}/public-api/datasets/{dataset}/files?folder_id=root&version={version}'
 
-          def fetch(name,url,max_time='60'):
+          def curl(name,url,headers=()):
               body=out/f'{name}.body'; hdr=out/f'{name}.headers'
-              cp=subprocess.run(['curl','-L','-sS','--retry','2','--connect-timeout','15','--max-time',max_time,'-D',str(hdr),'-o',str(body),'-w','%{http_code}',url],text=True,capture_output=True)
-              code=cp.stdout.strip() if cp.returncode==0 else 'curl_error'
+              cmd=['curl','-L','-sS','--retry','3','--retry-delay','2','--connect-timeout','15','--max-time','180','-D',str(hdr),'-o',str(body),'-w','%{http_code}']
+              for h in headers: cmd += ['-H',h]
+              cmd.append(url)
+              cp=subprocess.run(cmd,text=True,capture_output=True)
               b=body.read_bytes() if body.exists() else b''
               ft=subprocess.run(['file','-b',str(body)],text=True,capture_output=True).stdout.strip() if body.exists() else None
-              return {'name':name,'url':url,'curl_returncode':cp.returncode,'http_code':code,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest() if b else None,'file_type':ft}
+              return {'name':name,'url':url,'curl_returncode':cp.returncode,'http_code':cp.stdout.strip() if cp.returncode==0 else 'curl_error','bytes':len(b),'sha256':hashlib.sha256(b).hexdigest() if b else None,'file_type':ft}
 
-          rows=[]
-          endpoints=[
-            ('landing',f'{base}/datasets/{dataset}/{version}'),
-            ('api_data_snapshot',f'https://api.data.mendeley.com/datasets/{dataset}?version={version}'),
-            ('api_mendeley_snapshot',f'https://api.mendeley.com/datasets/{dataset}?version={version}'),
-            ('api_data_zip',f'https://api.data.mendeley.com/datasets/{dataset}/zip/file_downloaded?version={version}'),
-          ]
-          for name,url in endpoints: rows.append(fetch(name,url))
+          landing=curl('landing',f'{base}/datasets/{dataset}/{version}')
+          listing=curl('public_files',public_files,('Accept: application/vnd.mendeley-public-dataset.1+json',))
+          if listing['http_code']!='200':
+              raise RuntimeError(f'public file-list endpoint failed: {listing}')
+          try: payload=json.loads((out/'public_files.body').read_text())
+          except Exception as exc: raise RuntimeError(f'public file-list is not JSON: {exc}')
 
-          landing=(out/'landing.body').read_text(errors='ignore') if (out/'landing.body').exists() else ''
-          bundle_paths=[]
-          for m in re.finditer(r'<script[^>]+src=["\']([^"\']*?/datasets/bundle\.js\?[^"\']+)["\']',landing,re.I):
-              src=m.group(1).replace('&#x2F;','/')
-              if src.startswith('//'): src='https:'+src
-              elif src.startswith('/'): src=base+src
-              elif not src.startswith('http'): src=base+'/'+src.lstrip('/')
-              bundle_paths.append(src)
-          bundle_paths=sorted(set(bundle_paths))
-          bundle_contexts=[]
-          public_probe_urls=[]
-          for i,url in enumerate(bundle_paths):
-              row=fetch(f'frontend_bundle_{i}',url); rows.append(row)
-              p=out/f'frontend_bundle_{i}.body'
-              js=p.read_text(errors='ignore') if p.exists() else ''
-              # Persist compact contexts around likely public file-list/download API strings.
-              needles=('file_download','fileDownload','/files','files?','datasetFiles','file_contents','content_details','repositoryApi','api.data.mendeley','api.mendeley','download-all','short_id','folders')
-              for needle in needles:
-                  pos=0
-                  while True:
-                      j=js.find(needle,pos)
-                      if j<0:break
-                      ctx=js[max(0,j-350):min(len(js),j+700)]
-                      bundle_contexts.append({'bundle':url,'needle':needle,'context':ctx})
-                      pos=j+len(needle)
-                      if sum(1 for x in bundle_contexts if x['needle']==needle)>=20:break
-              # Extract literal endpoint-like strings mentioning datasets/files/repository.
-              for raw in re.findall(r'["\']([^"\']{3,500})["\']',js):
-                  low=raw.lower()
-                  if any(x in low for x in ('/datasets','file_download','/files','repository')) and (' ' not in raw):
-                      val=raw.replace('\\/','/')
-                      if dataset in val or '{' in val or 'dataset' in low or 'file' in low:
-                          public_probe_urls.append(val)
-          (out/'frontend_api_contexts.json').write_text(json.dumps(bundle_contexts[:500],indent=2,sort_keys=True)+'\n')
-          (out/'frontend_endpoint_strings.json').write_text(json.dumps(sorted(set(public_probe_urls))[:1000],indent=2)+'\n')
+          # Recursively find file dictionaries because the public API response
+          # shape is an implementation detail and may be a list or a wrapper.
+          dicts=[]
+          def walk(x):
+              if isinstance(x,dict):
+                  dicts.append(x)
+                  for v in x.values(): walk(v)
+              elif isinstance(x,list):
+                  for v in x: walk(v)
+          walk(payload)
+          matches=[d for d in dicts if d.get('filename')==expected]
+          if len(matches)!=1:
+              raise RuntimeError(f'expected exactly one {expected}, found {len(matches)}')
+          meta=matches[0]
+          details=meta.get('content_details') if isinstance(meta.get('content_details'),dict) else {}
+          download=details.get('download_url') or meta.get('download_url')
+          if not isinstance(download,str) or not download.startswith('http'):
+              raise RuntimeError(f'published file metadata lacks download_url: {meta}')
 
-          # Search returned material for immutable content locators, UUIDs and expected filename.
-          candidates=[]
-          for p in out.glob('*.body'):
-              raw=p.read_bytes(); text=raw.decode('utf-8','ignore')
-              if 'alterbbn_v2.2.tar.xz' in text:
-                  candidates.append({'source':p.name,'kind':'filename_seen','value':'alterbbn_v2.2.tar.xz'})
-              for u in sorted(set(re.findall(r'https?://[^"\'<>\\\s]+',text))):
-                  if any(x in u.lower() for x in ('mendeley','file','download',dataset)):
-                      candidates.append({'source':p.name,'kind':'url','value':u[:2000]})
-              for uid in sorted(set(re.findall(r'\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b',text,re.I))):
-                  candidates.append({'source':p.name,'kind':'uuid','value':uid})
-
-          archives=[]
-          for row in rows:
-              if row.get('file_type') and any(k in row['file_type'].lower() for k in ('xz compressed','zip archive','tar archive','gzip compressed')):
-                  archives.append({'name':row['name'],'path':str(out/f"{row['name']}.body"),'sha256':row['sha256'],'bytes':row['bytes'],'file_type':row['file_type']})
+          archive=curl('alterbbn_v2_2_archive',download)
+          archive_path=out/'alterbbn_v2_2_archive.body'
+          if archive['http_code']!='200' or archive['bytes']<100000:
+              raise RuntimeError(f'archive download failed or implausibly small: {archive}')
+          # Verify XZ and that it is a readable tar archive before accepting a pin.
+          if 'xz compressed' not in (archive.get('file_type') or '').lower():
+              raise RuntimeError(f'published object is not detected as xz: {archive}')
+          cp=subprocess.run(['tar','-tJf',str(archive_path)],text=True,capture_output=True)
+          if cp.returncode:
+              raise RuntimeError('published xz object is not a readable tar archive: '+cp.stderr)
+          members=[x for x in cp.stdout.splitlines() if x.strip()]
+          if len(members)<10:
+              raise RuntimeError(f'archive contains suspiciously few members: {len(members)}')
+          (out/'archive_members.txt').write_text('\n'.join(members)+'\n')
+          # Persist the archive under its published name as an artifact, while
+          # the digest below is the scientific source identity used later.
+          published_path=out/expected
+          published_path.write_bytes(archive_path.read_bytes())
 
           result={
-            'classification':'ALTERBBN_PUBLISHED_SOURCE_DISCOVERY',
+            'classification':'ALTERBBN_PUBLISHED_SOURCE_PIN_PASS',
+            'status':'PINNED_ARCHIVE_FOUND',
             'doi':'10.17632/k7j3b9zyvf.1',
-            'expected_filename':'alterbbn_v2.2.tar.xz',
-            'expected_dataset_version':1,
-            'endpoint_results':rows,
-            'frontend_bundle_urls':bundle_paths,
-            'frontend_endpoint_string_count':len(set(public_probe_urls)),
-            'frontend_context_count':len(bundle_contexts),
-            'extracted_candidates':candidates,
-            'archive_like_responses':archives,
-            'status':'PIN_CANDIDATE_FOUND' if archives else ('FRONTEND_ENDPOINTS_DISCOVERED' if public_probe_urls else 'SOURCE_DISCOVERY_INCOMPLETE'),
-            'warning':'Discovery/provenance only. No BBN abundance calculation and no source is accepted until byte identity and archive contents are validated.'
+            'dataset_id':dataset,
+            'dataset_version':1,
+            'published_filename':expected,
+            'public_file_list_endpoint':public_files,
+            'public_file_metadata':meta,
+            'download_url':download,
+            'archive_sha256':archive['sha256'],
+            'archive_bytes':archive['bytes'],
+            'archive_file_type':archive['file_type'],
+            'archive_member_count':len(members),
+            'archive_member_head':members[:30],
+            'landing_sha256':landing['sha256'],
+            'public_file_list_sha256':listing['sha256'],
+            'warning':'Published source identity only. No BBN abundance calculation has been executed yet.'
           }
           (out/'summary.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
-          print('RTK_ALTERBBN_SOURCE_DISCOVERY',json.dumps(result,sort_keys=True))
+          print('RTK_ALTERBBN_SOURCE_PIN_PASS',json.dumps(result,sort_keys=True))
           PY
 
-      - name: Print concise discovery classification
+      - name: Fail closed unless immutable archive pin is complete
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json
-          s=json.load(open('output/alterbbn_source_pin/summary.json'))
+          import json,hashlib,pathlib
+          p=pathlib.Path('output/alterbbn_source_pin/summary.json')
+          s=json.load(open(p))
+          assert s['classification']=='ALTERBBN_PUBLISHED_SOURCE_PIN_PASS'
+          assert s['status']=='PINNED_ARCHIVE_FOUND'
           assert s['doi']=='10.17632/k7j3b9zyvf.1'
-          assert s['expected_filename']=='alterbbn_v2.2.tar.xz'
-          print('RTK_ALTERBBN_SOURCE_PIN_AUDIT_COMPLETE',s['status'])
+          assert s['published_filename']=='alterbbn_v2.2.tar.xz'
+          a=pathlib.Path('output/alterbbn_source_pin/alterbbn_v2.2.tar.xz')
+          h=hashlib.sha256(a.read_bytes()).hexdigest()
+          assert h==s['archive_sha256']
+          print('RTK_ALTERBBN_SOURCE_PIN_AUDIT_COMPLETE',h,s['archive_member_count'])
           PY
 
       - uses: actions/upload-artifact@v4
