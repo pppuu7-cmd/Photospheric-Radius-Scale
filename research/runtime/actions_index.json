@@ -1,7 +1,20 @@
 {
-  "generated_at_utc": "2026-08-18T22:59:06.582090+00:00",
+  "generated_at_utc": "2026-08-18T22:59:45.250985+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": null,
+      "created_at": "2026-08-18T22:58:35Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "8098eaa5797cfe7c2c7f72112b1bb98455cc29c2",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32195153149",
+      "id": 32195153149,
+      "name": "RTK audit-only locked LCDM stationarity replay",
+      "run_number": 1,
+      "status": "in_progress",
+      "updated_at": "2026-08-18T22:58:39Z"
+    },
     {
       "conclusion": "success",
       "created_at": "2026-08-18T22:51:34Z",
@@ -248,19 +261,6 @@
       "run_number": 89,
       "status": "completed",
       "updated_at": "2026-08-18T15:49:39Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T15:15:06Z",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "8f403d7e42020d38f1e98d3c7654c1d5f9cfc377",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32153310758",
-      "id": 32153310758,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 88,
-      "status": "completed",
-      "updated_at": "2026-08-18T15:15:19Z"
     }
   ]
 }
