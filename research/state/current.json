@@ -28,8 +28,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 69,
-  "last_iteration": "research/iterations/000069_20260818T114416Z.json",
+  "iteration": 70,
+  "last_iteration": "research/iterations/000070_20260818T121358Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -867,9 +867,11 @@
     "half_hessian_result": null,
     "half_hessian_run": {
       "artifact": "rtk-autonomous-dense-rtk-half-stencil",
+      "conclusion": null,
       "expected_stencil_scale": 0.5,
-      "run_id": null,
-      "status": "requested",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32133215190",
+      "run_id": 32133215190,
+      "status": "in_progress",
       "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
     },
     "hessian_history": [
@@ -2548,5 +2550,5 @@
   "schema_version": 1,
   "stage": "rtk_half_stencil_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-18T11:44:16Z"
+  "updated_at": "2026-08-18T12:13:58Z"
 }
