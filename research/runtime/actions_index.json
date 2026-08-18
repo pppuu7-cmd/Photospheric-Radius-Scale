@@ -1,7 +1,20 @@
 {
-  "generated_at_utc": "2026-08-18T22:00:20.580448+00:00",
+  "generated_at_utc": "2026-08-18T22:05:40.102480+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": null,
+      "created_at": "2026-08-18T22:04:51Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "94ecfa01f85ad69b1138719dc9fd78b9e096f7b7",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32190997977",
+      "id": 32190997977,
+      "name": "RTK minimal-neutrino paired reoptimization seed",
+      "run_number": 2,
+      "status": "in_progress",
+      "updated_at": "2026-08-18T22:04:56Z"
+    },
     {
       "conclusion": "success",
       "created_at": "2026-08-18T21:50:13Z",
@@ -235,19 +248,6 @@
       "run_number": 86,
       "status": "completed",
       "updated_at": "2026-08-18T14:39:02Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T14:31:35Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "2b830eb86c987b6e796a021fa3903597e00dc8a5",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32148867100",
-      "id": 32148867100,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 85,
-      "status": "completed",
-      "updated_at": "2026-08-18T14:31:56Z"
     }
   ]
 }
