@@ -57,6 +57,12 @@ jobs:
           python3 rtk/test_adaptive_quarter_gate.py | tee autonomous_adaptive_quarter_unit.log
           grep -q RTK_ADAPTIVE_QUARTER_GATE_UNIT_PASS autonomous_adaptive_quarter_unit.log
 
+      - name: Test generalized Stage4D3 scale ladder
+        run: |
+          set -euo pipefail
+          python3 rtk/test_stage4d3_scale_ladder_gate.py | tee autonomous_scale_ladder_unit.log
+          grep -q RTK_STAGE4D3_SCALE_LADDER_GATE_UNIT_PASS autonomous_scale_ladder_unit.log
+
       - name: Test proof-artifact runtime sidecars
         run: |
           set -euo pipefail
@@ -112,6 +118,14 @@ jobs:
           set -euo pipefail
           python3 rtk/enforce_adaptive_quarter_gate.py | tee autonomous_adaptive_quarter.log
           grep -q RTK_ADAPTIVE_QUARTER_GATE autonomous_adaptive_quarter.log
+
+      - name: Enforce generalized Stage4D3 scale ladder
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 rtk/enforce_stage4d3_scale_ladder_gate.py | tee autonomous_scale_ladder.log
+          grep -q RTK_STAGE4D3_SCALE_LADDER_GATE autonomous_scale_ladder.log
 
       - name: Enforce independent final matched-minima replay gate
         env:
