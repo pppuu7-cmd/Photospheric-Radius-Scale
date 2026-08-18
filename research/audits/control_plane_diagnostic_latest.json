@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "name": "py_compile",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "name": "scientific_invariants",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_AUDIT_INVARIANTS_PASS [\"production_gauge_newtonian\", \"exact_float_cache_preparation\", \"success_only_likelihood_cache\", \"production_mapping_eff\", \"matched_dense_objective\", \"lambda_is_real_input\", \"mapping_separation_protocol\", \"lcdm_steps_decoupled_from_rtk\", \"rtk_hessian_records_eigenvectors\", \"orchestrator_same_iteration_freeze_uses_best_exact\", \"fs8_eff_is_dsigma8_dloga\", \"k01_mapping_separate\", \"pantheon_offset_profile\", \"boss_bao_rescaling\", \"signature_uses_legacy_As_ns\", \"signature_rejects_As_ad_ns_ad\", \"signature_neutrino_baseline_matches_production\", \"signature_recfast_matches_production\", \"signature_gauge_newtonian\", \"signature_exact_pk_redshift_gate\", \"signature_drag_epoch_gate\", \"class_upstream_pinned_target\", \"pantheon_pinned_target\", \"clipy_pinned\", \"artifact_identity_checks_objective\", \"artifact_identity_checks_center\", \"artifact_identity_checks_objective_fingerprint\", \"artifact_identity_checks_center_fingerprint\", \"artifact_identity_checks_locked_class_sha\", \"artifact_identity_checks_locked_pantheon_sha\", \"artifact_identity_checks_locked_numpy\", \"artifact_identity_includes_negative_eigenray\", \"artifact_identity_includes_quarter_stencil\", \"stage4d3_negative_eigenray_before_half\", \"adaptive_quarter_requires_ray_clear_and_half_pd\", \"adaptive_proof_requires_half_and_quarter_pd\", \"lcdm_freeze_uses_best_exact\"]\n"
+    },
+    {
+      "name": "negative_eigenray_unit",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_STAGE4D3_NEGATIVE_EIGENRAY_UNIT_PASS\n"
+    },
+    {
+      "name": "adaptive_quarter_unit",
+      "returncode": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/test_adaptive_quarter_gate.py\", line 58, in <module>\n    s=run_case(s)\n      ^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/test_adaptive_quarter_gate.py\", line 28, in run_case\n    try:G.main()\n        ^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 137, in main\n    rr=get_run(qslot['run_id']);qslot['status']=rr.get('status');qslot['conclusion']=rr.get('conclusion');qslot['html_url']=rr.get('html_url')\n       ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 33, in get_run\n    def get_run(run_id):return gh(f'repos/{REPO}/actions/runs/{int(run_id)}')\n                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 29, in gh\n    def gh(endpoint):return json.loads(run(['gh','api',endpoint]).stdout)\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 26, in run\n    if check and p.returncode:raise RuntimeError(p.stderr.strip())\n                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: gh: Not Found (HTTP 404)\n",
+      "stdout": "RTK_ADAPTIVE_QUARTER_GATE [\"stabilize_parsed_base_half_N5_pass\"]\nRTK_ADAPTIVE_QUARTER_GATE [\"dispatch_RTK_quarter_stencil_N5\"]\n"
+    },
+    {
+      "name": "runtime_sidecars_unit",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_ARTIFACT_RUNTIME_SIDECARS_UNIT_PASS\n"
+    },
+    {
+      "name": "final_replay_unit",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_FINAL_REPLAY_GATE_UNIT_PASS {\"fingerprint\": \"454d35363a5420da0d100fb1ac4c9adc7d8665c0f9353c18cfd18d4d06f7b767\", \"checks\": \"ready+identity+score+provenance\"}\n"
+    },
+    {
+      "name": "idempotent_dispatch_unit",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_IDEMPOTENT_DISPATCH_GUARD_UNIT_PASS\n"
+    },
+    {
+      "name": "reproducibility_extensions",
+      "returncode": 1,
+      "stderr": "RTK_REPRO_EXT_AUDIT_FAIL [\"clean_room_pair_not_hardcoded\", \"clean_room_pair_provenance\"]\n",
+      "stdout": ""
+    },
+    {
+      "name": "artifact_identity_current",
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_ARTIFACT_IDENTITY_PASS []\n"
+    }
+  ],
+  "generated_at": "2026-08-18T14:04:59.886683+00:00",
+  "note": "Diagnostic-only: no research/state mutation and no heavy dispatch.",
+  "overall_pass": false
+}
