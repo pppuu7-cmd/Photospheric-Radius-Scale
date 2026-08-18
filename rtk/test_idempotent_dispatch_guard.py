@@ -2,8 +2,11 @@
 from __future__ import annotations
 
 import datetime as dt
+import json
+import tempfile
+from pathlib import Path
 
-from idempotent_dispatch_guard import parse_utc, satisfying_run, select_existing_run
+from idempotent_dispatch_guard import consume, parse_utc, satisfying_run, select_existing_run
 
 
 def run(run_id, created_at, *, event='workflow_dispatch', branch='main', actor='github-actions[bot]'):
@@ -58,6 +61,23 @@ def main():
 
     # No valid automation run => dispatch is still required.
     assert select_existing_run([before, wrong_event, wrong_branch, manual_actor], req) is None
+
+    # Simulate the post-crash recovery path at file level: an existing bot run
+    # is selected, the request is consumed, and its run id is persisted.
+    with tempfile.TemporaryDirectory(prefix='rtk-dispatch-test-') as td:
+        root = Path(td)
+        request_path = root / 'dispatch_request.json'
+        state_path = root / 'current.json'
+        request_path.write_text(json.dumps(req) + '\n')
+        state_path.write_text(json.dumps({'dispatch': dict(req), 'iteration': 7}) + '\n')
+        consume(request_path, state_path, later, 'reused_existing_run')
+        assert not request_path.exists()
+        state = json.loads(state_path.read_text())
+        assert state['dispatch']['status'] == 'submitted'
+        assert state['dispatch']['run_id'] == 11
+        assert state['dispatch']['html_url'].endswith('/11')
+        assert state['dispatch']['idempotency_disposition'] == 'reused_existing_run'
+        assert state['dispatch']['idempotency_guard'] == 'workflow_ref_created_at_actor_v2'
 
     # A malformed request timestamp must fail closed rather than silently
     # producing a second expensive workflow dispatch.
