@@ -1,2 +1,2 @@
-trigger: 2026-08-18T00:41:00Z
-reason: index newly dispatched RTK Hessian plus post-axis component, standard-siren, and neutrino robustness diagnostics at axis run 32081135646
+trigger: 2026-08-18T14:26:00Z
+reason: refresh current half-stencil, neutrino robustness, standard-siren, and orchestrator conclusions while preserving active heavy worker
