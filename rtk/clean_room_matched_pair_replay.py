@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -19,6 +21,8 @@ from pathlib import Path
 sys.path.insert(0,str(Path.cwd()))
 sys.argv=['clean_room_matched_pair_replay','planck_data']
 import inference_core as L
+import numpy as np
+import scipy
 
 ROOT=Path('..')
 STATE=json.loads((ROOT/'research/state/current.json').read_text())
@@ -34,6 +38,13 @@ ALLOWED_N5={
 
 def canonical_hash(obj):
     return hashlib.sha256(json.dumps(obj,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+
+
+def git_head(path):
+    try:
+        return subprocess.check_output(['git','-C',str(path),'rev-parse','HEAD'],text=True,stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return None
 
 
 def append_jsonl(path,row):
@@ -133,6 +144,20 @@ errors={
 }
 passed=abs(errors['rtk_eff'])<=TOL and abs(errors['lcdm_eff'])<=TOL
 
+provenance={
+    'research_source_commit':git_head('..'),
+    'class_upstream_commit':git_head('.'),
+    'pantheon_commit':git_head('pantheon'),
+    'numpy_version':np.__version__,
+    'scipy_version':scipy.__version__,
+    'class_upstream_sha_expected':os.environ.get('RTK_CLASS_UPSTREAM_SHA'),
+    'pantheon_sha_expected':os.environ.get('RTK_PANTHEON_SHA'),
+    'planck_sha256_expected':os.environ.get('RTK_PLANCK_SHA256'),
+    'numpy_version_expected':os.environ.get('RTK_NUMPY_VERSION'),
+    'scipy_version_expected':os.environ.get('RTK_SCIPY_VERSION'),
+    'cache_key_version':os.environ.get('RTK_CACHE_KEY_VERSION'),
+}
+
 summary={
     'status':'PASS' if passed else 'FAIL',
     'classification':'INDEPENDENT_FRESH_TREE_MATCHED_MINIMA_REPLAY',
@@ -143,6 +168,7 @@ summary={
     'state_last_iteration':STATE.get('last_iteration'),
     'rtk_interior_minimum_certification':rtk_state.get('interior_minimum_certification'),
     'score_tolerance_abs':TOL,
+    'provenance':provenance,
     'rtk':{
         'params':rtk_params,
         'params_fingerprint':canonical_hash(rtk_params),
