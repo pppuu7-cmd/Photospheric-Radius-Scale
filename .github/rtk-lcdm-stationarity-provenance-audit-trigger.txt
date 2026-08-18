@@ -1,0 +1,2 @@
+trigger: 2026-08-19T01:43:00+03:00
+reason: fresh audit-only locked LCDM Hessian replay to close D4 proof-artifact provenance without modifying frozen A1-A5 state
