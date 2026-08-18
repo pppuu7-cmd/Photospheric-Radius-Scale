@@ -45,4 +45,22 @@ assert s['rtk']['interior_minimum_certification']=='N5_ADAPTIVE_PENDING_QUARTER'
 assert s['stage']=='rtk_quarter_stencil_running'
 assert s['comparison']['dense_raw_delta_S'] is None
 
+# Once an adaptive half+quarter proof has already been parsed, every later cron
+# pass must reconstruct the interior-certified comparison.  This protects the
+# final clean-room replay gate from an ordering regression where the generic
+# orchestrator/multiscale stages temporarily rewrite comparison first.
+s=base_state(False,True)
+s['rtk']['quarter_hessian_run']={'run_id':3,'parsed':True,'status':'completed','conclusion':'success','expected_stencil_scale':0.25}
+s['rtk']['quarter_hessian_result']=summary(True,0.25,S=1050.29)
+s['rtk']['certification']='matched_raw_candidate_only_curvature_unresolved'
+s['rtk']['interior_minimum_certification']='N5_CURVATURE_UNRESOLVED'
+s['comparison']={'status':'matched_dense_raw_candidate_ready_curvature_unresolved','dense_raw_delta_S':None,'interior_minimum_certified':False}
+s=run_case(s)
+assert s['rtk']['certification']=='local_dense_accepted'
+assert s['rtk']['interior_minimum_certification']=='N5_ADAPTIVE_HALF_AND_QUARTER_PASS'
+assert s['stage']=='matched_dense_ready'
+assert s['comparison']['status']=='matched_local_dense_raw_fit_ready'
+assert s['comparison']['interior_minimum_certified'] is True
+assert abs(float(s['rtk']['accepted_score_eff'])-1050.29)<1e-12
+
 print('RTK_ADAPTIVE_QUARTER_GATE_UNIT_PASS')
