@@ -1,6 +1,6 @@
 {
-  "schema_version": 7,
-  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866; the historical production neutrino/recombination baseline is explicit; both RTK and LCDM Hessian workflows now use locked environments; autonomous heavy dispatch has a crash-safe idempotency guard.",
+  "schema_version": 8,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866; the historical production neutrino/recombination baseline is explicit; both RTK and LCDM Hessian workflows use locked environments; autonomous heavy dispatch is crash-idempotent; an N5-gated paired clean-room replay is prepared for independent final local-minima reproduction.",
   "external_git": {
     "class_public": {
       "repository": "dirian/class_public",
@@ -119,5 +119,27 @@
     "request_retained_if_dispatched_run_not_yet_visible": true,
     "validated_no_duplicate_during_active_half_worker_state_iteration": 71
   },
-  "workflow_wiring_status": "axis_half_quarter_negative_ray_base_hessian_and_lcdm_hessian_provenance_hardened; RTK/LCDM production replays share locked CLASS/Pantheon/Planck/NumPy/SciPy environment; autonomous heavy dispatch is serialized and crash-idempotent"
+  "final_matched_clean_room_replay": {
+    "status": "infrastructure_ready_pending_pre_N5_regression_and_scientific_execution",
+    "workflow_main_commit": "7e2760b04d7df70de53bc9789e5c107ad820f379",
+    "workflow_research_mirror_commit": "c6c2f91e554540180b4b7b177fb90dd52f449254",
+    "worker_commit": "d5d0d927ed8f0c94b070a844da152ad399db634a",
+    "gate_commit": "9d3a8b40b31490aec2bd875cc18b768fd39d35d4",
+    "gate_unit_test_commit": "660ac0535fca1223f85af0fc6a2fe6b7cec0e7e8",
+    "orchestrator_wiring_main_commit": "fb5084c412d395bcc284ec37e1a654ca017bcffa",
+    "static_invariant_audit_commit": "f74b139396d9a12f19fb940c9eef6cb32395fbe3",
+    "dispatch_only": true,
+    "n5_fail_closed": true,
+    "paired_models": ["RTK", "LCDM"],
+    "uses_state_accepted_score_params": true,
+    "explicit_dense_ultra_objective": true,
+    "score_reproduction_tolerance_abs": 2e-06,
+    "target_fingerprint_invalidates_stale_replays": true,
+    "class_commit_pinned": true,
+    "pantheon_commit_pinned": true,
+    "planck_sha256_verified": true,
+    "numpy_scipy_pinned": true,
+    "scientific_replay_executed": false
+  },
+  "workflow_wiring_status": "axis_half_quarter_negative_ray_base_hessian_lcdm_hessian_and_N5_gated_paired_clean_room_replay_provenance_hardened; RTK/LCDM production replays share locked CLASS/Pantheon/Planck/NumPy/SciPy environment; autonomous heavy dispatch is serialized and crash-idempotent"
 }
