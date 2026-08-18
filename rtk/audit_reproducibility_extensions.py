@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import json
+import json, subprocess
 
 R=Path(__file__).resolve().parents[1]
 L=json.loads((R/'rtk/reproducibility_lock.json').read_text())
@@ -36,23 +36,12 @@ C={
     "RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'",
     "RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'",
     "RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'",
-    "RTK_NUMPY_VERSION: '2.5.2'",
-    "RTK_SCIPY_VERSION: '1.18.0'",
-    'sha256sum -c -',
-    'upgrade_rtk_nonlocal_initial_conditions.py',
-)),
-'clean_room_pair_not_hardcoded':all(x in CR for x in (
-    "rtk_state=STATE['rtk']","lcdm_state=STATE['lcdm']",
-    "rtk_params=dict(rtk_state['accepted_score_params'])",
-    "lcdm_params=dict(lcdm_state['accepted_score_params'])",
-    "evaluate_exact('RTK'","evaluate_exact('LCDM'",
-)),
+    "RTK_NUMPY_VERSION: '2.5.2'","RTK_SCIPY_VERSION: '1.18.0'",'sha256sum -c -','upgrade_rtk_nonlocal_initial_conditions.py')),
+'clean_room_pair_not_hardcoded':all(x in CR for x in ("rtk_state=STATE['rtk']","lcdm_state=STATE['lcdm']","rtk_params=dict(rtk_state['accepted_score_params'])","lcdm_params=dict(lcdm_state['accepted_score_params'])","evaluate_exact('RTK'","evaluate_exact('LCDM'")),
 'clean_room_dense_ultra_objective':"DENSE=STATE['objective']['dense_z_pk']" in CR and "ULTRA={k:str(v) for k,v in STATE['objective']['ultra'].items()}" in CR,
 'clean_room_n5_fail_closed':"N5_BASE_AND_HALF_STENCIL_PASS" in CR and "N5_ADAPTIVE_HALF_AND_QUARTER_PASS" in CR and "RTK local dense candidate not certified" in CR,
 'clean_room_exact_score_tolerance':"TOL=2e-6" in CR and "abs(errors['rtk_eff'])<=TOL" in CR and "abs(errors['lcdm_eff'])<=TOL" in CR,
-'clean_room_pair_provenance':all(x in CR for x in (
-    'research_source_commit','class_upstream_commit','pantheon_commit','planck_sha256_expected',
-    'numpy_version','scipy_version','RTK_CACHE_KEY_VERSION')) and "RTK_CACHE_KEY_VERSION: 'clean-room-exact-float-v2'" in CRWF,
+'clean_room_pair_provenance':all(x in CR for x in ('research_source_commit','class_upstream_commit','pantheon_commit','planck_sha256_expected','numpy_version','scipy_version','RTK_CACHE_KEY_VERSION')) and "RTK_CACHE_KEY_VERSION: 'clean-room-exact-float-v2'" in CRWF,
 'final_replay_target_fingerprint':"target_fingerprint" in FRG and "accepted_score_params" in FRG and "accepted_score_eff" in FRG,
 'final_replay_validates_locked_provenance':all(x in FRG for x in ('class_provenance_mismatch','pantheon_provenance_mismatch','planck_provenance_mismatch','numpy_provenance_mismatch','scipy_provenance_mismatch')),
 'final_replay_never_promotes_global_claim':"not evidence of global optimality" in CR,
@@ -65,6 +54,12 @@ C={
 'neutrino_baseline_matches_runner':'"N_ur = 3.046"' in RUN and '"N_ncdm = 0"' in RUN,
 'recombination_baseline_matches_runner':'"recombination = RECFAST"' in RUN,
 }
+# Validate the workflows that GitHub actually executes from main, not only the
+# research-branch mirrors. checkout(fetch-depth=0) gives access to origin/main.
+p=subprocess.run(['python3',str(R/'rtk/audit_main_workflow_lock_consistency.py')],text=True,capture_output=True)
+C['active_main_workflows_match_live_lock']=p.returncode==0
+if p.stdout:print(p.stdout.strip())
+if p.stderr:print(p.stderr.strip())
 b=[k for k,v in C.items() if not v]
 if b:raise SystemExit('RTK_REPRO_EXT_AUDIT_FAIL '+json.dumps(b))
 print('RTK_REPRO_EXT_AUDIT_PASS',json.dumps(sorted(C)))
