@@ -1,2 +1,2 @@
-trigger: 2026-08-18T00:37:00Z
-reason: consume successful axis 32081135646 after adaptive unit dependency fix; run all control regressions and dispatch next RTK Hessian only if every gate passes
+trigger: 2026-08-18T12:40:00Z
+reason: validate crash-safe idempotent dispatch unit and wiring while current RTK half-stencil run remains active; no duplicate heavy dispatch is permitted
