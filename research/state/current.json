@@ -10,17 +10,32 @@
     ]
   },
   "comparison": {
-    "dense_raw_delta_S": null,
-    "status": "pending_multiscale_stationarity"
+    "S_LCDM": 1049.966118347761,
+    "S_RTK": 1050.249912429787,
+    "dense_raw_delta_S": 0.2837940820259064,
+    "interior_minimum_certified": true,
+    "mapping": "eff",
+    "numerically_indistinguishable_at_0p005": false,
+    "status": "matched_local_dense_raw_fit_ready",
+    "warning": "Raw local objective comparison only; not AIC/BIC/Bayes evidence/significance. Adaptive Stage4D3 used adjacent 1/2 and 1/4 PD stencils after exact negative-eigenray falsification of the coarse non-PD scale."
   },
   "dispatch": {
-    "created_at": "2026-08-18T11:44:16Z",
-    "iteration": 69,
-    "reason": "Stage4D3 N5 requires 1/2-stencil stability after base RTK Hessian",
+    "created_at": "2026-08-18T14:31:43Z",
+    "iteration": 77,
+    "reason": "Independent fresh-tree replay required after Stage4D3 matched local-minimum certification",
     "ref": "main",
-    "status": "submitted",
-    "target": "rtk_half_hessian",
-    "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
+    "target": "final_matched_minima_replay",
+    "target_fingerprint": "91ff4471a86ba9ac0d84cea7ad945cdf54b96b52dac111b6b5db47d106af618c",
+    "workflow": "rtk-clean-room-minimum-reproduction.yml"
+  },
+  "final_replay_certification": "PENDING_INDEPENDENT_FRESH_TREE_REPLAY",
+  "final_replay_run": {
+    "artifact": "rtk-clean-room-matched-minima-reproduction",
+    "requested_at": "2026-08-18T14:31:43Z",
+    "run_id": null,
+    "status": "requested",
+    "target_fingerprint": "91ff4471a86ba9ac0d84cea7ad945cdf54b96b52dac111b6b5db47d106af618c",
+    "workflow": "rtk-clean-room-minimum-reproduction.yml"
   },
   "guardrails": [
     "never_compare_sparse_and_dense_scores_as_same_objective",
@@ -28,8 +43,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 76,
-  "last_iteration": "research/iterations/000076_20260818T140823Z.json",
+  "iteration": 77,
+  "last_iteration": "research/iterations/000077_20260818T143143Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -370,7 +385,7 @@
       "ns": 0.9645577770978523,
       "zre": 7.328459220286924
     },
-    "accepted_score_semantics": "best_exact_base_stencil_within_recenter_tolerance",
+    "accepted_score_semantics": "best_exact_across_base_and_half_stencils_within_recenter_tolerance",
     "axis_result": {
       "best_eff": {
         "axis": "",
@@ -455,7 +470,7 @@
       "ns": 0.00035,
       "zre": 0.07
     },
-    "certification": "pending_half_stencil",
+    "certification": "local_dense_accepted",
     "half_hessian_history": [
       {
         "base_steps": {
@@ -864,14 +879,420 @@
         "warning": "Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection."
       }
     ],
-    "half_hessian_result": null,
+    "half_hessian_result": {
+      "base_steps": {
+        "As": 2e-12,
+        "Ob": 3.5e-05,
+        "Om": 0.00035,
+        "h": 0.000175,
+        "loglam": 0.025,
+        "ns": 0.000175,
+        "zre": 0.035
+      },
+      "center": {
+        "As": 2.0877827951474356e-09,
+        "Ob": 0.046800730927437424,
+        "Om": 0.2522864064078236,
+        "h": 0.691103719964454,
+        "lam": 219457.5727136581,
+        "ns": 0.9645577770978523,
+        "zre": 7.328459220286924
+      },
+      "center_fingerprint": "9b3b0a7f44e48ed0eb80b8907382a87ae40c079b125d14422f0e040e9dd78d41",
+      "eff": {
+        "S_center": 1050.249912429787,
+        "S_newton": 1050.269804358163,
+        "best_exact_S": 1050.249912429787,
+        "best_improvement": 0.0,
+        "best_label": "center",
+        "best_params": {
+          "As": 2.0877827951474356e-09,
+          "Ob": 0.046800730927437424,
+          "Om": 0.2522864064078236,
+          "h": 0.691103719964454,
+          "lam": 219457.5727136581,
+          "ns": 0.9645577770978523,
+          "zre": 7.328459220286924
+        },
+        "eigenvalues_y": [
+          0.0002755537750933801,
+          0.022109338548007403,
+          0.0488778149942228,
+          0.08489396919468396,
+          0.11750099452408003,
+          0.8139167341773023,
+          1.8754372309459193
+        ],
+        "eigenvectors_y": [
+          [
+            0.9999997875874735,
+            0.0002867788077495732,
+            0.00019870819399287149,
+            2.6992511771573946e-05,
+            0.0003278874538521774,
+            0.0002268688015415551,
+            0.0003786683848993181
+          ],
+          [
+            -0.0003091239250626206,
+            0.559772297382934,
+            -0.211808301447154,
+            -0.3040763359802198,
+            0.023805698685214857,
+            0.7381547990151688,
+            0.06237376260040339
+          ],
+          [
+            -0.00012918533236156525,
+            -0.5422920605707219,
+            0.39072853892283205,
+            0.3376009684223456,
+            0.08455614059749053,
+            0.6548710049434567,
+            0.0571867582245951
+          ],
+          [
+            -0.0005219762297399492,
+            0.12383044756326395,
+            0.15210115568919458,
+            -0.0007780176959117369,
+            0.6263795073440172,
+            -0.13352626832999764,
+            0.7425293457964504
+          ],
+          [
+            -0.0001761993874331276,
+            0.45509403947750177,
+            0.8366900982580517,
+            -0.02091425279905229,
+            0.029883507901290116,
+            -0.09021468120010565,
+            -0.28873854080134764
+          ],
+          [
+            -3.734112345380979e-05,
+            0.2084777998879151,
+            -0.27993487150524987,
+            0.5636589223761527,
+            0.584619141035973,
+            0.014413960187628291,
+            -0.467412869085457
+          ],
+          [
+            -8.762869772576788e-05,
+            0.35590259387188317,
+            -0.030328179217290883,
+            0.689502556364093,
+            -0.5072076388980394,
+            -0.009782270662156454,
+            0.3736903538136747
+          ]
+        ],
+        "gradient_y": [
+          -5.943559801835363e-05,
+          0.010116593911448035,
+          0.006693133460316858,
+          -0.01391035495998949,
+          0.01219098892920556,
+          -0.00632507617194733,
+          -0.011754484382777264
+        ],
+        "hessian_y": [
+          [
+            0.0002755989005436277,
+            -8.00578645225869e-05,
+            -1.1535178430222004e-05,
+            -0.00013002393490069153,
+            3.660601964838861e-05,
+            -1.6324162288583466e-07,
+            -7.481573834411392e-05
+          ],
+          [
+            -8.00578645225869e-05,
+            0.31986995491956804,
+            -0.03438151461449479,
+            0.5420296566242087,
+            -0.23311097500510414,
+            -0.0185339147978425,
+            0.16173788602981176
+          ],
+          [
+            -1.1535178430222004e-05,
+            -0.03438151461449479,
+            0.15818102796833955,
+            -0.1618387646786914,
+            -0.09182313478197557,
+            -0.004271097537866808,
+            0.06724358984121181
+          ],
+          [
+            -0.00013002393490069153,
+            0.5420296566242087,
+            -0.1618387646786914,
+            1.1578658538710442,
+            -0.3865527319176749,
+            3.718763144888726e-05,
+            0.2699751704848836
+          ],
+          [
+            3.660601964838861e-05,
+            -0.23311097500510414,
+            -0.09182313478197557,
+            -0.3865527319176749,
+            0.794429480864892,
+            0.011841756743592668,
+            -0.5391374837818148
+          ],
+          [
+            -1.6324162288583466e-07,
+            -0.0185339147978425,
+            -0.004271097537866808,
+            3.718763144888726e-05,
+            0.011841756743592668,
+            0.0358267846702347,
+            -0.014847172278166454
+          ],
+          [
+            -7.481573834411392e-05,
+            0.16173788602981176,
+            0.06724358984121181,
+            0.2699751704848836,
+            -0.5391374837818148,
+            -0.014847172278166454,
+            0.49656293496468606
+          ]
+        ],
+        "max_abs_gradient_y": 0.01391035495998949,
+        "newton_delta": [
+          0.20860790432657286,
+          -0.2694995968913392,
+          0.01522057658629522,
+          0.1300503420226365,
+          -0.010753188857509585,
+          0.05424109886202011,
+          0.028661859172123813
+        ],
+        "newton_params": {
+          "As": 2.0877612887697206e-09,
+          "Ob": 0.04680126364761794,
+          "Om": 0.2523319240275316,
+          "h": 0.691056557534998,
+          "lam": 220605.07695180245,
+          "ns": 0.9645672692901531,
+          "zre": 7.329462385357949
+        },
+        "positive_definite": true
+      },
+      "eigenvector_convention": "rows correspond to sorted ascending eigenvalues; sign fixed by largest-absolute component positive",
+      "k01": {
+        "S_center": 1050.2501979467324,
+        "S_newton": 1050.2702442335349,
+        "best_exact_S": 1050.2501979467324,
+        "best_improvement": 0.0,
+        "best_label": "center",
+        "best_params": {
+          "As": 2.0877827951474356e-09,
+          "Ob": 0.046800730927437424,
+          "Om": 0.2522864064078236,
+          "h": 0.691103719964454,
+          "lam": 219457.5727136581,
+          "ns": 0.9645577770978523,
+          "zre": 7.328459220286924
+        },
+        "eigenvalues_y": [
+          0.0002757135581862385,
+          0.022109335182475008,
+          0.04887779322333537,
+          0.08489397377949988,
+          0.11750099798585008,
+          0.8139166187709334,
+          1.8754370645831897
+        ],
+        "eigenvectors_y": [
+          [
+            0.9999997819843225,
+            0.00028812055431834925,
+            0.00019906721818656423,
+            2.8699986406546373e-05,
+            0.0003338765558562404,
+            0.00023175243011788087,
+            0.00038390580064255223
+          ],
+          [
+            -0.00031335363512836314,
+            0.5597725941032019,
+            -0.21180848183200315,
+            -0.30407661810551084,
+            0.0238054006944583,
+            0.738154436321424,
+            0.06237349663748207
+          ],
+          [
+            -0.00013317888073344623,
+            -0.542291702305801,
+            0.3907283382707712,
+            0.3376008611413511,
+            0.0845564183036206,
+            0.6548714129665997,
+            0.05718706763976092
+          ],
+          [
+            -0.0005291840314248262,
+            0.12383089277787895,
+            0.15210106384319894,
+            -0.0007782387723124506,
+            0.6263794825185862,
+            -0.13352628314583964,
+            0.742529303306799
+          ],
+          [
+            -0.0001753007586029868,
+            0.4550939072582322,
+            0.8366901398003458,
+            -0.020914179929087395,
+            0.02988343245579697,
+            -0.09021465055502771,
+            -0.28873865202765125
+          ],
+          [
+            -3.9606508659600815e-05,
+            0.208477954048463,
+            -0.2799349430562067,
+            0.5636589594331312,
+            0.5846190615973793,
+            0.01441397244247894,
+            -0.46741281158029624
+          ],
+          [
+            -8.814432510583917e-05,
+            0.35590259585149187,
+            -0.03032815627745558,
+            0.6895024560706882,
+            -0.5072077293469539,
+            -0.009782271814880013,
+            0.373690415925928
+          ]
+        ],
+        "gradient_y": [
+          -6.271424956594274e-05,
+          0.01013755944325112,
+          0.006678588543650221,
+          -0.013858297829415278,
+          0.012220583769590121,
+          -0.006320869474620849,
+          -0.011754485666870096
+        ],
+        "hessian_y": [
+          [
+            0.0002757597078471008,
+            -8.076025005721021e-05,
+            -1.1050748923935316e-05,
+            -0.0001317686759989556,
+            3.562142313739969e-05,
+            -3.0365214342964464e-07,
+            -7.481561266331482e-05
+          ],
+          [
+            -8.076025005721021e-05,
+            0.31986996069349516,
+            -0.034381529188806326,
+            0.5420296245296186,
+            -0.2331109505601603,
+            -0.018533906515699528,
+            0.16173788570364422
+          ],
+          [
+            -1.1050748923935316e-05,
+            -0.034381529188806326,
+            0.15818104764343843,
+            -0.1618387506525778,
+            -0.0918231579569806,
+            -0.00427110296044475,
+            0.06724359019108306
+          ],
+          [
+            -0.0001317686759989556,
+            0.5420296245296186,
+            -0.1618387506525778,
+            1.1578655098658146,
+            -0.3865527580566095,
+            3.7192963816323754e-05,
+            0.26997517007333727
+          ],
+          [
+            3.562142313739969e-05,
+            -0.2331109505601603,
+            -0.0918231579569806,
+            -0.3865527580566095,
+            0.7944294955580062,
+            0.011841766866325543,
+            -0.5391374837606122
+          ],
+          [
+            -3.0365214342964464e-07,
+            -0.018533906515699528,
+            -0.00427110296044475,
+            3.7192963816323754e-05,
+            0.011841766866325543,
+            0.035826787868700194,
+            -0.014847172270435749
+          ],
+          [
+            -7.481561266331482e-05,
+            0.16173788570364422,
+            0.06724359019108306,
+            0.26997517007333727,
+            -0.5391374837606122,
+            -0.014847172270435749,
+            0.4965629357461694
+          ]
+        ],
+        "max_abs_gradient_y": 0.013858297829415278,
+        "newton_delta": [
+          0.22042100558948313,
+          -0.26953670583492806,
+          0.015213172213861328,
+          0.13000058946553356,
+          -0.010927138176483144,
+          0.0540994592773445,
+          0.02851068242024024
+        ],
+        "newton_params": {
+          "As": 2.0877609408710827e-09,
+          "Ob": 0.04680126338846491,
+          "Om": 0.25233190661413657,
+          "h": 0.6910565510409329,
+          "lam": 220670.23732598367,
+          "ns": 0.9645672445032258,
+          "zre": 7.329457094171633
+        },
+        "positive_definite": true
+      },
+      "objective": "matched-ultra-linstep2+dense-BOSS",
+      "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+      "points": 101,
+      "provenance": {
+        "center_fingerprint": "9b3b0a7f44e48ed0eb80b8907382a87ae40c079b125d14422f0e040e9dd78d41",
+        "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+        "numpy_version": "2.5.2",
+        "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+        "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+        "rtk_source_commit": "f09387188ba7a6d87d97cd5694ae3d7c7cef773c",
+        "state_iteration": 69,
+        "stencil_scale": 0.5
+      },
+      "stage": "autonomous-dense-rtk-7d-stationarity",
+      "stencil_scale": 0.5,
+      "warning": "Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection."
+    },
     "half_hessian_run": {
       "artifact": "rtk-autonomous-dense-rtk-half-stencil",
-      "conclusion": null,
+      "conclusion": "success",
       "expected_stencil_scale": 0.5,
       "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32133215190",
+      "parsed": true,
       "run_id": 32133215190,
-      "status": "in_progress",
+      "status": "completed",
       "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
     },
     "hessian_history": [
@@ -2496,7 +2917,7 @@
       "status": "completed",
       "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
     },
-    "interior_minimum_certification": "N5_PENDING_HALF_STENCIL",
+    "interior_minimum_certification": "N5_BASE_AND_HALF_STENCIL_PASS",
     "mixed_mode_ray_history": [
       {
         "artifact_digest": "sha256:fcbdf2d0a24a7b8a6c3272894a86d21d14bbb3daf5567d243233d49acecc2058",
@@ -2519,7 +2940,14 @@
         "run_id": 32079620601
       }
     ],
-    "multiscale_curvature": null,
+    "multiscale_curvature": {
+      "base_min_eigenvalue": 0.0002539372582019114,
+      "base_positive_definite": true,
+      "half_best_improvement": 0.0,
+      "half_min_eigenvalue": 0.0002755537750933801,
+      "half_positive_definite": true,
+      "negative_eigenray_gate": "exact_negative_eigenrays_recenter_clear"
+    },
     "negative_eigenray_certification": "exact_negative_eigenrays_recenter_clear",
     "negative_eigenray_result": null,
     "negative_eigenray_run": null,
@@ -2548,7 +2976,7 @@
     ]
   },
   "schema_version": 1,
-  "stage": "rtk_half_stencil_running",
+  "stage": "final_matched_replay_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-18T14:08:23Z"
+  "updated_at": "2026-08-18T14:31:43Z"
 }
