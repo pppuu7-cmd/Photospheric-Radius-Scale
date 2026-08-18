@@ -1,0 +1,170 @@
+name: RTK pinned AlterBBN v2.2 standard-network self-test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-alterbbn-standard-selftest-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-alterbbn-standard-selftest
+  cancel-in-progress: true
+
+jobs:
+  standard-selftest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+      ALTERBBN_FILENAME: 'alterbbn_v2.2.tar.xz'
+      ALTERBBN_DOI: '10.17632/k7j3b9zyvf.1'
+      ALTERBBN_CC: 'gcc-13'
+      ALTERBBN_CFLAGS: '-O3 -pipe -fomit-frame-pointer -mtune=generic -ffast-math -fno-finite-math-only'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Require frozen source lock and pre-execution protocol
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          s=json.load(open('research/robustness/alterbbn_v2_2_source_lock.json'))
+          assert s['doi']==os.environ['ALTERBBN_DOI']
+          assert s['published_filename']==os.environ['ALTERBBN_FILENAME']
+          assert s['sha256']==os.environ['ALTERBBN_SHA256']
+          assert int(s['bytes'])==int(os.environ['ALTERBBN_BYTES'])
+          p=open('research/robustness/RTK_ALTERBBN_STANDARD_SELFTEST_PROTOCOL_v1.md').read()
+          assert 'FROZEN BEFORE FIRST STANDARD-NETWORK EXECUTION' in p
+          assert 'failsafe=1' in p and 'failsafe=7' in p
+          print('ALTERBBN_SELFTEST_PREREQUISITES_PASS')
+          PY
+          command -v gcc-13
+          gcc-13 --version | tee gcc13_version.txt
+          uname -a | tee runner_uname.txt
+
+      - name: Download and byte-verify published source
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 -o "$ALTERBBN_FILENAME" "$ALTERBBN_URL"
+          test "$(stat -c %s "$ALTERBBN_FILENAME")" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  $ALTERBBN_FILENAME" | sha256sum -c -
+          file "$ALTERBBN_FILENAME" | tee alterbbn_file_type.txt
+          tar -tJf "$ALTERBBN_FILENAME" | tee alterbbn_archive_members.txt
+          test "$(grep -c . alterbbn_archive_members.txt)" -eq 43
+          tar -xJf "$ALTERBBN_FILENAME"
+          grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
+
+      - name: Compute extracted source-tree content digest
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('alterbbn_v2.2')
+          rows=[];h=hashlib.sha256()
+          for p in sorted(x for x in root.rglob('*') if x.is_file()):
+              rel=p.relative_to(root).as_posix(); b=p.read_bytes(); d=hashlib.sha256(b).hexdigest()
+              rows.append({'path':rel,'bytes':len(b),'sha256':d})
+              h.update(rel.encode()+b'\0'+bytes.fromhex(d))
+          out={'file_count':len(rows),'tree_content_sha256':h.hexdigest(),'files':rows}
+          Path('alterbbn_source_tree_manifest.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('ALTERBBN_SOURCE_TREE_DIGEST',out['tree_content_sha256'],out['file_count'])
+          PY
+
+      - name: Build unmodified published network
+        working-directory: alterbbn_v2.2
+        run: |
+          set -euo pipefail
+          ulimit -s unlimited
+          make clean || true
+          make CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
+          make stand_cosmo CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
+          test -x stand_cosmo.x
+          sha256sum stand_cosmo.x | tee ../stand_cosmo_binary_sha256.txt
+
+      - name: Run predeclared standard precision modes
+        working-directory: alterbbn_v2.2
+        run: |
+          set -euo pipefail
+          ulimit -s unlimited
+          set +e
+          ./stand_cosmo.x 1 > ../stand_cosmo_failsafe1.log 2>&1
+          rc1=$?
+          ./stand_cosmo.x 7 > ../stand_cosmo_failsafe7.log 2>&1
+          rc7=$?
+          set -e
+          echo "$rc1" > ../stand_cosmo_failsafe1.returncode
+          echo "$rc7" > ../stand_cosmo_failsafe7.returncode
+          # Published stand_cosmo.c returns 1 after its normal report path.
+          test "$rc1" -eq 1
+          test "$rc7" -eq 1
+          grep -q ' cent:' ../stand_cosmo_failsafe1.log
+          grep -q ' cent:' ../stand_cosmo_failsafe7.log
+
+      - name: Parse and enforce frozen self-test criteria
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math,os,re,hashlib
+          def parse(path):
+              text=Path(path).read_text(errors='replace')
+              m=re.search(r'^\s*cent:\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)',text,re.M)
+              if not m: raise RuntimeError(f'no central abundance row in {path}')
+              keys=('Yp','D_over_H','He3_over_H','Li7_over_H','Li6_over_H','Be7_over_H')
+              vals={k:float(v) for k,v in zip(keys,m.groups())}
+              if not all(math.isfinite(v) and v>0 for v in vals.values()): raise RuntimeError((path,vals))
+              return vals
+          a=parse('stand_cosmo_failsafe1.log'); b=parse('stand_cosmo_failsafe7.log')
+          for vals in (a,b):
+              assert 0.20 < vals['Yp'] < 0.30, vals
+              assert 1e-5 < vals['D_over_H'] < 5e-5, vals
+          relY=abs(a['Yp']-b['Yp'])/max(abs(a['Yp']),abs(b['Yp']))
+          relD=abs(a['D_over_H']-b['D_over_H'])/max(abs(a['D_over_H']),abs(b['D_over_H']))
+          assert relY < 0.005, relY
+          assert relD < 0.02, relD
+          lock=json.load(open('research/robustness/alterbbn_v2_2_source_lock.json'))
+          tree=json.load(open('alterbbn_source_tree_manifest.json'))
+          result={
+            'classification':'ALTERBBN_V2_2_STANDARD_NETWORK_SELFTEST_PASS',
+            'source':lock,
+            'compiler_version':Path('gcc13_version.txt').read_text(),
+            'runner_uname':Path('runner_uname.txt').read_text().strip(),
+            'compile_flags':os.environ['ALTERBBN_CFLAGS'],
+            'source_tree_content_sha256':tree['tree_content_sha256'],
+            'source_tree_file_count':tree['file_count'],
+            'failsafe_1':{'returncode':int(Path('stand_cosmo_failsafe1.returncode').read_text()),'central_abundances':a},
+            'failsafe_7':{'returncode':int(Path('stand_cosmo_failsafe7.returncode').read_text()),'central_abundances':b},
+            'refinement_relative_difference':{'Yp':relY,'D_over_H':relD},
+            'acceptance':{'Yp_sanity':[0.20,0.30],'D_over_H_sanity':[1e-5,5e-5],'Yp_refinement_rel_lt':0.005,'D_over_H_refinement_rel_lt':0.02},
+            'warning':'Unmodified standard AlterBBN v2.2 self-test only. No RTK H(T) injection and no observational BBN consistency claim.'
+          }
+          Path('alterbbn_standard_selftest_summary.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print('ALTERBBN_V2_2_STANDARD_NETWORK_SELFTEST_PASS',json.dumps(result,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-alterbbn-v2-2-standard-selftest
+          path: |
+            alterbbn_standard_selftest_summary.json
+            alterbbn_source_tree_manifest.json
+            alterbbn_archive_members.txt
+            alterbbn_file_type.txt
+            gcc13_version.txt
+            runner_uname.txt
+            stand_cosmo_binary_sha256.txt
+            stand_cosmo_failsafe1.log
+            stand_cosmo_failsafe7.log
+            stand_cosmo_failsafe1.returncode
+            stand_cosmo_failsafe7.returncode
+          if-no-files-found: warn
