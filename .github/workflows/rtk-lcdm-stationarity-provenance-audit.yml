@@ -1,0 +1,159 @@
+name: RTK audit-only locked LCDM stationarity replay
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-lcdm-stationarity-provenance-audit-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-lcdm-stationarity-provenance-audit
+  cancel-in-progress: false
+
+jobs:
+  audit-lcdm-hessian:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
+      RTK_SCORE_TOL: '2e-6'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Require frozen A2/A4/A5 state
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          s=json.load(open('research/state/current.json'))
+          assert s['lcdm']['certification']=='local_dense_accepted'
+          assert s['comparison']['final_replay_certified'] is True
+          assert s['comparison']['final_replay_run_id']==32148894768
+          assert s['comparison']['S_LCDM']==s['lcdm']['accepted_score_eff']
+          print('LCDM_PROVENANCE_AUDIT_PREREQUISITES_PASS',s['lcdm']['accepted_score_eff'])
+          PY
+
+      - name: Prepare pinned exact cache-safe tree
+        run: |
+          set -euo pipefail
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee lcdm_provenance_audit.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/autonomous_dense_lcdm_stationarity.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q "if r.get('ok')" inference_core.py
+          grep -q "RTK_PLANCK_DATA" inference_core.py
+
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+
+      - name: Install and verify locked runtime
+        run: |
+          set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 - <<'PY'
+          import numpy,scipy,os,platform
+          assert platform.python_version()==os.environ['RTK_PYTHON_VERSION']
+          assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
+          assert scipy.__version__==os.environ['RTK_SCIPY_VERSION']
+          PY
+          python3 -m pip freeze | sort | tee lcdm_provenance_audit_pip_freeze.txt
+          python3 --version | tee lcdm_provenance_audit_python_version.txt
+
+      - name: Download and verify Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          sha256sum planck.tar.gz | tee ../lcdm_provenance_audit_planck_sha256.txt
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
+      - name: Run fresh locked LCDM Hessian
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 autonomous_dense_lcdm_stationarity.py | tee ../lcdm_provenance_audit_hessian.log
+          grep -q AUTO_DENSE_LCDM_STATIONARITY_COMPLETE ../lcdm_provenance_audit_hessian.log
+
+      - name: Validate audit result against frozen proof
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,math,os
+          state=json.load(open('research/state/current.json'))
+          s=json.load(open('class_public/output/autonomous_dense_lcdm_stationarity/summary.json'))
+          prov=s['provenance']; lock=json.load(open('rtk/reproducibility_lock.json'))
+          def h(obj):
+              return hashlib.sha256(json.dumps(obj,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
+          assert s['objective']==state['objective']['name']
+          assert s['center']==state['lcdm']['accepted_center']
+          assert s['objective_fingerprint']==h(state['objective'])
+          expected_center_fp=h({'model':'LCDM','center':state['lcdm']['accepted_center'],'objective':state['objective']['name'],'mapping':state['production_mapping']})
+          assert s['center_fingerprint']==expected_center_fp
+          assert prov['class_upstream_commit']==lock['external_git']['class_public']['commit']==os.environ['RTK_CLASS_UPSTREAM_SHA']
+          assert prov['pantheon_commit']==lock['external_git']['pantheon']['commit']==os.environ['RTK_PANTHEON_SHA']
+          assert prov['numpy_version']==lock['python_packages']['numpy']==os.environ['RTK_NUMPY_VERSION']
+          assert bool(s['positive_definite'])
+          assert float(s['best_improvement'])<=float(state['objective']['recenter_tolerance_S'])
+          target=float(state['lcdm']['accepted_score_eff']); got=float(s['best_exact_S'])
+          err=abs(got-target)
+          assert err<=float(os.environ['RTK_SCORE_TOL']),(got,target,err)
+          out={'classification':'LCDM_LOCKED_STATIONARITY_PROVENANCE_AUDIT_PASS','historical_hessian_run_id':state['lcdm']['hessian_run']['run_id'],'objective':s['objective'],'center_fingerprint':s['center_fingerprint'],'objective_fingerprint':s['objective_fingerprint'],'best_exact_S':got,'frozen_accepted_score_eff':target,'score_error_abs':err,'best_improvement':s['best_improvement'],'positive_definite':s['positive_definite'],'eigenvalues_y':s['eigenvalues_y'],'provenance':prov,'warning':'Audit-only fresh stationarity replay; does not modify frozen A1-A5 state or imply a global minimum.'}
+          open('lcdm_stationarity_provenance_audit_summary.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('LCDM_LOCKED_STATIONARITY_PROVENANCE_AUDIT_PASS',json.dumps(out,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-lcdm-stationarity-provenance-audit
+          path: |
+            lcdm_provenance_audit.txt
+            lcdm_provenance_audit_pip_freeze.txt
+            lcdm_provenance_audit_python_version.txt
+            lcdm_provenance_audit_planck_sha256.txt
+            lcdm_provenance_audit_hessian.log
+            lcdm_stationarity_provenance_audit_summary.json
+            class_public/output/autonomous_dense_lcdm_stationarity/summary.json
+            class_public/output/autonomous_dense_lcdm_stationarity/provenance.json
+            class_public/output/autonomous_dense_lcdm_stationarity/points.jsonl
+            class_public/output/autonomous_dense_lcdm_stationarity/failures.jsonl
+          if-no-files-found: warn
