@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-08-18T04:48:40Z",
+  "iteration": 57,
+  "reason": "Stage4D3 N5 requires 1/2-stencil stability after base RTK Hessian",
+  "ref": "main",
+  "target": "rtk_half_hessian",
+  "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
+}

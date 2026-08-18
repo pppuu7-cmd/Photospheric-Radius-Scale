@@ -14,13 +14,12 @@
     "status": "pending_multiscale_stationarity"
   },
   "dispatch": {
-    "created_at": "2026-08-18T03:22:53Z",
-    "iteration": 55,
-    "reason": "Stage4D3 exact-ray falsification required for non-PD recenter-clear RTK Hessian",
+    "created_at": "2026-08-18T04:48:40Z",
+    "iteration": 57,
+    "reason": "Stage4D3 N5 requires 1/2-stencil stability after base RTK Hessian",
     "ref": "main",
-    "status": "submitted",
-    "target": "rtk_negative_eigenray",
-    "workflow": "rtk-autonomous-negative-eigenray.yml"
+    "target": "rtk_half_hessian",
+    "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
   },
   "guardrails": [
     "never_compare_sparse_and_dense_scores_as_same_objective",
@@ -28,8 +27,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 56,
-  "last_iteration": "research/iterations/000056_20260818T040641Z.json",
+  "iteration": 57,
+  "last_iteration": "research/iterations/000057_20260818T044840Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -455,9 +454,15 @@
       "ns": 0.00035,
       "zre": 0.07
     },
-    "certification": "pending_negative_eigenray",
+    "certification": "pending_half_stencil",
     "half_hessian_result": null,
-    "half_hessian_run": null,
+    "half_hessian_run": {
+      "artifact": "rtk-autonomous-dense-rtk-half-stencil",
+      "expected_stencil_scale": 0.5,
+      "run_id": null,
+      "status": "requested",
+      "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
+    },
     "hessian_history": [
       {
         "base_steps": {
@@ -1674,7 +1679,7 @@
       "status": "completed",
       "workflow": "rtk-autonomous-dense-rtk-stationarity.yml"
     },
-    "interior_minimum_certification": "N5_PENDING_NEGATIVE_EIGENRAY",
+    "interior_minimum_certification": "N5_PENDING_HALF_STENCIL",
     "mixed_mode_ray_history": [
       {
         "artifact_digest": "sha256:fcbdf2d0a24a7b8a6c3272894a86d21d14bbb3daf5567d243233d49acecc2058",
@@ -1698,10 +1703,407 @@
       }
     ],
     "multiscale_curvature": null,
+    "negative_eigenray_certification": "exact_negative_eigenrays_recenter_clear",
+    "negative_eigenray_result": {
+      "base_eigenvalues": [
+        -6.598848012304426e-05,
+        0.027797942109503104,
+        0.05557178549663771,
+        0.0941990489512907,
+        0.2808190153952011,
+        3.114910323838477,
+        7.371611186038811
+      ],
+      "base_hessian_run_id": 32083295640,
+      "best_exact_S": 1050.2749368159539,
+      "best_improvement": 7.112065213732421e-05,
+      "best_params": {
+        "As": 2.0872353441226246e-09,
+        "Ob": 0.046795315204902876,
+        "Om": 0.2523061959075105,
+        "h": 0.6910696769029532,
+        "lam": 222735.1820931203,
+        "ns": 0.964644551813856,
+        "zre": 7.3196723875643395
+      },
+      "center": {
+        "As": 2.0872356834621613e-09,
+        "Ob": 0.046795335641066506,
+        "Om": 0.2523064029808687,
+        "h": 0.6910694838209896,
+        "lam": 219968.33239135708,
+        "ns": 0.9646445048182237,
+        "zre": 7.319677519287684
+      },
+      "center_fingerprint": "ff79aa7070ec2d5715af181653f10d79b454f60bc3c75a5fe43a9480b783d206",
+      "classification": "RTK_AUTONOMOUS_NEGATIVE_EIGENRAY_GATE_COMPLETE",
+      "modes": [
+        {
+          "base_eigenvalue": -6.598848012304426e-05,
+          "best_exact_S": 1050.2749368159539,
+          "best_improvement": 7.112065213732421e-05,
+          "best_params": {
+            "As": 2.0872353441226246e-09,
+            "Ob": 0.046795315204902876,
+            "Om": 0.2523061959075105,
+            "h": 0.6910696769029532,
+            "lam": 222735.1820931203,
+            "ns": 0.964644551813856,
+            "zre": 7.3196723875643395
+          },
+          "best_t": 0.25,
+          "eigenvector": [
+            0.999995938604682,
+            0.00220665101164832,
+            -0.0011677807787659955,
+            -0.001183276332554944,
+            -0.00033933953674983525,
+            0.0005370929397912864,
+            -0.00029324133398263687
+          ],
+          "mode_index": 0,
+          "points": [
+            {
+              "attempt": 1,
+              "label": "mode_0_t_-2.00",
+              "mode_index": 0,
+              "params": {
+                "As": 2.087238398178455e-09,
+                "Ob": 0.046795499130375534,
+                "Om": 0.2523080595677343,
+                "h": 0.6910679391652815,
+                "lam": 199035.65876690412,
+                "ns": 0.9646441288531659,
+                "zre": 7.319718573074442
+              },
+              "score_eff": 1050.2750272498674,
+              "score_k01": 1050.2753213232215,
+              "t": -2.0,
+              "y": [
+                -1.999991877209364,
+                -0.00441330202329664,
+                0.002335561557531991,
+                0.002366552665109888,
+                0.0006786790734996705,
+                -0.0010741858795825729,
+                0.0005864826679652737
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_-1.50",
+              "mode_index": 0,
+              "params": {
+                "As": 2.0872377194993817e-09,
+                "Ob": 0.046795458258048275,
+                "Om": 0.2523076454210179,
+                "h": 0.6910683253292086,
+                "lam": 204074.24973659127,
+                "ns": 0.9646442228444303,
+                "zre": 7.319708309627752
+              },
+              "score_eff": 1050.2751017701396,
+              "score_k01": 1050.2753921488413,
+              "t": -1.5,
+              "y": [
+                -1.499993907907023,
+                -0.00330997651747248,
+                0.0017516711681489932,
+                0.0017749144988324157,
+                0.0005090093051247529,
+                -0.0008056394096869297,
+                0.0004398620009739553
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_-1.00",
+              "mode_index": 0,
+              "params": {
+                "As": 2.0872370408203084e-09,
+                "Ob": 0.046795417385721017,
+                "Om": 0.2523072312743015,
+                "h": 0.6910687114931355,
+                "lam": 209240.39271940562,
+                "ns": 0.9646443168356948,
+                "zre": 7.319698046181063
+              },
+              "score_eff": 1050.275138092927,
+              "score_k01": 1050.2754249558818,
+              "t": -1.0,
+              "y": [
+                -0.999995938604682,
+                -0.00220665101164832,
+                0.0011677807787659955,
+                0.001183276332554944,
+                0.00033933953674983525,
+                -0.0005370929397912864,
+                0.00029324133398263687
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_-0.50",
+              "mode_index": 0,
+              "params": {
+                "As": 2.0872363621412346e-09,
+                "Ob": 0.046795376513393765,
+                "Om": 0.2523068171275851,
+                "h": 0.6910690976570626,
+                "lam": 214537.31669665375,
+                "ns": 0.9646444108269593,
+                "zre": 7.319687782734373
+              },
+              "score_eff": 1050.275048044346,
+              "score_k01": 1050.2753315616824,
+              "t": -0.5,
+              "y": [
+                -0.499997969302341,
+                -0.00110332550582416,
+                0.0005838903893829977,
+                0.000591638166277472,
+                0.00016966976837491763,
+                -0.0002685464698956432,
+                0.00014662066699131843
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_-0.25",
+              "mode_index": 0,
+              "params": {
+                "As": 2.087236022801698e-09,
+                "Ob": 0.046795356077230135,
+                "Om": 0.2523066100542269,
+                "h": 0.6910692907390261,
+                "lam": 217235.8529098716,
+                "ns": 0.9646444578225915,
+                "zre": 7.319682651011029
+              },
+              "score_eff": 1050.2750344234278,
+              "score_k01": 1050.2753163292448,
+              "t": -0.25,
+              "y": [
+                -0.2499989846511705,
+                -0.00055166275291208,
+                0.00029194519469149887,
+                0.000295819083138736,
+                8.483488418745881e-05,
+                -0.0001342732349478216,
+                7.331033349565922e-05
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_center",
+              "mode_index": 0,
+              "params": {
+                "As": 2.0872356834621613e-09,
+                "Ob": 0.046795335641066506,
+                "Om": 0.2523064029808687,
+                "h": 0.6910694838209896,
+                "lam": 219968.33239135708,
+                "ns": 0.9646445048182237,
+                "zre": 7.319677519287684
+              },
+              "score_eff": 1050.275007936606,
+              "score_k01": 1050.2752882692346,
+              "t": 0.0,
+              "y": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_+0.25",
+              "mode_index": 0,
+              "params": {
+                "As": 2.0872353441226246e-09,
+                "Ob": 0.046795315204902876,
+                "Om": 0.2523061959075105,
+                "h": 0.6910696769029532,
+                "lam": 222735.1820931203,
+                "ns": 0.964644551813856,
+                "zre": 7.3196723875643395
+              },
+              "score_eff": 1050.2749368159539,
+              "score_k01": 1050.275215615179,
+              "t": 0.25,
+              "y": [
+                0.2499989846511705,
+                0.00055166275291208,
+                -0.00029194519469149887,
+                -0.000295819083138736,
+                -8.483488418745881e-05,
+                0.0001342732349478216,
+                -7.331033349565922e-05
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_+0.50",
+              "mode_index": 0,
+              "params": {
+                "As": 2.087235004783088e-09,
+                "Ob": 0.04679529476873925,
+                "Om": 0.2523059888341523,
+                "h": 0.6910698699849167,
+                "lam": 225536.83433754466,
+                "ns": 0.9646445988094882,
+                "zre": 7.319667255840995
+              },
+              "score_eff": 1050.274991894415,
+              "score_k01": 1050.2752691964715,
+              "t": 0.5,
+              "y": [
+                0.499997969302341,
+                0.00110332550582416,
+                -0.0005838903893829977,
+                -0.000591638166277472,
+                -0.00016966976837491763,
+                0.0002685464698956432,
+                -0.00014662066699131843
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_+1.00",
+              "mode_index": 0,
+              "params": {
+                "As": 2.087234326104014e-09,
+                "Ob": 0.046795253896411995,
+                "Om": 0.2523055746874359,
+                "h": 0.6910702561488438,
+                "lam": 231246.30300193024,
+                "ns": 0.9646446928007526,
+                "zre": 7.319656992394306
+              },
+              "score_eff": 1050.274991853035,
+              "score_k01": 1050.275266269994,
+              "t": 1.0,
+              "y": [
+                0.999995938604682,
+                0.00220665101164832,
+                -0.0011677807787659955,
+                -0.001183276332554944,
+                -0.00033933953674983525,
+                0.0005370929397912864,
+                -0.00029324133398263687
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_+1.50",
+              "mode_index": 0,
+              "params": {
+                "As": 2.087233647424941e-09,
+                "Ob": 0.046795213024084736,
+                "Om": 0.2523051605407195,
+                "h": 0.6910706423127707,
+                "lam": 237100.30695929957,
+                "ns": 0.9646447867920172,
+                "zre": 7.319646728947617
+              },
+              "score_eff": 1050.2750045494397,
+              "score_k01": 1050.27527621957,
+              "t": 1.5,
+              "y": [
+                1.499993907907023,
+                0.00330997651747248,
+                -0.0017516711681489932,
+                -0.0017749144988324157,
+                -0.0005090093051247529,
+                0.0008056394096869297,
+                -0.0004398620009739553
+              ]
+            },
+            {
+              "attempt": 1,
+              "label": "mode_0_t_+2.00",
+              "mode_index": 0,
+              "params": {
+                "As": 2.0872329687458675e-09,
+                "Ob": 0.04679517215175748,
+                "Om": 0.25230474639400313,
+                "h": 0.6910710284766978,
+                "lam": 243102.50512296768,
+                "ns": 0.9646448807832816,
+                "zre": 7.319636465500927
+              },
+              "score_eff": 1050.2751018991303,
+              "score_k01": 1050.2753709537199,
+              "t": 2.0,
+              "y": [
+                1.999991877209364,
+                0.00441330202329664,
+                -0.002335561557531991,
+                -0.002366552665109888,
+                -0.0006786790734996705,
+                0.0010741858795825729,
+                -0.0005864826679652737
+              ]
+            }
+          ],
+          "symmetric_scale_diagnostics": [
+            {
+              "abs_t": 0.25,
+              "symmetric_curvature_eff": -0.0007141412861528806,
+              "symmetric_gradient_eff": -0.00019521494778018678
+            },
+            {
+              "abs_t": 0.5,
+              "symmetric_curvature_eff": 9.626219616620801e-05,
+              "symmetric_gradient_eff": -5.614993096969556e-05
+            },
+            {
+              "abs_t": 1.0,
+              "symmetric_curvature_eff": 0.00011407274996599881,
+              "symmetric_gradient_eff": -7.311994590963877e-05
+            },
+            {
+              "abs_t": 1.5,
+              "symmetric_curvature_eff": 4.019838545193327e-05,
+              "symmetric_gradient_eff": -3.240689996649356e-05
+            },
+            {
+              "abs_t": 2.0,
+              "symmetric_curvature_eff": 2.831894641985855e-05,
+              "symmetric_gradient_eff": 1.866231571057142e-05
+            }
+          ]
+        }
+      ],
+      "negative_mode_count": 1,
+      "negative_mode_indices": [
+        0
+      ],
+      "objective": "matched-ultra-linstep2+dense-BOSS",
+      "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+      "provenance": {
+        "base_hessian_run_id": 32083295640,
+        "center_fingerprint": "ff79aa7070ec2d5715af181653f10d79b454f60bc3c75a5fe43a9480b783d206",
+        "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+        "numpy_version": "2.5.2",
+        "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+        "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+        "rtk_source_commit": "36d8815d1cd072f54642c447849008129596e27f",
+        "state_iteration": 55
+      },
+      "ray_recenter_required": false,
+      "recenter_tolerance_S": 0.005,
+      "warning": "Exact frozen-objective diagnostic along strictly negative base-Hessian eigendirections; not a global-minimum or model-selection claim."
+    },
     "negative_eigenray_run": {
       "artifact": "rtk-autonomous-negative-eigenray",
       "conclusion": "success",
       "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32095267062",
+      "parsed": true,
       "run_id": 32095267062,
       "status": "completed",
       "workflow": "rtk-autonomous-negative-eigenray.yml"
@@ -1731,7 +2133,7 @@
     ]
   },
   "schema_version": 1,
-  "stage": "rtk_negative_eigenray_running",
+  "stage": "rtk_half_stencil_running",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-08-18T04:06:41Z"
+  "updated_at": "2026-08-18T04:48:40Z"
 }
