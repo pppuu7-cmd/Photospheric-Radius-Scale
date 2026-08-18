@@ -57,6 +57,12 @@ jobs:
           python3 rtk/test_adaptive_quarter_gate.py | tee autonomous_adaptive_quarter_unit.log
           grep -q RTK_ADAPTIVE_QUARTER_GATE_UNIT_PASS autonomous_adaptive_quarter_unit.log
 
+      - name: Test proof-artifact runtime sidecars
+        run: |
+          set -euo pipefail
+          python3 rtk/test_artifact_runtime_sidecars.py | tee autonomous_runtime_sidecars_unit.log
+          grep -q RTK_ARTIFACT_RUNTIME_SIDECARS_UNIT_PASS autonomous_runtime_sidecars_unit.log
+
       - name: Test final matched replay gate
         run: |
           set -euo pipefail
