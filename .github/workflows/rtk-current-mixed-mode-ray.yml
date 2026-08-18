@@ -1,13 +1,14 @@
-name: RTK current exact mixed negative-mode ray profile
+name: RTK historical exact mixed negative-mode ray replay
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/rtk-current-mixed-mode-ray.yml'
 
 permissions:
   contents: read
+
+concurrency:
+  group: rtk-historical-mixed-mode-ray-32065998894
+  cancel-in-progress: false
 
 jobs:
   ray-profile:
@@ -79,7 +80,7 @@ jobs:
           echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
           mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
 
-      - name: Run exact mixed-mode ray profile
+      - name: Run exact historical mixed-mode ray profile
         working-directory: class_public
         run: |
           set -euo pipefail
@@ -92,13 +93,13 @@ jobs:
           assert s['base_hessian_run']==32065998894
           assert len(s['points'])==11
           assert math.isfinite(s['best_improvement'])
-          print('RTK_MIXED_MODE_RAY_FAIL_CLOSED_CHECKS_PASS')
+          print('RTK_HISTORICAL_MIXED_MODE_RAY_FAIL_CLOSED_CHECKS_PASS')
           PY
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: rtk-current-mixed-mode-ray
+          name: rtk-historical-mixed-mode-ray-32065998894
           path: |
             mixed_mode_ray.log
             mixed_mode_ray_provenance.txt
