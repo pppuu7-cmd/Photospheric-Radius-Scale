@@ -1,0 +1,2 @@
+trigger: 2026-08-19T02:12:00+03:00
+reason: discover immutable DOI-published AlterBBN v2.2 source bytes/hash before any B6 abundance execution
