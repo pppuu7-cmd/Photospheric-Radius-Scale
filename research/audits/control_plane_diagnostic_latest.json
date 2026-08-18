@@ -20,9 +20,9 @@
     },
     {
       "name": "adaptive_quarter_unit",
-      "returncode": 1,
-      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/test_adaptive_quarter_gate.py\", line 58, in <module>\n    s=run_case(s)\n      ^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/test_adaptive_quarter_gate.py\", line 28, in run_case\n    try:G.main()\n        ^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 137, in main\n    rr=get_run(qslot['run_id']);qslot['status']=rr.get('status');qslot['conclusion']=rr.get('conclusion');qslot['html_url']=rr.get('html_url')\n       ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 33, in get_run\n    def get_run(run_id):return gh(f'repos/{REPO}/actions/runs/{int(run_id)}')\n                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 29, in gh\n    def gh(endpoint):return json.loads(run(['gh','api',endpoint]).stdout)\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/rtk/enforce_adaptive_quarter_gate.py\", line 26, in run\n    if check and p.returncode:raise RuntimeError(p.stderr.strip())\n                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: gh: Not Found (HTTP 404)\n",
-      "stdout": "RTK_ADAPTIVE_QUARTER_GATE [\"stabilize_parsed_base_half_N5_pass\"]\nRTK_ADAPTIVE_QUARTER_GATE [\"dispatch_RTK_quarter_stencil_N5\"]\n"
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_ADAPTIVE_QUARTER_GATE [\"stabilize_parsed_base_half_N5_pass\"]\nRTK_ADAPTIVE_QUARTER_GATE [\"dispatch_RTK_quarter_stencil_N5\"]\nRTK_ADAPTIVE_QUARTER_GATE [\"stabilize_parsed_adaptive_half_quarter_pass\"]\nRTK_ADAPTIVE_QUARTER_GATE_UNIT_PASS\n"
     },
     {
       "name": "runtime_sidecars_unit",
@@ -44,9 +44,9 @@
     },
     {
       "name": "reproducibility_extensions",
-      "returncode": 1,
-      "stderr": "RTK_REPRO_EXT_AUDIT_FAIL [\"clean_room_pair_not_hardcoded\", \"clean_room_pair_provenance\"]\n",
-      "stdout": ""
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "RTK_REPRO_EXT_AUDIT_PASS [\"class_sha\", \"clean_room_dense_ultra_objective\", \"clean_room_exact_score_tolerance\", \"clean_room_n5_fail_closed\", \"clean_room_pair_not_hardcoded\", \"clean_room_pair_provenance\", \"clean_room_workflow_dispatch_only\", \"clean_room_workflow_locked_environment\", \"final_replay_never_promotes_global_claim\", \"final_replay_target_fingerprint\", \"final_replay_validates_locked_provenance\", \"lcdm_exact_three_retry\", \"lcdm_failure_not_cached\", \"lcdm_points_failures_provenance\", \"lcdm_steps_decoupled\", \"lcdm_workflow_class_pin\", \"lcdm_workflow_dispatch_only\", \"lcdm_workflow_nonlocal_ic_patch\", \"lcdm_workflow_numpy_scipy_pins\", \"lcdm_workflow_pantheon_pin\", \"lcdm_workflow_planck_pin\", \"lcdm_workflow_provenance_upload\", \"neutrino_baseline_locked\", \"neutrino_baseline_matches_runner\", \"nonlocal_aux_ic_ab_equivalent\", \"nonlocal_aux_ic_lock\", \"nonlocal_aux_ic_patch_fail_closed\", \"nonlocal_aux_ic_production_flag\", \"numpy\", \"pantheon_sha\", \"planck_sha\", \"python\", \"recombination_baseline_locked\", \"recombination_baseline_matches_runner\", \"scipy\"]\n"
     },
     {
       "name": "artifact_identity_current",
@@ -55,7 +55,7 @@
       "stdout": "RTK_ARTIFACT_IDENTITY_PASS []\n"
     }
   ],
-  "generated_at": "2026-08-18T14:04:59.886683+00:00",
+  "generated_at": "2026-08-18T14:07:57.982488+00:00",
   "note": "Diagnostic-only: no research/state mutation and no heavy dispatch.",
-  "overall_pass": false
+  "overall_pass": true
 }
