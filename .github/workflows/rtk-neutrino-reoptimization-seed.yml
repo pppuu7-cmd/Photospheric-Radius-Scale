@@ -112,7 +112,7 @@ jobs:
           python3 neutrino_reoptimization_seed.py '${{ matrix.model }}' | tee '../neutrino_seed_${{ matrix.model }}.log'
           grep -q "B4_NEUTRINO_REOPTIMIZATION_SEED_COMPLETE ${{ matrix.model }}" '../neutrino_seed_${{ matrix.model }}.log'
           python3 - <<'PY'
-          import json,os
+          import json
           m='${{ matrix.model }}'.lower()
           p=f'../output/neutrino_reoptimization_seed/{m}/summary.json'
           s=json.load(open(p))
@@ -130,7 +130,6 @@ jobs:
           path: |
             neutrino_seed_provenance.txt
             neutrino_seed_${{ matrix.model }}.log
-            output/neutrino_reoptimization_seed/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/summary.json
-            output/neutrino_reoptimization_seed/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/trace.csv
-            output/neutrino_reoptimization_seed/${{ matrix.model == 'RTK' && 'rtk' || 'lcdm' }}/points.jsonl
+            output/neutrino_reoptimization_seed/rtk/
+            output/neutrino_reoptimization_seed/lcdm/
           if-no-files-found: warn
