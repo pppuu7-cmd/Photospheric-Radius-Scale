@@ -1,2 +1,2 @@
-trigger: 2026-08-18T14:54:00Z
-reason: capture final-center matched component, standard-siren, early-universe, and post-freeze control results after A3-A5 closure
+trigger: 2026-08-18T15:00:00Z
+reason: capture final-center component, siren, early-universe and any post-freeze control runs; no heavy stationarity work should be active after A3-A5 closure
