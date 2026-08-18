@@ -90,6 +90,13 @@ for i in range(N):
             for b in (-1.,1.):
                 y=np.zeros(N);y[i]=a;y[j]=b;ev(y,f'cross_{i}_{j}_{int(a):+d}_{int(b):+d}')
 
+def canonicalize_eigenvectors_columns(v):
+    v=np.array(v,float,copy=True)
+    for j in range(v.shape[1]):
+        i=int(np.argmax(np.abs(v[:,j])))
+        if v[i,j]<0:v[:,j]*=-1.0
+    return v
+
 def geom(field):
     S0=r0[field];g=np.zeros(N);H=np.zeros((N,N))
     for i in range(N):
@@ -101,13 +108,14 @@ def geom(field):
             for a,b in ((1,1),(1,-1),(-1,1),(-1,-1)):
                 y=np.zeros(N);y[i]=a;y[j]=b;vals.append(E[key(y)][field])
             H[i,j]=H[j,i]=(vals[0]-vals[1]-vals[2]+vals[3])/4
-    eig=np.linalg.eigvalsh(H);delta=-np.linalg.pinv(H,rcond=1e-10)@g
-    return g,H,eig,delta
+    eig,evec=np.linalg.eigh(H);evec=canonicalize_eigenvectors_columns(evec)
+    delta=-np.linalg.pinv(H,rcond=1e-10)@g
+    return g,H,eig,evec,delta
 
-ge,He,ee,de=geom('score_eff');gk,Hk,ek,dk=geom('score_k01')
+ge,He,ee,vee,de=geom('score_eff');gk,Hk,ek,vek,dk=geom('score_k01')
 rne=ev(np.clip(de,-1,1),'newton_trust_eff');rnk=ev(np.clip(dk,-1,1),'newton_trust_k01')
 best_eff=min(E.values(),key=lambda r:r['score_eff']);best_k01=min(E.values(),key=lambda r:r['score_k01'])
-summary={'stage':'autonomous-dense-rtk-7d-stationarity','objective':STATE['objective']['name'],'center':CENTER,'center_fingerprint':CENTER_FINGERPRINT,'objective_fingerprint':OBJECTIVE_FINGERPRINT,'provenance':PROVENANCE,'stencil_scale':STENCIL_SCALE,'base_steps':dict(BASE),'points':len(E),'eff':{'S_center':r0['score_eff'],'gradient_y':ge.tolist(),'max_abs_gradient_y':float(np.max(np.abs(ge))),'hessian_y':He.tolist(),'eigenvalues_y':ee.tolist(),'positive_definite':bool(np.all(ee>1e-8)),'newton_delta':de.tolist(),'S_newton':rne['score_eff'],'newton_params':rne['params'],'best_exact_S':best_eff['score_eff'],'best_improvement':r0['score_eff']-best_eff['score_eff'],'best_label':best_eff['label'],'best_params':best_eff['params']},'k01':{'S_center':r0['score_k01'],'gradient_y':gk.tolist(),'max_abs_gradient_y':float(np.max(np.abs(gk))),'hessian_y':Hk.tolist(),'eigenvalues_y':ek.tolist(),'positive_definite':bool(np.all(ek>1e-8)),'newton_delta':dk.tolist(),'S_newton':rnk['score_k01'],'newton_params':rnk['params'],'best_exact_S':best_k01['score_k01'],'best_improvement':r0['score_k01']-best_k01['score_k01'],'best_label':best_k01['label'],'best_params':best_k01['params']},'warning':'Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection.'}
+summary={'stage':'autonomous-dense-rtk-7d-stationarity','objective':STATE['objective']['name'],'center':CENTER,'center_fingerprint':CENTER_FINGERPRINT,'objective_fingerprint':OBJECTIVE_FINGERPRINT,'provenance':PROVENANCE,'stencil_scale':STENCIL_SCALE,'base_steps':dict(BASE),'points':len(E),'eigenvector_convention':'rows correspond to sorted ascending eigenvalues; sign fixed by largest-absolute component positive','eff':{'S_center':r0['score_eff'],'gradient_y':ge.tolist(),'max_abs_gradient_y':float(np.max(np.abs(ge))),'hessian_y':He.tolist(),'eigenvalues_y':ee.tolist(),'eigenvectors_y':vee.T.tolist(),'positive_definite':bool(np.all(ee>1e-8)),'newton_delta':de.tolist(),'S_newton':rne['score_eff'],'newton_params':rne['params'],'best_exact_S':best_eff['score_eff'],'best_improvement':r0['score_eff']-best_eff['score_eff'],'best_label':best_eff['label'],'best_params':best_eff['params']},'k01':{'S_center':r0['score_k01'],'gradient_y':gk.tolist(),'max_abs_gradient_y':float(np.max(np.abs(gk))),'hessian_y':Hk.tolist(),'eigenvalues_y':ek.tolist(),'eigenvectors_y':vek.T.tolist(),'positive_definite':bool(np.all(ek>1e-8)),'newton_delta':dk.tolist(),'S_newton':rnk['score_k01'],'newton_params':rnk['params'],'best_exact_S':best_k01['score_k01'],'best_improvement':r0['score_k01']-best_k01['score_k01'],'best_label':best_k01['label'],'best_params':best_k01['params']},'warning':'Local mapping-specific numerical Hessian on frozen production objective; retries repeat identical exact points and do not alter the objective; not posterior evidence or global model selection.'}
 (OUT/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print('AUTO_DENSE_RTK_STATIONARITY_RESULT',json.dumps(summary,sort_keys=True),flush=True)
 print('AUTO_DENSE_RTK_STATIONARITY_COMPLETE',flush=True)
