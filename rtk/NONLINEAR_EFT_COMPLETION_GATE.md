@@ -1,14 +1,14 @@
 # RTK nonlinear EFT completion gate
 
-Date: 2026-08-18
+Date: 2026-08-18; reconciled 2026-08-19 after Route-A1 P(X), D4-identifiability and D5-basis results.
 
 ## Purpose
 
-The implemented RTK/Khronon linear scalar sector already admits a healthy local quadratic preferred-frame EFT reconstruction. The linear equations do not determine a unique nonlinear completion, so the research program separates an explicit reduced preferred-frame EFT route from any future fundamental/covariant completion.
+The implemented RTK/Khronon linear scalar sector admits a healthy local quadratic preferred-frame EFT reconstruction. The linear equations do not determine a unique nonlinear completion, so the research program separates an explicit reduced preferred-frame EFT route from any future fundamental/covariant completion.
 
-The first nonlinear symmetry/operator gate is now advanced by the validated **Route A1** defined in `PREFERRED_FRAME_EFT_ROUTE_A1.md`.
+The selected reduced route is **Route A1** in `PREFERRED_FRAME_EFT_ROUTE_A1.md`. Later theorem layers must be read together with `ROUTE_A1_BAROTROPIC_PX_SUBSECTOR.md` and the D4/D5 identifiability audits; this file must not resurrect the obsolete statement that every cubic coefficient is unknown.
 
-## 1. Quadratic target that every completion must reproduce
+## 1. Quadratic target every completion must reproduce
 
 Any acceptable nonlinear completion must reduce, around the cosmological background and after the same linear field identification, to
 
@@ -24,7 +24,7 @@ so that
 
 `omega^2 = (G/K) q^2/[1+q^2/M^2]`.
 
-This target is fixed by the successful local quadratic EFT reconstruction audit, workflow run `31982347734`, and its later current-branch rerun.
+This target is fixed by the successful local quadratic EFT reconstruction audit.
 
 ## 2. Non-negotiable linear properties
 
@@ -45,17 +45,16 @@ The implemented perturbation sector is homogeneous/isotropic at background level
 
 ### Explicitly selected for Route A1
 
-Route A1 is now frozen as a research EFT class with:
+Route A1 is frozen as a research EFT class with:
 
 - locality in preferred-frame coordinates;
 - spatial translations and SO(3) rotations;
 - spatial parity;
-- an explicitly **postulated** constant internal shift `pi -> pi + const`;
+- a postulated constant internal shift `pi -> pi + const`;
 - no imposed Lorentz invariance away from the preferred frame;
 - no imposed time-reversal symmetry;
 - slowly background-time-dependent EFT coefficients;
-- no more than one time derivative on an individual `pi` field through the cubic truncation;
-- cubic truncation at three fields and total derivative order `D <= 4`.
+- no more than one time derivative on an individual `pi` field through the declared cubic truncations.
 
 This is a chosen EFT symmetry class, not a derivation of the unique fundamental DBI/Khronon symmetry.
 
@@ -65,19 +64,19 @@ The present CLASS equations do not establish a unique covariant Stueckelberg com
 
 ## 4. Nonlinear routes
 
-### Route A1 — preferred-frame EFT: SELECTED AND FIRST GATE PASSED
+### Route A1 — preferred-frame EFT: selected and partially reconstructed
 
-The project now has an explicit reduced scalar EFT route. Its first cubic theorem layer is defined in `PREFERRED_FRAME_EFT_ROUTE_A1.md` and validated by workflow run `32072791555`.
+The reduced scalar EFT route is explicit and internally testable. It supports operator-basis, Legendre-map and conditional thermodynamic theorems without claiming a unique fundamental action.
 
-### Route B — fundamental/covariant completion: OPEN
+### Route B — fundamental/covariant completion: open
 
-A stronger future route must start from a proposed fundamental nonlinear Khronon/DBI action, expand it around the cosmological solution, solve lapse/shift or other nondynamical constraints, and demonstrate that its reduced quadratic scalar action maps to the established `K,G,M` form.
+A stronger route must start from a proposed nonlinear Khronon/DBI action (or another explicit coupled completion), expand it around the cosmological solution, solve lapse/shift or other nondynamical constraints, and demonstrate that its reduced quadratic scalar action maps to the established `K,G,M` target while remaining compatible with the causal RT sector.
 
-Route B is required before claiming a full-theory Hassan-Rosen-style ghost theorem.
+Route B or an equally explicit coupled nonlinear definition is required before claiming a full-theory ghost/DOF theorem.
 
-## 5. Cubic operator gate
+## 5. Cubic operator gate through D<=4
 
-Within the explicitly frozen Route A1 assumptions and derivative truncation, the complete cubic basis modulo spatial integration by parts is
+Within the frozen Route A1 assumptions and the original `D <= 4` cubic truncation, the complete basis modulo spatial integration by parts is
 
 `O1 = dot(pi)^3`,
 
@@ -87,87 +86,104 @@ Within the explicitly frozen Route A1 assumptions and derivative truncation, the
 
 `O4 = (grad pi)^2 Laplacian(pi)`.
 
-The symbolic audit verifies the two nontrivial integration-by-parts reductions used to obtain this basis and verifies that no basis representative contains a second time derivative.
+The symbolic audit verifies the nontrivial integration-by-parts reductions and that no basis representative contains a second time derivative.
 
-Workflow evidence:
+### Coefficient status after the P(X) theorem
 
-- run `32072791555`: success;
-- job `95519466034`;
-- checked-out research commit `d19612c4586441f4d5ab23bb1993886cabbf3edd`;
-- artifact `rtk-quantum-route-a1-cubic`, ID `9302328178`;
-- artifact ZIP SHA256 `cccd7034ec94ab05fb2f880163dd015bac9b5e2b242e8b12f39e1daae6be17a9`;
-- SymPy `1.14.0`.
+The old statement “`c1...c4` are all undetermined” is no longer correct.
 
-The numerical coefficients `c1...c4` are **not** determined by the linear implementation.
+In the explicitly scoped **long-wavelength, shift-symmetric barotropic P(X) subsector**:
 
-## 6. Reduced-scalar DOF result vs full ghost gate
+- `G = rho+p`,
+- `K = (rho+p)/c_a^2`,
+- `c2 = -(K-G)/2`,
+- `c1 = (dK/dlnX - K)/3`.
 
-Route A1 now has a reduced-scalar perturbative DOF result through cubic order. The generalized momentum is
+These are conditional reconstruction identities, not a derivation that the full finite-k RTK completion is pure P(X).
 
-`P = K(1-Laplacian/M^2) dot(pi) + 3 c1 dot(pi)^2 + c2 (grad pi)^2 + 2 c3 dot(pi) Laplacian(pi)`.
+The finite-k spatial cubic coefficients `c3,c4` are **not** determined by the homogeneous background plus linear target. Their non-identifiability has been proved constructively: changing them does not alter the background or quadratic CLASS target but does change cubic dynamics.
 
-The velocity Hessian/operator is
+## 6. D5 dispersive layer
 
-`K(1-Laplacian/M^2) + 6 c1 dot(pi) + 2 c3 Laplacian(pi)`.
+Because the quadratic dispersive operator `(grad pi_dot)^2` already has total derivative order `D=4`, its natural first nonlinear completion contains `D=5` interactions. The complete cubic Route-A1 D5 basis has been enumerated and rank/IBP audited. A convenient basis is
 
-At the background its Fourier eigenvalue is
+- `dot(pi) (grad dot(pi))^2`,
+- `dot(pi) (Laplacian pi)^2`,
+- `dot(pi) (partial_i partial_j pi)^2`,
+- `(Laplacian dot(pi)) (grad pi)^2`.
+
+Their coefficients are additional nonlinear data. In particular, an arbitrary coefficient multiplying `dot(pi)(grad dot(pi))^2` leaves the same quadratic dispersive scale `M` but changes the cubic interaction strength. Therefore `M=k_*` cannot be promoted to the physical strong-coupling cutoff from linear information alone.
+
+## 7. Reduced-scalar DOF result versus full coupled ghost gate
+
+For the D<=4 Route-A1 scalar truncation, the generalized momentum contains the quadratic elliptic kinetic operator plus cubic corrections. At the background the Fourier-space velocity-Hessian eigenvalue is
 
 `K(1+q^2/M^2) > 0`.
 
-Thus, in the perturbative neighborhood where cubic corrections do not make the velocity operator singular, the reduced A1 scalar retains one canonical pair and does not acquire an Ostrogradsky mode from higher time derivatives.
+Thus, in a perturbative neighborhood where nonlinear corrections do not make the velocity operator singular, the **reduced A1 scalar** retains one canonical pair and does not acquire an Ostrogradsky mode from higher time derivatives.
 
-This does **not** close the full gravity constraint/ghost gate. A full claim still requires:
+For the homogeneous long-wave P(X) subsector the velocity Hessian reduces to
 
-- nonlinear field content including metric/lapse/shift and RT auxiliary/nonlocal sector;
+`K_vel = K + 6 c1 pi_dot`,
+
+so a sufficient two-sided perturbative invertibility region is
+
+`|pi_dot| < 1/(6 |c1/K|)`.
+
+This is a dimensionless local Legendre-map radius, not a physical energy cutoff.
+
+None of these reduced-scalar statements closes the full gravity constraint/ghost gate. A full claim still requires:
+
+- nonlinear field content including metric/lapse/shift and the causal RT/nonlocal sector;
 - primary/secondary constraints;
-- first/second-class classification or equivalent reduced-Hamiltonian proof;
+- first/second-class classification or an equivalent reduced-Hamiltonian proof;
 - complete physical DOF count;
 - proof that coupling to the rest of the theory does not activate an unwanted extra mode.
 
-## 7. Strong-coupling gate
+## 8. Strong-coupling gate
 
-At low momentum `pi_c=sqrt(K) pi`. The four canonical Route A1 cubic operators have coefficient mass dimensions `[-2,-2,-3,-3]`, so they may be parameterized by interaction scales such as `Lambda_1^-2`, `Lambda_2^-2`, `Lambda_3^-3`, `Lambda_4^-3`.
+At low momentum `pi_c = sqrt(K_phys) pi`. The conditionally reconstructed long-wave D3 coefficients permit coefficient-suppression diagnostics, but those diagnostics are **not** the full strong-coupling scale because:
 
-Their numerical values remain underdetermined because `c1...c4` are new nonlinear data. At `q ~ M`, the full momentum-dependent kinetic normalization must be used.
+- `c3,c4` are not fixed by the linear/background target;
+- D5 dispersive coefficients are independent nonlinear data;
+- finite-`q/M` canonical normalization differs from the long-wave normalization;
+- small sound speed and operator mixing can change the scattering hierarchy.
 
-`M_K` or `k_*` therefore remains a dispersive scale, not a derived strong-coupling cutoff.
+A physical cutoff may only be claimed after a concrete nonlinear completion supplies the relevant coefficients and the full interaction basis is canonically normalized in the regime of interest.
 
-## 8. Radiative-stability gate
+## 9. Radiative-stability gate
 
-Only after nonlinear coefficients or a more fundamental Route B action are specified is it meaningful to test loop-generated operators, counterterm closure, and technical naturalness.
+Loop/counterterm closure is meaningful only after a nonlinear completion/operator content and its physical coefficient hierarchy are declared. The current linear implementation plus coefficient-identifiability no-go is insufficient to determine radiative stability.
 
-## 9. Current status
+## 10. Current theorem status
 
-✅ Quadratic target fixed and reproduced exactly.
+🚀 Quadratic target and healthy local representative established at the declared linear scope.
 
-✅ Positive quadratic Hamiltonian representative established on scanned physical domain.
+🚀 Route-A1 preferred-frame nonlinear EFT symmetry class explicitly frozen.
 
-✅ No higher time derivatives in the quadratic representative.
+🚀 Complete Route-A1 cubic basis through `D <= 4` symbolically verified.
 
-✅ Strong-coupling non-identifiability from linear equations proved.
+🚀 Conditional long-wave P(X) thermodynamic identities and `c1,c2` reconstruction proved.
 
-🚀 **Route A1 preferred-frame nonlinear EFT symmetry class is now explicitly frozen.**
+🚀 Finite-k `c3,c4` / nonlinear dispersive coefficient **non-identifiability from the background+linear target** proved; D5 cubic basis enumerated.
 
-🚀 **Complete Route A1 cubic operator basis through `D <= 4` is derived and symbolic-CI verified.**
+✅ Reduced Route-A1 scalar retains one perturbative canonical pair while its velocity Hessian remains invertible.
 
-✅ Reduced Route A1 scalar retains one perturbative canonical pair through cubic order while its velocity Hessian remains invertible.
+🔴 Unique fundamental/covariant coupled DBI/Khronon+RT completion not selected/derived.
 
-🔴 Unique fundamental/covariant DBI-Khronon action not yet selected/derived.
+🔴 Full metric + causal RT + Khronon nonlinear constraint algebra / total DOF count not derived.
 
-🔴 Full metric + RT + Khronon nonlinear constraint algebra / total DOF count not yet derived.
+🔴 Physical strong-coupling scale not derived.
 
-🔴 Physical values of the cubic coefficients are not fixed.
+🔴 Loop/radiative closure not derived.
 
-🔴 Physical strong-coupling scale not yet derived.
+## 11. Immediate non-redundant theorem task
 
-🔴 Loop/radiative closure not yet derived.
+The next theorem task is **not** another attempt to infer missing nonlinear coefficients from CLASS linear data; that is now proved impossible.
 
-## 10. Immediate next theorem task
+The next fork must be explicit:
 
-The next non-redundant theoretical task is no longer “choose a nonlinear symmetry class”. For Route A1 it is now:
+1. **Route A1 coupled benchmark:** postulate a concrete nonlinear metric/RT/Khronon completion consistent with all established quadratic and long-wave identities, then perform its full constraint/DOF and cutoff analysis; or
+2. **Route B fundamental completion:** derive/propose a covariant nonlinear action/prescription, including the causal RT sector, then reduce it and verify that it reproduces the established cosmological target.
 
-1. couple the A1 scalar completion consistently to the metric/RT sector or derive a Route B fundamental action;
-2. perform the full constraint/DOF analysis of that coupled theory;
-3. determine or constrain `c1...c4` from the chosen nonlinear completion;
-4. canonically normalize at finite `q/M` and derive the actual lowest interaction scale;
-5. only then perform radiative-stability analysis.
+Only after one of those routes supplies physical finite-k nonlinear coefficients can C8 (cutoff) and C9 (radiative stability) be closed.
