@@ -1,2 +1,2 @@
-trigger: 2026-08-18T12:40:00Z
-reason: validate crash-safe idempotent dispatch unit and wiring while current RTK half-stencil run remains active; no duplicate heavy dispatch is permitted
+trigger: 2026-08-18T13:00:00Z
+reason: validate file-level crash-recovery consume test for idempotent heavy dispatch; preserve active half-stencil as the only heavy worker
