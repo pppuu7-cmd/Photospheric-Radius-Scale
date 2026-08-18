@@ -1,0 +1,46 @@
+name: RTK Route-B khronometric dispersion non-mapping theorem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-route-b-khronometric-dispersion-nongo.yml'
+      - '.github/rtk-route-b-khronometric-dispersion-nongo-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-route-b-khronometric-dispersion-nongo
+  cancel-in-progress: true
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact symbolic non-mapping theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_khronometric_dispersion_nongo.py
+          python3 rtk/route_b_khronometric_dispersion_nongo.py | tee route_b_khronometric_dispersion_nongo.log
+          grep -q RTK_ROUTE_B_KHRONOMETRIC_DISPERSION_NONGO_PASS route_b_khronometric_dispersion_nongo.log
+          python3 - <<'PY'
+          import sympy,platform
+          assert sympy.__version__=='1.14.0'
+          assert platform.python_version()=='3.12.3'
+          print('RTK_ROUTE_B_KHRONOMETRIC_DISPERSION_RUNTIME_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-khronometric-dispersion-nongo
+          path: route_b_khronometric_dispersion_nongo.log
+          if-no-files-found: error
