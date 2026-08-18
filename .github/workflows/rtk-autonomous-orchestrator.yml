@@ -57,6 +57,12 @@ jobs:
           python3 rtk/test_adaptive_quarter_gate.py | tee autonomous_adaptive_quarter_unit.log
           grep -q RTK_ADAPTIVE_QUARTER_GATE_UNIT_PASS autonomous_adaptive_quarter_unit.log
 
+      - name: Test crash-safe idempotent dispatch guard
+        run: |
+          set -euo pipefail
+          python3 rtk/test_idempotent_dispatch_guard.py | tee autonomous_idempotent_dispatch_unit.log
+          grep -q RTK_IDEMPOTENT_DISPATCH_GUARD_UNIT_PASS autonomous_idempotent_dispatch_unit.log
+
       - name: Enforce measured reproducibility extensions
         run: |
           set -euo pipefail
@@ -107,7 +113,7 @@ jobs:
             git push origin HEAD:rtk-class-build
           fi
 
-      - name: Dispatch at most one requested heavy worker
+      - name: Dispatch at most one requested heavy worker crash-safely
         id: dispatch
         env:
           GH_TOKEN: ${{ github.token }}
@@ -117,21 +123,13 @@ jobs:
             echo 'No heavy dispatch requested this iteration'
             exit 0
           fi
-          WF=$(python3 -c "import json;print(json.load(open('research/state/dispatch_request.json'))['workflow'])")
-          REF=$(python3 -c "import json;print(json.load(open('research/state/dispatch_request.json')).get('ref','main'))")
-          echo "Dispatching $WF at $REF"
-          gh workflow run "$WF" --repo "$GITHUB_REPOSITORY" --ref "$REF"
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          p=Path('research/state/current.json')
-          s=json.loads(p.read_text())
-          if isinstance(s.get('dispatch'),dict):
-              s['dispatch']['status']='submitted'
-          p.write_text(json.dumps(s,indent=2,sort_keys=True)+'\n')
-          Path('research/state/dispatch_request.json').unlink(missing_ok=True)
-          PY
+          python3 rtk/idempotent_dispatch_guard.py | tee autonomous_idempotent_dispatch.log
+          grep -Eq 'RTK_IDEMPOTENT_DISPATCH_(NEW|REUSED)' autonomous_idempotent_dispatch.log
           git add research/state
-          git commit -m "RTK autonomous dispatch consumed"
+          if git diff --cached --quiet; then
+            echo 'ERROR: dispatch guard returned success but did not consume request' >&2
+            exit 1
+          fi
+          git commit -m "RTK autonomous dispatch consumed idempotently"
           git pull --rebase origin rtk-class-build
           git push origin HEAD:rtk-class-build
