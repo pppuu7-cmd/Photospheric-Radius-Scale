@@ -1,0 +1,51 @@
+name: RTK control-plane non-mutating diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-control-diagnostic-trigger.txt'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Compile control-plane Python
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            rtk/audit_invariants.py \
+            rtk/test_stage4d3_negative_eigenray_gate.py \
+            rtk/test_adaptive_quarter_gate.py \
+            rtk/test_artifact_runtime_sidecars.py \
+            rtk/test_final_replay_gate.py \
+            rtk/test_idempotent_dispatch_guard.py \
+            rtk/audit_reproducibility_extensions.py \
+            rtk/validate_artifact_identity.py
+      - name: Scientific invariants
+        run: python3 rtk/audit_invariants.py
+      - name: Negative-eigenray state-machine unit
+        run: python3 rtk/test_stage4d3_negative_eigenray_gate.py
+      - name: Adaptive-quarter state-machine unit
+        run: python3 rtk/test_adaptive_quarter_gate.py
+      - name: Runtime-sidecar identity unit
+        run: python3 rtk/test_artifact_runtime_sidecars.py
+      - name: Final replay state-machine unit
+        run: python3 rtk/test_final_replay_gate.py
+      - name: Idempotent dispatch unit
+        run: python3 rtk/test_idempotent_dispatch_guard.py
+      - name: Reproducibility extension audit
+        run: python3 rtk/audit_reproducibility_extensions.py
+      - name: Current artifact identity dry validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 rtk/validate_artifact_identity.py
