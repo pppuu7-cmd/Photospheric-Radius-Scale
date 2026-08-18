@@ -1,0 +1,113 @@
+{
+  "H_ratios": {
+    "1000.0": {
+      "RTK_over_final_LCDM_minus_1": 0.0009244836667967604,
+      "RTK_over_same_params_LCDM_minus_1": 1.824240966064039e-06
+    },
+    "10000.0": {
+      "RTK_over_final_LCDM_minus_1": 0.0003039965763100838,
+      "RTK_over_same_params_LCDM_minus_1": 6.006765895794075e-07
+    },
+    "1000000.0": {
+      "RTK_over_final_LCDM_minus_1": 4.0625621560153036e-06,
+      "RTK_over_same_params_LCDM_minus_1": 8.031047826762006e-09
+    },
+    "100000000.0": {
+      "RTK_over_final_LCDM_minus_1": 4.0763279862687796e-08,
+      "RTK_over_same_params_LCDM_minus_1": 8.046563415575747e-11
+    },
+    "1000000000.0": {
+      "RTK_over_final_LCDM_minus_1": 4.076106563388748e-09,
+      "RTK_over_same_params_LCDM_minus_1": 7.879918939579511e-12
+    },
+    "10000000000.0": {
+      "RTK_over_final_LCDM_minus_1": 4.0729730699240463e-10,
+      "RTK_over_same_params_LCDM_minus_1": 9.237055564881302e-13
+    }
+  },
+  "classification": "FINAL_RTK_EARLY_UNIVERSE_BACKGROUND_DIAGNOSTIC",
+  "final_lcdm": {
+    "H_over_c_Mpc_inv": {
+      "1000.0": 4.53627225840036,
+      "10000.0": 249.85984554395208,
+      "1000000.0": 2161221.8142738882,
+      "100000000.0": 21575827362.220844,
+      "1000000000.0": 2157549625600.3037,
+      "10000000000.0": 215754631451146.72
+    },
+    "background_z_max": 100000000000000.0,
+    "background_z_min": 0.0,
+    "gamma": null,
+    "params": {
+      "As": 2.1054040998203598e-09,
+      "Ob": 0.04858764689799632,
+      "Om": 0.2611722579449536,
+      "h": 0.6782837587382693,
+      "lam": 0.0,
+      "ns": 0.9653185632254442,
+      "zre": 7.788312934950947
+    }
+  },
+  "final_replay_run_id": 32148894768,
+  "frozen_baseline": {
+    "N_ncdm": 0,
+    "N_ur": 3.046,
+    "T_cmb": 2.7255,
+    "recombination": "RECFAST"
+  },
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "omega_b_h2": {
+    "LCDM": 0.02235366319056659,
+    "RTK": 0.022353168770582937
+  },
+  "omega_nonbaryonic_h2": {
+    "LCDM": 0.12015722228898532,
+    "RTK": 0.12049813131554746
+  },
+  "rtk": {
+    "H_over_c_Mpc_inv": {
+      "1000.0": 4.540465968011395,
+      "10000.0": 249.9358020815548,
+      "1000000.0": 2161230.5943718418,
+      "100000000.0": 21575828241.722332,
+      "1000000000.0": 2157549634394.706,
+      "10000000000.0": 215754631539023.0
+    },
+    "background_z_max": 100000000000000.0,
+    "background_z_min": 0.0,
+    "gamma": 28.0,
+    "params": {
+      "As": 2.0877827951474356e-09,
+      "Ob": 0.046800730927437424,
+      "Om": 0.2522864064078236,
+      "h": 0.691103719964454,
+      "lam": 219457.5727136581,
+      "ns": 0.9645577770978523,
+      "zre": 7.328459220286924
+    }
+  },
+  "same_params_lcdm_control": {
+    "H_over_c_Mpc_inv": {
+      "1000.0": 4.540457685122481,
+      "10000.0": 249.9356519510598,
+      "1000000.0": 2161230.5770148956,
+      "100000000.0": 21575828239.98622,
+      "1000000000.0": 2157549634377.7046,
+      "10000000000.0": 215754631538823.72
+    },
+    "background_z_max": 100000000000000.0,
+    "background_z_min": 0.0,
+    "gamma": null,
+    "params": {
+      "As": 2.0877827951474356e-09,
+      "Ob": 0.046800730927437424,
+      "Om": 0.2522864064078236,
+      "h": 0.691103719964454,
+      "lam": 219457.5727136581,
+      "ns": 0.9645577770978523,
+      "zre": 7.328459220286924
+    }
+  },
+  "state_iteration": 79,
+  "warning": "Background robustness diagnostic only; not a primordial-abundance likelihood or a replacement for a dedicated BBN code."
+}
