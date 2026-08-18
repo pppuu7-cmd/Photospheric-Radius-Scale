@@ -13,8 +13,10 @@ identity=(ROOT/'rtk/validate_artifact_identity.py').read_text()
 identity_norm=''.join(identity.split()).replace('"',"'")
 signature=(ROOT/'rtk/build_signature_atlas_pair.py').read_text()
 lcdm_stationarity=(ROOT/'rtk/autonomous_dense_lcdm_stationarity.py').read_text()
+rtk_stationarity=(ROOT/'rtk/autonomous_dense_rtk_stationarity.py').read_text()
 orchestrator=(ROOT/'rtk/autonomous_orchestrator.py').read_text()
 multiscale=(ROOT/'rtk/enforce_stage4d3_multiscale_gate.py').read_text()
+adaptive=(ROOT/'rtk/enforce_adaptive_quarter_gate.py').read_text()
 
 checks=[]
 def ok(name, cond, detail=''):
@@ -34,6 +36,8 @@ ok('lambda_is_real_input', 'class_read_double("lambda_D",pba->lambda_D)' in inpu
 ok('mapping_separation_protocol', 'eff` and `k01`' in protocol and 'treated as separate objective variants' in protocol)
 ok('lcdm_steps_decoupled_from_rtk', "STATE['rtk']['base_steps']" not in lcdm_stationarity and 'DEFAULT_LCDM_STEPS' in lcdm_stationarity,
    'LCDM Hessian finite-difference scale must not silently inherit the RTK state block')
+ok('rtk_hessian_records_eigenvectors', 'np.linalg.eigh(H)' in rtk_stationarity and "'eigenvectors_y':vee.T.tolist()" in rtk_stationarity and "'eigenvectors_y':vek.T.tolist()" in rtk_stationarity,
+   'future RTK Hessian artifacts must retain eigenvectors for multiscale convergence/overlap diagnostics')
 ok('orchestrator_same_iteration_freeze_uses_best_exact',
    'summary.get("best_exact_S", summary["S_center"])' in orchestrator and
    'eff.get("best_exact_S", eff["S_center"])' in orchestrator and
@@ -62,35 +66,34 @@ ok('signature_drag_epoch_gate', 'baryon drag stops at z' in signature)
 ok('class_upstream_pinned_target', lock['external_git']['class_public']['commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317')
 ok('pantheon_pinned_target', lock['external_git']['pantheon']['commit']=='7eb29dc87ba223b4ec8457cd3cccba1216c36fb7')
 ok('clipy_pinned', lock['likelihood']['clipy_like']=='0.15')
-# Normalize whitespace and quote style before inspecting source-level semantics;
-# the audit must not fail just because a refactor switched single/double quotes.
 ok('artifact_identity_checks_objective', "summary.get('objective')!=expected_objective" in identity_norm)
 ok('artifact_identity_checks_center', "exact_center_equal(summary.get('center'),expected_center)" in identity_norm)
 ok('artifact_identity_checks_objective_fingerprint', "'objective_fingerprint'" in identity_norm and "canonical_hash(state['objective'])" in identity_norm,
    'RTK proof artifacts must match the canonical frozen-objective fingerprint')
 ok('artifact_identity_checks_center_fingerprint', "'center_fingerprint'" in identity_norm and "'model':'RTK'" in identity_norm and "'mapping':state.get('production_mapping','eff')" in identity_norm,
    'RTK proof artifacts must match the canonical model/center/objective/mapping fingerprint')
-ok('artifact_identity_checks_locked_class_sha', "'class_upstream_commit'" in identity_norm and "repro['external_git']['class_public']['commit']" in identity_norm,
-   'RTK proof artifact must declare the locked CLASS upstream commit')
-ok('artifact_identity_checks_locked_pantheon_sha', "'pantheon_commit'" in identity_norm and "repro['external_git']['pantheon']['commit']" in identity_norm,
-   'RTK proof artifact must declare the locked Pantheon commit')
-ok('artifact_identity_checks_locked_numpy', "'numpy_version'" in identity_norm and "repro['python_packages']['numpy']" in identity_norm,
-   'RTK proof artifact runtime NumPy must match the measured lock')
-ok('artifact_identity_includes_negative_eigenray', "('rtk','negative_eigenray_run')" in identity_norm and "'negative_eigenray_run'" in identity_norm,
-   'exact negative-eigenray artifacts must pass the same identity/provenance gate')
+ok('artifact_identity_checks_locked_class_sha', "'class_upstream_commit'" in identity_norm and "repro['external_git']['class_public']['commit']" in identity_norm)
+ok('artifact_identity_checks_locked_pantheon_sha', "'pantheon_commit'" in identity_norm and "repro['external_git']['pantheon']['commit']" in identity_norm)
+ok('artifact_identity_checks_locked_numpy', "'numpy_version'" in identity_norm and "repro['python_packages']['numpy']" in identity_norm)
+ok('artifact_identity_includes_negative_eigenray', "('rtk','negative_eigenray_run')" in identity_norm and "'negative_eigenray_run'" in identity_norm)
+ok('artifact_identity_includes_quarter_stencil', "('rtk','quarter_hessian_run')" in identity_norm and "'quarter_hessian_run'" in identity_norm)
 
-# A non-PD recenter-clear base Hessian must be falsified by exact eigen-rays
-# before a half-stencil Hessian is allowed to consume compute.
 ok('stage4d3_negative_eigenray_before_half',
    'process_negative_ray' in multiscale and 'rtk-autonomous-negative-eigenray.yml' in multiscale and
    multiscale.find('ray_status=process_negative_ray') < multiscale.find("half=rtk.get('half_hessian_run')"),
    'Stage4D3 must run exact negative-eigenray gate before half-stencil for non-PD base Hessians')
+ok('adaptive_quarter_requires_ray_clear_and_half_pd',
+   "ray_clear=(base_pd or rtk.get('negative_eigenray_certification')=='exact_negative_eigenrays_recenter_clear')" in adaptive and
+   "if (not base_pd) and half_pd:" in adaptive and "expected_stencil_scale':0.25" in adaptive,
+   'adaptive quarter proof must require exact-ray clearance and a PD half stencil after a non-PD coarse base')
+ok('adaptive_proof_requires_half_and_quarter_pd',
+   "bool(qe.get('positive_definite'))" in adaptive and 'N5_ADAPTIVE_HALF_AND_QUARTER_PASS' in adaptive,
+   'adaptive interior-minimum certification must require a recenter-clear PD quarter stencil after PD half')
 
 tol=float(state['objective']['recenter_tolerance_S'])
 for model in ('lcdm','rtk'):
     m=state.get(model,{})
-    if m.get('certification')!='local_dense_accepted':
-        continue
+    if m.get('certification')!='local_dense_accepted':continue
     result=m.get('hessian_result') or {}
     if model=='rtk':result=result.get('eff',{})
     imp=float(result.get('best_improvement',1e99));best=result.get('best_exact_S');accepted=m.get('accepted_score_eff')
