@@ -1,0 +1,33 @@
+{
+  "actions": [
+    "compute_matched_dense_raw_delta_S"
+  ],
+  "comparison": {
+    "S_LCDM": 1049.966118347761,
+    "S_RTK": 1050.249912429787,
+    "dense_raw_delta_S": 0.2837940820259064,
+    "mapping": "eff",
+    "numerically_indistinguishable_at_0p005": false,
+    "status": "matched_local_dense_raw_fit_ready",
+    "warning": "Raw local objective comparison only; not AIC/BIC/Bayes evidence/significance."
+  },
+  "iteration": 99,
+  "next_dispatch": {
+    "created_at": "2026-08-18T14:31:43Z",
+    "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32148894768",
+    "idempotency_disposition": "new_dispatch",
+    "idempotency_guard": "workflow_ref_created_at_actor_v2",
+    "iteration": 77,
+    "reason": "Independent fresh-tree replay required after Stage4D3 matched local-minimum certification",
+    "ref": "main",
+    "run_id": 32148894768,
+    "status": "submitted",
+    "target": "final_matched_minima_replay",
+    "target_fingerprint": "91ff4471a86ba9ac0d84cea7ad945cdf54b96b52dac111b6b5db47d106af618c",
+    "workflow": "rtk-clean-room-minimum-reproduction.yml"
+  },
+  "observations": [],
+  "schema_version": 1,
+  "stage": "matched_dense_ready",
+  "time": "2026-08-18T23:34:53Z"
+}
