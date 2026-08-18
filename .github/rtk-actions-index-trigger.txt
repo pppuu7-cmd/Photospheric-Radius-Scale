@@ -1,2 +1,2 @@
-trigger: 2026-08-19T02:08:00+03:00
-reason: detect any duplicate D4 audit after self-trigger hardening and track active B4 paired neutrino seed
+trigger: 2026-08-19T02:23:00+03:00
+reason: capture B6 frontend source discovery v2, Route-B dispersion theorem CI, D4 audit and active B4 paired neutrino seed
