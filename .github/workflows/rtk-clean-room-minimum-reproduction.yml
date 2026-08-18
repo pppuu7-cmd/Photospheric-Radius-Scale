@@ -1,37 +1,65 @@
-name: RTK clean-room minimum reproduction
+name: RTK clean-room matched minima reproduction
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/rtk-clean-room-minimum-reproduction.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-clean-room-matched-minima-reproduction
+  cancel-in-progress: false
 
 jobs:
   reproduce:
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 120
     env:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
-      RTK_CLASS_TIMEOUT: '900'
-      RTK_CACHE_KEY_VERSION: 'clean-room-exact-float-v1'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CACHE_KEY_VERSION: 'clean-room-exact-float-v2'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+
     steps:
       - uses: actions/checkout@v4
-        with: {ref: rtk-class-build}
-      - name: Prepare pristine CLASS and likelihood tree
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Capture research source provenance
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee clean_room_rtk_source_sha.txt
+
+      - name: Prepare pristine pinned CLASS and likelihood tree
         run: |
           set -euo pipefail
           rm -rf class_public
-          git clone --depth 1 --branch nonlocal https://github.com/dirian/class_public.git class_public
-          git clone --depth 1 https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          {
+            echo "class_upstream_sha=$(git -C class_public rev-parse HEAD)"
+            echo "pantheon_sha=$(git -C class_public/pantheon rev-parse HEAD)"
+          } | tee clean_room_external_git.txt
           cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
           cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
           python3 rtk/apply_rtk_class_patch.py class_public
           python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_initial_conditions.py class_public
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
           python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
           cp rtk/joint_profile_runner.py class_public/joint_profile_runner.py
           cp rtk/prepare_inference_core.py class_public/prepare_inference_core.py
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
@@ -39,61 +67,56 @@ jobs:
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
           rm -rf output profile_*.ini profile_*.log __pycache__
+
       - name: Build CLASS from scratch
         working-directory: class_public
         run: make -j2 class
-      - name: Install exact likelihood dependencies
-        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' numpy scipy
-      - name: Download official Planck baseline fresh
+
+      - name: Install pinned likelihood dependencies
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check \
+            'clipy-like==0.15' \
+            "numpy==$RTK_NUMPY_VERSION" \
+            "scipy==$RTK_SCIPY_VERSION"
+          python3 - <<'PY'
+          import numpy, scipy, os
+          assert numpy.__version__ == os.environ['RTK_NUMPY_VERSION']
+          assert scipy.__version__ == os.environ['RTK_SCIPY_VERSION']
+          print('RTK_CLEAN_ROOM_PYTHON_PINS_CONFIRMED', numpy.__version__, scipy.__version__)
+          PY
+          python3 -m pip freeze | sort | tee clean_room_pip_freeze.txt
+          python3 --version | tee clean_room_python_version.txt
+
+      - name: Download and verify official Planck baseline fresh
         working-directory: class_public
         run: |
           set -euo pipefail
           rm -rf planck_data planck.tar.gz
           curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          sha256sum planck.tar.gz | tee ../clean_room_planck_sha256.txt
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
           mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
-      - name: Evaluate current seven-parameter point exactly once
+
+      - name: Replay certified matched minima in fresh tree
         working-directory: class_public
         run: |
-          set -euo pipefail
-          python3 - <<'PY' | tee ../clean_room_minimum.json
-          import json, math
-          import inference_core as L
-          p={
-            'lam':217225.01601516694,
-            'h':0.6904831253428524,
-            'Ob':0.046836300417955265,
-            'Om':0.25300743080221694,
-            'As':2.0837288833768707e-9,
-            'ns':0.9643603115669437,
-            'zre':7.21843542110055,
-          }
-          r=L.evaluate('RTK',p)
-          if not r.get('ok'):
-              raise SystemExit('clean-room evaluation failed: '+repr(r))
-          out={
-            'status':'PASS',
-            'params':p,
-            'score_eff':float(r['score']),
-            'score_k01':float(r['score_k01']),
-            'expected_eff':1050.0338294787382,
-            'expected_k01':1050.0482111660676,
-            'delta_eff':float(r['score'])-1050.0338294787382,
-            'delta_k01':float(r['score_k01'])-1050.0482111660676,
-            'components':{k:r.get(k) for k in ('logL_planck','chi2_SN','chi2_BOSS_eff','chi2_BOSS_k01','rd')},
-            'likelihood_calls':int(L.COUNTER),
-            'cache_key_version':'clean-room-exact-float-v1',
-          }
-          print(json.dumps(out,indent=2,sort_keys=True))
-          tol=5e-6
-          if abs(out['delta_eff'])>tol or abs(out['delta_k01'])>tol:
-              raise SystemExit(f'REPRODUCTION_MISMATCH tol={tol} eff={out["delta_eff"]} k01={out["delta_k01"]}')
-          PY
-      - name: Verify clean-room invariants
-        run: |
-          grep -q '"status": "PASS"' clean_room_minimum.json
-          grep -q '"cache_key_version": "clean-room-exact-float-v1"' clean_room_minimum.json
+          set -o pipefail
+          python3 ../rtk/clean_room_matched_pair_replay.py | tee ../clean_room_matched_pair_replay.log
+          grep -q RTK_CLEAN_ROOM_MATCHED_PAIR_REPLAY_PASS ../clean_room_matched_pair_replay.log
+
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: rtk-clean-room-minimum-reproduction
-          path: clean_room_minimum.json
-          if-no-files-found: error
+          name: rtk-clean-room-matched-minima-reproduction
+          path: |
+            clean_room_matched_pair_replay.log
+            clean_room_rtk_source_sha.txt
+            clean_room_external_git.txt
+            clean_room_pip_freeze.txt
+            clean_room_python_version.txt
+            clean_room_planck_sha256.txt
+            class_public/output/clean_room_matched_pair/summary.json
+            class_public/output/clean_room_matched_pair/points.jsonl
+            class_public/output/clean_room_matched_pair/failures.jsonl
+          if-no-files-found: warn
