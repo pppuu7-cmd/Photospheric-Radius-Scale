@@ -1,2 +1,2 @@
-trigger: 2026-08-18T13:58:00Z
-reason: validate artifact runtime-sidecar fail-closed checks plus repeated adaptive-quarter N5 stabilization; preserve half-stencil 32133215190 as the only heavy worker
+trigger: 2026-08-18T14:17:00Z
+reason: restart autonomous control after fixing adaptive-quarter test network leak and clean-room reproducibility static-audit false positives; preserve half-stencil 32133215190 as the only heavy worker
