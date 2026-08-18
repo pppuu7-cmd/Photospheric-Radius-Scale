@@ -1,0 +1,2 @@
+trigger: 2026-08-19T02:27:00+03:00
+reason: rerun symbolic Route-B non-mapping theorem after replacing inconsistent SymPy nonzero-solution assert with exact coefficient contradiction
