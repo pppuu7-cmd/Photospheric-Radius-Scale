@@ -1,2 +1,2 @@
-trigger: 2026-08-19T01:45:00+03:00
-reason: validate eighth-negative-eigenray generalized Stage4D3 scale-ladder hardening and preserve frozen A1-A5 state
+trigger: 2026-08-19T01:52:00+03:00
+reason: verify static eighth-ray invariants plus generalized Stage4D3 regression before D5 closure
