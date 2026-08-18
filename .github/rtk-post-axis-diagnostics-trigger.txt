@@ -1,3 +1,4 @@
-trigger: 2026-08-18T00:40:00Z
+trigger: 2026-08-18T14:45:00Z
 axis_run: 32081135646
-reason: axis-certified mixed-ray RTK center; launch matched component decomposition and refreshed current-center standard-siren diagnostics without changing the frozen stationarity objective
+final_replay_run: 32148894768
+reason: Stage4D3 N5 and independent clean-room replay are certified; refresh final-center matched component decomposition and standard-siren propagation diagnostic without changing the frozen objective
