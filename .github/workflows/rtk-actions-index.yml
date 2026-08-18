@@ -46,6 +46,7 @@ jobs:
               'RTK minimal-neutrino paired reoptimization seed',
               'RTK audit-only locked LCDM stationarity replay',
               'RTK AlterBBN published-source pin audit',
+              'RTK Route-B khronometric dispersion non-mapping theorem',
               'RTK Route A1 background interaction ratios',
               'RTK Route A1 D4 identifiability theorem',
               'RTK Route A1 D5 dispersive identifiability theorem',
