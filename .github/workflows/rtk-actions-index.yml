@@ -43,6 +43,7 @@ jobs:
               'RTK current exact mixed negative-mode ray profile',
               'RTK current-center standard-siren prediction',
               'RTK matched minimal-neutrino robustness',
+              'RTK minimal-neutrino paired reoptimization seed',
               'RTK Route A1 background interaction ratios',
               'RTK Route A1 D4 identifiability theorem',
               'RTK Route A1 D5 dispersive identifiability theorem',
