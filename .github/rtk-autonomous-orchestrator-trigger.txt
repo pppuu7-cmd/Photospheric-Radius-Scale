@@ -1,2 +1,2 @@
-trigger: 2026-08-18T13:20:00Z
-reason: validate autonomous final matched replay unit and fail-closed pre-N5 behavior; active RTK half-stencil 32133215190 must remain the only heavy worker
+trigger: 2026-08-18T13:25:00Z
+reason: validate final replay gate plus clean-room reproducibility invariants while N5 is pending; do not dispatch final replay and preserve half-stencil 32133215190 as the only heavy worker
