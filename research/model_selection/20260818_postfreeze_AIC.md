@@ -13,7 +13,7 @@ This calculation is authorized by `rtk/POSTFREEZE_MODEL_SELECTION_PROTOCOL_v1.md
 
 The common analytically profiled Pantheon offset does not affect `Delta k`; if counted explicitly it adds equally to both models.
 
-## AIC
+## Ordinary AIC arithmetic
 
 Using `AIC = S + 2 k`:
 
@@ -25,16 +25,18 @@ Conditional Akaike relative likelihood:
 
 `exp(-Delta AIC/2) = 0.31921288712815515`.
 
-If, and only if, the candidate set is restricted to these two models, normalized Akaike weights are:
+If, and only if, the candidate set is restricted to these two models, normalized ordinary-AIC weights are:
 
 - `w_LCDM = 0.7580277677372741`
 - `w_RTK = 0.24197223226272588`
 
 ## Interpretation boundary
 
-✅ **A6a AIC diagnostic is closed.** On this local matched objective, AIC penalizes RTK by about `2.284` relative to ΛCDM because the raw score difference is small but RTK has one additional fitted physical coordinate `lambda_D`.
+✅ **A6a ordinary-AIC arithmetic diagnostic is closed.** On this local matched objective, the standard formula penalizes RTK by about `2.284` relative to ΛCDM because the raw score difference is small but RTK has one additional fitted physical coordinate `lambda_D`.
 
-These numbers are model-ranking diagnostics under AIC assumptions, not posterior probabilities that either model is true and not a significance/exclusion claim.
+The arithmetic is exact for the frozen scores and declared parameter counts. The stronger asymptotic interpretation of ordinary AIC as a bias-corrected expected predictive/KL criterion assumes a regular identifiable likelihood family. RTK currently has a weakly identifiable, dust-like large-`lambda_D` direction, so those regularity assumptions have not been proved. Therefore these numbers remain a **conditional ordinary-AIC diagnostic**, not rigorous evidence or a probability that either model is true.
+
+🔴 A stronger predictive-information claim requires a separately preregistered treatment that is valid for the actual identifiability structure.
 
 🔴 BIC remains unauthorized until a defensible composite-likelihood effective sample count is preregistered.
 
