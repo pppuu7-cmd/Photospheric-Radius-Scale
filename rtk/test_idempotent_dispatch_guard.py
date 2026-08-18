@@ -6,12 +6,13 @@ import datetime as dt
 from idempotent_dispatch_guard import parse_utc, satisfying_run, select_existing_run
 
 
-def run(run_id, created_at, *, event='workflow_dispatch', branch='main'):
+def run(run_id, created_at, *, event='workflow_dispatch', branch='main', actor='github-actions[bot]'):
     return {
         'id': run_id,
         'created_at': created_at,
         'event': event,
         'head_branch': branch,
+        'actor': {'login': actor},
         'html_url': f'https://example.invalid/{run_id}',
     }
 
@@ -34,17 +35,19 @@ def main():
     before = run(9, '2026-08-18T11:44:15Z')
     wrong_event = run(13, '2026-08-18T11:44:17Z', event='push')
     wrong_branch = run(14, '2026-08-18T11:44:18Z', branch='rtk-class-build')
+    manual_actor = run(15, '2026-08-18T11:44:19Z', actor='pppuu7-cmd')
 
     assert satisfying_run(exact, req)
     assert satisfying_run(later, req)
     assert not satisfying_run(before, req)
     assert not satisfying_run(wrong_event, req)
     assert not satisfying_run(wrong_branch, req)
+    assert not satisfying_run(manual_actor, req)
     assert not satisfying_run({'id': 99}, req)
 
-    # Input API ordering must not matter: choose the earliest qualifying run,
-    # which is the run most tightly associated with this request.
-    rows = [much_later, wrong_event, later, before, wrong_branch, exact]
+    # Input API ordering must not matter: choose the earliest qualifying
+    # Actions-bot run, which is the run most tightly associated with request.
+    rows = [much_later, manual_actor, wrong_event, later, before, wrong_branch, exact]
     selected = select_existing_run(rows, req)
     assert selected is not None and selected['id'] == 10
 
@@ -53,8 +56,8 @@ def main():
     assert satisfying_run(feature, req_feature)
     assert select_existing_run([later, feature], req_feature)['id'] == 20
 
-    # No valid run => dispatch is still required.
-    assert select_existing_run([before, wrong_event, wrong_branch], req) is None
+    # No valid automation run => dispatch is still required.
+    assert select_existing_run([before, wrong_event, wrong_branch, manual_actor], req) is None
 
     # A malformed request timestamp must fail closed rather than silently
     # producing a second expensive workflow dispatch.
