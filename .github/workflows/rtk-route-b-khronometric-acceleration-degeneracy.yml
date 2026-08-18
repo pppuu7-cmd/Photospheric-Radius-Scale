@@ -1,0 +1,46 @@
+name: RTK Route-B khronometric acceleration degeneracy audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-route-b-khronometric-acceleration-degeneracy.yml'
+      - '.github/rtk-route-b-khronometric-acceleration-degeneracy-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-route-b-khronometric-acceleration-degeneracy
+  cancel-in-progress: true
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact khronometric/DHOST degeneracy audit
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_khronometric_acceleration_degeneracy_audit.py
+          python3 rtk/route_b_khronometric_acceleration_degeneracy_audit.py | tee route_b_khronometric_acceleration_degeneracy.log
+          grep -q RTK_ROUTE_B_KHRONOMETRIC_ACCELERATION_DEGENERACY_AUDIT_PASS route_b_khronometric_acceleration_degeneracy.log
+          python3 - <<'PY'
+          import platform,sympy
+          assert platform.python_version()=='3.12.3'
+          assert sympy.__version__=='1.14.0'
+          print('RTK_ROUTE_B_KHRONOMETRIC_ACCELERATION_RUNTIME_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-khronometric-acceleration-degeneracy
+          path: route_b_khronometric_acceleration_degeneracy.log
+          if-no-files-found: error
