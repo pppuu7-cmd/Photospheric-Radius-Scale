@@ -7,7 +7,7 @@ on:
       - '.github/rtk-control-diagnostic-trigger.txt'
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 jobs:
@@ -18,34 +18,57 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: rtk-class-build
-          fetch-depth: 1
-      - name: Compile control-plane Python
-        run: |
-          set -euo pipefail
-          python3 -m py_compile \
-            rtk/audit_invariants.py \
-            rtk/test_stage4d3_negative_eigenray_gate.py \
-            rtk/test_adaptive_quarter_gate.py \
-            rtk/test_artifact_runtime_sidecars.py \
-            rtk/test_final_replay_gate.py \
-            rtk/test_idempotent_dispatch_guard.py \
-            rtk/audit_reproducibility_extensions.py \
-            rtk/validate_artifact_identity.py
-      - name: Scientific invariants
-        run: python3 rtk/audit_invariants.py
-      - name: Negative-eigenray state-machine unit
-        run: python3 rtk/test_stage4d3_negative_eigenray_gate.py
-      - name: Adaptive-quarter state-machine unit
-        run: python3 rtk/test_adaptive_quarter_gate.py
-      - name: Runtime-sidecar identity unit
-        run: python3 rtk/test_artifact_runtime_sidecars.py
-      - name: Final replay state-machine unit
-        run: python3 rtk/test_final_replay_gate.py
-      - name: Idempotent dispatch unit
-        run: python3 rtk/test_idempotent_dispatch_guard.py
-      - name: Reproducibility extension audit
-        run: python3 rtk/audit_reproducibility_extensions.py
-      - name: Current artifact identity dry validation
+          fetch-depth: 0
+
+      - name: Run all control-plane diagnostics without mutating state
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 rtk/validate_artifact_identity.py
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import datetime,json,os,subprocess
+          checks=[
+            ('py_compile',['python3','-m','py_compile',
+              'rtk/audit_invariants.py','rtk/test_stage4d3_negative_eigenray_gate.py',
+              'rtk/test_adaptive_quarter_gate.py','rtk/test_artifact_runtime_sidecars.py',
+              'rtk/test_final_replay_gate.py','rtk/test_idempotent_dispatch_guard.py',
+              'rtk/audit_reproducibility_extensions.py','rtk/validate_artifact_identity.py']),
+            ('scientific_invariants',['python3','rtk/audit_invariants.py']),
+            ('negative_eigenray_unit',['python3','rtk/test_stage4d3_negative_eigenray_gate.py']),
+            ('adaptive_quarter_unit',['python3','rtk/test_adaptive_quarter_gate.py']),
+            ('runtime_sidecars_unit',['python3','rtk/test_artifact_runtime_sidecars.py']),
+            ('final_replay_unit',['python3','rtk/test_final_replay_gate.py']),
+            ('idempotent_dispatch_unit',['python3','rtk/test_idempotent_dispatch_guard.py']),
+            ('reproducibility_extensions',['python3','rtk/audit_reproducibility_extensions.py']),
+            ('artifact_identity_current',['python3','rtk/validate_artifact_identity.py']),
+          ]
+          rows=[]
+          for name,cmd in checks:
+              p=subprocess.run(cmd,text=True,capture_output=True,env=os.environ.copy())
+              rows.append({'name':name,'returncode':p.returncode,'stdout':p.stdout[-12000:],'stderr':p.stderr[-12000:]})
+              print('RTK_CONTROL_DIAGNOSTIC',name,'rc',p.returncode,flush=True)
+          out={
+            'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'overall_pass':all(r['returncode']==0 for r in rows),
+            'checks':rows,
+            'note':'Diagnostic-only: no research/state mutation and no heavy dispatch.'
+          }
+          path='research/audits/control_plane_diagnostic_latest.json'
+          open(path,'w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('RTK_CONTROL_DIAGNOSTIC_COMPLETE',json.dumps({'overall_pass':out['overall_pass']}))
+          PY
+
+      - name: Commit diagnostic report only
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'rtk-control-diagnostic'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/audits/control_plane_diagnostic_latest.json
+          if git diff --cached --quiet; then
+            echo 'No diagnostic change to commit'
+          else
+            git commit -m 'RTK control-plane diagnostic report'
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
