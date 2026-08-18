@@ -18,6 +18,7 @@
     "iteration": 55,
     "reason": "Stage4D3 exact-ray falsification required for non-PD recenter-clear RTK Hessian",
     "ref": "main",
+    "status": "submitted",
     "target": "rtk_negative_eigenray",
     "workflow": "rtk-autonomous-negative-eigenray.yml"
   },
