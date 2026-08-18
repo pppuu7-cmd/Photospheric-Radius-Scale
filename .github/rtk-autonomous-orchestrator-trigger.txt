@@ -1,2 +1,2 @@
-trigger: 2026-08-18T00:18:00Z
-reason: re-run synthetic negative-eigenray state-machine regression after direct-module import fix; axis 32081135646 remains the only stationarity compute
+trigger: 2026-08-18T00:27:00Z
+reason: consume successful axis run 32081135646 at the exact mixed-ray center, validate adaptive control hardening, and dispatch the next RTK 7D Hessian if axis remains recenter-clear
