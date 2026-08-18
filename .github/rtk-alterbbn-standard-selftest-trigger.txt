@@ -1,0 +1,2 @@
+trigger: 2026-08-19T02:47:00+03:00
+reason: execute predeclared unmodified AlterBBN v2.2 standard-network self-test on DOI-pinned bytes before any RTK H(T) injection
