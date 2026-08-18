@@ -14,9 +14,11 @@ identity_norm=''.join(identity.split()).replace('"',"'")
 signature=(ROOT/'rtk/build_signature_atlas_pair.py').read_text()
 lcdm_stationarity=(ROOT/'rtk/autonomous_dense_lcdm_stationarity.py').read_text()
 rtk_stationarity=(ROOT/'rtk/autonomous_dense_rtk_stationarity.py').read_text()
+negative_ray=(ROOT/'rtk/autonomous_negative_eigenray_gate.py').read_text()
 orchestrator=(ROOT/'rtk/autonomous_orchestrator.py').read_text()
 multiscale=(ROOT/'rtk/enforce_stage4d3_multiscale_gate.py').read_text()
 adaptive=(ROOT/'rtk/enforce_adaptive_quarter_gate.py').read_text()
+ladder=(ROOT/'rtk/enforce_stage4d3_scale_ladder_gate.py').read_text()
 
 checks=[]
 def ok(name, cond, detail=''):
@@ -77,6 +79,9 @@ ok('artifact_identity_checks_locked_pantheon_sha', "'pantheon_commit'" in identi
 ok('artifact_identity_checks_locked_numpy', "'numpy_version'" in identity_norm and "repro['python_packages']['numpy']" in identity_norm)
 ok('artifact_identity_includes_negative_eigenray', "('rtk','negative_eigenray_run')" in identity_norm and "'negative_eigenray_run'" in identity_norm)
 ok('artifact_identity_includes_quarter_stencil', "('rtk','quarter_hessian_run')" in identity_norm and "'quarter_hessian_run'" in identity_norm)
+ok('artifact_identity_includes_eighth_negative_eigenray',
+   "('rtk','eighth_negative_eigenray_run')" in identity_norm and "'eighth_negative_eigenray_run'" in identity_norm,
+   'terminal 1/8 negative-eigenray artifacts must receive the same locked proof-artifact validation')
 
 ok('stage4d3_negative_eigenray_before_half',
    'process_negative_ray' in multiscale and 'rtk-autonomous-negative-eigenray.yml' in multiscale and
@@ -89,6 +94,20 @@ ok('adaptive_quarter_requires_ray_clear_and_half_pd',
 ok('adaptive_proof_requires_half_and_quarter_pd',
    "bool(qe.get('positive_definite'))" in adaptive and 'N5_ADAPTIVE_HALF_AND_QUARTER_PASS' in adaptive,
    'adaptive interior-minimum certification must require a recenter-clear PD quarter stencil after PD half')
+ok('negative_eigenray_worker_supports_eighth_scale',
+   "'eighth':('eighth_hessian_result','eighth_hessian_run',0.125)" in negative_ray,
+   'generic exact-ray worker must be able to falsify a non-PD terminal 1/8 Hessian at its own physical scale')
+ok('scale_ladder_requires_eighth_ray_before_exhaustion',
+   "rs=ensure_ray(state,'eighth',changes)" in ladder and
+   ladder.find("rs=ensure_ray(state,'eighth',changes)") < ladder.find("N5_SCALE_LADDER_EXHAUSTED_CURVATURE_UNRESOLVED"),
+   'a non-PD 1/8 Hessian may not be classified as exhausted until its same-scale exact ray is recenter-clear')
+ok('scale_ladder_eighth_ray_is_scale_locked',
+   "'eighth':('eighth_negative_eigenray_run','eighth_negative_eigenray_result','eighth_negative_eigenray_certification',EIGHTH_RAY_WF,EIGHTH_RAY_ART,0.125)" in ladder and
+   "expected={'half':0.5,'quarter':0.25,'eighth':0.125}" in ladder,
+   'terminal eigenray dispatch and artifact semantics must remain fixed to source scale 0.125')
+ok('scale_ladder_recenter_clears_eighth_ray',
+   "'eighth_negative_eigenray_result','eighth_negative_eigenray_run'" in ladder,
+   'a downhill recenter must invalidate all old terminal-ray proof state')
 
 tol=float(state['objective']['recenter_tolerance_S'])
 for model in ('lcdm','rtk'):
