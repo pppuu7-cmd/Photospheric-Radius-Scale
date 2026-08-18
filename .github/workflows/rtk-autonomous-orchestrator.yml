@@ -57,6 +57,12 @@ jobs:
           python3 rtk/test_adaptive_quarter_gate.py | tee autonomous_adaptive_quarter_unit.log
           grep -q RTK_ADAPTIVE_QUARTER_GATE_UNIT_PASS autonomous_adaptive_quarter_unit.log
 
+      - name: Test final matched replay gate
+        run: |
+          set -euo pipefail
+          python3 rtk/test_final_replay_gate.py | tee autonomous_final_replay_unit.log
+          grep -q RTK_FINAL_REPLAY_GATE_UNIT_PASS autonomous_final_replay_unit.log
+
       - name: Test crash-safe idempotent dispatch guard
         run: |
           set -euo pipefail
@@ -100,6 +106,14 @@ jobs:
           set -euo pipefail
           python3 rtk/enforce_adaptive_quarter_gate.py | tee autonomous_adaptive_quarter.log
           grep -q RTK_ADAPTIVE_QUARTER_GATE autonomous_adaptive_quarter.log
+
+      - name: Enforce independent final matched-minima replay gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 rtk/enforce_final_replay_gate.py | tee autonomous_final_replay.log
+          grep -q RTK_FINAL_REPLAY_GATE autonomous_final_replay.log
 
       - name: Commit centralized state and journal
         run: |
