@@ -1,6 +1,6 @@
 {
-  "schema_version": 5,
-  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866; the historical production neutrino/recombination baseline is now made explicit rather than changed.",
+  "schema_version": 6,
+  "purpose": "Audited provenance targets for future matched RTK/LCDM production runs. Measured package versions and Planck checksum were reproduced in pinned two-point control run 32055127966; the upstream nonlocal model mapping was independently resolved from the pinned equations; explicit zero RT auxiliary background initial conditions were A/B verified in run 32073306866; the historical production neutrino/recombination baseline is explicit; the base 7D Hessian workflow is now dispatch-only and uses the same pinned production environment as the multiscale proof workflows.",
   "external_git": {
     "class_public": {
       "repository": "dirian/class_public",
@@ -81,5 +81,17 @@
     "cache_semantics": "exact-float-success-only",
     "objective": "matched-ultra-linstep2+dense-BOSS"
   },
-  "workflow_wiring_status": "axis_and_half_stencil_hardened; active base Hessian predates explicit-zero IC patch but A/B score equivalence is exact on audited point; heavy workflow must be rewired after active run completes to avoid self-trigger duplication"
+  "base_hessian_workflow_hardening": {
+    "main_commit": "f05569bfc8cf6f64a01fe75ca630c337d0523ab8",
+    "dispatch_only": true,
+    "timeout_minutes": 240,
+    "class_commit_pinned": true,
+    "pantheon_commit_pinned": true,
+    "planck_sha256_verified": true,
+    "numpy_scipy_pinned": true,
+    "pip_freeze_uploaded": true,
+    "python_version_uploaded": true,
+    "stencil_scale_one_asserted": true
+  },
+  "workflow_wiring_status": "axis_half_quarter_negative_ray_and_base_hessian_provenance_hardened; base heavy workflow is dispatch-only and shares locked CLASS/Pantheon/Planck/NumPy/SciPy environment with multiscale proof chain"
 }
