@@ -65,7 +65,7 @@ L.make_ini=make_ini
 OUT=Path('../output/neutrino_reoptimization_seed')/MODEL.lower()
 OUT.mkdir(parents=True,exist_ok=True)
 JOURNAL=OUT/'points.jsonl'; SUMMARY=OUT/'summary.json'; TRACE=OUT/'trace.csv'
-ROWS=[]; SUCCESS={}; NREQ=0
+ROWS=[]; SUCCESS={}; NREQ=0; NBOUND=0
 
 # Exact-float point identity at the worker level. inference_core also has exact-float success cache.
 def point_key(p):
@@ -89,6 +89,20 @@ def y_bounds():
     return b
 BOUNDS=y_bounds()
 
+def physical_violations(p):
+    """Return explicit violations; never clip a proposed cosmological point."""
+    bad=[]
+    for a in AXES:
+        if a=='loglam':
+            lam=float(p.get('lam',float('nan')))
+            v=math.log(lam) if math.isfinite(lam) and lam>0.0 else float('nan')
+        else:
+            v=float(p.get(a,float('nan')))
+        lo,hi=PHYS[a]
+        if (not math.isfinite(v)) or v<lo or v>hi:
+            bad.append({'axis':a,'value':v,'lower':lo,'upper':hi})
+    return bad
+
 def cleanup(tag):
     if not tag:return
     for q in L.OUT.glob(tag+'_*'):
@@ -109,7 +123,7 @@ def persist(status='running',extra=None):
       'start_params':START,'optimizer_axes':AXES,'optimizer_scales':SCALE,
       'physical_bounds':PHYS,'normalized_bounds':BOUNDS,
       'neutrino':{'N_ncdm':1,'m_ncdm_eV':0.06,'T_ncdm':0.71611,'deg_ncdm':1.0,'N_ur':2.0328},
-      'exact_requests':NREQ,'unique_success_points':len(SUCCESS),
+      'exact_requests':NREQ,'physical_bound_rejections':NBOUND,'unique_success_points':len(SUCCESS),
       'best_score_eff':float(best['score']) if best else None,
       'best_score_k01':float(best['score_k01']) if best else None,
       'best_params':best.get('params') if best else None,
@@ -128,7 +142,16 @@ def persist(status='running',extra=None):
     return s
 
 def exact_eval(p,label):
-    global NREQ
+    global NREQ,NBOUND
+    violations=physical_violations(p)
+    if violations:
+        NBOUND+=1
+        fail={'ok':False,'model':MODEL,'params':copy.deepcopy(p),'label':label,
+              'error':'PHYSICAL_BOUNDS_REJECTION','violations':violations}
+        with JOURNAL.open('a') as f:f.write(json.dumps(fail,sort_keys=True)+'\n')
+        persist('running')
+        print('B4_NEUTRINO_BOUNDS_REJECT',MODEL,json.dumps(fail,sort_keys=True),flush=True)
+        return fail
     k=point_key(p)
     if k in SUCCESS:return SUCCESS[k]
     last=None
@@ -174,8 +197,8 @@ valid=[r for r in SUCCESS.values() if r.get('ok')]
 best=min(valid,key=lambda r:float(r['score']))
 
 # One exact normalized coordinate poll at a preregistered diagnostic scale. This is a
-# candidate-quality check, not the later stationarity proof. Any >0.005 downhill point
-# is explicitly reported and becomes the next reoptimization center.
+# candidate-quality check, not the later stationarity proof. OOB poll points are
+# explicitly rejected and recorded; they are never silently clipped.
 POLL={'loglam':0.10,'h':0.0010,'Ob':0.00020,'Om':0.0020,'As':0.010e-9,'ns':0.0020,'zre':0.10}
 c=copy.deepcopy(best['params']);center_score=float(best['score']);poll_rows=[]
 for a in AXES:
@@ -184,7 +207,10 @@ for a in AXES:
         if a=='loglam':p['lam']=float(c['lam'])*math.exp(sg*POLL[a])
         else:p[a]=float(c[a])+sg*POLL[a]
         rr=exact_eval(p,f'poll_{a}_{sg:+d}')
-        if rr.get('ok'):poll_rows.append({'axis':a,'sign':sg,'score':float(rr['score']),'params':rr['params']})
+        if rr.get('ok'):
+            poll_rows.append({'axis':a,'sign':sg,'status':'evaluated','score':float(rr['score']),'params':rr['params']})
+        else:
+            poll_rows.append({'axis':a,'sign':sg,'status':'rejected_or_failed','error':rr.get('error'),'violations':rr.get('violations')})
 valid=[r for r in SUCCESS.values() if r.get('ok')]
 best2=min(valid,key=lambda r:float(r['score']))
 best_improvement=center_score-float(best2['score'])
@@ -192,7 +218,8 @@ summary=persist('complete',{
  'initial_neutrino_score_eff':S0,
  'seed_improvement_from_massless_start':S0-float(best2['score']),
  'powell_result':{'success':bool(res.success),'message':str(res.message),'nfev':int(res.nfev),'x':res.x.tolist(),'fun':float(res.fun)},
- 'diagnostic_poll_steps':POLL,'diagnostic_poll_best_improvement_from_pre_poll_best':best_improvement,
+ 'diagnostic_poll_steps':POLL,'diagnostic_poll_results':poll_rows,
+ 'diagnostic_poll_best_improvement_from_pre_poll_best':best_improvement,
  'recenter_required_by_0p005':bool(best_improvement>TOL),
  'next_required_gate':'recenter_and_repeat_seed' if best_improvement>TOL else 'dedicated_neutrino_stationarity_multiscale',
  'best_score_eff':float(best2['score']),'best_score_k01':float(best2['score_k01']),
