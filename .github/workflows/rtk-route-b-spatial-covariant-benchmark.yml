@@ -1,0 +1,46 @@
+name: RTK Route-B preferred-foliation metric-Khronon benchmark
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-route-b-spatial-covariant-benchmark.yml'
+      - '.github/rtk-route-b-spatial-covariant-benchmark-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-route-b-spatial-covariant-benchmark
+  cancel-in-progress: true
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact preferred-foliation benchmark proof
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_spatial_covariant_benchmark.py
+          python3 rtk/route_b_spatial_covariant_benchmark.py | tee route_b_spatial_covariant_benchmark.log
+          grep -q RTK_ROUTE_B_SPATIAL_COVARIANT_BENCHMARK_PASS route_b_spatial_covariant_benchmark.log
+          python3 - <<'PY'
+          import platform,sympy
+          assert platform.python_version()=='3.12.3'
+          assert sympy.__version__=='1.14.0'
+          print('RTK_ROUTE_B_SPATIAL_COVARIANT_BENCHMARK_RUNTIME_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-spatial-covariant-benchmark
+          path: route_b_spatial_covariant_benchmark.log
+          if-no-files-found: error
