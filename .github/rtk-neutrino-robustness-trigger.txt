@@ -1,3 +1,3 @@
-trigger: 2026-08-18T00:40:00Z
+trigger: 2026-08-18T13:36:00Z
 axis_run: 32081135646
-reason: run six fixed-center minimal-neutrino robustness evaluations only after the current RTK center passed the exact axis gate
+reason: rerun six fixed-center minimal-neutrino robustness evaluations after aligning Planck SHA256 with reproducibility_lock schema 8; frozen production objective unchanged
