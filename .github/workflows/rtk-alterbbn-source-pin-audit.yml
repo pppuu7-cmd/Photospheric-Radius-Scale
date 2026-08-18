@@ -1,0 +1,100 @@
+name: RTK AlterBBN published-source pin audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-alterbbn-source-pin-audit-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-alterbbn-source-pin-audit
+  cancel-in-progress: true
+
+jobs:
+  discover-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Probe published AlterBBN v2.2 source endpoints
+        run: |
+          set -euo pipefail
+          mkdir -p output/alterbbn_source_pin
+          python3 - <<'PY'
+          import json, subprocess, re, hashlib, os, pathlib
+          out=pathlib.Path('output/alterbbn_source_pin')
+          endpoints=[
+            ('landing','https://data.mendeley.com/datasets/k7j3b9zyvf/1'),
+            ('api_data_snapshot','https://api.data.mendeley.com/datasets/k7j3b9zyvf?version=1'),
+            ('api_mendeley_snapshot','https://api.mendeley.com/datasets/k7j3b9zyvf?version=1'),
+            ('api_data_zip','https://api.data.mendeley.com/datasets/k7j3b9zyvf/zip/file_downloaded?version=1'),
+          ]
+          rows=[]
+          for name,url in endpoints:
+              body=out/f'{name}.body'
+              hdr=out/f'{name}.headers'
+              cp=subprocess.run(['curl','-L','-sS','--retry','2','--connect-timeout','15','--max-time','60','-D',str(hdr),'-o',str(body),'-w','%{http_code}',url],text=True,capture_output=True)
+              code=cp.stdout.strip() if cp.returncode==0 else 'curl_error'
+              b=body.read_bytes() if body.exists() else b''
+              rows.append({'name':name,'url':url,'curl_returncode':cp.returncode,'http_code':code,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest() if b else None})
+          # Search all returned text/JSON for immutable content locators, UUIDs and filename references.
+          candidates=[]
+          for p in out.glob('*.body'):
+              raw=p.read_bytes()
+              try:text=raw.decode('utf-8','ignore')
+              except Exception:continue
+              if 'alterbbn_v2.2.tar.xz' in text:
+                  candidates.append({'source':p.name,'kind':'filename_seen','value':'alterbbn_v2.2.tar.xz'})
+              for u in sorted(set(re.findall(r'https?://[^"\'<>\\\s]+',text))):
+                  if any(x in u.lower() for x in ('mendeley','file','download','k7j3b9zyvf')):
+                      candidates.append({'source':p.name,'kind':'url','value':u[:2000]})
+              for uid in sorted(set(re.findall(r'\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b',text,re.I))):
+                  candidates.append({'source':p.name,'kind':'uuid','value':uid})
+          # Identify any successful archive-like response without assuming its endpoint semantics.
+          archives=[]
+          for row in rows:
+              p=out/f"{row['name']}.body"
+              if not p.exists() or p.stat().st_size==0:continue
+              ft=subprocess.run(['file','-b',str(p)],text=True,capture_output=True).stdout.strip()
+              row['file_type']=ft
+              if any(k in ft.lower() for k in ('xz compressed','zip archive','tar archive','gzip compressed')):
+                  archives.append({'name':row['name'],'path':str(p),'sha256':row['sha256'],'bytes':row['bytes'],'file_type':ft})
+          result={
+            'classification':'ALTERBBN_PUBLISHED_SOURCE_DISCOVERY',
+            'doi':'10.17632/k7j3b9zyvf.1',
+            'expected_filename':'alterbbn_v2.2.tar.xz',
+            'expected_dataset_version':1,
+            'endpoint_results':rows,
+            'extracted_candidates':candidates,
+            'archive_like_responses':archives,
+            'status':'PIN_CANDIDATE_FOUND' if archives else 'SOURCE_DISCOVERY_INCOMPLETE',
+            'warning':'Discovery/provenance only. No BBN abundance calculation and no source is accepted until byte identity and archive contents are validated.'
+          }
+          (out/'summary.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print('RTK_ALTERBBN_SOURCE_DISCOVERY',json.dumps(result,sort_keys=True))
+          PY
+
+      - name: Print concise discovery classification
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          s=json.load(open('output/alterbbn_source_pin/summary.json'))
+          assert s['doi']=='10.17632/k7j3b9zyvf.1'
+          assert s['expected_filename']=='alterbbn_v2.2.tar.xz'
+          print('RTK_ALTERBBN_SOURCE_PIN_AUDIT_COMPLETE',s['status'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-alterbbn-source-pin-audit
+          path: output/alterbbn_source_pin/
+          if-no-files-found: error
