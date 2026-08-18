@@ -18,6 +18,7 @@
     "iteration": 62,
     "reason": "half-stencil exact improvement 0.0250955068 > 0.005",
     "ref": "main",
+    "status": "submitted",
     "target": "rtk_axis",
     "workflow": "rtk-autonomous-dense-rtk-axis.yml"
   },
