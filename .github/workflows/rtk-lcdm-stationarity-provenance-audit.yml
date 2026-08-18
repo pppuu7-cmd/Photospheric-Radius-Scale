@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - '.github/workflows/rtk-lcdm-stationarity-provenance-audit.yml'
       - '.github/rtk-lcdm-stationarity-provenance-audit-trigger.txt'
 
 permissions:
