@@ -1,2 +1,2 @@
-trigger: 2026-08-19T02:43:00+03:00
-reason: capture AlterBBN source-pin v3, Route-B dispersion theorem rerun, acceleration-degeneracy theorem, D4 audit, and active B4 paired neutrino seed
+trigger: 2026-08-19T02:50:00+03:00
+reason: capture AlterBBN standard-network self-test, Route-B acceleration-degeneracy theorem, D4 provenance audit, and active B4 neutrino seed
