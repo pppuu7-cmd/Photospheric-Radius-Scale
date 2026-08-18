@@ -1,0 +1,2 @@
+trigger: 2026-08-19T02:55:00+03:00
+reason: machine-check exact RTK quadratic dispersion plus ADM velocity-Hessian/constraint count for explicit preferred-foliation metric+Khronon benchmark
