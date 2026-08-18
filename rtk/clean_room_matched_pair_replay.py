@@ -14,6 +14,9 @@ import sys
 import time
 from pathlib import Path
 
+# The workflow executes this source from ../rtk while cwd is class_public,
+# where the freshly generated inference_core.py lives.
+sys.path.insert(0,str(Path.cwd()))
 sys.argv=['clean_room_matched_pair_replay','planck_data']
 import inference_core as L
 
