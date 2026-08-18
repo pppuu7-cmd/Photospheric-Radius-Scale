@@ -23,58 +23,98 @@ jobs:
           ref: rtk-class-build
           fetch-depth: 1
 
-      - name: Probe published AlterBBN v2.2 source endpoints
+      - name: Probe published AlterBBN v2.2 source endpoints and public frontend API
         run: |
           set -euo pipefail
           mkdir -p output/alterbbn_source_pin
           python3 - <<'PY'
-          import json, subprocess, re, hashlib, os, pathlib
+          import json, subprocess, re, hashlib, pathlib, urllib.parse
           out=pathlib.Path('output/alterbbn_source_pin')
-          endpoints=[
-            ('landing','https://data.mendeley.com/datasets/k7j3b9zyvf/1'),
-            ('api_data_snapshot','https://api.data.mendeley.com/datasets/k7j3b9zyvf?version=1'),
-            ('api_mendeley_snapshot','https://api.mendeley.com/datasets/k7j3b9zyvf?version=1'),
-            ('api_data_zip','https://api.data.mendeley.com/datasets/k7j3b9zyvf/zip/file_downloaded?version=1'),
-          ]
-          rows=[]
-          for name,url in endpoints:
-              body=out/f'{name}.body'
-              hdr=out/f'{name}.headers'
-              cp=subprocess.run(['curl','-L','-sS','--retry','2','--connect-timeout','15','--max-time','60','-D',str(hdr),'-o',str(body),'-w','%{http_code}',url],text=True,capture_output=True)
+          base='https://data.mendeley.com'
+          dataset='k7j3b9zyvf'; version='1'
+
+          def fetch(name,url,max_time='60'):
+              body=out/f'{name}.body'; hdr=out/f'{name}.headers'
+              cp=subprocess.run(['curl','-L','-sS','--retry','2','--connect-timeout','15','--max-time',max_time,'-D',str(hdr),'-o',str(body),'-w','%{http_code}',url],text=True,capture_output=True)
               code=cp.stdout.strip() if cp.returncode==0 else 'curl_error'
               b=body.read_bytes() if body.exists() else b''
-              rows.append({'name':name,'url':url,'curl_returncode':cp.returncode,'http_code':code,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest() if b else None})
-          # Search all returned text/JSON for immutable content locators, UUIDs and filename references.
+              ft=subprocess.run(['file','-b',str(body)],text=True,capture_output=True).stdout.strip() if body.exists() else None
+              return {'name':name,'url':url,'curl_returncode':cp.returncode,'http_code':code,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest() if b else None,'file_type':ft}
+
+          rows=[]
+          endpoints=[
+            ('landing',f'{base}/datasets/{dataset}/{version}'),
+            ('api_data_snapshot',f'https://api.data.mendeley.com/datasets/{dataset}?version={version}'),
+            ('api_mendeley_snapshot',f'https://api.mendeley.com/datasets/{dataset}?version={version}'),
+            ('api_data_zip',f'https://api.data.mendeley.com/datasets/{dataset}/zip/file_downloaded?version={version}'),
+          ]
+          for name,url in endpoints: rows.append(fetch(name,url))
+
+          landing=(out/'landing.body').read_text(errors='ignore') if (out/'landing.body').exists() else ''
+          bundle_paths=[]
+          for m in re.finditer(r'<script[^>]+src=["\']([^"\']*?/datasets/bundle\.js\?[^"\']+)["\']',landing,re.I):
+              src=m.group(1).replace('&#x2F;','/')
+              if src.startswith('//'): src='https:'+src
+              elif src.startswith('/'): src=base+src
+              elif not src.startswith('http'): src=base+'/'+src.lstrip('/')
+              bundle_paths.append(src)
+          bundle_paths=sorted(set(bundle_paths))
+          bundle_contexts=[]
+          public_probe_urls=[]
+          for i,url in enumerate(bundle_paths):
+              row=fetch(f'frontend_bundle_{i}',url); rows.append(row)
+              p=out/f'frontend_bundle_{i}.body'
+              js=p.read_text(errors='ignore') if p.exists() else ''
+              # Persist compact contexts around likely public file-list/download API strings.
+              needles=('file_download','fileDownload','/files','files?','datasetFiles','file_contents','content_details','repositoryApi','api.data.mendeley','api.mendeley','download-all','short_id','folders')
+              for needle in needles:
+                  pos=0
+                  while True:
+                      j=js.find(needle,pos)
+                      if j<0:break
+                      ctx=js[max(0,j-350):min(len(js),j+700)]
+                      bundle_contexts.append({'bundle':url,'needle':needle,'context':ctx})
+                      pos=j+len(needle)
+                      if sum(1 for x in bundle_contexts if x['needle']==needle)>=20:break
+              # Extract literal endpoint-like strings mentioning datasets/files/repository.
+              for raw in re.findall(r'["\']([^"\']{3,500})["\']',js):
+                  low=raw.lower()
+                  if any(x in low for x in ('/datasets','file_download','/files','repository')) and (' ' not in raw):
+                      val=raw.replace('\\/','/')
+                      if dataset in val or '{' in val or 'dataset' in low or 'file' in low:
+                          public_probe_urls.append(val)
+          (out/'frontend_api_contexts.json').write_text(json.dumps(bundle_contexts[:500],indent=2,sort_keys=True)+'\n')
+          (out/'frontend_endpoint_strings.json').write_text(json.dumps(sorted(set(public_probe_urls))[:1000],indent=2)+'\n')
+
+          # Search returned material for immutable content locators, UUIDs and expected filename.
           candidates=[]
           for p in out.glob('*.body'):
-              raw=p.read_bytes()
-              try:text=raw.decode('utf-8','ignore')
-              except Exception:continue
+              raw=p.read_bytes(); text=raw.decode('utf-8','ignore')
               if 'alterbbn_v2.2.tar.xz' in text:
                   candidates.append({'source':p.name,'kind':'filename_seen','value':'alterbbn_v2.2.tar.xz'})
               for u in sorted(set(re.findall(r'https?://[^"\'<>\\\s]+',text))):
-                  if any(x in u.lower() for x in ('mendeley','file','download','k7j3b9zyvf')):
+                  if any(x in u.lower() for x in ('mendeley','file','download',dataset)):
                       candidates.append({'source':p.name,'kind':'url','value':u[:2000]})
               for uid in sorted(set(re.findall(r'\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b',text,re.I))):
                   candidates.append({'source':p.name,'kind':'uuid','value':uid})
-          # Identify any successful archive-like response without assuming its endpoint semantics.
+
           archives=[]
           for row in rows:
-              p=out/f"{row['name']}.body"
-              if not p.exists() or p.stat().st_size==0:continue
-              ft=subprocess.run(['file','-b',str(p)],text=True,capture_output=True).stdout.strip()
-              row['file_type']=ft
-              if any(k in ft.lower() for k in ('xz compressed','zip archive','tar archive','gzip compressed')):
-                  archives.append({'name':row['name'],'path':str(p),'sha256':row['sha256'],'bytes':row['bytes'],'file_type':ft})
+              if row.get('file_type') and any(k in row['file_type'].lower() for k in ('xz compressed','zip archive','tar archive','gzip compressed')):
+                  archives.append({'name':row['name'],'path':str(out/f"{row['name']}.body"),'sha256':row['sha256'],'bytes':row['bytes'],'file_type':row['file_type']})
+
           result={
             'classification':'ALTERBBN_PUBLISHED_SOURCE_DISCOVERY',
             'doi':'10.17632/k7j3b9zyvf.1',
             'expected_filename':'alterbbn_v2.2.tar.xz',
             'expected_dataset_version':1,
             'endpoint_results':rows,
+            'frontend_bundle_urls':bundle_paths,
+            'frontend_endpoint_string_count':len(set(public_probe_urls)),
+            'frontend_context_count':len(bundle_contexts),
             'extracted_candidates':candidates,
             'archive_like_responses':archives,
-            'status':'PIN_CANDIDATE_FOUND' if archives else 'SOURCE_DISCOVERY_INCOMPLETE',
+            'status':'PIN_CANDIDATE_FOUND' if archives else ('FRONTEND_ENDPOINTS_DISCOVERED' if public_probe_urls else 'SOURCE_DISCOVERY_INCOMPLETE'),
             'warning':'Discovery/provenance only. No BBN abundance calculation and no source is accepted until byte identity and archive contents are validated.'
           }
           (out/'summary.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
