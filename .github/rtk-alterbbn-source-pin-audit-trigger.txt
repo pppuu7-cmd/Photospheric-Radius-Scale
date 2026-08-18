@@ -1,2 +1,2 @@
-trigger: 2026-08-19T02:18:00+03:00
-reason: inspect public Mendeley Data frontend bundle for immutable AlterBBN v2.2 file-list/download endpoint after documented API returned 401
+trigger: 2026-08-19T02:31:00+03:00
+reason: use discovered Mendeley public-api endpoint to download alterbbn_v2.2.tar.xz, compute SHA-256 and validate archive contents before B6 self-test
