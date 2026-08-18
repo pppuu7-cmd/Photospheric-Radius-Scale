@@ -1,2 +1,2 @@
-trigger: 2026-08-18T14:04:00Z
-reason: diagnose state iteration stall without mutating research state or duplicating active half-stencil 32133215190
+trigger: 2026-08-18T14:10:00Z
+reason: persist exact control-plane unit/invariant exit codes while half-stencil 32133215190 remains the only heavy worker
