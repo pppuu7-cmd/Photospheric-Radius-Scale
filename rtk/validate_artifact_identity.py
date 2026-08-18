@@ -113,13 +113,13 @@ def validate_slot(state,repro,model,key):
     if expected_source is not None and summary.get('eigenray_source')!=expected_source:
         raise RuntimeError(f'artifact identity mismatch {model}.{key} run={run_id}: eigenray_source={summary.get("eigenray_source")!r} expected={expected_source!r}')
     row={'slot':f'{model}.{key}','run_id':run_id,'objective':expected_objective,'center_match':True,'stencil_scale':summary.get('stencil_scale'),'source_stencil_scale':summary.get('source_stencil_scale'),'eigenray_source':summary.get('eigenray_source')}
-    proof_keys=('hessian_run','half_hessian_run','quarter_hessian_run','eighth_hessian_run','negative_eigenray_run','half_negative_eigenray_run','quarter_negative_eigenray_run')
+    proof_keys=('hessian_run','half_hessian_run','quarter_hessian_run','eighth_hessian_run','negative_eigenray_run','half_negative_eigenray_run','quarter_negative_eigenray_run','eighth_negative_eigenray_run')
     if model=='rtk' and key in proof_keys:row['locked_provenance']=validate_rtk_locked_provenance(state,repro,key,run_id,summary,bundle)
     return row
 
 def main():
     state=json.loads(STATE.read_text());repro=json.loads(REPRO.read_text());checked=[]
-    slots=(('rtk','axis_run'),('rtk','hessian_run'),('rtk','negative_eigenray_run'),('rtk','half_hessian_run'),('rtk','half_negative_eigenray_run'),('rtk','quarter_hessian_run'),('rtk','quarter_negative_eigenray_run'),('rtk','eighth_hessian_run'),('lcdm','hessian_run'))
+    slots=(('rtk','axis_run'),('rtk','hessian_run'),('rtk','negative_eigenray_run'),('rtk','half_hessian_run'),('rtk','half_negative_eigenray_run'),('rtk','quarter_hessian_run'),('rtk','quarter_negative_eigenray_run'),('rtk','eighth_hessian_run'),('rtk','eighth_negative_eigenray_run'),('lcdm','hessian_run'))
     for model,key in slots:
         row=validate_slot(state,repro,model,key)
         if row:checked.append(row)
