@@ -1,2 +1,2 @@
-trigger: 2026-08-18T14:16:00Z
-reason: verify adaptive-quarter no-network regression and state-driven clean-room reproducibility audit fixes; do not mutate research state
+trigger: 2026-08-18T14:35:00Z
+reason: non-mutating validation of live-lock workflow audit, runtime-sidecar validator and N5 control gates after half-stencil completion
