@@ -26,6 +26,7 @@ jobs:
       CLIPY_NOJAX: '1'
       OMP_NUM_THREADS: '2'
       RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
       RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
       RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
       RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
@@ -78,6 +79,8 @@ jobs:
           ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
           ! grep -q 'round(float(p\[k\]),12)' inference_core.py
           grep -q "if r.get('ok')" inference_core.py
+          grep -q "RTK_PLANCK_DATA" inference_core.py
+          ! grep -q "PLANCK=Path(sys.argv\[1\])" inference_core.py
           grep -q 'pba->V_prime_ini_nlde = 0.;' source/input.c
 
       - name: Build CLASS
@@ -105,6 +108,21 @@ jobs:
           echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
           mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
 
+      - name: Smoke-test reusable likelihood import
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,sys
+          # Reproduce the exact failure mode from run 32173665110: a worker has
+          # its own RTK/LCDM argv. The reusable core must ignore that argv.
+          sys.argv=['neutrino_reoptimization_seed.py','RTK']
+          import inference_core as L
+          assert str(L.PLANCK)==os.environ['RTK_PLANCK_DATA']
+          assert set(L.LIKES)=={'lowT','lowE','high'}
+          print('B4_REUSABLE_LIKELIHOOD_IMPORT_SMOKE_PASS',L.PLANCK)
+          PY
+
       - name: Run exact neutrino seed reoptimization
         working-directory: class_public
         run: |
@@ -120,6 +138,7 @@ jobs:
           assert s['objective']=='matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1'
           assert s['neutrino']['m_ncdm_eV']==0.06
           assert s['warning'].startswith('Seed optimization only')
+          assert 'physical_bound_rejections' in s
           print('B4_NEUTRINO_SEED_ARTIFACT_PASS',s['model'],s['best_score_eff'])
           PY
 
