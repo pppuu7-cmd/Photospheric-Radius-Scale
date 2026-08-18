@@ -49,6 +49,7 @@ jobs:
               'RTK pinned AlterBBN v2.2 standard-network self-test',
               'RTK Route-B khronometric dispersion non-mapping theorem',
               'RTK Route-B khronometric acceleration degeneracy audit',
+              'RTK Route-B preferred-foliation metric-Khronon benchmark',
               'RTK Route A1 background interaction ratios',
               'RTK Route A1 D4 identifiability theorem',
               'RTK Route A1 D5 dispersive identifiability theorem',
