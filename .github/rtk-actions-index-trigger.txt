@@ -1,2 +1,2 @@
-trigger: 2026-08-19T01:44:00+03:00
-reason: capture audit-only locked LCDM stationarity replay plus active B4 paired neutrino seed
+trigger: 2026-08-19T02:03:00+03:00
+reason: capture self-triggered audit-only LCDM stationarity provenance replay and active B4 paired neutrino seed
