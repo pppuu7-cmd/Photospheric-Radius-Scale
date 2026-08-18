@@ -1,2 +1,2 @@
-trigger: 2026-08-18T00:27:00Z
-reason: consume successful axis run 32081135646 at the exact mixed-ray center, validate adaptive control hardening, and dispatch the next RTK 7D Hessian if axis remains recenter-clear
+trigger: 2026-08-18T00:37:00Z
+reason: consume successful axis 32081135646 after adaptive unit dependency fix; run all control regressions and dispatch next RTK Hessian only if every gate passes
