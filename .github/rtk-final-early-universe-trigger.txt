@@ -1,2 +1,2 @@
-trigger: 2026-08-18T15:04:00Z
-reason: rerun final RTK/LCDM backgrounds through z=1e10 and persist summary into research/robustness; frozen matched likelihood unchanged
+trigger: 2026-08-18T15:09:00Z
+reason: rerun identical final RTK/LCDM backgrounds after fixing gamma parser to require the explicit gamma= field; H-ratio science should reproduce and frozen matched likelihood remains unchanged
