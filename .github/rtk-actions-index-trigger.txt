@@ -1,2 +1,2 @@
-trigger: 2026-08-19T01:56:00+03:00
-reason: capture second D5 generalized scale-ladder CI with locked eighth-ray invariants plus active B4 status
+trigger: 2026-08-19T01:44:00+03:00
+reason: capture audit-only locked LCDM stationarity replay plus active B4 paired neutrino seed
