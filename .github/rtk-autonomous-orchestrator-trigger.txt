@@ -1,2 +1,2 @@
-trigger: 2026-08-18T13:00:00Z
-reason: validate file-level crash-recovery consume test for idempotent heavy dispatch; preserve active half-stencil as the only heavy worker
+trigger: 2026-08-18T13:10:00Z
+reason: validate LCDM replay hardening, extended reproducibility audit, and file-level idempotent dispatch crash recovery while preserving active RTK half-stencil as the only heavy worker
