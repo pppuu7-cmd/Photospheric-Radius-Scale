@@ -1,0 +1,19 @@
+{
+  "classification": "ALTERBBN_V2_2_PUBLISHED_SOURCE_LOCK",
+  "doi": "10.17632/k7j3b9zyvf.1",
+  "dataset_id": "k7j3b9zyvf",
+  "dataset_version": 1,
+  "published_filename": "alterbbn_v2.2.tar.xz",
+  "public_file_id": "62eaf2d8-31d4-448c-8a8c-6c291a67a3f5",
+  "public_content_id": "15ba7744-a599-40ea-b8e4-c786aa62cb1d",
+  "download_url": "https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded",
+  "sha256": "2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae",
+  "bytes": 2586656,
+  "archive_format": "XZ compressed tar archive",
+  "archive_member_count": 43,
+  "version_string_from_readme": "AlterBBN Version 2.2 (16th July 2019)",
+  "source_pin_workflow_run": 32196956939,
+  "source_pin_artifact_id": 9346173384,
+  "source_pin_artifact_digest": "sha256:f82271b858f765218bfb397558d61b1c02488ac8d16728fa0a6549142da5915a",
+  "warning": "Source-code identity only. This lock does not certify a standard BBN self-test, RTK abundance prediction, or observational BBN consistency."
+}
