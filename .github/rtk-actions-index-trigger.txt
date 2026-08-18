@@ -1,2 +1,2 @@
-trigger: 2026-08-19T00:55:00+03:00
-reason: capture repaired B4 minimal-neutrino paired seed run and current post-freeze control state
+trigger: 2026-08-19T01:47:00+03:00
+reason: capture generalized Stage4D3 scale-ladder regression run and active B4 neutrino reoptimization
