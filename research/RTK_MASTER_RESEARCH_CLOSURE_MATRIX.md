@@ -2,14 +2,14 @@
 
 **Role:** authoritative high-level stopping/closure checklist for the autonomous RTK research loop.
 
-This file does **not** override the frozen matched comparison protocol, `research/state/current.json`, the reproducibility lock, or any theorem-specific acceptance gate.  It records what must be true before a major item may be called closed.
+This file does **not** override the frozen matched comparison protocol, `research/state/current.json`, the reproducibility lock, or any theorem-specific acceptance gate. It records what must be true before a major item may be called closed.
 
 Status semantics:
 
 - 🟡 **RUNNING** — an admissible proof calculation is currently in progress.
 - ✅ **SUBGATE CLOSED** — a meaningful local sub-question is reproducibly settled, but the parent major claim is not complete.
 - 🔴 **OPEN** — internally testable work remains.
-- 🚀 **MAJOR CLOSED** — all predeclared proof requirements for this major item are satisfied.  Do not use this mark for partial evidence.
+- 🚀 **MAJOR CLOSED** — all predeclared proof requirements for this major item are satisfied. Do not use this mark for partial evidence.
 - `EXTERNAL_BLOCKER` — closure intrinsically requires an independent group, new observations, peer review, or other input not derivable from the current repository/model.
 
 ## A. Matched numerical cosmology
@@ -18,10 +18,10 @@ Status semantics:
 |---|---|---|---|---|
 | A1 | Frozen matched objective and common likelihood definition | 🚀 MAJOR CLOSED | RTK and ΛCDM use the same named dense-ultra objective, exact-float success-only evaluation semantics, fixed production mapping, and frozen recenter rule | `matched-ultra-linstep2+dense-BOSS`; production `eff`; recenter tolerance 0.005; protocol and invariants committed |
 | A2 | ΛCDM local dense reference minimum | 🚀 MAJOR CLOSED | recenter-clear exact stencil, positive-definite local Hessian, accepted-score point explicitly frozen | accepted local score `1049.966118347761`; repeated dense Hessian PD and recenter-clear |
-| A3 | RTK Stage-4D3 interior local minimum | 🟡 RUNNING | current center recenter-clear; all negative coarse modes exact-ray falsified if present; two adjacent accepted stencil scales PD and each best improvement ≤0.005 | current base Hessian is recenter-clear and PD; 0.5-stencil run `32133215190` is active |
-| A4 | Independent clean-room reproduction of both accepted minima | 🔴 OPEN | fresh-tree paired RTK+ΛCDM replay at exact accepted-score params, locked environment, each score reproduced within 2e-6 and target fingerprint validated | infrastructure/gate ready; execution blocked on A3 |
-| A5 | Final frozen matched raw ΔS | 🔴 OPEN | A3 + A4 pass, then freeze `S_RTK - S_LCDM` from validated accepted points/replay; no stale target | provisional values are not final |
-| A6 | Formal model-selection statistics | 🔴 OPEN | only after A5 and a separately preregistered parameter-count/prior/nuisance treatment | AIC/BIC/Bayes/significance intentionally forbidden before this gate |
+| A3 | RTK Stage-4D3 interior local minimum | 🚀 MAJOR CLOSED | current center recenter-clear; all negative coarse modes exact-ray falsified if present; two adjacent accepted stencil scales PD and each best improvement ≤0.005 | current base and half stencils are both recenter-clear and PD; `N5_BASE_AND_HALF_STENCIL_PASS`; half run `32133215190`, artifact `9328770791` |
+| A4 | Independent clean-room reproduction of both accepted minima | 🚀 MAJOR CLOSED | fresh-tree paired RTK+ΛCDM replay at exact accepted-score params, locked environment, each score reproduced within 2e-6 and target fingerprint validated | run `32148894768`, artifact `9329042339`; RTK, ΛCDM and delta replay errors are exactly `0.0` in the recorded doubles; `INDEPENDENT_FRESH_TREE_REPLAY_PASS` |
+| A5 | Final frozen matched raw ΔS | 🚀 MAJOR CLOSED | A3 + A4 pass, then freeze `S_RTK - S_LCDM` from validated accepted points/replay; no stale target | `S_RTK=1050.249912429787`, `S_LCDM=1049.966118347761`, final raw local `ΔS=+0.2837940820259064`; replayed identically |
+| A6 | Formal model-selection statistics | 🔴 OPEN | only after A5 and a separately preregistered parameter-count/prior/nuisance treatment | A5 is now closed; a new explicit model-selection protocol is required before any AIC/BIC/Bayes/significance calculation |
 
 ## B. Likelihood, observables, and robustness
 
@@ -30,10 +30,10 @@ Status semantics:
 | B1 | Planck+Pantheon+BOSS implementation consistency | 🚀 MAJOR CLOSED | formulas/units/data ordering independently audited; exact component replay reproducible; BOSS conventions externally cross-checked | component replay and BOSS convention/unit audits passed |
 | B2 | Linear RTK observable fingerprint | 🚀 MAJOR CLOSED | reproducible background/CMB/P(k)/growth signature atlas at matched current centers with hardened primordial inputs and exact requested redshifts | signature atlas + cross-anchor decomposition completed |
 | B3 | Source of present BOSS pressure | 🚀 MAJOR CLOSED | correlated residual analysis identifies geometry/growth directions and rules out λ_D and linear RSD-scale mapping as dominant explanations | BOSS PCA mode identified; λ_D scan and fσ8(k) grid show negligible explanatory power |
-| B4 | Minimal-neutrino robustness | 🔴 OPEN | separate, explicitly non-frozen robustness replay with mν=0.06 eV completed for both models and interpreted without contaminating A1 objective | workflow prepared/retried; final validated result still to be consumed |
+| B4 | Minimal-neutrino robustness | 🔴 OPEN | separate paired, explicitly non-frozen robustness comparison with mν=0.06 eV and matched reoptimization for both models after massless freeze | ✅ fixed-current-center sensitivity is closed: run `32144865816`, artifact `9327720740`; O(10–30) score displacement proves reoptimization is required before a robustness claim |
 | B5 | Survey-level/nonlinear RSD robustness | 🔴 OPEN | model-specific survey-window/AP/nonlinear-template treatment or a justified bound showing compressed BOSS likelihood is adequate at required precision | linear k-dependence is tiny, but survey-template robustness remains open |
 | B6 | Early-universe / BBN robustness | 🔴 OPEN | demonstrate valid background/perturbation behavior and abundance/expansion constraints through relevant early epochs under a declared data/protocol set | not yet closed |
-| B7 | Tensor/GW propagation and standard-siren sector | 🔴 OPEN | derive/verify tensor equations and propagation observables; execute reproducible diagnostic against GR baseline | partial diagnostics/workflows may exist; authoritative closure not yet recorded |
+| B7 | Tensor/GW propagation and standard-siren sector | 🔴 OPEN | derive/verify tensor equations and propagation observables; execute reproducible diagnostic at the final frozen RTK center; distinguish late-time propagation from primordial tensor claims | ✅ model=2 tensor friction equation and cT=c propagation coefficient independently verified in pinned source; old-center siren diagnostic is consistent but final-center replay is still required |
 | B8 | Nonlinear/local-gravity/compact-object phenomenology | 🔴 OPEN | derive applicable regime and pass declared local/nonlinear consistency tests | open |
 
 ## C. Theory / EFT consistency
@@ -54,11 +54,11 @@ Status semantics:
 
 | ID | Major item | Status | Strict closure condition | Current evidence / next gate |
 |---|---|---|---|---|
-| D1 | Locked production environment | 🚀 MAJOR CLOSED | CLASS/Pantheon commits, Planck archive SHA, NumPy/SciPy/Python/likelihood version, gauge, nonlocal branch mapping, neutrino baseline and IC semantics recorded | `rtk/reproducibility_lock.json` schema 8 |
+| D1 | Locked production environment | 🚀 MAJOR CLOSED | CLASS/Pantheon commits, Planck archive SHA, NumPy/SciPy/Python/likelihood version, gauge, nonlocal branch mapping, neutrino baseline and IC semantics recorded | `rtk/reproducibility_lock.json` schema 8; clean-room Python is now explicitly pinned to 3.12.3 |
 | D2 | Failure/cache/retry safety | 🚀 MAJOR CLOSED | failed/transient evaluations never memoized as successful objective walls; deterministic exact retries and regression tests pass | success-only cache and retries audited/CI-tested |
-| D3 | Crash-idempotent heavy dispatch | 🚀 MAJOR CLOSED | serialized control-plane and tested no-duplicate behavior across dispatch crash window | idempotent dispatch guard + tests; active half-run not duplicated |
-| D4 | Proof-artifact identity/provenance | ✅ SUBGATE CLOSED | current proof artifacts require exact center/objective/stencil fingerprints and locked key provenance; future schema should additionally embed all measured runtime hashes/versions directly in summary | current validator checks CLASS/Pantheon/NumPy + canonical fingerprints; provenance-v2 hardening is an open software improvement |
-| D5 | Autonomous decision-tree regression coverage | ✅ SUBGATE CLOSED | negative-eigenray, half/quarter, final replay and dispatch transitions covered by synthetic regression tests; no known logical acceptance race | current unit gates pass; continue audit as state machine evolves |
+| D3 | Crash-idempotent heavy dispatch | 🚀 MAJOR CLOSED | serialized control-plane and tested no-duplicate behavior across dispatch crash window | idempotent dispatch guard + tests; no duplicate base/half worker occurred |
+| D4 | Proof-artifact identity/provenance | ✅ SUBGATE CLOSED | current proof artifacts require exact center/objective/stencil fingerprints and locked runtime provenance; all active proof families should be covered consistently | validator now checks runtime sidecars when present: Python, NumPy, SciPy, clipy-like, Planck SHA in addition to canonical fingerprints and CLASS/Pantheon; active-main workflow/live-lock consistency audit added |
+| D5 | Autonomous decision-tree regression coverage | ✅ SUBGATE CLOSED | negative-eigenray, half/quarter, final replay and dispatch transitions covered by synthetic regression tests; no known logical acceptance race | repeated N5 stabilization, runtime sidecars, final replay and crash-idempotent dispatch regression gates pass; continue audit as scale-ladder code evolves |
 
 ## E. External scientific validation
 
@@ -70,6 +70,6 @@ Status semantics:
 
 ## Autonomous stopping rule
 
-The autonomous research loop must **not** stop because a single workflow, paper draft, or local fit completes.  It may declare the internally achievable research frontier exhausted only when every internally achievable major row above is 🚀, or when a remaining row has been rigorously reclassified as `EXTERNAL_BLOCKER` with a precise external closure condition.
+The autonomous research loop must **not** stop because a single workflow, paper draft, or local fit completes. It may declare the internally achievable research frontier exhausted only when every internally achievable major row above is 🚀, or when a remaining row has been rigorously reclassified as `EXTERNAL_BLOCKER` with a precise external closure condition.
 
-Whenever `research/state/current.json` materially changes a major proof status, update this matrix conservatively.  A weaker claim may be downgraded if later evidence invalidates an earlier gate.
+Whenever `research/state/current.json` materially changes a major proof status, update this matrix conservatively. A weaker claim may be downgraded if later evidence invalidates an earlier gate.
