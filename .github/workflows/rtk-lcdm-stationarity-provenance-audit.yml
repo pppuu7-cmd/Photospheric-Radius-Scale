@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - '.github/workflows/rtk-lcdm-stationarity-provenance-audit.yml'
       - '.github/rtk-lcdm-stationarity-provenance-audit-trigger.txt'
 
 permissions:
@@ -12,7 +11,7 @@ permissions:
 
 concurrency:
   group: rtk-lcdm-stationarity-provenance-audit
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   audit-lcdm-hessian:
@@ -118,7 +117,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import hashlib,json,math,os
+          import hashlib,json,os
           state=json.load(open('research/state/current.json'))
           s=json.load(open('class_public/output/autonomous_dense_lcdm_stationarity/summary.json'))
           prov=s['provenance']; lock=json.load(open('rtk/reproducibility_lock.json'))
