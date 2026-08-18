@@ -1,0 +1,23 @@
+{
+  "actions": [
+    "observe_and_wait_no_duplicate_heavy_dispatch"
+  ],
+  "comparison": {
+    "dense_raw_delta_S": null,
+    "status": "pending_multiscale_stationarity"
+  },
+  "iteration": 62,
+  "next_dispatch": {
+    "created_at": "2026-08-18T04:48:40Z",
+    "iteration": 57,
+    "reason": "Stage4D3 N5 requires 1/2-stencil stability after base RTK Hessian",
+    "ref": "main",
+    "status": "submitted",
+    "target": "rtk_half_hessian",
+    "workflow": "rtk-autonomous-dense-rtk-half-stencil.yml"
+  },
+  "observations": [],
+  "schema_version": 1,
+  "stage": "rtk_half_stencil_running",
+  "time": "2026-08-18T07:53:23Z"
+}
