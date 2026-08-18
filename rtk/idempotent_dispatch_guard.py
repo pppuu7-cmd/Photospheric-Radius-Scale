@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Crash-consistent exactly-once guard for state-driven heavy workflow dispatch.
 
-A dispatch request is satisfied by any workflow_dispatch run of the requested
-workflow/ref created at or after the request timestamp. Because RTK heavy
-workers are state-driven, such a run is semantically equivalent to issuing a
-second dispatch for the same request. This closes the crash window where
-`gh workflow run` succeeded but dispatch_request.json was not yet consumed.
+A dispatch request is satisfied by an Actions-bot workflow_dispatch run of the
+requested workflow/ref created at or after the request timestamp. Because RTK
+heavy workers are state-driven, such a run is semantically equivalent to
+issuing a second dispatch for the same request. Requiring the Actions bot actor
+prevents a coincident user-initiated manual replay from consuming an autonomous
+request. This closes the crash window where `gh workflow run` succeeded but
+`dispatch_request.json` was not yet consumed.
 """
 from __future__ import annotations
 
@@ -21,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REQUEST = ROOT / "research/state/dispatch_request.json"
 DEFAULT_STATE = ROOT / "research/state/current.json"
 REPO = os.environ.get("GITHUB_REPOSITORY", "pppuu7-cmd/Photospheric-Radius-Scale")
+AUTOMATION_ACTOR = "github-actions[bot]"
 
 
 def parse_utc(value: str) -> dt.datetime:
@@ -39,6 +42,11 @@ def run_created_at(run: dict) -> dt.datetime:
     return parse_utc(run["created_at"])
 
 
+def actor_login(run: dict) -> str | None:
+    actor = run.get("actor")
+    return actor.get("login") if isinstance(actor, dict) else None
+
+
 def satisfying_run(run: dict, request: dict) -> bool:
     try:
         requested_at = parse_utc(request["created_at"])
@@ -48,6 +56,7 @@ def satisfying_run(run: dict, request: dict) -> bool:
     return (
         run.get("event") == "workflow_dispatch"
         and run.get("head_branch") == request.get("ref", "main")
+        and actor_login(run) == AUTOMATION_ACTOR
         and created_at >= requested_at
     )
 
@@ -56,8 +65,8 @@ def select_existing_run(runs: list[dict], request: dict) -> dict | None:
     matches = [r for r in runs if satisfying_run(r, request)]
     if not matches:
         return None
-    # The earliest qualifying run is the one most tightly associated with the
-    # request and avoids accidentally preferring a later manual replay.
+    # The earliest qualifying automation run is the one most tightly
+    # associated with the request and avoids preferring later replays.
     return min(matches, key=run_created_at)
 
 
@@ -119,7 +128,7 @@ def consume(request_path: Path, state_path: Path, run: dict, disposition: str) -
         "run_id": int(run["id"]),
         "html_url": run.get("html_url"),
         "idempotency_disposition": disposition,
-        "idempotency_guard": "workflow_ref_created_at_v1",
+        "idempotency_guard": "workflow_ref_created_at_actor_v2",
     })
     state_path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
     request_path.unlink(missing_ok=True)
@@ -148,7 +157,7 @@ def main() -> int:
         # Keep request intact. On the next orchestrator iteration the run should
         # be visible and will be consumed rather than duplicated.
         raise RuntimeError(
-            "workflow dispatch accepted but run not visible yet; request retained for crash-safe reconciliation"
+            "workflow dispatch accepted but automation run not visible yet; request retained for crash-safe reconciliation"
         )
     consume(request_path, state_path, created, "new_dispatch")
     print("RTK_IDEMPOTENT_DISPATCH_NEW", int(created["id"]), request["workflow"])
