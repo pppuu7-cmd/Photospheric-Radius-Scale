@@ -32,15 +32,20 @@ jobs:
       RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
       RTK_NUMPY_VERSION: '2.5.2'
       RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
     steps:
       - uses: actions/checkout@v4
         with:
           ref: rtk-class-build
           fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
 
       - name: Require frozen B4 protocol and A4/A5 state
         run: |
           set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
           test -f research/robustness/RTK_MINIMAL_NEUTRINO_REOPTIMIZATION_PROTOCOL_v1.md
           python3 - <<'PY'
           import json
@@ -50,7 +55,7 @@ jobs:
           assert s['comparison']['final_replay_run_id']==32148894768
           print('B4_MASSLESS_FREEZE_PREREQUISITES_PASS')
           PY
-          python3 -m py_compile rtk/neutrino_reoptimization_seed.py rtk/prepare_inference_core.py
+          python3 -m py_compile rtk/neutrino_reoptimization_seed.py rtk/prepare_inference_core.py rtk/write_neutrino_seed_provenance.py
 
       - name: Prepare pinned hardened CLASS tree
         run: |
@@ -72,7 +77,7 @@ jobs:
           python3 rtk/upgrade_rtk_matter_sources.py class_public
           python3 rtk/upgrade_rtk_gamma_root.py class_public
           python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
-          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/neutrino_reoptimization_seed.py class_public/
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/neutrino_reoptimization_seed.py rtk/write_neutrino_seed_provenance.py class_public/
           cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
           cd class_public
           python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
@@ -95,7 +100,8 @@ jobs:
             "numpy==$RTK_NUMPY_VERSION" \
             "scipy==$RTK_SCIPY_VERSION"
           python3 - <<'PY'
-          import numpy,scipy,os
+          import numpy,scipy,os,platform
+          assert platform.python_version()==os.environ['RTK_PYTHON_VERSION']
           assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
           assert scipy.__version__==os.environ['RTK_SCIPY_VERSION']
           PY
@@ -114,8 +120,6 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import os,sys
-          # Reproduce the exact failure mode from run 32173665110: a worker has
-          # its own RTK/LCDM argv. The reusable core must ignore that argv.
           sys.argv=['neutrino_reoptimization_seed.py','RTK']
           import inference_core as L
           assert str(L.PLANCK)==os.environ['RTK_PLANCK_DATA']
@@ -141,6 +145,9 @@ jobs:
           assert 'physical_bound_rejections' in s
           print('B4_NEUTRINO_SEED_ARTIFACT_PASS',s['model'],s['best_score_eff'])
           PY
+          python3 write_neutrino_seed_provenance.py '${{ matrix.model }}' | tee -a '../neutrino_seed_${{ matrix.model }}.log'
+          grep -q B4_NEUTRINO_SEED_PROVENANCE_PASS '../neutrino_seed_${{ matrix.model }}.log'
+          test -f "output/neutrino_reoptimization_seed/$(echo '${{ matrix.model }}' | tr '[:upper:]' '[:lower:]')/provenance.json"
 
       - uses: actions/upload-artifact@v4
         if: always()
