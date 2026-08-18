@@ -40,7 +40,15 @@ Only the **difference** is interpreted:
 
 `Delta AIC = AIC_RTK - AIC_LCDM = Delta S + 2 Delta k`.
 
-Akaike relative likelihood `exp(-Delta AIC/2)` and normalized two-model Akaike weights may be reported only as AIC diagnostics conditional on the two-model candidate set. They are not posterior probabilities that a model is true and are not a sigma significance.
+Akaike relative likelihood `exp(-Delta AIC/2)` and normalized two-model Akaike weights may be reported only as ordinary-AIC diagnostics conditional on the two-model candidate set. They are not posterior probabilities that a model is true and are not a sigma significance.
+
+### AIC regularity boundary
+
+The arithmetic `Delta AIC = Delta S + 2 Delta k` is reproducible from the frozen scores and parameter counts. However, the usual interpretation of ordinary AIC as an asymptotic bias-corrected estimator of expected predictive/KL performance relies on regular identifiable maximum-likelihood conditions. The RTK `lambda_D` direction is empirically weakly identifiable and approaches a dust-like large-lambda regime. Therefore:
+
+- A6a closure means **only** that the ordinary-AIC arithmetic diagnostic has been correctly computed under `k_RTK=7`, `k_LCDM=6`;
+- do not promote `Delta AIC` or Akaike weights to a rigorous evidence/probability statement for this potentially non-regular model family;
+- if a stronger predictive-information claim is desired, first establish suitable regularity/identifiability or use a separately preregistered method appropriate to singular/weakly identifiable models and compute it from the required full likelihood/posterior information.
 
 ## BIC — not yet authorized
 
@@ -60,7 +68,7 @@ Do not translate `Delta S` or `Delta AIC` into a chi-square sigma. The two model
 
 ## Closure semantics
 
-- A6a (AIC diagnostic) may close after the arithmetic is independently reproduced from the frozen A5 scores and `Delta k=1`.
+- A6a (ordinary-AIC arithmetic diagnostic) may close after the arithmetic is independently reproduced from the frozen A5 scores and `Delta k=1`; this is not a proof that ordinary-AIC regularity assumptions hold for RTK.
 - BIC remains open until a separate `N_eff` protocol is justified.
 - Bayes evidence remains open until a prior/evidence protocol is preregistered and executed.
 - No model truth/probability/significance claim follows from AIC alone.
