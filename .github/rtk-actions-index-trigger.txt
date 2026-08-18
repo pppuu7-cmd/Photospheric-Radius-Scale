@@ -1,2 +1,2 @@
-trigger: 2026-08-18T14:34:00Z
-reason: capture half-stencil completion and the control run that should validate/parse N5 and dispatch clean-room replay
+trigger: 2026-08-18T14:54:00Z
+reason: capture final-center matched component, standard-siren, early-universe, and post-freeze control results after A3-A5 closure
