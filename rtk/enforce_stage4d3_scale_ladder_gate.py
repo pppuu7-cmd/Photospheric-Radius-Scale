@@ -2,8 +2,12 @@
 """Fallback Stage-4D3 adjacent-scale ladder for base-PD / half-non-PD cases.
 
 Pre-registered in STAGE4D3_ADAPTIVE_SCALE_LADDER_PROTOCOL.md before consuming
-run 32133215190.  This gate is downstream of the ordinary multiscale and
+run 32133215190. This gate is downstream of the ordinary multiscale and
 adaptive-quarter gates and is inert for their already-covered branches.
+
+Every non-PD tested scale, including the terminal 1/8 scale, must be falsified
+by an exact negative-eigenray at the same physical stencil scale before the
+ladder may descend further or declare curvature unresolved.
 """
 from __future__ import annotations
 import json,os,shutil,subprocess,tempfile
@@ -14,6 +18,7 @@ STATE=ROOT/'research/state/current.json';DISPATCH=ROOT/'research/state/dispatch_
 REPO=os.environ.get('GITHUB_REPOSITORY','pppuu7-cmd/Photospheric-Radius-Scale');TOKEN=os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN')
 HALF_RAY_WF='rtk-autonomous-half-negative-eigenray.yml';HALF_RAY_ART='rtk-autonomous-half-negative-eigenray'
 QUARTER_RAY_WF='rtk-autonomous-quarter-negative-eigenray.yml';QUARTER_RAY_ART='rtk-autonomous-quarter-negative-eigenray'
+EIGHTH_RAY_WF='rtk-autonomous-eighth-negative-eigenray.yml';EIGHTH_RAY_ART='rtk-autonomous-eighth-negative-eigenray'
 QUARTER_WF='rtk-autonomous-dense-rtk-quarter-stencil.yml';QUARTER_ART='rtk-autonomous-dense-rtk-quarter-stencil'
 EIGHTH_WF='rtk-autonomous-dense-rtk-eighth-stencil.yml';EIGHTH_ART='rtk-autonomous-dense-rtk-eighth-stencil'
 
@@ -48,11 +53,7 @@ def dispatch(state,wf,target,reason,changes,label):
     DISPATCH.write_text(json.dumps(req,indent=2,sort_keys=True)+'\n');state['dispatch']=req;changes.append(label)
 
 def refresh_slot(slot,changes,label):
-    """Update run metadata and return True when this cycle first observes completion.
-
-    Parsing is deliberately deferred one control cycle after completion so the
-    upstream artifact-identity validator can inspect the completed slot first.
-    """
+    """Update run metadata and defer parse one cycle after first completion."""
     if not slot.get('run_id'):
         rr=latest(slot['workflow'])
         if rr:
@@ -67,11 +68,15 @@ def validate_common(state,s,scale=None,source=None):
     if not exact_center_equal(s.get('center'),state['rtk']['accepted_center']):raise RuntimeError('scale-ladder artifact center mismatch')
     if scale is not None and abs(float(s.get('stencil_scale',-1))-scale)>1e-15:raise RuntimeError('scale-ladder Hessian scale mismatch')
     if source is not None:
-        expected={'half':0.5,'quarter':0.25}[source]
+        expected={'half':0.5,'quarter':0.25,'eighth':0.125}[source]
         if s.get('eigenray_source')!=source or abs(float(s.get('source_stencil_scale',-1))-expected)>1e-15:raise RuntimeError('scale-ladder eigenray source mismatch')
 
 def clear_for_recenter(rtk):
-    for k in ('hessian_result','hessian_run','negative_eigenray_result','negative_eigenray_run','half_hessian_result','half_hessian_run','half_negative_eigenray_result','half_negative_eigenray_run','quarter_hessian_result','quarter_hessian_run','quarter_negative_eigenray_result','quarter_negative_eigenray_run','eighth_hessian_result','eighth_hessian_run','multiscale_curvature'):
+    for k in ('hessian_result','hessian_run','negative_eigenray_result','negative_eigenray_run',
+              'half_hessian_result','half_hessian_run','half_negative_eigenray_result','half_negative_eigenray_run',
+              'quarter_hessian_result','quarter_hessian_run','quarter_negative_eigenray_result','quarter_negative_eigenray_run',
+              'eighth_hessian_result','eighth_hessian_run','eighth_negative_eigenray_result','eighth_negative_eigenray_run',
+              'multiscale_curvature'):
         rtk[k]=None
 
 def recenter(state,summary,reason,changes):
@@ -88,6 +93,7 @@ def ensure_ray(state,source,changes):
     cfg={
       'half':('half_negative_eigenray_run','half_negative_eigenray_result','half_negative_eigenray_certification',HALF_RAY_WF,HALF_RAY_ART,0.5),
       'quarter':('quarter_negative_eigenray_run','quarter_negative_eigenray_result','quarter_negative_eigenray_certification',QUARTER_RAY_WF,QUARTER_RAY_ART,0.25),
+      'eighth':('eighth_negative_eigenray_run','eighth_negative_eigenray_result','eighth_negative_eigenray_certification',EIGHTH_RAY_WF,EIGHTH_RAY_ART,0.125),
     }
     slotk,resk,certk,wf,art,scale=cfg[source];slot=rtk.get(slotk)
     if slot is None:
@@ -169,15 +175,24 @@ def main():
         if es!='recentered':state['comparison']={'status':'pending_multiscale_stationarity','dense_raw_delta_S':None}
         STATE.write_text(json.dumps(state,indent=2,sort_keys=True)+'\n');print('RTK_STAGE4D3_SCALE_LADDER_GATE',json.dumps(changes,sort_keys=True));return
     ee=eighth['eff'];epd=bool(ee.get('positive_definite'))
+    if not epd:
+        rs=ensure_ray(state,'eighth',changes)
+        if rs!='clear':
+            state['comparison']={'status':'pending_multiscale_stationarity','dense_raw_delta_S':None};STATE.write_text(json.dumps(state,indent=2,sort_keys=True)+'\n');print('RTK_STAGE4D3_SCALE_LADDER_GATE',json.dumps(changes,sort_keys=True));return
+
     candidates=[base,half,quarter,eighth];best=min((float(s['eff']['best_exact_S']),s['eff'].get('best_params')) for s in candidates)
     rtk['accepted_score_eff']=best[0]
     if isinstance(best[1],dict):rtk['accepted_score_params']=dict(best[1])
     rtk['accepted_score_semantics']='best_exact_across_base_half_quarter_eighth_within_recenter_tolerance'
-    rtk['multiscale_curvature']={'base_positive_definite':True,'half_positive_definite':False,'quarter_positive_definite':qpd,'eighth_positive_definite':epd,'base_min_eigenvalue':min(be['eigenvalues_y']),'half_min_eigenvalue':min(he['eigenvalues_y']),'quarter_min_eigenvalue':min(qe['eigenvalues_y']),'eighth_min_eigenvalue':min(ee['eigenvalues_y']),'half_negative_eigenray_gate':rtk.get('half_negative_eigenray_certification'),'quarter_negative_eigenray_gate':rtk.get('quarter_negative_eigenray_certification')}
+    rtk['multiscale_curvature']={'base_positive_definite':True,'half_positive_definite':False,'quarter_positive_definite':qpd,'eighth_positive_definite':epd,
+      'base_min_eigenvalue':min(be['eigenvalues_y']),'half_min_eigenvalue':min(he['eigenvalues_y']),'quarter_min_eigenvalue':min(qe['eigenvalues_y']),'eighth_min_eigenvalue':min(ee['eigenvalues_y']),
+      'half_negative_eigenray_gate':rtk.get('half_negative_eigenray_certification'),'quarter_negative_eigenray_gate':rtk.get('quarter_negative_eigenray_certification'),'eighth_negative_eigenray_gate':rtk.get('eighth_negative_eigenray_certification')}
     if qpd and epd:
         rtk['certification']='local_dense_accepted';rtk['interior_minimum_certification']='N5_ADAPTIVE_QUARTER_AND_EIGHTH_PASS';rtk['accepted_proof_stencil_scale']=0.25;rtk['proof_validation_stencil_scale']=0.125;state['stage']='matched_dense_ready';comparison(state,tol);changes.append('Stage4D3_N5_quarter_eighth_pass')
     else:
-        rtk['certification']='matched_raw_candidate_only_curvature_unresolved';rtk['interior_minimum_certification']='N5_SCALE_LADDER_EXHAUSTED_CURVATURE_UNRESOLVED';state['stage']='rtk_curvature_unresolved';state['comparison']={'status':'matched_dense_raw_candidate_ready_curvature_unresolved','dense_raw_delta_S':None,'interior_minimum_certified':False};changes.append('scale_ladder_exhausted_without_adjacent_PD_pair')
+        # At this point every non-PD scale encountered by this branch has an
+        # exact same-scale ray that is recenter-clear, including 1/8 if non-PD.
+        rtk['certification']='matched_raw_candidate_only_curvature_unresolved';rtk['interior_minimum_certification']='N5_SCALE_LADDER_EXHAUSTED_CURVATURE_UNRESOLVED';state['stage']='rtk_curvature_unresolved';state['comparison']={'status':'matched_dense_raw_candidate_ready_curvature_unresolved','dense_raw_delta_S':None,'interior_minimum_certified':False};changes.append('scale_ladder_exhausted_after_all_nonpd_rays_clear')
     STATE.write_text(json.dumps(state,indent=2,sort_keys=True)+'\n');print('RTK_STAGE4D3_SCALE_LADDER_GATE',json.dumps(changes,sort_keys=True))
 
 if __name__=='__main__':main()
