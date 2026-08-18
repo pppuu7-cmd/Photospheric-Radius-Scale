@@ -1,0 +1,80 @@
+name: RTK final-center early-universe background robustness
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-final-early-universe-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  early-universe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Require final replay certification
+        run: |
+          set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 - <<'PY'
+          import json
+          s=json.load(open('research/state/current.json'))
+          assert s.get('final_replay_certification')=='INDEPENDENT_FRESH_TREE_REPLAY_PASS'
+          assert s.get('comparison',{}).get('final_replay_certified') is True
+          assert s['rtk'].get('interior_minimum_certification')=='N5_BASE_AND_HALF_STENCIL_PASS'
+          print('RTK_FINAL_EARLY_UNIVERSE_STATE_GATE_PASS',s['comparison']['dense_raw_delta_S'])
+          PY
+      - name: Prepare pinned RTK CLASS tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
+          cp rtk/final_center_early_universe_diagnostic.py class_public/
+      - name: Build CLASS
+        working-directory: class_public
+        run: make -j2 class
+      - name: Run final-center early-universe diagnostic
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 final_center_early_universe_diagnostic.py | tee ../final_early_universe.log
+          grep -q RTK_FINAL_EARLY_UNIVERSE_DIAGNOSTIC ../final_early_universe.log
+          python3 - <<'PY'
+          import json
+          s=json.load(open('output/final_early_universe/summary.json'))
+          assert s['classification']=='FINAL_RTK_EARLY_UNIVERSE_BACKGROUND_DIAGNOSTIC'
+          assert float(s['rtk']['background_z_max'])>=1e10
+          print('RTK_FINAL_EARLY_UNIVERSE_OUTPUT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-final-early-universe-background
+          path: |
+            final_early_universe.log
+            class_public/early_*.log
+            class_public/output/final_early_universe/summary.json
+          if-no-files-found: error
