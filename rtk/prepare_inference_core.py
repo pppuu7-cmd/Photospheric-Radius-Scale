@@ -3,14 +3,19 @@
 
 The helper accepts either the historical joint-profile source or an already
 canonicalized source. It guarantees modern A_s/n_s names, an exact-float cache
-key, a CLASS timeout, success-only memoization, and removal of the standalone
-deterministic-search tail.
+key, a CLASS timeout, success-only memoization, a module-safe Planck data path,
+and removal of the standalone deterministic-search tail.
 
 Execution or post-processing failures are deliberately *not* memoized. A
 failure return is not guaranteed to be a deterministic property of the
 cosmological point; caching it could turn a transient numerical/resource/I/O
 event into a permanent artificial wall in an optimizer or finite-difference
 stencil. Only completed ``ok=True`` likelihood evaluations enter CACHE.
+
+The reusable core is imported by workers that have their own command-line
+arguments. Therefore it must never interpret the importing worker's sys.argv
+as the Planck likelihood path. RTK_PLANCK_DATA is the explicit override;
+``planck_data`` remains the reproducible workflow default.
 """
 from pathlib import Path
 import sys
@@ -18,6 +23,17 @@ import sys
 src=Path(sys.argv[1] if len(sys.argv)>1 else 'joint_profile_runner.py')
 out=Path(sys.argv[2] if len(sys.argv)>2 else 'inference_core.py')
 s=src.read_text()
+
+# Reusable modules must not inherit the caller's argv. Historically the source
+# accepted the Planck directory as argv[1], which is valid for the standalone
+# runner but unsafe after importing the generated module from workers such as
+# ``neutrino_reoptimization_seed.py RTK``.
+legacy_planck="PLANCK=Path(sys.argv[1]) if len(sys.argv)>1 else Path('planck_data')"
+module_safe_planck="PLANCK=Path(os.environ.get('RTK_PLANCK_DATA','planck_data'))"
+if legacy_planck in s:
+    s=s.replace(legacy_planck,module_safe_planck,1)
+elif module_safe_planck not in s:
+    raise SystemExit('recognized Planck path block not found')
 
 # Primordial parameter names: legacy -> modern, while accepting modern input.
 s=s.replace("f\"A_s_ad = {p['As']}\"", "f\"A_s = {p['As']}\"")
@@ -68,6 +84,8 @@ assert 'A_s_ad' not in text and 'n_s_ad' not in text
 assert 'timeout=float(os.environ.get' in text
 assert 'round(float(p[k]),12)' not in text
 assert "tuple(float(p[k]) for k in ['lam','h','Ob','Om','As','ns','zre'])" in text
+assert module_safe_planck in text
+assert legacy_planck not in text
 assert 'def evaluate(' in text and 'def make_ini(' in text
 # No failure path may poison the exact cache.
 timeout_block=text.split('except subprocess.TimeoutExpired:',1)[1].split('if cp.returncode!=0:',1)[0]
