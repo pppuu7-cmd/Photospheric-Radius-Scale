@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-18T23:18:29.381512+00:00",
+  "generated_at_utc": "2026-08-18T23:19:35.331740+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
@@ -196,19 +196,6 @@
       "run_number": 98,
       "status": "completed",
       "updated_at": "2026-08-18T20:36:40Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T20:00:36Z",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "5fdfb6f01f5bd60f1bdce20210face501140d26d",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32179835414",
-      "id": 32179835414,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 97,
-      "status": "completed",
-      "updated_at": "2026-08-18T20:00:50Z"
     }
   ]
 }
