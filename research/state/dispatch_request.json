@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-08-18T03:22:53Z",
+  "iteration": 55,
+  "reason": "Stage4D3 exact-ray falsification required for non-PD recenter-clear RTK Hessian",
+  "ref": "main",
+  "target": "rtk_negative_eigenray",
+  "workflow": "rtk-autonomous-negative-eigenray.yml"
+}
