@@ -22,11 +22,15 @@ def base_state(base_pd,half_pd):
 def run_case(s):
     with tempfile.TemporaryDirectory() as td:
         p=Path(td)/'state.json';p.write_text(json.dumps(s))
-        old_state,old_dispatch,old_fn=G.STATE,G.DISPATCH,G.dispatch
+        old_state,old_dispatch,old_fn,old_get=G.STATE,G.DISPATCH,G.dispatch,G.get_run
         G.STATE=p;G.DISPATCH=Path(td)/'dispatch.json'
         G.dispatch=lambda st,wf,target,reason,changes,label:changes.append(label)
+        # Synthetic tests must never reach GitHub.  A pre-existing run id is
+        # represented as a completed successful run; parsed/unparsed semantics
+        # are tested by the state fields themselves.
+        G.get_run=lambda run_id:{'id':int(run_id),'status':'completed','conclusion':'success','html_url':f'https://example.invalid/runs/{int(run_id)}'}
         try:G.main()
-        finally:G.STATE,G.DISPATCH,G.dispatch=old_state,old_dispatch,old_fn
+        finally:G.STATE,G.DISPATCH,G.dispatch,G.get_run=old_state,old_dispatch,old_fn,old_get
         return json.loads(p.read_text())
 
 # Parsed ordinary base+half PD result must remain accepted on later iterations.
