@@ -1,0 +1,2 @@
+trigger: 2026-08-19T02:41:00+03:00
+reason: machine-check pure/tunable khronometric acceleration-squared degeneracy obstruction and isolate special c4=2 branch
