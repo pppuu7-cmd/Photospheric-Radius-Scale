@@ -1,2 +1,2 @@
-trigger: 2026-08-18T14:31:00Z
-reason: half-stencil 32133215190 completed success; validate runtime/identity, parse Stage4D3 base+half proof, and if N5 passes dispatch final clean-room matched minima replay
+trigger: 2026-08-18T14:40:00Z
+reason: clean-room run 32148894768 completed success with zero replay error; attach/validate final replay, correct Stage4D3 proof narrative, and freeze final matched raw delta S if all gates pass
