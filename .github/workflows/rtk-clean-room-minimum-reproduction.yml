@@ -24,6 +24,7 @@ jobs:
       RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
       RTK_NUMPY_VERSION: '2.5.2'
       RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
 
     steps:
       - uses: actions/checkout@v4
@@ -31,9 +32,14 @@ jobs:
           ref: rtk-class-build
           fetch-depth: 1
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
       - name: Capture research source provenance
         run: |
           set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
           git rev-parse HEAD | tee clean_room_rtk_source_sha.txt
 
       - name: Prepare pristine pinned CLASS and likelihood tree
@@ -80,10 +86,11 @@ jobs:
             "numpy==$RTK_NUMPY_VERSION" \
             "scipy==$RTK_SCIPY_VERSION"
           python3 - <<'PY'
-          import numpy, scipy, os
+          import numpy, scipy, os, platform
+          assert platform.python_version() == os.environ['RTK_PYTHON_VERSION']
           assert numpy.__version__ == os.environ['RTK_NUMPY_VERSION']
           assert scipy.__version__ == os.environ['RTK_SCIPY_VERSION']
-          print('RTK_CLEAN_ROOM_PYTHON_PINS_CONFIRMED', numpy.__version__, scipy.__version__)
+          print('RTK_CLEAN_ROOM_PYTHON_PINS_CONFIRMED', platform.python_version(), numpy.__version__, scipy.__version__)
           PY
           python3 -m pip freeze | sort | tee clean_room_pip_freeze.txt
           python3 --version | tee clean_room_python_version.txt
