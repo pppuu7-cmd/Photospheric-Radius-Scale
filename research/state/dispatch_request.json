@@ -1,9 +1,0 @@
-{
-  "created_at": "2026-08-18T14:31:43Z",
-  "iteration": 77,
-  "reason": "Independent fresh-tree replay required after Stage4D3 matched local-minimum certification",
-  "ref": "main",
-  "target": "final_matched_minima_replay",
-  "target_fingerprint": "91ff4471a86ba9ac0d84cea7ad945cdf54b96b52dac111b6b5db47d106af618c",
-  "workflow": "rtk-clean-room-minimum-reproduction.yml"
-}
