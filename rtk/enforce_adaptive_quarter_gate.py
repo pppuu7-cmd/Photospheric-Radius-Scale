@@ -55,10 +55,19 @@ def comparison(state,tol):
     sr=state['rtk'].get('accepted_score_eff');sl=state['lcdm'].get('accepted_score_eff')
     if sr is None or sl is None:return
     sr=float(sr);sl=float(sl)
+    cert=state.get('rtk',{}).get('interior_minimum_certification')
+    if cert=='N5_BASE_AND_HALF_STENCIL_PASS':
+        proof='Stage4D3 used adjacent base (1) and half (1/2) recenter-clear positive-definite Hessian stencils.'
+    elif cert=='N5_ADAPTIVE_HALF_AND_QUARTER_PASS':
+        proof='Adaptive Stage4D3 used adjacent half (1/2) and quarter (1/4) recenter-clear positive-definite stencils after exact negative-eigenray falsification of the coarse non-PD scale.'
+    elif cert=='N5_ADAPTIVE_QUARTER_AND_EIGHTH_PASS':
+        proof='Adaptive Stage4D3 used adjacent quarter (1/4) and eighth (1/8) recenter-clear positive-definite stencils after exact negative-eigenray falsification of intervening non-PD scales.'
+    else:
+        proof=f'Stage4D3 interior-minimum certification: {cert!r}.'
     state['comparison']={'status':'matched_local_dense_raw_fit_ready','mapping':'eff','S_RTK':sr,'S_LCDM':sl,
       'dense_raw_delta_S':sr-sl,'numerically_indistinguishable_at_0p005':abs(sr-sl)<=tol,
       'interior_minimum_certified':True,
-      'warning':'Raw local objective comparison only; not AIC/BIC/Bayes evidence/significance. Adaptive Stage4D3 used adjacent 1/2 and 1/4 PD stencils after exact negative-eigenray falsification of the coarse non-PD scale.'}
+      'warning':'Raw local objective comparison only; not AIC/BIC/Bayes evidence/significance. '+proof}
 
 def normalized_hessian_diagnostics(half,quarter):
     # NumPy is only needed when a real parsed half+quarter pair exists. Keep it
