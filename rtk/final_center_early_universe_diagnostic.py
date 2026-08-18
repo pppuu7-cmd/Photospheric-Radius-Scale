@@ -55,8 +55,6 @@ def interp_logz(rr,col,z):
     j=bisect_left(zs,z)
     if j<len(zs) and zs[j]==z:return rr[j][col]
     z0,z1=zs[j-1],zs[j];y0,y1=rr[j-1][col],rr[j][col]
-    # H is very close to a power law over a short background-table interval;
-    # interpolate log H in log(1+z) to avoid high-z linear interpolation bias.
     x=math.log1p(z);x0=math.log1p(z0);x1=math.log1p(z1)
     if y0>0 and y1>0:
         return math.exp(math.log(y0)+(x-x0)*(math.log(y1)-math.log(y0))/(x1-x0))
@@ -66,9 +64,14 @@ def interp_logz(rr,col,z):
 def parse_gamma(log):
     vals=[]
     for line in Path(log).read_text().splitlines():
-        m=re.search(r'RTK_LOG_GAMMA_ROOT[^0-9+\-.]*([+\-0-9.eE]+)',line)
+        m=re.search(r'RTK_LOG_GAMMA_ROOT\s+steps=\d+\s+gamma=([+\-0-9.eE]+)\s+F=',line)
         if m:vals.append(float(m.group(1)))
-    return vals[-1] if vals else None
+    if not vals:
+        raise RuntimeError('RTK_LOG_GAMMA_ROOT gamma=... marker not found')
+    gamma=vals[-1]
+    if not (math.isfinite(gamma) and 0.0<gamma<1.0):
+        raise RuntimeError(f'parsed RTK gamma outside expected positive branch: {gamma!r}')
+    return gamma
 
 
 def run_model(model,p,tag):
