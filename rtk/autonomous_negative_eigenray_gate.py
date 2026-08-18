@@ -3,9 +3,9 @@
 
 The worker is source-scale aware.  By default it profiles the parsed base
 (scale=1) Hessian, preserving the historical Stage-4D3 behavior.  Dedicated
-manual-only workflows may set ``RTK_EIGENRAY_SOURCE=half`` or ``quarter`` to
-falsify a smaller non-PD Hessian before descending further in the pre-registered
-adjacent-scale proof ladder.
+manual-only workflows may set ``RTK_EIGENRAY_SOURCE=half``, ``quarter`` or
+``eighth`` to falsify a smaller non-PD Hessian before descending further in
+the pre-registered adjacent-scale proof ladder.
 """
 from pathlib import Path
 import hashlib, json, math, os, subprocess, sys, time
@@ -23,6 +23,7 @@ SOURCE_CFG={
     'base':('hessian_result','hessian_run',1.0),
     'half':('half_hessian_result','half_hessian_run',0.5),
     'quarter':('quarter_hessian_result','quarter_hessian_run',0.25),
+    'eighth':('eighth_hessian_result','eighth_hessian_run',0.125),
 }
 if SOURCE not in SOURCE_CFG:
     raise RuntimeError(f'unsupported RTK_EIGENRAY_SOURCE={SOURCE!r}')
