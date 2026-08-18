@@ -1,1 +1,1 @@
-trigger 2026-08-18 B4 paired seed reoptimization after frozen A4/A5 closure
+trigger 2026-08-19 B4 paired seed rerun after module-safe Planck path + physical-bound hardening
