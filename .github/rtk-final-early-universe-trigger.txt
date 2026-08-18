@@ -1,0 +1,2 @@
+trigger: 2026-08-18T14:52:00Z
+reason: A3-A5 are frozen and replay-certified; test final RTK background against same-parameter LCDM and final matched LCDM through z=1e10 without altering the likelihood objective
