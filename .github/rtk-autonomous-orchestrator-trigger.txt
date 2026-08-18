@@ -1,2 +1,2 @@
-trigger: 2026-08-18T14:17:00Z
-reason: restart autonomous control after fixing adaptive-quarter test network leak and clean-room reproducibility static-audit false positives; preserve half-stencil 32133215190 as the only heavy worker
+trigger: 2026-08-18T14:31:00Z
+reason: half-stencil 32133215190 completed success; validate runtime/identity, parse Stage4D3 base+half proof, and if N5 passes dispatch final clean-room matched minima replay
