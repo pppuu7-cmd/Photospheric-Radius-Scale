@@ -1,0 +1,5 @@
+Launch B4 RTK ray-recenter base Hessian from exact negative-mode winner.
+Parent ray run: 32284932113
+Parent artifact: 9378827376
+Target commit: 3b9acfb25a01c6107a4a8427ef2b51ae61017d20
+Workflow commit: 11dce912e209998dcd9ae5f73f9a33905a45ec38
