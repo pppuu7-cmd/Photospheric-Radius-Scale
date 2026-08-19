@@ -1,0 +1,64 @@
+name: RTK pinned AlterBBN expansion-interface audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-alterbbn-expansion-interface-audit-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-alterbbn-expansion-interface-audit
+  cancel-in-progress: true
+
+jobs:
+  source-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+      ALTERBBN_FILENAME: 'alterbbn_v2.2.tar.xz'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Require frozen B6 source lock and abundance protocol
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          s=json.load(open('research/robustness/alterbbn_v2_2_source_lock.json'))
+          assert s['sha256']==os.environ['ALTERBBN_SHA256']
+          assert int(s['bytes'])==int(os.environ['ALTERBBN_BYTES'])
+          p=open('research/robustness/RTK_BBN_ABUNDANCE_PROTOCOL_v1.md').read()
+          assert 'FROZEN BEFORE ABUNDANCE NETWORK EXECUTION' in p
+          assert 'RTK expansion-history table' in p
+          print('ALTERBBN_EXPANSION_INTERFACE_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/audit_alterbbn_expansion_interface.py
+      - name: Download and verify published AlterBBN source
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 -o "$ALTERBBN_FILENAME" "$ALTERBBN_URL"
+          test "$(stat -c %s "$ALTERBBN_FILENAME")" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  $ALTERBBN_FILENAME" | sha256sum -c -
+          tar -xJf "$ALTERBBN_FILENAME"
+          grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
+      - name: Audit expansion and alternative-cosmology interfaces
+        run: |
+          set -euo pipefail
+          python3 rtk/audit_alterbbn_expansion_interface.py alterbbn_v2.2 | tee alterbbn_expansion_interface_audit.log
+          grep -q ALTERBBN_V2_2_EXPANSION_INTERFACE_AUDIT_PASS alterbbn_expansion_interface_audit.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-alterbbn-expansion-interface-audit
+          path: |
+            alterbbn_expansion_interface_audit.json
+            alterbbn_expansion_interface_audit.log
+          if-no-files-found: error
