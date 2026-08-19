@@ -1,2 +1,2 @@
-trigger: 2026-08-19T15:15:45+03:00
-reason: capture new B6 paired AlterBBN abundance run, new B4 LCDM recenter run, active B4 RTK base Hessian, and B10 T2 profiles
+trigger: 2026-08-19T15:36:30+03:00
+reason: capture B6 matcher-repair rerun, B10 T3 base stationarity, B4 LCDM/RTK recenter runs, and completed paired B4 base
