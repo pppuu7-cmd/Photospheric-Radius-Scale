@@ -1,1 +1,1 @@
-Refresh active/recent run IDs after B4 LCDM closure, B4 RTK recenter progress, B9 paired reoptimization, Route-B auxiliary theorem launch, CLASS CI fixes, and stale Stage4D3 AI-agent retirement.
+Refresh active/recent run IDs after auxiliary-equivalence algebraic-equality rerun, retarded-auxiliary uniqueness coefficient fix/rerun, legacy Stage4D3 agent retirement regression update, scoped CLASS CI, and ongoing B4/B9 scientific jobs.
