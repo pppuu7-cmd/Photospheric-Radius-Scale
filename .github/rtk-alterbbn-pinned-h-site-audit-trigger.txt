@@ -1,0 +1,3 @@
+trigger: 2026-08-19T15:42:00+03:00
+reason: inspect byte-pinned AlterBBN Friedmann-H function/call-site semantics after compile-safe fail-closed discovery
+source_failed_run_id: 32252015488
