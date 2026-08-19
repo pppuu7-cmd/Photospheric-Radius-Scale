@@ -1,2 +1,2 @@
-trigger: 2026-08-19T15:45:30+03:00
-reason: capture pinned AlterBBN H-site audit plus active B4/B10 and B6 repair status
+trigger: 2026-08-19T15:53:30+03:00
+reason: capture third B6 paired AlterBBN run after pinned direct-GeV H-site repair and current heavy-run states
