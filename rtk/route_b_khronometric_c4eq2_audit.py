@@ -17,6 +17,9 @@ c2,c3=sp.symbols('c2 c3', real=True)
 f=sp.Integer(1)
 c4=sp.Integer(2)
 
+def eq(a,b):
+    return sp.simplify(a-b)==0
+
 # Khronometric -> quadratic-DHOST dictionary after absorbing c1 (paper Eq. 7.4).
 a1=-c3/X
 a2=-c2/X
@@ -27,7 +30,7 @@ a5=-(c2+c3+c4)/X**3
 # Paper Eq. (7.11) on the isolated c4=2 D0 branch.
 D1_special=8*(1+c3)*(3*c2+c3-2)/X**2
 D2_special=sp.simplify(D1_special/X)
-assert sp.factor(D1_special)==8*(c3+1)*(3*c2+c3-2)/X**2
+assert eq(sp.factor(D1_special),8*(c3+1)*(3*c2+c3-2)/X**2)
 
 # The two exact degeneracy families from factorization.
 family_A={c3:sp.Integer(-1)}
@@ -40,8 +43,10 @@ assert sp.simplify(D2_special.subs(family_B))==0
 # Reproduce Eqs. (7.12)-(7.13) directly from Eq. (7.4).
 A=[sp.simplify(x.subs(family_A)) for x in (a1,a2,a3,a4,a5)]
 B=[sp.simplify(x.subs(family_B)) for x in (a1,a2,a3,a4,a5)]
-assert A==[1/X,-c2/X,2*c2/X**2,0,-(c2+1)/X**3]
-assert B==[(3*c2-2)/X,-c2/X,2*c2/X**2,6*(1-c2)/X**2,2*(c2-2)/X**3]
+A_expected=[1/X,-c2/X,2*c2/X**2,0,-(c2+1)/X**3]
+B_expected=[(3*c2-2)/X,-c2/X,2*c2/X**2,6*(1-c2)/X**2,2*(c2-2)/X**3]
+assert all(eq(x,y) for x,y in zip(A,A_expected))
+assert all(eq(x,y) for x,y in zip(B,B_expected))
 
 # Class-II metric-block discriminator used in the same paper:
 # IIa is derived assuming f-X*a1 != 0; IIb has f=X*a1 and is reported to
@@ -50,7 +55,7 @@ assert B==[(3*c2-2)/X,-c2/X,2*c2/X**2,6*(1-c2)/X**2,2*(c2-2)/X**3]
 metric_factor_A=sp.simplify(f-X*A[0])
 metric_factor_B=sp.factor(f-X*B[0])
 assert metric_factor_A==0
-assert metric_factor_B==3*(1-c2)
+assert eq(metric_factor_B,3*(1-c2))
 
 # Therefore family A lies on the metric-degenerate factor identically.
 # Family B lies off it for c2 != 1, and hits it only at c2=1.
