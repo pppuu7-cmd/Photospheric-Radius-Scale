@@ -1,0 +1,4 @@
+B9 paired Planck-lensing reoptimization launch.
+Target commit: 3091870f52c0bdf41475c5aca38974fbe63b7ab5
+Worker commit: 8a27501cb7d1f910e4408394d9b686313e3a2706
+Workflow commit: 5029be98e032eaa49ad514773a667060b52dbacf
