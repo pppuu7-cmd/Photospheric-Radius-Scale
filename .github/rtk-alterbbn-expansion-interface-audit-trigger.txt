@@ -1,0 +1,2 @@
+trigger: 2026-08-19T12:28:00+03:00
+reason: B6 source and standard-network self-test are closed; inspect pinned AlterBBN v2.2 H(T)/alternative-cosmology interface before any RTK source modification
