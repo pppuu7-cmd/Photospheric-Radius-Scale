@@ -1,0 +1,162 @@
+name: RTK B6 entropy-aware H(T) mapping
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-bbn-ht-mapping-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-b6-ht-mapping
+  cancel-in-progress: true
+
+jobs:
+  mapping:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+      ALTERBBN_FILENAME: 'alterbbn_v2.2.tar.xz'
+      ALTERBBN_CC: 'gcc-13'
+      ALTERBBN_CFLAGS: '-O3 -pipe -fomit-frame-pointer -mtune=generic -ffast-math -fno-finite-math-only'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Require frozen B6 mapping protocol and source lock
+        run: |
+          set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 - <<'PY'
+          import json,os
+          lock=json.load(open('research/robustness/alterbbn_v2_2_source_lock.json'))
+          assert lock['sha256']==os.environ['ALTERBBN_SHA256']
+          assert int(lock['bytes'])==int(os.environ['ALTERBBN_BYTES'])
+          p=open('research/robustness/RTK_BBN_HT_MAPPING_PROTOCOL_v1.md').read()
+          assert 'FROZEN BEFORE FIRST ALTERBBN T-a TRACE / RTK H(T) TABLE EXECUTION' in p
+          assert 'T_anchor = 0.01 MeV = 1e-5 GeV' in p
+          s=json.load(open('research/state/current.json'))
+          assert s['comparison']['final_replay_certified'] is True
+          assert s['final_replay_certification']=='INDEPENDENT_FRESH_TREE_REPLAY_PASS'
+          print('RTK_B6_HT_MAPPING_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/patch_alterbbn_ta_trace.py rtk/build_bbn_rtk_ht_mapping.py rtk/final_center_early_universe_diagnostic.py
+          command -v gcc-13
+          gcc-13 --version | tee b6_mapping_gcc13_version.txt
+          uname -a | tee b6_mapping_runner_uname.txt
+
+      - name: Download, verify and instrument pinned AlterBBN
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 -o "$ALTERBBN_FILENAME" "$ALTERBBN_URL"
+          test "$(stat -c %s "$ALTERBBN_FILENAME")" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  $ALTERBBN_FILENAME" | sha256sum -c -
+          tar -xJf "$ALTERBBN_FILENAME"
+          grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
+          python3 rtk/patch_alterbbn_ta_trace.py alterbbn_v2.2 | tee b6_ta_trace_patch.log
+          grep -q ALTERBBN_TA_TRACE_INSTRUMENTATION_PATCH_APPLIED b6_ta_trace_patch.log
+          grep -q RTK_BBN_TA_TRACE_V1 alterbbn_v2.2/src/bbn.c
+
+      - name: Build instrumented-but-physics-identical AlterBBN
+        working-directory: alterbbn_v2.2
+        run: |
+          set -euo pipefail
+          ulimit -s unlimited
+          make clean || true
+          make CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
+          make stand_cosmo CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
+          sha256sum stand_cosmo.x | tee ../b6_mapping_stand_cosmo_sha256.txt
+
+      - name: Run standard network and capture T-a-H trace
+        working-directory: alterbbn_v2.2
+        run: |
+          set -euo pipefail
+          ulimit -s unlimited
+          set +e
+          ./stand_cosmo.x 1 > ../b6_mapping_stand_cosmo.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > ../b6_mapping_stand_cosmo.returncode
+          test "$rc" -eq 1
+          test -s rtk_bbn_Ta_trace.tsv
+          grep -q ' cent:' ../b6_mapping_stand_cosmo.log
+          python3 - <<'PY'
+          import re
+          text=open('../b6_mapping_stand_cosmo.log').read()
+          m=re.search(r'^\s*cent:\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)',text,re.M)
+          assert m
+          got=tuple(map(float,m.groups()))
+          expected=(0.2473,2.435e-5,1.031e-5,5.466e-10)
+          assert got==expected,(got,expected)
+          print('ALTERBBN_TA_TRACE_INSTRUMENTATION_ABUNDANCE_INVARIANCE_PASS',got)
+          PY
+
+      - name: Prepare pinned RTK CLASS tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
+          cp rtk/final_center_early_universe_diagnostic.py class_public/
+
+      - name: Build CLASS and generate RTK/same-params backgrounds
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          make -j2 class
+          python3 final_center_early_universe_diagnostic.py | tee ../b6_mapping_class_background.log
+          grep -q RTK_FINAL_EARLY_UNIVERSE_DIAGNOSTIC ../b6_mapping_class_background.log
+          test -s output/final_early_universe/rtk_final_background.dat
+          test -s output/final_early_universe/lcdm_same_rtk_params_background.dat
+
+      - name: Build entropy-aware nested RTK H(T) tables
+        run: |
+          set -euo pipefail
+          python3 rtk/build_bbn_rtk_ht_mapping.py \
+            alterbbn_v2.2/rtk_bbn_Ta_trace.tsv \
+            class_public/output/final_early_universe/rtk_final_background.dat \
+            class_public/output/final_early_universe/lcdm_same_rtk_params_background.dat | tee b6_ht_mapping.log
+          grep -q RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS b6_ht_mapping.log
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b6-entropy-aware-ht-mapping
+          path: |
+            b6_mapping_gcc13_version.txt
+            b6_mapping_runner_uname.txt
+            b6_ta_trace_patch.log
+            alterbbn_ta_trace_patch_manifest.json
+            b6_mapping_stand_cosmo_sha256.txt
+            b6_mapping_stand_cosmo.log
+            b6_mapping_stand_cosmo.returncode
+            alterbbn_v2.2/rtk_bbn_Ta_trace.tsv
+            b6_mapping_class_background.log
+            class_public/output/final_early_universe/rtk_final_background.dat
+            class_public/output/final_early_universe/lcdm_same_rtk_params_background.dat
+            output/b6_bbn_ht_mapping/summary.json
+            output/b6_bbn_ht_mapping/nominal_256.csv
+            output/b6_bbn_ht_mapping/refined_512.csv
+          if-no-files-found: warn
