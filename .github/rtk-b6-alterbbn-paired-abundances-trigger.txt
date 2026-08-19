@@ -1,0 +1,4 @@
+trigger: 2026-08-19T15:11:30+03:00
+reason: execute preregistered B6 paired AlterBBN abundance/refinement gate
+protocol: research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
+mapping_run_id: 32243547025
