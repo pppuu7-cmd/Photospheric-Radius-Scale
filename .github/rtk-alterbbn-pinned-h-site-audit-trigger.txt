@@ -1,3 +1,3 @@
-trigger: 2026-08-19T15:42:00+03:00
-reason: inspect byte-pinned AlterBBN Friedmann-H function/call-site semantics after compile-safe fail-closed discovery
-source_failed_run_id: 32252015488
+trigger: 2026-08-19T15:59:30+03:00
+reason: inspect byte-pinned AlterBBN final-temperature Tf initialization/stop site after B6 run3 exposed 0.48% lower H-evaluation temperature than accepted trace endpoint
+source_failed_run_id: 32252925021
