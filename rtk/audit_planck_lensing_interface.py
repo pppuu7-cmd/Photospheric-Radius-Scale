@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit standalone Planck lensing likelihood availability through clipy.
 
-No cosmological score is evaluated here.  The script scans the already pinned
+No cosmological score is evaluated here. The script scans the already pinned
 Planck R3.00 baseline tree, requires at least one .clik_lensing directory, and
 verifies that clipy-like can instantiate the intended standalone likelihood.
 """
@@ -22,8 +22,8 @@ for p in cands:
     try:
         L=clipy.clik(str(p))
         row['load_ok']=True
-        row['lmax']=list(L.get_lmax())
-        row['default_par_len']=len(L.default_par)
+        row['lmax']=[int(x) for x in L.get_lmax()]
+        row['default_par_len']=int(len(L.default_par))
         row['default_par_sha256']=hashlib.sha256(memoryview(L.default_par).tobytes()).hexdigest()
     except Exception as exc:
         row['load_ok']=False;row['error']=repr(exc)
@@ -31,13 +31,16 @@ for p in cands:
 
 loaded=[r for r in rows if r.get('load_ok')]
 if not loaded: raise RuntimeError('Planck lensing directories exist but none load through clipy-like')
-# Prefer the official SMICA minimum-variance PP product when present; otherwise
-# fail closed rather than silently choosing another lensing likelihood.
 smica=[r for r in loaded if 'smica' in r['path'].lower() and ('pp' in r['path'].lower() or 'lensing' in r['path'].lower())]
 if not smica: raise RuntimeError(f'no loadable SMICA standalone lensing product among {loaded}')
-chosen=sorted(smica,key=lambda r:r['path'])[0]
+# Prefer the non-CMB-marginalized minimum-variance reconstruction as the first
+# B9 interface target; the choice is made structurally before any cosmological score.
+non_marg=[r for r in smica if 'cmbmarged' not in r['path'].lower()]
+if len(non_marg)!=1:
+    raise RuntimeError(f'expected exactly one non-CMB-marginalized SMICA lensing product, found {len(non_marg)}')
+chosen=non_marg[0]
 summary={'classification':'PLANCK_R3_STANDALONE_LENSING_CLIPY_INTERFACE_PASS','planck_root':str(root),
-         'candidates':rows,'chosen':chosen,'clipy_version':getattr(clipy,'__version__',None),
+         'candidates':rows,'chosen':chosen,'clipy_version':str(getattr(clipy,'__version__','unknown')),
          'next_gate':'freeze B9 matched-lensing robustness protocol before first cosmological lensing score',
          'warning':'Likelihood-interface audit only; no RTK/LCDM lensing score or robustness claim.'}
 Path('planck_lensing_interface_audit.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
