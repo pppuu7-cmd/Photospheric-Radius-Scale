@@ -51,6 +51,7 @@ jobs:
               'RTK AlterBBN published-source pin audit',
               'RTK pinned AlterBBN v2.2 standard-network self-test',
               'RTK pinned AlterBBN expansion-interface audit',
+              'RTK pinned AlterBBN integration-flow audit',
               'RTK B6 entropy-aware H(T) mapping',
               'RTK Route-B khronometric dispersion non-mapping theorem',
               'RTK Route-B khronometric acceleration degeneracy audit',
