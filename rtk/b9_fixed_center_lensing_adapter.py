@@ -17,7 +17,7 @@ import inference_core as C
 ROOT=Path('..')
 STATE=json.loads((ROOT/'research/state/current.json').read_text())
 PROTOCOL=(ROOT/'research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md').read_text()
-if 'FROZEN BEFORE FIRST COSMOLOGICAL LENSING SCORE' not in PROTOCOL:
+if 'FROZEN BEFORE THE FIRST RTK/LCDM COSMOLOGICAL STANDALONE-LENSING SCORE' not in PROTOCOL:
     raise RuntimeError('B9 protocol not frozen before score')
 if STATE['final_replay_certification']!='INDEPENDENT_FRESH_TREE_REPLAY_PASS':
     raise RuntimeError('massless frozen centers lack fresh-tree replay certification')
