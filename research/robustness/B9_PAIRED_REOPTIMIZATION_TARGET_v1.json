@@ -1,0 +1,69 @@
+{
+  "schema": "B9_PAIRED_REOPTIMIZATION_TARGET_v1",
+  "status": "PREREGISTERED_TARGET_BEFORE_FIRST_B9_REOPTIMIZATION_RESULT",
+  "protocol": "research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md",
+  "baseline_objective": "matched-ultra-linstep2+dense-BOSS",
+  "baseline_objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "mapping": "eff",
+  "lensing_product": "baseline/plc_3.0/lensing/smicadx12_Dec5_ftl_mv2_ndclpp_p_teb_consext8.clik_lensing",
+  "lensing_lmax": [2500, 2500, 2500, -1, 2500, -1, -1],
+  "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
+  "cache": "clean-room-exact-float-v2",
+  "failure_policy": "fail_closed; one identical-point retry only for CLASS_TIMEOUT; never clip physical failures into validity",
+  "starts": {
+    "LCDM": {
+      "lam": 0.0,
+      "As": 2.1054040998203598e-09,
+      "Ob": 0.04858764689799632,
+      "Om": 0.2611722579449536,
+      "h": 0.6782837587382693,
+      "ns": 0.9653185632254442,
+      "zre": 7.788312934950947
+    },
+    "RTK": {
+      "lam": 219457.5727136581,
+      "As": 2.0877827951474356e-09,
+      "Ob": 0.046800730927437424,
+      "Om": 0.2522864064078236,
+      "h": 0.691103719964454,
+      "ns": 0.9645577770978523,
+      "zre": 7.328459220286924
+    }
+  },
+  "reoptimization_geometry": {
+    "method": "deterministic_COBYQA_plus_exact_recentered_polls",
+    "source_semantics": "rtk/stage4d3_joint_lambda_wide.py",
+    "shared_halfwidths": {
+      "h": 0.004,
+      "Ob": 0.0008,
+      "Om": 0.008,
+      "As": 5e-11,
+      "ns": 0.004,
+      "zre": 0.8
+    },
+    "rtk_loglambda_halfwidth": 2.0,
+    "normalized_bounds": [-1.0, 1.0],
+    "initial_tr_radius": 0.65,
+    "final_tr_radius": 0.0005,
+    "maxfev": 900,
+    "maxiter": 1100,
+    "exact_poll_sequence": [0.05, 0.015, 0.004]
+  },
+  "certification_geometry": {
+    "recenter_improvement_tolerance": 0.005,
+    "shared_base_steps": {
+      "h": 0.00035,
+      "Ob": 0.00007,
+      "Om": 0.0007,
+      "As": 4e-12,
+      "ns": 0.00035,
+      "zre": 0.07
+    },
+    "rtk_loglambda_base_step": 0.05,
+    "required_scales": [1.0, 0.5],
+    "hessian_requirement": "positive_definite_and_consistent_at_required_scales",
+    "fresh_tree_replay_abs_tolerance": 2e-6
+  },
+  "interpretation_guard": "Local B9-v1 reoptimization only; not a global optimum, significance, AIC/BIC, posterior preference or Bayes factor."
+}
