@@ -1,0 +1,3 @@
+Launch exact C8 no-inference theorem: identical quadratic mixed-kinetic dispersion with independently variable cubic coupling.
+Research worker commit: 6b6bd718ffaae3798cd8d0a17c24cdfc31bff2d7
+Workflow commit: df9068b2e4270c9c9495e53c058f66aa9f25c869
