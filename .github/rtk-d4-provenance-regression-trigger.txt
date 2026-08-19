@@ -1,0 +1,2 @@
+trigger: 2026-08-19T12:18:00+03:00
+reason: fresh LCDM locked stationarity audit 32195153149 passed; validate model-aware RTK/LCDM proof provenance code and static invariants
