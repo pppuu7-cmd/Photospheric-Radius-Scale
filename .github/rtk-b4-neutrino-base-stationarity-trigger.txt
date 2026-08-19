@@ -1,0 +1,2 @@
+trigger: 2026-08-19T12:12:00+03:00
+reason: paired neutrino seed run 32190997977 completed success; preregistered base Hessian stationarity gate for RTK and LCDM
