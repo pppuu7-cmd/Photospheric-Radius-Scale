@@ -55,7 +55,27 @@ The existing implementation audit fixes background `U,U',V,V'` and perturbation 
 
 **Narrow conclusion:** localized RT auxiliaries do not represent freely specifiable homogeneous dark-fluid initial modes inside the physical retarded solution space. This is not the full nonlinear Hamiltonian/ADM DOF theorem of metric+Khronon+RT.
 
-## 5. Still viable completion classes
+## 5. Reduced mixed-kinetic scalar kinematics
+
+Worker: `rtk/route_b_mixed_kinetic_dispersion_kinematics.py`.
+GitHub Actions run `32302480967`, artifact `9383521326`, digest `sha256:b6c70616b972b5aec9b612dda9b65032ab7746a579a782f558cf03c5e74461d1`.
+Durable result: `research/theory/ROUTE_B_MIXED_KINETIC_DISPERSION_KINEMATICS_RESULT_v1.json`.
+
+For the reduced inverse kernel
+
+`(1+q^2/M^2) omega^2 - c_s^2 q^2 = 0`,
+
+machine-checked exact expressions are
+
+- `omega = c_s q/sqrt(1+q^2/M^2)`;
+- `v_phase = c_s/sqrt(1+q^2/M^2)`;
+- `v_group = c_s/(1+q^2/M^2)^(3/2)`.
+
+For `M^2>0` and `c_s^2>0`, the reduced branch has real positive `omega^2`. For `q>0`, `0<v_group<v_phase<c_s`; if `c_s<=1` in metric-light-speed units, both reduced-branch phase and group velocities are subluminal. At high momentum `omega -> c_s M`, `v_phase ~ c_s M/q`, and `v_group ~ c_s M^3/q^3`.
+
+**Narrow conclusion:** the target mixed-kinetic factor gives a real, monotonically propagating reduced scalar branch with suppressed high-q phase/group velocities under positive `M^2,c_s^2`. This is not the full coupled characteristic cone, strong-hyperbolicity theorem, ghost theorem, or strong-coupling result.
+
+## 6. Still viable completion classes
 
 The current narrow results leave the following routes genuinely open:
 
@@ -64,7 +84,7 @@ The current narrow results leave the following routes genuinely open:
 - metric/extrinsic-curvature companion operators chosen as a degenerate spatially-covariant/DHOST-like combination;
 - a spatially covariant preferred-foliation construction whose full constraint algebra yields the desired scalar branch without extra propagating ghosts.
 
-## 6. Required next proof layers
+## 7. Required next proof layers
 
 C7 remains open until there is an explicit coupled metric+Khronon+RT constraint/DOF analysis on FLRW and a sufficiently generic background. A valid completion must then support machine-checkable no-ghost/no-gradient/hyperbolicity inequalities. C8 requires cubic interactions and canonical normalization to determine a strong-coupling/EFT cutoff; the quadratic dispersion alone cannot supply that number. C9 requires radiative/loop stability or an explicit symmetry/power-counting argument.
 
