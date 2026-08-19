@@ -1,4 +1,5 @@
-Launch exact isolated c4=2 khronometric/DHOST audit.
-Worker commit: dfde97dd163950444c42bc014f6f0502406808a8
-Workflow commit: dd7ca5e19eb783137d50384bceff00d612a95275
+Launch exact isolated c4=2 khronometric/DHOST audit plus exact-target no-go.
+Algebra audit commit: dfde97dd163950444c42bc014f6f0502406808a8
+Exact-target theorem commit: 5f53e0c1b2205159ad8d950840cbe58202c01840
+Workflow commit: 6ed4482711d9856ea6f92111d9bd16a7625da22f
 Primary source: arXiv:1602.08398 Eqs. 7.4, 7.10-7.13 and Class-II metric discriminator.
