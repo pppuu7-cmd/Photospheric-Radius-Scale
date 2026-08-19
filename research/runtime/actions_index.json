@@ -1,7 +1,33 @@
 {
-  "generated_at_utc": "2026-08-19T09:30:38.060761+00:00",
+  "generated_at_utc": "2026-08-19T09:40:30.951681+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T09:38:26Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "2ef0093e9fb70641f66c102a2b312e25109ac01c",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32238634437",
+      "id": 32238634437,
+      "name": "RTK B6 entropy-aware H(T) mapping",
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-19T09:39:14Z"
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T09:31:22Z",
+      "event": "schedule",
+      "head_branch": "main",
+      "head_sha": "ea113ae21ef1c06a91075f4396c49e08357f87a9",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32238031937",
+      "id": 32238031937,
+      "name": "RTK autonomous research orchestrator",
+      "run_number": 120,
+      "status": "completed",
+      "updated_at": "2026-08-19T09:31:35Z"
+    },
     {
       "conclusion": "success",
       "created_at": "2026-08-19T09:29:50Z",
@@ -300,32 +326,6 @@
       "run_number": 2,
       "status": "completed",
       "updated_at": "2026-08-18T23:21:50Z"
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-18T23:17:39Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "a097b70848d2d4e217a9fbac179f89a849dd0d76",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32196553120",
-      "id": 32196553120,
-      "name": "RTK Route-B khronometric dispersion non-mapping theorem",
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-18T23:18:03Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T23:15:58Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "58928cf817ba44e3471b6216606beab6acf7d63d",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32196429748",
-      "id": 32196429748,
-      "name": "RTK AlterBBN published-source pin audit",
-      "run_number": 2,
-      "status": "completed",
-      "updated_at": "2026-08-18T23:16:10Z"
     }
   ]
 }
