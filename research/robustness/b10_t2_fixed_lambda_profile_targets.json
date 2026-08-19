@@ -1,0 +1,41 @@
+{
+  "classification": "B10_T2_TARGETS_FROZEN_BEFORE_FIRST_PROFILE",
+  "source_t1_run_id": 32240381293,
+  "source_t1_artifact_id": 9361169855,
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "asymptotic_rule_tolerance_S": 0.002,
+  "lambda_star": 219457.5727136581,
+  "anchors": [
+    {"factor": 64.0, "lambda_D": 14045284.653674118, "role": "mechanical_asymptotic_onset"},
+    {"factor": 16384.0, "lambda_D": 3595592871.3405743, "role": "largest_successful_preregistered_tail_factor"}
+  ],
+  "optimizer_axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "optimizer_scales": {
+    "h": 0.01,
+    "Ob": 0.002,
+    "Om": 0.02,
+    "As": 1e-10,
+    "ns": 0.02,
+    "zre": 1.0
+  },
+  "physical_bounds": {
+    "h": [0.58, 0.8],
+    "Ob": [0.025, 0.075],
+    "Om": [0.12, 0.42],
+    "As": [1.2e-9, 3.2e-9],
+    "ns": [0.85, 1.1],
+    "zre": [3.0, 15.0]
+  },
+  "optimizer": {
+    "method": "Powell",
+    "maxfev": 180,
+    "xtol": 0.015,
+    "ftol": 2e-5
+  },
+  "start_semantics": "For T1 every tail point held the six shared parameters exactly at the frozen RTK accepted-score point; therefore the protocol's frozen start and nearest successful T1 shared-parameter start are identical and are deduplicated as one exact start. No previous T2 profile is available before this paired execution.",
+  "candidate_only": true,
+  "next_required_gate": "T3 fixed-lambda 6D coordinate-poll/Hessian stationarity certification at every tail anchor retained for the final B10 classification",
+  "warning": "T2 optimizer endpoints are not stationarity-certified and cannot close B10 by themselves."
+}
