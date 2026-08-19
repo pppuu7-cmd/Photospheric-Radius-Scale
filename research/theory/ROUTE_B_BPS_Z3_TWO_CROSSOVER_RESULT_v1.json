@@ -1,0 +1,55 @@
+{
+  "classification": "RTK_ROUTE_B_BPS_Z3_TWO_CROSSOVER_PASS",
+  "status": "CLOSED_CONSTRUCTIVE_TWO_CROSSOVER_QUADRATIC_LEMMA",
+  "run": {
+    "run_id": 32305611111,
+    "artifact_id": 9384581354,
+    "artifact_name": "rtk-route-b-bps-z3-two-crossover",
+    "artifact_digest": "sha256:b66944c808a577c190b929f57b59f910d80b08a64402cfc5ed7e6a05cd4e79d7",
+    "head_sha": "0efb9e4414948dbdd2cc9abd22011fe69a7d0058"
+  },
+  "primary_source": "Blas, Pujolas, Sibiryakov, arXiv:1007.3503, Eqs. (5.1)-(5.8)",
+  "worker": "rtk/route_b_bps_z3_two_crossover.py",
+  "worker_post_artifact_guard_fix_commit": "2c98b7ec95e599ee28c162d5587acba0a2bbbb79",
+  "parameterization": {
+    "alpha": "2z/(1+z) in (0,2)",
+    "lambda": "1+ell > 1",
+    "eta": "e/(1+e) in (0,1)",
+    "f3": "-alpha",
+    "f2_over_f3": "linear interpolation between the two exact-rational roots",
+    "f1": "-(2f3+4f2)/alpha",
+    "g1": "(f2^2-f1 f3)/alpha",
+    "g2": 0,
+    "g3": 0
+  },
+  "exact_polynomials": {
+    "P": "(4-2alpha)[1-gamma x^3]",
+    "Q": "alpha(1-x)",
+    "gamma": "4eta(1-eta)=4e/(1+e)^2 in (0,1]"
+  },
+  "physical_dispersion": {
+    "form": "omega^2=cs^2 p^2 [1+gamma(p^2/M_*^2)^3]/[1+p^2/M_*^2]",
+    "cs2": "ell/[z(2+3ell)] > 0",
+    "first_crossover": "M_disp=M_*",
+    "relative_correction_to_exact_RTK_rational": "gamma (p^2/M_*^2)^3",
+    "actual_z3_momentum_crossover": "p_UV=M_* gamma^(-1/6)",
+    "uv_scaling": "omega^2 proportional to p^6"
+  },
+  "stability": "For every physical p, P(-p^2/M_*^2)>0 and Q(-p^2/M_*^2)>0; lambda>1 gives the positive BPS scalar kinetic sign.",
+  "theorem": "The BPS healthy scalar quadratic class contains a continuous two-crossover family that approaches the exact RTK rational dispersion arbitrarily closely on any fixed finite momentum range while restoring the z=3 p^6 UV dispersion above a parametrically higher scale.",
+  "post_artifact_strong_coupling_interpretation_correction": "The artifact's structural theorem is unchanged, but the relevant BPS momentum strong-coupling guard is p_UV=M_* gamma^(-1/6) < Lambda_p because the z=3 numerator is gamma-suppressed. The weaker M_*<Lambda_p condition is not sufficient when gamma<<1. At p_UV the scalar frequency remains O(c_s M_*), so frequency strong-coupling requires a separate Lambda_omega guard.",
+  "next_required_proofs": [
+    "machine-check the finite-range approximation versus p_UV<Lambda_p feasibility window",
+    "specialize BPS cubic interactions/canonical normalization to the selected coefficient family",
+    "full nonlinear constraint and physical-DOF count on the selected family",
+    "off-shell source/observable mapping to the intended RTK Khronon sector",
+    "FLRW/generic-background stability",
+    "radiative stability and matter Lorentz-violation constraints"
+  ],
+  "non_claims": [
+    "not exact RTK rational dispersion at arbitrarily high momentum for gamma>0",
+    "not a full nonlinear RTK equivalence",
+    "not a completed strong-coupling proof",
+    "not radiative stability or a UV-completion proof"
+  ]
+}
