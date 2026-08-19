@@ -1,9 +1,10 @@
 name: RTK CLASS build
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-class-build-trigger.txt'
 
 jobs:
   build:
