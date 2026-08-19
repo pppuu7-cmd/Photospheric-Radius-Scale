@@ -1,1 +1,1 @@
-Refresh active/recent run IDs after B9 lensed-Cl interface certification, mixed-kinetic kinematics rerun, Planck calibration contract audit launch, and ongoing B4/B9 scientific jobs.
+Launch isolated runtime snapshot after moving runtime state to rtk-runtime-state branch. Include B4/B9 heavy jobs, mixed-kinetic kinematics rerun, Planck calibration contract audit, and B9 interface guard.
