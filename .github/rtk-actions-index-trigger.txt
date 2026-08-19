@@ -1,2 +1,2 @@
-trigger: 2026-08-19T13:33:00+03:00
-reason: capture B6 structural failsafe1 trace rerun, B9 JSON-normalized lensing interface rerun, completed B10 tail reconnaissance, and active B4 paired neutrino Hessians
+trigger: 2026-08-19T15:15:45+03:00
+reason: capture new B6 paired AlterBBN abundance run, new B4 LCDM recenter run, active B4 RTK base Hessian, and B10 T2 profiles
