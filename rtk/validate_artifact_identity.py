@@ -79,11 +79,17 @@ def validate_runtime_sidecars(repro,model,key,run_id,bundle):
     return {'sidecars_present':{k:(bundle.get(k) is not None) for k in ('python_version','pip_freeze','planck_sha256')},**observed}
 
 def validate_locked_provenance(state,repro,model,key,run_id,summary,bundle):
-    prov=summary.get('provenance');slot=f'{model}.{key}';model_name='RTK' if model=='rtk' else 'LCDM'
+    prov=summary.get('provenance');slot=f'{model}.{key}'
     if not isinstance(prov,dict):raise RuntimeError(f'artifact provenance missing {slot} run={run_id}')
     expected_obj_fp=canonical_hash(state['objective']);actual_obj_fp=summary.get('objective_fingerprint') or prov.get('objective_fingerprint')
     if actual_obj_fp!=expected_obj_fp:raise RuntimeError(f'artifact provenance mismatch {slot} run={run_id}: objective_fingerprint={actual_obj_fp!r} expected={expected_obj_fp!r}')
-    expected_center_fp=canonical_hash({'model':model_name,'center':state[model]['accepted_center'],'objective':state['objective']['name'],'mapping':state.get('production_mapping','eff')});actual_center_fp=summary.get('center_fingerprint') or prov.get('center_fingerprint')
+    if model=='rtk':
+        expected_center_fp=canonical_hash({'model':'RTK','center':state['rtk']['accepted_center'],'objective':state['objective']['name'],'mapping':state.get('production_mapping','eff')})
+    elif model=='lcdm':
+        expected_center_fp=canonical_hash({'model':'LCDM','center':state['lcdm']['accepted_center'],'objective':state['objective']['name'],'mapping':state.get('production_mapping','eff')})
+    else:
+        raise RuntimeError(f'unsupported proof-artifact model {model!r}')
+    actual_center_fp=summary.get('center_fingerprint') or prov.get('center_fingerprint')
     if actual_center_fp!=expected_center_fp:raise RuntimeError(f'artifact provenance mismatch {slot} run={run_id}: center_fingerprint={actual_center_fp!r} expected={expected_center_fp!r}')
     expected={'class_upstream_commit':repro['external_git']['class_public']['commit'],'pantheon_commit':repro['external_git']['pantheon']['commit'],'numpy_version':repro['python_packages']['numpy']};observed={k:prov.get(k) for k in expected}
     bad={k:{'actual':observed[k],'expected':expected[k]} for k in expected if observed[k]!=expected[k]}
