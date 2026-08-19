@@ -1,0 +1,35 @@
+{
+  "classification": "RTK_RETARDED_AUX_SOLUTION_SPACE_UNIQUENESS_PASS",
+  "status": "CLOSED_SOLUTION_SPACE_LEMMA",
+  "run": {
+    "run_id": 32301071093,
+    "artifact_id": 9383027131,
+    "artifact_name": "rtk-route-b-retarded-aux-solution-space",
+    "artifact_digest": "sha256:a69d512c73742b8a9ab8e562e5f8ac55f31ebfbbe32bd3d9d0e7eb4e7d20fbfe",
+    "head_sha": "d974e884425479e66364c1dd2e19a62206dfdb02"
+  },
+  "worker": "rtk/route_b_retarded_aux_solution_space.py",
+  "generic_second_order_local_constants_per_auxiliary": 2,
+  "retarded_free_homogeneous_constants_per_auxiliary": 0,
+  "proof_conditions": [
+    "well-posed second-order auxiliary evolution on the chosen initial-value domain",
+    "nonzero fundamental-solution Wronskian at the initial hypersurface",
+    "retarded value and normal-derivative data are fixed rather than freely varied",
+    "for a chain, auxiliary sourcing is triangular/causally ordered so uniqueness applies inductively"
+  ],
+  "implementation_anchor": {
+    "audit": "rtk/audit_rt_retarded_auxiliary_ic.py",
+    "model": "RT/model=2",
+    "background_fixed_fields": ["U","U_prime","V","V_prime"],
+    "perturbation_fixed_fields": ["deltaU","deltaU_prime","deltaV","deltaV_prime","deltaZ","deltaZ_prime"]
+  },
+  "theorem": "Within the physical retarded solution space, localized RT auxiliary fields carry no independently specifiable homogeneous initial-data constants: any two solutions with the same primary history and the same retarded prescription coincide, by zero-data homogeneous uniqueness applied inductively.",
+  "non_claims": [
+    "not the full nonlinear ADM/Hamiltonian constraint count of metric + Khronon + RT",
+    "not absence of all ghosts in an unconstrained local auxiliary action varied with arbitrary boundary data",
+    "not a strong-coupling-scale result",
+    "not radiative or quantum stability",
+    "not a global-hyperbolicity theorem outside the declared well-posed retarded domain"
+  ],
+  "interpretation_guard": "Do not count U,V,Z localization variables as freely tunable dark-fluid initial modes merely from the order of their localized equations; equally, this lemma does not close the full coupled C7 degree-of-freedom problem."
+}
