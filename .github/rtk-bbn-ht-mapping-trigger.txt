@@ -1,0 +1,2 @@
+trigger: 2026-08-19T12:38:00+03:00
+reason: pinned AlterBBN expansion-interface audit 32237897006 passed; execute preregistered entropy-aware T-a trace and RTK/same-params LCDM H(T) table construction
