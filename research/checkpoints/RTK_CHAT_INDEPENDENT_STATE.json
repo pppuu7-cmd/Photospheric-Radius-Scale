@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "reconciled_at_utc": "2026-08-19T11:00:00Z",
+  "purpose": "chat-independent recovery snapshot; live production state remains authoritative",
+  "source_of_truth": {
+    "production_state": "rtk-class-build:research/state/current.json",
+    "runtime_index": "rtk-class-build:research/runtime/actions_index.json",
+    "human_recovery": "main:research/checkpoints/RTK_CHAT_INDEPENDENT_RECOVERY.md"
+  },
+  "production_objective": {
+    "name": "matched-ultra-linstep2+dense-BOSS",
+    "mapping": "eff",
+    "fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+    "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "cache_key_version": "clean-room-exact-float-v2"
+  },
+  "matched_local_replay": {
+    "certification": "INDEPENDENT_FRESH_TREE_REPLAY_PASS",
+    "rtk_interior_minimum_certification": "N5_BASE_AND_HALF_STENCIL_PASS",
+    "S_LCDM_eff": 1049.966118347761,
+    "S_RTK_eff": 1050.249912429787,
+    "delta_S_eff_RTK_minus_LCDM": 0.2837940820259064,
+    "interpretation": "reproducible matched-local raw objective only; not global preference/significance/AIC/BIC/Bayes"
+  },
+  "recovered_guardrails": [
+    "never_compare_sparse_and_dense_scores_as_same_objective",
+    "never_compare_absolute scores without branch/source/objective/precision provenance",
+    "keep_eff_and_k01_separate",
+    "full_precision_cache_keys_only",
+    "historical_rounded_As_cache_optimizer_convergence_is_withdrawn",
+    "modern_As_ns_primordial_inputs_only",
+    "physical_RTK_Omega_cdm_zero",
+    "positive_bracketed_gamma_root_no_silent_tiny_fallback",
+    "preserve_khronon_variables_across_CLASS_approximation_vector_recreation",
+    "unsupported_gauge_or_isocurvature_modes_fail_closed",
+    "local_optimizer_or_Hessian_never_implies_global_minimum"
+  ],
+  "recovered_analytic_facts": {
+    "transition_radius": "r_C ~= (r_M / M_K^2)^(1/3)",
+    "transition_radius_old_wrong_formula": "[M_K^2 r_M]^(1/3)",
+    "mass_scaling": "r_C proportional to M_b^(1/6)",
+    "early_DBI_scaling": "r_C(a) proportional to a^3; r_C(z) ~= r_C0 (1+z)^(-3)",
+    "stationary_external_sensitivity": "d ln g / d p_ext ~= -(1/6)(r/r_C)^3",
+    "one_percent_radius": "r < 0.391 r_C"
+  },
+  "robustness_packages": {
+    "B6_BBN_H_of_T": {
+      "status": "mapping_pass_abundance_pending",
+      "run_id": 32243547025,
+      "classification": "RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS",
+      "max_abs_R_H_minus_1": 2.1702035724047164e-09,
+      "nominal_vs_refined_max_abs_R_error": 1.730393606180769e-12,
+      "next_gate": "patch common AlterBBN Hubble-rate path with frozen R_H(T); paired R=1 vs RTK abundance/refinement tests",
+      "warning": "expansion history only; no abundance constraint yet"
+    },
+    "B9_Planck_lensing": {
+      "status": "interface_pass_score_pending",
+      "run_id": 32243756716,
+      "classification": "PLANCK_R3_STANDALONE_LENSING_CLIPY_INTERFACE_PASS",
+      "clipy_version": "0.15",
+      "next_gate": "freeze matched standalone-lensing robustness protocol before first RTK/LCDM cosmological score",
+      "warning": "interface only; no RTK/LCDM lensing score yet"
+    },
+    "B10_lambda_tail_T1": {
+      "status": "fixed_shared_recon_pass_T2_active",
+      "run_id": 32240381293,
+      "classification": "B10_LAMBDA_TAIL_RECONNAISSANCE_COMPLETE",
+      "lambda_star": 219457.5727136581,
+      "asymptotic_onset_factor": 64.0,
+      "largest_successful_factor": 16384.0,
+      "warning": "fixed-shared tail cannot establish profiled lambda identifiability"
+    }
+  },
+  "active_runs_at_reconciliation": [
+    {
+      "run_id": 32236524767,
+      "name": "RTK B4 paired minimal-neutrino base stationarity",
+      "jobs": ["base-hessian (LCDM)", "base-hessian (RTK)"],
+      "status": "in_progress"
+    },
+    {
+      "run_id": 32244330691,
+      "name": "RTK B10 paired fixed-lambda T2 profiles",
+      "jobs": ["profile (64)", "profile (16384)"],
+      "status": "in_progress"
+    }
+  ],
+  "known_stale_state": {
+    "path": "main:rtk/agent/frontier_state.json",
+    "problem": "contains historical sparse/navigation best S_eff=1050.0338294787366 and must not override production dense state",
+    "action": "do not mutate automatically until agent-state semantics are audited"
+  },
+  "next_priority_gates": [
+    "B4 matched minimal-neutrino base then half-stencil stationarity",
+    "B10 T2 profiled large-lambda identifiability decision",
+    "B6 paired AlterBBN abundance/refinement test using frozen R_H(T)",
+    "B9 matched standalone Planck lensing score after protocol freeze",
+    "then theory consistency / EFT-PPF translation / observable derivative atlas"
+  ]
+}
