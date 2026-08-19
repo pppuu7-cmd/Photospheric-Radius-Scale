@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-19T12:27:57.326451+00:00",
+  "generated_at_utc": "2026-08-19T12:28:09.044676+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
@@ -248,19 +248,6 @@
       "run_number": 1,
       "status": "completed",
       "updated_at": "2026-08-19T10:19:14Z"
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-19T09:56:21Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "bbe62249002a2cc4da6dbc2a8d67428ba45a59ed",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32240164970",
-      "id": 32240164970,
-      "name": "RTK pinned Planck standalone-lensing interface audit",
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-19T09:56:51Z"
     }
   ]
 }
