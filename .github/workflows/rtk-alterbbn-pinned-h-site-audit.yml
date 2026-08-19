@@ -1,0 +1,47 @@
+name: RTK pinned AlterBBN Friedmann-H site audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-alterbbn-pinned-h-site-audit-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-alterbbn-pinned-h-site-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Download exact pinned source and audit H site
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/audit_alterbbn_pinned_h_site.py
+          curl -L --fail --retry 3 --retry-delay 2 -o alterbbn_v2.2.tar.xz "$ALTERBBN_URL"
+          test "$(stat -c %s alterbbn_v2.2.tar.xz)" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  alterbbn_v2.2.tar.xz" | sha256sum -c -
+          tar -xJf alterbbn_v2.2.tar.xz
+          grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
+          python3 rtk/audit_alterbbn_pinned_h_site.py alterbbn_v2.2 | tee alterbbn_pinned_h_site_audit.log
+          grep -q ALTERBBN_PINNED_FRIEDMANN_H_SITE_AUDIT_COMPLETE alterbbn_pinned_h_site_audit.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-alterbbn-pinned-h-site-audit
+          path: |
+            alterbbn_pinned_h_site_audit.json
+            alterbbn_pinned_h_site_audit.log
+          if-no-files-found: warn
