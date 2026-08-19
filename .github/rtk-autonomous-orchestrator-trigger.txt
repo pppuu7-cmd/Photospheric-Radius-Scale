@@ -1,2 +1,2 @@
-trigger: 2026-08-19T01:52:00+03:00
-reason: verify static eighth-ray invariants plus generalized Stage4D3 regression before D5 closure
+trigger: 2026-08-19T12:44:00+03:00
+reason: restore green autonomous control plane after updating runtime-sidecar regression to the model-aware validator API
