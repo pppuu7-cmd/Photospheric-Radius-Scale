@@ -1,6 +1,7 @@
-trigger_utc: 2026-08-19T17:56:30Z
-trigger_helsinki: 2026-08-19T20:56:30+03:00
-reason: rerun identical frozen B9 step-1 fixed-center Planck lensing adapter after correcting only the preflight protocol-status literal; no physics, likelihood product, units, ordering, or cosmological parameters changed.
+trigger_utc: 2026-08-19T18:03:11Z
+trigger_helsinki: 2026-08-19T21:03:11+03:00
+reason: rerun identical frozen B9 step-1 after correcting the same stale protocol-status literal inside adapter.py; no physics, likelihood product, CLASS precision, spectrum units/order, or frozen cosmological parameters changed.
 protocol: research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md
 failed_preflight_run_id: 32253698321
-preflight_fix_commit: ab8651888230ac4c77d040f86e4b015d6c013c01
+failed_internal_guard_run_id: 32284654918
+adapter_guard_fix_commit: 550c4a0746658e5687b3f9008f12d95bf9407671
