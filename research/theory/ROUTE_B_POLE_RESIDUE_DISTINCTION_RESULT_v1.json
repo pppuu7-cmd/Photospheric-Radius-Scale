@@ -1,0 +1,30 @@
+{
+  "classification": "RTK_ROUTE_B_POLE_RESIDUE_DISTINCTION_PASS",
+  "status": "CLOSED_INTERPRETATION_GUARD_LEMMA",
+  "run": {
+    "run_id": 32304837982,
+    "artifact_id": 9384321313,
+    "artifact_name": "rtk-route-b-pole-residue-distinction",
+    "artifact_digest": "sha256:418e71231c7a37a298928223fe3a3ad35b62137bd5b237b6fe42eef4603dacbb",
+    "head_sha": "4abf59bea2aa4b3be57d7ee0291a53b1a8ffe91c"
+  },
+  "worker": "rtk/route_b_pole_residue_distinction.py",
+  "bps_kernel": "K_BPS=A omega^2-G q^2/(1+r q^2)",
+  "rtk_kernel": "K_RTK=A(1+r q^2) omega^2-G q^2",
+  "exact_relation": "K_RTK=(1+r q^2) K_BPS",
+  "shared_pole": "omega^2=(G/A) q^2/(1+r q^2)",
+  "propagator_relation": "D_BPS=(1+r q^2) D_RTK for the same fixed source normalization",
+  "residue_relation": "Res_BPS=(1+r q^2) Res_RTK in omega^2",
+  "theorem": "Exact matching of the rational scalar dispersion is weaker than matching the off-shell quadratic kernel and source-coupled two-point response. The BPS constructive family is therefore an exact pole/dispersion embedding, not yet an exact RTK propagator/observable mapping.",
+  "required_for_full_mapping": [
+    "explicit field normalization/transformation between the BPS scalar and intended RTK Khronon variable",
+    "consistent mapping of matter/source couplings and constraint variables",
+    "comparison of gauge-invariant transfer functions/residues, not only pole locations",
+    "generic-background constraint and stability analysis"
+  ],
+  "non_claims": [
+    "does not invalidate the BPS healthy quadratic dispersion embedding",
+    "does not prove that no field/source mapping exists",
+    "does not establish full nonlinear equivalence or inequivalence"
+  ]
+}
