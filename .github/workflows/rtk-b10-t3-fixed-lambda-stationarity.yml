@@ -1,0 +1,149 @@
+name: RTK B10 T3 fixed-lambda base stationarity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b10-t3-stationarity-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-b10-t3-fixed-lambda-base-stationarity
+  cancel-in-progress: false
+
+jobs:
+  base-stationarity:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        factor: ['64','16384']
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
+      B10_FACTOR: '${{ matrix.factor }}'
+      B10_T3_STENCIL_SCALE: '1.0'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Require frozen B10 T3 targets
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p=open('research/robustness/B10_LAMBDA_TAIL_IDENTIFIABILITY_PROTOCOL_v1.md').read()
+          assert 'FROZEN BEFORE THE NEW BROAD TAIL RECONNAISSANCE RUN' in p
+          t=json.load(open('research/robustness/b10_t3_fixed_lambda_stationarity_targets.json'))
+          assert t['classification']=='B10_T3_BASE_TARGETS_FROZEN_BEFORE_FIRST_STATIONARITY'
+          assert t['source_t2_run_id']==32244330691
+          f=os.environ['B10_FACTOR'];assert f in t['anchors']
+          assert t['anchors'][f]['t2_profile_improvement']==0.0
+          s=json.load(open('research/state/current.json'))
+          assert s['comparison']['final_replay_certified'] is True
+          assert s['objective']['name']==t['objective']
+          print('B10_T3_TARGET_PASS',f,t['anchors'][f]['lambda_D'],t['anchors'][f]['t2_best_score_eff'])
+          PY
+          python3 -m py_compile rtk/b10_fixed_lambda_stationarity.py rtk/prepare_inference_core.py
+
+      - name: Prepare pinned hardened CLASS tree
+        run: |
+          set -euo pipefail
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee b10_t3_provenance_${B10_FACTOR}.txt
+          echo "factor=$B10_FACTOR" | tee -a b10_t3_provenance_${B10_FACTOR}.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          grep -q 'pba->V_prime_ini_nlde = 0.;' class_public/source/input.c
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/b10_fixed_lambda_stationarity.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q "if r.get('ok')" inference_core.py
+          grep -q 'RTK_PLANCK_DATA' inference_core.py
+
+      - name: Build CLASS and install locked likelihood stack
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 - <<'PY'
+          import numpy,scipy,os,platform
+          assert platform.python_version()==os.environ['RTK_PYTHON_VERSION']
+          assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
+          assert scipy.__version__==os.environ['RTK_SCIPY_VERSION']
+          PY
+          python3 -m pip freeze | sort | tee b10_t3_pip_freeze_${B10_FACTOR}.txt
+          python3 --version | tee b10_t3_python_version_${B10_FACTOR}.txt
+
+      - name: Download and verify Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          sha256sum planck.tar.gz | tee ../b10_t3_planck_sha256_${B10_FACTOR}.txt
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
+      - name: Run exact fixed-lambda 6D base stationarity
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 b10_fixed_lambda_stationarity.py | tee ../b10_t3_stationarity_${B10_FACTOR}.log
+          grep -q "B10_T3_FIXED_LAMBDA_BASE_STATIONARITY_COMPLETE ${B10_FACTOR} 1.0" ../b10_t3_stationarity_${B10_FACTOR}.log
+          python3 - <<'PY'
+          import json,os
+          f=os.environ['B10_FACTOR']
+          s=json.load(open(f'../output/b10_t3_fixed_lambda/f{f}/scale_1/summary.json'))
+          t=json.load(open('../research/robustness/b10_t3_fixed_lambda_stationarity_targets.json'))
+          assert s['classification']=='B10_T3_FIXED_LAMBDA_BASE_STATIONARITY_COMPLETE'
+          assert s['center']==t['anchors'][f]['center']
+          assert int(s['factor'])==int(f)
+          assert abs(s['eff']['S_center']-t['anchors'][f]['t2_best_score_eff'])<=2e-6
+          print('B10_T3_BASE_ARTIFACT_PASS',f,s['eff']['best_exact_S'],s['eff']['best_improvement'],s['eff']['positive_definite'],s['next_required_gate'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b10-t3-base-stationarity-f${{ matrix.factor }}
+          path: |
+            b10_t3_provenance_${{ matrix.factor }}.txt
+            b10_t3_pip_freeze_${{ matrix.factor }}.txt
+            b10_t3_python_version_${{ matrix.factor }}.txt
+            b10_t3_planck_sha256_${{ matrix.factor }}.txt
+            b10_t3_stationarity_${{ matrix.factor }}.log
+            output/b10_t3_fixed_lambda/f${{ matrix.factor }}/scale_1/
+          if-no-files-found: warn
