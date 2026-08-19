@@ -1,7 +1,33 @@
 {
-  "generated_at_utc": "2026-08-19T09:48:10.950563+00:00",
+  "generated_at_utc": "2026-08-19T09:57:12.013339+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T09:56:21Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "bbe62249002a2cc4da6dbc2a8d67428ba45a59ed",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32240164970",
+      "id": 32240164970,
+      "name": "RTK pinned Planck standalone-lensing interface audit",
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-19T09:56:51Z"
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T09:53:32Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "55ad0a99955fc00a02fe3e887234e393aee1f544",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32239927888",
+      "id": 32239927888,
+      "name": "RTK B6 entropy-aware H(T) mapping",
+      "run_number": 2,
+      "status": "completed",
+      "updated_at": "2026-08-19T09:54:21Z"
+    },
     {
       "conclusion": "success",
       "created_at": "2026-08-19T09:47:22Z",
@@ -300,32 +326,6 @@
       "run_number": 1,
       "status": "completed",
       "updated_at": "2026-08-18T23:54:30Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T23:30:05Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "47a6d81aa17660ea7ede7cf900b30ac81b22e83f",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32197431357",
-      "id": 32197431357,
-      "name": "RTK Route-B khronometric acceleration degeneracy audit",
-      "run_number": 2,
-      "status": "completed",
-      "updated_at": "2026-08-18T23:30:34Z"
-    },
-    {
-      "conclusion": "cancelled",
-      "created_at": "2026-08-18T23:29:57Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "e31ad5d525cb1f1ca270149f19d5117b7613cb96",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32197421040",
-      "id": 32197421040,
-      "name": "RTK Route-B khronometric acceleration degeneracy audit",
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-18T23:30:09Z"
     }
   ]
 }
