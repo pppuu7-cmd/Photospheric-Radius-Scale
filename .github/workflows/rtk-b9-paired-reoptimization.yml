@@ -127,7 +127,5 @@ jobs:
             b9_paired_${{ matrix.model }}_provenance.txt
             b9_paired_${{ matrix.model }}_pip_freeze.txt
             b9_paired_${{ matrix.model }}.log
-            output/b9_paired_reoptimization/${{ matrix.model }}/summary.json
-            output/b9_paired_reoptimization/${{ matrix.model }}/trace.csv
-            output/b9_paired_reoptimization/${{ matrix.model }}/failures.jsonl
+            output/b9_paired_reoptimization/**
           if-no-files-found: warn
