@@ -1,0 +1,71 @@
+{
+  "classification": "B9_PAIRED_REOPTIMIZATION_CANDIDATE",
+  "status": "RTK_INTERIOR_REOPTIMIZATION_CANDIDATE_AWAITING_PAIRED_LCDM_AND_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "run": {
+    "run_id": 32289834876,
+    "job_id": 96187840574,
+    "artifact_id": 9384705087,
+    "artifact_name": "rtk-b9-paired-reoptimization-RTK",
+    "artifact_digest": "sha256:667636c992f7c87fb7249274881c483b719fd904f440c48d25ef78774484bdfb",
+    "head_sha": "e52e72f3143d474932e81aa646ddbc7b327f29bc"
+  },
+  "fixed_center": {
+    "S_B9_expected": 1059.2891797624086,
+    "S_B9_replayed": 1059.2891797624068,
+    "replay_abs_error": 1.8189894035458565e-12
+  },
+  "candidate": {
+    "S_B9": 1059.2759492715309,
+    "S_base_eff": 1050.253210640323,
+    "lensing_loglike": -4.511369315603947,
+    "lensing_minus2loglike": 9.022738631207893,
+    "improvement_from_fixed_center": 0.013230490875912437,
+    "label": "poll_0.004_5_-1",
+    "params": {
+      "As": 2.087516612980563e-9,
+      "Ob": 0.04679736391039825,
+      "Om": 0.25226571239744694,
+      "h": 0.6911020893447606,
+      "lam": 801437.5006766783,
+      "ns": 0.9645408625912186,
+      "zre": 7.329114544599571
+    },
+    "normalized_y": [
+      0.6476240339149215,
+      -0.0004076549233344592,
+      -0.004208771298968804,
+      -0.0025867512970859244,
+      -0.005323643337445084,
+      -0.004228626658409139,
+      0.0008191553908086004
+    ],
+    "boundary_axes": [],
+    "max_abs_normalized_coordinate": 0.6476240339149215
+  },
+  "all_points_audit": {
+    "exact_scored_points": 140,
+    "true_minimum_label": "poll_0.004_5_-1",
+    "true_minimum_S_B9": 1059.2759492715309,
+    "summary_matches_trace_minimum": true,
+    "boundary_guard_threshold": 0.97,
+    "boundary_guard_pass": true
+  },
+  "optimizer": {
+    "method": "COBYQA",
+    "success": true,
+    "nfev": 98,
+    "nit": 49,
+    "message": "The lower bound for the trust-region radius has been reached",
+    "reported_fun": 1059.2764824471942
+  },
+  "interpretation_guards": [
+    "B9-v1 is conditional on the distributed per-product Planck A_planck defaults",
+    "B9-v1 uses the frozen linear CLASS lensing semantics; Halofit is a separately preregistered robustness variant",
+    "this interior optimizer/poll candidate is not a stationarity-certified local minimum",
+    "no paired Delta S_B9 may be frozen until the LCDM candidate, both stationarity certifications and fresh-tree replay pass"
+  ],
+  "next_gate": "Wait for the paired LCDM reoptimization job. Then freeze the paired B9 recenter targets before launching model-specific base/half stationarity-Hessian certification.",
+  "warning": "Local B9-v1 candidate only; not a global optimum, significance, AIC/BIC, posterior preference or Bayes factor."
+}
