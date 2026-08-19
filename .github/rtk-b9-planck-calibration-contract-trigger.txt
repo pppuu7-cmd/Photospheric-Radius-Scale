@@ -1,0 +1,3 @@
+Launch exact Planck R3 default-vector/nuisance-tail contract audit for lowT, lowE, Plik-lite and non-CMB-marginalized lensing.
+Workflow commit: 48e02f75d6c4e41b863a97aa3d3de69ade4a7717
+This is a contract/provenance audit only and does not modify A5 or B9-v1 objective semantics.
