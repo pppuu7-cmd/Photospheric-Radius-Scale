@@ -1,65 +1,59 @@
-name: RTK AI auto-research agent
+name: RTK AI auto-research agent (retired Stage4D3)
 
+# Historical guarded agent only. Automatic triggers were retired after the
+# production dense A3-A5 proof chain superseded rtk/agent/frontier_state.json.
+# Current autonomous research continuity is handled by the state/methodology
+# orchestration built around rtk-class-build:research/state/current.json.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
-  workflow_run:
-    workflows:
-      - 'RTK clean-room fixed-lambda rediscovery grid'
-      - 'RTK Stage 4D3 Round5 finest 7D stationarity'
-      - 'RTK current-pair linstep1 precision rescue v3 long'
-      - 'RTK agent scientific gate'
-    types: [completed]
 
 concurrency:
   group: rtk-ai-auto-research-agent
   cancel-in-progress: false
 
 permissions:
-  actions: write
-  contents: write
+  actions: read
+  contents: read
 
 env:
   OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
 
 jobs:
-  decide-and-advance:
+  historical-readonly-check:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 1
 
-      - name: Check whether OpenAI agent is enabled
-        id: preflight
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Fail closed on retired sparse frontier
         run: |
-          if [ -n "$OPENAI_API_KEY" ]; then
-            echo 'enabled=true' >> "$GITHUB_OUTPUT"
-            echo 'RTK_AI_AGENT_ENABLED'
-          else
-            echo 'enabled=false' >> "$GITHUB_OUTPUT"
-            echo 'RTK_AI_AGENT_DISABLED: add repository secret OPENAI_API_KEY to enable autonomous scientific decisions'
-          fi
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/checkpoints/RTK_CHAT_INDEPENDENT_STATE.json'
+          s=json.load(open(p))
+          stale=s.get('known_stale_state',{})
+          assert stale.get('path')=='main:rtk/agent/frontier_state.json'
+          prod=s['production_objective']
+          assert prod['name']=='matched-ultra-linstep2+dense-BOSS'
+          assert prod['fingerprint']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          print('RTK_STAGE4D3_AI_AGENT_RETIRED_STALE_FRONTIER_FAIL_CLOSED')
+          PY
 
-      - name: Syntax-check guarded orchestrator
-        if: steps.preflight.outputs.enabled == 'true'
-        run: python3 -m py_compile rtk/agent/auto_research_agent.py
-
-      - name: Analyze frontier and dispatch next earned gate
-        if: steps.preflight.outputs.enabled == 'true'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python3 rtk/agent/auto_research_agent.py | tee rtk_agent_decision.log
+      - name: Record retirement guard
+        run: |
+          cat > rtk_agent_decision.log <<'EOF'
+          RTK_STAGE4D3_AI_AGENT_RETIRED_STALE_FRONTIER_FAIL_CLOSED
+          Historical rtk/agent/frontier_state.json is sparse/stale and is not authorized to dispatch scientific work.
+          Use the production dense state and current autonomous methodology/orchestrator instead.
+          EOF
 
       - uses: actions/upload-artifact@v4
-        if: always() && steps.preflight.outputs.enabled == 'true'
+        if: always()
         with:
-          name: rtk-ai-agent-decision-${{ github.run_id }}
+          name: rtk-ai-agent-retired-${{ github.run_id }}
           path: rtk_agent_decision.log
-          if-no-files-found: ignore
+          if-no-files-found: warn
