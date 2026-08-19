@@ -1,0 +1,80 @@
+name: RTK B9 Planck calibration contract audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b9-planck-calibration-contract-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CLIPY_NOJAX: '1'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install pinned likelihood reader
+        run: python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2' 'scipy==1.18.0'
+      - name: Download and verify Planck R3 baseline
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Record exact default-vector and nuisance contracts
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee b9_planck_calibration_contract.log
+          import json,os
+          import numpy as np,clipy
+          base='planck_data/baseline/plc_3.0'
+          paths={
+            'lowT':base+'/low_l/commander/commander_dx12_v3_2_29.clik',
+            'lowE':base+'/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik',
+            'high_plik_lite':base+'/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik',
+            'lensing_nonmarg':base+'/lensing/smicadx12_Dec5_ftl_mv2_ndclpp_p_teb_consext8.clik_lensing',
+          }
+          out={'classification':'RTK_B9_PLANCK_CALIBRATION_CONTRACT_AUDIT_PASS','clipy_like':'0.15','products':{}}
+          for name,path in paths.items():
+              L=clipy.clik(path)
+              lmax=[int(x) for x in L.get_lmax()]
+              default=np.asarray(L.default_par,dtype=float).reshape(-1)
+              extra=[str(x) for x in L.get_extra_parameter_names()]
+              cl_len=sum(x+1 for x in lmax if x>=0)
+              if cl_len+len(extra)!=len(default):
+                  raise RuntimeError((name,lmax,cl_len,extra,len(default)))
+              val=np.asarray(L(default.copy()),dtype=float).reshape(-1)
+              if val.size<1 or not np.isfinite(val[0]): raise RuntimeError((name,val))
+              out['products'][name]={
+                'path':path.split('planck_data/',1)[1],
+                'lmax':lmax,'default_par_len':len(default),'cl_payload_len':cl_len,
+                'extra_parameter_names':extra,
+                'default_nuisance_tail':default[cl_len:].tolist(),
+                'default_selfcheck_loglike':float(val[0]),
+              }
+          # The current A5/B9 implementation copies default_par and replaces only
+          # the C_l payload; record that semantic rather than changing it here.
+          out['project_semantics']='A5 and B9-v1 are conditional on distributed default nuisance tails; this audit does not mutate either objective.'
+          open('b9_planck_calibration_contract.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('RTK_B9_PLANCK_CALIBRATION_CONTRACT_AUDIT_PASS',json.dumps(out,sort_keys=True))
+          PY
+          grep -q RTK_B9_PLANCK_CALIBRATION_CONTRACT_AUDIT_PASS b9_planck_calibration_contract.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b9-planck-calibration-contract
+          path: |
+            b9_planck_calibration_contract.log
+            b9_planck_calibration_contract.json
+          if-no-files-found: warn
