@@ -1,0 +1,5 @@
+trigger: 2026-08-19T15:14:33+03:00
+reason: parent B4 LCDM base improvement 0.037490380365852616 exceeds frozen 0.005 recenter tolerance
+parent_run_id: 32236524767
+parent_artifact_id: 9362264642
+target: research/robustness/b4_neutrino_lcdm_recenter_target_v1.json
