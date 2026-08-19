@@ -1,3 +1,3 @@
-Launch exact retarded auxiliary solution-space uniqueness lemma.
-Research theorem commit: 251ac56363fe714b287e9195705b636f954a6ab6
+Rerun exact retarded auxiliary solution-space uniqueness lemma after correcting homogeneous coefficients to be unrestricted before zero-data uniqueness is imposed.
+Research theorem commit: ed64586043f75bdf2177b808c960a97c9b692477
 Workflow commit: e13243c7fc4143d6962fa7b804d412de01ce3291
