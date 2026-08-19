@@ -1,1 +1,1 @@
-Refresh active run IDs after c4=2 exact-target theorem launch and current B4/B6/B9 progress.
+Refresh active run IDs after B6 closure, corrected c4=2 theorem trigger, clock operator discriminator launch, and current B4/B9 progress.
