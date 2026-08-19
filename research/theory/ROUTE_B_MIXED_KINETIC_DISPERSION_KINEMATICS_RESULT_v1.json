@@ -1,0 +1,35 @@
+{
+  "classification": "RTK_ROUTE_B_MIXED_KINETIC_DISPERSION_KINEMATICS_PASS",
+  "status": "CLOSED_REDUCED_BRANCH_KINEMATICS_LEMMA",
+  "run": {
+    "run_id": 32302480967,
+    "artifact_id": 9383521326,
+    "artifact_name": "rtk-route-b-mixed-kinetic-dispersion-kinematics",
+    "artifact_digest": "sha256:b6c70616b972b5aec9b612dda9b65032ab7746a579a782f558cf03c5e74461d1",
+    "head_sha": "a469f4c18979f7fe9d957e89e1683e3104f0c10f"
+  },
+  "worker_commit": "0510f7e6881c04d8bbbbd53bb18750de657db8d3",
+  "inverse_kernel": "(1+q^2/M^2) omega^2 - c_s^2 q^2",
+  "positive_frequency": "omega=c_s q/sqrt(1+q^2/M^2)",
+  "phase_velocity": "v_phase=c_s/sqrt(1+q^2/M^2)",
+  "group_velocity": "v_group=c_s/(1+q^2/M^2)^(3/2)",
+  "sign_conditions": "M^2>0 and c_s^2>0 give real omega^2 for q^2>=0 on this reduced branch",
+  "velocity_bounds": "0 < v_group <= v_phase <= c_s for q>=0; if c_s<=1 in units with metric light speed 1, both reduced-branch phase and group velocities are <=1",
+  "low_q": "omega^2=c_s^2 q^2 [1-q^2/M^2+q^4/M^4+...]",
+  "high_q": "omega -> c_s M, v_phase ~ c_s M/q, v_group ~ c_s M^3/q^3",
+  "interpretation": "The mixed kinetic factor suppresses phase/group propagation at q>>M while keeping the reduced mode real for positive M^2,c_s^2.",
+  "non_claims": [
+    "not the front-velocity/causal-cone theorem of the full coupled PDE system",
+    "not full strong hyperbolicity",
+    "not a ghost theorem for all coupled modes",
+    "not a strong-coupling cutoff",
+    "not a nonlinear or radiative-stability result"
+  ],
+  "failure_history": {
+    "first_run_id": 32301970359,
+    "first_artifact_id": 9383338172,
+    "first_failure_reason": "brittle SymPy structural equality in the final low-q series check; all preceding velocity, sign and asymptotic assertions had passed",
+    "scientific_formula_changed_after_failure": false,
+    "fix": "replace structural expression equality by exact simplify(difference)==0"
+  }
+}
