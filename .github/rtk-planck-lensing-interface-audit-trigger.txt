@@ -1,2 +1,2 @@
-trigger: 2026-08-19T13:31:00+03:00
-reason: first B9 interface audit 32240164970 failed only because CLIPY_NOJAX runtime omitted locked scipy; rerun with numpy 2.5.2 and scipy 1.18.0 before any cosmological lensing score
+trigger: 2026-08-19T13:32:00+03:00
+reason: run 32241074303 proved both pinned Planck R3 standalone lensing products load through clipy-like 0.15; it failed only while serializing NumPy metadata. research commit 160fb63bd8b239b8fe22c9ebe9df2ebb98d7afe8 adds recursive native JSON normalization and allow_nan=False before any cosmological lensing score
