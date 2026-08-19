@@ -2,41 +2,45 @@
 """C7 lemma: retarded RT auxiliaries have no free homogeneous IC constants.
 
 This is a solution-space theorem, not a full Hamiltonian degree-of-freedom
-count.  A localized second-order auxiliary equation has two formal homogeneous
-integration constants.  The physical nonlocal/retarded prescription fixes the
-auxiliary value and normal derivative on the initial hypersurface.  For a
+count. A localized second-order auxiliary equation has two formal homogeneous
+integration constants. The physical nonlocal/retarded prescription fixes the
+auxiliary value and normal derivative on the initial hypersurface. For a
 well-posed operator (nonzero fundamental-solution Wronskian), those conditions
-set the homogeneous constants uniquely.  A triangular chain follows by
+set the homogeneous constants uniquely. A triangular chain follows by
 induction.
 
 The theorem explains why localized RT auxiliary variables must not be counted
 as freely specifiable dark-sector fluids merely because their local equations
-are second order.  It does not prove the complete nonlinear constraint algebra
+are second order. It does not prove the complete nonlinear constraint algebra
 of metric + Khronon + RT.
 """
 import json
 import sympy as sp
 
-# Generic fundamental pair f1,f2 evaluated at an initial time t0.
-f1, f2, df1, df2, C1, C2, W = sp.symbols(
-    'f1 f2 df1 df2 C1 C2 W', nonzero=True
-)
+# Generic fundamental pair f1,f2 evaluated at an initial time t0.  The
+# homogeneous coefficients must be unrestricted: the theorem is precisely that
+# the retarded zero-data equations force them to vanish.
+f1, f2, df1, df2 = sp.symbols('f1 f2 df1 df2', real=True)
+C1, C2 = sp.symbols('C1 C2', real=True)
 M = sp.Matrix([[f1, f2], [df1, df2]])
 c = sp.Matrix([C1, C2])
 initial_difference = M*c
 wronskian = sp.factor(M.det())
 assert wronskian == f1*df2 - f2*df1
 
-# Cramer's/linear-algebra statement: if det(M) != 0, zero value and zero
-# normal derivative imply zero homogeneous coefficients.
+# Cramer's/linear-algebra statement on the declared nondegenerate branch
+# W(t0)!=0: zero value and zero normal derivative imply zero homogeneous
+# coefficients.  SymPy treats the generic symbolic determinant as nonzero when
+# solving the generic branch; the physical proof condition is recorded below.
 sol = sp.solve(
     [sp.Eq(initial_difference[0], 0), sp.Eq(initial_difference[1], 0)],
     [C1, C2], dict=True
 )
 assert sol == [{C1: 0, C2: 0}]
+assert sp.simplify(M.adjugate()*initial_difference - wronskian*c) == sp.zeros(2,1)
 
 # Count the formal versus physically free homogeneous constants for a chain of
-# N retarded second-order auxiliaries.  The triangular induction works because
+# N retarded second-order auxiliaries. The triangular induction works because
 # after auxiliaries 1..i-1 are unique, the difference of the i-th source is
 # zero; the i-th difference therefore obeys the homogeneous equation with zero
 # retarded data and is unique as above.
