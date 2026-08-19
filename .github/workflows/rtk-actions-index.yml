@@ -55,6 +55,7 @@ jobs:
               'RTK B6 entropy-aware H(T) mapping',
               'RTK pinned Planck standalone-lensing interface audit',
               'RTK B10 fixed-shared lambda-tail reconnaissance',
+              'RTK B10 paired fixed-lambda T2 profiles',
               'RTK Route-B khronometric dispersion non-mapping theorem',
               'RTK Route-B khronometric acceleration degeneracy audit',
               'RTK Route-B preferred-foliation metric-Khronon benchmark',
