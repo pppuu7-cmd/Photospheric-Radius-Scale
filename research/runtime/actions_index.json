@@ -1,7 +1,46 @@
 {
-  "generated_at_utc": "2026-08-19T12:16:04.684301+00:00",
+  "generated_at_utc": "2026-08-19T12:23:55.600007+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": null,
+      "created_at": "2026-08-19T12:23:24Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "bf07e282078c06a2fc62c938be6ac3e6f08c6da1",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32252398625",
+      "id": 32252398625,
+      "name": "RTK B4 neutrino RTK recenter base stationarity",
+      "run_number": 1,
+      "status": "in_progress",
+      "updated_at": "2026-08-19T12:23:29Z"
+    },
+    {
+      "conclusion": null,
+      "created_at": "2026-08-19T12:22:06Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "36f5dbb73b45221bf59951e043a66e0a87051682",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32252288173",
+      "id": 32252288173,
+      "name": "RTK B10 T3 fixed-lambda base stationarity",
+      "run_number": 1,
+      "status": "in_progress",
+      "updated_at": "2026-08-19T12:22:12Z"
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T12:18:56Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "ceb1c7671ae9cd976b2dbe5f1c804b031cc3b554",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32252015488",
+      "id": 32252015488,
+      "name": "RTK B6 paired AlterBBN abundances",
+      "run_number": 2,
+      "status": "completed",
+      "updated_at": "2026-08-19T12:19:21Z"
+    },
     {
       "conclusion": null,
       "created_at": "2026-08-19T12:14:43Z",
@@ -209,45 +248,6 @@
       "run_number": 2,
       "status": "completed",
       "updated_at": "2026-08-19T09:54:21Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-19T09:47:22Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "4fbe5d8b3b18ca014da9e1cd0478d09175ad99e6",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32239397180",
-      "id": 32239397180,
-      "name": "RTK pinned AlterBBN integration-flow audit",
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-19T09:47:37Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-19T09:43:41Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "243a8b77cfc9796ecc64b03f8f8878647b9e0074",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32239081611",
-      "id": 32239081611,
-      "name": "RTK autonomous research orchestrator",
-      "run_number": 121,
-      "status": "completed",
-      "updated_at": "2026-08-19T09:43:59Z"
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-19T09:38:26Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "2ef0093e9fb70641f66c102a2b312e25109ac01c",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32238634437",
-      "id": 32238634437,
-      "name": "RTK B6 entropy-aware H(T) mapping",
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-19T09:39:14Z"
     }
   ]
 }
