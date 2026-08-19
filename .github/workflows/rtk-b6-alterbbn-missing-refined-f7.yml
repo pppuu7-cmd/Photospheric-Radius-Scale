@@ -1,0 +1,177 @@
+name: RTK B6 AlterBBN missing refined failsafe-7
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b6-alterbbn-missing-refined-f7-trigger.txt'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: rtk-b6-alterbbn-missing-refined-f7
+  cancel-in-progress: false
+
+jobs:
+  complete-and-aggregate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_COMMIT: '50085f112f8e1b39ede2b8014df9848d457aff63'
+      PRIOR_RUN_ID: '32285359564'
+      PRIOR_ARTIFACT: 'rtk-b6-paired-alterbbn-abundances'
+      MAP_RUN_ID: '32284769820'
+      MAP_ARTIFACT: 'rtk-b6-extended-ht-mapping'
+      NOM_SHA: '1f615acc893a168d3743b1b517b0ff1db306f0a3ed0c22036b43a095485798ec'
+      REF_SHA: '332c75f6b0d64a0e70103a485687f78d81d88d25be926ad29b98881bf4679a38'
+      SUM_SHA: 'fc1a767e34129293b93bf0c493d89adc4a61bd121bc6831139bdf72633995a92'
+      COV_SHA: '7fb298d5dcf534a4285f91d6da258d20dbf6441f265bad97e27a8c36fc9a3e76'
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+      ETA: '6.122532926262666e-10'
+      EXPECTED_REFINED_BINARY_SHA256: '4470fa1cdd36dd03b1f319a9b7482eebfa9106277b6848388c2fc33fbbe24b45'
+      CC: 'gcc-13'
+      CFLAGS: '-O3 -pipe -fomit-frame-pointer -mtune=generic -ffast-math -fno-finite-math-only'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_COMMIT }}
+          fetch-depth: 1
+
+      - name: Require exact continuation semantics
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+          grep -q 'FROZEN BEFORE THE FIRST RTK H(T)-INJECTED ABUNDANCE NETWORK OUTPUT' research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
+          python3 - <<'PY'
+          import json,os
+          lock=json.load(open('research/robustness/B6_EXTENDED_HT_MAPPING_INPUT_LOCK_v1.json'))
+          assert lock['classification']=='B6_EXTENDED_HT_MAPPING_INPUT_LOCK_V1_FROZEN'
+          assert lock['source_mapping_run_id']==int(os.environ['MAP_RUN_ID'])
+          assert lock['source_mapping_artifact_id']==9377196879
+          assert lock['files']['nominal_256.csv']==os.environ['NOM_SHA']
+          assert lock['files']['refined_512.csv']==os.environ['REF_SHA']
+          assert lock['files']['summary.json']==os.environ['SUM_SHA']
+          assert lock['files']['coverage_extension_result.json']==os.environ['COV_SHA']
+          assert lock['eta']==float(os.environ['ETA'])
+          print('B6_CONTINUATION_LOCK_PASS')
+          PY
+          command -v gcc-13
+          gcc-13 --version | tee b6_continuation_gcc_version.txt
+
+      - name: Recover five completed prior networks and verify them
+        run: |
+          set -euo pipefail
+          mkdir prior
+          gh run download "$PRIOR_RUN_ID" -n "$PRIOR_ARTIFACT" -D prior
+          for f in reference_f1 reference_f7 rtk_nominal_f1 rtk_nominal_f7 rtk_refined_f1; do
+            test -s "prior/${f}.log"
+            test "$(cat "prior/${f}.returncode")" = '1'
+            grep -q 'cent:' "prior/${f}.log"
+            ! grep -q 'RTK_BBN_HT_OOB' "prior/${f}.log"
+          done
+          test -f prior/rtk_refined_f7.log
+          test ! -s prior/rtk_refined_f7.log
+          test ! -f prior/rtk_refined_f7.returncode
+          grep -q "$EXPECTED_REFINED_BINARY_SHA256  tree_rtk_refined/stand_cosmo.x" prior/b6_binary_sha256.txt
+          echo B6_PRIOR_FIVE_NETWORKS_PASS
+
+      - name: Download and verify exact extended H(T) mapping
+        run: |
+          set -euo pipefail
+          mkdir b6map
+          gh run download "$MAP_RUN_ID" -n "$MAP_ARTIFACT" -D b6map
+          REF=b6map/output/b6_bbn_ht_mapping/refined_512.csv
+          SUM=b6map/output/b6_bbn_ht_mapping/summary.json
+          COV=b6map/output/b6_bbn_ht_mapping/coverage_extension_result.json
+          test -f "$REF" -a -f "$SUM" -a -f "$COV"
+          echo "$REF_SHA  $REF" | sha256sum -c -
+          echo "$SUM_SHA  $SUM" | sha256sum -c -
+          echo "$COV_SHA  $COV" | sha256sum -c -
+
+      - name: Rebuild only the exact refined network
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 -o alterbbn_v2.2.tar.xz "$ALTERBBN_URL"
+          test "$(stat -c %s alterbbn_v2.2.tar.xz)" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  alterbbn_v2.2.tar.xz" | sha256sum -c -
+          tar -xJf alterbbn_v2.2.tar.xz
+          mv alterbbn_v2.2 tree_rtk_refined
+          python3 rtk/patch_alterbbn_rtk_h_ratio.py tree_rtk_refined b6map/output/b6_bbn_ht_mapping/refined_512.csv --mode rtk --eta "$ETA" --manifest manifest_rtk_refined_continuation.json
+          cmp <(python3 - <<'PY'
+          import json
+          d=json.load(open('prior/manifest_rtk_refined.json')); print(json.dumps(d,sort_keys=True,separators=(',',':')))
+          PY
+          ) <(python3 - <<'PY'
+          import json
+          d=json.load(open('manifest_rtk_refined_continuation.json')); print(json.dumps(d,sort_keys=True,separators=(',',':')))
+          PY
+          )
+          (cd tree_rtk_refined && ulimit -s unlimited && make clean || true; make CC="$CC" CFLAGS="$CFLAGS" CFLAGS_MP='-fopenmp'; make stand_cosmo CC="$CC" CFLAGS="$CFLAGS" CFLAGS_MP='-fopenmp'; test -x stand_cosmo.x)
+          sha256sum tree_rtk_refined/stand_cosmo.x | tee b6_refined_continuation_binary_sha256.txt
+          test "$(sha256sum tree_rtk_refined/stand_cosmo.x | awk '{print $1}')" = "$EXPECTED_REFINED_BINARY_SHA256"
+          echo B6_REFINED_BINARY_REPRODUCTION_PASS
+
+      - name: Run only missing refined failsafe-7
+        run: |
+          set -euo pipefail
+          set +e
+          (cd tree_rtk_refined && ulimit -s unlimited && ./stand_cosmo.x 7) > rtk_refined_f7.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" | tee rtk_refined_f7.returncode
+          test "$rc" -eq 1
+          grep -q 'cent:' rtk_refined_f7.log
+          ! grep -q 'RTK_BBN_HT_OOB' rtk_refined_f7.log
+          echo B6_MISSING_REFINED_F7_PASS
+
+      - name: Aggregate all six and apply frozen rules
+        run: |
+          set -euo pipefail
+          mkdir -p output/b6_alterbbn_abundances_completed
+          for f in reference_f1 reference_f7 rtk_nominal_f1 rtk_nominal_f7 rtk_refined_f1; do cp "prior/${f}.log" "${f}.log"; done
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math,re,os
+          keys=('Yp','D_over_H','He3_over_H','Li7_over_H','Li6_over_H','Be7_over_H')
+          def parse(p):
+              t=Path(p).read_text(errors='replace')
+              m=re.search(r'^\s*cent:\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)',t,re.M)
+              if not m: raise RuntimeError(f'central abundance row missing: {p}')
+              v={k:float(x) for k,x in zip(keys,m.groups())}
+              if not all(math.isfinite(x) and x>0 for x in v.values()): raise RuntimeError((p,v))
+              return v
+          runs={tag:{fs:parse(f'{tag}_f{fs}.log') for fs in (1,7)} for tag in ('reference','rtk_nominal','rtk_refined')}
+          shifts={};resolution={}
+          for k in keys:
+              dnom=runs['rtk_nominal'][1][k]-runs['reference'][1][k]
+              dref1=runs['rtk_refined'][1][k]-runs['reference'][1][k]
+              dref7=runs['rtk_refined'][7][k]-runs['reference'][7][k]
+              table_noise=abs(dref1-dnom);solver_noise=abs(dref1-dref7);noise=max(table_noise,solver_noise)
+              resolved=(dref1!=0.0 and abs(dref1)>5.0*noise)
+              shifts[k]={'nominal_f1':dnom,'refined_f1':dref1,'refined_f7':dref7}
+              resolution[k]={'table_noise':table_noise,'solver_mode_noise':solver_noise,'noise':noise,'resolved':resolved,'classification':'ABUNDANCE_SHIFT_RESOLVED' if resolved else 'ABUNDANCE_SHIFT_BELOW_NUMERICAL_RESOLUTION','conservative_abs_bound':abs(dref1)+5.0*noise}
+          obs={'Yp':{'mean':0.2458,'sigma':0.0013,'source':'Aver et al. 2026 arXiv:2601.22238'},'D_over_H':{'mean':2.533e-5,'sigma':0.024e-5,'source':'Kislitsyn et al. 2024 arXiv:2401.12797'}}
+          z={k:{'reference_f1':(runs['reference'][1][k]-o['mean'])/o['sigma'],'rtk_refined_f1':(runs['rtk_refined'][1][k]-o['mean'])/o['sigma']} for k,o in obs.items()}
+          def j(p): return json.load(open(p))
+          out={'classification':'RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS','execution_mode':'five_preserved_from_run_32285359564_plus_exact_missing_refined_f7_continuation','eta':float(os.environ['ETA']),'mapping_run_id':int(os.environ['MAP_RUN_ID']),'mapping_artifact':os.environ['MAP_ARTIFACT'],'mapping_hashes':{'nominal_256':os.environ['NOM_SHA'],'refined_512':os.environ['REF_SHA'],'summary':os.environ['SUM_SHA'],'coverage_extension_result':os.environ['COV_SHA']},'alterbbn_archive_sha256':os.environ['ALTERBBN_SHA256'],'source_commit':os.environ['SOURCE_COMMIT'],'prior_partial_run_id':int(os.environ['PRIOR_RUN_ID']),'runs':runs,'paired_shifts':shifts,'numerical_resolution':resolution,'observations_frozen_before_run':obs,'observational_z':z,'patch_manifest_refined_continuation':j('manifest_rtk_refined_continuation.json'),'refined_binary_sha256':os.environ['EXPECTED_REFINED_BINARY_SHA256'],'warning':'Paired B6 robustness result only; not a global model-selection result and not a lithium-problem claim.'}
+          Path('output/b6_alterbbn_abundances_completed/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS',json.dumps({'resolution':resolution,'observational_z':z},sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b6-completed-paired-alterbbn-abundances
+          path: |
+            output/b6_alterbbn_abundances_completed/summary.json
+            manifest_rtk_refined_continuation.json
+            b6_continuation_gcc_version.txt
+            b6_refined_continuation_binary_sha256.txt
+            rtk_refined_f7.log
+            rtk_refined_f7.returncode
+          if-no-files-found: warn
