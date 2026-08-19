@@ -1,7 +1,20 @@
 {
-  "generated_at_utc": "2026-08-19T12:28:09.044676+00:00",
+  "generated_at_utc": "2026-08-19T12:30:02.054948+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": null,
+      "created_at": "2026-08-19T12:29:30Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "556e6fea2391c456a504b79712f082e3ef3c2c77",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32252925021",
+      "id": 32252925021,
+      "name": "RTK B6 paired AlterBBN abundances",
+      "run_number": 3,
+      "status": "in_progress",
+      "updated_at": "2026-08-19T12:29:35Z"
+    },
     {
       "conclusion": "success",
       "created_at": "2026-08-19T12:27:31Z",
