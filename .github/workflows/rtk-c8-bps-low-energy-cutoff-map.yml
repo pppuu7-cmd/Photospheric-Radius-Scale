@@ -1,0 +1,36 @@
+name: RTK C8 BPS low-energy cutoff map
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c8-bps-low-energy-cutoff-map-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact BPS cutoff map theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/c8_bps_low_energy_cutoff_map.py
+          python3 rtk/c8_bps_low_energy_cutoff_map.py | tee c8_bps_low_energy_cutoff_map.log
+          grep -q RTK_C8_BPS_LOW_ENERGY_CUTOFF_MAP_PASS c8_bps_low_energy_cutoff_map.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c8-bps-low-energy-cutoff-map
+          path: c8_bps_low_energy_cutoff_map.log
+          if-no-files-found: warn
