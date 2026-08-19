@@ -1,0 +1,27 @@
+{
+  "classification": "B4_NEUTRINO_LCDM_RECENTER_BASE_PASS",
+  "run_id": 32251647845,
+  "artifact_id": 9368193099,
+  "created_at_utc": "2026-08-19T12:14:43Z",
+  "completed_at_utc": "2026-08-19T13:55:40Z",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "stencil_scale": 1.0,
+  "center": {
+    "As": 2.1020299238037777e-9,
+    "Ob": 0.04898891309740501,
+    "Om": 0.26094715021228926,
+    "h": 0.6765022211034925,
+    "lam": 0.0,
+    "ns": 0.9669253119564393,
+    "zre": 7.797045458689995
+  },
+  "S_center_eff": 1051.491860373968,
+  "best_exact_S_eff": 1051.491860373968,
+  "best_improvement_eff": 0.0,
+  "positive_definite_eff": true,
+  "min_eigenvalue_eff": 0.004263402329226062,
+  "recenter_tolerance_S": 0.005,
+  "next_gate": "half-scale 0.5 Hessian at the identical center",
+  "warning": "B4 robustness local base gate only; not a global minimum and not a replacement for A1-A5."
+}
