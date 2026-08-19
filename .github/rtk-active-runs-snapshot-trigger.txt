@@ -1,1 +1,1 @@
-Launch isolated runtime snapshot after moving runtime state to rtk-runtime-state branch. Include B4/B9 heavy jobs, mixed-kinetic kinematics rerun, Planck calibration contract audit, and B9 interface guard.
+Refresh isolated runtime state after C8 quadratic strong-coupling nonidentifiability launch; include current B4 RTK, B9 paired reoptimization, and recent calibration/kinematics gates.
