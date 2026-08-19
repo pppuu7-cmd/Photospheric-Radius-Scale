@@ -1,0 +1,64 @@
+name: RTK pinned Planck standalone-lensing interface audit
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-planck-lensing-interface-audit-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-planck-lensing-interface-audit
+  cancel-in-progress: true
+
+jobs:
+  interface-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CLIPY_NOJAX: '1'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install locked likelihood interface
+        run: |
+          set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2'
+          python3 -m py_compile rtk/audit_planck_lensing_interface.py
+          python3 - <<'PY'
+          import numpy
+          assert numpy.__version__=='2.5.2'
+          print('PLANCK_LENSING_INTERFACE_RUNTIME_PASS',numpy.__version__)
+          PY
+      - name: Download and verify pinned Planck R3 baseline
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+          find planck_data/baseline/plc_3.0 -type d -name '*.clik_lensing' -print | sort | tee planck_lensing_candidates.txt
+          test -s planck_lensing_candidates.txt
+      - name: Instantiate standalone lensing likelihood through clipy
+        run: |
+          set -euo pipefail
+          python3 rtk/audit_planck_lensing_interface.py planck_data | tee planck_lensing_interface_audit.log
+          grep -q PLANCK_R3_STANDALONE_LENSING_CLIPY_INTERFACE_PASS planck_lensing_interface_audit.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-planck-lensing-interface-audit
+          path: |
+            planck_lensing_candidates.txt
+            planck_lensing_interface_audit.log
+            planck_lensing_interface_audit.json
+          if-no-files-found: warn
