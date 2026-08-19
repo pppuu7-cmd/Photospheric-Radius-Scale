@@ -49,6 +49,7 @@ jobs:
               'RTK D4 model-aware proof provenance regression',
               'RTK AlterBBN published-source pin audit',
               'RTK pinned AlterBBN v2.2 standard-network self-test',
+              'RTK pinned AlterBBN expansion-interface audit',
               'RTK Route-B khronometric dispersion non-mapping theorem',
               'RTK Route-B khronometric acceleration degeneracy audit',
               'RTK Route-B preferred-foliation metric-Khronon benchmark',
