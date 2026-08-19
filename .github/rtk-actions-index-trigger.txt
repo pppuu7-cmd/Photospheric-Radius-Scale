@@ -1,2 +1,2 @@
-trigger: 2026-08-19T15:36:30+03:00
-reason: capture B6 matcher-repair rerun, B10 T3 base stationarity, B4 LCDM/RTK recenter runs, and completed paired B4 base
+trigger: 2026-08-19T15:45:30+03:00
+reason: capture pinned AlterBBN H-site audit plus active B4/B10 and B6 repair status
