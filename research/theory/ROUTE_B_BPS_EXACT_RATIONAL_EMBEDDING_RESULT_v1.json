@@ -2,16 +2,21 @@
   "classification": "RTK_ROUTE_B_BPS_EXACT_RATIONAL_EMBEDDING_PASS",
   "status": "CLOSED_CONSTRUCTIVE_POLE_DISPERSION_EMBEDDING_LEMMA",
   "run": {
-    "run_id": 32304612368,
-    "artifact_id": 9384246684,
+    "run_id": 32305251435,
+    "artifact_id": 9384462213,
     "artifact_name": "rtk-route-b-bps-exact-rational-embedding",
-    "artifact_digest": "sha256:9805f35c996136414313b1786cbb25e8954dd7197b3e19f710ca46c4d4c67c9d",
-    "head_sha": "aceccda6a280090ebc63c49e1c4ef75b23e43a77"
+    "artifact_digest": "sha256:2b54901ff525f7bd1bbace5e28e59c4bb97038548cb48dbe5b45413816659664",
+    "head_sha": "2892046e9bc7ef83026299627ba92117f9448be0"
   },
-  "primary_source": "Blas, Pujolas, Sibiryakov, A healthy extension of Horava gravity, arXiv:0909.3525, Eqs. (12)-(18)",
+  "supersedes_run": {
+    "run_id": 32304612368,
+    "reason": "The original algebra was correct but used an MP symbol that could be misread as Planck mass. The mature BPS formulation uses an independent higher-spatial-derivative scale M_* in P(Delta/M_*^2), Q(Delta/M_*^2)."
+  },
+  "primary_source": "Blas, Pujolas, Sibiryakov, Models of non-relativistic quantum gravity: The good, the bad and the healthy, arXiv:1007.3503, Eqs. (5.1)-(5.8)",
   "worker": "rtk/route_b_bps_exact_rational_embedding.py",
+  "higher_derivative_scale_semantics": "Muv denotes the source-paper independent M_* scale and is not identified with Planck mass.",
   "constructive_family": {
-    "free_positive_parameters": ["z","s","ell","MP"],
+    "free_positive_parameters": ["z","s","ell","Muv"],
     "alpha": "2 z/(1+z) in (0,2)",
     "lambda": "1+ell > 1",
     "f3": "-s < 0",
@@ -24,12 +29,12 @@
   "exact_reduced_polynomials": {
     "P": "4-2 alpha = 4/(1+z)",
     "Q": "alpha+f3*x",
-    "physical_Q": "Q(-p^2/MP^2)=alpha+s p^2/MP^2 > 0"
+    "physical_Q": "Q(-p^2/Muv^2)=alpha+s p^2/Muv^2 > 0"
   },
   "exact_dispersion": {
-    "form": "omega^2=cs^2 p^2/(1+p^2/Mstar^2)",
+    "form": "omega^2=cs^2 p^2/(1+p^2/Mdisp^2)",
     "cs2": "ell/[z(3ell+2)] > 0",
-    "Mstar2": "alpha MP^2/s = 2 MP^2 z/[s(z+1)] > 0"
+    "Mdisp2": "alpha Muv^2/s = 2 Muv^2 z/[s(z+1)] > 0"
   },
   "source_paper_quadratic_stability": {
     "ghost_ratio": "(3lambda-1)/(lambda-1)=3+2/ell > 0",
@@ -37,14 +42,16 @@
     "alpha_interval": "0<alpha<2 by construction"
   },
   "theorem": "The BPS healthy nonprojectable Horava scalar quadratic sector contains a continuous two-branch coefficient family whose pole/dispersion is exactly the RTK rational mixed-kinetic form while satisfying the BPS Minkowski scalar ghost/gradient conditions.",
-  "important_scope_guard": "This is an exact pole/dispersion embedding after integrating nondynamical BPS fields. It is not yet proof that the reduced BPS off-shell quadratic kernel, propagator residue, matter/source coupling, or gauge-invariant observable transfer functions equal the constructive RTK mixed-kinetic EFT. A separate pole/residue guard is required before any stronger equivalence claim.",
-  "relation_to_previous_nogo": "The family uses the broader higher-spatial-operator healthy nonprojectable Horava class and lies outside the previously excluded constant-ci c4=2 khronometric subspace; the earlier narrow no-go therefore does not apply.",
+  "important_scope_guard": "This is an exact pole/dispersion embedding after integrating nondynamical BPS fields. It is not proof that the reduced BPS off-shell quadratic kernel, propagator residue, matter/source coupling, or gauge-invariant observable transfer functions equal the constructive RTK mixed-kinetic EFT. The independently machine-checked pole/residue distinction result must accompany this theorem.",
+  "uv_guard": "The exact rational tuning cancels the generic higher-p spatial powers in P and therefore does not by itself retain the standard BPS z=3 p^6 ultraviolet scalar dispersion. It should be regarded as a finite-range/intermediate-EFT pole embedding unless an additional higher crossover restores z=3 behavior.",
+  "relation_to_previous_nogo": "The family uses the broader higher-spatial-operator healthy nonprojectable Horava class and lies outside the previously excluded constant-ci c4=2 khronometric subspace; the earlier narrow no-go does not apply.",
   "next_required_proofs": [
     "off-shell field/source/observable mapping between the BPS scalar and intended RTK Khronon sector",
     "full nonlinear constraint and physical-DOF count for the selected coefficient family",
-    "FLRW and generic smooth-background scalar/tensor stability beyond short-wavelength reasoning",
-    "hierarchy/naturalness assessment if Mstar is far below MP",
-    "cubic interactions and actual strong-coupling scale",
+    "FLRW and generic smooth-background scalar/tensor stability",
+    "map Mdisp and Muv to the RTK phenomenological scale",
+    "restore and certify a higher z=3 crossover before importing BPS strong-coupling-avoidance arguments",
+    "derive/specialize cubic interactions and the actual strong-coupling scale",
     "radiative stability and matter-sector Lorentz-violation constraints"
   ],
   "non_claims": [
