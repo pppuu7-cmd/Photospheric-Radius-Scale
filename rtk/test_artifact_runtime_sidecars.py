@@ -17,14 +17,18 @@ GOOD={
   'pip_freeze':'clipy-like==0.15\nnumpy==2.5.2\nscipy==1.18.0\n',
   'planck_sha256':'abc123  planck.tar.gz\n',
 }
-r=M.validate_runtime_sidecars(REPRO,'half_hessian_run',123,GOOD)
+r=M.validate_runtime_sidecars(REPRO,'rtk','half_hessian_run',123,GOOD)
 assert r['python_version']=='3.12.3'
 assert r['planck_baseline_sha256']=='abc123'
 assert r['pip_locked_packages']['numpy']=='2.5.2'
 
 # Historical artifacts with no runtime sidecars remain backward compatible.
-r=M.validate_runtime_sidecars(REPRO,'negative_eigenray_run',124,{'python_version':None,'pip_freeze':None,'planck_sha256':None})
+r=M.validate_runtime_sidecars(REPRO,'rtk','negative_eigenray_run',124,{'python_version':None,'pip_freeze':None,'planck_sha256':None})
 assert not any(r['sidecars_present'].values())
+
+# LCDM uses the same runtime-sidecar checker with an explicit model label.
+r=M.validate_runtime_sidecars(REPRO,'lcdm','hessian_run',124,GOOD)
+assert r['python_version']=='3.12.3'
 
 for label,bad in [
   ('python',{**GOOD,'python_version':'Python 3.12.4\n'}),
@@ -34,7 +38,7 @@ for label,bad in [
   ('planck',{**GOOD,'planck_sha256':'deadbeef  planck.tar.gz\n'}),
 ]:
     try:
-        M.validate_runtime_sidecars(REPRO,'half_hessian_run',125,bad)
+        M.validate_runtime_sidecars(REPRO,'rtk','half_hessian_run',125,bad)
     except RuntimeError:
         pass
     else:
