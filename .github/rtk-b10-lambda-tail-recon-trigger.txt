@@ -1,0 +1,2 @@
+trigger: 2026-08-19T13:18:00+03:00
+reason: recovered finite-lambda versus dust-tail identifiability gate; protocol frozen before scores; execute exact fixed-shared 12-point tail reconnaissance
