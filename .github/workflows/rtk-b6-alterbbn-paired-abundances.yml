@@ -20,11 +20,12 @@ jobs:
     timeout-minutes: 45
     env:
       GH_TOKEN: ${{ github.token }}
-      MAP_RUN_ID: '32243547025'
-      MAP_ARTIFACT: 'rtk-b6-entropy-aware-ht-mapping'
-      NOM_SHA: 'cdb0e72b3bb59c53d01719ad3eab827e14f2424de73f4dd9029f559877192c15'
-      REF_SHA: 'a9116a22844927a4d085343de9c22215e407e62813b6a7f4b0eeb6f7cec187b9'
-      SUM_SHA: '5c5bfeea86c3c352418c51a6c217dee5b45df7a4d556815dc6a65e0f28d98416'
+      MAP_RUN_ID: '32284769820'
+      MAP_ARTIFACT: 'rtk-b6-extended-ht-mapping'
+      NOM_SHA: '1f615acc893a168d3743b1b517b0ff1db306f0a3ed0c22036b43a095485798ec'
+      REF_SHA: '332c75f6b0d64a0e70103a485687f78d81d88d25be926ad29b98881bf4679a38'
+      SUM_SHA: 'fc1a767e34129293b93bf0c493d89adc4a61bd121bc6831139bdf72633995a92'
+      COV_SHA: '7fb298d5dcf534a4285f91d6da258d20dbf6441f265bad97e27a8c36fc9a3e76'
       ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
       ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
       ALTERBBN_BYTES: '2586656'
@@ -37,16 +38,32 @@ jobs:
           ref: rtk-class-build
           fetch-depth: 1
 
-      - name: Require preregistered protocol and code
+      - name: Require preregistered protocol, extended input lock and code
         run: |
           set -euo pipefail
           grep -q 'FROZEN BEFORE THE FIRST RTK H(T)-INJECTED ABUNDANCE NETWORK OUTPUT' research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
+          python3 - <<'PY'
+          import json,os
+          lock=json.load(open('research/robustness/B6_EXTENDED_HT_MAPPING_INPUT_LOCK_v1.json'))
+          assert lock['classification']=='B6_EXTENDED_HT_MAPPING_INPUT_LOCK_V1_FROZEN'
+          assert lock['source_mapping_run_id']==int(os.environ['MAP_RUN_ID'])==32284769820
+          assert lock['source_mapping_artifact_id']==9377196879
+          assert lock['files']['nominal_256.csv']==os.environ['NOM_SHA']
+          assert lock['files']['refined_512.csv']==os.environ['REF_SHA']
+          assert lock['files']['summary.json']==os.environ['SUM_SHA']
+          assert lock['files']['coverage_extension_result.json']==os.environ['COV_SHA']
+          assert lock['abundance_network_standard_Tf_changed'] is False
+          assert lock['eta']==float(os.environ['ETA'])
+          assert lock['coverage']['nominal_Tmin_GeV']<lock['coverage']['required_Tmin_GeV_lt']
+          assert lock['coverage']['refined_Tmin_GeV']<lock['coverage']['required_Tmin_GeV_lt']
+          print('B6_EXTENDED_INPUT_LOCK_PASS')
+          PY
           python3 -m py_compile rtk/patch_alterbbn_rtk_h_ratio.py
           git rev-parse HEAD | tee b6_source_head.txt
           command -v gcc-13
           gcc-13 --version | tee b6_gcc_version.txt
 
-      - name: Download and verify exact B6 H(T) mapping artifact
+      - name: Download and verify exact extended B6 H(T) mapping artifact
         run: |
           set -euo pipefail
           mkdir -p b6map
@@ -54,18 +71,23 @@ jobs:
           NOM=b6map/output/b6_bbn_ht_mapping/nominal_256.csv
           REF=b6map/output/b6_bbn_ht_mapping/refined_512.csv
           SUM=b6map/output/b6_bbn_ht_mapping/summary.json
-          test -f "$NOM" -a -f "$REF" -a -f "$SUM"
+          COV=b6map/output/b6_bbn_ht_mapping/coverage_extension_result.json
+          test -f "$NOM" -a -f "$REF" -a -f "$SUM" -a -f "$COV"
           echo "$NOM_SHA  $NOM" | sha256sum -c -
           echo "$REF_SHA  $REF" | sha256sum -c -
           echo "$SUM_SHA  $SUM" | sha256sum -c -
+          echo "$COV_SHA  $COV" | sha256sum -c -
           python3 - <<'PY'
           import json
           s=json.load(open('b6map/output/b6_bbn_ht_mapping/summary.json'))
+          c=json.load(open('b6map/output/b6_bbn_ht_mapping/coverage_extension_result.json'))
           assert s['classification']=='RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS'
+          assert c['classification']=='B6_EXTENDED_HT_MAPPING_COVERAGE_PASS'
           assert s['nominal_points']==256 and s['refined_points']==512
-          assert s['max_abs_R_minus_1']<=2.3e-9
+          assert s['max_abs_R_minus_1']==c['max_abs_R_minus_1']
           assert s['nominal_vs_refined_max_abs_R_error']<=2e-12
-          print('B6_MAPPING_INPUT_LOCK_PASS',s['max_abs_R_minus_1'],s['nominal_vs_refined_max_abs_R_error'])
+          assert max(c['Tmin_GeV'])<c['required_Tmin_GeV_lt']
+          print('B6_EXTENDED_MAPPING_INPUT_PASS',c['Tmin_GeV'],s['max_abs_R_minus_1'],s['nominal_vs_refined_max_abs_R_error'])
           PY
 
       - name: Download and verify pinned AlterBBN v2.2
@@ -144,7 +166,7 @@ jobs:
           obs={'Yp':{'mean':0.2458,'sigma':0.0013,'source':'Aver et al. 2026 arXiv:2601.22238'},'D_over_H':{'mean':2.533e-5,'sigma':0.024e-5,'source':'Kislitsyn et al. 2024 arXiv:2401.12797'}}
           z={k:{'reference_f1':(runs['reference'][1][k]-o['mean'])/o['sigma'],'rtk_refined_f1':(runs['rtk_refined'][1][k]-o['mean'])/o['sigma']} for k,o in obs.items()}
           def j(p): return json.load(open(p))
-          out={'classification':'RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS','eta':float(os.environ['ETA']),'mapping_run_id':int(os.environ['MAP_RUN_ID']),'mapping_artifact':os.environ['MAP_ARTIFACT'],'mapping_hashes':{'nominal_256':os.environ['NOM_SHA'],'refined_512':os.environ['REF_SHA'],'summary':os.environ['SUM_SHA']},'alterbbn_archive_sha256':os.environ['ALTERBBN_SHA256'],'runs':runs,'paired_shifts':shifts,'numerical_resolution':resolution,'observations_frozen_before_run':obs,'observational_z':z,'patch_manifests':{'reference':j('manifest_reference.json'),'rtk_nominal':j('manifest_rtk_nominal.json'),'rtk_refined':j('manifest_rtk_refined.json')},'warning':'Paired B6 robustness result only; not a global model-selection result and not a lithium-problem claim.'}
+          out={'classification':'RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS','eta':float(os.environ['ETA']),'mapping_run_id':int(os.environ['MAP_RUN_ID']),'mapping_artifact':os.environ['MAP_ARTIFACT'],'mapping_hashes':{'nominal_256':os.environ['NOM_SHA'],'refined_512':os.environ['REF_SHA'],'summary':os.environ['SUM_SHA'],'coverage_extension_result':os.environ['COV_SHA']},'alterbbn_archive_sha256':os.environ['ALTERBBN_SHA256'],'runs':runs,'paired_shifts':shifts,'numerical_resolution':resolution,'observations_frozen_before_run':obs,'observational_z':z,'patch_manifests':{'reference':j('manifest_reference.json'),'rtk_nominal':j('manifest_rtk_nominal.json'),'rtk_refined':j('manifest_rtk_refined.json')},'warning':'Paired B6 robustness result only; not a global model-selection result and not a lithium-problem claim.'}
           Path('output/b6_alterbbn_abundances/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
           print('RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS',json.dumps({'runs':runs,'resolution':resolution,'observational_z':z},sort_keys=True))
           PY
