@@ -1,0 +1,42 @@
+{
+  "classification": "B4_LCDM_MULTISCALE_LOCAL_STATIONARITY_PASS",
+  "scientific_scope": "minimal-neutrino 0.06 eV robustness; LCDM side only",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "protocol": "research/robustness/B4_NEUTRINO_STATIONARITY_PROTOCOL_v1.md",
+  "center": {
+    "As": 2.1020299238037777e-09,
+    "Ob": 0.04898891309740501,
+    "Om": 0.26094715021228926,
+    "h": 0.6765022211034925,
+    "lam": 0.0,
+    "ns": 0.9669253119564393,
+    "zre": 7.797045458689995
+  },
+  "base_scale": {
+    "run_id": 32251647845,
+    "S_center_eff": 1051.491860373968,
+    "best_exact_S_eff": 1051.491860373968,
+    "best_improvement_eff": 0.0,
+    "positive_definite": true,
+    "eigenvalues_y": [0.004263402329226062, 0.018031984571187893, 0.03426170212810463, 0.23710983248483022, 2.938984062487463, 7.009990156778788]
+  },
+  "half_scale": {
+    "run_id": 32284521400,
+    "artifact_id": 9380579980,
+    "artifact_name": "rtk-b4-neutrino-lcdm-recenter-half",
+    "artifact_digest": "sha256:8110dae0223deb4fb3e34c22c3f04400a669e421b28b92c4220dd64d5cf81803",
+    "S_center_eff": 1051.491860373968,
+    "best_exact_S_eff": 1051.491860373968,
+    "best_improvement_eff": 0.0,
+    "positive_definite": true,
+    "eigenvalues_y": [0.001970516421407411, 0.010047008156647295, 0.017487613956718877, 0.06629737343897306, 0.7326827120512692, 1.7588816936780771]
+  },
+  "decision": "Two adjacent scales are recenter-clear at tolerance 0.005 and have positive-definite Hessians, so the LCDM side satisfies the frozen local interior-minimum stationarity criterion.",
+  "remaining_B4_gates": [
+    "RTK minimal-neutrino stationarity certification",
+    "paired fresh-tree replay of final accepted LCDM and RTK neutrino score points within 2e-6",
+    "freeze Delta S_nu0p06 only after paired replay"
+  ],
+  "warning": "Local multiscale stationarity only; not a global minimum, significance, Bayesian evidence, AIC/BIC result, or replacement of the massless A1-A5 comparison."
+}
