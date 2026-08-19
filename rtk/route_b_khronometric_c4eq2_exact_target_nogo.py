@@ -26,6 +26,9 @@ c2,c3=sp.symbols('c2 c3', real=True)
 c4=sp.Integer(2)
 f=sp.Integer(1)
 
+def eq(a,b):
+    return sp.simplify(a-b)==0
+
 # Exact scalar single-Fourier-mode identity:
 # (tr H)^2 = tr(H^2) for H_ij ~ q_i q_j*pi, so c2 and c3 contribute through
 # c2+c3 to q^4*pi^2 after c1 absorption.
@@ -36,25 +39,25 @@ assert sp.simplify(trH_sq-trH2)==0
 q4_coeff=sp.expand(c2+c3)
 
 # Exact RTK target has V(q) proportional to q^2 only: no q^4 numerator.
-exact_target_q4_condition=sp.Eq(q4_coeff,0)
 classI_sub={c3:-c2}
+assert sp.simplify(q4_coeff.subs(classI_sub))==0
 
 # Primary-source special-branch conditions, Ben Achour et al. Eq. (7.11).
 D1_c4eq2=8*(1+c3)*(3*c2+c3-2)/X**2
 D2_c4eq2=sp.simplify(D1_c4eq2/X)
 D1_on_exact_target=sp.factor(D1_c4eq2.subs(classI_sub))
 D2_on_exact_target=sp.factor(D2_c4eq2.subs(classI_sub))
-assert D1_on_exact_target==-16*(c2-1)**2/X**2
-assert D2_on_exact_target==-16*(c2-1)**2/X**3
-sol=sp.solve(sp.Eq(D1_on_exact_target,0),c2)
+assert eq(D1_on_exact_target,-16*(c2-1)**2/X**2)
+assert eq(D2_on_exact_target,-16*(c2-1)**2/X**3)
+sol=sp.solve(sp.Eq(sp.factor(D1_on_exact_target),0),c2)
 assert sol==[1]
 forced={c2:sp.Integer(1),c3:sp.Integer(-1)}
 
 # Khronometric -> DHOST mapping after c1 absorption, Eq. (7.4).
 alpha1=-c3/X
 alpha2=-c2/X
-assert sp.simplify(alpha1.subs(forced))==1/X
-assert sp.simplify(alpha2.subs(forced))==-1/X
+assert eq(alpha1.subs(forced),1/X)
+assert eq(alpha2.subs(forced),-1/X)
 
 # At the forced intersection, both common metric-sector discriminants vanish:
 # Class-Ib criterion f+X*alpha2=0; also f-X*alpha1=0.
@@ -62,10 +65,6 @@ metric_Ib=sp.simplify(f+X*alpha2.subs(forced))
 metric_alt=sp.simplify(f-X*alpha1.subs(forced))
 assert metric_Ib==0
 assert metric_alt==0
-
-# The c4 term remains nonzero and supplies the desired mixed kinetic structure,
-# but only at this metric-degenerate exact-target point.
-assert c4==2
 
 out={
   'classification':'RTK_ROUTE_B_C4EQ2_MINIMAL_EXACT_TARGET_NOMAPPING_PASS',
