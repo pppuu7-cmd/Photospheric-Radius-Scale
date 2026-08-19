@@ -1,0 +1,3 @@
+Launch exact Route-B auxiliary acceleration equivalence theorem.
+Research worker commit: d84138c3154288e0d5190dc63284cbe3bbaaf503
+Workflow commit: e29ab94acbb66e602075ed5de7f040efedbd0ec8
