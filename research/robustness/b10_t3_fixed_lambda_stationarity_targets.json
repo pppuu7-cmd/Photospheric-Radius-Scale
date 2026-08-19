@@ -1,0 +1,69 @@
+{
+  "classification": "B10_T3_BASE_TARGETS_FROZEN_BEFORE_FIRST_STATIONARITY",
+  "protocol": "research/robustness/B10_LAMBDA_TAIL_IDENTIFIABILITY_PROTOCOL_v1.md",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "production_mapping": "eff",
+  "source_t2_run_id": 32244330691,
+  "source_t2_head_sha": "56123505241ac35ee42ae1beb8393be7056cf4fb",
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-8,
+  "base_scale": 1.0,
+  "validation_scale": 0.5,
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "step_semantics": "Same shared-coordinate physical step resolution used by the matched-objective stationarity program; lambda remains exactly fixed and is not a Hessian coordinate.",
+  "anchors": {
+    "64": {
+      "factor": 64.0,
+      "lambda_D": 14045284.653674118,
+      "role": "mechanical_asymptotic_onset",
+      "source_artifact_id": 9364651941,
+      "source_artifact_digest": "sha256:40057c4ba3d9870cfdd3850eddbf02e237111b981119a9c06303ab6f9b6f2a7e",
+      "source_summary_sha256": "99996406c31de3fb19a4be1c65a7b324b6f75cf5af52706cc156a72ed974e38e",
+      "t2_best_score_eff": 1050.249062546245,
+      "t2_profile_improvement": 0.0,
+      "center": {
+        "As": 2.0877827951474356e-9,
+        "Ob": 0.046800730927437424,
+        "Om": 0.2522864064078236,
+        "h": 0.691103719964454,
+        "lam": 14045284.653674118,
+        "ns": 0.9645577770978523,
+        "zre": 7.328459220286924
+      }
+    },
+    "16384": {
+      "factor": 16384.0,
+      "lambda_D": 3595592871.3405743,
+      "role": "largest_successful_preregistered_tail_factor",
+      "source_artifact_id": 9363646458,
+      "source_artifact_digest": "sha256:0994aeb5ad83b2989d3f8184d86987f3ee481e5e098000a34b4452d04978a8bd",
+      "source_summary_sha256": "bd4f5bf7def5063b889b9a8c463864028bfee286d6bc8764f8fd289ce3949107",
+      "t2_best_score_eff": 1050.2490169939647,
+      "t2_profile_improvement": 0.0,
+      "center": {
+        "As": 2.0877827951474356e-9,
+        "Ob": 0.046800730927437424,
+        "Om": 0.2522864064078236,
+        "h": 0.691103719964454,
+        "lam": 3595592871.3405743,
+        "ns": 0.9645577770978523,
+        "zre": 7.328459220286924
+      }
+    }
+  },
+  "proof_logic": {
+    "base_rule": "For each anchor run the exact 73-point six-dimensional fixed-lambda coordinate/cross stencil plus trust-region Newton checks. If best exact improvement exceeds 0.005, recenter before any half-scale validation.",
+    "non_pd_rule": "A non-positive-definite base Hessian cannot progress directly; exact negative-mode ray falsification is required before deciding the next center.",
+    "validation_rule": "If base is recenter-clear and positive definite, run an independently evaluated half-scale fixed-lambda stencil before stationarity certification.",
+    "final_rule": "Only a stationarity-certified tail score may enter the finite-vs-tail B10 classification in the frozen protocol."
+  },
+  "warning": "Frozen before first T3 stationarity output. Tail anchors are robustness candidates only; no global-minimum, confidence, Bayes-factor, or significance claim."
+}
