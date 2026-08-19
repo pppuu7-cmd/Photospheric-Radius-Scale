@@ -1,1 +1,1 @@
-Refresh isolated runtime state after C8 BPS accuracy-vs-strong-coupling window and exact low-energy cutoff-map launches; include current B4 RTK/B9 heavy jobs.
+Refresh isolated runtime state after B9 RTK interior candidate persistence and the C8 BPS accuracy/cutoff-map theorem launches; include B4 RTK and B9 LCDM active jobs.
