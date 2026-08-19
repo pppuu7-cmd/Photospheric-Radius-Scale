@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Paired B4 minimal-neutrino exact Hessian worker.
 
-This worker is a robustness proof component only.  It reads pre-registered
+This worker is a robustness proof component only. It reads pre-registered
 centers/steps from b4_neutrino_stationarity_targets_v1.json and never mutates
-the frozen massless state.  The production objective is eff; k01 is calculated
+the frozen massless state. The production objective is eff; k01 is calculated
 in parallel and must not choose the eff center.
 """
 from pathlib import Path
@@ -43,7 +43,6 @@ POINTS=OUT/'points.jsonl';FAILURES=OUT/'failures.jsonl';SUMMARY=OUT/'summary.jso
 
 def canonical_hash(obj):
     return hashlib.sha256(json.dumps(obj,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
-
 def git_head(path):
     try:return subprocess.check_output(['git','-C',str(path),'rev-parse','HEAD'],text=True,stderr=subprocess.DEVNULL).strip()
     except Exception:return None
@@ -59,7 +58,6 @@ PROV={
 PROVFILE.write_text(json.dumps(PROV,indent=2,sort_keys=True)+'\n')
 
 ORIG=L.make_ini
-
 def make_ini(model,p,tag):
     path=ORIG(model,p,tag);text=Path(path).read_text()
     if 'z_pk = '+SPARSE not in text:raise RuntimeError('expected sparse z_pk baseline not found')
@@ -76,7 +74,6 @@ L.make_ini=make_ini
 
 E={}
 def key(y):return tuple(float(x).hex() for x in np.asarray(y,float))
-
 def pars(y):
     y=np.asarray(y,float);p=copy.deepcopy(CENTER)
     for yi,a in zip(y,AXES):
@@ -84,7 +81,6 @@ def pars(y):
         else:p[a]=float(CENTER[a])+float(yi)*STEPS[a]
     if MODEL=='LCDM':p['lam']=0.0
     return p
-
 def cleanup(tag):
     if not tag:return
     for q in L.OUT.glob(tag+'_*'):
@@ -93,10 +89,8 @@ def cleanup(tag):
     for q in (Path(f'profile_{tag}.ini'),Path(f'profile_{tag}.log')):
         try:q.unlink()
         except OSError:pass
-
 def append(path,row):
     with path.open('a') as f:f.write(json.dumps(row,sort_keys=True,default=str)+'\n');f.flush()
-
 def ev(y,label):
     y=np.asarray(y,float);k=key(y)
     if k in E:return E[k]
@@ -143,18 +137,35 @@ def build(which):
         if vecs[q,j]<0:vecs[:,j]*=-1
     delta=-np.linalg.pinv(H,rcond=1e-10)@g
     rn=ev(np.clip(delta,-1.,1.),f'newton_trust_{which}')
-    best=min(E.values(),key=lambda r:float(r[fld]))
+    # Do not choose best_exact here: the other mapping's Newton point is an
+    # additional exact physical evaluation and can have a lower production-eff
+    # score. Final best selection is deliberately deferred until BOTH Newton
+    # candidates have been evaluated, making the result independent of build order.
     return {'S_center':S0,'gradient_y':g.tolist(),'max_abs_gradient_y':float(np.max(np.abs(g))),
             'hessian_y':H.tolist(),'eigenvalues_y':vals.tolist(),'eigenvectors_y':vecs.T.tolist(),
             'positive_definite':bool(np.all(vals>float(TARGETS['proof_logic']['positive_definite_threshold']))),
-            'newton_delta':delta.tolist(),'S_newton':float(rn[fld]),'newton_params':rn['params'],
-            'best_exact_S':float(best[fld]),'best_improvement':float(S0-float(best[fld])),'best_label':best['label'],'best_params':best['params']}
+            'newton_delta':delta.tolist(),'S_newton':float(rn[fld]),'newton_params':rn['params']}
+
+def finalize_best(block,which):
+    fld='score_eff' if which=='eff' else 'score_k01'
+    best=min(E.values(),key=lambda r:float(r[fld]))
+    S0=float(block['S_center'])
+    block.update({
+        'best_exact_S':float(best[fld]),
+        'best_improvement':float(S0-float(best[fld])),
+        'best_label':best['label'],
+        'best_params':best['params'],
+        'best_selection_scope':'all_exact_points_after_both_mapping_newton_candidates',
+    })
+    return block
 
 EFF=build('eff');K01=build('k01')
+EFF=finalize_best(EFF,'eff');K01=finalize_best(K01,'k01')
 summary={'classification':'B4_NEUTRINO_STATIONARITY_HESSIAN_COMPLETE','model':MODEL,'objective':OBJ,'production_mapping':'eff',
          'neutrino':TARGETS['neutrino'],'center':CENTER,'center_fingerprint':CENTER_FP,'target_fingerprint':TARGET_FP,
          'source_seed_run_id':TARGETS['source_seed_run_id'],'stencil_scale':SCALE,'base_steps':CFG['base_steps'],'scaled_steps':STEPS,
          'points':len(E),'eff':EFF,'k01':K01,'recenter_tolerance_S':TOL,'provenance':PROV,
+         'selection_guard':'best_exact for each mapping is selected only after both mapping-specific Newton candidates exist',
          'warning':'B4 robustness local numerical Hessian only; not a global minimum, model-selection statistic, or replacement of the massless A1-A5 result.'}
 SUMMARY.write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print('B4_NEUTRINO_STATIONARITY_HESSIAN_COMPLETE',MODEL,SCALE,json.dumps(summary,sort_keys=True),flush=True)
