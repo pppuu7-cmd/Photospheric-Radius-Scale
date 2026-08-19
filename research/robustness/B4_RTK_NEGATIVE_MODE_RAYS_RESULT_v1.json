@@ -1,0 +1,56 @@
+{
+  "classification": "B4_RTK_NEGATIVE_RAY_RECENTER_REQUIRED",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "run": {
+    "run_id": 32284932113,
+    "created_at_utc": "2026-08-19T18:00:52Z",
+    "completed_at_utc": "2026-08-19T18:46:56Z",
+    "head_sha": "9009e0fb105a4870d57082804cb8d1531aa14325",
+    "artifact_id": 9378827376,
+    "artifact_name": "rtk-b4-neutrino-rtk-negative-mode-rays",
+    "artifact_digest": "sha256:e320c38ee09001ff66676a2ed0e06e8dd5861d85434b18dad2dfbfe5a42d5a01"
+  },
+  "parent": {
+    "run_id": 32252398625,
+    "center_S_eff": 1050.6979573843187,
+    "hessian_positive_definite": false,
+    "negative_eigenvalues_y": [-0.0324084135524679, -0.0015792056227914312, -1.9922876135075676e-05]
+  },
+  "mode_results": [
+    {
+      "mode_index": 0,
+      "parent_eigenvalue_y": -0.0324084135524679,
+      "best_alpha": 2.0,
+      "best_exact_S_eff": 1050.5880475140204,
+      "best_improvement_eff": 0.10990987029822463,
+      "best_params": {
+        "As": 2.0920212896820786e-09,
+        "Ob": 0.04722200104991654,
+        "Om": 0.2528393318824633,
+        "h": 0.6885660022475836,
+        "lam": 3043326.1774413693,
+        "ns": 0.9657332769496741,
+        "zre": 7.506210209218662
+      }
+    },
+    {
+      "mode_index": 1,
+      "parent_eigenvalue_y": -0.0015792056227914312,
+      "best_alpha": -2.0,
+      "best_exact_S_eff": 1050.6442788344725,
+      "best_improvement_eff": 0.053678549846154056
+    },
+    {
+      "mode_index": 2,
+      "parent_eigenvalue_y": -1.9922876135075676e-05,
+      "best_alpha": -2.0,
+      "best_exact_S_eff": 1050.6820965368115,
+      "best_improvement_eff": 0.015860847507155995
+    }
+  ],
+  "max_exact_improvement_eff": 0.10990987029822463,
+  "next_gate": "Recenter the B4 RTK base Hessian/stationarity calculation at the exact mode-0 alpha=+2 point; do not run half-scale before a recentered base gate is recenter-clear and positive-definite.",
+  "warning": "B4 neutrino robustness branch only; this does not alter the frozen massless A1-A5 production state and is not global evidence."
+}
