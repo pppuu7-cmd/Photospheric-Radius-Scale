@@ -1,0 +1,4 @@
+Launch exact linearized clock derivative-fingerprint theorem.
+Worker commit: 11dbec97ba5ed4ac97be748adf11e743fcbc852e
+Workflow commit: e4f8c5c971a3ceec4fcace0cc767a0133489c2c0
+Literature context: arXiv:1410.6360 and arXiv:1604.04215; theorem itself uses only geometric definitions and Fourier derivative counting.
