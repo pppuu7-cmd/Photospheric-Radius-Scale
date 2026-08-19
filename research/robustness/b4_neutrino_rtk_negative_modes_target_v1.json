@@ -1,0 +1,63 @@
+{
+  "classification": "B4_NEUTRINO_RTK_NEGATIVE_MODES_TARGET_V1_FROZEN",
+  "frozen_at_utc": "2026-08-19T17:59:03Z",
+  "frozen_at_helsinki": "2026-08-19T20:59:03+03:00",
+  "protocol": "research/robustness/B4_NEUTRINO_STATIONARITY_PROTOCOL_v1.md",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "parent_recenter_run_id": 32252398625,
+  "parent_recenter_artifact_id": 9371716156,
+  "parent_center_fingerprint": "d6bf283a6c3478d178db74c44325afb0387d3c168db095465920a232666c3335",
+  "parent_target_fingerprint": "646bba61a29e676f3f5e58207c92e3ee261e33668db1f0550343667343c63cb7",
+  "parent_S_center_eff": 1050.6979573843187,
+  "parent_best_exact_S_eff": 1050.6978948673993,
+  "parent_best_improvement_eff": 0.00006251691934267001,
+  "parent_positive_definite_eff": false,
+  "axes": ["loglam", "h", "Ob", "Om", "As", "ns", "zre"],
+  "center": {
+    "As": 2.0874853364554216e-9,
+    "Ob": 0.04722503932186544,
+    "Om": 0.2528668961185522,
+    "h": 0.688550855870249,
+    "lam": 3043232.309640512,
+    "ns": 0.9657228676316294,
+    "zre": 7.391020782396863
+  },
+  "base_steps": {
+    "loglam": 0.05,
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "negative_modes": [
+    {
+      "mode_index": 0,
+      "eigenvalue_y": -0.0324084135524679,
+      "eigenvector_y": [0.0003084429437879023,0.021637681906572614,-0.021701942492105483,-0.019688740063455862,0.5669941533321341,0.01487045434961537,0.8227816201557107]
+    },
+    {
+      "mode_index": 1,
+      "eigenvalue_y": -0.0015792056227914312,
+      "eigenvector_y": [-0.004093843903109518,0.725009269535912,-0.38566069665466385,-0.42321308477487396,-0.05362247615641752,0.37886699565077414,-0.009259649976380124]
+    },
+    {
+      "mode_index": 2,
+      "eigenvalue_y": -0.000019922876135075676,
+      "eigenvector_y": [0.9999915616368881,0.0028958884836810927,-0.0015989831922386755,-0.001699781417590307,-0.0004106280066104227,0.0016723719687617934,-0.000281135962530752]
+    }
+  ],
+  "ray_amplitudes": [-2.0,-1.0,-0.5,-0.25,0.0,0.25,0.5,1.0,2.0],
+  "decision_rule": {
+    "evaluate_all_negative_modes": true,
+    "parameter_transform": "p(alpha)=center plus alpha*eigenvector_y*base_steps; loglam is multiplicative exp(alpha*v*step)",
+    "no_clipping": true,
+    "failed_or_out_of_bounds_points": "fail closed and record; never replace by clipped values",
+    "recenter_if_any_exact_improvement_gt": 0.005,
+    "progression_if_no_ray_improvement_gt_tolerance": "negative-ray falsification alone does not make the parent Hessian PD; require a separately justified reduced-scale Hessian before half-scale closure"
+  },
+  "warning": "Frozen before any exact score evaluation along these recentered B4 RTK negative eigendirections. Separate robustness branch; does not alter A1-A5."
+}
