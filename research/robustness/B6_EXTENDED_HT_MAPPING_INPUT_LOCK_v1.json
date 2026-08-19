@@ -1,0 +1,27 @@
+{
+  "classification": "B6_EXTENDED_HT_MAPPING_INPUT_LOCK_V1_FROZEN",
+  "frozen_at_utc": "2026-08-19T18:01:25Z",
+  "frozen_at_helsinki": "2026-08-19T21:01:25+03:00",
+  "protocol": "research/robustness/B6_HT_COVERAGE_EXTENSION_PROTOCOL_v1.md",
+  "source_mapping_run_id": 32284769820,
+  "source_mapping_artifact_id": 9377196879,
+  "source_mapping_artifact_digest": "sha256:2b1eac563bb3f3608a1606a1ccb5bf90595b00d676ccb36a526e0c5fdd986614",
+  "source_mapping_head_sha": "6c8e295da2f70297026308ffa741d84dd82b5b96",
+  "coverage": {
+    "classification": "B6_EXTENDED_HT_MAPPING_COVERAGE_PASS",
+    "observed_oob_T_GeV": 8.572921799800281e-7,
+    "required_Tmin_GeV_lt": 8.487192581802278e-7,
+    "nominal_Tmin_GeV": 7.712647359466997e-7,
+    "refined_Tmin_GeV": 7.712647359466997e-7,
+    "max_abs_R_minus_1": 2.422446243599552e-9,
+    "nominal_vs_refined_max_abs_R_error": 1.588063014423824e-12
+  },
+  "files": {
+    "nominal_256.csv": "1f615acc893a168d3743b1b517b0ff1db306f0a3ed0c22036b43a095485798ec",
+    "refined_512.csv": "332c75f6b0d64a0e70103a485687f78d81d88d25be926ad29b98881bf4679a38",
+    "summary.json": "fc1a767e34129293b93bf0c493d89adc4a61bd121bc6831139bdf72633995a92"
+  },
+  "abundance_network_standard_Tf_changed": false,
+  "eta": 6.122532926262666e-10,
+  "decision": "Supersede the old run 32243547025 H(T) table only for B6 abundance execution because the old table lacked endpoint coverage. No observational criterion, eta, nuclear rate, or standard abundance cutoff changes."
+}
