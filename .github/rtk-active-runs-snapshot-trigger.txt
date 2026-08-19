@@ -1,1 +1,1 @@
-Refresh active run IDs after B6 closure, corrected c4=2 theorem trigger, clock operator discriminator launch, and current B4/B9 progress.
+Refresh active/recent run IDs after B4 LCDM closure, B4 RTK recenter progress, B9 paired reoptimization, Route-B auxiliary theorem launch, CLASS CI fixes, and stale Stage4D3 AI-agent retirement.
