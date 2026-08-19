@@ -1,0 +1,2 @@
+trigger: 2026-08-19T12:49:00+03:00
+reason: B6 raw RHS trace contains trial/rejected states; identify exact central network-call order and accepted-step update location before modifying instrumentation
