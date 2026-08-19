@@ -1,0 +1,52 @@
+{
+  "classification": "B4_NEUTRINO_LCDM_RECENTER_TARGET_V1_FROZEN",
+  "frozen_at_utc": "2026-08-19T12:13:28Z",
+  "frozen_at_helsinki": "2026-08-19T15:13:28+03:00",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "source_seed_run_id": 32190997977,
+  "massless_final_replay_run_id": 32148894768,
+  "parent_base_run_id": 32236524767,
+  "parent_artifact_id": 9362264642,
+  "parent_center_S_eff": 1051.5293507543338,
+  "parent_best_exact_S_eff": 1051.491860373968,
+  "parent_best_improvement_eff": 0.037490380365852616,
+  "parent_best_label": "newton_trust_eff",
+  "neutrino": {
+    "N_ncdm": 1,
+    "m_ncdm_eV": 0.06,
+    "T_ncdm": 0.71611,
+    "deg_ncdm": 1.0,
+    "N_ur": 2.0328
+  },
+  "proof_logic": {
+    "base_scale": 1.0,
+    "validation_scale": 0.5,
+    "positive_definite_threshold": 1e-8,
+    "negative_mode_rule": "any non-PD Hessian must be exact-ray falsified at the same physical scale before progression",
+    "closure_rule": "recenter until exact best improvement <=0.005; then require adjacent base and half positive-definite Hessians and fresh-tree replay"
+  },
+  "models": {
+    "LCDM": {
+      "center": {
+        "As": 2.1020299238037777e-9,
+        "Ob": 0.04898891309740501,
+        "Om": 0.26094715021228926,
+        "h": 0.6765022211034925,
+        "lam": 0.0,
+        "ns": 0.9669253119564393,
+        "zre": 7.797045458689995
+      },
+      "base_steps": {
+        "h": 0.00035,
+        "Ob": 0.00007,
+        "Om": 0.0007,
+        "As": 4e-12,
+        "ns": 0.00035,
+        "zre": 0.07
+      }
+    }
+  },
+  "warning": "Frozen before the recentered Hessian run. Separate B4 robustness branch; does not alter the massless A1-A5 production state."
+}
