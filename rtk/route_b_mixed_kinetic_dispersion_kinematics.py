@@ -27,14 +27,21 @@ assert sp.simplify(omega2-c**2*q**2/(1+q**2/M**2))==0
 
 # Monotonic positive-frequency branch: d omega/dq > 0 for q,M,c>0.
 assert v_group.is_positive is True
-# Both velocities are bounded by c because denominators are >=1.
+# v_phase<c follows from an exact positive difference of squares.
 assert sp.simplify(c**2-v_phase**2)==sp.simplify(c**2*q**2/(M**2+q**2))
-assert sp.simplify(c-v_group)>0
+assert sp.ask(sp.Q.positive(sp.simplify(c**2-v_phase**2))) is True
 
-# Dimensionless x=q/M makes the asymptotic structure explicit.
+# Dimensionless x=q/M makes the velocity ordering and asymptotics explicit.
 omega_x=sp.simplify(omega.subs(q,M*x))
 vp_x=sp.simplify(v_phase.subs(q,M*x))
 vg_x=sp.simplify(v_group.subs(q,M*x))
+assert sp.simplify(vp_x-vg_x-c*x**2/(1+x**2)**sp.Rational(3,2))==0
+assert sp.ask(sp.Q.positive(sp.simplify(vp_x-vg_x))) is True
+# vg<c is equivalent (for positive quantities) to (1+x^2)^3>1.
+vg_bound_poly=sp.expand((1+x**2)**3-1)
+assert sp.factor(vg_bound_poly)==x**2*(x**4+3*x**2+3)
+assert sp.ask(sp.Q.positive(vg_bound_poly)) is True
+
 assert sp.limit(omega_x,x,0,dir='+')==0
 assert sp.limit(omega_x/(c*M*x),x,0,dir='+')==1
 assert sp.limit(omega_x,x,sp.oo)==c*M
