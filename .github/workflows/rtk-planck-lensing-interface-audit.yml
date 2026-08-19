@@ -21,6 +21,8 @@ jobs:
       CLIPY_NOJAX: '1'
       RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
       RTK_PYTHON_VERSION: '3.12.3'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,12 +35,13 @@ jobs:
         run: |
           set -euo pipefail
           test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
-          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2'
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
           python3 -m py_compile rtk/audit_planck_lensing_interface.py
           python3 - <<'PY'
-          import numpy
-          assert numpy.__version__=='2.5.2'
-          print('PLANCK_LENSING_INTERFACE_RUNTIME_PASS',numpy.__version__)
+          import numpy,scipy,os
+          assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
+          assert scipy.__version__==os.environ['RTK_SCIPY_VERSION']
+          print('PLANCK_LENSING_INTERFACE_RUNTIME_PASS',numpy.__version__,scipy.__version__)
           PY
       - name: Download and verify pinned Planck R3 baseline
         run: |
