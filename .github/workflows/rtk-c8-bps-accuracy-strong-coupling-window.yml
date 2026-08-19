@@ -1,0 +1,36 @@
+name: RTK C8 BPS accuracy strong-coupling window
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c8-bps-accuracy-strong-coupling-window-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact C8 crossover-window theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/c8_bps_accuracy_strong_coupling_window.py
+          python3 rtk/c8_bps_accuracy_strong_coupling_window.py | tee c8_bps_accuracy_strong_coupling_window.log
+          grep -q RTK_C8_BPS_ACCURACY_STRONG_COUPLING_WINDOW_PASS c8_bps_accuracy_strong_coupling_window.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c8-bps-accuracy-strong-coupling-window
+          path: c8_bps_accuracy_strong_coupling_window.log
+          if-no-files-found: warn
