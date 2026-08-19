@@ -1,0 +1,7 @@
+trigger_utc: 2026-08-19T17:59:03Z
+trigger_helsinki: 2026-08-19T20:59:03+03:00
+reason: run preregistered trace-only Tf=0.009 accepted-state extension so the CLASS-derived H(T) table strictly covers the unmodified abundance network endpoint without extrapolation or tolerance relaxation.
+protocol: research/robustness/B6_HT_COVERAGE_EXTENSION_PROTOCOL_v1.md
+failed_abundance_run_id: 32252925021
+observed_oob_T_GeV: 8.572921799800281e-7
+trace_patch_commit: dc021196d66f7669b66af0076f1c4862c5efa19b
