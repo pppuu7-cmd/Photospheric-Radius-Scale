@@ -3,6 +3,12 @@ name: RTK CLASS build
 on:
   push:
     branches: [rtk-class-build]
+    paths:
+      - 'rtk/khronon_background.c'
+      - 'rtk/khronon_background.h'
+      - 'rtk/khronon_perturbations.c'
+      - 'rtk/khronon_perturbations.h'
+      - '.github/workflows/rtk-class-build.yml'
   workflow_dispatch:
 
 jobs:
