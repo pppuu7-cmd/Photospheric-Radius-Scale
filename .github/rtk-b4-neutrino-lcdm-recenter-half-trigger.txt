@@ -1,0 +1,6 @@
+trigger_utc: 2026-08-19T17:56:30Z
+trigger_helsinki: 2026-08-19T20:56:30+03:00
+reason: B4 LCDM recentered base run 32251647845 is recenter-clear (best improvement 0 <= 0.005) and positive definite; execute frozen 0.5 validation-scale Hessian at the identical center.
+protocol: research/robustness/B4_NEUTRINO_STATIONARITY_PROTOCOL_v1.md
+base_run_id: 32251647845
+base_artifact_id: 9368193099
