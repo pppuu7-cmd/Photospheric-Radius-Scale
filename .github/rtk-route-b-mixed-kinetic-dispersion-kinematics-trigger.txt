@@ -1,0 +1,3 @@
+Launch exact Route-B mixed-kinetic scalar dispersion kinematics gate.
+Research theorem commit: f40483453f34f14e74ee29c18537221d6da4787c
+Workflow commit: ac19c93449ec78360a69e9975232c40e8e071067
