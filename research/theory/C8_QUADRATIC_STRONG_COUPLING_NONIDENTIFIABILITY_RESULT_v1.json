@@ -1,0 +1,25 @@
+{
+  "classification": "RTK_C8_QUADRATIC_STRONG_COUPLING_NONIDENTIFIABILITY_PASS",
+  "status": "CLOSED_NO_INFERENCE_LEMMA",
+  "run": {
+    "run_id": 32304019916,
+    "artifact_id": 9384050448,
+    "artifact_name": "rtk-c8-quadratic-strong-coupling-nonidentifiability",
+    "artifact_digest": "sha256:030eb66fafa76dd179d227f1e1424f8ce8b74a589278a8616efc9978cef35833",
+    "head_sha": "700f06b984af7eb86024849d63fd7027adabe0d5"
+  },
+  "worker": "rtk/c8_quadratic_strong_coupling_nonidentifiability.py",
+  "quadratic_representative": "L2=K pi_dot^2/2 + K (grad pi_dot)^2/(2M^2) - G (grad pi)^2/2",
+  "example_cubic": "L3=(g/Lambda^2) pi_dot (grad pi)^2",
+  "vacuum_hessian_independent_of_cubic": true,
+  "cubic_vertex": "d^3L/(d pi_dot d(grad pi)^2)=2g/Lambda^2",
+  "quadratic_dispersion": "omega^2=(G/K) q^2/(1+q^2/M^2)",
+  "theorem": "An infinite family of EFTs with different independent cubic couplings shares exactly the same quadratic Hessian and mixed-kinetic dispersion. Therefore the quadratic dispersive scale M (or M_K/k_*) does not determine a unique interaction strength or strong-coupling cutoff.",
+  "required_next_step": "Choose or derive an explicit nonlinear completion; expand to cubic order; impose its constraints; canonically normalize the propagating fields; only then power-count the actual interaction vertices.",
+  "non_claims": [
+    "does not determine the numerical RTK strong-coupling scale",
+    "does not prove any chosen nonlinear completion is weakly coupled",
+    "does not establish radiative stability or counterterm closure",
+    "does not replace the full C7 constraint/DOF analysis"
+  ]
+}
