@@ -54,6 +54,7 @@ jobs:
               'RTK pinned AlterBBN v2.2 standard-network self-test',
               'RTK pinned AlterBBN expansion-interface audit',
               'RTK pinned AlterBBN integration-flow audit',
+              'RTK pinned AlterBBN Friedmann-H site audit',
               'RTK B6 entropy-aware H(T) mapping',
               'RTK B6 paired AlterBBN abundances',
               'RTK pinned Planck standalone-lensing interface audit',
