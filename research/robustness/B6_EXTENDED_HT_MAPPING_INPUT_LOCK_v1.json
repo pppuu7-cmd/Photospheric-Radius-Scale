@@ -19,7 +19,8 @@
   "files": {
     "nominal_256.csv": "1f615acc893a168d3743b1b517b0ff1db306f0a3ed0c22036b43a095485798ec",
     "refined_512.csv": "332c75f6b0d64a0e70103a485687f78d81d88d25be926ad29b98881bf4679a38",
-    "summary.json": "fc1a767e34129293b93bf0c493d89adc4a61bd121bc6831139bdf72633995a92"
+    "summary.json": "fc1a767e34129293b93bf0c493d89adc4a61bd121bc6831139bdf72633995a92",
+    "coverage_extension_result.json": "7fb298d5dcf534a4285f91d6da258d20dbf6441f265bad97e27a8c36fc9a3e76"
   },
   "abundance_network_standard_Tf_changed": false,
   "eta": 6.122532926262666e-10,
