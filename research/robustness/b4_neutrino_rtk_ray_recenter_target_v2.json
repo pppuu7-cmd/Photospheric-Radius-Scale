@@ -3,6 +3,8 @@
   "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
   "production_mapping": "eff",
   "recenter_tolerance_S": 0.005,
+  "source_seed_run_id": 32190997977,
+  "massless_final_replay_run_id": 32148894768,
   "parent_recenter_run_id": 32252398625,
   "parent_negative_ray_run_id": 32284932113,
   "parent_negative_ray_artifact_id": 9378827376,
