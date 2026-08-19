@@ -1,2 +1,2 @@
-trigger: 2026-08-19T15:53:30+03:00
-reason: capture third B6 paired AlterBBN run after pinned direct-GeV H-site repair and current heavy-run states
+trigger: 2026-08-19T15:56:30+03:00
+reason: refresh active robustness frontier after B6 direct-GeV rerun, B4 recenter computations, and B10 T3 stationarity
