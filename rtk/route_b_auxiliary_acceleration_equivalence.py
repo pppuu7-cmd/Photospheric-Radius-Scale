@@ -38,7 +38,7 @@ assert H_B != 0
 K = 1 + q**2/M**2
 inverse_kernel = sp.expand(K*w**2-c**2*q**2)
 w2_solution = sp.solve(sp.Eq(inverse_kernel,0),w**2)
-assert w2_solution == [c**2*q**2/(1+q**2/M**2)]
+assert len(w2_solution) == 1
 assert sp.simplify(w2_solution[0]-c**2*q**2*M**2/(M**2+q**2)) == 0
 
 # The key equivalence statement is algebraic and exact: any action containing
