@@ -15,6 +15,9 @@
   },
   "base_scale": {
     "run_id": 32251647845,
+    "artifact_id": 9368193099,
+    "artifact_name": "rtk-b4-neutrino-lcdm-recenter-base",
+    "artifact_digest": "sha256:4924c3be144925acff3aa7b8f60a5e34c741fed8085ca6b489c84b237c7e99e3",
     "S_center_eff": 1051.491860373968,
     "best_exact_S_eff": 1051.491860373968,
     "best_improvement_eff": 0.0,
@@ -32,7 +35,21 @@
     "positive_definite": true,
     "eigenvalues_y": [0.001970516421407411, 0.010047008156647295, 0.017487613956718877, 0.06629737343897306, 0.7326827120512692, 1.7588816936780771]
   },
-  "decision": "Two adjacent scales are recenter-clear at tolerance 0.005 and have positive-definite Hessians, so the LCDM side satisfies the frozen local interior-minimum stationarity criterion.",
+  "selection_order_audit": {
+    "reason": "The historical B4 worker selected eff.best_exact before evaluating the later k01-specific Newton candidate. Primary points.jsonl artifacts were therefore audited across all exact evaluations before retaining closure.",
+    "base_all_exact_points": 75,
+    "base_true_best_label_by_score_eff": "center",
+    "base_true_best_score_eff": 1051.491860373968,
+    "base_newton_trust_k01_score_eff": 1051.5863537764114,
+    "half_all_exact_points": 75,
+    "half_true_best_label_by_score_eff": "center",
+    "half_true_best_score_eff": 1051.491860373968,
+    "half_newton_trust_k01_score_eff": 1051.5287234545071,
+    "audit_result": "PASS_NO_HIDDEN_CROSS_MAPPING_NEWTON_DESCENT",
+    "worker_fix_commit": "4d2416c02979650e48e8f53cf67da4ae07079992",
+    "future_rule": "best_exact must be selected only after both mapping-specific Newton candidates have been evaluated"
+  },
+  "decision": "Two adjacent scales are recenter-clear at tolerance 0.005 and have positive-definite Hessians; an independent all-points audit also confirms no hidden production-eff descent from the later k01 Newton candidate. The LCDM side satisfies the frozen local interior-minimum stationarity criterion.",
   "remaining_B4_gates": [
     "RTK minimal-neutrino stationarity certification",
     "paired fresh-tree replay of final accepted LCDM and RTK neutrino score points within 2e-6",
