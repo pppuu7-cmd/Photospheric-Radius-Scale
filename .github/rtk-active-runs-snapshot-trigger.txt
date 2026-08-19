@@ -1,1 +1,1 @@
-Refresh isolated runtime state after C8 quadratic strong-coupling nonidentifiability launch; include current B4 RTK, B9 paired reoptimization, and recent calibration/kinematics gates.
+Refresh isolated runtime state after BPS exact rational embedding and C8 quadratic strong-coupling nonidentifiability launches; include B4 RTK and B9 paired reoptimization heavy jobs.
