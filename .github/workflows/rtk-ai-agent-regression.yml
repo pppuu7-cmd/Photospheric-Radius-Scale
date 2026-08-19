@@ -8,6 +8,7 @@ on:
       - '.github/workflows/rtk-ai-auto-research-agent.yml'
       - '.github/workflows/rtk-agent-scientific-gate.yml'
       - '.github/workflows/rtk-ai-agent-regression.yml'
+      - 'research/checkpoints/RTK_CHAT_INDEPENDENT_STATE.json'
 
 permissions:
   contents: read
@@ -20,24 +21,39 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Syntax and state validation
+      - name: Historical state and retirement validation
         run: |
+          set -euo pipefail
           python3 -m py_compile rtk/agent/auto_research_agent.py
           python3 - <<'PY'
           import json
-          s=json.load(open('rtk/agent/frontier_state.json'))
-          assert s['schema_version']==1
-          assert set(s['allowed_actions'])=={'WAIT','RECENTER','STATIONARITY','REDISCOVERY_FOLLOWUP'}
-          assert s['gate_rules']['never_advance_on_failed_or_incomplete_run'] is True
-          assert s['gate_rules']['never_claim_global_minimum_from_local_optimizer'] is True
-          print('RTK_AI_AGENT_STATE_PASS')
+          state=json.load(open('rtk/agent/frontier_state.json'))
+          recovery=json.load(open('research/checkpoints/RTK_CHAT_INDEPENDENT_STATE.json'))
+          assert state['schema_version']==1 and state['stage']=='4D3'
+          assert state['best']['S_eff']==1050.0338294787366
+          stale=recovery['known_stale_state']
+          assert stale['path']=='main:rtk/agent/frontier_state.json'
+          assert recovery['production_objective']['name']=='matched-ultra-linstep2+dense-BOSS'
+          assert recovery['production_objective']['fingerprint']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          print('RTK_AI_AGENT_HISTORICAL_STATE_MARKED_STALE_PASS')
           PY
-      - name: Safety invariant checks
+      - name: Enforce retired read-only workflow
         run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          t=Path('.github/workflows/rtk-ai-auto-research-agent.yml').read_text()
+          assert 'schedule:' not in t
+          assert 'workflow_run:' not in t
+          assert 'actions: write' not in t
+          assert 'contents: write' not in t
+          assert 'actions: read' in t and 'contents: read' in t
+          assert 'RTK_STAGE4D3_AI_AGENT_RETIRED_STALE_FRONTIER_FAIL_CLOSED' in t
+          assert 'workflow_dispatch:' in t
+          print('RTK_AI_AGENT_RETIREMENT_GUARD_PASS')
+          PY
           grep -q "ALLOWED={'WAIT','RECENTER','STATIONARITY','REDISCOVERY_FOLLOWUP'}" rtk/agent/auto_research_agent.py
           grep -q "stationarity gate not earned by poll" rtk/agent/auto_research_agent.py
-          grep -q "RTK_AGENT_DISABLED_NO_OPENAI_API_KEY" rtk/agent/auto_research_agent.py
-          grep -q "RTK_AI_AGENT_DISABLED" .github/workflows/rtk-ai-auto-research-agent.yml
           grep -q "Validate agent-selected action and numerical inputs" .github/workflows/rtk-agent-scientific-gate.yml
           echo RTK_AI_AGENT_REGRESSION_PASS
       - uses: actions/checkout@v4
