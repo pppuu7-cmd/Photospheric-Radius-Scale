@@ -1,0 +1,53 @@
+{
+  "classification": "B4_RTK_NEGATIVE_MODE_COMPONENT_DIAGNOSIS",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "source_run_id": 32284932113,
+  "source_artifact_id": 9378827376,
+  "center": {
+    "S_eff": 1050.6979573843187,
+    "logL_planck": -502.1507024310297,
+    "chi2_SN": 39.482740963358786,
+    "chi2_BOSS_eff": 6.913811558900482,
+    "rd_Mpc": 147.097138
+  },
+  "modes": [
+    {
+      "mode_index": 0,
+      "dominant_normalized_components": {"As": 0.5669941533321341, "zre": 0.8227816201557107},
+      "best_alpha": 2.0,
+      "delta_S_eff": -0.10990987029822463,
+      "delta_minus2logL_planck": -0.140315961711849,
+      "delta_chi2_SN": 0.0013771362166679069,
+      "delta_chi2_BOSS_eff": 0.029028955197121675,
+      "interpretation": "CMB-driven As-zre-dominated descent; BOSS mildly opposes it."
+    },
+    {
+      "mode_index": 1,
+      "dominant_normalized_components": {"h": 0.725009269535912, "Ob": -0.38566069665466385, "Om": -0.42321308477487396, "ns": 0.37886699565077414},
+      "best_alpha": -2.0,
+      "delta_S_eff": -0.053678549846154056,
+      "delta_minus2logL_planck": -0.06579173968589203,
+      "delta_chi2_SN": -0.027974699484957455,
+      "delta_chi2_BOSS_eff": 0.04008788932476559,
+      "interpretation": "Mixed background/shape descent driven by Planck plus SN, partially opposed by BOSS."
+    },
+    {
+      "mode_index": 2,
+      "dominant_normalized_components": {"loglam": 0.9999915616368881},
+      "best_alpha": -2.0,
+      "delta_S_eff": -0.015860847507155995,
+      "delta_minus2logL_planck": -0.015901597906349707,
+      "delta_chi2_SN": -0.00011701663632379677,
+      "delta_chi2_BOSS_eff": 0.00015776703544201354,
+      "interpretation": "Nearly pure lambda_D descent, small and almost entirely Planck-driven on the B4 neutrino objective."
+    }
+  ],
+  "cross_model_feasible_point_diagnostic": {
+    "rtk_exact_ray_best_S_eff": 1050.5880475140204,
+    "lcdm_recenter_base_S_eff": 1051.491860373968,
+    "raw_delta_RTK_minus_LCDM": -0.903812859947493,
+    "status": "PROVISIONAL_FEASIBLE_POINT_COMPARISON_ONLY"
+  },
+  "warning": "The RTK ray point is not yet a certified multiscale local minimum and the LCDM half-scale gate is still active. This decomposition is diagnostic only and is not model preference, significance, AIC/BIC, posterior evidence or Bayes evidence."
+}
