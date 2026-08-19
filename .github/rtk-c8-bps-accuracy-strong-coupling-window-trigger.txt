@@ -1,0 +1,4 @@
+Launch exact C8 theorem connecting finite-range RTK accuracy, actual z=3 crossover momentum, and an abstract BPS low-energy strong-coupling window.
+Prerequisite BPS z3 structural run: 32305611111 PASS.
+Research worker commit: 96c75d0084f343ca0de52585b211793debd008ff
+Workflow commit: 4e55e66540eaa9323de570e26e92e6d407ffc4dd
