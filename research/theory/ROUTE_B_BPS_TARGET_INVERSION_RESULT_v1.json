@@ -1,0 +1,38 @@
+{
+  "classification": "RTK_ROUTE_B_BPS_TARGET_INVERSION_PASS",
+  "status": "CLOSED_ARBITRARY_POSITIVE_TARGET_POLE_INVERSION_LEMMA",
+  "run": {
+    "run_id": 32306826347,
+    "artifact_id": 9384997016,
+    "artifact_name": "rtk-route-b-bps-target-inversion",
+    "artifact_digest": "sha256:3b6e8e7113957f1c7fa7ef50dc63c2743dd68e1b9d62280f0b4c7caf7279168a",
+    "head_sha": "508b56a4ab9a43279a01fe0b61ab04ec136c8f2b"
+  },
+  "target": "omega^2=C p^2/(1+p^2/Mdisp^2), C>0, Mdisp>0",
+  "free_tuning": "h in (0,1), parameterized in the proof as h=k/(1+k) with k>0",
+  "inverse_map": {
+    "z": "h/(3C)",
+    "ell=lambda-1": "2h/[3(1-h)]",
+    "alpha": "2h/(3C+h)",
+    "s": "alpha",
+    "M_*": "Mdisp"
+  },
+  "exact_checks": {
+    "c_s^2": "ell/[z(2+3ell)] = C exactly",
+    "Mdisp^2": "alpha M_*^2/s = Mdisp^2 exactly",
+    "healthy_interval": "0<alpha<2 and lambda>1 for every C>0, 0<h<1"
+  },
+  "small_h_limit": {
+    "alpha": "~2h/(3C) -> 0",
+    "ell": "~2h/3 -> 0",
+    "z": "~h/(3C) -> 0",
+    "target_C": "remains exactly fixed"
+  },
+  "theorem": "Every positive rational RTK target pole admits a continuous healthy-BPS exact pole/dispersion embedding. The low-energy alpha and lambda-1 parameters can simultaneously be made arbitrarily small at fixed target C and Mdisp by taking h->0.",
+  "guards": [
+    "pole/dispersion only, not off-shell residue/source equivalence",
+    "small alpha,ell do not automatically guarantee a usable strong-coupling window because the BPS low-energy cutoffs also decrease",
+    "matter Lorentz-violation and cosmological stability constraints remain separate"
+  ],
+  "next_step": "Combine this inverse map with the exact C8 BPS cutoff/window formulas to determine the h interval, if any, that simultaneously matches the phenomenological target and places the z=3 crossover before strong coupling."
+}
