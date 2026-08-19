@@ -1,2 +1,2 @@
-trigger: 2026-08-19T12:57:00+03:00
-reason: first mapping run 32238634437 failed closed on RHS trial-state mixing; exact-source audit 32239397180 identified accepted stiff-step state; rerun frozen v1.1 accepted-state mapping
+trigger: 2026-08-19T13:36:00+03:00
+reason: run 32239927888 proved instrumented abundances unchanged but trace was inserted in unused failsafe<10 branch; v1.2 freezes the actual failsafe=1 corrected loop==2 observation point before this third mapping run
