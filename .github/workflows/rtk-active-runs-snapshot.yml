@@ -1,0 +1,62 @@
+name: RTK active Actions snapshot
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-active-runs-snapshot-trigger.txt'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: rtk-active-runs-snapshot
+  cancel-in-progress: true
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Capture active and recent scientific runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p research/runtime
+          python3 - <<'PY'
+          import datetime,json,os,subprocess
+          repo=os.environ['GITHUB_REPOSITORY']
+          raw=subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs?per_page=100'],text=True)
+          runs=json.loads(raw).get('workflow_runs',[])
+          active=[]; recent=[]
+          for r in runs:
+              row={k:r.get(k) for k in ('id','name','status','conclusion','event','created_at','updated_at','head_sha','head_branch','html_url','run_number')}
+              if r.get('status') in ('queued','in_progress','waiting','requested','pending'):
+                  active.append(row)
+              if len(recent)<40:
+                  recent.append(row)
+          out={
+            'classification':'RTK_ACTIONS_RUNTIME_SNAPSHOT',
+            'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'repository':repo,
+            'active_runs':active,
+            'recent_runs':recent,
+          }
+          open('research/runtime/active_runs_snapshot.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'active':[(x['id'],x['name'],x['status']) for x in active]},sort_keys=True))
+          PY
+      - name: Commit snapshot to research branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/runtime/active_runs_snapshot.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'runtime: snapshot active Actions runs'
+          git push origin HEAD:rtk-class-build
