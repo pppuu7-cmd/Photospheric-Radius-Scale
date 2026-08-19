@@ -21,13 +21,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12.3'
-      - name: Run exact c4=2 Class-II algebra audit
+      - name: Run exact c4=2 Class-II and exact-target audits
         run: |
           set -euo pipefail
           python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
-          python3 -m py_compile rtk/route_b_khronometric_c4eq2_audit.py
+          python3 -m py_compile rtk/route_b_khronometric_c4eq2_audit.py rtk/route_b_khronometric_c4eq2_exact_target_nogo.py
           python3 rtk/route_b_khronometric_c4eq2_audit.py | tee route_b_c4eq2.log
+          python3 rtk/route_b_khronometric_c4eq2_exact_target_nogo.py | tee route_b_c4eq2_exact_target.log
           grep -q RTK_ROUTE_B_KHRONOMETRIC_C4EQ2_AUDIT_PASS route_b_c4eq2.log
+          grep -q RTK_ROUTE_B_C4EQ2_MINIMAL_EXACT_TARGET_NOMAPPING_PASS route_b_c4eq2_exact_target.log
           python3 - <<'PY'
           import platform,sympy
           assert platform.python_version()=='3.12.3'
@@ -37,5 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: rtk-route-b-khronometric-c4eq2-audit
-          path: route_b_c4eq2.log
+          path: |
+            route_b_c4eq2.log
+            route_b_c4eq2_exact_target.log
           if-no-files-found: error
