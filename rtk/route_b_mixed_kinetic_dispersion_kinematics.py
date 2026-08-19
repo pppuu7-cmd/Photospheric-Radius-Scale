@@ -53,7 +53,8 @@ assert sp.limit(vg_x*x**3/c,x,sp.oo)==1
 
 # Low-q series: omega^2 = c^2 q^2 [1-q^2/M^2+O(q^4/M^4)].
 series_omega2=sp.series(c**2*M**2*x**2/(1+x**2),x,0,7).removeO()
-assert sp.expand(series_omega2)==c**2*M**2*(x**2-x**4+x**6)
+expected_series=c**2*M**2*(x**2-x**4+x**6)
+assert sp.simplify(series_omega2-expected_series)==0
 
 result={
   'classification':'RTK_ROUTE_B_MIXED_KINETIC_DISPERSION_KINEMATICS_PASS',
