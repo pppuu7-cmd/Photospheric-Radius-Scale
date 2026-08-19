@@ -1,2 +1,2 @@
-trigger: 2026-08-19T13:08:00+03:00
-reason: recovered B9 open robustness gate; verify pinned Planck R3 standalone lensing product loads through current clipy-like stack before any cosmological score
+trigger: 2026-08-19T13:31:00+03:00
+reason: first B9 interface audit 32240164970 failed only because CLIPY_NOJAX runtime omitted locked scipy; rerun with numpy 2.5.2 and scipy 1.18.0 before any cosmological lensing score
