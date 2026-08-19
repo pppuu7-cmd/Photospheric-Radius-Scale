@@ -1,0 +1,38 @@
+name: RTK D4 model-aware proof provenance regression
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-d4-provenance-regression-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-d4-model-aware-provenance-regression
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Compile provenance validator and regression
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/validate_artifact_identity.py rtk/test_model_aware_provenance_validator.py rtk/audit_invariants.py
+      - name: Run scientific static invariants
+        run: |
+          set -euo pipefail
+          python3 rtk/audit_invariants.py | tee d4_audit_invariants.log
+          grep -q RTK_AUDIT_INVARIANTS_PASS d4_audit_invariants.log
+      - name: Run RTK/LCDM locked-provenance regression
+        run: |
+          set -euo pipefail
+          python3 rtk/test_model_aware_provenance_validator.py | tee d4_model_aware_provenance.log
+          grep -q RTK_MODEL_AWARE_PROVENANCE_VALIDATOR_UNIT_PASS d4_model_aware_provenance.log
