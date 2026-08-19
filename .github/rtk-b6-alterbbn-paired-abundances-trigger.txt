@@ -1,6 +1,8 @@
-trigger: 2026-08-19T15:20:20+03:00
-reason: rerun identical preregistered B6 abundance gate after source-structure matcher repair only; no physics/protocol change
+trigger: 2026-08-19T15:50:30+03:00
+reason: rerun identical preregistered B6 abundance gate after byte-pinned H-site audit proved fill_params T is direct GeV; implementation interface fix only, no physics/protocol change
 protocol: research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
 mapping_run_id: 32243547025
-matcher_fix_commit: dcc8eb5efac362789210ba78a1a8da913dde7f27
-failed_preoutput_run_id: 32251381580
+h_site_audit_run_id: 32252756243
+h_site_audit_artifact_id: 9365062069
+direct_gev_fix_commit: 2ab6812a3420c9876494df6f61756dabf9374883
+failed_preoutput_run_ids: [32251381580, 32252015488]
