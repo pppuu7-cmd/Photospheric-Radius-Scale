@@ -58,6 +58,7 @@ jobs:
               'RTK B6 entropy-aware H(T) mapping',
               'RTK B6 paired AlterBBN abundances',
               'RTK pinned Planck standalone-lensing interface audit',
+              'RTK B9 fixed-center Planck lensing adapter',
               'RTK B10 fixed-shared lambda-tail reconnaissance',
               'RTK B10 paired fixed-lambda T2 profiles',
               'RTK B10 T3 fixed-lambda base stationarity',
