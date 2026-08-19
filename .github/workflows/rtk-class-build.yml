@@ -41,11 +41,16 @@ jobs:
           nm class | grep -E 'khr_(background|perturb_derivs_newtonian)' || true
       - name: Smoke-run stock RT-CLASS parser
         working-directory: class_public
-        run: ./class explanatory.ini > ../class_smoke.log 2>&1 || (cat ../class_smoke.log; exit 1)
+        run: |
+          set -euo pipefail
+          mkdir -p output
+          ./class explanatory.ini > ../class_smoke.log 2>&1 || (cat ../class_smoke.log; exit 1)
       - name: Upload logs and binary
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rtk-class-build
           path: |
             class_public/class
             class_smoke.log
+          if-no-files-found: warn
