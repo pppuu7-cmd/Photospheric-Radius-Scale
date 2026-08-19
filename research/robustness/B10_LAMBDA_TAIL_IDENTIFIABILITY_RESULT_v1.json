@@ -1,0 +1,66 @@
+{
+  "classification": "LAMBDA_NOT_NUMERICALLY_IDENTIFIABLE_AGAINST_PREREGISTERED_DUST_TAIL_AT_0P005",
+  "status": "CLOSED_B10_V1",
+  "protocol": "research/robustness/B10_LAMBDA_TAIL_IDENTIFIABILITY_PROTOCOL_v1.md",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "production_mapping": "eff",
+  "tolerance_S": 0.005,
+  "finite_reference": {
+    "lambda_D": 219457.5727136581,
+    "S_eff": 1050.249912429787,
+    "source": "frozen A5 massless RTK accepted point"
+  },
+  "t1": {
+    "run_id": 32240381293,
+    "onset_factor": 64,
+    "largest_successful_factor": 16384
+  },
+  "t2": {
+    "run_id": 32244330691,
+    "factor_64": {
+      "lambda_D": 14045284.653674118,
+      "S_eff": 1050.249062546245,
+      "profile_improvement": 0.0
+    },
+    "factor_16384": {
+      "lambda_D": 3595592871.3405743,
+      "S_eff": 1050.2490169939647,
+      "profile_improvement": 0.0
+    }
+  },
+  "t3": {
+    "run_id": 32252288173,
+    "created_at_utc": "2026-08-19T12:22:06Z",
+    "completed_at_utc": "2026-08-19T14:22:46Z",
+    "factor_64": {
+      "artifact_id": 9369250983,
+      "S_center_eff": 1050.249062546245,
+      "best_exact_S_eff": 1050.249062546245,
+      "best_improvement_eff": 0.0,
+      "positive_definite_eff": true,
+      "min_eigenvalue_eff": 0.046674959619984545
+    },
+    "factor_16384": {
+      "artifact_id": 9369257669,
+      "S_center_eff": 1050.2490169939647,
+      "best_exact_S_eff": 1050.2490169939647,
+      "best_improvement_eff": 0.0,
+      "positive_definite_eff": true,
+      "min_eigenvalue_eff": 0.0467070781427316
+    }
+  },
+  "derived": {
+    "delta_tail64_minus_finite": -0.0008498835418322415,
+    "delta_tail16384_minus_finite": -0.0008954358222581504,
+    "delta_outer_tail_16384_minus_64": -0.000045552280425908975,
+    "both_tail_points_within_abs_tolerance": true
+  },
+  "interpretation": "Within the preregistered B10-v1 local numerical objective and 0.005 score resolution, the frozen finite-lambda RTK point is not numerically distinguishable from the stationarity-certified asymptotic tail anchors.",
+  "non_claims": [
+    "not a proof that lambda_D is mathematically redundant",
+    "not a proof of an exact dust limit of the full theory",
+    "not a global optimum statement",
+    "not AIC/BIC/Bayes/significance evidence",
+    "does not replace the frozen A1-A5 massless comparison"
+  ]
+}
