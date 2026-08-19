@@ -52,11 +52,20 @@ static double rtk_bbn_h_ratio_from_T9(double T9){{
 def patch_bbn(path):
     s=Path(path).read_text();lines=s.splitlines(True)
     if 'rtk_bbn_h_ratio.h' in s: raise RuntimeError('bbn.c already patched')
+    expected=('rho_gamma','rho_epem','rho_wimp','rho_neutrinos','rho_neuteq','rho_baryons','rhod')
     hits=[]
     for i,line in enumerate(lines):
         q=''.join(line.split())
-        if q.startswith('H=sqrt(Gn*8.*pi/3.*(') and all(x in q for x in ('rho_gamma','rho_epem','rho_wimp','rho_neutrinos','rho_neuteq','rho_baryons','rhod')): hits.append(i)
+        # The published v2.2 archive is the byte-verified authority. Match the
+        # unique common Friedmann assignment structurally instead of depending
+        # on punctuation/spacing of the public mirror. Still fail closed unless
+        # exactly one source line contains H=, sqrt(, and every expected density.
+        if 'H=' in q and 'sqrt(' in q and q.endswith(';') and all(x in q for x in expected):
+            hits.append(i)
     if len(hits)!=1: raise RuntimeError(f'expected one common Friedmann H assignment; found {len(hits)}')
+    matched=''.join(lines[hits[0]].split())
+    if matched.count('H=')!=1 or matched.count('sqrt(')!=1:
+        raise RuntimeError(f'ambiguous Friedmann assignment structure: {matched!r}')
     inc=[i for i,l in enumerate(lines) if '#include' in l and 'include.h' in l]
     if len(inc)!=1: raise RuntimeError(f'expected one include.h; found {len(inc)}')
     lines.insert(inc[0]+1,'#include "rtk_bbn_h_ratio.h"\n');hidx=hits[0]+(1 if inc[0]<hits[0] else 0)
