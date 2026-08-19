@@ -40,7 +40,7 @@ jobs:
       - name: Require frozen B9 protocol and adapter
         run: |
           set -euo pipefail
-          grep -q 'FROZEN BEFORE FIRST COSMOLOGICAL LENSING SCORE' research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md
+          grep -q 'FROZEN BEFORE THE FIRST RTK/LCDM COSMOLOGICAL STANDALONE-LENSING SCORE' research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md
           python3 -m py_compile rtk/b9_fixed_center_lensing_adapter.py rtk/prepare_inference_core.py
           echo "research_source_commit=$(git rev-parse HEAD)" | tee b9_fixed_center_provenance.txt
 
