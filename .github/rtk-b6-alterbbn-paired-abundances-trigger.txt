@@ -1,8 +1,10 @@
-trigger: 2026-08-19T15:50:30+03:00
-reason: rerun identical preregistered B6 abundance gate after byte-pinned H-site audit proved fill_params T is direct GeV; implementation interface fix only, no physics/protocol change
+trigger_utc: 2026-08-19T18:05:06Z
+trigger_helsinki: 2026-08-19T21:05:06+03:00
+reason: execute the original preregistered paired AlterBBN abundance gate using the superseding frozen extended H(T) input lock after run 32284769820 proved >1% endpoint coverage without changing the standard abundance cutoff.
 protocol: research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
-mapping_run_id: 32243547025
-h_site_audit_run_id: 32252756243
-h_site_audit_artifact_id: 9365062069
-direct_gev_fix_commit: 2ab6812a3420c9876494df6f61756dabf9374883
-failed_preoutput_run_ids: [32251381580, 32252015488]
+coverage_protocol: research/robustness/B6_HT_COVERAGE_EXTENSION_PROTOCOL_v1.md
+input_lock: research/robustness/B6_EXTENDED_HT_MAPPING_INPUT_LOCK_v1.json
+mapping_run_id: 32284769820
+mapping_artifact_id: 9377196879
+failed_preoutput_run_ids: [32251381580, 32252015488, 32252925021]
+workflow_input_update_commit: 9eb9084f5c2a34083c8118a8aecc497c2f644311
