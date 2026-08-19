@@ -1,0 +1,4 @@
+trigger: 2026-08-19T15:29:30+03:00
+reason: T2 completed successfully at both preregistered tail anchors; launch required T3 exact fixed-lambda base stationarity
+source_t2_run_id: 32244330691
+targets: research/robustness/b10_t3_fixed_lambda_stationarity_targets.json
