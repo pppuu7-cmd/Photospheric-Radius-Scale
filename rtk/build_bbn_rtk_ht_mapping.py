@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Build entropy-aware B6 R(T)=H_RTK/H_sameparams table.
 
-Inputs are an instrument-only AlterBBN T-a trace and two pinned CLASS background
-files (RTK and same-shared-parameter LCDM).  No abundance network modification
-is performed here.
+Protocol v1.1 consumes an accepted-state AlterBBN trace carrying nucl_single
+call serials.  It selects the direct standard central solve (err=0) and never
+mixes trial/rejected RHS evaluations or uncertainty-network repeats.
 """
 from __future__ import annotations
 from bisect import bisect_left
 from pathlib import Path
-import csv,json,math,statistics,sys
+import csv,json,math,sys
 
 if len(sys.argv)!=4:
     raise SystemExit('usage: build_bbn_rtk_ht_mapping.py TRACE RTK_BACKGROUND LCDM_BACKGROUND')
@@ -27,36 +27,45 @@ def trace_rows():
         s=line.strip()
         if not s or s.startswith('#'):continue
         q=s.split()
-        if len(q)<3:continue
-        T,a,H=map(float,q[:3])
-        if all(math.isfinite(x) and x>0 for x in (T,a,H)):rows.append((T,a,H))
-    if len(rows)<100:raise RuntimeError(f'too few raw trace rows: {len(rows)}')
+        if len(q)<4:continue
+        call_id=int(q[0]);err=int(q[1]);T=float(q[2]);a=float(q[3])
+        if call_id>0 and math.isfinite(T) and math.isfinite(a) and T>0 and a>0:
+            rows.append((call_id,err,T,a))
+    if len(rows)<100:raise RuntimeError(f'too few accepted-state trace rows: {len(rows)}')
     return rows
 
 
-def reduce_trace(raw,nbin=2048):
-    lo=min(math.log(r[0]) for r in raw);hi=max(math.log(r[0]) for r in raw)
-    bins=[[] for _ in range(nbin)]
-    for T,a,H in raw:
-        u=(math.log(T)-lo)/(hi-lo);i=min(nbin-1,max(0,int(u*nbin)))
-        bins[i].append((T,a,H))
-    out=[]
-    for b in bins:
-        if not b:continue
-        # Solver trial calls sample the same thermodynamic path. Median in log
-        # variables suppresses repeated/rejected micro-steps without changing dynamics.
-        T=math.exp(statistics.median([math.log(x[0]) for x in b]))
-        a=math.exp(statistics.median([math.log(x[1]) for x in b]))
-        H=math.exp(statistics.median([math.log(x[2]) for x in b]))
-        out.append((T,a,H))
-    out.sort(key=lambda r:r[0])
-    if len(out)<REFINED_N:raise RuntimeError(f'reduced trace has only {len(out)} points')
-    # a must decrease with increasing T. Permit only numerical scatter at 2e-4 in log a.
-    bad=[]
-    for x,y in zip(out,out[1:]):
-        if math.log(y[1])-math.log(x[1]) > 2e-4:bad.append((x,y))
-    if bad:raise RuntimeError(f'nonmonotone reduced a(T): {len(bad)} violations')
-    return out
+def select_central_path(raw):
+    groups={}
+    for row in raw:groups.setdefault(row[0],[]).append(row)
+    meta=[]
+    for cid in sorted(groups):
+        g=groups[cid];errs={r[1] for r in g}
+        if len(errs)!=1:raise RuntimeError(f'call {cid} changes paramrelic.err within one nucl_single solve: {errs}')
+        Ts=[r[2] for r in g];aa=[r[3] for r in g]
+        meta.append({'call_id':cid,'err':next(iter(errs)),'rows':len(g),'T_start':Ts[0],'T_end':Ts[-1],'T_min':min(Ts),'T_max':max(Ts),'a_start':aa[0],'a_end':aa[-1]})
+    # A complete direct central solve must include the fixed 0.01 MeV anchor,
+    # start near the standard BBN initial temperature and reach the final tail.
+    candidates=[]
+    for m in meta:
+        if m['err']==0 and m['T_min']<=T_ANCHOR<=m['T_max'] and m['T_max']>1e-3 and m['T_min']<2e-6 and m['rows']>=50:
+            candidates.append(m['call_id'])
+    if not candidates:raise RuntimeError('no complete accepted err=0 central solve found')
+    cid=min(candidates)
+    byid={m['call_id']:m for m in meta}
+    if cid-1 not in byid or byid[cid-1]['err']!=2:
+        raise RuntimeError(f'central call {cid} is not immediately preceded by audited low err=2 solve')
+    if cid+1 not in byid or byid[cid+1]['err']!=1:
+        raise RuntimeError(f'central call {cid} is not immediately followed by audited high err=1 solve')
+    g=groups[cid]
+    # Accepted states are recorded in physical integration order: T falls, a rises.
+    if any(g[i+1][2]>=g[i][2] for i in range(len(g)-1)):
+        raise RuntimeError(f'central accepted path call {cid}: T is not strictly decreasing')
+    if any(g[i+1][3]<=g[i][3] for i in range(len(g)-1)):
+        raise RuntimeError(f'central accepted path call {cid}: a is not strictly increasing')
+    # Interpolation helpers below require increasing T.
+    path=sorted([(r[2],r[3]) for r in g],key=lambda x:x[0])
+    return path,meta,cid
 
 
 def log_interp_xy(rows,x,col=1):
@@ -74,8 +83,8 @@ def bg_rows(path):
     for line in path.read_text(errors='replace').splitlines():
         s=line.strip()
         if not s or s.startswith('#'):continue
-        a=[float(x) for x in s.split()]
-        if len(a)>=4 and a[0]>=0 and a[3]>0:out.append((a[0],a[3]))
+        q=[float(x) for x in s.split()]
+        if len(q)>=4 and q[0]>=0 and q[3]>0:out.append((q[0],q[3]))
     out.sort()
     if len(out)<20:raise RuntimeError(f'too few background rows in {path}')
     return out
@@ -91,31 +100,30 @@ def interp_bg(rows,z):
     return math.exp(math.log(h0)+f*(math.log(h1)-math.log(h0)))
 
 
-def grid_from_trace(red,n):
-    Tmin=max(red[0][0],min(r[0] for r in red));Tmax=red[-1][0]
+def grid_from_path(path,n):
+    Tmin,Tmax=path[0][0],path[-1][0]
     vals=[]
     for i in range(n):
         T=math.exp(math.log(Tmin)+i*(math.log(Tmax)-math.log(Tmin))/(n-1))
-        a=log_interp_xy(red,T,1);Href_trace=log_interp_xy(red,T,2)
-        vals.append((T,a,Href_trace))
+        vals.append((T,log_interp_xy(path,T,1)))
     return vals
 
-raw=trace_rows();red=reduce_trace(raw)
-if not (red[0][0] <= T_ANCHOR <= red[-1][0]):
-    raise RuntimeError(f'fixed anchor {T_ANCHOR} GeV outside trace [{red[0][0]},{red[-1][0]}]')
-a_anchor=log_interp_xy(red,T_ANCHOR,1)
+raw=trace_rows();path,call_meta,central_call_id=select_central_path(raw)
+if not (path[0][0] <= T_ANCHOR <= path[-1][0]):
+    raise RuntimeError(f'fixed anchor {T_ANCHOR} GeV outside central trace [{path[0][0]},{path[-1][0]}]')
+a_anchor=log_interp_xy(path,T_ANCHOR,1)
 a_phys_anchor=T0/T_ANCHOR
 rtkbg=bg_rows(RTK_BG);lcdbg=bg_rows(LCDM_BG)
 
 
 def make_table(n):
     rows=[]
-    for T,a_int,Htrace in grid_from_trace(red,n):
+    for T,a_int in grid_from_path(path,n):
         a_phys=a_phys_anchor*(a_int/a_anchor);z=1./a_phys-1.
         Hr=interp_bg(rtkbg,z);Hl=interp_bg(lcdbg,z);R=Hr/Hl
         if not all(math.isfinite(x) and x>0 for x in (a_phys,Hr,Hl,R)):raise RuntimeError('nonpositive/nonfinite mapping value')
         rows.append({'T_GeV':T,'T_MeV':T*1e3,'a_internal':a_int,'a_physical':a_phys,'z':z,
-                     'H_trace_standard':Htrace,'H_RTK_over_c_Mpc_inv':Hr,'H_sameparams_LCDM_over_c_Mpc_inv':Hl,'R_H':R})
+                     'H_RTK_over_c_Mpc_inv':Hr,'H_sameparams_LCDM_over_c_Mpc_inv':Hl,'R_H':R})
     # increasing T => decreasing a_phys and increasing z
     if any(rows[i+1]['a_physical']>=rows[i]['a_physical'] for i in range(len(rows)-1)):
         raise RuntimeError('physical scale factor is not strictly decreasing with increasing T')
@@ -133,10 +141,10 @@ maxerr=max(errs)
 if maxerr>2e-12:raise RuntimeError(f'nominal/refined R interpolation error {maxerr} > 2e-12')
 
 rep={}
-for Tm in (10.0,3.0,1.0,0.3,0.1,0.03,0.01):
+for Tm in (10.0,3.0,2.0,1.0,0.3,0.1,0.03,0.01,0.003,0.001):
     T=Tm*1e-3
     if ref[0]['T_GeV']<=T<=ref[-1]['T_GeV']:
-        rep[str(Tm)]= {'R_H':interp_R(ref,T),'R_minus_1':interp_R(ref,T)-1.0}
+        rr=interp_R(ref,T);rep[str(Tm)]={'R_H':rr,'R_minus_1':rr-1.0}
 
 for name,table in [('nominal_256',nom),('refined_512',ref)]:
     with (OUT/f'{name}.csv').open('w',newline='') as f:
@@ -144,9 +152,10 @@ for name,table in [('nominal_256',nom),('refined_512',ref)]:
 
 summary={
  'classification':'RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS',
- 'mapping_protocol':'RTK_BBN_HT_MAPPING_PROTOCOL_v1',
- 'raw_trace_rows':len(raw),'reduced_trace_rows':len(red),
- 'trace_T_GeV_range':[red[0][0],red[-1][0]],
+ 'mapping_protocol':'RTK_BBN_HT_MAPPING_PROTOCOL_v1_1_TRACE_FIX',
+ 'raw_accepted_trace_rows':len(raw),'central_call_id':central_call_id,'central_accepted_rows':len(path),
+ 'call_metadata':call_meta,
+ 'trace_T_GeV_range':[path[0][0],path[-1][0]],
  'anchor':{'T_GeV':T_ANCHOR,'T_MeV':0.01,'a_internal':a_anchor,'T0_GeV':T0,'a_physical':a_phys_anchor},
  'mapped_z_range':[ref[0]['z'],ref[-1]['z']],
  'class_rtk_z_coverage':[rtkbg[0][0],rtkbg[-1][0]],
