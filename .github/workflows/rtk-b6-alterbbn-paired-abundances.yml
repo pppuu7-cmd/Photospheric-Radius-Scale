@@ -1,0 +1,176 @@
+name: RTK B6 paired AlterBBN abundances
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b6-alterbbn-paired-abundances-trigger.txt'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: rtk-b6-alterbbn-paired-abundances
+  cancel-in-progress: false
+
+jobs:
+  paired-abundances:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+      MAP_RUN_ID: '32243547025'
+      MAP_ARTIFACT: 'rtk-b6-entropy-aware-ht-mapping'
+      NOM_SHA: 'cdb0e72b3bb59c53d01719ad3eab827e14f2424de73f4dd9029f559877192c15'
+      REF_SHA: 'a9116a22844927a4d085343de9c22215e407e62813b6a7f4b0eeb6f7cec187b9'
+      SUM_SHA: '5c5bfeea86c3c352418c51a6c217dee5b45df7a4d556815dc6a65e0f28d98416'
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+      ETA: '6.122532926262666e-10'
+      CC: 'gcc-13'
+      CFLAGS: '-O3 -pipe -fomit-frame-pointer -mtune=generic -ffast-math -fno-finite-math-only'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Require preregistered protocol and code
+        run: |
+          set -euo pipefail
+          grep -q 'FROZEN BEFORE THE FIRST RTK H(T)-INJECTED ABUNDANCE NETWORK OUTPUT' research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
+          python3 -m py_compile rtk/patch_alterbbn_rtk_h_ratio.py
+          git rev-parse HEAD | tee b6_source_head.txt
+          command -v gcc-13
+          gcc-13 --version | tee b6_gcc_version.txt
+
+      - name: Download and verify exact B6 H(T) mapping artifact
+        run: |
+          set -euo pipefail
+          mkdir -p b6map
+          gh run download "$MAP_RUN_ID" -n "$MAP_ARTIFACT" -D b6map
+          NOM=b6map/output/b6_bbn_ht_mapping/nominal_256.csv
+          REF=b6map/output/b6_bbn_ht_mapping/refined_512.csv
+          SUM=b6map/output/b6_bbn_ht_mapping/summary.json
+          test -f "$NOM" -a -f "$REF" -a -f "$SUM"
+          echo "$NOM_SHA  $NOM" | sha256sum -c -
+          echo "$REF_SHA  $REF" | sha256sum -c -
+          echo "$SUM_SHA  $SUM" | sha256sum -c -
+          python3 - <<'PY'
+          import json
+          s=json.load(open('b6map/output/b6_bbn_ht_mapping/summary.json'))
+          assert s['classification']=='RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS'
+          assert s['nominal_points']==256 and s['refined_points']==512
+          assert s['max_abs_R_minus_1']<=2.3e-9
+          assert s['nominal_vs_refined_max_abs_R_error']<=2e-12
+          print('B6_MAPPING_INPUT_LOCK_PASS',s['max_abs_R_minus_1'],s['nominal_vs_refined_max_abs_R_error'])
+          PY
+
+      - name: Download and verify pinned AlterBBN v2.2
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 -o alterbbn_v2.2.tar.xz "$ALTERBBN_URL"
+          test "$(stat -c %s alterbbn_v2.2.tar.xz)" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  alterbbn_v2.2.tar.xz" | sha256sum -c -
+          tar -xJf alterbbn_v2.2.tar.xz
+          grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
+          mv alterbbn_v2.2 source_clean
+          cp -a source_clean tree_reference
+          cp -a source_clean tree_rtk_nominal
+          cp -a source_clean tree_rtk_refined
+
+      - name: Apply identical paired patch with frozen eta
+        run: |
+          set -euo pipefail
+          python3 rtk/patch_alterbbn_rtk_h_ratio.py tree_reference b6map/output/b6_bbn_ht_mapping/nominal_256.csv --mode reference --eta "$ETA" --manifest manifest_reference.json
+          python3 rtk/patch_alterbbn_rtk_h_ratio.py tree_rtk_nominal b6map/output/b6_bbn_ht_mapping/nominal_256.csv --mode rtk --eta "$ETA" --manifest manifest_rtk_nominal.json
+          python3 rtk/patch_alterbbn_rtk_h_ratio.py tree_rtk_refined b6map/output/b6_bbn_ht_mapping/refined_512.csv --mode rtk --eta "$ETA" --manifest manifest_rtk_refined.json
+          grep -q RTK_BBN_H_RATIO_V1 tree_reference/src/bbn.c
+          grep -q RTK_BBN_H_RATIO_V1 tree_rtk_nominal/src/bbn.c
+          grep -q RTK_BBN_H_RATIO_V1 tree_rtk_refined/src/bbn.c
+
+      - name: Build three byte-separated networks
+        run: |
+          set -euo pipefail
+          for d in tree_reference tree_rtk_nominal tree_rtk_refined; do
+            (cd "$d" && ulimit -s unlimited && make clean || true; make CC="$CC" CFLAGS="$CFLAGS" CFLAGS_MP='-fopenmp'; make stand_cosmo CC="$CC" CFLAGS="$CFLAGS" CFLAGS_MP='-fopenmp'; test -x stand_cosmo.x)
+            sha256sum "$d/stand_cosmo.x"
+          done | tee b6_binary_sha256.txt
+
+      - name: Run failsafe 1 and 7 for all paired trees
+        run: |
+          set -euo pipefail
+          for tag in reference rtk_nominal rtk_refined; do
+            d="tree_${tag}"
+            for fs in 1 7; do
+              set +e
+              (cd "$d" && ulimit -s unlimited && ./stand_cosmo.x "$fs") > "${tag}_f${fs}.log" 2>&1
+              rc=$?
+              set -e
+              echo "$rc" > "${tag}_f${fs}.returncode"
+              test "$rc" -eq 1
+              grep -q 'cent:' "${tag}_f${fs}.log"
+              ! grep -q 'RTK_BBN_HT_OOB' "${tag}_f${fs}.log"
+            done
+          done
+
+      - name: Parse full precision, apply frozen resolution and observation rules
+        run: |
+          set -euo pipefail
+          mkdir -p output/b6_alterbbn_abundances
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math,re,os
+          keys=('Yp','D_over_H','He3_over_H','Li7_over_H','Li6_over_H','Be7_over_H')
+          def parse(p):
+            t=Path(p).read_text(errors='replace')
+            m=re.search(r'^\s*cent:\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)',t,re.M)
+            if not m: raise RuntimeError(f'central abundance row missing: {p}')
+            v={k:float(x) for k,x in zip(keys,m.groups())}
+            if not all(math.isfinite(x) and x>0 for x in v.values()): raise RuntimeError((p,v))
+            return v
+          runs={tag:{fs:parse(f'{tag}_f{fs}.log') for fs in (1,7)} for tag in ('reference','rtk_nominal','rtk_refined')}
+          shifts={};resolution={}
+          for k in keys:
+            dnom=runs['rtk_nominal'][1][k]-runs['reference'][1][k]
+            dref1=runs['rtk_refined'][1][k]-runs['reference'][1][k]
+            dref7=runs['rtk_refined'][7][k]-runs['reference'][7][k]
+            table_noise=abs(dref1-dnom);solver_noise=abs(dref1-dref7);noise=max(table_noise,solver_noise)
+            resolved=(dref1!=0.0 and abs(dref1)>5.0*noise)
+            shifts[k]={'nominal_f1':dnom,'refined_f1':dref1,'refined_f7':dref7}
+            resolution[k]={'table_noise':table_noise,'solver_mode_noise':solver_noise,'noise':noise,'resolved':resolved,'classification':'ABUNDANCE_SHIFT_RESOLVED' if resolved else 'ABUNDANCE_SHIFT_BELOW_NUMERICAL_RESOLUTION','conservative_abs_bound':abs(dref1)+5.0*noise}
+          obs={'Yp':{'mean':0.2458,'sigma':0.0013,'source':'Aver et al. 2026 arXiv:2601.22238'},'D_over_H':{'mean':2.533e-5,'sigma':0.024e-5,'source':'Kislitsyn et al. 2024 arXiv:2401.12797'}}
+          z={k:{'reference_f1':(runs['reference'][1][k]-o['mean'])/o['sigma'],'rtk_refined_f1':(runs['rtk_refined'][1][k]-o['mean'])/o['sigma']} for k,o in obs.items()}
+          def j(p): return json.load(open(p))
+          out={'classification':'RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS','eta':float(os.environ['ETA']),'mapping_run_id':int(os.environ['MAP_RUN_ID']),'mapping_artifact':os.environ['MAP_ARTIFACT'],'mapping_hashes':{'nominal_256':os.environ['NOM_SHA'],'refined_512':os.environ['REF_SHA'],'summary':os.environ['SUM_SHA']},'alterbbn_archive_sha256':os.environ['ALTERBBN_SHA256'],'runs':runs,'paired_shifts':shifts,'numerical_resolution':resolution,'observations_frozen_before_run':obs,'observational_z':z,'patch_manifests':{'reference':j('manifest_reference.json'),'rtk_nominal':j('manifest_rtk_nominal.json'),'rtk_refined':j('manifest_rtk_refined.json')},'warning':'Paired B6 robustness result only; not a global model-selection result and not a lithium-problem claim.'}
+          Path('output/b6_alterbbn_abundances/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS',json.dumps({'runs':runs,'resolution':resolution,'observational_z':z},sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b6-paired-alterbbn-abundances
+          path: |
+            output/b6_alterbbn_abundances/summary.json
+            manifest_reference.json
+            manifest_rtk_nominal.json
+            manifest_rtk_refined.json
+            b6_source_head.txt
+            b6_gcc_version.txt
+            b6_binary_sha256.txt
+            reference_f1.log
+            reference_f7.log
+            rtk_nominal_f1.log
+            rtk_nominal_f7.log
+            rtk_refined_f1.log
+            rtk_refined_f7.log
+            reference_f1.returncode
+            reference_f7.returncode
+            rtk_nominal_f1.returncode
+            rtk_nominal_f7.returncode
+            rtk_refined_f1.returncode
+            rtk_refined_f7.returncode
+          if-no-files-found: warn
