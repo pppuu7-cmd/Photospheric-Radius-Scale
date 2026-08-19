@@ -1,0 +1,4 @@
+Launch exact C8 map of BPS low-energy momentum/frequency strong-coupling cutoffs from M_alpha,M_lambda to alpha and ell=lambda-1.
+Primary source: arXiv:1007.3503 Eqs. (2.10), (5.14), (5.15).
+Research worker commit: d7aff299890d31d4535e15885a26998dedd3046a
+Workflow commit: d317152cba1013e1a7161d024ac534d839f03a84
