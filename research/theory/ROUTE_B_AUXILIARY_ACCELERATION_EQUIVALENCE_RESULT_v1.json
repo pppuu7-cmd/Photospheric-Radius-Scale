@@ -1,0 +1,37 @@
+{
+  "classification": "RTK_ROUTE_B_AUXILIARY_ACCELERATION_EQUIVALENCE_PASS",
+  "status": "CLOSED_NARROW_LEMMA",
+  "run": {
+    "run_id": 32300929835,
+    "artifact_id": 9382978932,
+    "artifact_name": "rtk-route-b-auxiliary-acceleration-equivalence",
+    "artifact_digest": "sha256:6a00989cda157ef84fe4cc6146c8536e3d3920ce59dc36b24b5ebd6c9a090fae",
+    "head_sha": "3528a38f7b4f185c463d4aa57cfecaa6d1c692da"
+  },
+  "worker": "rtk/route_b_auxiliary_acceleration_equivalence.py",
+  "assumptions": [
+    "fixed-metric preferred-foliation quadratic diagnostic",
+    "spatial auxiliary vector B_i is derivative-free and unconstrained beyond its algebraic equation",
+    "M^2 > 0 and the auxiliary Hessian is nonsingular"
+  ],
+  "exact_reduction": {
+    "auxiliary_lagrangian": "-M^2 B_i B^i/2 + B_i a^i",
+    "auxiliary_equation": "B_i=a_i/M^2",
+    "eliminated_operator": "+a_i a^i/(2 M^2)",
+    "clock_fingerprint": "a_i~partial_i pi_dot -> q^2 omega^2 |pi|^2",
+    "reduced_dispersion": "omega^2=c^2 q^2/(1+q^2/M^2)"
+  },
+  "theorem": "A derivative-free unconstrained auxiliary spatial vector reproduces the desired mixed kinetic operator but is exactly an algebraic rewrite of acceleration-squared; by itself it cannot evade a degeneracy or constraint obstruction of the corresponding eliminated action.",
+  "remaining_completion_routes": [
+    "auxiliary fields with additional primary constraints",
+    "nontrivial metric/extrinsic-curvature companion couplings",
+    "X-dependent coefficients that alter the effective degeneracy conditions",
+    "spatially covariant constructions whose constraint algebra is not equivalent to the direct constant-coefficient acceleration-squared action"
+  ],
+  "non_claims": [
+    "not a full ADM/Hamiltonian constraint theorem",
+    "not a DHOST degeneracy classification",
+    "not a hyperbolicity theorem",
+    "not a strong-coupling or loop/radiative-stability result"
+  ]
+}
