@@ -4,12 +4,12 @@
   "protocol": "research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md",
   "run": {
     "run_id": 32285180694,
-    "created_at_utc": "2026-08-19T18:03:19Z",
-    "completed_at_utc": "2026-08-19T18:05:11Z",
+    "created_at_utc": "2026-08-19T18:03:30Z",
+    "completed_at_utc": "2026-08-19T18:07:13Z",
     "head_sha": "8cba594e5e78a56e8d7af88be856acbbfa71b80b",
     "artifact_id": 9377441941,
     "artifact_name": "rtk-b9-fixed-center-lensing-adapter",
-    "artifact_digest": "sha256:655cea098c88ec8e8b67f47bded22ba89aacec0992af8fa6fc4af9bf0958949c"
+    "artifact_digest": "sha256:4917318ec0f20a4060e4d158dae4a3b861dcdf616f6f378d62ddf0e23de89917"
   },
   "objective": {
     "base": "matched-ultra-linstep2+dense-BOSS",
@@ -24,7 +24,7 @@
     "default_par_len": 10005,
     "cl_payload_len": 10004,
     "extra_parameter_names": ["A_planck"],
-    "default_selfcheck_loglike": -7371.546446649224,
+    "default_selfcheck_loglike": -4.421024272523798,
     "class_to_clik_semantics": "CLASS class-format lensed phiphi is D_l=l(l+1)C_l/(2pi); adapter converts to C_l. CMB spectra are converted to microK^2; phiphi remains dimensionless."
   },
   "models": {
@@ -32,20 +32,21 @@
       "baseline_expected_S_eff": 1049.966118347761,
       "baseline_replayed_S_eff": 1049.966118347761,
       "baseline_replay_abs_error": 0.0,
-      "lensing_loglike": -4.5274627908148355,
-      "lensing_minus2loglike": 9.054925581629671,
+      "lensing_loglike": -4.527462790814954,
+      "lensing_minus2loglike": 9.054925581629908,
       "fixed_center_S_B9": 1059.0210439293908
     },
     "RTK": {
       "baseline_expected_S_eff": 1050.249912429787,
       "baseline_replayed_S_eff": 1050.249912429787,
       "baseline_replay_abs_error": 0.0,
-      "lensing_loglike": -4.519633666310778,
-      "lensing_minus2loglike": 9.039267332621555,
+      "lensing_loglike": -4.519633666310728,
+      "lensing_minus2loglike": 9.039267332621456,
       "fixed_center_S_B9": 1059.2891797624086
     }
   },
   "fixed_center_raw_delta_S_B9_RTK_minus_LCDM": 0.26813583301782273,
-  "next_gate": "Independent paired B9 reoptimization: RTK 7D including lambda_D and LCDM 6D, both starting from their frozen A5 accepted points; then recenter/stationarity and independent replay.",
+  "provenance_correction": "Corrected against primary GitHub Actions artifact 9377441941: previous hand-persisted metadata had an incorrect artifact digest, run timestamps, and default-vector selfcheck value. Cosmological LCDM/RTK fixed-center scores and the raw fixed-center delta were unchanged to the recorded precision relevant to B9 progression.",
+  "next_gate": "Independent paired B9 reoptimization: RTK 7D including lambda_D and LCDM 6D, both starting from their frozen A5 accepted points; then recenter/stationarity and independent replay subject to B9_BOUNDARY_INTERPRETATION_GUARD_v1.md.",
   "warning": "Fixed-center diagnostic only. These are not B9 minima and cannot be used as a B9 preference, significance, AIC/BIC, Bayes-factor, or global-optimum claim."
 }
