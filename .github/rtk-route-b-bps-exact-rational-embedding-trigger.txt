@@ -1,4 +1,4 @@
-Launch exact Route-B constructive embedding of the RTK rational mixed-kinetic dispersion into the BPS healthy nonprojectable Horava quadratic scalar sector.
-Primary source equations: arXiv:0909.3525 Eqs. (12)-(18).
-Research worker commit: a12a40b1f09aba14bff2c704d63725f8156fa67c
+Rerun exact Route-B BPS rational embedding using the mature healthy-extension equations arXiv:1007.3503 Eqs. (5.1)-(5.8), where the polynomial argument is controlled by the independent higher-spatial-derivative scale M_* rather than Planck mass.
+Research worker commit: 75df5eea209101ad7fd28528c02158283924df54
 Workflow commit: 9763581b357ec14d49b8de51137c2a4f6a481d85
+Original successful algebra run: 32304612368
