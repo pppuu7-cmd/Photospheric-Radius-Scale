@@ -1,0 +1,46 @@
+{
+  "classification": "B6_ABUNDANCE_EXECUTION_TIMEOUT_WITH_FIVE_OF_SIX_NETWORKS_COMPLETE",
+  "scientific_failure": false,
+  "objective_scope": "B6 paired AlterBBN abundance robustness only",
+  "run": {
+    "run_id": 32285359564,
+    "job_id": 96173477412,
+    "artifact_id": 9378966320,
+    "artifact_name": "rtk-b6-paired-alterbbn-abundances",
+    "artifact_digest": "sha256:d22db13ce9ef3372508db49f0e58420bfb63c519f52a6d1faf06cf1116710359"
+  },
+  "workflow_timeout_minutes": 45,
+  "scientific_loop_started_utc": "2026-08-19T18:05:52.709Z",
+  "cancellation_utc": "2026-08-19T18:50:53.420Z",
+  "input_gates": {
+    "extended_mapping_lock": "PASS",
+    "mapping_hash_verification": "PASS",
+    "pinned_alterbbn_archive": "PASS",
+    "paired_patch_contract": "PASS",
+    "three_network_builds": "PASS"
+  },
+  "completed_networks": [
+    {"tree":"reference","failsafe":1,"returncode":1,"cent_row":true,"ht_oob":false},
+    {"tree":"reference","failsafe":7,"returncode":1,"cent_row":true,"ht_oob":false},
+    {"tree":"rtk_nominal","failsafe":1,"returncode":1,"cent_row":true,"ht_oob":false},
+    {"tree":"rtk_nominal","failsafe":7,"returncode":1,"cent_row":true,"ht_oob":false},
+    {"tree":"rtk_refined","failsafe":1,"returncode":1,"cent_row":true,"ht_oob":false}
+  ],
+  "incomplete_network": {
+    "tree":"rtk_refined",
+    "failsafe":7,
+    "log_bytes":0,
+    "returncode_file":false,
+    "cause":"job timeout killed stand_cosmo.x before completion"
+  },
+  "refined_binary_sha256_from_cancelled_run": "4470fa1cdd36dd03b1f319a9b7482eebfa9106277b6848388c2fc33fbbe24b45",
+  "continuation_rule": "Run only the missing rtk_refined/failsafe=7 network from the identical frozen mapping/source/patch/eta/compiler semantics with a longer execution timeout; require rebuilt binary SHA256 to match the prior refined binary; then aggregate with the five preserved completed logs from artifact 9378966320 and apply the already-frozen parser/resolution/observation rules.",
+  "forbidden_changes": [
+    "no change to H(T) tables or hashes",
+    "no change to interpolation or endpoint tolerance",
+    "no change to eta",
+    "no change to AlterBBN source or compiler flags",
+    "no change to observational anchors",
+    "no reinterpretation of cancellation as physical failure"
+  ]
+}
