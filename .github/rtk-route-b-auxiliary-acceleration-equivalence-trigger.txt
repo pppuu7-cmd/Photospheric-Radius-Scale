@@ -1,3 +1,4 @@
-Launch exact Route-B auxiliary acceleration equivalence theorem.
-Research worker commit: d84138c3154288e0d5190dc63284cbe3bbaaf503
+Rerun exact Route-B auxiliary acceleration equivalence theorem after replacing brittle SymPy structural equality with exact algebraic simplify equality.
+Research worker commit: f31011d7f52fe5f95b500d029632b4b5e0bb5c2d
 Workflow commit: e29ab94acbb66e602075ed5de7f040efedbd0ec8
+Original failed run: 32299975202
