@@ -1,0 +1,46 @@
+name: RTK Route-B retarded auxiliary solution-space lemma
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-retarded-aux-solution-space-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify implementation anchor exists
+        run: |
+          set -euo pipefail
+          test -f rtk/audit_rt_retarded_auxiliary_ic.py
+          grep -q RTK_RETARDED_AUX_IC_AUDIT_PASS rtk/audit_rt_retarded_auxiliary_ic.py
+      - name: Run exact solution-space uniqueness lemma
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_retarded_aux_solution_space.py
+          python3 rtk/route_b_retarded_aux_solution_space.py | tee route_b_retarded_aux_solution_space.log
+          grep -q RTK_RETARDED_AUX_SOLUTION_SPACE_UNIQUENESS_PASS route_b_retarded_aux_solution_space.log
+          python3 - <<'PY'
+          import platform,sympy
+          assert platform.python_version()=='3.12.3'
+          assert sympy.__version__=='1.14.0'
+          print('RTK_RETARDED_AUX_SOLUTION_SPACE_RUNTIME_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-retarded-aux-solution-space
+          path: route_b_retarded_aux_solution_space.log
+          if-no-files-found: error
