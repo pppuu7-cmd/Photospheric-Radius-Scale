@@ -1,0 +1,58 @@
+{
+  "classification": "RTK_B9_PLANCK_CALIBRATION_CONTRACT_AUDIT_PASS",
+  "status": "CLOSED_INTERFACE_CONTRACT_AUDIT",
+  "run": {
+    "run_id": 32302366002,
+    "artifact_id": 9383486257,
+    "artifact_name": "rtk-b9-planck-calibration-contract",
+    "artifact_digest": "sha256:784639e2bce4fc5f4cb3180f2a62211a116d9fd1a15ae50041dc52ce06ccc4dc",
+    "head_sha": "feb2638ab3faaac939b6b7fb8709a59c628beb15"
+  },
+  "clipy_like_version": "0.15",
+  "products": {
+    "lowT": {
+      "path": "baseline/plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik",
+      "lmax": [29,-1,-1,-1,-1,-1],
+      "cl_payload_len": 30,
+      "default_par_len": 31,
+      "extra_parameter_names": ["A_planck"],
+      "default_nuisance_tail": [1.000442],
+      "default_selfcheck_loglike": -11.62574085746067
+    },
+    "lowE": {
+      "path": "baseline/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik",
+      "lmax": [-1,29,-1,-1,-1,-1],
+      "cl_payload_len": 30,
+      "default_par_len": 31,
+      "extra_parameter_names": ["A_planck"],
+      "default_nuisance_tail": [1.0],
+      "default_selfcheck_loglike": -197.98979215822206
+    },
+    "high_plik_lite": {
+      "path": "baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik",
+      "lmax": [2508,2508,-1,2508,-1,-1],
+      "cl_payload_len": 7527,
+      "default_par_len": 7528,
+      "extra_parameter_names": ["A_planck"],
+      "default_nuisance_tail": [1.000442],
+      "default_selfcheck_loglike": -292.2863112961377
+    },
+    "lensing_nonmarg": {
+      "path": "baseline/plc_3.0/lensing/smicadx12_Dec5_ftl_mv2_ndclpp_p_teb_consext8.clik_lensing",
+      "lmax": [2500,2500,2500,-1,2500,-1,-1],
+      "cl_payload_len": 10004,
+      "default_par_len": 10005,
+      "extra_parameter_names": ["A_planck"],
+      "default_nuisance_tail": [1.0],
+      "default_selfcheck_loglike": -4.421024272523798
+    }
+  },
+  "project_semantics": "A5 and B9-v1 copy each likelihood's distributed default_par vector and replace only its C_l payload. Thus all four Planck likelihoods are conditional on their own distributed A_planck defaults rather than on one shared fitted calibration parameter.",
+  "official_interface_anchor": {
+    "cobaya_commit": "b76b6fed2a6c8c5594c6f92d5058bef10079746a",
+    "lensing_config": "cobaya/likelihoods/planck_2018_lensing/clik.yaml imports ../base_classes/planck_calib",
+    "calibration_prior": "A_planck ~ Normal(mean=1, sigma=0.0025) in planck_calib.yaml"
+  },
+  "decision": "A separately scoped nuisance-aware robustness variant is scientifically earned. It must use a single shared A_planck across every one of these four products and apply the external Gaussian calibration prior exactly once. It must not mutate or retroactively reinterpret the frozen conditional-default A5 or B9-v1 objectives.",
+  "warning": "Interface/provenance audit only; it does not predict the numerical shift produced by freeing A_planck and is not a posterior or evidence calculation."
+}
