@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-19T12:39:11.421876+00:00",
+  "generated_at_utc": "2026-08-19T12:39:27.821202+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
@@ -235,19 +235,6 @@
       "run_number": 4,
       "status": "completed",
       "updated_at": "2026-08-19T10:37:58Z"
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-19T10:10:49Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "f2a37d1ff442ca9fb020d3ab9bc0f36e2b8ef3e0",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32241402976",
-      "id": 32241402976,
-      "name": "RTK B6 entropy-aware H(T) mapping",
-      "run_number": 3,
-      "status": "completed",
-      "updated_at": "2026-08-19T10:11:12Z"
     }
   ]
 }
