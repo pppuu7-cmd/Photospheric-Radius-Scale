@@ -1,2 +1,2 @@
-trigger: 2026-08-19T13:39:00+03:00
-reason: refresh runtime index after B6 failsafe1 trace rerun, B9 locked-SciPy rerun, active B4 neutrino Hessians, and active B10 lambda-tail reconnaissance
+trigger: 2026-08-19T13:33:00+03:00
+reason: capture B6 structural failsafe1 trace rerun, B9 JSON-normalized lensing interface rerun, completed B10 tail reconnaissance, and active B4 paired neutrino Hessians
