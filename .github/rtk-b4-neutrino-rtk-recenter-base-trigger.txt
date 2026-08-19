@@ -1,0 +1,5 @@
+trigger: 2026-08-19T15:34:00+03:00
+reason: parent B4 RTK base improvement 0.03422555702718455 exceeds frozen 0.005 recenter tolerance
+parent_run_id: 32236524767
+parent_artifact_id: 9364818690
+target: research/robustness/b4_neutrino_rtk_recenter_target_v1.json
