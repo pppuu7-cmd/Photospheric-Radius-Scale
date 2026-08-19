@@ -1,0 +1,175 @@
+name: RTK B6 extended accepted-trace H(T) mapping
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b6-ht-mapping-extended-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-b6-ht-mapping-extended
+  cancel-in-progress: false
+
+jobs:
+  mapping:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      ALTERBBN_URL: 'https://data.mendeley.com/public-files/datasets/k7j3b9zyvf/files/62eaf2d8-31d4-448c-8a8c-6c291a67a3f5/file_downloaded'
+      ALTERBBN_SHA256: '2bcb7d2e3f4a74f59cd589e60f0923892bb90296a793f80016897405920c5fae'
+      ALTERBBN_BYTES: '2586656'
+      ALTERBBN_FILENAME: 'alterbbn_v2.2.tar.xz'
+      ALTERBBN_CC: 'gcc-13'
+      ALTERBBN_CFLAGS: '-O3 -pipe -fomit-frame-pointer -mtune=generic -ffast-math -fno-finite-math-only'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PYTHON_VERSION: '3.12.3'
+      OBSERVED_OOB_T_GEV: '8.572921799800281e-7'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Require frozen coverage-extension protocol
+        run: |
+          set -euo pipefail
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          grep -q 'FROZEN BEFORE THE FIRST EXTENDED T-a TRACE AND BEFORE ANY VALID RTK ABUNDANCE OUTPUT' research/robustness/B6_HT_COVERAGE_EXTENSION_PROTOCOL_v1.md
+          grep -q 'double Tf=0.009\*K_to_eV;' research/robustness/B6_HT_COVERAGE_EXTENSION_PROTOCOL_v1.md
+          python3 -m py_compile rtk/patch_alterbbn_trace_final_temperature.py rtk/patch_alterbbn_ta_trace.py rtk/build_bbn_rtk_ht_mapping.py rtk/final_center_early_universe_diagnostic.py
+          command -v gcc-13
+          gcc-13 --version | tee b6_extended_gcc13_version.txt
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee b6_extended_provenance.txt
+
+      - name: Download and verify pinned AlterBBN
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 2 -o "$ALTERBBN_FILENAME" "$ALTERBBN_URL"
+          test "$(stat -c %s "$ALTERBBN_FILENAME")" = "$ALTERBBN_BYTES"
+          echo "$ALTERBBN_SHA256  $ALTERBBN_FILENAME" | sha256sum -c -
+          tar -xJf "$ALTERBBN_FILENAME"
+          grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
+
+      - name: Apply trace-only Tf extension then accepted-state instrumentation
+        run: |
+          set -euo pipefail
+          python3 rtk/patch_alterbbn_trace_final_temperature.py alterbbn_v2.2 | tee b6_trace_tf_extension.log
+          grep -q ALTERBBN_TRACE_ONLY_TF_EXTENSION_PASS b6_trace_tf_extension.log
+          python3 rtk/patch_alterbbn_ta_trace.py alterbbn_v2.2 | tee b6_extended_ta_trace_patch.log
+          grep -q ALTERBBN_FAILSAFE1_ACCEPTED_TA_TRACE_PATCH_APPLIED b6_extended_ta_trace_patch.log
+          grep -q 'double Tf=0.009\*K_to_eV;' alterbbn_v2.2/src/bbn.c
+          grep -q RTK_BBN_TA_TRACE_V1_2 alterbbn_v2.2/src/bbn.c
+          grep -q RTK_BBN_FAILSAFE1_CORRECTED_STATE alterbbn_v2.2/src/bbn.c
+
+      - name: Build trace-only AlterBBN copy
+        working-directory: alterbbn_v2.2
+        run: |
+          set -euo pipefail
+          ulimit -s unlimited
+          make clean || true
+          make CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
+          make stand_cosmo CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
+          sha256sum stand_cosmo.x | tee ../b6_extended_stand_cosmo_sha256.txt
+
+      - name: Generate extended accepted-state T-a trace only
+        working-directory: alterbbn_v2.2
+        run: |
+          set -euo pipefail
+          ulimit -s unlimited
+          set +e
+          ./stand_cosmo.x 1 > ../b6_extended_stand_cosmo.log 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > ../b6_extended_stand_cosmo.returncode
+          test "$rc" -eq 1
+          test -s rtk_bbn_Ta_trace.tsv
+          grep -q '^# call_id' rtk_bbn_Ta_trace.tsv
+          test "$(grep -vc '^#' rtk_bbn_Ta_trace.tsv)" -ge 100
+          # Intentionally do not parse or judge printed abundance yields here.
+
+      - name: Prepare pinned RTK CLASS tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/final_center_early_universe_diagnostic.py class_public/
+
+      - name: Build CLASS and generate RTK/same-params backgrounds
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          make -j2 class
+          python3 final_center_early_universe_diagnostic.py | tee ../b6_extended_class_background.log
+          grep -q RTK_FINAL_EARLY_UNIVERSE_DIAGNOSTIC ../b6_extended_class_background.log
+          test -s output/final_early_universe/rtk_final_background.dat
+          test -s output/final_early_universe/lcdm_same_rtk_params_background.dat
+
+      - name: Build and validate extended nested H(T) tables
+        run: |
+          set -euo pipefail
+          python3 rtk/build_bbn_rtk_ht_mapping.py \
+            alterbbn_v2.2/rtk_bbn_Ta_trace.tsv \
+            class_public/output/final_early_universe/rtk_final_background.dat \
+            class_public/output/final_early_universe/lcdm_same_rtk_params_background.dat | tee b6_extended_ht_mapping.log
+          grep -q RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS b6_extended_ht_mapping.log
+          python3 - <<'PY'
+          import csv,hashlib,json,os
+          failT=float(os.environ['OBSERVED_OOB_T_GEV'])
+          s=json.load(open('output/b6_bbn_ht_mapping/summary.json'))
+          assert s['classification']=='RTK_BBN_ENTROPY_AWARE_HT_MAPPING_PASS'
+          assert s['nominal_points']==256 and s['refined_points']==512
+          assert s['nominal_vs_refined_max_abs_R_error']<=2e-12
+          mins=[]
+          shas={}
+          for name in ('nominal_256.csv','refined_512.csv'):
+              p='output/b6_bbn_ht_mapping/'+name
+              with open(p,newline='') as f: rows=list(csv.DictReader(f))
+              Tmin=min(float(r['T_GeV']) for r in rows)
+              mins.append(Tmin)
+              shas[name]=hashlib.sha256(open(p,'rb').read()).hexdigest()
+          required=failT*0.99
+          assert max(mins)<required,(mins,required)
+          summary_path='output/b6_bbn_ht_mapping/summary.json'
+          shas['summary.json']=hashlib.sha256(open(summary_path,'rb').read()).hexdigest()
+          out={'classification':'B6_EXTENDED_HT_MAPPING_COVERAGE_PASS','observed_oob_T_GeV':failT,'required_Tmin_GeV_lt':required,'Tmin_GeV':mins,'sha256':shas,'source_mapping_classification':s['classification'],'max_abs_R_minus_1':s['max_abs_R_minus_1'],'nominal_vs_refined_max_abs_R_error':s['nominal_vs_refined_max_abs_R_error']}
+          open('output/b6_bbn_ht_mapping/coverage_extension_result.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('B6_EXTENDED_HT_MAPPING_COVERAGE_PASS',json.dumps(out,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b6-extended-ht-mapping
+          path: |
+            b6_extended_gcc13_version.txt
+            b6_extended_provenance.txt
+            b6_trace_tf_extension.log
+            alterbbn_trace_tf_extension_manifest.json
+            b6_extended_ta_trace_patch.log
+            alterbbn_ta_trace_patch_manifest.json
+            b6_extended_stand_cosmo_sha256.txt
+            b6_extended_stand_cosmo.log
+            b6_extended_stand_cosmo.returncode
+            alterbbn_v2.2/rtk_bbn_Ta_trace.tsv
+            b6_extended_class_background.log
+            output/b6_bbn_ht_mapping/summary.json
+            output/b6_bbn_ht_mapping/coverage_extension_result.json
+            output/b6_bbn_ht_mapping/nominal_256.csv
+            output/b6_bbn_ht_mapping/refined_512.csv
+          if-no-files-found: warn
