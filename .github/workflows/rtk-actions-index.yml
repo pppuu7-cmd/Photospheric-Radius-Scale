@@ -53,6 +53,7 @@ jobs:
               'RTK pinned AlterBBN expansion-interface audit',
               'RTK pinned AlterBBN integration-flow audit',
               'RTK B6 entropy-aware H(T) mapping',
+              'RTK pinned Planck standalone-lensing interface audit',
               'RTK Route-B khronometric dispersion non-mapping theorem',
               'RTK Route-B khronometric acceleration degeneracy audit',
               'RTK Route-B preferred-foliation metric-Khronon benchmark',
