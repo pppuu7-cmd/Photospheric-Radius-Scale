@@ -1,0 +1,54 @@
+{
+  "classification": "RTK_C8_BPS_STRONG_COUPLING_DESIGN_CHAIN_PASS",
+  "status": "CLOSED_PARAMETRIC_DESIGN_CHAIN_NOT_NUMERICAL_CUTOFF_CLOSURE",
+  "prerequisite_two_crossover": {
+    "run_id": 32305611111,
+    "artifact_id": 9384581354,
+    "result": "research/theory/ROUTE_B_BPS_Z3_TWO_CROSSOVER_RESULT_v1.json"
+  },
+  "accuracy_window": {
+    "run_id": 32306100498,
+    "artifact_id": 9384750676,
+    "artifact_name": "rtk-c8-bps-accuracy-strong-coupling-window",
+    "artifact_digest": "sha256:5ff49cd1834e6f9e1eeee99edeeb378fd0171a258b1547d6f4172c07635d82c1",
+    "classification": "RTK_C8_BPS_ACCURACY_STRONG_COUPLING_WINDOW_PASS",
+    "exact_identity": "delta(p)=gamma(p/M_*)^6=(p/p_UV)^6 with p_UV=M_* gamma^(-1/6)",
+    "momentum_feasibility": "A strict open choice exists when max(M_*,p_max/epsilon^(1/6)) < Lambda_p; choose p_UV inside that interval and gamma=(M_*/p_UV)^6.",
+    "frequency_at_crossover": "omega_UV^2=2 c_s^2 M_*^2 u/(1+u)<2 c_s^2 M_*^2",
+    "sufficient_frequency_guard": "sqrt(2)c_s M_* < Lambda_omega"
+  },
+  "low_energy_cutoff_map": {
+    "run_id": 32306271279,
+    "artifact_id": 9384806626,
+    "artifact_name": "rtk-c8-bps-low-energy-cutoff-map",
+    "artifact_digest": "sha256:df0775eca5c896de235343ba755c7c68abcea4351437586edfc0d657ced0e73d",
+    "classification": "RTK_C8_BPS_LOW_ENERGY_CUTOFF_MAP_PASS",
+    "source": "Blas-Pujolas-Sibiryakov arXiv:1007.3503 Eqs. (2.10), (5.14), (5.15)",
+    "definitions": "M_alpha=M_P sqrt(alpha), M_lambda=M_P sqrt(ell), ell=lambda-1",
+    "ell_le_alpha": {
+      "Lambda_p": "M_P ell^(3/4) alpha^(-1/4)",
+      "Lambda_omega": "M_P ell^(5/4) alpha^(-3/4)"
+    },
+    "ell_ge_alpha": {
+      "Lambda_p": "M_P alpha^(3/4) ell^(-1/4)",
+      "Lambda_omega": "M_P (alpha ell)^(1/4)"
+    },
+    "balanced_ell_eq_alpha": "Lambda_p=Lambda_omega=M_P sqrt(alpha)",
+    "target_speed_inversion": "For z=alpha/(2-alpha), desired C=c_s^2 requires ell=2C alpha/[2-alpha(1+3C)] when denominator>0."
+  },
+  "design_rule": "Choose the phenomenological M_* and c_s together with alpha,ell and gamma so that the exact BPS cutoffs satisfy max(M_*,p_max/epsilon^(1/6)) < p_UV < Lambda_p and sqrt(2)c_s M_* < Lambda_omega. Gamma is then fixed by p_UV through gamma=(M_*/p_UV)^6.",
+  "interpretation": "The two-crossover BPS route can in principle be made RTK-accurate on a finite momentum band while activating z=3 scaling before the published low-energy BPS momentum/frequency strong-coupling scales. The available window is quantitative and falsifiable rather than qualitative.",
+  "remaining_C8_work": [
+    "identify/map the intended RTK phenomenological M_* and c_s into the BPS candidate",
+    "choose an explicit p_max and accuracy epsilon relevant to the observable/EFT domain",
+    "verify the inequalities numerically or parametrically at that target point",
+    "specialize the full selected-family cubic and higher-spatial interaction vertices and canonical normalization",
+    "check that no tuned higher-spatial coefficient generates a lower interaction cutoff than the low-energy BPS estimate"
+  ],
+  "non_claims": [
+    "not a numerical strong-coupling cutoff for the final RTK theory",
+    "not proof that all selected-family nonlinear vertices are weakly coupled",
+    "not full C7 nonlinear DOF closure",
+    "not radiative stability or a UV-completion proof"
+  ]
+}
