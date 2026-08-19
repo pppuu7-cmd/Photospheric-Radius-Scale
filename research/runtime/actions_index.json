@@ -1,7 +1,46 @@
 {
-  "generated_at_utc": "2026-08-19T09:59:42.830793+00:00",
+  "generated_at_utc": "2026-08-19T10:11:37.169712+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T10:10:49Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "f2a37d1ff442ca9fb020d3ab9bc0f36e2b8ef3e0",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32241402976",
+      "id": 32241402976,
+      "name": "RTK B6 entropy-aware H(T) mapping",
+      "run_number": 3,
+      "status": "completed",
+      "updated_at": "2026-08-19T10:11:12Z"
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-19T10:06:56Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "efa70ed02364b51a092ba37424ef6ae0e7987936",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32241074303",
+      "id": 32241074303,
+      "name": "RTK pinned Planck standalone-lensing interface audit",
+      "run_number": 2,
+      "status": "completed",
+      "updated_at": "2026-08-19T10:07:31Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-19T10:02:03Z",
+      "event": "schedule",
+      "head_branch": "main",
+      "head_sha": "59f7bfab77a42445db3315fbc684764764698663",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32240652021",
+      "id": 32240652021,
+      "name": "RTK autonomous research orchestrator",
+      "run_number": 122,
+      "status": "completed",
+      "updated_at": "2026-08-19T10:02:23Z"
+    },
     {
       "conclusion": null,
       "created_at": "2026-08-19T09:58:58Z",
@@ -287,32 +326,6 @@
       "run_number": 108,
       "status": "completed",
       "updated_at": "2026-08-18T23:55:13Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-18T23:42:58Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "a0b88a0fdf630dbeb9e26d14b0e1c1e386d12f41",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32198331764",
-      "id": 32198331764,
-      "name": "RTK Route-B preferred-foliation metric-Khronon benchmark",
-      "run_number": 2,
-      "status": "completed",
-      "updated_at": "2026-08-18T23:43:27Z"
-    },
-    {
-      "conclusion": "cancelled",
-      "created_at": "2026-08-18T23:42:49Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "bc891ecfdb98ddca8b57762d9641940b1d34c8d1",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32198320988",
-      "id": 32198320988,
-      "name": "RTK Route-B preferred-foliation metric-Khronon benchmark",
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-18T23:43:00Z"
     }
   ]
 }
