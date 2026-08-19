@@ -1,0 +1,74 @@
+{
+  "classification": "B4_NEUTRINO_STATIONARITY_TARGETS_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "source_seed_run_id": 32190997977,
+  "massless_final_replay_run_id": 32148894768,
+  "neutrino": {
+    "N_ncdm": 1,
+    "m_ncdm_eV": 0.06,
+    "T_ncdm": 0.71611,
+    "deg_ncdm": 1.0,
+    "N_ur": 2.0328
+  },
+  "proof_logic": {
+    "base_scale": 1.0,
+    "validation_scale": 0.5,
+    "positive_definite_threshold": 1e-8,
+    "negative_mode_rule": "any non-PD Hessian must be exact-ray falsified at the same physical scale before progression",
+    "closure_rule": "each model requires recenter-clear stationarity plus two adjacent positive-definite Hessian scales; then a paired fresh-tree replay is required before B4 closure"
+  },
+  "models": {
+    "RTK": {
+      "seed_artifact_id": 9350417957,
+      "seed_artifact_digest": "sha256:d151c205c1b0cc56b89702142b0fdd23aca4273c315ec61a5e398405eceababb",
+      "seed_score_eff": 1050.7321829413459,
+      "seed_score_k01": 1050.7339028394306,
+      "diagnostic_poll_best_improvement": 0.0,
+      "center": {
+        "As": 2.086105011336064e-09,
+        "Ob": 0.047221503495608046,
+        "Om": 0.2525760572141607,
+        "h": 0.6888519617491632,
+        "lam": 3031417.132721826,
+        "ns": 0.9658617109313197,
+        "zre": 7.3455250566503025
+      },
+      "base_steps": {
+        "loglam": 0.05,
+        "h": 0.00035,
+        "Ob": 0.00007,
+        "Om": 0.0007,
+        "As": 4e-12,
+        "ns": 0.00035,
+        "zre": 0.07
+      }
+    },
+    "LCDM": {
+      "seed_artifact_id": 9349159018,
+      "seed_artifact_digest": "sha256:ad7df9dba47b4e34961356af42e8b6d97c40cfbdb10b2c8339f38723f80b0fd7",
+      "seed_score_eff": 1051.5293507543338,
+      "seed_score_k01": 1051.5293046293173,
+      "diagnostic_poll_best_improvement": 0.0,
+      "center": {
+        "As": 2.1029117589465037e-09,
+        "Ob": 0.04903861825208892,
+        "Om": 0.2614246073333404,
+        "h": 0.6761522211034925,
+        "lam": 0.0,
+        "ns": 0.966728401753675,
+        "zre": 7.803043589316236
+      },
+      "base_steps": {
+        "h": 0.00035,
+        "Ob": 0.00007,
+        "Om": 0.0007,
+        "As": 4e-12,
+        "ns": 0.00035,
+        "zre": 0.07
+      }
+    }
+  },
+  "warning": "Separate B4 robustness proof. These targets do not alter the frozen massless A1-A5 state and are not certified minima until the stationarity and fresh-tree replay gates pass."
+}
