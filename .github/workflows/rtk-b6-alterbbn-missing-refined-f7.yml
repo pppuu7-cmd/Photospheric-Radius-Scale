@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ env.SOURCE_COMMIT }}
+          ref: '50085f112f8e1b39ede2b8014df9848d457aff63'
           fetch-depth: 1
 
       - name: Require exact continuation semantics
@@ -102,15 +102,13 @@ jobs:
           tar -xJf alterbbn_v2.2.tar.xz
           mv alterbbn_v2.2 tree_rtk_refined
           python3 rtk/patch_alterbbn_rtk_h_ratio.py tree_rtk_refined b6map/output/b6_bbn_ht_mapping/refined_512.csv --mode rtk --eta "$ETA" --manifest manifest_rtk_refined_continuation.json
-          cmp <(python3 - <<'PY'
+          python3 - <<'PY'
           import json
-          d=json.load(open('prior/manifest_rtk_refined.json')); print(json.dumps(d,sort_keys=True,separators=(',',':')))
+          a=json.load(open('prior/manifest_rtk_refined.json'))
+          b=json.load(open('manifest_rtk_refined_continuation.json'))
+          assert a==b, (a,b)
+          print('B6_REFINED_MANIFEST_EXACT_REPLAY_PASS')
           PY
-          ) <(python3 - <<'PY'
-          import json
-          d=json.load(open('manifest_rtk_refined_continuation.json')); print(json.dumps(d,sort_keys=True,separators=(',',':')))
-          PY
-          )
           (cd tree_rtk_refined && ulimit -s unlimited && make clean || true; make CC="$CC" CFLAGS="$CFLAGS" CFLAGS_MP='-fopenmp'; make stand_cosmo CC="$CC" CFLAGS="$CFLAGS" CFLAGS_MP='-fopenmp'; test -x stand_cosmo.x)
           sha256sum tree_rtk_refined/stand_cosmo.x | tee b6_refined_continuation_binary_sha256.txt
           test "$(sha256sum tree_rtk_refined/stand_cosmo.x | awk '{print $1}')" = "$EXPECTED_REFINED_BINARY_SHA256"
