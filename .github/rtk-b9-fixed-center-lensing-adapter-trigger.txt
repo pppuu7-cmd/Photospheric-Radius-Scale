@@ -1,0 +1,3 @@
+trigger: 2026-08-19T16:04:30+03:00
+reason: execute frozen B9 step-1 fixed-center Planck lensing adapter after primary-source CLASS/clik unit-order audit
+protocol: research/robustness/B9_PLANCK_LENSING_ROBUSTNESS_PROTOCOL_v1.md
