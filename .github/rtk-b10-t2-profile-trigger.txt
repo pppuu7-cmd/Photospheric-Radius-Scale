@@ -1,0 +1,2 @@
+trigger: 2026-08-19T13:35:00+03:00
+reason: T1 run 32240381293 mechanically selected asymptotic onset factor 64 and largest successful factor 16384; research target commit 12f172332888c3ba3c576d81331c28cc4dc6d2e3 froze both fixed-lambda anchors and optimizer semantics before any T2 profile score
