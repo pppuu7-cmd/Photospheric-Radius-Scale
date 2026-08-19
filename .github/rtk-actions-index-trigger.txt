@@ -1,2 +1,2 @@
-trigger: 2026-08-19T15:56:30+03:00
-reason: refresh active robustness frontier after B6 direct-GeV rerun, B4 recenter computations, and B10 T3 stationarity
+trigger: 2026-08-19T16:06:30+03:00
+reason: capture B9 fixed-center adapter, pinned AlterBBN Tf audit, B4 recenter jobs and B10 T3 jobs
