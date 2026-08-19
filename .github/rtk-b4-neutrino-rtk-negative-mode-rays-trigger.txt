@@ -1,0 +1,7 @@
+trigger_utc: 2026-08-19T18:00:41Z
+trigger_helsinki: 2026-08-19T21:00:41+03:00
+reason: recentered B4 RTK base run 32252398625 is score-recenter-clear but has three negative Hessian modes; exact-ray falsify all three at the same physical scale before any progression.
+protocol: research/robustness/B4_NEUTRINO_STATIONARITY_PROTOCOL_v1.md
+target: research/robustness/b4_neutrino_rtk_negative_modes_target_v1.json
+parent_run_id: 32252398625
+parent_artifact_id: 9371716156
