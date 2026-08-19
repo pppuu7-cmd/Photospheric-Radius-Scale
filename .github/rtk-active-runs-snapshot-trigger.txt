@@ -1,1 +1,1 @@
-Refresh isolated runtime state after BPS M_* semantics rerun, pole-residue guard, BPS z3 two-crossover launch, and current B4 RTK/B9 heavy jobs.
+Refresh isolated runtime state after C8 BPS accuracy-vs-strong-coupling window and exact low-energy cutoff-map launches; include current B4 RTK/B9 heavy jobs.
