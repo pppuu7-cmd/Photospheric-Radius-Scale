@@ -1,0 +1,1 @@
+Capture active run IDs after launching B4 ray recenter, B6 continuation, and B9 paired reoptimization.
