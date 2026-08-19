@@ -1,4 +1,6 @@
-trigger: 2026-08-19T15:11:30+03:00
-reason: execute preregistered B6 paired AlterBBN abundance/refinement gate
+trigger: 2026-08-19T15:20:20+03:00
+reason: rerun identical preregistered B6 abundance gate after source-structure matcher repair only; no physics/protocol change
 protocol: research/robustness/RTK_BBN_ABUNDANCE_EXECUTION_PROTOCOL_v1.md
 mapping_run_id: 32243547025
+matcher_fix_commit: dcc8eb5efac362789210ba78a1a8da913dde7f27
+failed_preoutput_run_id: 32251381580
