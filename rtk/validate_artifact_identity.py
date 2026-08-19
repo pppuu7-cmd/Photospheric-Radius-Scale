@@ -4,14 +4,15 @@
 The scientific orchestrator must never parse a successful artifact merely
 because its workflow/run ID looks plausible. Before parsing, require the
 artifact-declared objective and center to match the current accepted state.
-For RTK Hessian/eigenray proof artifacts, additionally require canonical
+For RTK and LCDM proof artifacts, additionally require canonical
 objective/center fingerprints and measured upstream/runtime provenance. For
 multiscale Hessians and source-scale eigenrays, also require the declared scale.
 
 When a proof artifact carries runtime sidecars (Python version, pip freeze,
 Planck archive SHA256), validate them against the live reproducibility lock as
 well. This remains backward compatible with historical artifacts that predate
-those sidecars.
+those sidecars; the frozen historical LCDM proof is additionally covered by a
+fresh locked audit replay recorded separately in the research tree.
 """
 from __future__ import annotations
 import hashlib,json,os,re,shutil,subprocess,tempfile
@@ -54,11 +55,11 @@ def exact_center_equal(a,b):
 
 def _canon_pkg(name):return re.sub(r'[-_.]+','-',name.strip().lower())
 
-def validate_runtime_sidecars(repro,key,run_id,bundle):
-    observed={};py=bundle.get('python_version')
+def validate_runtime_sidecars(repro,model,key,run_id,bundle):
+    observed={};py=bundle.get('python_version');slot=f'{model}.{key}'
     if py is not None:
         m=re.search(r'Python\s+([^\s]+)',py);actual=m.group(1) if m else None;expected=str(repro['runtime']['python'])
-        if actual!=expected:raise RuntimeError(f'artifact runtime mismatch rtk.{key} run={run_id}: python={actual!r} expected={expected!r}')
+        if actual!=expected:raise RuntimeError(f'artifact runtime mismatch {slot} run={run_id}: python={actual!r} expected={expected!r}')
         observed['python_version']=actual
     freeze=bundle.get('pip_freeze')
     if freeze is not None:
@@ -68,26 +69,26 @@ def validate_runtime_sidecars(repro,key,run_id,bundle):
             name,version=line.split('==',1);packages[_canon_pkg(name)]=version.strip()
         expected_pkgs={'numpy':str(repro['python_packages']['numpy']),'scipy':str(repro['python_packages']['scipy']),'clipy-like':str(repro['likelihood']['clipy_like'])}
         bad={k:{'actual':packages.get(_canon_pkg(k)),'expected':v} for k,v in expected_pkgs.items() if packages.get(_canon_pkg(k))!=v}
-        if bad:raise RuntimeError(f'artifact runtime package mismatch rtk.{key} run={run_id}: '+json.dumps(bad,sort_keys=True))
+        if bad:raise RuntimeError(f'artifact runtime package mismatch {slot} run={run_id}: '+json.dumps(bad,sort_keys=True))
         observed['pip_locked_packages']=expected_pkgs
     ps=bundle.get('planck_sha256')
     if ps is not None:
         toks=ps.strip().split();actual=toks[0] if toks else None;expected=str(repro['likelihood']['planck_baseline_sha256'])
-        if actual!=expected:raise RuntimeError(f'artifact runtime mismatch rtk.{key} run={run_id}: Planck SHA256={actual!r} expected={expected!r}')
+        if actual!=expected:raise RuntimeError(f'artifact runtime mismatch {slot} run={run_id}: Planck SHA256={actual!r} expected={expected!r}')
         observed['planck_baseline_sha256']=actual
     return {'sidecars_present':{k:(bundle.get(k) is not None) for k in ('python_version','pip_freeze','planck_sha256')},**observed}
 
-def validate_rtk_locked_provenance(state,repro,key,run_id,summary,bundle):
-    prov=summary.get('provenance')
-    if not isinstance(prov,dict):raise RuntimeError(f'artifact provenance missing rtk.{key} run={run_id}')
+def validate_locked_provenance(state,repro,model,key,run_id,summary,bundle):
+    prov=summary.get('provenance');slot=f'{model}.{key}';model_name='RTK' if model=='rtk' else 'LCDM'
+    if not isinstance(prov,dict):raise RuntimeError(f'artifact provenance missing {slot} run={run_id}')
     expected_obj_fp=canonical_hash(state['objective']);actual_obj_fp=summary.get('objective_fingerprint') or prov.get('objective_fingerprint')
-    if actual_obj_fp!=expected_obj_fp:raise RuntimeError(f'artifact provenance mismatch rtk.{key} run={run_id}: objective_fingerprint={actual_obj_fp!r} expected={expected_obj_fp!r}')
-    expected_center_fp=canonical_hash({'model':'RTK','center':state['rtk']['accepted_center'],'objective':state['objective']['name'],'mapping':state.get('production_mapping','eff')});actual_center_fp=summary.get('center_fingerprint') or prov.get('center_fingerprint')
-    if actual_center_fp!=expected_center_fp:raise RuntimeError(f'artifact provenance mismatch rtk.{key} run={run_id}: center_fingerprint={actual_center_fp!r} expected={expected_center_fp!r}')
+    if actual_obj_fp!=expected_obj_fp:raise RuntimeError(f'artifact provenance mismatch {slot} run={run_id}: objective_fingerprint={actual_obj_fp!r} expected={expected_obj_fp!r}')
+    expected_center_fp=canonical_hash({'model':model_name,'center':state[model]['accepted_center'],'objective':state['objective']['name'],'mapping':state.get('production_mapping','eff')});actual_center_fp=summary.get('center_fingerprint') or prov.get('center_fingerprint')
+    if actual_center_fp!=expected_center_fp:raise RuntimeError(f'artifact provenance mismatch {slot} run={run_id}: center_fingerprint={actual_center_fp!r} expected={expected_center_fp!r}')
     expected={'class_upstream_commit':repro['external_git']['class_public']['commit'],'pantheon_commit':repro['external_git']['pantheon']['commit'],'numpy_version':repro['python_packages']['numpy']};observed={k:prov.get(k) for k in expected}
     bad={k:{'actual':observed[k],'expected':expected[k]} for k in expected if observed[k]!=expected[k]}
-    if bad:raise RuntimeError(f'artifact locked provenance mismatch rtk.{key} run={run_id}: '+json.dumps(bad,sort_keys=True))
-    return {'objective_fingerprint_match':True,'center_fingerprint_match':True,**expected,'rtk_source_commit':prov.get('rtk_source_commit'),'runtime_sidecars':validate_runtime_sidecars(repro,key,run_id,bundle)}
+    if bad:raise RuntimeError(f'artifact locked provenance mismatch {slot} run={run_id}: '+json.dumps(bad,sort_keys=True))
+    return {'objective_fingerprint_match':True,'center_fingerprint_match':True,**expected,'rtk_source_commit':prov.get('rtk_source_commit'),'runtime_sidecars':validate_runtime_sidecars(repro,model,key,run_id,bundle)}
 
 def validate_slot(state,repro,model,key):
     slot=state.get(model,{}).get(key)
@@ -113,8 +114,10 @@ def validate_slot(state,repro,model,key):
     if expected_source is not None and summary.get('eigenray_source')!=expected_source:
         raise RuntimeError(f'artifact identity mismatch {model}.{key} run={run_id}: eigenray_source={summary.get("eigenray_source")!r} expected={expected_source!r}')
     row={'slot':f'{model}.{key}','run_id':run_id,'objective':expected_objective,'center_match':True,'stencil_scale':summary.get('stencil_scale'),'source_stencil_scale':summary.get('source_stencil_scale'),'eigenray_source':summary.get('eigenray_source')}
-    proof_keys=('hessian_run','half_hessian_run','quarter_hessian_run','eighth_hessian_run','negative_eigenray_run','half_negative_eigenray_run','quarter_negative_eigenray_run','eighth_negative_eigenray_run')
-    if model=='rtk' and key in proof_keys:row['locked_provenance']=validate_rtk_locked_provenance(state,repro,key,run_id,summary,bundle)
+    rtk_proof_keys=('hessian_run','half_hessian_run','quarter_hessian_run','eighth_hessian_run','negative_eigenray_run','half_negative_eigenray_run','quarter_negative_eigenray_run','eighth_negative_eigenray_run')
+    lcdm_proof_keys=('hessian_run',)
+    if (model=='rtk' and key in rtk_proof_keys) or (model=='lcdm' and key in lcdm_proof_keys):
+        row['locked_provenance']=validate_locked_provenance(state,repro,model,key,run_id,summary,bundle)
     return row
 
 def main():
