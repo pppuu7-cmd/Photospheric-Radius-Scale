@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: '3.12.3'
 
-      - name: Require frozen B6 mapping protocol and accepted-trace addendum
+      - name: Require frozen B6 mapping protocol and failsafe1 trace addendum
         run: |
           set -euo pipefail
           test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
@@ -47,9 +47,10 @@ jobs:
           p=open('research/robustness/RTK_BBN_HT_MAPPING_PROTOCOL_v1.md').read()
           assert 'FROZEN BEFORE FIRST ALTERBBN T-a TRACE / RTK H(T) TABLE EXECUTION' in p
           assert 'T_anchor = 0.01 MeV = 1e-5 GeV' in p
-          pfix=open('research/robustness/RTK_BBN_HT_MAPPING_PROTOCOL_v1_1_TRACE_FIX.md').read()
-          assert 'FROZEN BEFORE THE SECOND H(T) MAPPING RUN' in pfix
-          assert 'accepted-state block is the correct diagnostic observation point' in pfix
+          pfix=open('research/robustness/RTK_BBN_HT_MAPPING_PROTOCOL_v1_2_FAILSAFE1_TRACE_FIX.md').read()
+          assert 'FROZEN BEFORE THE THIRD H(T) MAPPING RUN' in pfix
+          assert 'if(paramrelic->failsafe<5)' in pfix
+          assert 'else /* if(loop==2) */' in pfix
           s=json.load(open('research/state/current.json'))
           assert s['comparison']['final_replay_certified'] is True
           assert s['final_replay_certification']=='INDEPENDENT_FRESH_TREE_REPLAY_PASS'
@@ -60,7 +61,7 @@ jobs:
           gcc-13 --version | tee b6_mapping_gcc13_version.txt
           uname -a | tee b6_mapping_runner_uname.txt
 
-      - name: Download, verify and instrument pinned AlterBBN accepted states
+      - name: Download, verify and instrument pinned AlterBBN failsafe1 corrected states
         run: |
           set -euo pipefail
           curl -L --fail --retry 3 --retry-delay 2 -o "$ALTERBBN_FILENAME" "$ALTERBBN_URL"
@@ -69,9 +70,9 @@ jobs:
           tar -xJf "$ALTERBBN_FILENAME"
           grep -q 'AlterBBN Version 2.2 (16th July 2019)' alterbbn_v2.2/README
           python3 rtk/patch_alterbbn_ta_trace.py alterbbn_v2.2 | tee b6_ta_trace_patch.log
-          grep -q ALTERBBN_ACCEPTED_TA_TRACE_INSTRUMENTATION_PATCH_APPLIED b6_ta_trace_patch.log
-          grep -q RTK_BBN_TA_TRACE_V1_1 alterbbn_v2.2/src/bbn.c
-          grep -q 'Accepted solver state only' alterbbn_v2.2/src/bbn.c
+          grep -q ALTERBBN_FAILSAFE1_ACCEPTED_TA_TRACE_PATCH_APPLIED b6_ta_trace_patch.log
+          grep -q RTK_BBN_TA_TRACE_V1_2 alterbbn_v2.2/src/bbn.c
+          grep -q RTK_BBN_FAILSAFE1_CORRECTED_STATE alterbbn_v2.2/src/bbn.c
 
       - name: Build instrumented-but-physics-identical AlterBBN
         working-directory: alterbbn_v2.2
@@ -83,7 +84,7 @@ jobs:
           make stand_cosmo CC="$ALTERBBN_CC" CFLAGS="$ALTERBBN_CFLAGS" CFLAGS_MP='-fopenmp'
           sha256sum stand_cosmo.x | tee ../b6_mapping_stand_cosmo_sha256.txt
 
-      - name: Run standard network and capture accepted T-a trace
+      - name: Run standard network and capture failsafe1 corrected T-a trace
         working-directory: alterbbn_v2.2
         run: |
           set -euo pipefail
@@ -96,6 +97,7 @@ jobs:
           test "$rc" -eq 1
           test -s rtk_bbn_Ta_trace.tsv
           grep -q '^# call_id' rtk_bbn_Ta_trace.tsv
+          test "$(grep -vc '^#' rtk_bbn_Ta_trace.tsv)" -ge 100
           grep -q ' cent:' ../b6_mapping_stand_cosmo.log
           python3 - <<'PY'
           import re
@@ -105,7 +107,7 @@ jobs:
           got=tuple(map(float,m.groups()))
           expected=(0.2473,2.435e-5,1.031e-5,5.466e-10)
           assert got==expected,(got,expected)
-          print('ALTERBBN_ACCEPTED_TA_TRACE_ABUNDANCE_INVARIANCE_PASS',got)
+          print('ALTERBBN_FAILSAFE1_TRACE_ABUNDANCE_INVARIANCE_PASS',got)
           PY
 
       - name: Prepare pinned RTK CLASS tree
