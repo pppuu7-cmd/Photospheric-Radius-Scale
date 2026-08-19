@@ -2,16 +2,16 @@
   "active_runs": [
     {
       "conclusion": null,
-      "created_at": "2026-08-19T21:57:22Z",
+      "created_at": "2026-08-19T22:02:33Z",
       "event": "push",
       "head_branch": "main",
-      "head_sha": "2d0ed6c5e5d0b4bcb890a1c8c619ddb4f5a62e95",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32306473698",
-      "id": 32306473698,
+      "head_sha": "08cb77e580d5018bea4a6b1ebc0efe2167e50dcf",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32306900967",
+      "id": 32306900967,
       "name": "RTK active Actions snapshot",
-      "run_number": 14,
+      "run_number": 15,
       "status": "in_progress",
-      "updated_at": "2026-08-19T21:57:27Z"
+      "updated_at": "2026-08-19T22:02:38Z"
     },
     {
       "conclusion": null,
@@ -41,10 +41,36 @@
     }
   ],
   "classification": "RTK_ACTIONS_RUNTIME_SNAPSHOT",
-  "generated_at_utc": "2026-08-19T21:57:31.280649+00:00",
+  "generated_at_utc": "2026-08-19T22:02:43.896492+00:00",
   "recent_runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-19T22:02:33Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "08cb77e580d5018bea4a6b1ebc0efe2167e50dcf",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32306900967",
+      "id": 32306900967,
+      "name": "RTK active Actions snapshot",
+      "run_number": 15,
+      "status": "in_progress",
+      "updated_at": "2026-08-19T22:02:38Z"
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-19T22:01:39Z",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "508b56a4ab9a43279a01fe0b61ab04ec136c8f2b",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32306826347",
+      "id": 32306826347,
+      "name": "RTK Route-B BPS target inversion",
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-19T22:02:09Z"
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-19T21:57:22Z",
       "event": "push",
       "head_branch": "main",
@@ -53,8 +79,8 @@
       "id": 32306473698,
       "name": "RTK active Actions snapshot",
       "run_number": 14,
-      "status": "in_progress",
-      "updated_at": "2026-08-19T21:57:27Z"
+      "status": "completed",
+      "updated_at": "2026-08-19T21:57:35Z"
     },
     {
       "conclusion": "success",
@@ -796,32 +822,6 @@
       "run_number": 988,
       "status": "completed",
       "updated_at": "2026-08-19T19:20:35Z"
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-19T19:19:47Z",
-      "event": "push",
-      "head_branch": "rtk-class-build",
-      "head_sha": "e8f2fb3f15eefdbc7c56680bf4eb66d9ac500254",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32292410679",
-      "id": 32292410679,
-      "name": "RTK CLASS build",
-      "run_number": 987,
-      "status": "completed",
-      "updated_at": "2026-08-19T19:20:13Z"
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-19T19:16:55Z",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "464e7e47e74b06202d8403748fad4aa047b09f91",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32292149779",
-      "id": 32292149779,
-      "name": "RTK active Actions snapshot",
-      "run_number": 2,
-      "status": "completed",
-      "updated_at": "2026-08-19T19:17:09Z"
     }
   ],
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
