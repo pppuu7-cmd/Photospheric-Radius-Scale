@@ -1,0 +1,52 @@
+{
+  "classification": "B4_NEUTRINO_RTK_RAY_RECENTER_TARGET_V2_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "parent_recenter_run_id": 32252398625,
+  "parent_negative_ray_run_id": 32284932113,
+  "parent_negative_ray_artifact_id": 9378827376,
+  "parent_negative_ray_artifact_digest": "sha256:e320c38ee09001ff66676a2ed0e06e8dd5861d85434b18dad2dfbfe5a42d5a01",
+  "parent_center_S_eff": 1050.6979573843187,
+  "parent_best_exact_S_eff": 1050.5880475140204,
+  "parent_best_improvement_eff": 0.10990987029822463,
+  "parent_best_mode_index": 0,
+  "parent_best_alpha": 2.0,
+  "neutrino": {
+    "N_ncdm": 1,
+    "m_ncdm_eV": 0.06,
+    "T_ncdm": 0.71611,
+    "deg_ncdm": 1.0,
+    "N_ur": 2.0328
+  },
+  "proof_logic": {
+    "base_scale": 1.0,
+    "validation_scale": 0.5,
+    "positive_definite_threshold": 1e-8,
+    "negative_mode_rule": "any non-PD Hessian must be exact-ray falsified at the same physical scale before progression",
+    "closure_rule": "recenter until exact best improvement <=0.005; then require adjacent base and half positive-definite Hessian scales and fresh-tree replay"
+  },
+  "models": {
+    "RTK": {
+      "center": {
+        "As": 2.0920212896820786e-09,
+        "Ob": 0.04722200104991654,
+        "Om": 0.2528393318824633,
+        "h": 0.6885660022475836,
+        "lam": 3043326.1774413693,
+        "ns": 0.9657332769496741,
+        "zre": 7.506210209218662
+      },
+      "base_steps": {
+        "loglam": 0.05,
+        "h": 0.00035,
+        "Ob": 0.00007,
+        "Om": 0.0007,
+        "As": 4e-12,
+        "ns": 0.00035,
+        "zre": 0.07
+      }
+    }
+  },
+  "warning": "Frozen before the second recentered RTK base Hessian run. Separate B4 robustness branch; does not alter the massless A1-A5 production state."
+}
