@@ -1,2 +1,2 @@
-trigger: 2026-08-19T12:38:00+03:00
-reason: pinned AlterBBN expansion-interface audit 32237897006 passed; execute preregistered entropy-aware T-a trace and RTK/same-params LCDM H(T) table construction
+trigger: 2026-08-19T12:57:00+03:00
+reason: first mapping run 32238634437 failed closed on RHS trial-state mixing; exact-source audit 32239397180 identified accepted stiff-step state; rerun frozen v1.1 accepted-state mapping
