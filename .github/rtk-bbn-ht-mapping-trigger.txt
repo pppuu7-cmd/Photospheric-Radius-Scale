@@ -1,2 +1,2 @@
-trigger: 2026-08-19T13:36:00+03:00
-reason: run 32239927888 proved instrumented abundances unchanged but trace was inserted in unused failsafe<10 branch; v1.2 freezes the actual failsafe=1 corrected loop==2 observation point before this third mapping run
+trigger: 2026-08-19T13:31:00+03:00
+reason: run 32241402976 failed only because the v1.2 trace patcher matched an indentation-literal corrected abundance tail; research commit d1d73a17c3c05d0b01df511cb478c7df710605d4 now uses a fail-closed whitespace-tolerant structural matcher restricted to the pinned failsafe<5 loop==2 corrected state and preserves the original physical block verbatim
