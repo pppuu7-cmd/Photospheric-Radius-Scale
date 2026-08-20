@@ -1,1 +1,1 @@
-Refresh isolated runtime state after BPS arbitrary target-inversion launch; include B4 RTK ray-recenter base and B9 LCDM paired reoptimization status.
+Refresh isolated runtime state after Route-B composed inversion, constrained cutoff, current scale dictionary, beta0 fixed-Newton, beta0 capped-Newton, and compact-object boundary launches; retain B4/B9 active status.
