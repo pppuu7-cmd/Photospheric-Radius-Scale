@@ -1,0 +1,5 @@
+Launch current replay-z0 pointwise Route-B PPN diagnostic and correct the previous alpha=1e-7 beta=0 hierarchy benchmark interpretation.
+Science worker commit: c85690c595900fc02e7bb21ba0f9fc9dd752668c
+Workflow commit: c7edc160841dc734ea82d44bc01d6af2e595f00b
+Primary theory sources: arXiv:1007.3503 Eq. (5.34); arXiv:1711.08845 Eq. (12); post-GW summary arXiv:1907.05958.
+Scope: current z=0 pointwise low-energy diagnostic only; not a fixed-action FLRW completion.
