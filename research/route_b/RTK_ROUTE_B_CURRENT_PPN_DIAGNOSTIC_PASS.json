@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "classification": "RTK_ROUTE_B_CURRENT_PPN_DIAGNOSTIC_PASS",
+  "validated_at_utc": "2026-08-20T02:08:57Z",
+  "run_id": 32323576385,
+  "job_id": 96290296101,
+  "artifact": {
+    "id": 9390569998,
+    "name": "rtk-route-b-current-ppn-diagnostic",
+    "sha256": "39487bbdf952d57e457002bb76ac870a9a1a391f85b9e2e75fe49bf9779855b5"
+  },
+  "science_commit": "c85690c595900fc02e7bb21ba0f9fc9dd752668c",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "scale_dictionary_run_id": 32320390501,
+  "C_z0": 1.4738358401883835e-8,
+  "beta0_exact_reduction": {
+    "ell_at_alpha_A": "2 A C/[2-A(1+3C)]",
+    "ppn_expression_magnitude": "A(1-C)/(2C)",
+    "translated_bound_benchmark": 1e-7,
+    "alpha_max_formula": "2 C*1e-7/(1-C)",
+    "alpha_max_current_z0": 2.9476717238206093e-15
+  },
+  "previous_alpha_1e7_benchmark_correction": {
+    "ppn_expression": 3.3925080324204324,
+    "ratio_to_bound": 33925080.324204326,
+    "status": "not PPN viable at beta=0; retained only as a conservative scale-separation stress test"
+  },
+  "tuned_plane": {
+    "condition": "alpha=2 beta",
+    "ppn_expression": "zero in cited low-energy formula",
+    "GW_beta_benchmark_abs_max": 1e-15,
+    "implied_alpha_abs_max": 2e-15
+  },
+  "scope": "current z=0 pointwise low-energy/Minkowski diagnostic; not a fixed-action FLRW completion",
+  "guards": [
+    "beta!=0 tuned branch still needs exact matter-frame rational-pole mapping",
+    "PPN applies to the current asymptotic low-energy solution, not independently to every cosmological epoch",
+    "compact-object UV regularity, radiative stability and matter Lorentz percolation remain open"
+  ]
+}
