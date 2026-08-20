@@ -1,0 +1,54 @@
+name: RTK Route-B current PPN capped hierarchy
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-current-ppn-capped-hierarchy-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  hierarchy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Compose replay state with PPN/GW caps
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,subprocess
+          state=json.load(open('research/state/current.json'))
+          fr=state['final_replay_result']; p=state['rtk']['accepted_score_params']
+          hman=json.load(open('research/route_b/RTK_ROUTE_B_CURRENT_BETA0_CAPPED_HIERARCHY_PASS.json'))
+          uman=json.load(open('research/route_b/RTK_ROUTE_B_BETA0_CAPPED_PHYSICAL_MARGIN_PASS.json'))
+          fp='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          assert fr['status']=='PASS' and fr['objective_fingerprint']==fp and hman['objective_fingerprint']==fp
+          assert hman['replay_run_id']==32148894768 and hman['route_b_run_id']==32322717923
+          assert uman['run_id']==32323019820
+          gamma=hman['gamma']; H0=100.0*float(p['h'])/299792.458
+          z=fr['objective']['dense_z_pk']; z=','.join(str(x) for x in z) if isinstance(z,list) else z
+          cmd=['python3','rtk/route_b_rtk_ppn_capped_hierarchy.py',
+               '--gamma',repr(gamma),'--H0',repr(H0),'--lambda-D',repr(float(p['lam'])),
+               '--Omega-K0',repr(float(p['Om'])),'--h-reduced',repr(float(p['h'])),
+               '--z-grid',z,'--pmax-h-mpc','5.0','--epsilons','1e-2,1e-3,1e-4',
+               '--MbarN-per-Mpc',repr(float(uman['derived']['Mbar_N_per_Mpc']))]
+          r=subprocess.run(cmd,check=True,text=True,capture_output=True)
+          open('route_b_current_ppn_capped_hierarchy.log','w').write(r.stdout); print(r.stdout,end='')
+          payload=json.loads(r.stdout.strip().split(' ',1)[1])
+          assert payload['classification']=='RTK_ROUTE_B_CURRENT_PPN_CAPPED_HIERARCHY_PASS'
+          for sc in payload['scenarios'].values():
+              for v in sc['worst'].values(): assert v['safety_margin']>1e30
+          print('RTK_ROUTE_B_CURRENT_PPN_CAPPED_HIERARCHY_VALIDATED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-current-ppn-capped-hierarchy
+          path: route_b_current_ppn_capped_hierarchy.log
+          if-no-files-found: error
