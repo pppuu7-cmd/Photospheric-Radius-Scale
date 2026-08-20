@@ -12,6 +12,10 @@ reported universal-horizon curvature pathology.
 This script proves only the algebraic intersection statement for the selected
 BPS exact-rational embedding.  It does NOT elevate the low-energy black-hole
 statement into a theorem about the full higher-spatial-derivative UV theory.
+The khronometric couplings alpha, beta and lambda/ell are gravitational-sector
+couplings in the standard low-energy convention; matter/effective-metric
+choices may change the phenomenological dictionary but do not make beta a
+pure matter-sector parameter.
 """
 import json
 import sympy as sp
@@ -62,8 +66,9 @@ out={
   'exact_intersection_result':'The selected exact-rational BPS family has no member with alpha=0 at finite h; alpha=0 is reached only as the singular boundary h->0 where alpha, ell, z and s all vanish.',
   'cutoff_boundary':'As h->0, both BPS low-energy momentum-cutoff branch expressions tend to zero in Planck units.',
   'phenomenology_boundary':'Therefore the selected family does not literally intersect the alpha=beta=0 low-energy compact-object regularity subspace quoted in arXiv:1907.05958, except as a degenerate zero-cutoff boundary.',
-  'interpretation':'This is a conditional negative intersection result, not a no-go for the full higher-spatial-derivative completion. The UV operators responsible for the Route-B completion may alter the universal-horizon region; that requires a dedicated compact-object calculation.',
-  'guards':['does not prove the full UV theory has singular black holes','does not prove low-energy alpha must vanish exactly for all astrophysical solutions','does not fix beta because beta belongs to the matter/effective-metric sector','does not replace a full moving-black-hole solution with the selected higher-spatial operators'],
-  'next_step':'Test the observationally allowed small-nonzero-alpha region with the capped cutoff theorem, and separately formulate the moving-black-hole/UV-operator problem for the selected Route-B coefficients.'
+  'interpretation':'This is a conditional negative intersection result for the selected family, not a no-go for RTK phenomenology or for every possible nonlinear/higher-spatial completion. The UV operators responsible for the Route-B completion may alter the universal-horizon region; that requires a dedicated compact-object calculation.',
+  'guards':['does not prove the full UV theory has singular black holes','does not prove low-energy alpha must vanish exactly for every completion or every astrophysical solution','beta is an independent low-energy gravitational coupling in the standard khronometric convention; matter-frame choices can alter the observational dictionary but do not remove beta from the gravitational EFT','does not replace a full moving-black-hole solution with the selected higher-spatial operators'],
+  'related_gate':'rtk/route_b_bps_alpha0_generalized_nogo.py separately tests exact alpha=0 in the full standard BPS scalar quadratic P/Q class.',
+  'next_step':'Audit the singular joint alpha->0, lambda->1 limit with canonical normalization/cutoff, and separately formulate the moving-black-hole problem including the selected higher-spatial operators.'
 }
 print('RTK_ROUTE_B_BPS_COMPACT_OBJECT_BOUNDARY_PASS',json.dumps(out,sort_keys=True))
