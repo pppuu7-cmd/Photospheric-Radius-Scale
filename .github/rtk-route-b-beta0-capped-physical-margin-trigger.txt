@@ -1,0 +1,6 @@
+Launch source-locked physical-unit composition of validated Route-B capped hierarchy.
+Hierarchy source run: 32322717923
+Hierarchy artifact: 9390306230 sha256:a9b5e7d741a88110eaf4704fd60a09e4f84e5f160f20f2fc7935719593467cc5
+Science worker commit: 8a8cf7814117f6f1255301e28c98f39dfea94651
+Workflow commit: 45a6952da287f61cbd56bddf667361236bd6b831
+Unit provenance: NIST 2022 CODATA Planck length; NIST SP 330 exact astronomical unit; parsec=(648000/pi) au.
