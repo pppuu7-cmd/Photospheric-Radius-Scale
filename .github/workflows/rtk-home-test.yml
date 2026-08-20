@@ -1,0 +1,65 @@
+name: RTK HOME PC diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - rtk-class-build
+    paths:
+      - '.github/workflows/rtk-home-test.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    runs-on: [self-hosted, Linux, X64, rtk-home]
+    timeout-minutes: 10
+    steps:
+      - name: Host and system information
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== HOST ==='
+          hostname
+          uname -a
+          echo '=== CPU ==='
+          nproc
+          lscpu | head -20
+          echo '=== MEMORY ==='
+          free -h
+          echo '=== DISK ==='
+          df -h /
+
+      - name: Toolchain check
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== Python ==='
+          python3 --version
+          echo '=== GCC ==='
+          gcc --version | head -1
+          echo '=== G++ ==='
+          g++ --version | head -1
+          echo '=== Make ==='
+          make --version | head -1
+          echo '=== CMake ==='
+          cmake --version | head -1
+          echo '=== Git ==='
+          git --version
+          echo '=== Curl ==='
+          curl --version | head -1
+
+      - name: Runner write and network sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${RUNNER_NAME:-}"
+          echo "RUNNER_NAME=$RUNNER_NAME"
+          echo "RUNNER_OS=$RUNNER_OS"
+          test "$RUNNER_NAME" = 'RTK-HOME-PC'
+          tmp="${RUNNER_TEMP}/rtk-home-test.txt"
+          printf 'RTK-HOME-PC OK\n' > "$tmp"
+          cat "$tmp"
+          curl -fsSI https://github.com >/dev/null
+          echo 'RTK_HOME_PC_DIAGNOSTIC_PASS'
