@@ -191,3 +191,18 @@ While expensive jobs run, do not duplicate them. Use spare work for:
 ## 12. Change-control rule
 
 Any future change to objective, dataset, precision preset, source tree, cache semantics, parameter mapping, stationarity threshold, or interpretation rule must be entered in chronology with timestamp and must create a new explicit provenance/fingerprint boundary. Cross-boundary absolute scores are non-comparable by default.
+
+## 13. Route-B quadratic-completion methodology (added 2026-08-20)
+
+The Route-B BPS/healthy-Horava completion program must preserve these additional invariants:
+
+1. **Use the production RTK scale dictionary, not a parameter-name guess.** From `rtk/khronon_background.c`, the physical rational-pole target is `C(a)=c_a^2(a)` and `Mdisp(a)=M_K(a)`, with the comoving transition `k_*(a)=a M_K(a)`. `lambda_D` affects these quantities through the background closure and must never be identified directly with `Mdisp`.
+2. **Use the same positive full-CLASS gamma root as the frozen cosmological point.** A stand-alone guessed or silently floored gamma is not valid scale provenance.
+3. **Keep unconstrained and constrained strong-coupling statements separate.** The unconstrained inverse family may maximize `Lambda_p` at order-one `alpha` or `lambda-1`; this cannot be promoted to a phenomenologically allowed completion until explicit low-energy caps are applied.
+4. **For abstract caps `0<alpha<=alpha_cap<2` and `0<ell=lambda-1<=ell_cap`, use the exact cap inversion** `h_alpha=3 alpha_cap C/(2-alpha_cap)` and `h_ell=3 ell_cap/(2+3 ell_cap)`. The capped optimum is `min(h0(C),h_alpha,h_ell)`, where `h0(C)` is the previously derived unconstrained optimum. Do not replace this analytic gate by an avoidable parameter scan.
+5. **Finite-range accuracy is evaluated in physical momentum.** For a CLASS comoving mode `k`, use `p=k/a`. The frozen matched likelihood harness uses `P_k_max_h/Mpc=5.0`; a coverage gate spanning the production dense grid therefore evaluates the physical maximum separately at every redshift.
+6. **Separate hierarchy requirement from Planck-unit convention.** First compute the dimensionless required `M_P/M_K` implied by the exact BPS cutoff theorem. Only a separate, sourced convention/unit audit may insert a numerical Planck hierarchy.
+7. **Workflow launch is never theorem validation.** SymPy theorem workflows and state-driven scale workflows remain `CANDIDATE` until their completed artifacts/logs contain the expected classification and all fail-closed checks pass.
+8. **Keep completion non-claims explicit.** Quadratic pole matching plus low-energy cutoff control does not establish off-shell source/residue equivalence, nonlinear constraint/DOF closure, radiative stability, or matter-sector Lorentz safety.
+
+Manual theory checkpoint for this addition: `research/checkpoints/RTK_ROUTE_B_ITERATION_20260820T011619Z.md`.
