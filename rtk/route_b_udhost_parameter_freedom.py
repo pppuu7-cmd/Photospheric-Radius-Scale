@@ -9,14 +9,20 @@ The paper states for the U-DHOST EFT that unitary-gauge degeneracy imposes
 while aside from this relation the EFT parameters are independent. It also
 identifies alphaT=c_GW^2-1.
 
+Independent operator dictionary:
+  Langlois, Mancarella, Noui, Vernizzi, arXiv:1703.03797 / JCAP 05 (2017) 033
+identifies beta3 with the lapse-gradient/normal-acceleration channel
+  a_i = partial_i N/N,
+so beta3 is the correct quadratic EFT channel for (grad dot pi)^2 after
+Stueckelberg restoration.
+
 This script proves only the algebraic compatibility of
   (i) U-DHOST degeneracy and
   (ii) luminal tensors alphaT=0
 with a still-free beta3 direction and nonzero beta1/alphaL choices.
 
-It does NOT identify beta3 with the RTK acceleration operator, does NOT prove
-PPN=GR, and does NOT construct the full RTK completion. Those are separate
-physics gates.
+It does NOT prove the required beta3 value lies on the PPN-safe U-DHOST
+subspace, nor construct the full RTK completion.
 """
 import json
 import sympy as sp
@@ -36,17 +42,20 @@ assert beta3 not in beta2.free_symbols
 out = {
   'classification':'RTK_ROUTE_B_UDHOST_PARAMETER_FREEDOM_PASS',
   'primary_source':'Saito-Yao-Kobayashi arXiv:2402.10459 / JCAP 06 (2024) 040',
+  'operator_dictionary_source':'Langlois-Mancarella-Noui-Vernizzi arXiv:1703.03797 / JCAP 05 (2017) 033',
   'degeneracy_relation':'beta2=-6 beta1^2/(1+alphaL)',
   'tensor_speed_condition':'alphaT=0 gives c_GW=1',
-  'result':'Degeneracy plus luminal tensors leaves at least beta3 algebraically free; therefore these two conditions alone do not collapse the U-DHOST scalar/constraint sector to the khronometric alpha=0 boundary.',
-  'scope':'parameter-freedom theorem only',
+  'beta3_semantics':'lapse-gradient / normal-acceleration channel, hence the quadratic source of (grad dot pi)^2 after Stueckelberg restoration',
+  'result':'U-DHOST degeneracy plus luminal tensors leaves beta3 algebraically free, and beta3 is the correct acceleration channel for the RTK mixed spatial-kinetic operator.',
+  'scope':'parameter-freedom plus sourced operator identification only',
   'non_claims':[
-    'does not prove beta3 is the coefficient required for the RTK (grad dot pi)^2 operator',
-    'does not prove all PPN parameters equal GR for the RTK-matched point',
+    'does not prove all PPN parameters equal GR for the RTK-matched beta3 value',
+    'does not prove the exact RTK rational denominator survives all U-DHOST constraints',
     'does not prove compact-object regularity',
     'does not prove one fixed action reproduces C(a) and M_K(a)',
     'does not prove nonlinear or radiative stability'
   ],
-  'next_step':'Derive the unitary-gauge operator dictionary for the RTK acceleration channel in U-DHOST, then intersect that mapping with the sourced GR-like PPN conditions.'
+  'boundary':'Fully degenerate DHOST C_I/C_II is not the direct exact-rational rescue branch in the 2017 quadratic EFT, where full degeneracy reduces scalar dispersion to a linear form. The open route is partial U-DHOST degeneracy.',
+  'next_step':'Intersect nonzero beta3 with the explicit PPN-safe U-DHOST conditions of arXiv:2310.11041 and arXiv:2402.10459, then derive the constrained scalar dispersion.'
 }
 print('RTK_ROUTE_B_UDHOST_PARAMETER_FREEDOM_PASS', json.dumps(out, sort_keys=True))
