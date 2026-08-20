@@ -1,0 +1,5 @@
+Launch state-driven RTK -> Route-B physical scale dictionary and hierarchy requirement gate.
+Research worker commit: ce12bc4683266c9190b456157993edbdded3f6f6
+Workflow initial commit: 1c11191b5296006a76bd2757801541808f86e490
+Workflow hardened commit: 397521d3142f3e2fe299a5dd634de49924c90c6a
+Frozen replay objective fingerprint: 754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666
