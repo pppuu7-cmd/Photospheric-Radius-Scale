@@ -206,3 +206,17 @@ The Route-B BPS/healthy-Horava completion program must preserve these additional
 8. **Keep completion non-claims explicit.** Quadratic pole matching plus low-energy cutoff control does not establish off-shell source/residue equivalence, nonlinear constraint/DOF closure, radiative stability, or matter-sector Lorentz safety.
 
 Manual theory checkpoint for this addition: `research/checkpoints/RTK_ROUTE_B_ITERATION_20260820T011619Z.md`.
+
+## 14. Route-B matter-normalization and low-energy phenomenology guards (added 2026-08-20)
+
+1. **Distinguish the bare BPS `M_P` from the scale inferred from measured `G_N`.** The BPS strong-coupling formulas use the bare coefficient in the gravitational action. Once a matter metric is selected, the relation to measured Newton gravity depends on low-energy couplings. Never multiply a bare-`M_P` cutoff by a numerical Planck mass without this normalization step.
+2. **The pure-gravity pole embedding does not fix the matter-metric parameter `beta`.** Generic physical-cutoff statements therefore require a separate matter-coupling dictionary. Any `beta=0` result is conditional and must be labeled as such.
+3. **For the conditional `beta=0` minimal/universal branch**, use `Mbar_N=(8 pi G_N)^(-1/2)=M_P sqrt(1-alpha/2)`. Reoptimizing at fixed measured `G_N` changes the unconstrained cutoff regime boundary from the bare-`M_P` value `C=1/3` to the physical value `C=1/5`.
+4. **For fixed `G_N` plus abstract alpha/ell caps**, use `h_opt=min(h0_Newton(C),h_alpha,h_ell)`, with `h_alpha=3 alpha_cap C/(2-alpha_cap)` and `h_ell=3 ell_cap/(2+3 ell_cap)`. Do not reuse the bare-`M_P` optimizer after inserting measured-Newton normalization.
+5. **Production RTK satisfies `0<C=c_a^2<1` analytically.** With `C=x/[s^2(s+x)]`, `s=sqrt(1+lambda_D x^2)`, the positive denominator margin is `s^3+lambda_D x^3`. This domain fact should be used before any numerical scan.
+6. **When using the sourced generic low-energy benchmark** summarized by Barausse arXiv:1907.05958 (`|beta|~<=1e-15`, `|alpha|~<=1e-7` for the generic branch, positive `lambda` only weakly bounded around `0.01--0.1`), keep it distinct from the alternative tuned branch. For production `0<C<1`, the `alpha=1e-7` benchmark is analytically the active cap before either `ell=0.01` or `0.1`.
+7. **Do not convert the tuned relation into an exact exclusion.** Treating `lambda≈alpha/(1-2alpha)` as equality makes the selected inverse family intersect the central curve only at `C=1`, while production has `C<1`; however the observational relation is approximate, so only the exact central equality is excluded, not its allowed finite band.
+8. **Compact-object regularity is a separate UV-sensitive gate.** The selected finite-h rational family has `alpha>0`; its only `alpha->0` limit is `h->0`, where the low-energy cutoff collapses. This does not prove the higher-spatial-derivative completion has pathological black holes. It requires a dedicated selected-UV-operator compact-object calculation.
+9. **Keep convention mapping explicit.** On the `beta=0` branch, comparison of the ADM actions gives `ell=lambda_BPS-1=lambda_modern`; do not mix the old BPS `lambda` with the modern low-energy parameter without subtracting the GR value.
+
+Manual checkpoint: `research/checkpoints/RTK_ROUTE_B_MATTER_NORMALIZATION_20260820T013203Z.md`.
