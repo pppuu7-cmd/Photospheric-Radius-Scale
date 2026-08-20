@@ -1,0 +1,5 @@
+Launch structural fixed-action FLRW moving-constraint-pole theorem.
+Science worker commit: 56805da98620213ed04b31f5cb4f7f7474c5af76
+Workflow commit: 2924cdc38cf348cffe111efd83557000eacfeb47
+Primary source: Kobayashi-Urakawa-Yamaguchi arXiv:1002.3101v2 Eqs. (19)-(20).
+Claim scope: fixed Wilson coefficients can generate H(a)-dependent FLRW constraint-pole roots; this is not yet the fully integrated propagating RTK scalar pole or a global completion.
