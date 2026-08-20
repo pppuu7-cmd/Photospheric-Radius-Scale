@@ -1,0 +1,37 @@
+name: RTK Route-B generalized alpha0 no-go
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-alpha0-generalized-nogo-trigger.txt'
+      - 'rtk/route_b_bps_alpha0_generalized_nogo.py'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run generalized alpha0 BPS quadratic no-go
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_bps_alpha0_generalized_nogo.py
+          python3 rtk/route_b_bps_alpha0_generalized_nogo.py | tee route_b_alpha0_generalized_nogo.log
+          grep -q RTK_ROUTE_B_BPS_ALPHA0_GENERALIZED_NOGO_PASS route_b_alpha0_generalized_nogo.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-alpha0-generalized-nogo
+          path: route_b_alpha0_generalized_nogo.log
+          if-no-files-found: error
