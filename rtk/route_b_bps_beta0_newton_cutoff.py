@@ -66,9 +66,16 @@ assert sp.simplify(hN-h_bal-(D-6*C-2)/4)==0
 # D^2-(6C+2)^2=3(5C-1)(3C+1), hence the regime switch C=1/5.
 assert sp.factor(D**2-(6*C+2)**2-3*(5*C-1)*(3*C+1))==0
 
-# At the balance point, physical cutoff simplifies exactly.
-G_bal2=sp.simplify(sp.sqrt(G_low4.subs(h,h_bal))) # G^2
-assert sp.simplify(G_bal2-(1-C)/(2*C))==0
+# At the balance point, physical cutoff simplifies exactly.  A bare SymPy
+# sqrt keeps Abs(1-C); encode the physical balance domain 0<C<1 explicitly
+# via C=u/(1+u), u>0, rather than relying on an implicit inequality solver.
+G_bal4=sp.factor(sp.simplify(G_low4.subs(h,h_bal)))
+assert sp.simplify(G_bal4-(1-C)**2/(4*C**2))==0
+u=sp.symbols('u', positive=True, finite=True, real=True)
+C01=sp.simplify(u/(1+u))
+G_bal2_01=sp.simplify(sp.sqrt(G_bal4.subs(C,C01)))
+assert sp.simplify(G_bal2_01-1/(2*u))==0
+assert sp.simplify(((1-C)/(2*C)).subs(C,C01)-1/(2*u))==0
 
 # Sufficient C8 frequency guard remains automatically weaker than the
 # momentum window at the physical optimum.
