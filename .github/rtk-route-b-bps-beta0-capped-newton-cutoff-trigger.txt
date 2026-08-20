@@ -1,0 +1,4 @@
+Launch exact Route-B beta=0 fixed-measured-Newton cutoff theorem with abstract alpha and lambda-1 caps.
+Research worker commit: a18d7313ff076224bdae26694aef18c700721649
+Workflow commit: e9e3caddcfb5ca32f876ed72acd77a4b8d4373b4
+Theorem keeps observational cap values external; they are inserted only in a separately sourced phenomenology gate.
