@@ -1,0 +1,5 @@
+Launch replay-certified current-state beta0 fixed-G_N capped hierarchy gate.
+Science worker commit: 4c3cd32bd664a05e187170e75bb9f9fb99c47c92
+Workflow commit: d0ad420cb984ea4413ce37a36886c8cf884f6cf6
+Frozen objective fingerprint: 754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666
+Benchmark caps: alpha<=1e-7, ell<=1e-2; beta=0 conditional.
