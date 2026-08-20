@@ -22,23 +22,28 @@ jobs:
           ref: rtk-class-build
           fetch-depth: 1
 
-      - name: Freeze current state and dictionary provenance
+      - name: Freeze replay-certified current state and dictionary provenance
         run: |
           set -euo pipefail
           echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_b_scale_provenance.txt
           python3 - <<'PY'
           import json,pathlib
           s=json.load(open('research/state/current.json'))
-          p=s['rtk'].get('accepted_score_params') or s['rtk']['accepted_center']
-          assert s['objective']['name']=='matched-ultra-linstep2+dense-BOSS'
-          assert s['objective']['objective_configuration_sha256']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666' or s['objective'].get('fingerprint','754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666')=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
-          z=s['objective']['dense_z_pk']
+          fr=s['final_replay_result']
+          assert fr['status']=='PASS'
+          assert fr['objective_fingerprint']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          assert fr['objective']['name']=='matched-ultra-linstep2+dense-BOSS'
+          assert fr['provenance']['class_upstream_commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          p=s['rtk']['accepted_score_params']
+          assert p==fr['rtk']['params'], 'top-level accepted score point != independent replay point'
+          z=fr['objective']['dense_z_pk']
           pathlib.Path('route_b_scale_state.json').write_text(json.dumps({
-            'iteration':s.get('iteration'),'objective':s['objective']['name'],
-            'objective_fingerprint':'754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666',
-            'center':p,'dense_z_pk':z,'P_k_max_h_Mpc':5.0
+            'iteration':s.get('iteration'),'objective':fr['objective']['name'],
+            'objective_fingerprint':fr['objective_fingerprint'],
+            'center':p,'dense_z_pk':z,'P_k_max_h_Mpc':5.0,
+            'replay_run_id':s['final_replay_run']['run_id']
           },indent=2,sort_keys=True)+'\n')
-          print('RTK_ROUTE_B_SCALE_STATE_FROZEN',s.get('iteration'),p['lam'])
+          print('RTK_ROUTE_B_SCALE_STATE_FROZEN',s.get('iteration'),p['lam'],s['final_replay_run']['run_id'])
           PY
 
       - name: Prepare pinned hardened CLASS tree
@@ -59,7 +64,7 @@ jobs:
           cp rtk/route_b_rtk_scale_dictionary.py class_public/
           make -C class_public -j2 class
 
-      - name: Solve positive gamma at frozen current center
+      - name: Solve positive gamma at replay-certified RTK point
         run: |
           set -euo pipefail
           mkdir -p class_public/output
@@ -123,7 +128,7 @@ jobs:
           assert payload['classification']=='RTK_ROUTE_B_SCALE_DICTIONARY_PASS'
           assert payload['dictionary']['C']=='c_a^2(a)'
           assert payload['dictionary']['Mdisp']=='M_K(a)'
-          assert len(payload['rows'])>=2
+          assert len(payload['rows'])==27
           for row in payload['rows']:
               assert row['C_ca2']>0 and row['Mdisp_MK']>0 and row['kstar']>0
               assert abs(row['kstar']-row['a']*row['Mdisp_MK']) <= 1e-12*max(1.0,abs(row['kstar']))
