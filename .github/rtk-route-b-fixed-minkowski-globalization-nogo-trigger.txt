@@ -1,0 +1,5 @@
+Launch narrow no-go for globalizing the proven fixed-coefficient Minkowski BPS rational map across the replay-certified time-dependent RTK background.
+Science worker commit: 4efd81c4bdd483df7f24a9af909387f22edf5959
+Workflow commit: f687e28e4155da64492228d24b0e5ba24d5df08a
+Validated inputs: scale dictionary run 32320390501; capped hierarchy run 32322717923; objective fingerprint 754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666.
+Scope guard: this is NOT a no-go for a fixed nonlinear BPS/Hořava action on FLRW with background-dependent effective coefficients.
