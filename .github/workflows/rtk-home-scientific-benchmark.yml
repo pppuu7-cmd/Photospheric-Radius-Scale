@@ -1,0 +1,157 @@
+name: RTK HOME scientific benchmark v1
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-home-scientific-benchmark.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scientific-benchmark:
+    runs-on: [self-hosted, Linux, X64, rtk-home]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare Python environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv-bench
+          . .venv-bench/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install numpy sympy
+
+      - name: Run RTK scientific benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .venv-bench/bin/activate
+          mkdir -p benchmark_results
+          python - <<'PY' | tee benchmark_results/rtk_home_scientific_benchmark.txt
+          import os, time, json, math, hashlib
+          from fractions import Fraction
+          from decimal import Decimal, getcontext
+          from concurrent.futures import ProcessPoolExecutor
+
+          import numpy as np
+          import sympy as sp
+
+          out = {}
+          print('=== RTK HOME scientific benchmark v1 ===')
+          print('logical_cpus =', os.cpu_count())
+
+          # 1) Exact rational arithmetic: bounded-denominator recurrence
+          t0 = time.perf_counter()
+          x = Fraction(1, 3)
+          a = Fraction(17, 31)
+          b = Fraction(19, 37)
+          n = 250_000
+          for i in range(n):
+              x = (x * a + b) % 1
+          dt = time.perf_counter() - t0
+          out['fraction_seconds'] = dt
+          out['fraction_ops_per_s'] = n / dt
+          print(f'Fraction: {n} iterations in {dt:.6f}s = {n/dt:.1f} iter/s')
+
+          # 2) Decimal high precision
+          getcontext().prec = 80
+          xd = Decimal(1) / Decimal(7)
+          ad = Decimal(17) / Decimal(31)
+          bd = Decimal(19) / Decimal(37)
+          n2 = 500_000
+          t0 = time.perf_counter()
+          for i in range(n2):
+              xd = xd * ad + bd
+              if xd > 10:
+                  xd /= 10
+          dt = time.perf_counter() - t0
+          out['decimal_seconds'] = dt
+          out['decimal_ops_per_s'] = n2 / dt
+          print(f'Decimal(80): {n2} iterations in {dt:.6f}s = {n2/dt:.1f} iter/s')
+
+          # 3) Symbolic algebra representative workload
+          x1,x2,x3,x4 = sp.symbols('x1 x2 x3 x4')
+          expr = (x1+x2+x3+x4)**8 - (x1-x2+x3-x4)**8
+          t0 = time.perf_counter()
+          e = sp.expand(expr)
+          f = sp.factor(e)
+          d = sp.diff(f, x1, 4)
+          s = sp.simplify(d)
+          dt = time.perf_counter() - t0
+          out['sympy_seconds'] = dt
+          out['sympy_result_chars'] = len(str(s))
+          print(f'SymPy expand/factor/diff/simplify: {dt:.6f}s; result chars={len(str(s))}')
+
+          # 4) Dense linear algebra
+          rng = np.random.default_rng(12345)
+          size = 1800
+          A = rng.standard_normal((size,size), dtype=np.float64)
+          B = rng.standard_normal((size,size), dtype=np.float64)
+          t0 = time.perf_counter()
+          C = A @ B
+          dt = time.perf_counter() - t0
+          gflops = (2 * size**3) / dt / 1e9
+          out['numpy_matmul_seconds'] = dt
+          out['numpy_matmul_gflops_est'] = gflops
+          out['numpy_checksum'] = float(C[0,0] + C[-1,-1])
+          print(f'NumPy matmul {size}x{size}: {dt:.6f}s; est {gflops:.2f} GFLOP/s')
+
+          # 5) Multi-process CPU saturation workload
+          def worker(seed):
+              payload = (f'rtk-{seed}-'.encode()) * 64
+              h = b''
+              for i in range(220_000):
+                  h = hashlib.sha256(payload + h).digest()
+              return h[0]
+
+          workers = max(1, os.cpu_count() or 1)
+          t0 = time.perf_counter()
+          with ProcessPoolExecutor(max_workers=workers) as ex:
+              vals = list(ex.map(worker, range(workers)))
+          dt = time.perf_counter() - t0
+          out['parallel_workers'] = workers
+          out['parallel_seconds'] = dt
+          out['parallel_checksum'] = int(sum(vals))
+          print(f'Parallel CPU: {workers} workers in {dt:.6f}s; checksum={sum(vals)}')
+
+          # System memory snapshot
+          try:
+              with open('/proc/meminfo') as fh:
+                  mem = fh.read().splitlines()
+              for line in mem[:5]:
+                  print(line)
+          except Exception as exc:
+              print('meminfo unavailable:', exc)
+
+          with open('benchmark_results/rtk_home_scientific_benchmark.json','w') as fh:
+              json.dump(out, fh, indent=2, sort_keys=True)
+          print('RTK_HOME_SCIENTIFIC_BENCHMARK_PASS')
+          PY
+
+      - name: Capture system context
+        shell: bash
+        run: |
+          {
+            echo '=== lscpu ==='
+            lscpu
+            echo '=== free -h ==='
+            free -h
+            echo '=== df -h ==='
+            df -h
+            echo '=== uname ==='
+            uname -a
+          } > benchmark_results/system_context.txt
+
+      - name: Upload benchmark artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-home-scientific-benchmark-v1
+          path: benchmark_results/
+          retention-days: 30
