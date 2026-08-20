@@ -16,34 +16,40 @@ statement into a theorem about the full higher-spatial-derivative UV theory.
 import json
 import sympy as sp
 
-C,h=sp.symbols('C h', positive=True, finite=True, real=True)
+# Parameterize the proven healthy domain 0<h<1 as h=k/(1+k), k>0.  This makes
+# positivity machine-manifest instead of asking SymPy to infer the hidden h<1
+# condition from a bare positive symbol.
+C,k=sp.symbols('C k', positive=True, finite=True, real=True)
+h=sp.simplify(k/(1+k))
 alpha=sp.simplify(2*h/(3*C+h))
 ell=sp.simplify(2*h/(3*(1-h)))
 z=sp.simplify(h/(3*C))
 s=alpha
 
 # Exact selected inverse family is strictly inside alpha>0, ell>0, z>0, s>0
-# for C>0 and h>0.  Hence it has no finite-h member in alpha=0.
+# for C>0, k>0 (equivalently 0<h<1). Hence no finite-h family member has alpha=0.
 assert alpha.is_positive is True
 assert ell.is_positive is True
 assert z.is_positive is True
 assert s.is_positive is True
 
-# The only way to approach alpha=0 inside this parameterization is h->0.
-assert sp.limit(alpha,h,0,dir='+')==0
-assert sp.limit(ell,h,0,dir='+')==0
-assert sp.limit(z,h,0,dir='+')==0
+# The only way to approach alpha=0 inside this parameterization is h->0,
+# equivalently k->0+.
+assert sp.limit(h,k,0,dir='+')==0
+assert sp.limit(alpha,k,0,dir='+')==0
+assert sp.limit(ell,k,0,dir='+')==0
+assert sp.limit(z,k,0,dir='+')==0
 
 # But the BPS low-energy momentum cutoff simultaneously collapses in that
-# limit on either algebraic cutoff branch.  Fourth powers are enough.
+# limit on either algebraic cutoff branch. Fourth powers are enough.
 F_low4=sp.simplify(ell**3/alpha)
 F_high4=sp.simplify(alpha**3/ell)
-assert sp.limit(F_low4,h,0,dir='+')==0
-assert sp.limit(F_high4,h,0,dir='+')==0
+assert sp.limit(F_low4,k,0,dir='+')==0
+assert sp.limit(F_high4,k,0,dir='+')==0
 
-# The target sound speed remains exactly C for all h>0, but h=0 itself is a
-# singular boundary of the constructive coefficient map (z=ell=alpha=s=0),
-# not a member of the proven healthy rational family.
+# The target sound speed remains exactly C for all k>0, but k=0/h=0 itself is
+# a singular boundary of the constructive coefficient map
+# (z=ell=alpha=s=0), not a member of the proven healthy rational family.
 cs2=sp.simplify(ell/(z*(2+3*ell)))
 assert sp.simplify(cs2-C)==0
 
@@ -51,7 +57,7 @@ out={
   'classification':'RTK_ROUTE_B_BPS_COMPACT_OBJECT_BOUNDARY_PASS',
   'selected_family':{
     'alpha':'2h/(3C+h)>0','ell':'2h/[3(1-h)]>0','z':'h/(3C)>0','s':'alpha>0',
-    'domain':'C>0, 0<h<1'
+    'domain':'C>0, 0<h<1; machine parameterization h=k/(1+k), k>0'
   },
   'exact_intersection_result':'The selected exact-rational BPS family has no member with alpha=0 at finite h; alpha=0 is reached only as the singular boundary h->0 where alpha, ell, z and s all vanish.',
   'cutoff_boundary':'As h->0, both BPS low-energy momentum-cutoff branch expressions tend to zero in Planck units.',
