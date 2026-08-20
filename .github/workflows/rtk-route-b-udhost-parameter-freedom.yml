@@ -1,0 +1,37 @@
+name: RTK Route-B U-DHOST parameter freedom
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'rtk/route_b_udhost_parameter_freedom.py'
+      - '.github/rtk-route-b-udhost-parameter-freedom-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run U-DHOST parameter-freedom theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_udhost_parameter_freedom.py
+          python3 rtk/route_b_udhost_parameter_freedom.py | tee route_b_udhost_parameter_freedom.log
+          grep -q RTK_ROUTE_B_UDHOST_PARAMETER_FREEDOM_PASS route_b_udhost_parameter_freedom.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-udhost-parameter-freedom
+          path: route_b_udhost_parameter_freedom.log
+          if-no-files-found: error
