@@ -1,0 +1,6 @@
+Launch replay-state Route-B hierarchy under current pointwise PPN/GW O(1e-15) caps.
+Science worker commit: 5dc47dc8d088c7ac6005c2d279aaf012e4656aa7
+Workflow commit: 128d4482611811bc4e0dc50d0fba27c3339d4b9e
+Frozen source hierarchy run: 32322717923; physical-margin run: 32323019820; replay run: 32148894768.
+Scenarios: beta=0 current-z0 PPN cap; alpha=2 beta tuned plane with |beta|<=1e-15 GW benchmark.
+Scope: pointwise pure-gravity scale separation, not fixed-action FLRW or exact beta!=0 matter-frame embedding.
