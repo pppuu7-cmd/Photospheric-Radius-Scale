@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "classification": "RTK_ROUTE_B_CURRENT_PPN_CAPPED_HIERARCHY_PASS",
+  "validated_at_utc": "2026-08-20T02:10:47Z",
+  "run_id": 32323701813,
+  "job_id": 96290645831,
+  "artifact": {
+    "id": 9390606033,
+    "name": "rtk-route-b-current-ppn-capped-hierarchy",
+    "sha256": "33e8f81052146b3cb14194039e99b901c16f445b5aec61919f39092d4380b341"
+  },
+  "science_commit": "5dc47dc8d088c7ac6005c2d279aaf012e4656aa7",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "replay_run_id": 32148894768,
+  "source_scale_dictionary_run_id": 32320390501,
+  "source_physical_margin_run_id": 32323019820,
+  "scenarios": {
+    "beta0_ppn": {
+      "alpha_cap": 2.9476717238206093e-15,
+      "beta": 0.0,
+      "worst_z": 1.0,
+      "epsilon": 1e-4,
+      "Lambda_p_over_MbarN": 3.2095543739833254e-15,
+      "required_MbarN_over_MK": 3.781295824900981e14,
+      "physical_MbarN_over_MK": 1.440775216758721e55,
+      "safety_margin": 3.8102684462579697e40
+    },
+    "alpha2beta_gw": {
+      "alpha_cap": 2e-15,
+      "beta": 1e-15,
+      "worst_z": 1.0,
+      "epsilon": 1e-4,
+      "Lambda_p_over_MbarN": 2.6437487399439765e-15,
+      "required_MbarN_over_MK": 4.590555210777333e14,
+      "physical_MbarN_over_MK": 1.440775216758721e55,
+      "safety_margin": 3.138564183644248e40
+    }
+  },
+  "interpretation": "Replacing the obsolete alpha=1e-7 beta=0 benchmark by current pointwise PPN/GW O(1e-15) caps still leaves more than 1e40 measured-Newton hierarchy margin on the frozen redshift/accuracy grid. Strong coupling is therefore not the immediate obstruction within these pointwise assumptions.",
+  "scope": "replay-state pointwise pure-gravity inverse plus low-energy PPN/GW caps; not fixed-action FLRW completion",
+  "guards": [
+    "beta!=0 tuned branch is not yet an exact matter-frame rational-pole mapping theorem",
+    "PPN constrains the current asymptotic solution, not each historical cosmological epoch",
+    "fixed-action FLRW matching remains open and is now the primary Route-B completion gate",
+    "compact-object UV regularity, nonlinear DOF/constraint closure, radiative stability and matter Lorentz percolation remain open"
+  ]
+}
