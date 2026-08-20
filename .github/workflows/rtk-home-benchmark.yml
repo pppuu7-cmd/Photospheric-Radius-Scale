@@ -1,0 +1,138 @@
+name: RTK HOME PC benchmark
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-home-benchmark.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: [self-hosted, Linux, X64, rtk-home]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: System snapshot
+        run: |
+          set -euo pipefail
+          mkdir -p benchmark-output
+          {
+            echo '=== HOST ==='
+            hostname
+            uname -a
+            echo '=== CPU ==='
+            nproc
+            lscpu
+            echo '=== MEMORY ==='
+            free -h
+            echo '=== DISK ==='
+            df -h
+            echo '=== TOOLS ==='
+            python3 --version
+            gcc --version | head -1
+            g++ --version | head -1
+            make --version | head -1
+            cmake --version | head -1
+            git --version
+          } | tee benchmark-output/system.txt
+
+      - name: Python numeric benchmark
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee benchmark-output/python_benchmark.txt
+          import math, os, time
+          from fractions import Fraction
+          from decimal import Decimal, getcontext
+
+          print('cpu_count', os.cpu_count())
+
+          n = 2_000_000
+          t0 = time.perf_counter()
+          s = 0.0
+          for i in range(1, n+1):
+              s += math.sin(i*1e-6) * math.cos(i*2e-6)
+          dt = time.perf_counter()-t0
+          print('float_loop_seconds', dt)
+          print('float_loop_ops_per_sec', n/dt)
+          print('float_checksum', repr(s))
+
+          nfrac = 120_000
+          t0 = time.perf_counter()
+          q = Fraction(0, 1)
+          for i in range(1, nfrac+1):
+              q += Fraction((i % 97)+1, (i % 89)+1)
+          dt = time.perf_counter()-t0
+          print('fraction_seconds', dt)
+          print('fraction_ops_per_sec', nfrac/dt)
+          print('fraction_checksum_digits', len(str(q.numerator))+len(str(q.denominator)))
+
+          getcontext().prec = 50
+          ndec = 300_000
+          x = Decimal('1.0000001')
+          y = Decimal('0.9999999')
+          t0 = time.perf_counter()
+          z = Decimal(0)
+          for _ in range(ndec):
+              z += x*y
+          dt = time.perf_counter()-t0
+          print('decimal_seconds', dt)
+          print('decimal_ops_per_sec', ndec/dt)
+          print('decimal_checksum', z)
+          print('RTK_HOME_NUMERIC_BENCHMARK_PASS')
+          PY
+
+      - name: C compiler benchmark
+        run: |
+          set -euo pipefail
+          cat > benchmark-output/bench.c <<'C'
+          #include <math.h>
+          #include <stdio.h>
+          #include <time.h>
+          int main(void) {
+            const long n = 50000000L;
+            volatile double s = 0.0;
+            struct timespec a,b;
+            clock_gettime(CLOCK_MONOTONIC, &a);
+            for (long i=1;i<=n;i++) s += sin(i*1e-7)*cos(i*2e-7);
+            clock_gettime(CLOCK_MONOTONIC, &b);
+            double dt=(b.tv_sec-a.tv_sec)+(b.tv_nsec-a.tv_nsec)/1e9;
+            printf("c_loop_seconds %.9f\n",dt);
+            printf("c_loop_ops_per_sec %.3f\n",n/dt);
+            printf("c_checksum %.17g\n",s);
+            return 0;
+          }
+          C
+          /usr/bin/time -v gcc -O3 benchmark-output/bench.c -lm -o benchmark-output/bench 2> benchmark-output/gcc_time.txt
+          benchmark-output/bench | tee benchmark-output/c_benchmark.txt
+
+      - name: Disk benchmark
+        run: |
+          set -euo pipefail
+          sync
+          dd if=/dev/zero of=benchmark-output/io_test.bin bs=8M count=64 conv=fdatasync status=progress 2>&1 | tee benchmark-output/disk_write.txt
+          rm -f benchmark-output/io_test.bin
+
+      - name: Repository sanity
+        run: |
+          set -euo pipefail
+          test -f research/state/current.json
+          test -f rtk/khronon_background.c
+          git rev-parse HEAD | tee benchmark-output/research_head.txt
+          echo RTK_HOME_REPOSITORY_SANITY_PASS | tee benchmark-output/repository_sanity.txt
+
+      - name: Upload benchmark artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-home-benchmark
+          path: benchmark-output/
+          if-no-files-found: error
