@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "classification": "RTK_ROUTE_B_CURRENT_BETA0_CAPPED_HIERARCHY_PASS",
+  "validated_at_utc": "2026-08-20T01:54:55Z",
+  "scope": "replay-certified RTK current state; conditional beta=0 measured-G_N normalization; low-energy benchmark alpha_cap=1e-7, ell_cap=1e-2",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "replay_run_id": 32148894768,
+  "route_b_run_id": 32322717923,
+  "route_b_job_id": 96287882622,
+  "artifact": {
+    "id": 9390306230,
+    "name": "rtk-route-b-current-beta0-capped-hierarchy",
+    "sha256": "a9b5e7d741a88110eaf4704fd60a09e4f84e5f160f20f2fc7935719593467cc5"
+  },
+  "science_worker_commit": "4c3cd32bd664a05e187170e75bb9f9fb99c47c92",
+  "workflow_commit": "d0ad420cb984ea4413ce37a36886c8cf884f6cf6",
+  "launch_commit": "476b4cb65c65269f6099b4eb439b0139beb67563",
+  "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "gamma": 0.05170371280716,
+  "gamma_root_residual": -4.064621979648e-09,
+  "alpha_cap": 1e-7,
+  "ell_cap": 0.01,
+  "dense_z_count": 27,
+  "all_rows_alpha_active": true,
+  "worst_capped_hierarchy": {
+    "1e-2": {
+      "z": 1.0,
+      "C_ca2": 2.302892011135705e-10,
+      "Mdisp_MK_per_Mpc": 26.431663976834585,
+      "Lambda_p_over_MbarN": 1.869412778606072e-11,
+      "p_req_over_MK": 1.0,
+      "required_MbarN_over_MK": 53492733731.3726
+    },
+    "1e-3": {
+      "z": 1.0,
+      "C_ca2": 2.302892011135705e-10,
+      "Mdisp_MK_per_Mpc": 26.431663976834585,
+      "Lambda_p_over_MbarN": 1.869412778606072e-11,
+      "p_req_over_MK": 1.0,
+      "required_MbarN_over_MK": 53492733731.3726
+    },
+    "1e-4": {
+      "z": 1.0,
+      "C_ca2": 2.302892011135705e-10,
+      "Mdisp_MK_per_Mpc": 26.431663976834585,
+      "Lambda_p_over_MbarN": 1.869412778606072e-11,
+      "p_req_over_MK": 1.213627455413583,
+      "required_MbarN_over_MK": 64920250321.522064
+    }
+  },
+  "guards": [
+    "beta=0 remains a conditional matter-coupling choice",
+    "alpha_cap and ell_cap are sourced low-energy benchmark caps, not a generic-matter theorem",
+    "this manifest freezes the validated hierarchy threshold but does not itself insert a numerical Planck-unit conversion",
+    "no compact-object UV regularity, radiative stability, off-shell source equivalence, or nonlinear DOF closure is claimed"
+  ]
+}
