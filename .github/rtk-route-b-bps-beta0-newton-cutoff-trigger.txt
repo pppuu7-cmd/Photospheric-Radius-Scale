@@ -1,0 +1,4 @@
+Launch exact Route-B beta=0 fixed-measured-Newton cutoff optimization theorem.
+Research worker commit: 6a0b84ec96cceafa2175eda44bf9331d7bf140dc
+Workflow commit: 1442716660f97eedaab34beab2ce6949a23643b1
+Primary source: Blas-Pujolas-Sibiryakov arXiv:1007.3503 Eqs. (2.10), (5.14), (5.15), (5.30); beta=0 normalization is conditional matter-coupling branch.
