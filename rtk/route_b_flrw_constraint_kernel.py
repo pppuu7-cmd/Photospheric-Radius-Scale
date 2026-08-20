@@ -21,10 +21,10 @@ import json
 import sympy as sp
 
 lam,H,y,M,eta,eta2,eta4=sp.symbols('lambda H y M eta eta2 eta4', finite=True, real=True)
-Mpos=sp.symbols('Mpos', positive=True, finite=True, real=True)
-# y=p^2. Keep generic M for symbolic source form, then use Mpos for signs.
+# y=p^2. Keep generic M for the symbolic source form.
 D=sp.expand(3*(3*lam-1)*H**2-eta*y-eta2*y**2/M**2+eta4*y**3/M**4)
-assert sp.diff(D,H**2 if False else H,2)==6*(3*lam-1)  # nonzero H^2 coefficient generically
+# Use algebraic equality rather than structural SymPy expression identity.
+assert sp.simplify(sp.diff(D,H,2)-6*(3*lam-1))==0  # nonzero H^2 coefficient generically
 assert sp.simplify(D.subs(H,0)-(-eta*y-eta2*y**2/M**2+eta4*y**3/M**4))==0
 
 # Implicit pole motion for a simple root y_*(H): D(y_*,H)=0.
