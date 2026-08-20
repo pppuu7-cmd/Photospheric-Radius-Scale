@@ -74,7 +74,9 @@ assert sp.Rational(3,19999999)<sp.Rational(3,5)
 # C<1 and tiny hA place the solution on ell<=alpha branch.
 newton_factor_sq=sp.simplify(1/(1-alpha/2))
 Glo4=sp.factor(sp.simplify((ell**3/alpha)*newton_factor_sq**2))
-G_A4=sp.factor(sp.simplify(Glo4.subs({h:hA,A:Agen})))
+# IMPORTANT: use sequential substitution. Glo4 itself has no A, while hA does;
+# a dict-based simultaneous/order-dependent substitution can leave A symbolic.
+G_A4=sp.factor(sp.simplify(Glo4.subs(h,hA).subs(A,Agen)))
 G_A4_expected=sp.factor(32*Agen**2*C**3/((2-Agen)**2*(2-Agen*(1+3*C))**3))
 assert sp.simplify(G_A4-G_A4_expected)==0
 
