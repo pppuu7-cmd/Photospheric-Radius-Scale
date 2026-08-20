@@ -1,0 +1,41 @@
+name: RTK Route-B beta0 capped physical margin
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-beta0-capped-physical-margin-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Validate source-locked physical hierarchy margin
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_beta0_capped_physical_margin.py
+          python3 rtk/route_b_beta0_capped_physical_margin.py | tee route_b_beta0_capped_physical_margin.log
+          grep -q RTK_ROUTE_B_BETA0_CAPPED_PHYSICAL_MARGIN_PASS route_b_beta0_capped_physical_margin.log
+          python3 - <<'PY'
+          import json
+          line=open('route_b_beta0_capped_physical_margin.log').read().strip()
+          p=json.loads(line.split(' ',1)[1])
+          assert p['classification']=='RTK_ROUTE_B_BETA0_CAPPED_PHYSICAL_MARGIN_PASS'
+          assert p['source_hierarchy_run_id']==32322717923
+          assert min(v['safety_margin'] for v in p['margins'].values())>1e44
+          print('RTK_ROUTE_B_BETA0_CAPPED_PHYSICAL_MARGIN_VALIDATED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-beta0-capped-physical-margin
+          path: route_b_beta0_capped_physical_margin.log
+          if-no-files-found: error
