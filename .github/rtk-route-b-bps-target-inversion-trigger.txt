@@ -1,3 +1,4 @@
 Launch exact inverse map from any positive RTK rational target pair (c_s^2,Mdisp) into the healthy-BPS exact pole family.
-Research worker commit: f768c17839a77aa27cb4927212ba007d8a720791
+Research worker commit: e98f0eb1b03486adaf884e102e6486ff3438e263
 Workflow commit: bb6d1202f018175688388d47df05ea169e154070
+Extension: compose the target inversion with exact C8 low-energy cutoffs and derive the closed-form h optimum plus the necessary-and-sufficient hierarchy criterion for an accuracy-preserving pre-strong-coupling z=3 crossover.
