@@ -1,0 +1,4 @@
+Launch exact selected-family intersection theorem against the alpha=beta=0 low-energy compact-object regularity subspace.
+Research worker commit: 4ad0765234b2ecc541e9d4080202bc31379f53b9
+Workflow commit: c434521aacaea4fca481ffd4343dfad33ecfa142
+Phenomenology boundary source: E. Barausse, arXiv:1907.05958; result is conditional and does not claim a full UV no-go.
