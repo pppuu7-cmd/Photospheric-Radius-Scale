@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "classification": "RTK_ROUTE_B_BETA0_CAPPED_PHYSICAL_MARGIN_PASS",
+  "validated_at_utc": "2026-08-20T01:59:49Z",
+  "source_hierarchy_run_id": 32322717923,
+  "run_id": 32323019820,
+  "job_id": 96288720152,
+  "artifact": {
+    "id": 9390393821,
+    "name": "rtk-route-b-beta0-capped-physical-margin",
+    "sha256": "8ac797daa7e4fde6a9ed650e618ac91135b4a3fe27a2397c5cd955193ed4cbdc"
+  },
+  "unit_provenance": {
+    "planck_length_m": 1.616255e-35,
+    "planck_length_relative_standard_uncertainty": 1.1e-5,
+    "astronomical_unit_m_exact": 149597870700,
+    "parsec_convention": "pc=(648000/pi) au"
+  },
+  "derived": {
+    "Mpc_m": 3.085677581491367e22,
+    "Mbar_N_per_Mpc": 3.8082086395517527e56
+  },
+  "minimum_safety_margin_over_tested_epsilons": 2.219300156150325e44,
+  "minimum_safety_margin_log10": 44.34621604371204,
+  "minimum_one_sigma_lower_safety_margin": 2.2192757441171395e44,
+  "scope": "conditional beta=0, alpha_cap=1e-7, ell_cap=1e-2 scale-separation benchmark",
+  "correction": "This PASS closes the strong-coupling hierarchy benchmark only. Subsequent PPN audit reopens phenomenological viability of alpha=1e-7,beta=0 and requires an O(1e-15) cap for the current pointwise inverse.",
+  "guards": [
+    "not a fixed-action FLRW completion",
+    "not a PPN viability certificate",
+    "not compact-object UV regularity",
+    "not radiative or matter-sector Lorentz closure"
+  ]
+}
