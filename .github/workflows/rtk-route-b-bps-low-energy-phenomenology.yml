@@ -1,0 +1,36 @@
+name: RTK Route-B BPS low-energy phenomenology gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-bps-low-energy-phenomenology-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run sourced low-energy phenomenology theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_bps_low_energy_phenomenology.py
+          python3 rtk/route_b_bps_low_energy_phenomenology.py | tee route_b_bps_low_energy_phenomenology.log
+          grep -q RTK_ROUTE_B_BPS_LOW_ENERGY_PHENOMENOLOGY_PASS route_b_bps_low_energy_phenomenology.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-bps-low-energy-phenomenology
+          path: route_b_bps_low_energy_phenomenology.log
+          if-no-files-found: error
