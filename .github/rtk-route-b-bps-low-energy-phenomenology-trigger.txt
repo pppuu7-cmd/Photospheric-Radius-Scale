@@ -1,0 +1,4 @@
+Launch sourced low-energy Route-B phenomenology theorem.
+Research worker commit: 7a07dc58518dbe21c8bf7dbb49de75a0443cc2b1
+Workflow commit: 1f17cf204189c92410567542aec173fd70b85949
+Primary phenomenology source: E. Barausse, arXiv:1907.05958, Introduction: beta~1e-15, generic alpha~1e-7, lambda~0.01-0.1; tuned relation treated only as an approximate central curve.
