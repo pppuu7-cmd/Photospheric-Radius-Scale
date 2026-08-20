@@ -1,0 +1,147 @@
+name: RTK Route-B current scale dictionary
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-current-scale-dictionary-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  dictionary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Freeze current state and dictionary provenance
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee route_b_scale_provenance.txt
+          python3 - <<'PY'
+          import json,pathlib
+          s=json.load(open('research/state/current.json'))
+          p=s['rtk'].get('accepted_score_params') or s['rtk']['accepted_center']
+          assert s['objective']['name']=='matched-ultra-linstep2+dense-BOSS'
+          assert s['objective']['objective_configuration_sha256']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666' or s['objective'].get('fingerprint','754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666')=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          z=s['objective']['dense_z_pk']
+          pathlib.Path('route_b_scale_state.json').write_text(json.dumps({
+            'iteration':s.get('iteration'),'objective':s['objective']['name'],
+            'objective_fingerprint':'754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666',
+            'center':p,'dense_z_pk':z,'P_k_max_h_Mpc':5.0
+          },indent=2,sort_keys=True)+'\n')
+          print('RTK_ROUTE_B_SCALE_STATE_FROZEN',s.get('iteration'),p['lam'])
+          PY
+
+      - name: Prepare pinned hardened CLASS tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/route_b_rtk_scale_dictionary.py class_public/
+          make -C class_public -j2 class
+
+      - name: Solve positive gamma at frozen current center
+        run: |
+          set -euo pipefail
+          mkdir -p class_public/output
+          python3 - <<'PY'
+          import json,pathlib
+          p=json.load(open('route_b_scale_state.json'))['center']
+          text=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_khronon = {p['Om']!r}
+          lambda_D = {p['lam']!r}
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          output = tCl
+          lensing = no
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          l_max_scalars = 30
+          root = output/route_b_scale_
+          background_verbose = 1
+          thermodynamics_verbose = 0
+          perturbations_verbose = 0
+          '''
+          pathlib.Path('class_public/route_b_scale.ini').write_text(text)
+          PY
+          cd class_public
+          ./class route_b_scale.ini > ../route_b_scale_class.log 2>&1
+          grep 'RTK_LOG_GAMMA_ROOT' ../route_b_scale_class.log | tail -1 | tee ../route_b_scale_gamma.txt
+
+      - name: Evaluate physical RTK pole scales and BPS hierarchy requirements
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re,subprocess
+          s=json.load(open('route_b_scale_state.json')); p=s['center']
+          line=open('route_b_scale_gamma.txt').read()
+          m=re.search(r'gamma=([0-9.eE+\-]+)',line)
+          if not m: raise SystemExit('gamma parse failed')
+          H0=100.0*float(p['h'])/299792.458
+          z=s['dense_z_pk']
+          if isinstance(z,list): z=','.join(str(x) for x in z)
+          cmd=['python3','class_public/route_b_rtk_scale_dictionary.py',
+               '--gamma',m.group(1),'--H0',repr(H0),
+               '--lambda-D',repr(float(p['lam'])),'--Omega-K0',repr(float(p['Om'])),
+               '--h-reduced',repr(float(p['h'])),'--z-grid',z,
+               '--pmax-h-mpc',repr(float(s['P_k_max_h_Mpc'])),
+               '--epsilons','1e-2,1e-3,1e-4']
+          r=subprocess.run(cmd,check=True,text=True,capture_output=True)
+          open('route_b_scale_dictionary.log','w').write(r.stdout)
+          print(r.stdout,end='')
+          payload=json.loads(r.stdout.strip().split(' ',1)[1])
+          assert payload['classification']=='RTK_ROUTE_B_SCALE_DICTIONARY_PASS'
+          assert payload['dictionary']['C']=='c_a^2(a)'
+          assert payload['dictionary']['Mdisp']=='M_K(a)'
+          assert len(payload['rows'])>=2
+          for row in payload['rows']:
+              assert row['C_ca2']>0 and row['Mdisp_MK']>0 and row['kstar']>0
+              assert abs(row['kstar']-row['a']*row['Mdisp_MK']) <= 1e-12*max(1.0,abs(row['kstar']))
+              assert row['pmax_over_MK']>0 and row['Fmax_unconstrained']>0
+          for v in payload['worst_unconstrained_hierarchy'].values():
+              assert v['required_MP_over_MK_unconstrained']>0
+          print('RTK_ROUTE_B_CURRENT_SCALE_DICTIONARY_VALIDATED')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-current-scale-dictionary
+          path: |
+            route_b_scale_dictionary.log
+            route_b_scale_state.json
+            route_b_scale_provenance.txt
+            route_b_scale_class.log
+            route_b_scale_gamma.txt
+            class_public/route_b_scale.ini
+          if-no-files-found: error
