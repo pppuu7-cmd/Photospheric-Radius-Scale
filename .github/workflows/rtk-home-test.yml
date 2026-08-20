@@ -1,0 +1,47 @@
+name: RTK HOME PC test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnostics:
+    runs-on: [self-hosted, Linux, X64, rtk-home]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: System information
+        run: |
+          echo "=== HOST ==="
+          hostname
+
+          echo "=== CPU ==="
+          nproc
+          lscpu | head -20
+
+          echo "=== MEMORY ==="
+          free -h
+
+          echo "=== DISK ==="
+          df -h
+
+      - name: Toolchain check
+        run: |
+          echo "=== Python ==="
+          python3 --version
+
+          echo "=== GCC ==="
+          gcc --version
+
+          echo "=== CMake ==="
+          cmake --version
+
+          echo "=== Git ==="
+          git --version
+
+      - name: RTK environment test
+        run: |
+          echo "RTK-HOME-PC runner is operational"
+          echo "Timestamp:"
+          date
