@@ -1,0 +1,27 @@
+{
+  "classification": "B9_RTK_RECENTER_BASE_PASS_HALF_SCALE_REQUIRED",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_run_id": 32518496348,
+  "parent_artifact_id": 9464480301,
+  "parent_artifact_digest": "sha256:021e393bdadee9d70d20de0d901247e347db3b2c677e13ce6d830fcd3a8b448d",
+  "center": {
+    "As": 2.0874265764520984e-09,
+    "Ob": 0.04679404670223316,
+    "Om": 0.2522369962493503,
+    "h": 0.6911169559022905,
+    "lam": 792605.2167661682,
+    "ns": 0.9645439945136476,
+    "zre": 7.329291125785135
+  },
+  "S_center_eff": 1059.2719553175134,
+  "best_exact_S_eff": 1059.2719553175134,
+  "best_improvement_eff": 0.0,
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_eff": true,
+  "minimum_eigenvalue_eff": 0.0005825694006286208,
+  "base_stencil_scale": 1.0,
+  "required_next_stencil_scale": 0.5,
+  "decision_frozen_before_half_scale_scores": true,
+  "next_gate": "independent half-scale Hessian at exactly the same recentered RTK B9 center; if recenter-clear and PD, advance to fresh-tree replay"
+}
