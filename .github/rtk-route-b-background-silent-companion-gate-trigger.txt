@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-22T00:23:00+03:00
+iteration_started_utc=2026-08-21T21:23:00Z
+research_source_commit=531c57eee83cc398670f798deb0e57d904a65f0e
+purpose=C8 determine when projected normal-derivative mixed kinetic avoids the direct acceleration carrier
