@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-21T20:44:00Z
+trigger_utc: 2026-08-21T20:47:00Z
 iteration_started_local: 2026-08-21T23:32:00+03:00
 iteration_started_utc: 2026-08-21T20:32:00Z
-reason: capture algebraic auxiliary, K2 deformation, dynamical auxiliary, two-auxiliary cancellation gates, B4/B9 Hessians and home bootstrap.
+reason: capture corrected K2 and dynamical auxiliary reruns, two-auxiliary PASS, B4/B9 Hessians and home bootstrap.
