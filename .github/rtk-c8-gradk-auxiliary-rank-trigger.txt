@@ -1,0 +1,4 @@
+Launch C8 gradK auxiliary-rank gate
+UTC 2026-08-21T20:18Z
+Source branch: rtk-class-build
+Source commit: 4d8a93f902da53d0a51886080865d353151ccd60
