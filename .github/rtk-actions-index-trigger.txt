@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-21T20:16:00Z
-reason: capture gradK tensor-null theorem, gradK Q_cosm ratio dictionary, B9 LCDM interrupted-recenter Hessian, B9 RTK recenter Hessian, B4 half-scale, and home bootstrap.
+trigger_utc: 2026-08-21T20:34:00Z
+reason: capture corrected TT-safe gradK basis, gradK static regularity gate, B4 half-scale, B9 RTK and LCDM recenter Hessians, and home bootstrap.
