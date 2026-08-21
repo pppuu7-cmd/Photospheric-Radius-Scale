@@ -13,12 +13,12 @@ from multiprocessing import Pool
 from .checkpoint import load_checkpoint, run_dir, save_checkpoint
 from .config import (
     CHECKPOINT_INTERVAL,
-    CHUNKSIZE,
     PROGRESS_INTERVAL,
     RESET_CHECKPOINT,
     RUN_KEY,
     TASK_MODULE,
     TOTAL_TASKS,
+    resolve_chunksize,
     resolve_workers,
 )
 from .progress import emit_event, write_progress
@@ -63,26 +63,32 @@ def main() -> int:
 
     module, calculate = _load_calculate()
     fingerprint = _fingerprint(module)
-    workers = resolve_workers()
+    logical_cpus = max(1, os.cpu_count() or 1)
+    workers = resolve_workers(logical_cpus)
     start_index = load_checkpoint(
         RUN_KEY,
         total_tasks=TOTAL_TASKS,
         fingerprint=fingerprint,
         reset=RESET_CHECKPOINT,
     )
+    remaining = max(0, TOTAL_TASKS - start_index)
+    chunksize = resolve_chunksize(remaining, workers)
     state = run_dir(RUN_KEY)
     state.mkdir(parents=True, exist_ok=True)
 
     metadata = {
         "workers": workers,
+        "logical_cpus": logical_cpus,
+        "chunksize": chunksize,
         "task_module": TASK_MODULE,
         "pid": os.getpid(),
         "fingerprint": fingerprint,
     }
     emit_event(
         RUN_KEY,
-        f"START tasks={TOTAL_TASKS} resume={start_index} workers={workers} "
-        f"task={TASK_MODULE} checkpoint={state / 'checkpoint.json'}",
+        f"START tasks={TOTAL_TASKS} resume={start_index} logical_cpus={logical_cpus} "
+        f"workers={workers} chunksize={chunksize} task={TASK_MODULE} "
+        f"checkpoint={state / 'checkpoint.json'}",
         notify_wall=True,
     )
 
@@ -113,7 +119,11 @@ def main() -> int:
     next_index = start_index
     pool = Pool(processes=workers)
     try:
-        iterator = pool.imap(calculate, range(start_index, TOTAL_TASKS), chunksize=CHUNKSIZE)
+        iterator = pool.imap(
+            calculate,
+            range(start_index, TOTAL_TASKS),
+            chunksize=chunksize,
+        )
         for index, _result in enumerate(iterator, start=start_index):
             # Ordered imap means every task before next_index has completed successfully.
             next_index = index + 1
