@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-21T18:49:00Z
-reason: capture C8 fixed-action FLRW exact-match theorem, B4 target-v2 half-scale, B9 paired reoptimization, and home bootstrap status after B10 closure.
+trigger_utc: 2026-08-21T18:59:00Z
+reason: capture C8 Newton-boundary theorem, B4 half-scale completion state, B9 LCDM reoptimization, and home bootstrap after exact FLRW carrier CI pass.
