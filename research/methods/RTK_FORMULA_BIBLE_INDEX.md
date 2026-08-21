@@ -18,15 +18,32 @@ Updated: 2026-08-21
 12. Primordial-abundance differential robustness
 13. Provenance and derivation discipline
 
-## C8 exact-algebra appendices
+## Detailed derivation appendices
 
-The main Formula Bible gives the project-level statement. Reconstructible detailed C8 derivations are additionally pinned in:
+The main Formula Bible stores project-level formulas/status. Long derivations live in named appendices and must be linked here so the project remains reconstructible without chat history.
 
-- `research/RTK_C8_FLRW_SCHUR_MATCHING_PROTOCOL_2026-08-21.md` on `rtk-class-build` — full lapse+shift Schur setup, pole and normalized-residue gates;
-- `rtk/route_b_flrw_schur_kernel.py` on `rtk-class-build` — exact Fraction arithmetic for D(q) and N(q);
-- `rtk/route_b_flrw_schur_rank_residue.py` on `rtk-class-build` — strict-linear theorem: `rank(M1)=1`, exact pole location, and normalized residues `N(q*)/D1` and `-N(q*)/D1` for the effective-kernel Schur term.
+### C8 FLRW Schur appendix
 
-### Current exact C8 theorem
+Canonical detailed derivation:
+
+- `research/methods/RTK_FORMULA_BIBLE_C8_SCHUR_APPENDIX.md` on `main`.
+
+Supporting source/protocol:
+
+- `research/RTK_C8_FLRW_SCHUR_MATCHING_PROTOCOL_2026-08-21.md` on `rtk-class-build`;
+- `rtk/route_b_flrw_schur_kernel.py` on `rtk-class-build`;
+- `rtk/route_b_flrw_schur_rank_residue.py` on `rtk-class-build`;
+- `rtk/route_b_pole_residue_distinction.py` on `rtk-class-build`.
+
+### B4 numerical proof chain
+
+Canonical audit/provenance chain:
+
+- `research/robustness/RTK_B4_NEUTRINO_STATIONARITY_CHAIN_2026-08-21.md` on `main`.
+
+It reconstructs the first recentered B4 Hessian, its three negative modes, exact negative-mode rays, the winning recenter point, target-v2 provenance and the mandatory base/half/fresh-tree closure sequence.
+
+## Current exact C8 reduced-kernel theorem
 
 For
 
@@ -42,29 +59,55 @@ and
 
 `D2=det(M1)=a1 b1-c1^2`.
 
-If the desired denominator is strictly linear and nonconstant, then `D2=0` and `D1!=0`. The latter excludes `M1=0`; therefore the 2x2 matrix `M1` is nonzero and singular and hence
+If the desired reduced-kernel denominator is strictly linear and nonconstant, then `D2=0` and `D1!=0`. Hence `M1` is nonzero and singular, so
 
 `rank(M1)=1`.
 
-For the simple pole
+For the simple **q-plane coefficient pole**
 
 `q*=-D0/D1`,
 
-the residue of `N/D` is
+the normalized q-plane residues are
 
-`Res[N/D]=N(q*)/D1`,
+`Res_q[N/D]=N(q*)/D1`,
 
-while the pole residue contributed to
+and for
 
-`K_eff=K0-N/D`
+`K_eff=K0-N/D`,
 
-is
+`Res_q[Schur in K_eff]=-N(q*)/D1`.
 
-`Res[K_eff pole]=-N(q*)/D1`.
+The unnormalised remainder `N(q*)` alone is not a valid cross-representation residue comparison when denominator normalization differs.
 
-The unnormalised remainder `N(q*)` alone is not a valid cross-representation residue comparison if denominator normalization differs.
+### Conditional rank-one sign theorem
 
-Scope: exact algebraic necessary condition for the reduced two-constraint linear-in-q kernel only. It is **not** by itself a DHOST degeneracy condition, a DOF proof, stability proof, or UV-completion theorem.
+For real symmetric rank-one
+
+`M1=sigma v v^T`, `sigma=+1 or -1`,
+
+with invertible `M0`, define
+
+`a=v^T M0^{-1}v`,
+
+`b(q)=v^T M0^{-1}J(q)`.
+
+Matrix determinant lemma gives
+
+`q*=-1/(sigma a)`.
+
+Sherman-Morrison gives the q-plane Schur residue
+
+`Res_q[Schur in K_eff] = - b(q*)^2/(sigma a^2)`.
+
+Therefore, when `b(q*) != 0`, its sign is opposite to the unique nonzero eigenvalue of `M1`. If `b(q*)=0`, the determinant pole cancels from that mixing/source channel.
+
+### Critical residue distinction
+
+The C8 residue above is a residue with respect to the **spatial variable q** in a reduced coefficient. It is **not** automatically the physical propagator residue with respect to `omega^2`.
+
+The existing `route_b_pole_residue_distinction.py` theorem separately shows that two kernels can share the same on-shell scalar dispersion/pole while differing in fixed-source propagator normalization and `omega^2` residue. A complete carrier must therefore pass both the q-plane off-shell coefficient mapping and the dynamical/source-coupled propagator mapping.
+
+Scope: these are exact algebraic statements for the stated reduced two-constraint kernel. They are not by themselves DHOST degeneracy conditions, DOF/stability proofs, ghost criteria, or UV-completion theorems.
 
 ## Recovery principle
 
