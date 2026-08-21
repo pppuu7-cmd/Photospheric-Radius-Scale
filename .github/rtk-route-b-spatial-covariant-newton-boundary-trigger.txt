@@ -1,0 +1,5 @@
+triggered_at_utc=2026-08-21T18:54:00Z
+script_commit=c9579ef48d508f0864b11914f399d9d517ed72de
+workflow_commit=8c805364ac98db2dde2409fe2b8ef1b851c9f7f2
+parent_exact_match_run_id=32514697064
+purpose=test minimal xi=1 beta=0 Newton normalization at the exact direct FLRW carrier coefficient
