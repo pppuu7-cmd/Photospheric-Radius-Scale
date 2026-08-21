@@ -1,0 +1,19 @@
+name: RTK Parallel Engine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  parallel:
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
+      - rtk-home
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run RTK Parallel Engine
+        run: |
+          python3 -m rtk_engine.parallel_engine
