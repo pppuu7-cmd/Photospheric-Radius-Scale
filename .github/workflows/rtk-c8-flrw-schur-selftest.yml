@@ -18,25 +18,37 @@ jobs:
         with:
           ref: rtk-class-build
           fetch-depth: 1
-      - name: Compile and run exact-arithmetic C8 diagnostic
+
+      - name: Compile and run exact-arithmetic C8 diagnostics
         run: |
           set -euo pipefail
-          python3 -m py_compile rtk/route_b_flrw_schur_kernel.py
+          python3 -m py_compile \
+            rtk/route_b_flrw_schur_kernel.py \
+            rtk/route_b_flrw_schur_rank_residue.py
           python3 rtk/route_b_flrw_schur_kernel.py --self-test | tee c8_flrw_schur_selftest.log
+          python3 rtk/route_b_flrw_schur_rank_residue.py --self-test | tee c8_flrw_rank_residue_selftest.log
           grep -q 'C8_FLRW_SCHUR_SELFTEST_PASS' c8_flrw_schur_selftest.log
-      - name: Record provenance
+          grep -q 'C8_FLRW_SCHUR_RANK_RESIDUE_SELFTEST_PASS' c8_flrw_rank_residue_selftest.log
+
+      - name: Record theorem report and provenance
         run: |
           set -euo pipefail
+          python3 rtk/route_b_flrw_schur_rank_residue.py | tee c8_flrw_rank_residue_report.json
           {
             echo "research_source_commit=$(git rev-parse HEAD)"
             echo "python=$(python3 --version)"
             echo "workflow_ref=${GITHUB_SHA}"
+            echo "base_tool=rtk/route_b_flrw_schur_kernel.py"
+            echo "rank_residue_tool=rtk/route_b_flrw_schur_rank_residue.py"
           } | tee c8_flrw_schur_provenance.txt
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: rtk-c8-flrw-schur-selftest
           path: |
             c8_flrw_schur_selftest.log
+            c8_flrw_rank_residue_selftest.log
+            c8_flrw_rank_residue_report.json
             c8_flrw_schur_provenance.txt
           if-no-files-found: error
