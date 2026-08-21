@@ -1,4 +1,7 @@
-B9 paired Planck-lensing reoptimization launch.
-Target commit: 3091870f52c0bdf41475c5aca38974fbe63b7ab5
-Worker commit: 8a27501cb7d1f910e4408394d9b686313e3a2706
-Workflow commit: 5029be98e032eaa49ad514773a667060b52dbacf
+B9 paired Planck-lensing reoptimization fresh replay.
+Reason: historical 2026-08-19 launch is not represented by a closed scientific result in current state/ledger; reproduce the already-preregistered target without changing objective, bounds, optimizer geometry, or interpretation.
+Target: research/robustness/B9_PAIRED_REOPTIMIZATION_TARGET_v1.json
+Target status: PREREGISTERED_TARGET_BEFORE_FIRST_B9_REOPTIMIZATION_RESULT
+Objective: matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1
+Historical launch commit: e52e72f3143d474932e81aa646ddbc7b327f29bc
+Workflow: .github/workflows/rtk-b9-paired-reoptimization.yml
