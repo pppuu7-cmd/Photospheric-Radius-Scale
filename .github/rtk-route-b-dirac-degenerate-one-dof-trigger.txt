@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-21T23:32:00+03:00
+iteration_started_utc=2026-08-21T20:32:00Z
+research_source_commit=bff40e5340d43605cf10dd6ee7eb1d918670ca32
+purpose=C8 constructive rank-one kinetic Dirac constraint and exact one-pole response gate
