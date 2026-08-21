@@ -17,6 +17,44 @@ Frozen finite-lambda local RTK score:
 
 This is the accepted local massless dense-objective RTK score. B10 asks whether the profiled large-lambda dust-like tail is numerically distinguishable from it on the same frozen objective.
 
+## T2 profile-artifact audit
+
+The T3 anchors come from the preregistered paired 6D fixed-lambda profiling run `32244330691`, not directly from the fixed-shared T1 reconnaissance.
+
+### Factor 64
+
+Source artifact id: `9364651941`.
+
+- fixed lambda: `14045284.653674118`;
+- exact shared-parameter start score: `1050.249062546245`;
+- Powell endpoint objective: `1050.252766957277`;
+- optimizer success: `true`;
+- normalized endpoint coordinates: approximately `[-0.001268, +0.001078, +0.000446, +0.002111, +0.001460, +0.008128]`;
+- retained best exact score: `1050.249062546245`;
+- `profile_improvement = 0.0`.
+
+The optimizer endpoint is interior and worse than the exact start. The pipeline therefore correctly retained the exact start as the best profiled point.
+
+### Factor 16384
+
+Source artifact id: `9363646458`.
+
+- fixed lambda: `3595592871.3405743`;
+- exact shared-parameter start score: `1050.2490169939647`;
+- Powell endpoint objective: `1050.2529335888485`;
+- optimizer success: `true`;
+- normalized endpoint coordinates: approximately `[-0.001264, +0.001076, +0.000444, +0.002109, +0.001456, +0.008127]`;
+- retained best exact score: `1050.2490169939647`;
+- `profile_improvement = 0.0`.
+
+Again, the optimizer endpoint is interior and worse than the exact start.
+
+### Interpretation of `profile_improvement=0`
+
+This value does **not** mean that T2 skipped nuisance-parameter profiling. Forty-nine exact requests were made for each tail anchor and Powell terminated successfully. It means the profiling search did not find a shared-parameter displacement with a lower exact objective than the frozen shared RTK start.
+
+The B10 tail similarity is therefore not a boundary-hit artifact of the T2 optimizer. T3 stationarity certification is still mandatory because a successful optimizer endpoint or retained exact start is not by itself a local-minimum proof.
+
 ## Already completed T3 base-stencil anchors
 
 Factor 64:
