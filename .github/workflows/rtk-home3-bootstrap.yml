@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/rtk-home3-bootstrap.yml
+      - .github/rtk-home3-bootstrap-trigger.txt
   workflow_dispatch:
 
 concurrency:
