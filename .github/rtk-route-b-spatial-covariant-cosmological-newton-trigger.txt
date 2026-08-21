@@ -1,0 +1,3 @@
+trigger_utc: 2026-08-21T19:20:00Z
+research_source_commit: 2670aa4c5a53d55a5816abe03be3e8db856ffdc0
+purpose: resolve bare-vs-cosmological normalization ambiguity for direct C8 carrier on minimal beta=0 universal matter branch
