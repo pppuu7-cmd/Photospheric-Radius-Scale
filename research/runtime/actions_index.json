@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-21T20:44:28.770618+00:00",
+  "generated_at_utc": "2026-08-21T20:49:54.266902+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-21T20:49:45Z",
+      "display_title": "Refresh RTK index for Dirac-degenerate gate",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "10aacf9377642871cde6793ac01f5088b7a1ad06",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32525527524",
+      "id": 32525527524,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 68,
+      "status": "in_progress",
+      "updated_at": "2026-08-21T20:49:49Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": "failure",
+      "created_at": "2026-08-21T20:48:31Z",
+      "display_title": "Launch C8 Dirac-degenerate one-DOF gate",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "b2934df1715d0fff954e3f64b20234a37b780dc1",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32525427091",
+      "id": 32525427091,
+      "name": "RTK Route-B Dirac-degenerate one-DOF gate",
+      "run_attempt": 1,
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-21T20:48:53Z",
+      "workflow_id": 339675744
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-21T20:44:18Z",
       "display_title": "Refresh RTK index after corrected CI reruns",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 67,
-      "status": "in_progress",
-      "updated_at": "2026-08-21T20:44:24Z",
+      "status": "completed",
+      "updated_at": "2026-08-21T20:44:34Z",
       "workflow_id": 336560028
     },
     {
@@ -1569,38 +1601,6 @@
       "run_number": 8,
       "status": "queued",
       "updated_at": "2026-08-21T00:42:51Z",
-      "workflow_id": 338990919
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-21T00:42:44Z",
-      "display_title": "Add RTK worker abstraction",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "ec72864af2ca1919e0943b2578afb54d21900e9a",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32433676263",
-      "id": 32433676263,
-      "name": "RTK Home Scientific Benchmark v3 Progress",
-      "run_attempt": 1,
-      "run_number": 7,
-      "status": "completed",
-      "updated_at": "2026-08-21T13:34:57Z",
-      "workflow_id": 338990919
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-21T00:42:37Z",
-      "display_title": "Add RTK progress reporting",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "e704d6c301a0fbf5139731a278e0fc894ede6fec",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32433670059",
-      "id": 32433670059,
-      "name": "RTK Home Scientific Benchmark v3 Progress",
-      "run_attempt": 1,
-      "run_number": 6,
-      "status": "completed",
-      "updated_at": "2026-08-21T00:59:44Z",
       "workflow_id": 338990919
     }
   ],
