@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-21T20:05:00Z
-reason: capture gradK tensor-null gate, fixed-Wilson gate, B4 half-scale, B9 LCDM reoptimization, B9 RTK recenter stationarity, and home bootstrap.
+trigger_utc: 2026-08-21T20:16:00Z
+reason: capture gradK tensor-null theorem, gradK Q_cosm ratio dictionary, B9 LCDM interrupted-recenter Hessian, B9 RTK recenter Hessian, B4 half-scale, and home bootstrap.
