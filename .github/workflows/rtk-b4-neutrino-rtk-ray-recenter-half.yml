@@ -1,0 +1,143 @@
+name: RTK B4 neutrino RTK target-v2 half stationarity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b4-neutrino-rtk-ray-recenter-half-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-b4-neutrino-rtk-target-v2-half
+  cancel-in-progress: false
+
+jobs:
+  target-v2-half-hessian:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
+      RTK_B4_STENCIL_SCALE: '0.5'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Require frozen target-v2 base decision
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/robustness/b4_neutrino_rtk_ray_recenter_target_v2.json'))
+          d=json.load(open('research/robustness/b4_neutrino_rtk_ray_recenter_base_decision_v2.json'))
+          assert t['classification']=='B4_NEUTRINO_RTK_RAY_RECENTER_TARGET_V2_FROZEN'
+          assert d['classification']=='B4_RTK_RAY_RECENTER_BASE_DECISION_V2'
+          assert d['source_base_run_id']==32482490823
+          assert d['source_artifact_id']==9452581043
+          assert d['source_artifact_digest']=='sha256:c5bb88ef4d182104d8e5b5ed578b749dd4e0f9b5b4857f047633782540d7223d'
+          assert d['objective']==t['objective']=='matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1'
+          assert d['base_recenter_clear'] is True
+          assert d['positive_definite'] is True
+          assert d['same_scale_negative_mode_ray_required'] is False
+          assert d['half_scale_required'] is True
+          assert d['validation_scale']==0.5
+          print('B4_RTK_TARGET_V2_HALF_DISPATCH_GATE_PASS')
+          PY
+          cp research/robustness/b4_neutrino_rtk_ray_recenter_target_v2.json research/robustness/b4_neutrino_stationarity_targets_v1.json
+          python3 -m py_compile rtk/neutrino_stationarity_hessian.py rtk/prepare_inference_core.py
+
+      - name: Prepare pinned hardened CLASS tree
+        run: |
+          set -euo pipefail
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee b4_rtk_target_v2_half_provenance.txt
+          echo "source_base_run_id=32482490823" | tee -a b4_rtk_target_v2_half_provenance.txt
+          echo "source_base_artifact_id=9452581043" | tee -a b4_rtk_target_v2_half_provenance.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/neutrino_stationarity_hessian.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q 'RTK_PLANCK_DATA' inference_core.py
+
+      - name: Build CLASS and locked runtime
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 -m pip freeze | sort | tee b4_rtk_target_v2_half_pip_freeze.txt
+          python3 --version | tee b4_rtk_target_v2_half_python_version.txt
+
+      - name: Download and verify Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          sha256sum planck.tar.gz | tee ../b4_rtk_target_v2_half_planck_sha256.txt
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
+      - name: Run exact RTK target-v2 half Hessian
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 neutrino_stationarity_hessian.py RTK | tee ../b4_rtk_target_v2_half.log
+          grep -q 'B4_NEUTRINO_STATIONARITY_HESSIAN_COMPLETE RTK 0.5' ../b4_rtk_target_v2_half.log
+          python3 - <<'PY'
+          import json
+          s=json.load(open('../output/b4_neutrino_stationarity/rtk/scale_0.5/summary.json'))
+          t=json.load(open('../research/robustness/b4_neutrino_rtk_ray_recenter_target_v2.json'))
+          d=json.load(open('../research/robustness/b4_neutrino_rtk_ray_recenter_base_decision_v2.json'))
+          assert s['center']==t['models']['RTK']['center']
+          assert s['objective']==t['objective']==d['objective']
+          assert abs(s['eff']['S_center']-d['center_score_eff'])<=2e-6
+          scientific_pass=(s['eff']['best_improvement']<=d['recenter_tolerance_S'] and s['eff']['positive_definite'])
+          print('B4_RTK_TARGET_V2_HALF_COMPLETE',s['eff']['best_exact_S'],s['eff']['best_improvement'],s['eff']['positive_definite'])
+          print('B4_RTK_TARGET_V2_HALF_SCIENTIFIC_PASS' if scientific_pass else 'B4_RTK_TARGET_V2_HALF_REQUIRES_FOLLOWUP')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b4-neutrino-rtk-target-v2-half
+          path: |
+            b4_rtk_target_v2_half.log
+            b4_rtk_target_v2_half_provenance.txt
+            b4_rtk_target_v2_half_pip_freeze.txt
+            b4_rtk_target_v2_half_python_version.txt
+            b4_rtk_target_v2_half_planck_sha256.txt
+            output/b4_neutrino_stationarity/rtk/scale_0.5/
+          if-no-files-found: warn
