@@ -21,11 +21,11 @@ Every iteration records:
 | ID | Question | Method | Status |
 |---|---|---|---|
 | B4 | Stationarity/neutrino sector | paired RTK/LCDM analysis | RAY-RECENTER BASE REPLAY LAUNCHED |
-| B6 | Primordial abundances | AlterBBN pipeline | RERUN ATTEMPT 2 RUNNING |
+| B6 | Primordial abundances | paired AlterBBN differential robustness | CLOSED — DIFFERENTIAL ABUNDANCE EFFECT NEGLIGIBLE |
 | B9 | CMB lensing | matched lensing comparison | FIXED-CENTER ADAPTER PASS; MATCHED REOPTIMIZATION OPEN |
 | B10 | Lambda identifiability | fixed-lambda profile + multiscale stationarity | HALF-SCALE RUNNING |
 | C8 | Exact UV/IR interpolation | FLRW lapse+shift Schur-complement matching | ALGEBRAIC FILTER ADDED; ACTION MAP OPEN |
-| INFRA-HOME3 | Distributed heavy compute | self-hosted Linux/X64 runner + process pool + persistent checkpoint | ENGINE V2 MIGRATED; BOOTSTRAP HANDSHAKE NEXT |
+| INFRA-HOME3 | Distributed heavy compute | self-hosted Linux/X64 runner + process pool + persistent checkpoint | ENGINE V2 MIGRATED; BOOTSTRAP HANDSHAKE ARMED |
 
 ## Closed / established results
 
@@ -36,6 +36,7 @@ Every iteration records:
 - B10 factor 64: lambda_D = 14045284.653674118; S_eff(center) = 1050.249062546245; exact stencil improvement = 0; Hessian positive definite; minimum eigenvalue ~= 0.046675.
 - B10 factor 16384: lambda_D = 3595592871.3405743; S_eff(center) = 1050.2490169939647; exact stencil improvement = 0; Hessian positive definite; minimum eigenvalue ~= 0.046707.
 - These base-stencil results do not close B10. The worker itself requires half-scale validation.
+- B6 paired AlterBBN differential abundance robustness is closed under its preregistered protocol: the RTK H(T) perturbation produces observationally negligible abundance shifts. This is not an absolute BBN goodness-of-fit or lithium-problem claim.
 
 ## 2026-08-21 continuation
 
@@ -49,13 +50,19 @@ Every iteration records:
 - Acceptance rule: center replay within 2e-6 of frozen T2 score; no exact improvement > 0.005; Hessian remains positive definite and qualitatively consistent.
 - Scientific interpretation is deferred until both artifacts are complete and inspected.
 
-### B6 paired AlterBBN abundance gate
+### B6 paired AlterBBN abundance gate — CLOSED
 
-- Run 32285359564 attempt 1 was cancelled externally during the long `stand_cosmo.x` abundance-network step.
-- Before cancellation, the frozen extended H(T) input lock passed; mapping artifact hashes passed; pinned AlterBBN v2.2 source passed; identical reference/RTK patching passed; all three binary trees built successfully.
-- No abundance conclusion may be drawn from the cancelled attempt.
-- Exact job rerun requested on 2026-08-21.
-- Attempt 2 is currently in progress. Steps 1-7 have passed and step 8, `Run failsafe 1 and 7 for all paired trees`, is executing. No abundance inference is allowed until the artifact is parsed.
+- Run `32285359564`, attempt 2, completed successfully and produced artifact `9447623417`, digest `sha256:d8cae8fbd36b886219b611603ef90852dff18251f93e020b0ab87c393e012287`.
+- Execution classification: `RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS`.
+- Source/artifact locks, exact extended H(T) input, pinned AlterBBN v2.2, identical paired patching, three builds, six network runs and full-precision parsing all passed.
+- Injected RTK expansion perturbation: `max |R_H-1| = 2.422446243599552e-09`.
+- Primary refined/failsafe-1 Yp shift: `+1.4314660568004456e-12`; this is numerically resolved, with conservative absolute bound `1.5052958879380185e-12`.
+- Primary refined/failsafe-1 D/H shift: `+1.6226982865047423e-15`; this is below numerical resolution, with conservative absolute bound `4.560750648668899e-15`.
+- He3/H, Li7/H, Li6/H and Be7/H shifts are also below the preregistered numerical-resolution threshold; their conservative bounds are preserved in `research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
+- Frozen observational residuals barely move: Yp changes by about `1.10e-9 sigma`, D/H by about `6.76e-9 sigma`.
+- The reference calculation itself is `z=-4.705799909832967` for frozen D/H and `z=+1.1728100763428537` for frozen Yp; therefore this gate does not certify absolute BBN goodness-of-fit.
+- Scientific closure classification: `RTK_B6_DIFFERENTIAL_ABUNDANCE_ROBUSTNESS_CLOSED`.
+- Interpretation: the RTK-vs-reference H(T) change does not create a new BBN abundance tension at the preregistered massless A1-A5 point. No global BBN likelihood, lithium-problem, or model-selection claim follows.
 
 ### B9 fixed-center Planck lensing diagnostic
 
@@ -98,18 +105,19 @@ Every iteration records:
 - Process-parallel workflows set OMP/OpenBLAS/MKL/NumExpr inner threads to 1 to prevent nested oversubscription.
 - Checkpoint state moved out of checkout to `$HOME/.rtk-runner-state/<run_key>/checkpoint.json` with atomic writes, schema/fingerprint checks and `next_index` resume semantics.
 - Engine now handles SIGINT/SIGTERM by committing the last contiguous completed prefix and exposes percent/rate/ETA/status via persistent `progress.json` and `live.log`.
-- Added Ubuntu console wrapper `scripts/rtk_home_runner_console.sh`; bootstrap will install it as `$HOME/.local/bin/rtk-runner-start`.
+- Added Ubuntu console wrapper `scripts/rtk_home_runner_console.sh`; bootstrap installs it as `$HOME/.local/bin/rtk-runner-start`.
+- Bootstrap workflow `.github/workflows/rtk-home3-bootstrap.yml` was armed by commit `ee0b42f8594235f41db8aaecb61bfbbe63df3d94` and targets `[self-hosted, Linux, X64, rtk-home3]`.
 - Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
-- Canonical chronology created: `research/RTK_MODEL_CHRONOLOGY.md`.
-- Formula Bible expanded with C8 Schur derivation and mandatory formula-provenance rules.
-- Scientific result status is unchanged by the infrastructure migration; placeholder engine workloads are infrastructure tests only.
+- Canonical chronology: `research/RTK_MODEL_CHRONOLOGY.md`.
+- Formula Bible contains the C8 Schur derivation and mandatory formula-provenance rules.
+- Placeholder engine workloads are infrastructure tests only and cannot alter scientific gate status.
 
 ## Next Research Cycle
 
 1. Inspect B10 half-scale artifacts; if both pass, quantify tail flatness and decide the next lambda-identifiability claim conservatively.
-2. Inspect B6 rerun abundance outputs; only then discuss Y_p, D/H, Li or observational compatibility.
-3. Inspect the fresh B4 ray-recenter base artifact; if improvement >0.005 recenter again, if Hessian is indefinite run exact negative-mode rays, otherwise run half-scale validation.
-4. Validate the C8 Schur self-test artifact, then map A,B,C,P,R,K0 from one explicit candidate fixed action; do not fit these coefficients independently by epoch.
-5. Freeze a matched B9 lensing reoptimization protocol before using lensing in any model-comparison statement.
-6. Continue the 2026-08-20 Route-B / PPN / compact-object / FLRW audit and merge only scoped, validated conclusions into the recovery manual and Formula Bible.
-7. Run the `rtk-home3` bootstrap handshake, record actual node/worker/progress/checkpoint behavior, then route the next suitable frozen heavy scientific workload to the home node without duplicating an already-running GitHub-hosted calculation.
+2. Inspect the fresh B4 ray-recenter base artifact; if improvement >0.005 recenter again, if Hessian is indefinite run exact negative-mode rays, otherwise run half-scale validation.
+3. Validate the C8 Schur self-test artifact, then map A,B,C,P,R,K0 from one explicit candidate fixed action; do not fit these coefficients independently by epoch.
+4. Freeze a matched B9 lensing reoptimization protocol before using lensing in any model-comparison statement.
+5. Continue the 2026-08-20 Route-B / PPN / compact-object / FLRW audit and merge only scoped, validated conclusions into the recovery manual and Formula Bible.
+6. Complete the `rtk-home3` bootstrap handshake, record actual node/worker/progress/checkpoint behavior, then route the next suitable frozen heavy scientific workload to the home node without duplicating an already-running calculation.
+7. If absolute BBN goodness-of-fit is promoted into a production likelihood later, freeze a separate protocol including nuclear-rate/theory uncertainty and parameter treatment; do not reinterpret the differential B6 gate as that likelihood.
