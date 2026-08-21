@@ -1,0 +1,6 @@
+iteration_started_local=2026-08-22T02:46:00+03:00
+iteration_started_utc=2026-08-21T23:46:00Z
+base_run_id=32518496348
+base_artifact_id=9464480301
+base_decision_commit=bb4f9d988c87e96572d4d3fd603dbc2186f0fa54
+purpose=independent half-scale stationarity at frozen B9 RTK recentered center
