@@ -1,0 +1,1 @@
+2026-08-21T20:22:00Z launch correction: complete TT-safe gradK scalar basis including D_i K D_j K^ij
