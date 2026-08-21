@@ -1,0 +1,86 @@
+{
+  "S_center_eff": 1050.5880475140204,
+  "axes": [
+    "loglam",
+    "h",
+    "Ob",
+    "Om",
+    "As",
+    "ns",
+    "zre"
+  ],
+  "best_improvement_eff": 0.0,
+  "center": {
+    "As": 2.0920212896820786e-09,
+    "Ob": 0.04722200104991654,
+    "Om": 0.2528393318824633,
+    "h": 0.6885660022475836,
+    "lam": 3043326.1774413693,
+    "ns": 0.9657332769496741,
+    "zre": 7.506210209218662
+  },
+  "center_fingerprint": "47ec8c2cab469973d0dcf0f6fc5dc404a84278fa9d4b2854d9050eb448291e5e",
+  "classification": "B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_TARGET_V1_FROZEN",
+  "decision_rule": {
+    "if_any_exact_improvement_gt_0p005": "freeze best exact ray point as next B4 recenter target",
+    "if_no_ray_improvement_gt_0p005": "preregister quarter-scale Hessian resolution audit because half-scale Hessian remains non-PD",
+    "no_clipping": true,
+    "soft_mode_selection": "mode 1 included conservatively because it is the next-smallest eigenvalue and is two orders of magnitude below the O(1) stiff modes; threshold is frozen before any ray score"
+  },
+  "eigenmodes": [
+    {
+      "eigenvalue_y": -0.007154172940511002,
+      "eigenvector_y": [
+        -0.0024622319482577215,
+        -0.13773558569272554,
+        0.037875969482101784,
+        0.06310575110013497,
+        0.5545914234862723,
+        0.12043999623428914,
+        0.8084110843278606
+      ],
+      "mode_index": 0,
+      "reason": "negative"
+    },
+    {
+      "eigenvalue_y": 0.00013489280964015747,
+      "eigenvector_y": [
+        0.9999961604658346,
+        0.0007079427264512468,
+        -0.00034361616674697824,
+        -0.00037005524104415604,
+        0.0014710482905342466,
+        0.0004403766889838795,
+        0.0021365727303050896
+      ],
+      "mode_index": 1,
+      "reason": "soft_positive_resolution_audit"
+    }
+  ],
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "parent_half_artifact_digest": "sha256:e96fcb3ab64286dadacd61d0b619889ac1b366d06d36a049effba67987edc614",
+  "parent_half_artifact_id": 9463331303,
+  "parent_half_run_id": 32514077002,
+  "parent_positive_definite_eff": false,
+  "parent_stencil_scale": 0.5,
+  "production_mapping": "eff",
+  "ray_amplitudes": [
+    -2.0,
+    -1.0,
+    -0.5,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "recenter_tolerance_S": 0.005,
+  "steps": {
+    "As": 2e-12,
+    "Ob": 3.5e-05,
+    "Om": 0.00035,
+    "h": 0.000175,
+    "loglam": 0.025,
+    "ns": 0.000175,
+    "zre": 0.035
+  },
+  "warning": "B4 robustness only; separate objective from massless A1-A5."
+}
