@@ -1,0 +1,161 @@
+name: RTK Route-B gradK tensor ratio dictionary
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-gradk-tensor-ratio-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  dictionary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_NUMPY_VERSION: '2.5.2'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Freeze replay-certified RTK point
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee gradk_tensor_ratio_provenance.txt
+          python3 - <<'PY'
+          import json,pathlib
+          s=json.load(open('research/state/current.json'))
+          fr=s['final_replay_result']
+          assert fr['status']=='PASS'
+          assert fr['objective']['name']=='matched-ultra-linstep2+dense-BOSS'
+          assert fr['objective_fingerprint']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          assert fr['provenance']['class_upstream_commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          p=fr['rtk']['params']
+          assert p==s['rtk']['accepted_score_params']
+          z=fr['objective']['dense_z_pk']
+          pathlib.Path('gradk_tensor_ratio_state.json').write_text(json.dumps({
+              'state_iteration':s.get('iteration'),
+              'replay_run_id':s['final_replay_run']['run_id'],
+              'objective':fr['objective']['name'],
+              'objective_fingerprint':fr['objective_fingerprint'],
+              'center':p,
+              'dense_z_pk':z,
+          },indent=2,sort_keys=True)+'\n')
+          print('RTK_GRADK_TENSOR_RATIO_STATE_FROZEN',p['lam'])
+          PY
+
+      - name: Prepare pinned hardened CLASS tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          make -C class_public -j2 class
+          python3 -m pip install --disable-pip-version-check "numpy==$RTK_NUMPY_VERSION"
+          python3 - <<'PY'
+          import numpy,os
+          assert numpy.__version__==os.environ['RTK_NUMPY_VERSION']
+          PY
+
+      - name: Generate frozen RTK background input
+        run: |
+          set -euo pipefail
+          mkdir -p class_public/output
+          python3 - <<'PY'
+          import json,pathlib
+          p=json.load(open('gradk_tensor_ratio_state.json'))['center']
+          text=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_khronon = {p['Om']!r}
+          lambda_D = {p['lam']!r}
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          root = output/gradk_tensor_ratio_
+          write background = yes
+          background_verbose = 1
+          thermodynamics_verbose = 0
+          perturbations_verbose = 0
+          output_verbose = 1
+          '''
+          pathlib.Path('class_public/gradk_tensor_ratio.ini').write_text(text)
+          PY
+
+      - name: Solve exact background and evaluate normalization-independent ratio
+        run: |
+          set -euo pipefail
+          cd class_public
+          ./class gradk_tensor_ratio.ini > ../gradk_tensor_ratio_class.log 2>&1
+          cd ..
+          grep 'RTK_LOG_GAMMA_ROOT' gradk_tensor_ratio_class.log | tail -1 | tee gradk_tensor_ratio_gamma.txt
+          python3 - <<'PY'
+          import json,re,subprocess
+          s=json.load(open('gradk_tensor_ratio_state.json')); p=s['center']
+          line=open('gradk_tensor_ratio_gamma.txt').read()
+          m=re.search(r'gamma=([0-9.eE+\-]+)',line)
+          if not m: raise SystemExit('gamma parse failed')
+          H0=100.0*float(p['h'])/299792.458
+          z=s['dense_z_pk']
+          if isinstance(z,list): z=','.join(str(q) for q in z)
+          cmd=[
+              'python3','rtk/route_b_gradK_tensor_ratio_dictionary.py',
+              '--background','class_public/output/gradk_tensor_ratio_background.dat',
+              '--gamma',m.group(1),'--H0',repr(H0),
+              '--lambda-D',repr(float(p['lam'])),'--Omega-K0',repr(float(p['Om'])),
+              '--z-grid',z,'--output','gradk_tensor_ratio_dictionary.json'
+          ]
+          r=subprocess.run(cmd,check=True,text=True,capture_output=True)
+          open('gradk_tensor_ratio_dictionary.log','w').write(r.stdout)
+          print(r.stdout,end='')
+          out=json.load(open('gradk_tensor_ratio_dictionary.json'))
+          assert out['classification'] in (
+              'RTK_ROUTE_B_GRADK_TENSOR_NULL_CONSTANT_NORMALIZATION_FAIL',
+              'RTK_ROUTE_B_GRADK_TENSOR_NULL_CONSTANT_NORMALIZATION_NOT_EXCLUDED')
+          assert len(out['rows'])==27
+          assert all(q['Q_cosm_2MK2_over_H2']>0 for q in out['rows'])
+          print('RTK_GRADK_TENSOR_RATIO_DICTIONARY_VALIDATED',out['classification'])
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-gradk-tensor-ratio-dictionary
+          path: |
+            gradk_tensor_ratio_dictionary.json
+            gradk_tensor_ratio_dictionary.log
+            gradk_tensor_ratio_state.json
+            gradk_tensor_ratio_provenance.txt
+            gradk_tensor_ratio_class.log
+            gradk_tensor_ratio_gamma.txt
+            class_public/gradk_tensor_ratio.ini
+            class_public/output/gradk_tensor_ratio_background.dat
+          if-no-files-found: error
