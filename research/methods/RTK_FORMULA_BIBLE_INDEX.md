@@ -1,240 +1,174 @@
 # RTK Formula Bible Index
 
-Updated: 2026-08-21 19:48 UTC
+Updated: 2026-08-21 20:38 UTC
 Status: canonical derivation/provenance map
 
 ## Purpose
 
-This file is the recovery index for RTK mathematics. The main Formula Bible stores project-level formulas/status; detailed derivations live in named appendices. A future research session must be able to reconstruct the current frontier without any chat transcript.
+Recovery index for RTK mathematics. Main formulas live in `research/methods/RTK_FORMULA_BIBLE.md`; detailed derivations and corrections live in appendices/result notes. A future session must reconstruct the current frontier without chat history.
 
-Status markers:
+Markers: GREEN validated in scope; YELLOW open gate; RED open; BLACK scoped excluded construction; SUPERSEDED means a broader interpretation was corrected while a narrower algebraic statement may remain true.
 
-- GREEN — exact/validated within stated assumptions;
-- YELLOW — promising or algebraically derived, but a required CI/action/phenomenology gate remains;
-- RED — open;
-- BLACK — scoped excluded construction only.
+## Core
 
-## Core Formula Bible
+Canonical file: `research/methods/RTK_FORMULA_BIBLE.md`.
 
-Canonical file:
+Maintain these invariants: exact-float `A_s`; physical RTK `Omega_cdm=0`; positive bracketed gamma root; production `eff` vs `k01` and sparse vs dense objectives are distinct; local Hessian/replay never implies a global minimum.
 
-`research/methods/RTK_FORMULA_BIBLE.md`.
+## Appendix A — C8 FLRW Schur/rank/residue
 
-Core subjects include:
+File: `research/methods/RTK_FORMULA_BIBLE_C8_SCHUR_APPENDIX.md`.
 
-1. action/carrier requirements;
-2. frozen production objective;
-3. Khronon/DBI implementation invariants;
-4. perturbation/stability requirements;
-5. weak-field transition-radius formulas;
-6. rational/alpha scoped boundaries;
-7. lapse-only and U-DHOST scoped no-go results;
-8. PPN/acceleration mappings;
-9. observational robustness gates;
-10. FLRW Schur algebra;
-11. B6 differential abundance closure;
-12. derivation/provenance discipline.
+CI run `32490690248`, artifact `9449602889`, digest `sha256:1f2bfda3959e8b6c57866bd35e7279e7cb398460c1a6cd296d4b2d146e092dce`.
 
-## Appendix A — C8 FLRW Schur/rank/q-residue algebra
-
-File:
-
-`research/methods/RTK_FORMULA_BIBLE_C8_SCHUR_APPENDIX.md`.
-
-Supporting sources on `rtk-class-build`:
-
-- `rtk/route_b_flrw_schur_kernel.py`;
-- `rtk/route_b_flrw_schur_rank_residue.py`;
-- `rtk/route_b_pole_residue_distinction.py`.
-
-CI result:
-
-- run `32490690248`;
-- artifact `9449602889`;
-- digest `sha256:1f2bfda3959e8b6c57866bd35e7279e7cb398460c1a6cd296d4b2d146e092dce`;
-- result document `research/RTK_C8_SCHUR_CI_RESULT_2026-08-21.md`.
-
-For `M(q)=M0+qM1`, a real symmetric nonzero 2x2 mechanism claiming a strict nonconstant linear constraint denominator requires `det M1=0`, hence `rank M1=1`. q-plane Schur residues are normalized by `D1`; they are not automatically physical `omega^2` propagator residues.
+For `M(q)=M0+qM1`, a strict nonconstant linear determinant mechanism needs `det M1=0`; q-plane constraint residues are not automatically physical `omega^2` residues.
 
 Status: GREEN scoped algebra.
 
-## Appendix B — C8 residue/source redefinition locality
+## Appendix B — source/redefinition locality
 
-File:
+File: `research/methods/RTK_FORMULA_BIBLE_C8_SOURCE_REDEFINITION_APPENDIX.md`.
 
-`research/methods/RTK_FORMULA_BIBLE_C8_SOURCE_REDEFINITION_APPENDIX.md`.
+CI run `32491666126`, artifact `9449986685`, digest `sha256:006d396c0bd686a76c1b76da2aaf3dd2c462b5ef696227b9ce5bf456134661d9`.
 
-Executable theorem:
-
-`rtk-class-build:rtk/route_b_residue_source_redefinition_gate.py`, refined commit `7f5fda897938e24170b8a0228ce8a392e4110e8a`.
-
-CI:
-
-- run `32491666126`;
-- artifact `9449986685`;
-- digest `sha256:006d396c0bd686a76c1b76da2aaf3dd2c462b5ef696227b9ce5bf456134661d9`.
-
-For `K_RTK=(1+r q^2)K_BPS`, exact scalar normalization requires `T=sqrt(1+r q^2)` and the source transforms by the same factor. `J^2/K` is invariant under a consistent field+source change. The scoped locality result is that the square root is not a finite polynomial in `q^2`, so the exact scalar-only finite-derivative shortcut cannot leave the original q-independent source unchanged.
+For `K_RTK=(1+r q^2)K_BPS`, exact scalar normalization requires `T=sqrt(1+r q^2)` and the source transforms with the same factor. The exact scalar-only finite-polynomial shortcut cannot keep a q-independent source unchanged.
 
 Status: GREEN scoped theorem.
 
-## Appendix C — direct spatial-covariant FLRW exact scalar match
+## Appendix C — direct spatial-covariant FLRW scalar match
 
-File:
+File: `research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md`.
 
-`research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md`.
+CI run `32514697064`, artifact `9458330218`, digest `sha256:72fe15a918873ee0d7bf6af27f6eab51ef47dea48d4a4c3d7db9d65de9aeeb74`.
 
-Executable theorem:
-
-- `rtk-class-build:rtk/route_b_spatial_covariant_flrw_exact_match.py`;
-- source commit `36c30a9b94ad120bfe461d93057daf57db8d14dc`.
-
-CI:
-
-- run `32514697064`;
-- artifact `9458330218`;
-- digest `sha256:72fe15a918873ee0d7bf6af27f6eab51ef47dea48d4a4c3d7db9d65de9aeeb74`.
-
-Production identity:
-
-`K_8piG=(rho_8piG+p_8piG)/c_a^2=2 M_K^2`.
-
-Controlled flat-FLRW lapse/shift elimination gives
-
-`S2 = 1/2 int a^3/H^2 [K_phys(1+p^2/M_K^2) dot(zeta)^2-G_phys p^2 zeta^2]`,
-
-hence exactly
+Production identity `K_8piG=(rho_8piG+p_8piG)/c_a^2=2M_K^2`. Controlled flat-FLRW reduction gives
 
 `omega^2=c_a^2 p^2/(1+p^2/M_K^2)`.
 
-This mechanism does not claim a strict linear pole in the constraint determinant; the Appendix-A `D2=0` filter addresses a different mechanism.
+Status: GREEN exact quadratic scalar FLRW theorem; physical completion remains open.
 
-Status: GREEN exact quadratic scalar FLRW theorem; physical completion remains YELLOW/RED.
+## Appendix D — gravitational normalization and standard universal matter frame
 
-## Appendix D — gravity normalization and standard matter frame
+File: `research/methods/RTK_FORMULA_BIBLE_C8_GRAVITY_NORMALIZATION_APPENDIX.md`.
 
-File:
+Always distinguish bare `M_*^2`, `M_cosm^2=(8piG_cosm)^-1`, and local `M_N^2=(8piG_N)^-1`.
 
-`research/methods/RTK_FORMULA_BIBLE_C8_GRAVITY_NORMALIZATION_APPENDIX.md`.
+### D1 beta=0
 
-This appendix is mandatory whenever the direct scalar EFT is mapped to a physical matter frame. It distinguishes:
-
-- bare action coefficient `M_*^2`;
-- `M_cosm^2=(8 pi G_cosm)^-1`;
-- `M_N^2=(8 pi G_N)^-1`.
-
-Do not revert to an unspecified single `Mpl` in physical carrier arguments.
-
-### D1 — beta=0 normalization theorem
-
-Exact standard-matter match gives
-
-`alpha=2+3 lambda_prime`.
-
-CI:
-
-- source `rtk/route_b_spatial_covariant_cosmological_newton_gate.py`, commit `2670aa4c5a53d55a5816abe03be3e8db856ffdc0`;
-- run `32518243787`;
-- artifact `9459582368`;
-- digest `sha256:1250056abd3426d1b78a32d4c97272dd6fa7d609f954adcd2cdb2e8cb14235d9`.
-
-No healthy positive-finite-Newton exact solution exists in the standard beta=0 direct acceleration-only universal matter branch.
+Run `32518243787`, artifact `9459582368`: no healthy positive-finite-Newton exact solution in the standard beta=0 direct acceleration-only universal matter branch.
 
 Status: BLACK scoped no-go.
 
-### D2 — general standard universal matter frame
+### D2 general beta
 
-Using the modern `(alpha,beta,gamma)` low-energy relations,
+Run `32518936616`, artifact `9459822043`, digest `sha256:07f9e3bb7e64139a5f35df9e7aa2d77a7bfe2b06b4578a545e14354c046aca02`.
 
-`alpha=2+3 gamma+beta`,
+Exact match gives `alpha=2+3gamma+beta`; the BBN/Newton window gives `16/17<alpha<16/15`, while GW plus PPN excludes this direct standard-universal branch by a minimum factor about `3.7647e4` against the `1e-4` PPN benchmark.
 
-and on the exact-match hypersurface
+Canonical result: `research/RTK_C8_STANDARD_MATTER_NO_GO_RESULT_2026-08-21.md`.
 
-`G_cosm/G_N=(2-alpha)/alpha`.
+Status: BLACK scoped no-go; nonminimal/disformal/auxiliary/companion completions remain open.
 
-The cited BBN bound becomes
+## Appendix E — minimal `{a_i,D_iK}` mixed-gradient basis
 
-`16/17 < alpha < 16/15`.
+Source: `rtk/route_b_mixed_gradient_static_safe_gate.py`.
 
-With the post-GW170817 `|beta|<=~1e-15` benchmark, the first PPN expression is bounded below by `3.7647058823529296`, versus the `1e-4` benchmark.
+CI run `32519335082`, artifact `9459962141`, digest `sha256:2bde114d4aafb9f5758ff7107c8479c3112036ccf507755960ff5bad676d1809`.
 
-CI:
+For `C a_i a^i +2D a_iD^iK+B D_iK D^iK`, the nontrivial exact branch requires
 
-- source `rtk/route_b_spatial_covariant_standard_matter_no_go.py`, commit `303e1922cc0950ece6cf77f24525ed3e564ccd07`;
-- run `32518936616`;
-- artifact `9459822043`;
-- digest `sha256:07f9e3bb7e64139a5f35df9e7aa2d77a7bfe2b06b4578a545e14354c046aca02`;
-- canonical result `research/RTK_C8_STANDARD_MATTER_NO_GO_RESULT_2026-08-21.md`.
+`C/C_direct=[(6H^2M_*^2+K)/(6H^2M_*^2-K)]^2>1`.
 
-Therefore the direct exact acceleration-only carrier cannot be embedded in the cited standard universal low-energy Hořava matter frame. This is not a no-go for nonminimal/disformal matter, companion operators, auxiliary fields or broader completions.
+Thus this minimal mixed-gradient basis cannot remove or reduce the direct static acceleration coefficient; `C=0` has no exact solution.
 
 Status: BLACK scoped no-go.
 
-## Appendix-E candidate — minimal static-safe mixed-gradient basis
+## Appendix F — full scalar grad-K carrier, tensor correction, and regularity
 
-Executable theorem under CI:
+Canonical reconciliation note:
 
-- `rtk-class-build:rtk/route_b_mixed_gradient_static_safe_gate.py`;
-- source commit `7aa3f26e3896baf69deb2c45d915f7b38ec50ba0`.
+`research/RTK_C8_GRADK_CORRECTION_AND_REGULARITY_RESULT_2026-08-21.md`.
 
-Tested operator basis:
+### F1 pointwise scalar match
 
-`C a_i a^i + 2D a_i D^i K + B D_iK D^iK`.
+For `p^2[U A^2+2V A q+W q^2]`, exact RTK matching requires
 
-The committed exact polynomial matching gives two branches. The nontrivial mixed branch has
+- `UW=V^2`;
+- `V/W=(6H^2M_*^2-K_clock)/(4H^2M_*^2)`;
+- `W=2H^2M_*^4/(K_clock M_K^2)`.
 
-`C/C_direct=[(6H^2M_*^2+K)/(6H^2M_*^2-K)]^2`,
+Pointwise scalar solution exists.
 
-and therefore
+### F2 constant-Wilson obstruction
 
-`C/C_direct - 1 = 24 H^2 M_*^2 K/(6H^2M_*^2-K)^2 > 0`.
+Run `32521251025`, artifact `9460618747`, digest `sha256:3e7fdd10e8847483ce212472779ff06f518c7190be82150ded3e282701159f99`.
 
-Thus the minimal mixed-gradient branch cannot reduce the static acceleration coefficient below the pure direct value; `C=0` has no exact solution in this basis. Promote to GREEN/BLACK only after CI artifact inspection.
+One constant `(U,V,W)` tuple forces constant `M_K`, incompatible with production `M_K(a)`.
 
-Status: YELLOW pending CI.
+Status: BLACK only for constant-Wilson members of this grad-K scalar class.
+
+### F3 tensor-basis correction — IMPORTANT
+
+An intermediate run `32521548678`, artifact `9460716295`, found `R=2` as tensor-null **inside the restricted `{O_T,O_K,O_D}` representation**. That statement must not be promoted to a full grad-K obstruction.
+
+The missing allowed contraction is `O_X=D_iK D_jK^{ij}`. The corrected TT-safe basis
+
+- `D_iK D^iK -> (9,3,1)`;
+- `D_iK^i_j D_kK^{kj} -> (1,1,1)`;
+- `D_iK D_jK^{ij} -> (3,2,1)`
+
+has determinant `-4` and spans arbitrary scalar `(U,V,W)` while all three structures are TT-null.
+
+On `r=V/W`, `U=r^2W`, the exact pointwise correction is
+
+`W[((r-1)/2)D_iK+((3-r)/2)D_jK^j_i]^2`.
+
+Corrected CI run `32522247851`, artifact `9460955420`, digest `sha256:b1923d26260050b6992549fc2c03e733efd500b1f382137da040ff9711edfecc`.
+
+Status: GREEN quadratic flat-FLRW tensor-safe representation. **Old broad `R=2` interpretation: SUPERSEDED.**
+
+### F4 Q_cosm restricted diagnostic
+
+Run `32521709199`, artifact `9460770879`, digest `sha256:322b75660ead7eb7420ef6000b94b273bb02d599c96506ea9d24ef24657a5690`.
+
+`Q_cosm=2M_K^2/H^2` changes from `5.1353307766e7` to `8.6792669171e9` over z=0..1, ratio `169.01086404510914`. This excludes maintaining the old restricted-basis `R=2` surface with one constant normalization, but no longer excludes the corrected TT-safe basis.
+
+### F5 zero-H regularity
+
+Run `32522407137`, artifact `9461010370`, digest `sha256:11cfcf0d22834f3c6e23b400d83202568e768ab34a93549a2cd239b6ab547b81`.
+
+Basis-independently within the same minimal EH+clock grad-K scalar form,
+
+`U=(6H^2M_*^2-K_clock)^2/(8K_clock M_K^2 H^2)`.
+
+For finite positive `K_clock/M_K^2`, `U~H^-2`; production gives `lim(H^2U)=M_cosm^2/4`.
+
+Status: BLACK scoped regularity obstruction for the minimal EH+clock+grad-K representation. Auxiliary/modified-constraint/different-branch/cosmology-only-EFT completions remain open.
 
 ## Numerical proof chains
 
 ### B4 neutrino
 
-Canonical chain:
-
-`research/robustness/RTK_B4_NEUTRINO_STATIONARITY_CHAIN_2026-08-21.md`.
-
-Target-v2 base run `32482490823`, artifact `9452581043`, passed the base gate with improvement `4.12100232551893e-05` and a positive-definite Hessian. Required half-scale run `32514077002` was still computing at the latest direct check.
+Target-v2 base run `32482490823`, artifact `9452581043`: improvement `4.12100232551893e-05`, PD Hessian. Half-scale run `32514077002` is still computing.
 
 ### B6 abundances
 
-Canonical result:
+`research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`: GREEN differential robustness only.
 
-`research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
+### B9 lensing
 
-Status: GREEN differential robustness only.
+RTK paired candidate from run `32490152072`, artifact `9456206708`, improved fixed center by `0.017224444894964108`; RTK recenter Hessian run `32518496348` computing.
 
-### B10 lambda-tail identifiability
+LCDM job in the same paired run hit the 360-minute limit after 293 exact points. Uploaded partial artifact `9460759915`, digest `sha256:6551f10c5896ef98d042aa578ade61c2922b002941dcc241e13b322d2cdc94c0`. Full-log exact minimum is eval 291: `S_B9=1058.6304210952487`, improvement `0.3906228341422775` from the fixed LCDM B9 center. This is only a frozen interrupted-optimizer recenter seed. Base Hessian run `32522002655` is computing.
 
-Canonical result:
+### B10 lambda tail
 
-`research/robustness/RTK_B10_FINAL_TAIL_IDENTIFIABILITY_RESULT_2026-08-21.md`.
+`research/robustness/RTK_B10_FINAL_TAIL_IDENTIFIABILITY_RESULT_2026-08-21.md`: `LAMBDA_NOT_NUMERICALLY_IDENTIFIABLE_AGAINST_PREREGISTERED_DUST_TAIL_AT_0P005` under protocol v1.
 
-Classification:
+## Current theoretical next move
 
-`LAMBDA_NOT_NUMERICALLY_IDENTIFIABLE_AGAINST_PREREGISTERED_DUST_TAIL_AT_0P005`.
-
-Status: GREEN protocol-v1 closure.
+Do not spend more cycles searching linear combinations inside the same minimal grad-K basis. The useful next class is a **regular auxiliary or modified-constraint carrier** that can reproduce the exact scalar pole/residue without singular grad-K Wilson coefficients, then survive same-action DOF/stability, Newton/PPN, GW, compact-object and EFT-cutoff gates.
 
 ## Recovery discipline
 
-Every admitted formula/result must record or link to:
-
-- starting action/equations;
-- conventions and dimensions;
-- derivation steps;
-- assumptions/domain;
-- symbolic/numerical checks;
-- implementation file;
-- commit/workflow/run/artifact provenance;
-- explicit scope and non-claims;
-- validation status.
-
-Never promote workflow success alone to a physics closure. Inspect the artifact and apply the frozen scientific decision rule.
+Every admitted result must retain action/equations, conventions, domain, derivation, symbolic/numerical checks, source commit, workflow/run/artifact provenance, explicit scope/non-claims, and validation status. Workflow success alone is not physics closure.
