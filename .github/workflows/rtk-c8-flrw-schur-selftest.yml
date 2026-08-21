@@ -1,0 +1,42 @@
+name: RTK C8 FLRW Schur diagnostic self-test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c8-flrw-schur-selftest-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  selftest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Compile and run exact-arithmetic C8 diagnostic
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_flrw_schur_kernel.py
+          python3 rtk/route_b_flrw_schur_kernel.py --self-test | tee c8_flrw_schur_selftest.log
+          grep -q 'C8_FLRW_SCHUR_SELFTEST_PASS' c8_flrw_schur_selftest.log
+      - name: Record provenance
+        run: |
+          set -euo pipefail
+          {
+            echo "research_source_commit=$(git rev-parse HEAD)"
+            echo "python=$(python3 --version)"
+            echo "workflow_ref=${GITHUB_SHA}"
+          } | tee c8_flrw_schur_provenance.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c8-flrw-schur-selftest
+          path: |
+            c8_flrw_schur_selftest.log
+            c8_flrw_schur_provenance.txt
+          if-no-files-found: error
