@@ -1,0 +1,4 @@
+trigger_utc: 2026-08-21T19:24:00Z
+rtk_recenter_target_commit: c89b8eac3e70f0fa40bc41963695de803e2e5487
+stationarity_worker_commit: b3d146658a16d2407a659638179a8a75e92720ee
+purpose: certify RTK B9-v1 recenter independently while LCDM reoptimization remains unresolved
