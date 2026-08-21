@@ -1,11 +1,16 @@
-name: RTK HOME PC test
+name: RTK HOME PC diagnostics
 
 on:
   workflow_dispatch:
 
+concurrency:
+  group: rtk-home3-exclusive
+  cancel-in-progress: false
+
 jobs:
   diagnostics:
-    runs-on: [self-hosted, Linux, X64, rtk-home]
+    runs-on: [self-hosted, Linux, X64, rtk-home3]
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -13,35 +18,30 @@ jobs:
 
       - name: System information
         run: |
+          set -euo pipefail
           echo "=== HOST ==="
           hostname
-
           echo "=== CPU ==="
           nproc
           lscpu | head -20
-
           echo "=== MEMORY ==="
           free -h
-
           echo "=== DISK ==="
           df -h
 
       - name: Toolchain check
         run: |
+          set -euo pipefail
           echo "=== Python ==="
           python3 --version
-
           echo "=== GCC ==="
           gcc --version
-
           echo "=== CMake ==="
           cmake --version
-
           echo "=== Git ==="
           git --version
 
       - name: RTK environment test
         run: |
-          echo "RTK-HOME-PC runner is operational"
-          echo "Timestamp:"
-          date
+          echo "RTK-HOME-PC / rtk-home3 runner is operational"
+          echo "Timestamp UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
