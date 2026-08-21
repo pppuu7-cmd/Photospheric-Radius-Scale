@@ -1,0 +1,46 @@
+{
+  "schema": "B9_LCDM_INTERRUPTED_RECENTER_TARGET_v1",
+  "status": "FROZEN_FROM_BEST_EXACT_POINT_OF_INTERRUPTED_LCDM_REOPTIMIZATION_BEFORE_LCDM_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "mapping": "eff",
+  "selection_semantics": "minimum exact S_B9 among all 293 exact points present in the uploaded interrupted LCDM reoptimization log; this is a recenter seed, not a converged optimizer result",
+  "parent_run_id": 32490152072,
+  "parent_job_conclusion": "cancelled_during_exact_reoptimization",
+  "parent_artifact_id": 9460759915,
+  "parent_artifact_digest": "sha256:6551f10c5896ef98d042aa578ade61c2922b002941dcc241e13b322d2cdc94c0",
+  "parent_research_source_commit": "c7fda91db2d5921dc7fa22a73a4cbf7dbacf8524",
+  "exact_points_present": 293,
+  "selected_eval": 291,
+  "fixed_center_S_B9": 1059.021043929391,
+  "best_exact_S_B9": 1058.6304210952487,
+  "improvement_from_fixed_center": 0.3906228341422775,
+  "best_S_base_eff": 1049.7048540841683,
+  "best_lensing_minus2loglike": 8.925567011080329,
+  "center": {
+    "lam": 0.0,
+    "As": 2.1043404211660074e-09,
+    "Ob": 0.04854523676526571,
+    "Om": 0.26020316605972393,
+    "h": 0.6790995137400001,
+    "ns": 0.965177972117784,
+    "zre": 7.785420802640161
+  },
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-8,
+  "fresh_tree_replay_abs_tolerance": 2e-6,
+  "decision_rule": "Use this point only as the center of the preregistered exact base/half stationarity chain. Improvement >0.005 forces another recenter; non-PD forces exact eigenmode rays; only base+half+fresh-tree may certify a local B9 LCDM point.",
+  "non_claims": [
+    "not a completed COBYQA result",
+    "not a local-minimum certification",
+    "not a global optimum",
+    "not a model-comparison result"
+  ]
+}
