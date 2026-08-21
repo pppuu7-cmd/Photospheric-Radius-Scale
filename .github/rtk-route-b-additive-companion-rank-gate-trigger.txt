@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-22T00:23:00+03:00
+iteration_started_utc=2026-08-21T21:23:00Z
+research_source_commit=e7f476305ad00760ccf03142eac7ec07ccc4661c
+purpose=C8 prove a healthy companion cannot simply be appended to unchanged DBI scalar kinetic without activating a second scalar direction
