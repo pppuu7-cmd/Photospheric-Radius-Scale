@@ -136,12 +136,11 @@ Canonical protocol: `research/RTK_C8_FLRW_SCHUR_MATCHING_PROTOCOL_2026-08-21.md`
 
 The project moved from GitHub-hosted-only/experimental home computation to a defined hybrid architecture.
 
-Recovered hardware/runner state:
+Recovered runner state:
 
 - runner name: `RTK-HOME-PC`;
 - platform: Linux/X64 under the already configured Ubuntu/WSL environment;
-- routing label: `rtk-home3`;
-- current node: ten logical CPUs.
+- routing label: `rtk-home3`.
 
 Legacy workflows still referenced `rtk-home`, so they could not reliably route to the configured node. The architecture was migrated to `rtk-home3` and heavy jobs were serialized through `rtk-home3-exclusive`.
 
@@ -161,7 +160,30 @@ The old engine used a hard eight-worker cap, reserved two CPUs and wrote a simpl
 
 Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
 
-Bootstrap workflow: `.github/workflows/rtk-home3-bootstrap.yml`, armed by commit `ee0b42f8594235f41db8aaecb61bfbbe63df3d94`. It installs the persistent Ubuntu launcher and verifies max-throughput multiprocessing plus checkpoint/progress contracts when the home runner comes online.
+### 2026-08-21 13:20 UTC — first live home-runner connection and correction
+
+The existing Actions runner 2.336.0 connected at `13:20:08Z` and accepted a queued job named `parallel` at `13:20:14Z`.
+
+The live Windows/WSL observation corrected an earlier hardware assumption:
+
+- Intel Core i5-1235U;
+- 10 physical cores;
+- **12 logical processors**, not 10.
+
+During the accepted legacy `parallel` job Windows showed roughly 30% aggregate CPU and WSL `top` roughly 78.6% idle. This was traced to the old engine formula `min(cpu_count()-2, 8)` plus a tiny placeholder task and `imap(..., chunksize=1)`. With 12 logical processors, the old formula creates only eight workers, and the tiny task shape makes parent/IPC overhead dominate.
+
+This observation changed the compute architecture again without changing any scientific conclusion. Engine v2.1 therefore added:
+
+- true 12-logical-CPU max-throughput mode;
+- adaptive multiprocessing chunksize for fine-grained indexed tasks;
+- checkpoint metadata for logical CPU count and effective chunksize;
+- a dedicated synthetic saturation worker that keeps each process CPU-bound for a controlled interval;
+- bootstrap verification of `nproc=12`, `os.cpu_count()=12`, `workers=12` and checkpoint/progress completion;
+- `/proc/stat` CPU-utilization sampling with an 80% mean-busy target used as an infrastructure diagnostic.
+
+Canonical implementation commits in this correction chain include `f14fe68997f9df42906b0bd72ba53da91e49c12d` (resource/chunksize policy), `22b6cabd9154a682e8299f6bba28bd44579ceda8` (engine metadata/batching), `945f308168d2309c30c00d531fa630671629d278` (saturation worker), and `632e2c1b5f9545d897a43aacc96881d975c3dd7f` (12-CPU bootstrap gate).
+
+The legacy ~30% observation is retained as a failed infrastructure configuration, not as a benchmark of the redesigned engine.
 
 ---
 
