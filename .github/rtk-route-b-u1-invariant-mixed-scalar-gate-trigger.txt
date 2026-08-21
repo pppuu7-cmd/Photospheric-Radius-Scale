@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-22T00:23:00+03:00
+iteration_started_utc=2026-08-21T21:23:00Z
+research_source_commit=5b5e91571849f54acfe8d0138032a1877a5c37d9
+purpose=C8 verify standard local-U1 invariant building blocks for the RTK mixed scalar operator
