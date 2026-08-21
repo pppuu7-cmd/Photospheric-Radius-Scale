@@ -80,7 +80,13 @@ therefore the parent center failed stationarity and required recentering. A fres
 
 ### B6 primordial abundances
 
-The paired AlterBBN pipeline passed frozen input/source/build checks. An earlier job was externally cancelled during the long abundance-network calculation, so no abundance conclusion was inferred from it. An exact rerun was launched.
+The paired AlterBBN pipeline initially passed frozen input/source/build checks but its first long abundance execution was externally cancelled, so no scientific abundance conclusion was inferred from that attempt.
+
+The exact rerun, GitHub Actions run `32285359564` attempt 2, subsequently completed all six paired network executions and full-precision parsing. Its artifact showed `max |R_H-1| = 2.422446243599552e-09`. The only numerically resolved primary abundance shift was `delta Yp = +1.4314660568004456e-12`; the primary D/H shift and the other listed nuclide shifts remained below the preregistered numerical-resolution threshold with conservative bounds.
+
+The RTK perturbation changes the frozen observational standardized residual by only about `1.10e-9 sigma` for Yp and `6.76e-9 sigma` for D/H. Therefore B6 was closed as **differential abundance robustness**, not as absolute BBN goodness-of-fit. The frozen reference calculation itself remains about `-4.706 sigma` from the selected D/H central value when only the quoted observational sigma is used.
+
+Canonical result: `research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
 
 ### B9 Planck lensing
 
@@ -154,6 +160,8 @@ The old engine used a hard eight-worker cap, reserved two CPUs and wrote a simpl
 - GitHub artifact snapshots of execution state.
 
 Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
+
+Bootstrap workflow: `.github/workflows/rtk-home3-bootstrap.yml`, armed by commit `ee0b42f8594235f41db8aaecb61bfbbe63df3d94`. It installs the persistent Ubuntu launcher and verifies max-throughput multiprocessing plus checkpoint/progress contracts when the home runner comes online.
 
 ---
 
