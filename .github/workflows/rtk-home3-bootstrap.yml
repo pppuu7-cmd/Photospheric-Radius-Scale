@@ -16,14 +16,17 @@ jobs:
     runs-on: [self-hosted, Linux, X64, rtk-home3]
     timeout-minutes: 60
     env:
+      EXPECTED_LOGICAL_CPUS: "12"
       RTK_RUN_KEY: bootstrap-${{ github.run_id }}
-      RTK_TOTAL_TASKS: "2000"
+      RTK_TOTAL_TASKS: "24"
       RTK_WORKERS: auto
       RTK_RESERVE_CPUS: "0"
-      RTK_TASK_MODULE: rtk_engine.worker
-      RTK_INPUT_FINGERPRINT: rtk-home3-bootstrap-v2
-      RTK_CHECKPOINT_INTERVAL: "200"
-      RTK_PROGRESS_INTERVAL: "100"
+      RTK_CHUNKSIZE: "1"
+      RTK_TASK_MODULE: rtk_engine.saturation_worker
+      RTK_SATURATION_SECONDS: "8"
+      RTK_INPUT_FINGERPRINT: rtk-home3-bootstrap-v3-12cpu
+      RTK_CHECKPOINT_INTERVAL: "4"
+      RTK_PROGRESS_INTERVAL: "1"
       RTK_RESET_CHECKPOINT: "true"
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
@@ -34,16 +37,26 @@ jobs:
       - name: Checkout architecture commit
         uses: actions/checkout@v4
 
-      - name: Identify configured node
+      - name: Identify configured node and enforce CPU width
         run: |
           set -euo pipefail
+          mkdir -p results/home3-bootstrap "$HOME/.rtk-runner-state"
           echo "RTK_HOME3_BOOTSTRAP_START"
           echo "UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           echo "HOST=$(hostname)"
           echo "LOGICAL_CPUS=$(nproc)"
-          uname -a
-          free -h
-          df -h .
+          echo "EXPECTED_LOGICAL_CPUS=$EXPECTED_LOGICAL_CPUS"
+          test "$(nproc)" -eq "$EXPECTED_LOGICAL_CPUS"
+          python3 - <<'PY'
+          import os
+          expected=int(os.environ['EXPECTED_LOGICAL_CPUS'])
+          actual=os.cpu_count()
+          print(f'python_os_cpu_count={actual}')
+          assert actual == expected, (actual, expected)
+          PY
+          lscpu | tee results/home3-bootstrap/lscpu.txt
+          free -h | tee results/home3-bootstrap/memory.txt
+          df -h . | tee results/home3-bootstrap/disk.txt
 
       - name: Install persistent Ubuntu progress launcher
         run: |
@@ -51,18 +64,71 @@ jobs:
           mkdir -p "$HOME/.local/bin" "$HOME/.rtk-runner-state"
           install -m 0755 scripts/rtk_home_runner_console.sh "$HOME/.local/bin/rtk-runner-start"
           echo "Installed: $HOME/.local/bin/rtk-runner-start"
-          "$HOME/.local/bin/rtk-runner-start" --help >/dev/null 2>&1 || true
 
-      - name: Run max-throughput multiprocessing handshake
+      - name: Run 12-process saturation and checkpoint handshake
         run: |
           set -euo pipefail
+          rm -f /tmp/rtk_home3_engine_done
+          python3 - <<'PY' &
+          import json,time
+          from pathlib import Path
+
+          done=Path('/tmp/rtk_home3_engine_done')
+          out=Path('results/home3-bootstrap/cpu_utilization.json')
+
+          def read_cpu():
+              fields=Path('/proc/stat').read_text().splitlines()[0].split()[1:]
+              vals=[int(x) for x in fields]
+              idle=vals[3] + (vals[4] if len(vals)>4 else 0)
+              total=sum(vals)
+              return total,idle
+
+          samples=[]
+          previous=read_cpu()
+          started=time.time()
+          while not done.exists() or len(samples)<4:
+              time.sleep(0.5)
+              current=read_cpu()
+              dt=current[0]-previous[0]
+              didle=current[1]-previous[1]
+              if dt>0:
+                  samples.append(100.0*(dt-didle)/dt)
+              previous=current
+              if time.time()-started > 120:
+                  break
+          mean=sum(samples)/len(samples) if samples else 0.0
+          ordered=sorted(samples)
+          median=ordered[len(ordered)//2] if ordered else 0.0
+          payload={
+              'samples_percent': samples,
+              'mean_busy_percent': mean,
+              'median_busy_percent': median,
+              'max_busy_percent': max(samples) if samples else 0.0,
+              'saturation_target_80pct': mean >= 80.0,
+          }
+          out.write_text(json.dumps(payload,indent=2)+'\n')
+          print('RTK_CPU_UTILIZATION',json.dumps(payload,sort_keys=True))
+          PY
+          SAMPLER_PID=$!
+
           python3 -m rtk_engine.run_monitor &
           MONITOR_PID=$!
-          cleanup() { kill "$MONITOR_PID" 2>/dev/null || true; }
+          cleanup() {
+            touch /tmp/rtk_home3_engine_done
+            kill "$MONITOR_PID" 2>/dev/null || true
+          }
           trap cleanup EXIT INT TERM
-          python3 -m rtk_engine.parallel_engine
 
-      - name: Validate checkpoint and progress contract
+          set +e
+          python3 -m rtk_engine.parallel_engine
+          ENGINE_RC=$?
+          set -e
+          touch /tmp/rtk_home3_engine_done
+          wait "$SAMPLER_PID"
+          kill "$MONITOR_PID" 2>/dev/null || true
+          test "$ENGINE_RC" -eq 0
+
+      - name: Validate checkpoint progress and saturation contract
         run: |
           set -euo pipefail
           python3 - <<'PY'
@@ -71,34 +137,41 @@ jobs:
           import re
           from pathlib import Path
 
-          run_key = os.environ["RTK_RUN_KEY"]
-          safe = re.sub(r"[^A-Za-z0-9_.-]+", "_", run_key).strip("._") or "run"
-          root = Path.home() / ".rtk-runner-state" / safe
-          checkpoint = json.loads((root / "checkpoint.json").read_text())
-          progress = json.loads((root / "progress.json").read_text())
-          expected = int(os.environ["RTK_TOTAL_TASKS"])
+          run_key = os.environ['RTK_RUN_KEY']
+          safe = re.sub(r'[^A-Za-z0-9_.-]+', '_', run_key).strip('._') or 'run'
+          root = Path.home() / '.rtk-runner-state' / safe
+          checkpoint = json.loads((root / 'checkpoint.json').read_text())
+          progress = json.loads((root / 'progress.json').read_text())
+          util = json.loads(Path('results/home3-bootstrap/cpu_utilization.json').read_text())
+          expected_tasks = int(os.environ['RTK_TOTAL_TASKS'])
+          expected_cpus = int(os.environ['EXPECTED_LOGICAL_CPUS'])
 
-          assert checkpoint["schema_version"] == 2, checkpoint
-          assert checkpoint["next_index"] == expected, checkpoint
-          assert checkpoint["completed"] == expected, checkpoint
-          assert checkpoint["fingerprint"] == os.environ["RTK_INPUT_FINGERPRINT"], checkpoint
-          assert checkpoint["metadata"]["status"] == "complete", checkpoint
-          assert progress["status"] == "complete", progress
-          assert progress["done"] == expected, progress
-          assert progress["workers"] >= 1, progress
+          assert checkpoint['schema_version'] == 2, checkpoint
+          assert checkpoint['next_index'] == expected_tasks, checkpoint
+          assert checkpoint['completed'] == expected_tasks, checkpoint
+          assert checkpoint['fingerprint'] == os.environ['RTK_INPUT_FINGERPRINT'], checkpoint
+          assert checkpoint['metadata']['status'] == 'complete', checkpoint
+          assert checkpoint['metadata']['workers'] == expected_cpus, checkpoint
+          assert checkpoint['metadata']['logical_cpus'] == expected_cpus, checkpoint
+          assert progress['status'] == 'complete', progress
+          assert progress['done'] == expected_tasks, progress
+          assert progress['workers'] == expected_cpus, progress
 
-          print("RTK_HOME3_CHECKPOINT_V2_PASS")
-          print(f"workers={progress['workers']} expected_node_cpus={os.cpu_count()}")
-          print(f"checkpoint={root / 'checkpoint.json'}")
-          print(f"progress={root / 'progress.json'}")
+          print('RTK_HOME3_CHECKPOINT_V2_PASS')
+          print(f'RTK_HOME3_ALL_LOGICAL_CPUS_PASS workers={progress["workers"]}')
+          print(
+              f'CPU_BUSY mean={util["mean_busy_percent"]:.1f}% '
+              f'median={util["median_busy_percent"]:.1f}% '
+              f'max={util["max_busy_percent"]:.1f}%'
+          )
+          if not util['saturation_target_80pct']:
+              print('::warning::Mean CPU saturation was below 80%; inspect Windows/WSL power and scheduling limits')
           PY
 
       - name: Snapshot bootstrap state
         if: always()
         run: |
           set -euo pipefail
-          rm -rf results/home3-bootstrap
-          mkdir -p results/home3-bootstrap
           SAFE_KEY=$(printf '%s' "$RTK_RUN_KEY" | sed -E 's/[^A-Za-z0-9_.-]+/_/g')
           if [[ -d "$HOME/.rtk-runner-state/$SAFE_KEY" ]]; then
             cp -a "$HOME/.rtk-runner-state/$SAFE_KEY" results/home3-bootstrap/
