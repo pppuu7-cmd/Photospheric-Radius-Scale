@@ -1,0 +1,52 @@
+{
+  "schema": "B9_RTK_RECENTER_TARGET_v1",
+  "status": "FROZEN_AFTER_RTK_REOPTIMIZATION_BEFORE_LCDM_RESULT_AND_BEFORE_RTK_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_run_id": 32490152072,
+  "parent_artifact_id": 9456206708,
+  "parent_artifact_digest": "sha256:3067fa908eb27cd90aa90b1898ea70ce0d4aa3b2e4e2b7a07bbfc8b9b9e945ea",
+  "parent_head_sha": "229d28425563f84d1ea2fa3831138e640b5730c4",
+  "parent_research_source_commit": "c7fda91db2d5921dc7fa22a73a4cbf7dbacf8524",
+  "parent_classification": "B9_PAIRED_REOPTIMIZATION_CANDIDATE",
+  "parent_status": "INTERIOR_LOCAL_REOPTIMIZATION_CANDIDATE",
+  "fixed_center_S_B9": 1059.2891797624084,
+  "best_exact_S_B9": 1059.2719553175134,
+  "improvement_from_fixed_center": 0.017224444894964108,
+  "recenter_tolerance_S": 0.005,
+  "center": {
+    "As": 2.0874265764520984e-09,
+    "Ob": 0.04679404670223316,
+    "Om": 0.2522369962493503,
+    "h": 0.6911169559022905,
+    "lam": 792605.2167661682,
+    "ns": 0.9645439945136476,
+    "zre": 7.329291125785135
+  },
+  "center_components": {
+    "S_A5_base_eff": 1050.2560245726381,
+    "lensing_loglike": -4.507965372437646,
+    "lensing_minus2loglike": 9.015930744875291
+  },
+  "base_steps": {
+    "loglam": 0.05,
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "required_scales": [1.0, 0.5],
+  "positive_definite_threshold": 1e-8,
+  "fresh_tree_replay_abs_tolerance": 2e-6,
+  "decision_tree": {
+    "recenter": "if exact improvement exceeds 0.005, freeze new exact center and rerun base",
+    "non_pd": "if Hessian is not positive definite, run exact negative/near-zero-mode rays before any half-scale certification",
+    "half": "if base is recenter-clear and positive definite, run independent scale=0.5 Hessian at the identical center",
+    "fresh_tree": "after adjacent base+half certification, perform independent fresh-tree replay",
+    "paired": "B9 RTK certification alone is not a matched RTK-vs-LCDM conclusion; LCDM must satisfy the same frozen objective and certification logic"
+  },
+  "freeze_guard": "This RTK target was frozen from the completed RTK artifact before inspecting any final LCDM reoptimization artifact. No LCDM score or parameter result was used to choose this center or geometry.",
+  "interpretation_guard": "Local B9-v1 stationarity only; not global optimum, significance, AIC/BIC, posterior preference or Bayes factor."
+}
