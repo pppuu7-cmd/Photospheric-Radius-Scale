@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-21T19:33:10.319999+00:00",
+  "generated_at_utc": "2026-08-21T19:36:52.723584+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-21T19:36:44Z",
+      "display_title": "Refresh RTK frontier after mixed-gradient launch",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "2cf420c711eca2a4dbc80a70c726bdf990bd619d",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32519356914",
+      "id": 32519356914,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 60,
+      "status": "in_progress",
+      "updated_at": "2026-08-21T19:36:48Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": null,
+      "created_at": "2026-08-21T19:36:29Z",
+      "display_title": "Launch mixed-gradient static-safe gate",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "ccff79cf28d94a3909af9b256f60017532083d25",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32519335082",
+      "id": 32519335082,
+      "name": "RTK Route-B mixed-gradient static-safe gate",
+      "run_attempt": 1,
+      "run_number": 1,
+      "status": "in_progress",
+      "updated_at": "2026-08-21T19:36:33Z",
+      "workflow_id": 339638485
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-21T19:33:01Z",
       "display_title": "Refresh RTK frontier after standard-matter gate launch",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 59,
-      "status": "in_progress",
-      "updated_at": "2026-08-21T19:33:05Z",
+      "status": "completed",
+      "updated_at": "2026-08-21T19:33:14Z",
       "workflow_id": 336560028
     },
     {
@@ -1569,38 +1601,6 @@
       "run_number": 171,
       "status": "completed",
       "updated_at": "2026-08-20T16:15:07Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-20T15:41:10Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "3fd58527dd251d0de8961d2634b031d90b330408",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32387607483",
-      "id": 32387607483,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 170,
-      "status": "completed",
-      "updated_at": "2026-08-20T15:41:26Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-20T14:59:32Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "3fd58527dd251d0de8961d2634b031d90b330408",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32383452253",
-      "id": 32383452253,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 169,
-      "status": "completed",
-      "updated_at": "2026-08-20T14:59:49Z",
       "workflow_id": 335879021
     }
   ],
