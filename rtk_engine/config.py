@@ -1,0 +1,8 @@
+import os
+
+# RTK compute node configuration
+CPU_RESERVED = 2
+MAX_WORKERS = 8
+CHECKPOINT_INTERVAL = 50000
+PROGRESS_INTERVAL = 5000
+TOTAL_TASKS = int(os.getenv("RTK_TOTAL_TASKS", "1000000"))
