@@ -1,0 +1,85 @@
+# RTK C8 — FLRW Schur-Complement Matching Protocol
+
+Date: 2026-08-21
+Status: diagnostic protocol; not a covariant completion
+
+## Question
+
+Can a single fixed set of carrier coefficients reproduce the RTK scalar rational kernel on FLRW after the nondynamical lapse/shift constraints are eliminated, including both the constraint pole and its residue?
+
+This protocol exists because the fixed-Minkowski obstruction cannot simply be promoted to FLRW: background quantities such as H can enter the constraint matrix and move the pole with epoch even when Wilson coefficients are fixed.
+
+## Algebraic setup
+
+Let q denote the Fourier variable and x=(delta N, chi) the nondynamical scalar constraints. Write
+
+L = 1/2 x^T M(q,H) x + x^T J(q,H) zeta + 1/2 K0(q,H) zeta^2,
+
+with
+
+M = [[A,C],[C,B]],   J=(P,R).
+
+Exact elimination gives
+
+K_eff(q,H) = K0(q,H) - N(q,H)/D(q,H),
+
+where
+
+D = det M = A B - C^2,
+
+N = B P^2 - 2 C P R + A R^2.
+
+The pole is controlled by D=0. Pole matching alone is insufficient; the rational remainder/residue encoded by N/D must also match the RTK target.
+
+## Linear-in-q diagnostic
+
+For
+
+A=a0+a1 q, B=b0+b1 q, C=c0+c1 q,
+
+D(q)=D0+D1 q+D2 q^2,
+
+D0=a0 b0-c0^2,
+
+D1=a0 b1+a1 b0-2 c0 c1,
+
+D2=a1 b1-c1^2.
+
+A strict single-linear-pole target requires, as a necessary algebraic condition,
+
+D2 = a1 b1-c1^2 = 0.
+
+This condition is only a statement about the constraint determinant. It must not be called DHOST degeneracy unless an explicit covariant action has been mapped to these coefficients and its full degeneracy conditions have been derived.
+
+For P=p0+p1 q and R=r0+r1 q, the numerator N is generically cubic. After denominator matching, the polynomial part may be absorbed into K0 only if the remaining rational part has the correct target residue. Equivalently, for a linear denominator the invariant remainder is N evaluated at the pole q_p=-D0/D1.
+
+## Required gates for an actual C8 candidate
+
+1. **Action map** — derive A,B,C,P,R,K0 from one explicit fixed covariant/ADM action. No coefficient may be fitted independently at each epoch.
+2. **Constraint gate** — verify the nondynamical constraint matrix has the intended rank and no unintended singularity over the physical q-domain.
+3. **Pole gate** — match the RTK pole location over more than one FLRW epoch with one fixed underlying coefficient set.
+4. **Residue gate** — match the rational residue at the same epochs; matching D alone is not sufficient.
+5. **Kinetic/gradient gate** — after elimination, verify positive physical kinetic residue, gradient stability and hyperbolicity.
+6. **DOF gate** — establish the degree-of-freedom count from the actual action/constraint algebra.
+7. **IR/UV gate** — recover the tested RTK IR kernel in its validity domain and state the EFT cutoff above all used scales.
+8. **PPN/GW gate** — check the same parameter set against the pinned Newton normalization, preferred-frame and GW constraints.
+
+## Reproducible algebraic tool
+
+`rtk/route_b_flrw_schur_kernel.py`
+
+Commit introducing the tool: `175adcc14bdfcdfc83218055dcbe4b0096545980`.
+
+The tool uses exact rational arithmetic and tests:
+
+- exact Schur-complement elimination in a diagonal constraint matrix;
+- A<->B, P<->R symmetry;
+- the necessary single-pole condition D2=0;
+- rejection of a generic nondegenerate quadratic determinant;
+- equality of the rational remainder with evaluation at the linear pole.
+
+## Interpretation rule
+
+Passing the algebraic tool is not evidence for a complete theory. Its purpose is to reject impossible coefficient patterns early and to prevent a future carrier proposal from matching only the denominator while silently failing the residue.
+
+A C8 success claim requires one explicit fixed action to pass the pole, residue, stability, DOF, IR/UV and observational consistency gates together.
