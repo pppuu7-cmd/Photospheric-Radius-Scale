@@ -1,19 +1,111 @@
-name: RTK Parallel Engine
+name: RTK Home Heavy Parallel Engine
 
 on:
   workflow_dispatch:
+    inputs:
+      run_key:
+        description: Stable checkpoint key for this scientific workload
+        required: true
+        default: manual-heavy
+        type: string
+      total_tasks:
+        description: Number of independent indexed tasks
+        required: true
+        default: "2000"
+        type: string
+      workers:
+        description: Process workers; auto = all available logical CPUs
+        required: true
+        default: auto
+        type: string
+      reserve_cpus:
+        description: Logical CPUs kept free for the desktop
+        required: true
+        default: "0"
+        type: string
+      task_module:
+        description: Python module exposing calculate(index)
+        required: true
+        default: rtk_engine.worker
+        type: string
+      checkpoint_interval:
+        description: Commit checkpoint every N completed tasks
+        required: true
+        default: "1000"
+        type: string
+      progress_interval:
+        description: Emit progress every N completed tasks
+        required: true
+        default: "100"
+        type: string
+      reset_checkpoint:
+        description: Archive an existing checkpoint and restart at zero
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: rtk-home3-exclusive
+  cancel-in-progress: false
 
 jobs:
   parallel:
-    runs-on:
-      - self-hosted
-      - Linux
-      - X64
-      - rtk-home
+    runs-on: [self-hosted, Linux, X64, rtk-home3]
+    timeout-minutes: 4320
+    env:
+      RTK_RUN_KEY: ${{ inputs.run_key }}
+      RTK_TOTAL_TASKS: ${{ inputs.total_tasks }}
+      RTK_WORKERS: ${{ inputs.workers }}
+      RTK_RESERVE_CPUS: ${{ inputs.reserve_cpus }}
+      RTK_TASK_MODULE: ${{ inputs.task_module }}
+      RTK_CHECKPOINT_INTERVAL: ${{ inputs.checkpoint_interval }}
+      RTK_PROGRESS_INTERVAL: ${{ inputs.progress_interval }}
+      RTK_RESET_CHECKPOINT: ${{ inputs.reset_checkpoint }}
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      NUMEXPR_NUM_THREADS: "1"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact repository state
+        uses: actions/checkout@v4
 
-      - name: Run RTK Parallel Engine
+      - name: Node and checkpoint preflight
         run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.rtk-runner-state"
+          echo "host=$(hostname)"
+          echo "logical_cpus=$(nproc)"
+          echo "workers_request=$RTK_WORKERS reserve=$RTK_RESERVE_CPUS"
+          echo "run_key=$RTK_RUN_KEY task_module=$RTK_TASK_MODULE total=$RTK_TOTAL_TASKS"
+          echo "state_root=$HOME/.rtk-runner-state"
+          free -h
+
+      - name: Run resumable parallel engine with heartbeat
+        run: |
+          set -euo pipefail
+          python3 -m rtk_engine.run_monitor &
+          MONITOR_PID=$!
+          cleanup() { kill "$MONITOR_PID" 2>/dev/null || true; }
+          trap cleanup EXIT INT TERM
           python3 -m rtk_engine.parallel_engine
+
+      - name: Snapshot persistent runner state
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -rf results/runner-state
+          mkdir -p results/runner-state
+          SAFE_KEY=$(printf '%s' "$RTK_RUN_KEY" | sed -E 's/[^A-Za-z0-9_.-]+/_/g')
+          if [[ -d "$HOME/.rtk-runner-state/$SAFE_KEY" ]]; then
+            cp -a "$HOME/.rtk-runner-state/$SAFE_KEY" "results/runner-state/$SAFE_KEY"
+          fi
+
+      - name: Upload checkpoint and progress snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-home3-state-${{ github.run_id }}
+          path: results/runner-state
+          if-no-files-found: warn
+          retention-days: 30
