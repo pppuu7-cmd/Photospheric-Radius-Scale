@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-21T20:39:02.883218+00:00",
+  "generated_at_utc": "2026-08-21T20:40:26.830748+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-21T20:40:15Z",
+      "display_title": "Refresh RTK Actions index after auxiliary gates",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "8e63655d44be13bc7bbab51d3de27ed5a0200552",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32524736966",
+      "id": 32524736966,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 66,
+      "status": "in_progress",
+      "updated_at": "2026-08-21T20:40:20Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-21T20:40:00Z",
+      "display_title": "Launch C8 two-auxiliary positive cancellation gate",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "27bfd06aa708a0c22f92edb7d6a95647716a222c",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32524715584",
+      "id": 32524715584,
+      "name": "RTK Route-B two-auxiliary positive cancellation gate",
+      "run_attempt": 1,
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-21T20:40:20Z",
+      "workflow_id": 339671339
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-21T20:38:54Z",
       "display_title": "Refresh RTK Actions index for iteration 23:32",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 65,
-      "status": "in_progress",
-      "updated_at": "2026-08-21T20:38:58Z",
+      "status": "completed",
+      "updated_at": "2026-08-21T20:39:08Z",
       "workflow_id": 336560028
     },
     {
@@ -1569,38 +1601,6 @@
       "run_number": 3,
       "status": "completed",
       "updated_at": "2026-08-21T00:46:49Z",
-      "workflow_id": 338990919
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-21T00:26:42Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "d8a0ed2d9381162f73c76caec57173476dbad761",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32432684799",
-      "id": 32432684799,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 186,
-      "status": "completed",
-      "updated_at": "2026-08-21T00:27:00Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "failure",
-      "created_at": "2026-08-20T23:58:21Z",
-      "display_title": "Add progress reporting to RTK home scientific benchmark",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "d8a0ed2d9381162f73c76caec57173476dbad761",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32430819300",
-      "id": 32430819300,
-      "name": "RTK Home Scientific Benchmark v3 Progress",
-      "run_attempt": 1,
-      "run_number": 2,
-      "status": "completed",
-      "updated_at": "2026-08-21T00:33:32Z",
       "workflow_id": 338990919
     }
   ],
