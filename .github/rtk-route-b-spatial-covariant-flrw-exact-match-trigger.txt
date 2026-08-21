@@ -1,0 +1,4 @@
+triggered_at_utc=2026-08-21T18:42:00Z
+script_commit=36c30a9b94ad120bfe461d93057daf57db8d14dc
+workflow_commit=7a7ced83037885988e5496bbf327425a2a69d4a2
+purpose=C8 fixed-action FLRW scalar kernel exact-match theorem
