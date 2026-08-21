@@ -1,0 +1,4 @@
+Launch C8 gradK K2 deformation gate
+UTC 2026-08-21T20:23Z
+Source branch: rtk-class-build
+Source commit: b3ac1334d1b5271a9e4af86603e762ab002342da
