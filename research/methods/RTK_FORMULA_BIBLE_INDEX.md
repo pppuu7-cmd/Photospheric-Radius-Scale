@@ -35,6 +35,40 @@ Supporting source/protocol:
 - `rtk/route_b_flrw_schur_rank_residue.py` on `rtk-class-build`;
 - `rtk/route_b_pole_residue_distinction.py` on `rtk-class-build`.
 
+### C8 residue/source redefinition appendix
+
+Canonical detailed derivation:
+
+- `research/methods/RTK_FORMULA_BIBLE_C8_SOURCE_REDEFINITION_APPENDIX.md` on `main`.
+
+It proves the narrow scalar-only statement that exact conversion of
+
+`K_RTK=(1+r q^2) K_BPS`
+
+requires the positive field normalization
+
+`T(q)=sqrt(1+r q^2)`,
+
+so an initially q-independent source transforms as
+
+`J_RTK=T(q) J_BPS`.
+
+The physically relevant quadratic source response is nevertheless invariant when field and source are transformed consistently:
+
+`J_RTK^2/K_RTK = J_BPS^2/K_BPS`.
+
+Thus fixed-source residue mismatch alone is not a physical inequivalence theorem. The actual locality gate is that `sqrt(1+r q^2)` is not a finite polynomial in `q^2` for `r>0`; a scalar-only finite-derivative local normalization cannot realize this exact map while also leaving the original fixed source unchanged. Multi-field/constraint and derived matter-source completions remain open.
+
+Executable theorem:
+
+- `rtk/route_b_residue_source_redefinition_gate.py` on `rtk-class-build`, refined commit `7f5fda897938e24170b8a0228ce8a392e4110e8a`.
+
+CI retrigger:
+
+- `2fcc9fb34fdffcd65a7fd487d6a1aff300ab4e85`.
+
+Status at indexing: YELLOW pending CI artifact inspection; key symbolic identities independently rechecked.
+
 ### B4 numerical proof chain
 
 Canonical audit/provenance chain:
@@ -106,6 +140,8 @@ Therefore, when `b(q*) != 0`, its sign is opposite to the unique nonzero eigenva
 The C8 residue above is a residue with respect to the **spatial variable q** in a reduced coefficient. It is **not** automatically the physical propagator residue with respect to `omega^2`.
 
 The existing `route_b_pole_residue_distinction.py` theorem separately shows that two kernels can share the same on-shell scalar dispersion/pole while differing in fixed-source propagator normalization and `omega^2` residue. A complete carrier must therefore pass both the q-plane off-shell coefficient mapping and the dynamical/source-coupled propagator mapping.
+
+The new residue/source redefinition appendix further shows that a consistent field+source transformation leaves `J^2/K` invariant, so residue mismatch must be interpreted together with the derivation/locality of the source map.
 
 Scope: these are exact algebraic statements for the stated reduced two-constraint kernel. They are not by themselves DHOST degeneracy conditions, DOF/stability proofs, ghost criteria, or UV-completion theorems.
 
