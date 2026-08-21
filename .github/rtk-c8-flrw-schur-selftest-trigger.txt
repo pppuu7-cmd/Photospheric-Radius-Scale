@@ -1,4 +1,5 @@
-trigger: c8-rank-residue-v2
-research_commit: 5029f5dd9bc62665063a926bc260a871bb9bb6f9
-protocol_commit: c7fda91db2d5921dc7fa22a73a4cbf7dbacf8524
+trigger: c8-rank-qresidue-v3
+research_commit: 524849364e0911f0afc35059c4dd3ac7d63c2b3e
+protocol_commit: 0276df24ef7dc3146cc0528d61fff6b924b53e06
 workflow_commit: 2bed0c176dcb165c5204609cec3b1ed70b9ec667
+scope: q-plane Schur residue only; physical omega^2 propagator residue remains a separate gate
