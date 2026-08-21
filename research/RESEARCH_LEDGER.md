@@ -25,6 +25,7 @@ Every iteration records:
 | B9 | CMB lensing | matched lensing comparison | FIXED-CENTER ADAPTER PASS; MATCHED REOPTIMIZATION OPEN |
 | B10 | Lambda identifiability | fixed-lambda profile + multiscale stationarity | HALF-SCALE RUNNING |
 | C8 | Exact UV/IR interpolation | FLRW lapse+shift Schur-complement matching | ALGEBRAIC FILTER ADDED; ACTION MAP OPEN |
+| INFRA-HOME3 | Distributed heavy compute | self-hosted Linux/X64 runner + process pool + persistent checkpoint | ENGINE V2 MIGRATED; BOOTSTRAP HANDSHAKE NEXT |
 
 ## Closed / established results
 
@@ -87,6 +88,22 @@ Every iteration records:
 - Added protocol: `research/RTK_C8_FLRW_SCHUR_MATCHING_PROTOCOL_2026-08-21.md`, commit `b6b9b4f0c2829b7732a4a658d37bbbe7dcd1a1a4`.
 - Added GitHub Actions self-test workflow commit `0a21da3359e211b113f58aa0945d5b06b1b21796`; launched by trigger commit `5d2417ed179f63fc25c9e6cbdbb0e47deef9b841`.
 
+### Home compute architecture migration
+
+- Recovered configured node contract: runner `RTK-HOME-PC`, Linux/X64, custom label `rtk-home3`, current node 10 logical CPUs.
+- Legacy home workflows used `rtk-home`; routes were migrated to `rtk-home3`.
+- Home benchmark was changed from automatic `push` execution to deliberate manual dispatch.
+- Heavy home workflows now share `concurrency: rtk-home3-exclusive`; only one heavyweight job occupies the PC while that job may use the full process pool internally.
+- Engine v2 supports `RTK_WORKERS=auto` and `RTK_RESERVE_CPUS`; maximum-throughput mode uses all available logical CPUs, while an 8-worker/2-reserved mode remains available.
+- Process-parallel workflows set OMP/OpenBLAS/MKL/NumExpr inner threads to 1 to prevent nested oversubscription.
+- Checkpoint state moved out of checkout to `$HOME/.rtk-runner-state/<run_key>/checkpoint.json` with atomic writes, schema/fingerprint checks and `next_index` resume semantics.
+- Engine now handles SIGINT/SIGTERM by committing the last contiguous completed prefix and exposes percent/rate/ETA/status via persistent `progress.json` and `live.log`.
+- Added Ubuntu console wrapper `scripts/rtk_home_runner_console.sh`; bootstrap will install it as `$HOME/.local/bin/rtk-runner-start`.
+- Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
+- Canonical chronology created: `research/RTK_MODEL_CHRONOLOGY.md`.
+- Formula Bible expanded with C8 Schur derivation and mandatory formula-provenance rules.
+- Scientific result status is unchanged by the infrastructure migration; placeholder engine workloads are infrastructure tests only.
+
 ## Next Research Cycle
 
 1. Inspect B10 half-scale artifacts; if both pass, quantify tail flatness and decide the next lambda-identifiability claim conservatively.
@@ -95,3 +112,4 @@ Every iteration records:
 4. Validate the C8 Schur self-test artifact, then map A,B,C,P,R,K0 from one explicit candidate fixed action; do not fit these coefficients independently by epoch.
 5. Freeze a matched B9 lensing reoptimization protocol before using lensing in any model-comparison statement.
 6. Continue the 2026-08-20 Route-B / PPN / compact-object / FLRW audit and merge only scoped, validated conclusions into the recovery manual and Formula Bible.
+7. Run the `rtk-home3` bootstrap handshake, record actual node/worker/progress/checkpoint behavior, then route the next suitable frozen heavy scientific workload to the home node without duplicating an already-running GitHub-hosted calculation.
