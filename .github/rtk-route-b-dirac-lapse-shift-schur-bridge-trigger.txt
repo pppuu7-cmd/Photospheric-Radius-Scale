@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-21T23:32:00+03:00
+iteration_started_utc=2026-08-21T20:32:00Z
+research_source_commit=936fdacb96f259598f465adcef6d9268d5b881d5
+purpose=C8 rank-one Dirac kinetic pair plus invertible lapse-shift Schur block bridge
