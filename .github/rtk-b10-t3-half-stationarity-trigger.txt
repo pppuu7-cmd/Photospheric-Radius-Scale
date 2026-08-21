@@ -1,0 +1,5 @@
+trigger: 2026-08-21T15:26:00+03:00
+reason: B10 T3 base stationarity run 32252288173 passed at factors 64 and 16384 with zero exact improvement and positive-definite Hessians; protocol requires half-scale validation before any B10 closure claim
+source_base_run_id: 32252288173
+stencil_scale: 0.5
+targets: research/robustness/b10_t3_fixed_lambda_stationarity_targets.json
