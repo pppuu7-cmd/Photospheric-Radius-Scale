@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-22T00:23:00+03:00
+iteration_started_utc=2026-08-21T21:23:00Z
+research_source_commit=4900db9448ddd61926632ed2fd70f36ad6a42f75
+purpose=C8 exact rank-one alignment condition for IR and mixed-spatial kinetic operators
