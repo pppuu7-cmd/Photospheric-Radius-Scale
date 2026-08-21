@@ -1,0 +1,3 @@
+trigger_utc: 2026-08-21T19:43:00Z
+research_source_commit: 7aa3f26e3896baf69deb2c45d915f7b38ec50ba0
+purpose: test whether D_i K mixed-gradient operators can remove the static acceleration coupling while preserving exact RTK FLRW kinetic factor
