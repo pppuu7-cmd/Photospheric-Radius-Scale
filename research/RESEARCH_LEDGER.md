@@ -1,123 +1,312 @@
 # RTK Research Ledger
 
-Version: 2026-08-21
+Version: 2026-08-21 14:25 UTC
+Purpose: canonical current-frontier record independent of chat history.
 
-Purpose: preserve research state independently from chat history.
+Historical development belongs in `research/RTK_MODEL_CHRONOLOGY.md`; detailed formulas belong in the Formula Bible/index and named appendices. This ledger records the current scientific gates, evidence, exact run provenance and next action.
 
-## Rules
+## Current frontier
 
-Every iteration records:
+| ID | Question | Current evidence | Status | Next mandatory gate |
+|---|---|---|---|---|
+| A1-A5 | Frozen matched dense cosmology | exact replay-certified local scores | GREEN local baseline | do not reinterpret as global evidence |
+| B4 | Minimal-neutrino local robustness | target-v2 ray-recenter replay run `32482490823` is in exact base-Hessian step | YELLOW / running | inspect artifact; recenter/rays/half-scale per frozen tree |
+| B6 | Primordial abundances | paired AlterBBN run `32285359564` attempt 2 | GREEN differential robustness | separate absolute BBN likelihood only if later preregistered |
+| B9 | Planck lensing | fixed-center diagnostic passed; paired reoptimization run `32490152072` is executing RTK and LCDM | YELLOW / running | inspect both reoptimized artifacts, then stationarity/paired interpretation |
+| B10 | lambda_D identifiability | base T3 passed at factors 64 and 16384; half-scale run `32482153752` executing both anchors | YELLOW / running | inspect both half-scale artifacts before tail/identifiability claim |
+| C8 | UV/IR off-shell carrier | Schur/rank/q-residue algebra CI-verified; source-redefinition locality gate launched | YELLOW overall | derive M,J,K0 from one explicit fixed FLRW action and match source response |
+| INFRA-HOME3 | Additional compute | 10-core/12-logical i5-1235U self-hosted node connected; v2.1 bootstrap queued as run `32487473962` | YELLOW / queued | let stale legacy jobs drain, then require 12-worker saturation/checkpoint PASS |
 
-- Date/time UTC
-- Research question
-- Method
-- Evidence
-- Result
-- Status
-- Next action
+## Frozen production baseline
 
-## Current Frontier
+Objective:
 
-| ID | Question | Method | Status |
-|---|---|---|---|
-| B4 | Stationarity/neutrino sector | paired RTK/LCDM analysis | RAY-RECENTER BASE REPLAY LAUNCHED |
-| B6 | Primordial abundances | paired AlterBBN differential robustness | CLOSED — DIFFERENTIAL ABUNDANCE EFFECT NEGLIGIBLE |
-| B9 | CMB lensing | matched lensing comparison | FIXED-CENTER ADAPTER PASS; MATCHED REOPTIMIZATION OPEN |
-| B10 | Lambda identifiability | fixed-lambda profile + multiscale stationarity | HALF-SCALE RUNNING |
-| C8 | Exact UV/IR interpolation | FLRW lapse+shift Schur-complement matching | ALGEBRAIC FILTER ADDED; ACTION MAP OPEN |
-| INFRA-HOME3 | Distributed heavy compute | self-hosted Linux/X64 runner + process pool + persistent checkpoint | ENGINE V2 MIGRATED; BOOTSTRAP HANDSHAKE ARMED |
+`matched-ultra-linstep2+dense-BOSS`
 
-## Closed / established results
+Production mapping:
 
-- Direct minimal U-DHOST branch ruled out.
-- Several fixed-action constructions ruled out.
-- Dense objective replay infrastructure established.
-- B10 T3 base stationarity run 32252288173 completed successfully at preregistered factors 64 and 16384.
-- B10 factor 64: lambda_D = 14045284.653674118; S_eff(center) = 1050.249062546245; exact stencil improvement = 0; Hessian positive definite; minimum eigenvalue ~= 0.046675.
-- B10 factor 16384: lambda_D = 3595592871.3405743; S_eff(center) = 1050.2490169939647; exact stencil improvement = 0; Hessian positive definite; minimum eigenvalue ~= 0.046707.
-- These base-stencil results do not close B10. The worker itself requires half-scale validation.
-- B6 paired AlterBBN differential abundance robustness is closed under its preregistered protocol: the RTK H(T) perturbation produces observationally negligible abundance shifts. This is not an absolute BBN goodness-of-fit or lithium-problem claim.
+`eff`
 
-## 2026-08-21 continuation
+Frozen exact local scores:
 
-### B10 half-scale gate
+- LCDM: `S_eff = 1049.966118347761`
+- RTK: `S_eff = 1050.249912429787`
+- local raw-objective difference: `Delta S_eff = +0.2837940820259064`
 
-- New workflow: `.github/workflows/rtk-b10-t3-half-scale-stationarity.yml`.
-- Workflow commit: `4909b91c898a64d29f4920da8c737d8593249740`.
-- Trigger commit: `6dfd19e0a70fcd7d853a9454cc9de6147e3d7322`.
-- Stencil scale: 0.5.
-- Factors: 64 and 16384, run in parallel on GitHub-hosted Ubuntu.
-- Acceptance rule: center replay within 2e-6 of frozen T2 score; no exact improvement > 0.005; Hessian remains positive definite and qualitatively consistent.
-- Scientific interpretation is deferred until both artifacts are complete and inspected.
+Latest production iteration inspected:
 
-### B6 paired AlterBBN abundance gate — CLOSED
+- `rtk-class-build:research/iterations/000194_20260821T135112Z.json`
+- iteration `194`
+- action: `compute_matched_dense_raw_delta_S`
 
-- Run `32285359564`, attempt 2, completed successfully and produced artifact `9447623417`, digest `sha256:d8cae8fbd36b886219b611603ef90852dff18251f93e020b0ab87c393e012287`.
-- Execution classification: `RTK_B6_ALTERBBN_PAIRED_ABUNDANCE_EXECUTION_PASS`.
-- Source/artifact locks, exact extended H(T) input, pinned AlterBBN v2.2, identical paired patching, three builds, six network runs and full-precision parsing all passed.
-- Injected RTK expansion perturbation: `max |R_H-1| = 2.422446243599552e-09`.
-- Primary refined/failsafe-1 Yp shift: `+1.4314660568004456e-12`; this is numerically resolved, with conservative absolute bound `1.5052958879380185e-12`.
-- Primary refined/failsafe-1 D/H shift: `+1.6226982865047423e-15`; this is below numerical resolution, with conservative absolute bound `4.560750648668899e-15`.
-- He3/H, Li7/H, Li6/H and Be7/H shifts are also below the preregistered numerical-resolution threshold; their conservative bounds are preserved in `research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
-- Frozen observational residuals barely move: Yp changes by about `1.10e-9 sigma`, D/H by about `6.76e-9 sigma`.
-- The reference calculation itself is `z=-4.705799909832967` for frozen D/H and `z=+1.1728100763428537` for frozen Yp; therefore this gate does not certify absolute BBN goodness-of-fit.
-- Scientific closure classification: `RTK_B6_DIFFERENTIAL_ABUNDANCE_ROBUSTNESS_CLOSED`.
-- Interpretation: the RTK-vs-reference H(T) change does not create a new BBN abundance tension at the preregistered massless A1-A5 point. No global BBN likelihood, lithium-problem, or model-selection claim follows.
+Iteration 194 only recomputed the already frozen local difference. It does not advance the physical frontier.
 
-### B9 fixed-center Planck lensing diagnostic
+Guardrail: this is a local matched raw-objective comparison only, not a global optimum, posterior preference, significance, AIC/BIC or Bayes factor.
 
-- Run 32285180694 completed successfully.
-- Contract classification: `B9_FIXED_CENTER_LENSING_ADAPTER_CONTRACT_PASS`.
-- LCDM standalone lensing: -2 ln L = 9.054925581629908.
-- RTK standalone lensing: -2 ln L = 9.039267332621456.
-- Fixed-center lensing delta (RTK-LCDM) = -0.015658249008452, i.e. a very small diagnostic improvement for RTK in this standalone contribution.
-- This is not a matched reoptimized objective, local-minimum comparison, significance, AIC/BIC result, or Bayes factor. B9 remains open.
+## B4 minimal-neutrino stationarity chain
 
-### B4 neutrino negative-mode recenter gate
+Separate objective:
 
-- Parent negative-mode ray run 32284932113 completed successfully but falsified stationarity of its parent RTK center.
-- Objective: `matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1`; do not compare its absolute scores directly with the massless frozen objective.
-- Parent center S_eff = 1050.6979573843187.
-- Strongest exact negative-mode ray: mode 0, alpha = +2.0, S_eff = 1050.5880475140204, improvement = 0.10990987029822463 > 0.005 recenter tolerance.
-- Frozen recenter winner parameters: As=2.0920212896820786e-9, Ob=0.04722200104991654, Om=0.2528393318824633, h=0.6885660022475836, lambda_D=3043326.1774413693, ns=0.9657332769496741, zre=7.506210209218662.
-- Therefore the mandatory next gate is an exact RTK ray-recenter base Hessian at that winner.
-- Existing frozen target: `research/robustness/b4_neutrino_rtk_ray_recenter_target_v2.json`, target commit `3b9acfb25a01c6107a4a8427ef2b51ae61017d20`.
-- A fresh replay was launched on 2026-08-21 by trigger commit `c71058fe5cb21e033e73b6966baca99686ffd851` because the prior launch result was not represented as a closed result in live state.
+`matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1`.
 
-### C8 FLRW Schur-complement gate
+Never compare its absolute scores numerically with the massless A1-A5 objective.
 
-- Existing FLRW constraint-kernel work shows that a fixed-Minkowski obstruction cannot automatically be promoted to FLRW because background quantities such as H can enter the constraint kernel and move a pole with epoch even for fixed Wilson coefficients.
-- The next exact algebraic object is the full nondynamical lapse+shift matrix M=[[A,C],[C,B]] with mixing J=(P,R).
-- Eliminating the constraints gives K_eff = K0 - (B P^2 - 2 C P R + A R^2)/(A B - C^2).
-- For A=a0+a1 q, B=b0+b1 q, C=c0+c1 q, the determinant has D2=a1 b1-c1^2 as the q^2 coefficient. A strict one-linear-pole target therefore requires the necessary algebraic condition D2=0.
-- This is not, by itself, a DHOST degeneracy theorem and not a UV completion claim. Pole matching must be followed by residue matching, stability, DOF, cutoff, PPN and GW gates for the same fixed action.
-- Added exact-rational diagnostic module on `rtk-class-build`: `rtk/route_b_flrw_schur_kernel.py`, commit `175adcc14bdfcdfc83218055dcbe4b0096545980`.
-- Added protocol: `research/RTK_C8_FLRW_SCHUR_MATCHING_PROTOCOL_2026-08-21.md`, commit `b6b9b4f0c2829b7732a4a658d37bbbe7dcd1a1a4`.
-- Added GitHub Actions self-test workflow commit `0a21da3359e211b113f58aa0945d5b06b1b21796`; launched by trigger commit `5d2417ed179f63fc25c9e6cbdbb0e47deef9b841`.
+First recentered RTK base Hessian run `32252398625` had three negative eigenvalues:
 
-### Home compute architecture migration
+- `-0.0324084135524679`
+- `-0.0015792056227914312`
+- `-1.9922876135075676e-05`
 
-- Recovered configured node contract: runner `RTK-HOME-PC`, Linux/X64, custom label `rtk-home3`, current node 10 logical CPUs.
-- Legacy home workflows used `rtk-home`; routes were migrated to `rtk-home3`.
-- Home benchmark was changed from automatic `push` execution to deliberate manual dispatch.
-- Heavy home workflows now share `concurrency: rtk-home3-exclusive`; only one heavyweight job occupies the PC while that job may use the full process pool internally.
-- Engine v2 supports `RTK_WORKERS=auto` and `RTK_RESERVE_CPUS`; maximum-throughput mode uses all available logical CPUs, while an 8-worker/2-reserved mode remains available.
-- Process-parallel workflows set OMP/OpenBLAS/MKL/NumExpr inner threads to 1 to prevent nested oversubscription.
-- Checkpoint state moved out of checkout to `$HOME/.rtk-runner-state/<run_key>/checkpoint.json` with atomic writes, schema/fingerprint checks and `next_index` resume semantics.
-- Engine now handles SIGINT/SIGTERM by committing the last contiguous completed prefix and exposes percent/rate/ETA/status via persistent `progress.json` and `live.log`.
-- Added Ubuntu console wrapper `scripts/rtk_home_runner_console.sh`; bootstrap installs it as `$HOME/.local/bin/rtk-runner-start`.
-- Bootstrap workflow `.github/workflows/rtk-home3-bootstrap.yml` was armed by commit `ee0b42f8594235f41db8aaecb61bfbbe63df3d94` and targets `[self-hosted, Linux, X64, rtk-home3]`.
-- Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
-- Canonical chronology: `research/RTK_MODEL_CHRONOLOGY.md`.
-- Formula Bible contains the C8 Schur derivation and mandatory formula-provenance rules.
-- Placeholder engine workloads are infrastructure tests only and cannot alter scientific gate status.
+Exact negative-mode ray run `32284932113` then confirmed real objective improvements. Strongest:
 
-## Next Research Cycle
+- mode `0`
+- alpha `+2.0`
+- parent `S_eff = 1050.6979573843187`
+- ray winner `S_eff = 1050.5880475140204`
+- improvement `0.10990987029822463 > 0.005`.
 
-1. Inspect B10 half-scale artifacts; if both pass, quantify tail flatness and decide the next lambda-identifiability claim conservatively.
-2. Inspect the fresh B4 ray-recenter base artifact; if improvement >0.005 recenter again, if Hessian is indefinite run exact negative-mode rays, otherwise run half-scale validation.
-3. Validate the C8 Schur self-test artifact, then map A,B,C,P,R,K0 from one explicit candidate fixed action; do not fit these coefficients independently by epoch.
-4. Freeze a matched B9 lensing reoptimization protocol before using lensing in any model-comparison statement.
-5. Continue the 2026-08-20 Route-B / PPN / compact-object / FLRW audit and merge only scoped, validated conclusions into the recovery manual and Formula Bible.
-6. Complete the `rtk-home3` bootstrap handshake, record actual node/worker/progress/checkpoint behavior, then route the next suitable frozen heavy scientific workload to the home node without duplicating an already-running calculation.
-7. If absolute BBN goodness-of-fit is promoted into a production likelihood later, freeze a separate protocol including nuclear-rate/theory uncertainty and parameter treatment; do not reinterpret the differential B6 gate as that likelihood.
+Frozen target-v2 parameters:
+
+- `As=2.0920212896820786e-9`
+- `Ob=0.04722200104991654`
+- `Om=0.2528393318824633`
+- `h=0.6885660022475836`
+- `lambda_D=3043326.1774413693`
+- `ns=0.9657332769496741`
+- `zre=7.506210209218662`.
+
+Canonical proof chain:
+
+`research/robustness/RTK_B4_NEUTRINO_STATIONARITY_CHAIN_2026-08-21.md`.
+
+Fresh target-v2 replay:
+
+- run `32482490823`
+- job `ray-recentered-base-hessian`
+- setup, frozen target checks, hardened CLASS build and Planck verification passed
+- exact RTK ray-recenter base Hessian step is/was the active scientific step at the last direct job check.
+
+Decision rule remains mechanical: exact improvement >0.005 -> recenter; indefinite Hessian -> exact negative/near-zero-mode rays; positive-definite base -> half-scale; adjacent base+half -> fresh-tree replay; only then pair with the LCDM side.
+
+Status: OPEN.
+
+## B6 paired AlterBBN abundance gate — CLOSED DIFFERENTIAL ROBUSTNESS
+
+Canonical result:
+
+`research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
+
+Provenance:
+
+- run `32285359564`, attempt 2
+- artifact `9447623417`
+- digest `sha256:d8cae8fbd36b886219b611603ef90852dff18251f93e020b0ab87c393e012287`.
+
+Expansion perturbation:
+
+`max |R_H-1| = 2.422446243599552e-09`.
+
+Primary shifts:
+
+- `delta Yp = +1.4314660568004456e-12`, resolved; conservative bound `1.5052958879380185e-12`
+- `delta(D/H) = +1.6226982865047423e-15`, below preregistered numerical resolution; conservative bound `4.560750648668899e-15`.
+
+Frozen standardized residual changes induced by RTK are only about `1.10e-9 sigma` for Yp and `6.76e-9 sigma` for D/H.
+
+Scope boundary: the reference AlterBBN calculation itself is about `-4.706 sigma` from the frozen D/H central value if only the quoted observational sigma is used. Therefore B6 closes only the *differential RTK effect*. It is not an absolute BBN likelihood, lithium solution or model-evidence result.
+
+## B9 Planck lensing
+
+Fixed-center standalone diagnostic run `32285180694`:
+
+- LCDM `-2 ln L = 9.054925581629908`
+- RTK `-2 ln L = 9.039267332621456`
+- RTK-LCDM fixed-center difference `-0.015658249008452`.
+
+This fixed-center number is not a matched reoptimized result.
+
+A frozen paired reoptimization has now been launched:
+
+- run `32490152072`
+- LCDM job `reoptimize (LCDM)`
+- RTK job `reoptimize (RTK)`
+- both jobs passed preregistered-target checks, hardened CLASS preparation/build and Planck R3 baseline verification
+- at the last direct job check both were inside `Run exact B9 paired reoptimization`.
+
+Status: OPEN/RUNNING. Do not use the fixed-center number for model-selection claims while the paired reoptimization is unresolved.
+
+## B10 lambda_D tail / identifiability
+
+Base T3 run `32252288173`:
+
+Factor 64:
+
+- `lambda_D = 14045284.653674118`
+- `S_eff(center) = 1050.249062546245`
+- exact stencil improvement `0`
+- Hessian positive definite
+- minimum eigenvalue approximately `0.046675`.
+
+Factor 16384:
+
+- `lambda_D = 3595592871.3405743`
+- `S_eff(center) = 1050.2490169939647`
+- exact stencil improvement `0`
+- Hessian positive definite
+- minimum eigenvalue approximately `0.046707`.
+
+Base scale alone does not close B10.
+
+Half-scale validation:
+
+- run `32482153752`
+- jobs `half-stationarity (64)` and `half-stationarity (16384)`
+- both passed target checks, hardened CLASS setup/build and Planck verification
+- at the last direct job check both were inside the exact fixed-lambda 6D half-scale stationarity step.
+
+Acceptance requires center replay consistency, no exact improvement above `0.005`, positive-definite Hessian and qualitative base/half consistency. Only after both artifacts pass may a conservative tail-flatness/identifiability statement be made.
+
+Status: OPEN/RUNNING.
+
+## C8 fixed-action FLRW / off-shell carrier
+
+### Established moving-pole theorem
+
+`rtk-class-build:rtk/route_b_flrw_constraint_kernel.py` shows that a fixed healthy-Horava-style action can have an FLRW constraint kernel
+
+`D_phi = 3(3 lambda-1)H^2 - eta p^2 - eta2 p^4/M_Pl^2 + eta4 p^6/M_Pl^4`,
+
+so a constraint root can move with `H(a)` even when Wilson coefficients are fixed. Hence a fixed-Minkowski globalization obstruction does not by itself extend to FLRW.
+
+This is structural only; it is not a full propagating/source map.
+
+### Exact Schur/rank/q-residue algebra — CI VERIFIED
+
+For two nondynamical variables,
+
+`M=[[A,C],[C,B]]`, `J=(P,R)`,
+
+exact elimination gives
+
+`K_eff = K0 - (B P^2 - 2 C P R + A R^2)/(A B-C^2)`.
+
+For `M(q)=M0+q M1`, strict nonconstant linear denominator requires
+
+`det(M1)=0` and `M1 != 0`, hence for the real symmetric 2x2 case
+
+`rank(M1)=1`.
+
+The strengthened self-test is now independently artifact-verified:
+
+- run `32490690248`
+- artifact `9449602889`
+- digest `sha256:1f2bfda3959e8b6c57866bd35e7279e7cb398460c1a6cd296d4b2d146e092dce`
+- artifact markers `C8_FLRW_SCHUR_SELFTEST_PASS` and `C8_FLRW_SCHUR_RANK_RESIDUE_SELFTEST_PASS`
+- exact diagnostic example: `D0=2`, `D1=6`, `D2=0`, rank `1`, `q_pole=-1/3`, `Res_q[N/D]=+1/9`, Schur contribution residue `-1/9`.
+
+Canonical CI result:
+
+`research/RTK_C8_SCHUR_CI_RESULT_2026-08-21.md`.
+
+These are q-plane reduced-coefficient residues, not physical `omega^2` propagator residues.
+
+### Exact BPS pole embedding remains stronger than a no-go
+
+`rtk-class-build:rtk/route_b_bps_target_inversion.py` constructs, for every positive target
+
+`omega^2 = C p^2/(1+p^2/Mdisp^2)`,
+
+an exact healthy-BPS quadratic dispersion/pole embedding with a continuous `h in (0,1)` family and explicit low-energy cutoff optimization. This result remains valid.
+
+It explicitly does not establish the off-shell source/residue map.
+
+### New residue/source redefinition locality gate
+
+Prior theorem:
+
+`K_RTK=(1+r q^2) K_BPS`.
+
+A scalar-only multiplicative redefinition `phi_BPS=T phi_RTK` that exactly maps the kernels forces
+
+`T(q)=sqrt(1+r q^2)`
+
+on the positive branch. The source must transform as
+
+`J_RTK=T(q) J_BPS`.
+
+Crucial invariant:
+
+`J_RTK^2/K_RTK = J_BPS^2/K_BPS`.
+
+Therefore fixed-source residue mismatch alone is not a physical inequivalence theorem; a consistent field+source change leaves the quadratic source response invariant.
+
+The actual scoped locality gate is that `sqrt(1+r q^2)` is not a finite polynomial in `q^2` for `r>0`. Hence an exact scalar-only finite-derivative local normalization cannot implement this map while also leaving the original q-independent fixed source unchanged.
+
+This is not a no-go for constraint mixing, auxiliary fields, disformal/derived source maps or other local carriers.
+
+Executable theorem:
+
+- `rtk-class-build:rtk/route_b_residue_source_redefinition_gate.py`
+- refined commit `7f5fda897938e24170b8a0228ce8a392e4110e8a`
+- CI retrigger commit `2fcc9fb34fdffcd65a7fd487d6a1aff300ab4e85`.
+
+Formula derivation appendix:
+
+`research/methods/RTK_FORMULA_BIBLE_C8_SOURCE_REDEFINITION_APPENDIX.md`.
+
+Status of this newest sub-gate: YELLOW pending its GitHub artifact inspection. Core symbolic identities were separately re-evaluated exactly before entry.
+
+### Current C8 next step
+
+Do not fit `A,B,C,P,R` independently at each epoch.
+
+Derive `M0,M1,J,K0` from **one explicit fixed FLRW action**, keep one Wilson-coefficient tuple across epochs, then require:
+
+1. correct constraint/DOF identification;
+2. rank-one linear-gradient gate if a strict linear q denominator is claimed;
+3. matched q-plane pole across epochs;
+4. matched normalized q-plane residue and polynomial remainder;
+5. source response generated by the action rather than an inserted `sqrt(1+r q^2)` factor;
+6. physical `omega^2` propagator/source response;
+7. no-ghost/no-gradient/hyperbolicity;
+8. EFT/strong-coupling cutoff;
+9. same-tuple PPN/Newton/GW constraints;
+10. observational/nonlinear tests.
+
+## Home compute architecture state
+
+Observed node:
+
+- runner `RTK-HOME-PC`
+- Linux/X64 WSL
+- custom label `rtk-home3`
+- Intel i5-1235U
+- **10 physical cores / 12 logical processors**
+- about 7.7 GiB Windows RAM, about 5.9 GiB visible to WSL during measurement.
+
+Engine v2.1 removes the old eight-worker cap, supports `RTK_WORKERS=auto`, adaptive task batching, persistent atomic checkpoint/resume, progress/rate/ETA and Ubuntu-visible event logging.
+
+Fresh saturation/bootstrap run:
+
+- run `32487473962`
+- status at the latest runtime-index snapshot: pending behind previously queued self-hosted jobs.
+
+Legacy `parallel`/`benchmark` CPU measurements are infrastructure history only, not performance evidence for v2.1 and not scientific model evidence.
+
+Canonical architecture/history:
+
+- `docs/RTK_COMPUTE_ARCHITECTURE.md`
+- `docs/COMPUTE_LOG.md`.
+
+## Immediate research order
+
+1. Inspect B4 run `32482490823` artifact when complete and mechanically follow the frozen recenter/ray/half-scale decision tree.
+2. Inspect both B10 half-scale jobs in `32482153752`; close/advance tail identifiability only if both pass.
+3. Inspect paired B9 reoptimization run `32490152072`; retire fixed-center-only interpretation once matched results are available.
+4. Inspect the new C8 residue/source-redefinition CI artifact; promote only the scoped locality statement if PASS.
+5. Build the explicit fixed-action FLRW `M,J,K0` derivation rather than another abstract pole fit.
+6. When home bootstrap `32487473962` reaches the runner, validate 12-worker saturation/checkpoint behavior, then route a suitable nonduplicated heavy scientific workload to it.
+
+## Interpretation discipline
+
+A workflow success means the encoded computation executed and its explicit assertions passed. It is not automatically a scientific gate closure. Every closure must satisfy the frozen acceptance rule and preserve its exact scope.
