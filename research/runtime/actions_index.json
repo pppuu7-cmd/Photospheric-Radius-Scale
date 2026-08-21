@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-21T18:45:42.016565+00:00",
+  "generated_at_utc": "2026-08-21T18:51:31.554858+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-21T18:51:22Z",
+      "display_title": "Refresh RTK frontier after Newton-boundary launch",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "fa38e17abe20860343ef7fe02e8399a6413e88f2",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32515462491",
+      "id": 32515462491,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 57,
+      "status": "in_progress",
+      "updated_at": "2026-08-21T18:51:26Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-21T18:49:32Z",
+      "display_title": "Launch spatial-covariant Newton boundary theorem",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "8c251c92e05683d76b1b29abcb386336138bc709",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32515307927",
+      "id": 32515307927,
+      "name": "RTK Route-B spatial-covariant Newton boundary",
+      "run_attempt": 1,
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-21T18:49:58Z",
+      "workflow_id": 339613613
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-21T18:45:32Z",
       "display_title": "Refresh RTK live frontier after C8 exact-match launch",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 56,
-      "status": "in_progress",
-      "updated_at": "2026-08-21T18:45:37Z",
+      "status": "completed",
+      "updated_at": "2026-08-21T18:45:47Z",
       "workflow_id": 336560028
     },
     {
@@ -1569,38 +1601,6 @@
       "run_number": 163,
       "status": "completed",
       "updated_at": "2026-08-20T10:50:59Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-20T10:14:27Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "3fd58527dd251d0de8961d2634b031d90b330408",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32357955812",
-      "id": 32357955812,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 162,
-      "status": "completed",
-      "updated_at": "2026-08-20T10:14:47Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-20T09:46:57Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "3fd58527dd251d0de8961d2634b031d90b330408",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32355629924",
-      "id": 32355629924,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 161,
-      "status": "completed",
-      "updated_at": "2026-08-20T09:47:11Z",
       "workflow_id": 335879021
     }
   ],
