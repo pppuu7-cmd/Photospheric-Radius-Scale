@@ -68,12 +68,30 @@ Therefore the observed ~30% is **not accepted as the target utilization** for th
 - Bootstrap saturation target: mean CPU busy >=80%; lower utilization generates an explicit warning for WSL/power/thermal/granularity investigation.
 - For process-parallel scientific workloads, inner `OMP/OPENBLAS/MKL/NUMEXPR` threads remain pinned to 1 to prevent nested oversubscription.
 
+### Second live connection: queued legacy benchmark
+
+At 2026-08-21 13:43:41Z the runner connected again and at 13:43:46Z accepted another previously queued job named `benchmark`.
+
+Observed approximately 27 seconds after start:
+
+- Windows Task Manager: about 18% aggregate CPU at 1.70 GHz;
+- Windows memory: about 6.4 / 7.7 GiB used (83%);
+- WSL `top`: 10.1% user, 89.9% idle;
+- one `python3` process at about 99.7% of one Linux logical CPU;
+- WSL load average: 0.20 / 0.32 / 0.49;
+- WSL-visible memory: 5925.1 MiB total, 666.2 MiB used, 4480.6 MiB free; swap unused.
+
+Interpretation: this accepted `benchmark` is a stale legacy queued workload and is effectively single-core at the sampled moment. It is not a validation of engine v2.1 and its low utilization must not be used as the redesigned architecture benchmark.
+
+The current repository `RTK Home Scientific Benchmark` workflow is now manual-only (`workflow_dispatch`), so new automatic push-triggered benchmark jobs should no longer be generated. The operational strategy is to let already accepted legacy queue entries drain while keeping the runner online, then validate the first `bootstrap` v3 run separately.
+
 Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
 
 Next validation gate:
 
-1. leave `RTK-HOME-PC` connected while the currently accepted legacy `parallel` job finishes;
-2. let the updated `rtk-home3` bootstrap v3 run next;
-3. inspect its artifact for exact `workers=12`, checkpoint/progress PASS and measured mean/median/max CPU busy fractions;
-4. after bootstrap PASS, use `$HOME/.local/bin/rtk-runner-start` for future sessions;
-5. route the next suitable frozen heavy scientific workload to the node and record whether its natural task granularity calls for 12 outer processes or one native threaded solver.
+1. leave `RTK-HOME-PC` connected while any already accepted legacy benchmark finishes;
+2. do not interpret legacy benchmark CPU utilization as engine-v2.1 performance;
+3. let the updated `rtk-home3` bootstrap v3 run when it reaches the runner;
+4. inspect its artifact for exact `workers=12`, checkpoint/progress PASS and measured mean/median/max CPU busy fractions;
+5. after bootstrap PASS, use `$HOME/.local/bin/rtk-runner-start` for future sessions;
+6. route the next suitable frozen heavy scientific workload to the node and record whether its natural task granularity calls for 12 outer processes or one native threaded solver.
