@@ -1,21 +1,24 @@
 # RTK Research Ledger
 
-Version: 2026-08-21 14:25 UTC
+Version: 2026-08-21 18:58 UTC
 Purpose: canonical current-frontier record independent of chat history.
 
-Historical development belongs in `research/RTK_MODEL_CHRONOLOGY.md`; detailed formulas belong in the Formula Bible/index and named appendices. This ledger records the current scientific gates, evidence, exact run provenance and next action.
+Historical evolution belongs in `research/RTK_MODEL_CHRONOLOGY.md`. Detailed derivations belong in `research/methods/RTK_FORMULA_BIBLE.md`, its index and appendices. This file records the current gates, evidence, exact run/artifact provenance and mandatory next actions.
 
 ## Current frontier
 
 | ID | Question | Current evidence | Status | Next mandatory gate |
 |---|---|---|---|---|
-| A1-A5 | Frozen matched dense cosmology | exact replay-certified local scores | GREEN local baseline | do not reinterpret as global evidence |
-| B4 | Minimal-neutrino local robustness | target-v2 ray-recenter replay run `32482490823` is in exact base-Hessian step | YELLOW / running | inspect artifact; recenter/rays/half-scale per frozen tree |
-| B6 | Primordial abundances | paired AlterBBN run `32285359564` attempt 2 | GREEN differential robustness | separate absolute BBN likelihood only if later preregistered |
-| B9 | Planck lensing | fixed-center diagnostic passed; paired reoptimization run `32490152072` is executing RTK and LCDM | YELLOW / running | inspect both reoptimized artifacts, then stationarity/paired interpretation |
-| B10 | lambda_D identifiability | base T3 passed at factors 64 and 16384; half-scale run `32482153752` executing both anchors | YELLOW / running | inspect both half-scale artifacts before tail/identifiability claim |
-| C8 | UV/IR off-shell carrier | Schur/rank/q-residue algebra CI-verified; source-redefinition locality gate launched | YELLOW overall | derive M,J,K0 from one explicit fixed FLRW action and match source response |
-| INFRA-HOME3 | Additional compute | 10-core/12-logical i5-1235U self-hosted node connected; v2.1 bootstrap queued as run `32487473962` | YELLOW / queued | let stale legacy jobs drain, then require 12-worker saturation/checkpoint PASS |
+| A1-A5 | Frozen matched dense cosmology | replay-certified local scores | ✅ GREEN local baseline | keep local/global distinction |
+| B4 | Minimal-neutrino local robustness | target-v2 base PASS; half-scale run `32514077002` executing exact Hessian | 🟡 RUNNING | inspect half artifact; then fresh-tree if PASS |
+| B6 | Primordial abundances | paired AlterBBN differential run complete | ✅ CLOSED differential robustness | absolute BBN likelihood is separate if later frozen |
+| B9 | Planck lensing robustness | RTK paired reoptimization complete; LCDM side of run `32490152072` still executing | 🟡 RUNNING | inspect LCDM artifact, then freeze matched stationarity targets |
+| B10 | `lambda_D` finite-vs-dust-tail identifiability | base+half stationarity pass at factors 64 and 16384 | ✅ CLOSED protocol v1 | no further B10 work unless a broader posterior/global question is separately frozen |
+| C8a | Schur/rank/q-residue algebra | run `32490690248`, artifact `9449602889` | ✅ GREEN reduced-kernel theorem | apply only to mechanisms that claim a strict constraint-determinant pole |
+| C8b | BPS residue/source normalization | run `32491666126`, artifact `9449986685` | ✅ GREEN scoped locality theorem | use action-derived source map, not hand-inserted `sqrt(1+r q^2)` |
+| C8c | Direct spatial-covariant FLRW scalar carrier | run `32514697064`, artifact `9458330218` | ✅ GREEN quadratic FLRW exact match / 🟡 completion | Newton/PPN/GW/compact-object/cutoff audit |
+| C8d | Minimal Newton normalization of direct carrier | exact map requires `alpha=2`; theorem CI launched | 🟡 scoped boundary under CI | test smallest nonminimal/companion escape if confirmed |
+| INFRA-HOME3 | Additional home compute | 10-core/12-logical self-hosted node; saturation bootstrap `32487473962` pending | 🟡 QUEUED | validate 12-worker saturation/checkpoint artifact before scientific dispatch |
 
 ## Frozen production baseline
 
@@ -23,290 +26,301 @@ Objective:
 
 `matched-ultra-linstep2+dense-BOSS`
 
-Production mapping:
-
-`eff`
+Production mapping: `eff`.
 
 Frozen exact local scores:
 
-- LCDM: `S_eff = 1049.966118347761`
-- RTK: `S_eff = 1050.249912429787`
-- local raw-objective difference: `Delta S_eff = +0.2837940820259064`
+- LCDM `S_eff = 1049.966118347761`
+- RTK `S_eff = 1050.249912429787`
+- `Delta S_eff = +0.2837940820259064`.
 
-Latest production iteration inspected:
+These are local raw-objective values only. They are not a global optimum theorem, significance, AIC/BIC, posterior preference or Bayes factor.
 
-- `rtk-class-build:research/iterations/000194_20260821T135112Z.json`
-- iteration `194`
-- action: `compute_matched_dense_raw_delta_S`
+The latest autonomous production iterations, including iteration 201, have merely replayed this frozen comparison and do not by themselves advance the physics frontier.
 
-Iteration 194 only recomputed the already frozen local difference. It does not advance the physical frontier.
+## B4 minimal-neutrino stationarity
 
-Guardrail: this is a local matched raw-objective comparison only, not a global optimum, posterior preference, significance, AIC/BIC or Bayes factor.
-
-## B4 minimal-neutrino stationarity chain
-
-Separate objective:
+Objective:
 
 `matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1`.
 
-Never compare its absolute scores numerically with the massless A1-A5 objective.
+Its absolute scores must never be mixed with the massless A1-A5 objective.
 
-First recentered RTK base Hessian run `32252398625` had three negative eigenvalues:
+The first recentered RTK Hessian had three negative modes. Exact negative-mode rays in run `32284932113` confirmed real improvements, strongest at mode 0, alpha `+2`:
 
-- `-0.0324084135524679`
-- `-0.0015792056227914312`
-- `-1.9922876135075676e-05`
-
-Exact negative-mode ray run `32284932113` then confirmed real objective improvements. Strongest:
-
-- mode `0`
-- alpha `+2.0`
 - parent `S_eff = 1050.6979573843187`
-- ray winner `S_eff = 1050.5880475140204`
+- winner `S_eff = 1050.5880475140204`
 - improvement `0.10990987029822463 > 0.005`.
 
-Frozen target-v2 parameters:
+That winner became frozen target-v2.
 
-- `As=2.0920212896820786e-9`
-- `Ob=0.04722200104991654`
-- `Om=0.2528393318824633`
-- `h=0.6885660022475836`
-- `lambda_D=3043326.1774413693`
-- `ns=0.9657332769496741`
-- `zre=7.506210209218662`.
+### Target-v2 base replay
 
-Canonical proof chain:
+Run `32482490823` completed successfully.
 
-`research/robustness/RTK_B4_NEUTRINO_STATIONARITY_CHAIN_2026-08-21.md`.
+Artifact:
 
-Fresh target-v2 replay:
+- id `9452581043`
+- digest `sha256:c5bb88ef4d182104d8e5b5ed578b749dd4e0f9b5b4857f047633782540d7223d`.
 
-- run `32482490823`
-- job `ray-recentered-base-hessian`
-- setup, frozen target checks, hardened CLASS build and Planck verification passed
-- exact RTK ray-recenter base Hessian step is/was the active scientific step at the last direct job check.
+Results:
 
-Decision rule remains mechanical: exact improvement >0.005 -> recenter; indefinite Hessian -> exact negative/near-zero-mode rays; positive-definite base -> half-scale; adjacent base+half -> fresh-tree replay; only then pair with the LCDM side.
+- center `1050.5880475140204`
+- best exact `1050.5880063039972`
+- improvement `4.12100232551893e-05 << 0.005`
+- Hessian positive definite
+- minimum eigenvalue `1.1738932605478353e-05`.
 
-Status: OPEN.
+The soft minimum eigenvalue is still above the frozen positive-definite threshold `1e-8`, so the preregistered decision is **base PASS, half-scale mandatory**, not immediate local certification.
 
-## B6 paired AlterBBN abundance gate — CLOSED DIFFERENTIAL ROBUSTNESS
+Frozen decision:
+
+`rtk-class-build:research/robustness/b4_neutrino_rtk_ray_recenter_base_decision_v2.json`, commit `9202e84e9e0f98c35a4b6fc3be0caaea40d63a32`.
+
+Half-scale validation:
+
+- workflow `RTK B4 neutrino RTK target-v2 half stationarity`
+- run `32514077002`
+- last direct job check: setup/locks/build/Planck PASS, exact half-Hessian step in progress.
+
+Decision after artifact:
+
+- improvement `>0.005` -> recenter;
+- non-PD without large coordinate improvement -> exact negative/near-zero-mode rays;
+- recenter-clear + PD -> fresh-tree target-v2 replay;
+- only after fresh-tree can the RTK side be locally certified, and paired robustness still requires equivalent LCDM certification.
+
+Status: OPEN/RUNNING.
+
+## B6 paired AlterBBN — CLOSED DIFFERENTIAL ROBUSTNESS
 
 Canonical result:
 
 `research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
 
-Provenance:
+Run `32285359564` attempt 2, artifact `9447623417`.
 
-- run `32285359564`, attempt 2
-- artifact `9447623417`
-- digest `sha256:d8cae8fbd36b886219b611603ef90852dff18251f93e020b0ab87c393e012287`.
-
-Expansion perturbation:
+Key result:
 
 `max |R_H-1| = 2.422446243599552e-09`.
 
-Primary shifts:
+RTK-induced abundance shifts are observationally negligible under the frozen paired protocol. The reference D/H residual itself is about `-4.706 sigma` if only the quoted observational sigma is used, so this is not an absolute BBN goodness-of-fit claim.
 
-- `delta Yp = +1.4314660568004456e-12`, resolved; conservative bound `1.5052958879380185e-12`
-- `delta(D/H) = +1.6226982865047423e-15`, below preregistered numerical resolution; conservative bound `4.560750648668899e-15`.
-
-Frozen standardized residual changes induced by RTK are only about `1.10e-9 sigma` for Yp and `6.76e-9 sigma` for D/H.
-
-Scope boundary: the reference AlterBBN calculation itself is about `-4.706 sigma` from the frozen D/H central value if only the quoted observational sigma is used. Therefore B6 closes only the *differential RTK effect*. It is not an absolute BBN likelihood, lithium solution or model-evidence result.
+Status: CLOSED within differential B6 scope.
 
 ## B9 Planck lensing
 
-Fixed-center standalone diagnostic run `32285180694`:
+Fixed-center diagnostic:
 
-- LCDM `-2 ln L = 9.054925581629908`
-- RTK `-2 ln L = 9.039267332621456`
-- RTK-LCDM fixed-center difference `-0.015658249008452`.
+- LCDM lensing `-2 ln L = 9.054925581629908`
+- RTK lensing `-2 ln L = 9.039267332621456`
+- fixed-center RTK-LCDM contribution `-0.015658249008452`.
 
-This fixed-center number is not a matched reoptimized result.
+This fixed-center number is diagnostic only.
 
-A frozen paired reoptimization has now been launched:
+Paired reoptimization run `32490152072`:
 
-- run `32490152072`
-- LCDM job `reoptimize (LCDM)`
-- RTK job `reoptimize (RTK)`
-- both jobs passed preregistered-target checks, hardened CLASS preparation/build and Planck R3 baseline verification
-- at the last direct job check both were inside `Run exact B9 paired reoptimization`.
+### RTK side — completed candidate
 
-Status: OPEN/RUNNING. Do not use the fixed-center number for model-selection claims while the paired reoptimization is unresolved.
+Artifact:
 
-## B10 lambda_D tail / identifiability
+- id `9456206708`
+- digest `sha256:3067fa908eb27cd90aa90b1898ea70ce0d4aa3b2e4e2b7a07bbfc8b9b9e945ea`.
 
-Base T3 run `32252288173`:
+Candidate summary:
 
-Factor 64:
+- `best_S_B9 = 1059.2719553175134`
+- `best_S_base_eff = 1050.2560245726381`
+- lensing `-2 ln L = 9.015930744875291`
+- improvement over RTK fixed-center B9 value `0.017224444894964108`
+- no reported boundary axis
+- classification `INTERIOR_LOCAL_REOPTIMIZATION_CANDIDATE`.
 
-- `lambda_D = 14045284.653674118`
-- `S_eff(center) = 1050.249062546245`
-- exact stencil improvement `0`
-- Hessian positive definite
-- minimum eigenvalue approximately `0.046675`.
+Best RTK candidate parameters:
 
-Factor 16384:
+- `As=2.0874265764520984e-9`
+- `Ob=0.04679404670223316`
+- `Om=0.2522369962493503`
+- `h=0.6911169559022905`
+- `lambda_D=792605.2167661682`
+- `ns=0.9645439945136476`
+- `zre=7.329291125785135`.
 
-- `lambda_D = 3595592871.3405743`
-- `S_eff(center) = 1050.2490169939647`
-- exact stencil improvement `0`
-- Hessian positive definite
-- minimum eigenvalue approximately `0.046707`.
+This is not yet a stationarity-certified B9 minimum.
 
-Base scale alone does not close B10.
+### LCDM side
 
-Half-scale validation:
+At the last direct check, the LCDM job remained inside `Run exact B9 paired reoptimization`; no LCDM artifact existed yet.
 
-- run `32482153752`
-- jobs `half-stationarity (64)` and `half-stationarity (16384)`
-- both passed target checks, hardened CLASS setup/build and Planck verification
-- at the last direct job check both were inside the exact fixed-lambda 6D half-scale stationarity step.
-
-Acceptance requires center replay consistency, no exact improvement above `0.005`, positive-definite Hessian and qualitative base/half consistency. Only after both artifacts pass may a conservative tail-flatness/identifiability statement be made.
+Therefore no paired B9 model comparison is allowed yet. Once both sides exist, freeze their exact candidates and run matched base+half stationarity/fresh-tree validation before using the paired score difference.
 
 Status: OPEN/RUNNING.
 
-## C8 fixed-action FLRW / off-shell carrier
+## B10 lambda-tail identifiability — CLOSED
 
-### Established moving-pole theorem
+Canonical final result:
 
-`rtk-class-build:rtk/route_b_flrw_constraint_kernel.py` shows that a fixed healthy-Horava-style action can have an FLRW constraint kernel
+`research/robustness/RTK_B10_FINAL_TAIL_IDENTIFIABILITY_RESULT_2026-08-21.md`.
 
-`D_phi = 3(3 lambda-1)H^2 - eta p^2 - eta2 p^4/M_Pl^2 + eta4 p^6/M_Pl^4`,
+Protocol:
 
-so a constraint root can move with `H(a)` even when Wilson coefficients are fixed. Hence a fixed-Minkowski globalization obstruction does not by itself extend to FLRW.
+`rtk-class-build:research/robustness/B10_LAMBDA_TAIL_IDENTIFIABILITY_PROTOCOL_v1.md`.
 
-This is structural only; it is not a full propagating/source map.
+Frozen finite local RTK score:
 
-### Exact Schur/rank/q-residue algebra — CI VERIFIED
+`S_finite = 1050.249912429787`.
 
-For two nondynamical variables,
+Stationarity-certified tail anchors:
 
-`M=[[A,C],[C,B]]`, `J=(P,R)`,
+- factor 64: `S_tail=1050.249062546245`
+- factor 16384: `S_tail=1050.2490169939647`.
 
-exact elimination gives
+Base T3 at both anchors had zero exact improvement and positive-definite Hessians. Independent half-scale run `32482153752` also had zero exact improvement and positive-definite Hessians at both anchors, with corresponding base↔half eigenvectors remaining strongly aligned.
 
-`K_eff = K0 - (B P^2 - 2 C P R + A R^2)/(A B-C^2)`.
+Artifacts:
 
-For `M(q)=M0+q M1`, strict nonconstant linear denominator requires
+- factor64 `9450288661`, digest `sha256:f7f2d67b4770ab611e77f523b2ac2715f1b0c58c1aec685e9f745b454f520ef5`
+- factor16384 `9450372881`, digest `sha256:1f5e57fc7b60d9d6f87535561b1c45403632933ca674e189a5be6ee220517d08`.
 
-`det(M1)=0` and `M1 != 0`, hence for the real symmetric 2x2 case
+Best preregistered tail difference:
 
-`rank(M1)=1`.
+`Delta_tail = 1050.2490169939647 - 1050.249912429787 = -0.0008954358222581504`.
 
-The strengthened self-test is now independently artifact-verified:
+Because
 
-- run `32490690248`
-- artifact `9449602889`
-- digest `sha256:1f2bfda3959e8b6c57866bd35e7279e7cb398460c1a6cd296d4b2d146e092dce`
-- artifact markers `C8_FLRW_SCHUR_SELFTEST_PASS` and `C8_FLRW_SCHUR_RANK_RESIDUE_SELFTEST_PASS`
-- exact diagnostic example: `D0=2`, `D1=6`, `D2=0`, rank `1`, `q_pole=-1/3`, `Res_q[N/D]=+1/9`, Schur contribution residue `-1/9`.
+`|Delta_tail| < 0.005`,
 
-Canonical CI result:
+the frozen protocol mechanically gives
 
-`research/RTK_C8_SCHUR_CI_RESULT_2026-08-21.md`.
+`LAMBDA_NOT_NUMERICALLY_IDENTIFIABLE_AGAINST_PREREGISTERED_DUST_TAIL_AT_0P005`.
 
-These are q-plane reduced-coefficient residues, not physical `omega^2` propagator residues.
+The slightly lower tail score is too small to trigger the separate recenter/global-search branch. This is a numerical-identifiability statement under the preregistered local/tail protocol, not a confidence interval, posterior, Bayes factor, global-minimum theorem or proof that lambda is mathematically redundant.
 
-### Exact BPS pole embedding remains stronger than a no-go
+Status: CLOSED protocol v1.
 
-`rtk-class-build:rtk/route_b_bps_target_inversion.py` constructs, for every positive target
+## C8 — off-shell/local carrier program
 
-`omega^2 = C p^2/(1+p^2/Mdisp^2)`,
+### C8a Schur/rank/q-residue theorem
 
-an exact healthy-BPS quadratic dispersion/pole embedding with a continuous `h in (0,1)` family and explicit low-energy cutoff optimization. This result remains valid.
+Run `32490690248`, artifact `9449602889`, digest `sha256:1f2bfda3959e8b6c57866bd35e7279e7cb398460c1a6cd296d4b2d146e092dce`.
 
-It explicitly does not establish the off-shell source/residue map.
+For mechanisms that claim a strict nonconstant linear denominator in the two-constraint determinant, the leading gradient block must be rank one. Normalized q-plane residues are fixed by the Schur algebra. These are not automatically physical `omega^2` propagator residues.
 
-### New residue/source redefinition locality gate
+Status: GREEN scoped algebra.
 
-Prior theorem:
+### C8b BPS residue/source redefinition theorem
 
-`K_RTK=(1+r q^2) K_BPS`.
+Refined run `32491666126` completed successfully.
 
-A scalar-only multiplicative redefinition `phi_BPS=T phi_RTK` that exactly maps the kernels forces
+Artifact:
 
-`T(q)=sqrt(1+r q^2)`
+- id `9449986685`
+- digest `sha256:006d396c0bd686a76c1b76da2aaf3dd2c462b5ef696227b9ce5bf456134661d9`.
 
-on the positive branch. The source must transform as
+For
 
-`J_RTK=T(q) J_BPS`.
+`K_RTK=(1+r q^2)K_BPS`,
 
-Crucial invariant:
+an exact scalar-only field normalization requires
 
-`J_RTK^2/K_RTK = J_BPS^2/K_BPS`.
+`T=sqrt(1+r q^2)`
 
-Therefore fixed-source residue mismatch alone is not a physical inequivalence theorem; a consistent field+source change leaves the quadratic source response invariant.
+and transforms the source with the same factor. The source-source response `J^2/K` is invariant under a consistent field+source transformation. Therefore residue mismatch alone is not a physical no-go.
 
-The actual scoped locality gate is that `sqrt(1+r q^2)` is not a finite polynomial in `q^2` for `r>0`. Hence an exact scalar-only finite-derivative local normalization cannot implement this map while also leaving the original q-independent fixed source unchanged.
+The scoped locality result is that `sqrt(1+r q^2)` is not a finite polynomial in `q^2`; the exact scalar-only finite-derivative shortcut cannot both implement this normalization and leave the original q-independent source untouched.
 
-This is not a no-go for constraint mixing, auxiliary fields, disformal/derived source maps or other local carriers.
+Status: GREEN scoped theorem.
 
-Executable theorem:
+### C8c Direct spatial-covariant FLRW exact scalar match
 
-- `rtk-class-build:rtk/route_b_residue_source_redefinition_gate.py`
-- refined commit `7f5fda897938e24170b8a0228ce8a392e4110e8a`
-- CI retrigger commit `2fcc9fb34fdffcd65a7fd487d6a1aff300ab4e85`.
+Existing local benchmark action class:
 
-Formula derivation appendix:
+`N sqrt(gamma)[Mpl^2/2(R3+KijKij-K^2)+F(t,N)+C_acc a_i a^i]`.
 
-`research/methods/RTK_FORMULA_BIBLE_C8_SOURCE_REDEFINITION_APPENDIX.md`.
+New executable theorem:
 
-Status of this newest sub-gate: YELLOW pending its GitHub artifact inspection. Core symbolic identities were separately re-evaluated exactly before entry.
+`rtk-class-build:rtk/route_b_spatial_covariant_flrw_exact_match.py`, commit `36c30a9b94ad120bfe461d93057daf57db8d14dc`.
 
-### Current C8 next step
+CI:
 
-Do not fit `A,B,C,P,R` independently at each epoch.
+- run `32514697064` — success
+- artifact `9458330218`
+- digest `sha256:72fe15a918873ee0d7bf6af27f6eab51ef47dea48d4a4c3d7db9d65de9aeeb74`.
 
-Derive `M0,M1,J,K0` from **one explicit fixed FLRW action**, keep one Wilson-coefficient tuple across epochs, then require:
+Production DBI identities give exactly
 
-1. correct constraint/DOF identification;
-2. rank-one linear-gradient gate if a strict linear q denominator is claimed;
-3. matched q-plane pole across epochs;
-4. matched normalized q-plane residue and polynomial remainder;
-5. source response generated by the action rather than an inserted `sqrt(1+r q^2)` factor;
-6. physical `omega^2` propagator/source response;
-7. no-ghost/no-gradient/hyperbolicity;
-8. EFT/strong-coupling cutoff;
-9. same-tuple PPN/Newton/GW constraints;
-10. observational/nonlinear tests.
+`K_8piG = (rho_8piG+p_8piG)/c_a^2 = 2 M_K^2`.
 
-## Home compute architecture state
+Hence
+
+`K_phys=2 Mpl^2 M_K^2`
+
+and the acceleration coefficient required by the exact direct match is simply
+
+`C_acc=Mpl^2`, constant across epochs.
+
+After exact lapse/shift elimination on flat FLRW:
+
+`S2 = 1/2 int a^3/H^2 [K_phys(1+p^2/M_K^2) dot(zeta)^2 - G_phys p^2 zeta^2]`,
+
+so
+
+`omega^2=c_a^2 p^2/(1+p^2/M_K^2)`
+
+exactly for the production scalar target.
+
+This mechanism does not rely on a linear pole in the constraint determinant; the earlier Schur single-pole filter is therefore inapplicable rather than violated.
+
+Interpretation: the question “can a fixed local spatially covariant action reproduce the exact quadratic scalar FLRW RTK kernel?” now has a constructive YES within this benchmark class.
+
+This is not yet a final covariant/phenomenologically viable completion.
+
+Status: GREEN exact quadratic scalar theorem; completion remains OPEN.
+
+### C8d Immediate Newton boundary of the direct carrier
+
+In the standard low-energy healthy-Hořava/BPS normalization, the coefficient of `a_i a^i` is `(M_P^2/2) alpha`. The exact direct carrier has `C_acc=M_P^2`, hence its direct identification gives
+
+`alpha=2`.
+
+For the minimal/universal `xi=1,beta=0` matter branch,
+
+`G_N=1/[8 pi M_P^2(1-alpha/2)]`.
+
+Therefore the direct exact match lands at a singular Newton-normalization boundary for finite bare `M_P`.
+
+A new exact scoped theorem was committed as
+
+`rtk-class-build:rtk/route_b_spatial_covariant_newton_boundary.py`, commit `c9579ef48d508f0864b11914f399d9d517ed72de`, and its CI was launched by main commit `8c251c92e05683d76b1b29abcb386336138bc709`.
+
+This does **not** reject the spatially covariant scalar EFT. It rejects, if CI confirms, only the simplest direct identification with `xi=1,beta=0` universal/minimal matter normalization. Candidate escape routes include `xi!=1`, a derived nonminimal/disformal matter metric, fixed companion operators, auxiliary fields or a broader covariant completion.
+
+Status: YELLOW pending artifact inspection.
+
+## Home compute architecture
 
 Observed node:
 
-- runner `RTK-HOME-PC`
-- Linux/X64 WSL
-- custom label `rtk-home3`
+- `RTK-HOME-PC`
+- WSL Linux/X64
+- label `rtk-home3`
 - Intel i5-1235U
-- **10 physical cores / 12 logical processors**
-- about 7.7 GiB Windows RAM, about 5.9 GiB visible to WSL during measurement.
+- 10 physical cores / 12 logical processors.
 
-Engine v2.1 removes the old eight-worker cap, supports `RTK_WORKERS=auto`, adaptive task batching, persistent atomic checkpoint/resume, progress/rate/ETA and Ubuntu-visible event logging.
+Engine v2.1 includes all-logical-CPU auto mode, adaptive batching, persistent atomic checkpoint/resume, progress/rate/ETA and Ubuntu-visible lifecycle logging.
 
-Fresh saturation/bootstrap run:
+Fresh saturation bootstrap run `32487473962` remained pending in the latest live Actions index because older self-hosted queue items had not fully drained.
 
-- run `32487473962`
-- status at the latest runtime-index snapshot: pending behind previously queued self-hosted jobs.
-
-Legacy `parallel`/`benchmark` CPU measurements are infrastructure history only, not performance evidence for v2.1 and not scientific model evidence.
-
-Canonical architecture/history:
-
-- `docs/RTK_COMPUTE_ARCHITECTURE.md`
-- `docs/COMPUTE_LOG.md`.
+Do not treat legacy one-thread/eight-worker benchmark utilization as evidence about v2.1.
 
 ## Immediate research order
 
-1. Inspect B4 run `32482490823` artifact when complete and mechanically follow the frozen recenter/ray/half-scale decision tree.
-2. Inspect both B10 half-scale jobs in `32482153752`; close/advance tail identifiability only if both pass.
-3. Inspect paired B9 reoptimization run `32490152072`; retire fixed-center-only interpretation once matched results are available.
-4. Inspect the new C8 residue/source-redefinition CI artifact; promote only the scoped locality statement if PASS.
-5. Build the explicit fixed-action FLRW `M,J,K0` derivation rather than another abstract pole fit.
-6. When home bootstrap `32487473962` reaches the runner, validate 12-worker saturation/checkpoint behavior, then route a suitable nonduplicated heavy scientific workload to it.
+1. Inspect B4 half run `32514077002`; mechanically follow the frozen decision tree.
+2. Inspect the C8 minimal Newton-boundary CI artifact; if PASS, freeze the scoped negative result and search the smallest fixed escape deformation.
+3. Wait for the LCDM side of B9 run `32490152072`; then freeze matched RTK/LCDM stationarity targets and do not compare uncertified optimizer candidates as minima.
+4. Move C8 from scalar-kernel construction to the same-action matter/Newton/PPN/GW/compact-object/strong-coupling gates.
+5. When home bootstrap `32487473962` finally executes, inspect its artifact and then dispatch only a nonduplicated suitable heavy scientific workload.
 
 ## Interpretation discipline
 
-A workflow success means the encoded computation executed and its explicit assertions passed. It is not automatically a scientific gate closure. Every closure must satisfy the frozen acceptance rule and preserve its exact scope.
+Workflow success is execution evidence, not automatically scientific closure. Every conclusion above uses the frozen acceptance rule and explicitly stated scope.
