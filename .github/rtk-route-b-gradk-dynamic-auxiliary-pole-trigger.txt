@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-21T23:32:00+03:00
+iteration_started_utc=2026-08-21T20:32:00Z
+research_source_commit=66b0c726e0acdff52ef7accb48d870c4dd9fb2a7
+purpose=C8 minimal dynamical auxiliary extra-pole and zero-H light-mode gate
