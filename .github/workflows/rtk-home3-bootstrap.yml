@@ -1,0 +1,121 @@
+name: RTK Home3 Bootstrap Handshake
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/rtk-home3-bootstrap.yml
+  workflow_dispatch:
+
+concurrency:
+  group: rtk-home3-exclusive
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: [self-hosted, Linux, X64, rtk-home3]
+    timeout-minutes: 60
+    env:
+      RTK_RUN_KEY: bootstrap-${{ github.run_id }}
+      RTK_TOTAL_TASKS: "2000"
+      RTK_WORKERS: auto
+      RTK_RESERVE_CPUS: "0"
+      RTK_TASK_MODULE: rtk_engine.worker
+      RTK_INPUT_FINGERPRINT: rtk-home3-bootstrap-v2
+      RTK_CHECKPOINT_INTERVAL: "200"
+      RTK_PROGRESS_INTERVAL: "100"
+      RTK_RESET_CHECKPOINT: "true"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      NUMEXPR_NUM_THREADS: "1"
+
+    steps:
+      - name: Checkout architecture commit
+        uses: actions/checkout@v4
+
+      - name: Identify configured node
+        run: |
+          set -euo pipefail
+          echo "RTK_HOME3_BOOTSTRAP_START"
+          echo "UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "HOST=$(hostname)"
+          echo "LOGICAL_CPUS=$(nproc)"
+          uname -a
+          free -h
+          df -h .
+
+      - name: Install persistent Ubuntu progress launcher
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.local/bin" "$HOME/.rtk-runner-state"
+          install -m 0755 scripts/rtk_home_runner_console.sh "$HOME/.local/bin/rtk-runner-start"
+          echo "Installed: $HOME/.local/bin/rtk-runner-start"
+          "$HOME/.local/bin/rtk-runner-start" --help >/dev/null 2>&1 || true
+
+      - name: Run max-throughput multiprocessing handshake
+        run: |
+          set -euo pipefail
+          python3 -m rtk_engine.run_monitor &
+          MONITOR_PID=$!
+          cleanup() { kill "$MONITOR_PID" 2>/dev/null || true; }
+          trap cleanup EXIT INT TERM
+          python3 -m rtk_engine.parallel_engine
+
+      - name: Validate checkpoint and progress contract
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          run_key = os.environ["RTK_RUN_KEY"]
+          safe = re.sub(r"[^A-Za-z0-9_.-]+", "_", run_key).strip("._") or "run"
+          root = Path.home() / ".rtk-runner-state" / safe
+          checkpoint = json.loads((root / "checkpoint.json").read_text())
+          progress = json.loads((root / "progress.json").read_text())
+          expected = int(os.environ["RTK_TOTAL_TASKS"])
+
+          assert checkpoint["schema_version"] == 2, checkpoint
+          assert checkpoint["next_index"] == expected, checkpoint
+          assert checkpoint["completed"] == expected, checkpoint
+          assert checkpoint["fingerprint"] == os.environ["RTK_INPUT_FINGERPRINT"], checkpoint
+          assert checkpoint["metadata"]["status"] == "complete", checkpoint
+          assert progress["status"] == "complete", progress
+          assert progress["done"] == expected, progress
+          assert progress["workers"] >= 1, progress
+
+          print("RTK_HOME3_CHECKPOINT_V2_PASS")
+          print(f"workers={progress['workers']} expected_node_cpus={os.cpu_count()}")
+          print(f"checkpoint={root / 'checkpoint.json'}")
+          print(f"progress={root / 'progress.json'}")
+          PY
+
+      - name: Snapshot bootstrap state
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -rf results/home3-bootstrap
+          mkdir -p results/home3-bootstrap
+          SAFE_KEY=$(printf '%s' "$RTK_RUN_KEY" | sed -E 's/[^A-Za-z0-9_.-]+/_/g')
+          if [[ -d "$HOME/.rtk-runner-state/$SAFE_KEY" ]]; then
+            cp -a "$HOME/.rtk-runner-state/$SAFE_KEY" results/home3-bootstrap/
+          fi
+          cp docs/RTK_COMPUTE_ARCHITECTURE.md results/home3-bootstrap/
+          printf 'run_id=%s\nrun_key=%s\ncommit=%s\n' "$GITHUB_RUN_ID" "$RTK_RUN_KEY" "$GITHUB_SHA" > results/home3-bootstrap/provenance.txt
+
+      - name: Upload bootstrap evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-home3-bootstrap-${{ github.run_id }}
+          path: results/home3-bootstrap
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Bootstrap pass marker
+        run: |
+          echo "RTK_HOME3_BOOTSTRAP_PASS"
+          echo "Future runner launch command: $HOME/.local/bin/rtk-runner-start"
