@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-22T00:23:00+03:00
+iteration_started_utc=2026-08-21T21:23:00Z
+research_source_commit=e9ca1c224e5b7fed48af6dd9f50978570351d1b7
+purpose=C8 prove field normalization cannot suppress the acceleration coefficient of an exact rolling mixed-derivative RTK match
