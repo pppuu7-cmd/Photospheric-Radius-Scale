@@ -1,0 +1,7 @@
+triggered_at_utc=2026-08-21T18:34:00Z
+base_run_id=32482490823
+base_artifact_id=9452581043
+base_decision_commit=9202e84e9e0f98c35a4b6fc3be0caaea40d63a32
+workflow_commit=df569f6203520937de8eab11a0c7fe4065bc9aa3
+stencil_scale=0.5
+purpose=B4 target-v2 adjacent-scale stationarity validation
