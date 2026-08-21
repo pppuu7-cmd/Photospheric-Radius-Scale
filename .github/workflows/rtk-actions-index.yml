@@ -25,62 +25,52 @@ jobs:
           ref: rtk-class-build
           fetch-depth: 0
 
-      - name: Capture recent Actions runs
+      - name: Capture recent RTK Actions runs without a manual name allowlist
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mkdir -p research/runtime
           python3 - <<'PY'
-          import json, os, subprocess, datetime
+          import datetime
+          import json
+          import os
+          import subprocess
+
           repo=os.environ['GITHUB_REPOSITORY']
-          raw=subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs?per_page=100'],text=True)
+          raw=subprocess.check_output(
+              ['gh','api',f'repos/{repo}/actions/runs?per_page=100'],
+              text=True,
+          )
           data=json.loads(raw)
-          wanted={
-              'RTK autonomous dense RTK axis',
-              'RTK autonomous dense RTK half-stencil proof gate',
-              'RTK autonomous exact negative-eigenray gate',
-              'RTK current exact mixed negative-mode ray profile',
-              'RTK current-center standard-siren prediction',
-              'RTK matched minimal-neutrino robustness',
-              'RTK minimal-neutrino paired reoptimization seed',
-              'RTK B4 paired minimal-neutrino base stationarity',
-              'RTK B4 paired minimal-neutrino half stationarity',
-              'RTK B4 neutrino LCDM recenter base stationarity',
-              'RTK B4 neutrino LCDM recenter half stationarity',
-              'RTK B4 neutrino RTK recenter base stationarity',
-              'RTK B4 neutrino RTK negative-mode rays',
-              'RTK audit-only locked LCDM stationarity replay',
-              'RTK D4 model-aware proof provenance regression',
-              'RTK AlterBBN published-source pin audit',
-              'RTK pinned AlterBBN v2.2 standard-network self-test',
-              'RTK pinned AlterBBN expansion-interface audit',
-              'RTK pinned AlterBBN integration-flow audit',
-              'RTK pinned AlterBBN Friedmann-H site audit',
-              'RTK B6 entropy-aware H(T) mapping',
-              'RTK B6 extended accepted-trace H(T) mapping',
-              'RTK B6 paired AlterBBN abundances',
-              'RTK pinned Planck standalone-lensing interface audit',
-              'RTK B9 fixed-center Planck lensing adapter',
-              'RTK B10 fixed-shared lambda-tail reconnaissance',
-              'RTK B10 paired fixed-lambda T2 profiles',
-              'RTK B10 T3 fixed-lambda base stationarity',
-              'RTK Route-B khronometric dispersion non-mapping theorem',
-              'RTK Route-B khronometric acceleration degeneracy audit',
-              'RTK Route-B preferred-foliation metric-Khronon benchmark',
-              'RTK Route A1 background interaction ratios',
-              'RTK Route A1 D4 identifiability theorem',
-              'RTK Route A1 D5 dispersive identifiability theorem',
-              'RTK Route A1 complete cubic D5 basis audit',
-              'RTK autonomous dense RTK 7D stationarity',
-              'RTK autonomous research orchestrator',
-          }
+
+          # Architecture rule: research workflows are discovered by the stable
+          # RTK name prefix.  Do not maintain a fragile hard-coded allowlist;
+          # new B4/B9/B10/C8/home workflows must appear automatically.
           rows=[]
           for r in data.get('workflow_runs',[]):
-              if r.get('name') in wanted:
-                  rows.append({k:r.get(k) for k in ('id','name','run_number','event','status','conclusion','head_branch','head_sha','created_at','updated_at','html_url')})
-          out={'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repository':repo,'runs':rows}
-          open('research/runtime/actions_index.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+              name=str(r.get('name') or '')
+              if not name.startswith('RTK '):
+                  continue
+              rows.append({
+                  k:r.get(k) for k in (
+                      'id','name','display_title','workflow_id','run_number',
+                      'run_attempt','event','status','conclusion','head_branch',
+                      'head_sha','created_at','updated_at','html_url'
+                  )
+              })
+
+          out={
+              'schema':'RTK_ACTIONS_INDEX_V2',
+              'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'repository':repo,
+              'selection':'all recent workflow runs whose name starts with RTK ',
+              'api_window':100,
+              'runs':rows,
+          }
+          open('research/runtime/actions_index.json','w').write(
+              json.dumps(out,indent=2,sort_keys=True)+'\n'
+          )
           print(json.dumps(out,indent=2,sort_keys=True))
           PY
 
@@ -93,7 +83,7 @@ jobs:
           if git diff --cached --quiet; then
             echo 'No index change'
           else
-            git commit -m 'Update RTK Actions runtime index'
+            git commit -m 'Update RTK Actions runtime index v2'
             git pull --rebase origin rtk-class-build
             git push origin HEAD:rtk-class-build
           fi
