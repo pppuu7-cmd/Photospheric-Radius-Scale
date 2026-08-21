@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-21T20:51:00Z
+trigger_utc: 2026-08-21T20:55:00Z
 iteration_started_local: 2026-08-21T23:32:00+03:00
 iteration_started_utc: 2026-08-21T20:32:00Z
-reason: capture Dirac-degenerate one-DOF gate plus corrected K2/dynamical auxiliary artifacts and B4/B9 Hessians.
+reason: capture corrected Dirac-degenerate one-DOF gate, corrected K2/dynamical artifacts, B4/B9 Hessians and home bootstrap.
