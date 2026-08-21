@@ -160,3 +160,23 @@ At the latest direct check, all three remained in their exact Hessian steps:
 - B9 LCDM recenter base run `32522002655`.
 
 No conclusion is inferred from elapsed runtime.
+
+---
+
+## Iteration started 2026-08-22 00:23:00 UTC+03:00 / 2026-08-21 21:23:00 UTC
+
+User instruction: continue the research.
+
+### Frontier at start
+
+- C8 rank-one Dirac-degenerate one-DOF theorem had been independently CI-confirmed in corrected run `32525622115`, artifact `9462068516`, digest `sha256:c9f42d3b8917cdaa083972edd9bc1ad4961a082ca62ce5c1cc2d45a08f8a4800`.
+- C8 Dirac + invertible lapse/shift Schur bridge had been launched from source commit `936fdacb96f259598f465adcef6d9268d5b881d5`, with workflow commit `92d0bba33d2443df65b689463ae886025b8ff0ff` and trigger `63b37becb070e365bee8ca6228b498e38db10d4f`.
+- C8 fixed-state mixed-kinetic scalar theorem existed at source commit `0b3211c9a6cfb5f933fb07542c1f69050bb9f703`, with workflow commit `2deb8a099009fff99a54e32b87cc4c69168c8e4d`, but no independent GitHub artifact had yet been inspected.
+- B4 half-scale run `32514077002`, B9 RTK recenter base `32518496348`, and B9 LCDM recenter base `32522002655` were still unresolved at the previous direct check.
+
+### Iteration objective
+
+1. Inspect the Dirac+lapse/shift Schur bridge CI artifact.
+2. Launch and inspect the fixed-state mixed-kinetic scalar theorem.
+3. Advance B4/B9 mechanically if their frozen Hessian gates finish.
+4. If the mixed-kinetic theorem survives CI, derive a symmetry-based Khronon/ADM operator that produces the required `(D_i dot S)^2/M_K^2(r)` term from one fixed action rather than an epoch-by-epoch quadratic reconstruction.
