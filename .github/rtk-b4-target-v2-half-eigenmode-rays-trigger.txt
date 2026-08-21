@@ -1,0 +1,6 @@
+iteration_started_local=2026-08-22T02:46:00+03:00
+iteration_started_utc=2026-08-21T23:46:00Z
+research_source_commit=55c993894e9b2c8595e8fffb1a21ecf41ac68dd5
+parent_half_run_id=32514077002
+parent_half_artifact_id=9463331303
+purpose=exact rays along frozen negative and soft half-scale B4 eigenmodes
