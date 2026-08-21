@@ -1,0 +1,40 @@
+name: RTK Route-B gradK auxiliary rank gate
+
+on:
+  push:
+    paths:
+      - '.github/rtk-c8-gradk-auxiliary-rank-trigger.txt'
+      - '.github/workflows/rtk-c8-gradk-auxiliary-rank-gate.yml'
+
+jobs:
+  auxiliary-rank-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout research source
+        uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact symbolic dependency
+        run: python -m pip install 'sympy==1.13.3'
+      - name: Run auxiliary rank theorem
+        run: |
+          python rtk/route_b_gradK_auxiliary_rank_gate.py | tee rtk_gradk_auxiliary_rank.log
+          grep -q 'RTK_ROUTE_B_GRADK_AUXILIARY_RANK_GATE_PASS' rtk_gradk_auxiliary_rank.log
+      - name: Freeze provenance
+        run: |
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" > rtk_gradk_auxiliary_rank_provenance.txt
+          python --version >> rtk_gradk_auxiliary_rank_provenance.txt
+          python -c 'import sympy; print("sympy="+sympy.__version__)' >> rtk_gradk_auxiliary_rank_provenance.txt
+      - name: Upload theorem artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-gradk-auxiliary-rank-gate
+          path: |
+            rtk_gradk_auxiliary_rank.log
+            rtk_gradk_auxiliary_rank_provenance.txt
