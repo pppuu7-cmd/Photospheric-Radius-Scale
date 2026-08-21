@@ -1,0 +1,40 @@
+name: RTK Route-B U1-invariant mixed-scalar gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-invariant-mixed-scalar-gate-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run U1-invariant mixed-scalar theorem
+        run: |
+          set -euo pipefail
+          echo "RTK_SOURCE_SHA=$(git rev-parse HEAD)" | tee rtk_u1_invariant_mixed_scalar_provenance.txt
+          python -m py_compile rtk/route_b_u1_invariant_mixed_scalar_gate.py
+          python rtk/route_b_u1_invariant_mixed_scalar_gate.py | tee rtk_u1_invariant_mixed_scalar.log
+          grep -q '^RTK_ROUTE_B_U1_INVARIANT_MIXED_SCALAR_GATE_PASS ' rtk_u1_invariant_mixed_scalar.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-invariant-mixed-scalar-gate
+          path: |
+            rtk_u1_invariant_mixed_scalar.log
+            rtk_u1_invariant_mixed_scalar_provenance.txt
+          if-no-files-found: error
