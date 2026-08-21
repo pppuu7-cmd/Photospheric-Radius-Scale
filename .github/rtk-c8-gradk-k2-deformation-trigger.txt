@@ -1,4 +1,6 @@
-Launch C8 gradK K2 deformation gate
-UTC 2026-08-21T20:23Z
+Launch corrected C8 gradK K2 deformation gate
+Iteration start local: 2026-08-21T23:32:00+03:00
+Iteration start UTC: 2026-08-21T20:32:00Z
 Source branch: rtk-class-build
-Source commit: b3ac1334d1b5271a9e4af86603e762ab002342da
+Source commit: a5744e9ab4f8cf54d1e376e61a08a17f331305e4
+Correction: eta is now allowed to take the theorem solution eta=0; analytic coefficient identity unchanged.
