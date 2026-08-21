@@ -12,27 +12,68 @@
 ### Engine v2 / distributed-compute migration
 
 - Actual configured routing label recovered as `rtk-home3`; platform Linux/X64.
-- Current home node has 10 logical CPUs.
 - Home workflows migrated from `rtk-home` to `rtk-home3`.
 - Automatic push execution removed from the home scientific benchmark; home compute is dispatched deliberately.
 - All heavy home jobs share concurrency group `rtk-home3-exclusive`, preventing two heavyweight workflows from oversubscribing the same PC.
-- `RTK_WORKERS=auto` + `RTK_RESERVE_CPUS=0` is the maximum-throughput mode; on the current node this resolves to 10 outer worker processes.
-- `RTK_RESERVE_CPUS=2` or explicit `RTK_WORKERS=8` remains available when desktop responsiveness is preferred.
-- For process-parallel scientific workloads, inner `OMP/OPENBLAS/MKL/NUMEXPR` thread counts are pinned to 1 to prevent nested oversubscription.
 - Persistent execution state moved to `$HOME/.rtk-runner-state/<run_key>/`.
 - Checkpoint schema v2 records `next_index`, total task count, fingerprint, UTC time and metadata; writes are atomic.
 - Resume refuses a changed fingerprint or changed total task count unless reset is explicit.
 - SIGINT/SIGTERM produces a safe interrupted checkpoint at the last contiguous completed task prefix.
-- Progress now records percent, throughput, ETA, worker count and status in `progress.json` plus an Ubuntu-visible `live.log`.
+- Progress records percent, throughput, ETA, worker count and status in `progress.json` plus an Ubuntu-visible `live.log`.
 - Lifecycle events use stdout and best-effort local `wall` notification.
 - Added console launcher `scripts/rtk_home_runner_console.sh`; bootstrap installs it as `$HOME/.local/bin/rtk-runner-start`.
 - Heavy workflow uploads an end-of-job checkpoint/progress snapshot as a GitHub Actions artifact.
+
+### First live connection and corrected hardware topology
+
+At 2026-08-21 13:20:08Z the existing self-hosted runner connected successfully to GitHub using Actions runner `2.336.0`. At 13:20:14Z it accepted a queued job named `parallel`.
+
+Observed host data supplied from Windows Task Manager and WSL `top`:
+
+- CPU: 12th Gen Intel Core i5-1235U;
+- physical cores: 10;
+- logical processors: 12;
+- Windows CPU utilization during the legacy test: about 30%;
+- WSL aggregate CPU at the sample: 15.5% user, 4.9% system, 78.6% idle, 1.0% softirq;
+- WSL load average at the sample: 2.45 / 1.07 / 0.41;
+- Windows host memory: about 7.3 / 7.7 GiB used at the screenshot moment;
+- WSL-visible memory: 5925.1 MiB total, 751.5 MiB used, 4473.7 MiB free, 889.3 MiB buffer/cache;
+- WSL swap: 8192 MiB total, unused at the sample.
+
+The earlier repository note that described the node as having ten logical CPUs was incorrect. The correct topology is **10 cores / 12 logical processors**.
+
+### Diagnosis of the ~30% legacy CPU utilization
+
+The active `parallel` job corresponded to the earlier engine behavior:
+
+- old worker count: `min(cpu_count()-2, MAX_WORKERS)` with `MAX_WORKERS=8`;
+- for 12 logical processors this resolves to 8 outer processes;
+- the placeholder `calculate(index)` workload was extremely small;
+- multiprocessing `imap` used `chunksize=1`.
+
+The `top` snapshot showed the Python parent process consuming about 120% of one Linux CPU plus several worker processes at only about 10–20% each. This is characteristic of a parent/IPC dispatch bottleneck for tiny tasks rather than a CPU-capacity ceiling.
+
+Therefore the observed ~30% is **not accepted as the target utilization** for the redesigned architecture.
+
+### Engine v2.1 response
+
+- Corrected max-throughput topology to 12 logical processors.
+- `RTK_WORKERS=auto` + `RTK_RESERVE_CPUS=0` now resolves to all 12 processors visible to WSL.
+- Ten-worker mode is available with `RTK_RESERVE_CPUS=2` when desktop headroom is needed.
+- Added `RTK_CHUNKSIZE=auto` to batch tiny multiprocessing tasks and avoid parent/queue saturation.
+- Auto chunksize targets approximately 16 dispatch batches per worker and caps a batch at 1024 indexed tasks.
+- Engine metadata now records logical CPU count, worker count and effective chunksize in the persistent checkpoint.
+- Added `rtk_engine.saturation_worker`, an infrastructure-only CPU-bound test that keeps each worker continuously busy for a controlled interval.
+- Bootstrap v3 requires `nproc=12`, `os.cpu_count()=12`, 12 workers, valid checkpoint/progress completion, and records `/proc/stat` aggregate CPU utilization.
+- Bootstrap saturation target: mean CPU busy >=80%; lower utilization generates an explicit warning for WSL/power/thermal/granularity investigation.
+- For process-parallel scientific workloads, inner `OMP/OPENBLAS/MKL/NUMEXPR` threads remain pinned to 1 to prevent nested oversubscription.
 
 Canonical architecture: `docs/RTK_COMPUTE_ARCHITECTURE.md`.
 
 Next validation gate:
 
-1. bring `RTK-HOME-PC` online with its existing `./run.sh`;
-2. allow the queued `rtk-home3` bootstrap/handshake job to verify labels, CPU count, persistent state and multiprocessing;
-3. after bootstrap PASS, use the installed `rtk-runner-start` wrapper for future sessions and route the next suitable frozen heavy scientific workload to the node;
-4. record observed scaling and actual worker count from the bootstrap artifact before deciding whether a scientific workload should use 10 processes, 8 processes, or one native multithreaded solver.
+1. leave `RTK-HOME-PC` connected while the currently accepted legacy `parallel` job finishes;
+2. let the updated `rtk-home3` bootstrap v3 run next;
+3. inspect its artifact for exact `workers=12`, checkpoint/progress PASS and measured mean/median/max CPU busy fractions;
+4. after bootstrap PASS, use `$HOME/.local/bin/rtk-runner-start` for future sessions;
+5. route the next suitable frozen heavy scientific workload to the node and record whether its natural task granularity calls for 12 outer processes or one native threaded solver.
