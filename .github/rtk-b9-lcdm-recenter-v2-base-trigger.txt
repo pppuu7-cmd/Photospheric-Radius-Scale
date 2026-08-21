@@ -1,0 +1,6 @@
+iteration_started_local=2026-08-22T02:46:00+03:00
+iteration_started_utc=2026-08-21T23:46:00Z
+parent_run_id=32522002655
+parent_artifact_id=9463358870
+recenter_target_commit=0ae9f85c652aacfc75e5edc5b00774225496d732
+purpose=fresh exact base Hessian at the newly frozen B9 LCDM recenter-v2 point
