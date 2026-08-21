@@ -187,11 +187,134 @@ The legacy ~30% observation is retained as a failed infrastructure configuration
 
 ---
 
+## 2026-08-21 14:30 UTC — B10 lambda-tail identifiability closes
+
+Independent half-scale fixed-lambda stationarity run `32482153752` completed at both preregistered dust-tail anchors after the earlier base T3 pass.
+
+- factor 64: `S_tail=1050.249062546245`, zero exact base/half improvement, positive-definite Hessians;
+- factor 16384: `S_tail=1050.2490169939647`, zero exact base/half improvement, positive-definite Hessians.
+
+The corresponding base/half eigenmodes remained qualitatively aligned. Against the frozen finite-lambda local score `1050.249912429787`, the best tail difference is
+
+`Delta_tail=-0.0008954358222581504`.
+
+Since its absolute magnitude is below the preregistered `0.005` identifiability convention, B10 closes as
+
+`LAMBDA_NOT_NUMERICALLY_IDENTIFIABLE_AGAINST_PREREGISTERED_DUST_TAIL_AT_0P005`.
+
+This is explicitly not a confidence interval, posterior, Bayes factor, mathematical redundancy theorem or global-minimum statement.
+
+Canonical result: `research/robustness/RTK_B10_FINAL_TAIL_IDENTIFIABILITY_RESULT_2026-08-21.md`.
+
+---
+
+## 2026-08-21 18:42 UTC — constructive C8 direct FLRW scalar carrier
+
+The project crossed an important conceptual boundary: C8 no longer asks only whether a rational RTK pole can be mimicked. A fixed local spatially covariant action was shown to reproduce the complete controlled quadratic FLRW scalar kinetic kernel directly.
+
+For
+
+`S = integral N sqrt(gamma)[M_*^2/2(R3+KijKij-K^2)+F+C_acc a_i a^i]`,
+
+the production DBI background obeys the exact identity
+
+`K_8piG=(rho_8piG+p_8piG)/c_a^2=2 M_K^2`.
+
+Exact lapse/shift elimination gives
+
+`S2 = 1/2 integral a^3/H^2 [K_phys(1+p^2/M_K^2) dot(zeta)^2-G_phys p^2 zeta^2]`,
+
+hence
+
+`omega^2=c_a^2 p^2/(1+p^2/M_K^2)`.
+
+Run `32514697064`, artifact `9458330218`, confirmed the executable theorem.
+
+This result does not establish a viable universal matter frame or UV completion. It moves the frontier from “construct the RTK scalar kernel” to “preserve that kernel while satisfying Newton/PPN/GW/compact-object/cutoff constraints.”
+
+---
+
+## 2026-08-21 19:23 UTC — gravitational-normalization ambiguity resolved for beta=0
+
+A normalization correction was made before promoting the direct carrier to a physical theory. Production `8 pi G` must not automatically be identified with the bare coefficient `M_*^-2` of a candidate covariant action. For a standard universally coupled low-energy Hořava mapping, the production background normalization corresponds to `G_cosm`.
+
+With
+
+`M_cosm^2=M_*^2(1+3 lambda_prime/2)`
+
+and
+
+`M_N^2=M_*^2(1-alpha/2)`,
+
+exact matching requires
+
+`alpha=2+3 lambda_prime`.
+
+Run `32518243787`, artifact `9459582368`, proved that the beta=0 direct acceleration-only branch has no healthy positive-finite-Newton exact solution: positive scalar gradient requires `lambda_prime>0`, which makes `M_N^2<0`; the other lambda-prime intervals either make the scalar gradient negative or alpha nonpositive.
+
+This is a scoped negative result for the standard beta=0 universal matter branch only.
+
+Canonical derivation: `research/methods/RTK_FORMULA_BIBLE_C8_GRAVITY_NORMALIZATION_APPENDIX.md`.
+
+---
+
+## 2026-08-21 19:31 UTC — standard universal matter frame excluded for the direct carrier
+
+The beta=0 restriction was then removed using the modern low-energy parameters `(alpha,beta,gamma)` and the same-source cosmological, Newton, PPN and post-GW170817 relations.
+
+Exact direct matching gives
+
+`alpha=2+3 gamma+beta`
+
+and therefore
+
+`G_cosm/G_N=(2-alpha)/alpha`.
+
+The cited BBN bound reduces on this hypersurface to
+
+`|2(alpha-1)/alpha|<1/8`,
+
+which requires
+
+`16/17 < alpha < 16/15`.
+
+With the post-GW170817 benchmark `|beta|<=~1e-15`, the first preferred-frame PPN expression is bounded below by about `3.7647`, while the observational benchmark is `1e-4`. The minimum mismatch exceeds `3.7e4`.
+
+Run `32518936616`, artifact `9459822043`, independently verified the exact rational theorem.
+
+Therefore the direct acceleration-only exact RTK carrier cannot live in the cited **standard universal low-energy Hořava matter frame**. This does not exclude nonminimal/disformal matter maps, auxiliary fields, fixed companion operators or broader spatially covariant/covariant completions.
+
+Canonical result: `research/RTK_C8_STANDARD_MATTER_NO_GO_RESULT_2026-08-21.md`.
+
+---
+
+## 2026-08-21 19:43 UTC — minimal static-safe mixed-gradient escape tested
+
+The next carrier search was narrowed to operators that can contribute to the cosmological scalar kinetic sector but vanish in a strictly static `K_ij=0` configuration. The minimal quadratic basis tested is
+
+`C a_i a^i + 2D a_i D^i K + B D_iK D^iK`.
+
+Exact lapse/shift elimination and polynomial matching to
+
+`K/(2H^2)[1+p^2/M_K^2]`
+
+produce only two analytic branches: the pure acceleration solution and a rank-one mixed branch. On the mixed branch
+
+`C/C_direct=[(6H^2M_*^2+K)/(6H^2M_*^2-K)]^2 > 1`.
+
+Thus this smallest mixed-gradient deformation cannot lower the static `a_i a^i` coefficient; setting `C=0` gives no exact RTK solution in this operator basis.
+
+Executable theorem: `rtk-class-build:rtk/route_b_mixed_gradient_static_safe_gate.py`, source commit `7aa3f26e3896baf69deb2c45d915f7b38ec50ba0`. CI was launched at this chronology update; promote only after artifact inspection.
+
+This is again a scoped operator-basis result, not a no-go for auxiliary constraints, other extrinsic-curvature tensors, nonminimal matter coupling or higher-spatial-gradient completions.
+
+---
+
 ## Continuing rule
 
 Every subsequent research iteration must update, as applicable:
 
 1. `research/RESEARCH_LEDGER.md` — current gate/result/next action;
-2. `research/methods/RTK_FORMULA_BIBLE.md` — formulas, derivations, assumptions, scope;
+2. `research/methods/RTK_FORMULA_BIBLE.md` and its index/appendices — formulas, derivations, assumptions, scope;
 3. `research/RTK_MODEL_CHRONOLOGY.md` — why the model/research architecture changed;
 4. `docs/COMPUTE_LOG.md` and compute artifacts — execution provenance for material numerical runs.
