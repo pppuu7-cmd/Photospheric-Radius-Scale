@@ -1,0 +1,4 @@
+trigger_utc: 2026-08-21T19:34:00Z
+research_source_commit: 303e1922cc0950ece6cf77f24525ed3e564ccd07
+source: arXiv:1711.08845 Eqs. 7-12
+purpose: combine direct exact C8 match with BBN, PPN and GW constraints in the standard universal matter frame
