@@ -1,0 +1,35 @@
+name: RTK Route-B spatial-covariant standard-matter no-go
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-spatial-covariant-standard-matter-no-go-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact standard-matter PPN/GW no-go
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_spatial_covariant_standard_matter_no_go.py
+          python3 rtk/route_b_spatial_covariant_standard_matter_no_go.py | tee route_b_spatial_covariant_standard_matter_no_go.log
+          grep -q RTK_ROUTE_B_SPATIAL_COVARIANT_STANDARD_MATTER_NO_GO_PASS route_b_spatial_covariant_standard_matter_no_go.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-spatial-covariant-standard-matter-no-go
+          path: route_b_spatial_covariant_standard_matter_no_go.log
+          if-no-files-found: error
