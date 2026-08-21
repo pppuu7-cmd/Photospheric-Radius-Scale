@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-21T19:57:00Z
-reason: capture gradK fixed-Wilson gate together with B4 half-scale, B9 LCDM reoptimization, B9 RTK recenter stationarity, mixed-gradient result, and home bootstrap.
+trigger_utc: 2026-08-21T20:05:00Z
+reason: capture gradK tensor-null gate, fixed-Wilson gate, B4 half-scale, B9 LCDM reoptimization, B9 RTK recenter stationarity, and home bootstrap.
