@@ -1,0 +1,36 @@
+name: RTK Route-B residue-source redefinition gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-residue-source-redefinition-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact residue/source redefinition gate
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_residue_source_redefinition_gate.py
+          python3 rtk/route_b_residue_source_redefinition_gate.py | tee route_b_residue_source_redefinition.log
+          grep -q RTK_ROUTE_B_RESIDUE_SOURCE_REDEFINITION_GATE_PASS route_b_residue_source_redefinition.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-residue-source-redefinition
+          path: route_b_residue_source_redefinition.log
+          if-no-files-found: error
