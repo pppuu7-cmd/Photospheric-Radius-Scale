@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-21T23:32:00+03:00
+iteration_started_utc=2026-08-21T20:32:00Z
+research_source_commit=71d198c9454a45f358e5995b0db799432b96ac3f
+purpose=C8 healthy two-auxiliary determinant-cancellation gate
