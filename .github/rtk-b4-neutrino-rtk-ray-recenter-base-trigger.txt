@@ -1,4 +1,6 @@
-Launch B4 RTK ray-recenter base Hessian from exact negative-mode winner.
+Replay B4 RTK ray-recenter base Hessian from frozen exact negative-mode winner.
+Requested: 2026-08-21T15:36:00+03:00
+Reason: live state does not contain a closed result for the prior ray-recenter launch; perform a fresh reproducible replay of the mandatory recenter gate before any B4 robustness claim.
 Parent ray run: 32284932113
 Parent artifact: 9378827376
 Target commit: 3b9acfb25a01c6107a4a8427ef2b51ae61017d20
