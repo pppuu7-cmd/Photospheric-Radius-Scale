@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-21T18:36:00Z
-reason: refresh live B4 target-v2 half-scale, B9 paired reoptimization, B10 closed-tail provenance, C8 residue-source gate, and home bootstrap status.
+trigger_utc: 2026-08-21T18:49:00Z
+reason: capture C8 fixed-action FLRW exact-match theorem, B4 target-v2 half-scale, B9 paired reoptimization, and home bootstrap status after B10 closure.
