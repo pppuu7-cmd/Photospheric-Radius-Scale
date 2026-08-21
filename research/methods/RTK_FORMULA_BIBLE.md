@@ -282,3 +282,129 @@ The main theoretical frontier is not another local cosmological optimizer pass. 
 Candidate completion classes still open include higher-spatial-gradient, mixed-gradient/mixed-derivative and full-DHOST constructions, provided their degeneracy and stability conditions are derived rather than assumed.
 
 Status: RED.
+
+---
+
+# 12. FLRW constraint kernel and exact Schur-complement gate
+
+The fixed-Minkowski obstruction cannot automatically be extended to a fixed-action FLRW background because background quantities can enter the nondynamical constraint kernel. A representative healthy-Horava-style lapse kernel has the structural form
+
+D_phi(p,H) = 3(3 lambda - 1) H^2
+             - eta p^2
+             - eta_2 p^4/M_Pl^2
+             + eta_4 p^6/M_Pl^4.
+
+For a simple root y=p^2 defined by D_phi(y,H)=0,
+
+d y_pole / d(H^2)
+= -3(3 lambda - 1) / [d D_phi / d(p^2)],
+
+which is generically nonzero. In the two-spatial-derivative truncation eta_2=eta_4=0,
+
+p_pole^2 = 3(3 lambda - 1) H^2 / eta.
+
+Therefore fixed Wilson coefficients do not imply a fixed effective pole on FLRW.
+
+This structural fact is still insufficient for RTK matching because lapse and scalar shift must be eliminated together. Let
+
+x = (delta N, chi),
+
+M(q,H) = [[A,C],[C,B]],
+
+J(q,H) = (P,R),
+
+and write the quadratic scalar sector as
+
+L = 1/2 x^T M x + x^T J zeta + 1/2 K0 zeta^2.
+
+The nondynamical equations are
+
+M x + J zeta = 0,
+
+hence
+
+x = - M^{-1} J zeta.
+
+Substitution gives the exact Schur complement
+
+K_eff(q,H)
+= K0(q,H)
+- [B P^2 - 2 C P R + A R^2]/[A B - C^2].
+
+Define
+
+D(q,H)=A B-C^2,
+
+N(q,H)=B P^2-2 C P R+A R^2.
+
+The zero of D controls a constraint-pole location, while N/D controls its rational remainder/residue. Matching D alone is therefore not an RTK completion test.
+
+For the diagnostic linear-in-q form
+
+A=a0+a1 q,
+B=b0+b1 q,
+C=c0+c1 q,
+
+the determinant is
+
+D=D0+D1 q+D2 q^2,
+
+with
+
+D0=a0 b0-c0^2,
+
+D1=a0 b1+a1 b0-2 c0 c1,
+
+D2=a1 b1-c1^2.
+
+A strict target with one linear denominator has the necessary algebraic condition
+
+D2 = a1 b1-c1^2 = 0.
+
+This condition is only a constraint-determinant condition. It must not be called DHOST degeneracy unless a specific covariant action has been mapped to A,B,C and its full degeneracy/constraint algebra has been derived.
+
+For a linear denominator D=D0+D1 q with D1 nonzero, the invariant numerator remainder after division by D is N evaluated at
+
+q_pole = -D0/D1.
+
+Thus a viable C8 candidate must match, using one fixed underlying coefficient tuple across multiple epochs:
+
+1. denominator/pole;
+2. rational residue/remainder;
+3. physical kinetic sign;
+4. gradient stability/hyperbolicity;
+5. degree-of-freedom count;
+6. IR recovery and EFT cutoff;
+7. PPN/Newton/GW constraints.
+
+Canonical algebraic tool: `rtk/route_b_flrw_schur_kernel.py` on `rtk-class-build`.
+Canonical protocol: `research/RTK_C8_FLRW_SCHUR_MATCHING_PROTOCOL_2026-08-21.md` on `rtk-class-build`.
+
+Status: GREEN for the exact Schur algebra and necessary single-linear-pole condition; YELLOW/RED for mapping a fixed healthy action to the full RTK pole+residue target.
+
+---
+
+# 13. Derivation and provenance discipline
+
+Every new formula admitted to this Bible must carry enough information to reconstruct it without a chat transcript. At minimum record:
+
+1. starting action/equations or frozen numerical definition;
+2. field/gauge/Fourier conventions and dimensional definitions;
+3. algebraic substitutions or elimination steps;
+4. assumptions/limits used;
+5. exact domain of validity;
+6. symbolic/numerical verification tool when available;
+7. source file, commit/workflow/run provenance;
+8. status GREEN/YELLOW/RED/BLACK;
+9. explicit statement of what the result does not prove.
+
+Corrections are append-and-explain operations. If an older formula is dimensionally or algebraically wrong, retain enough chronology to show why it changed; do not silently rewrite the project's history.
+
+The current canonical state split is:
+
+- formulas and derivations: `research/methods/RTK_FORMULA_BIBLE.md`;
+- current scientific gate state: `research/RESEARCH_LEDGER.md`;
+- chronological development: `research/RTK_MODEL_CHRONOLOGY.md`;
+- compute architecture/provenance: `docs/RTK_COMPUTE_ARCHITECTURE.md` and `docs/COMPUTE_LOG.md`.
+
+Status: GREEN methodological rule.
