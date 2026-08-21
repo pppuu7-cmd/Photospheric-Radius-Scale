@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-21T19:45:00Z
-reason: capture standard-matter no-go, mixed-gradient static-safe gate, B9 RTK recenter base, B4 half-scale, B9 LCDM reoptimization, and home bootstrap.
+trigger_utc: 2026-08-21T19:57:00Z
+reason: capture gradK fixed-Wilson gate together with B4 half-scale, B9 LCDM reoptimization, B9 RTK recenter stationarity, mixed-gradient result, and home bootstrap.
