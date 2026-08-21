@@ -1,4 +1,4 @@
-trigger: 2026-08-21T15:47:00+03:00
-reason: validate the exact-arithmetic FLRW lapse+shift Schur-complement diagnostic before using it as a C8 algebraic filter
-research_module_commit: 175adcc14bdfcdfc83218055dcbe4b0096545980
-protocol_commit: b6b9b4f0c2829b7732a4a658d37bbbe7dcd1a1a4
+trigger: c8-rank-residue-v2
+research_commit: 5029f5dd9bc62665063a926bc260a871bb9bb6f9
+protocol_commit: c7fda91db2d5921dc7fa22a73a4cbf7dbacf8524
+workflow_commit: 2bed0c176dcb165c5204609cec3b1ed70b9ec667
