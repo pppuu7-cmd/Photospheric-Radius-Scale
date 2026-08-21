@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-21T21:34:00Z
-iteration_started_local: 2026-08-22T00:23:00+03:00
-iteration_started_utc: 2026-08-21T21:23:00Z
-reason: capture corrected mixed-kinetic rerun, background-silent, alignment, FDiff companion, additive companion, rolling normalization gates, and B4/B9 Hessians.
+trigger_utc: 2026-08-21T23:54:00Z
+iteration_started_local: 2026-08-22T02:46:00+03:00
+iteration_started_utc: 2026-08-21T23:46:00Z
+reason: capture B10 chat audit, B4 half eigenmode rays, B9 RTK half-scale, B9 LCDM recenter-v2, and current U1 completion gates.
