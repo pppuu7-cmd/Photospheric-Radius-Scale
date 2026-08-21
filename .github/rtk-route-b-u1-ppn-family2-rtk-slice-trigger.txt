@@ -1,0 +1,5 @@
+iteration_started_local=2026-08-22T02:46:00+03:00
+iteration_started_utc=2026-08-21T23:46:00Z
+research_source_commit=bb04a706a7742005569dfa5feeb27bc59e42ef8c
+literature=arXiv:1310.6666
+purpose=verify direct RTK beta0=2 mismatch with explicit GR-PPN family II at gamma1=-1
