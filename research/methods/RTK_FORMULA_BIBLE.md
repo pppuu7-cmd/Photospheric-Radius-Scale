@@ -251,7 +251,7 @@ Status: YELLOW diagnostic boundary.
 
 ---
 
-# 10. Observational pipeline and open robustness gates
+# 10. Observational pipeline and robustness gates
 
 Operational chain:
 
@@ -259,13 +259,13 @@ Theory -> CLASS -> Planck + Pantheon + dense BOSS -> exact objective -> local st
 
 Current high-value robustness gates:
 
-- B4: minimal-neutrino paired stationarity/recenter validation;
-- B6: paired AlterBBN abundance calculation, not H(T) alone;
-- B9: matched/reoptimized lensing comparison; fixed-center lensing is diagnostic only;
-- B10: profiled lambda_D identifiability and multiscale fixed-lambda stationarity;
-- A6: BIC/Bayes/posterior-level model comparison remains incomplete.
+- B4: minimal-neutrino paired stationarity/recenter validation — OPEN;
+- B6: paired AlterBBN differential abundance robustness — CLOSED under its frozen paired protocol; see section 14;
+- B9: matched/reoptimized lensing comparison — OPEN; fixed-center lensing is diagnostic only;
+- B10: profiled lambda_D identifiability and multiscale fixed-lambda stationarity — OPEN;
+- A6: BIC/Bayes/posterior-level model comparison — OPEN.
 
-Status: YELLOW/RED until each gate satisfies its frozen protocol.
+Status: mixed; never infer global model preference from any one robustness gate.
 
 ---
 
@@ -276,7 +276,7 @@ The main theoretical frontier is not another local cosmological optimizer pass. 
 1. C7: construct a broader healthy carrier/completion;
 2. C8: derive an exact UV/IR interpolation whose scalar kernel reproduces the RTK target in its validity domain;
 3. C9: compute the EFT cutoff / strong-coupling scale;
-4. close B4/B6/B9/B10 on matched frozen protocols;
+4. close B4/B9/B10 on matched frozen protocols while retaining B6 as closed differential robustness;
 5. connect the controlled galaxy/weak-field sector to nonlinear environment and lensing data without inserting a linear cosmological environmental field by hand.
 
 Candidate completion classes still open include higher-spatial-gradient, mixed-gradient/mixed-derivative and full-DHOST constructions, provided their degeneracy and stability conditions are derived rather than assumed.
@@ -408,3 +408,69 @@ The current canonical state split is:
 - compute architecture/provenance: `docs/RTK_COMPUTE_ARCHITECTURE.md` and `docs/COMPUTE_LOG.md`.
 
 Status: GREEN methodological rule.
+
+---
+
+# 14. B6 paired AlterBBN differential-abundance closure
+
+The B6 gate isolates only the effect of the RTK expansion-history perturbation on primordial abundances. Reference and RTK use the same frozen baryon ratio, radiation semantics, nuclear network, compiler/runtime settings and abundance parser; the scientific difference is the injected ratio
+
+R_H(T) = H_RTK(T)/H_reference(T).
+
+At the preregistered massless A1-A5 point,
+
+eta = 6.122532926262666e-10,
+
+and the mapped expansion perturbation satisfies
+
+max |R_H-1| = 2.422446243599552e-09
+
+over the injected BBN temperature interval.
+
+For each abundance X define the paired shift
+
+delta_X = X_RTK - X_reference.
+
+The primary shift is the refined 512-point table at AlterBBN failsafe=1. Numerical sensitivity is
+
+noise_X = max(
+ |delta_refined,f1 - delta_nominal,f1|,
+ |delta_refined,f1 - delta_refined,f7|
+).
+
+A nonzero shift is declared numerically resolved only if
+
+|delta_refined,f1| > 5 noise_X.
+
+Otherwise the physical statement is not `delta_X=0`; the retained conservative bound is
+
+|delta_X| <= |delta_refined,f1| + 5 noise_X.
+
+Results:
+
+- Yp: `delta = +1.4314660568004456e-12`, numerically resolved; conservative bound `1.5052958879380185e-12`;
+- D/H: `delta = +1.6226982865047423e-15`, unresolved; conservative bound `4.560750648668899e-15`;
+- He3/H, Li7/H, Li6/H and Be7/H are also unresolved under the same preregistered rule and retain explicit conservative bounds in the canonical B6 result document.
+
+With the observations frozen before the output,
+
+Yp_obs = 0.2458 +/- 0.0013,
+
+(D/H)_obs = (2.533 +/- 0.024)e-5,
+
+the RTK perturbation changes the standardized residual by only about
+
+1.10e-9 sigma for Yp
+
+and
+
+6.76e-9 sigma for D/H.
+
+Therefore the RTK modification to H(T) is observationally negligible in this paired B6 sense.
+
+Important scope boundary: the reference AlterBBN value itself gives approximately `z=-4.706` for the frozen D/H observational sigma, so this gate is not an absolute BBN goodness-of-fit certification. It isolates the differential RTK effect and does not include a full nuclear-rate/theory-error likelihood, refit eta, solve the lithium problem, or provide model evidence.
+
+Canonical result: `research/robustness/RTK_B6_ALTERBBN_RESULT_2026-08-21.md`.
+Workflow run: `32285359564`, attempt 2; artifact id `9447623417`.
+
+Status: GREEN for differential B6 abundance robustness under the frozen protocol; absolute BBN likelihood remains a separate future gate if required.
