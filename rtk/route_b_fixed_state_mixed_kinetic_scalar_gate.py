@@ -107,9 +107,11 @@ response = sp.factor((v.T*Mfreq.inv()*v)[0])
 rtk_response = sp.factor(1/(G*p2-Keff*w2))
 assert sp.simplify(response-rtk_response) == 0
 
-# The sole pole reproduces the production dispersion.
+# The sole pole reproduces the production dispersion. Compare invariantly:
+# SymPy may print algebraically identical radicals/rational factors differently.
 pole = sp.solve(sp.Eq(G*p2-Keff*w2,0),w2)
-assert pole == [sp.simplify(target_disp)]
+assert len(pole) == 1
+assert sp.simplify(pole[0]-target_disp) == 0
 
 out = {
   'classification':'RTK_ROUTE_B_FIXED_STATE_MIXED_KINETIC_SCALAR_GATE_PASS',
