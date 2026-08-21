@@ -1,0 +1,5 @@
+iteration_started_local=2026-08-22T02:46:00+03:00
+iteration_started_utc=2026-08-21T23:46:00Z
+research_source_commit=21fff2f9911350bd4fe4d701559acaf71821705d
+literature=arXiv:1310.6666
+purpose=verify that explicit GR-PPN family I a1=kappa=1 sigma2=0 does not algebraically fix beta0 and therefore leaves direct RTK beta0=2 open pending full static equations
