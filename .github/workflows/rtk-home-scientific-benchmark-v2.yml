@@ -1,90 +1,50 @@
-name: RTK Home Scientific Benchmark v3 Progress
+name: RTK Home Scientific Benchmark
 
 on:
-  push:
+  workflow_dispatch:
+
+concurrency:
+  group: rtk-home3-exclusive
+  cancel-in-progress: false
 
 jobs:
   benchmark:
-    runs-on: [self-hosted, Linux, X64, rtk-home]
+    runs-on: [self-hosted, Linux, X64, rtk-home3]
     timeout-minutes: 120
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: System resources 0%
+      - name: System resources
         run: |
+          set -euo pipefail
           echo "[0%] Starting RTK scientific benchmark"
-          echo "CPU:"
-          nproc
-          echo "Memory:"
+          echo "Logical CPUs: $(nproc)"
           free -h
 
-      - name: Exact rational benchmark 20%
-        run: |
-          python3 - <<'PY'
-          from fractions import Fraction
-          import time
-          total=1000000
-          a=Fraction(1,3)
-          b=Fraction(2,7)
-          t=time.time()
-          for i in range(total):
-              a=(a*b)+(a/b)
-              if i % 100000 == 0:
-                  print(f"Progress: {20*i/total:.1f}% ({i}/{total})")
-          print('Fraction seconds:', time.time()-t)
-          print('digits:', len(str(a.numerator)))
-          PY
-
-      - name: Decimal precision benchmark 45%
-        run: |
-          python3 - <<'PY'
-          from decimal import Decimal, getcontext
-          import time
-          getcontext().prec=100
-          x=Decimal(1)
-          total=500000
-          t=time.time()
-          for i in range(total):
-              x=(x*Decimal('1.000001'))/Decimal('1.0000001')
-              if i % 50000 == 0:
-                  print(f"Progress: {45*i/total:.1f}% ({i}/{total})")
-          print('Decimal seconds:', time.time()-t)
-          PY
-
-      - name: Matrix benchmark 65%
-        run: |
-          python3 - <<'PY'
-          import time
-          import numpy as np
-          print('Progress: 65% matrix start')
-          a=np.random.rand(1200,1200)
-          t=time.time()
-          a@a
-          print('Matrix seconds:', time.time()-t)
-          print('Progress: 75% matrix done')
-          PY
-
-      - name: Parallel CPU benchmark 90%
+      - name: Parallel CPU benchmark
+        env:
+          OMP_NUM_THREADS: "1"
+          OPENBLAS_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          NUMEXPR_NUM_THREADS: "1"
         run: |
           python3 - <<'PY'
           import multiprocessing as mp
-          import time
-          def f(n):
-              x=0
-              for i in range(5000000):
-                  x += i*i
-              return x
-          print('Workers:', mp.cpu_count())
-          t=time.time()
-          with mp.Pool(mp.cpu_count()) as p:
-              p.map(f, range(mp.cpu_count()))
-          print('Parallel seconds:', time.time()-t)
-          print('Progress: 95%')
-          PY
+          import os, time
 
-      - name: Final report 100%
-        run: |
-          echo "RTK_HOME_SCIENTIFIC_BENCHMARK_V3_PASS"
-          date
+          workers = mp.cpu_count()
+          def f(n):
+              x = 0
+              for i in range(2_000_000):
+                  x += (i * i + n) % 1000003
+              return x
+
+          print(f"[10%] Workers={workers}; inner BLAS/OMP threads=1")
+          t = time.time()
+          with mp.Pool(workers) as pool:
+              pool.map(f, range(workers))
+          print(f"[95%] Parallel seconds={time.time()-t:.3f}")
+          print("[100%] RTK_HOME_SCIENTIFIC_BENCHMARK_PASS")
+          PY
