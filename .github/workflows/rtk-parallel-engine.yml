@@ -23,6 +23,11 @@ on:
         required: true
         default: "0"
         type: string
+      chunksize:
+        description: Multiprocessing IPC batch size; auto adapts to task count
+        required: true
+        default: auto
+        type: string
       task_module:
         description: Python module exposing calculate(index)
         required: true
@@ -57,6 +62,7 @@ jobs:
       RTK_TOTAL_TASKS: ${{ inputs.total_tasks }}
       RTK_WORKERS: ${{ inputs.workers }}
       RTK_RESERVE_CPUS: ${{ inputs.reserve_cpus }}
+      RTK_CHUNKSIZE: ${{ inputs.chunksize }}
       RTK_TASK_MODULE: ${{ inputs.task_module }}
       RTK_CHECKPOINT_INTERVAL: ${{ inputs.checkpoint_interval }}
       RTK_PROGRESS_INTERVAL: ${{ inputs.progress_interval }}
@@ -76,7 +82,7 @@ jobs:
           mkdir -p "$HOME/.rtk-runner-state"
           echo "host=$(hostname)"
           echo "logical_cpus=$(nproc)"
-          echo "workers_request=$RTK_WORKERS reserve=$RTK_RESERVE_CPUS"
+          echo "workers_request=$RTK_WORKERS reserve=$RTK_RESERVE_CPUS chunksize=$RTK_CHUNKSIZE"
           echo "run_key=$RTK_RUN_KEY task_module=$RTK_TASK_MODULE total=$RTK_TOTAL_TASKS"
           echo "state_root=$HOME/.rtk-runner-state"
           free -h
