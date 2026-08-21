@@ -1,0 +1,4 @@
+iteration_started_local=2026-08-22T00:23:00+03:00
+iteration_started_utc=2026-08-21T21:23:00Z
+research_source_commit=10e4d86f86d3773f0b72d5e571d580f34fb78dc2
+purpose=C8 prove minimal aligned rolling DBI combination cannot also be background-silent
