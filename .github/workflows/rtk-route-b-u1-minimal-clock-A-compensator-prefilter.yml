@@ -1,0 +1,68 @@
+name: RTK Route-B U1 minimal clock A-compensator prefilter
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-minimal-clock-A-compensator-prefilter-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-route-b-u1-minimal-clock-A-compensator-prefilter
+  cancel-in-progress: false
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require frozen prefilter target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_CI_PREFILTER_RESULT'
+          assert t['parent_trilemma_run_id']==32592531836
+          assert t['candidate']['new_term']=='Delta L_M=-sigma rho_comp(X_U)'
+          assert t['source_script']=='rtk/route_b_u1_minimal_clock_A_compensator_prefilter_gate.py'
+          print('U1_MINIMAL_CLOCK_A_COMPENSATOR_TARGET_PASS',t['source_script_commit'])
+          PY
+          python3 -m py_compile rtk/route_b_u1_minimal_clock_A_compensator_prefilter_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_minimal_clock_A_compensator_prefilter_provenance.txt
+      - name: Run exact compensator prefilter
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_minimal_clock_A_compensator_prefilter_gate.py | tee u1_minimal_clock_A_compensator_prefilter.log
+          grep -q '^RTK_ROUTE_B_U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER ' u1_minimal_clock_A_compensator_prefilter.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_minimal_clock_A_compensator_prefilter_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER'
+          assert r['status_scope']=='YELLOW_CONSTRUCTIVE_FLRW_ESCAPE_BUT_FRESH_DOF_COUNT_REQUIRED'
+          assert 'Delta J_A=-2 rho_comp exactly cancels' in r['exact_background_results'][2]
+          assert r['velocity_hessian']['generic_rolling_status'].startswith('nonzero')
+          print('U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-minimal-clock-A-compensator-prefilter
+          path: |
+            u1_minimal_clock_A_compensator_prefilter.log
+            u1_minimal_clock_A_compensator_prefilter_result.json
+            u1_minimal_clock_A_compensator_prefilter_provenance.txt
+            research/RTK_U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER_v1.json
+            rtk/route_b_u1_minimal_clock_A_compensator_prefilter_gate.py
+          if-no-files-found: error
