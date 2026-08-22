@@ -1,0 +1,29 @@
+{
+  "status": "HALF_SCALE_PASS_FROZEN_BEFORE_FRESH_TREE",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "base_run_id": 32518496348,
+  "half_run_id": 32538458738,
+  "half_artifact_id": 9468954931,
+  "half_artifact_digest": "sha256:e4193abe049f6035fb50e9933fafff47c276ef4c567fcb7c15050f994d4d3409",
+  "center": {
+    "As": 2.0874265764520984e-09,
+    "Ob": 0.04679404670223316,
+    "Om": 0.2522369962493503,
+    "h": 0.6911169559022905,
+    "lam": 792605.2167661682,
+    "ns": 0.9645439945136476,
+    "zre": 7.329291125785135
+  },
+  "expected_center_S_eff": 1059.2719553175134,
+  "half_best_exact_S_eff": 1059.2719553175134,
+  "half_best_improvement_eff": 0.0,
+  "half_positive_definite_eff": true,
+  "half_min_eigenvalue_eff": 0.00035275631994283977,
+  "half_center_replay_abs_error": 0.0,
+  "recenter_tolerance_S": 0.005,
+  "fresh_tree_replay_abs_tolerance": 2e-06,
+  "fresh_tree_requires_positive_definite": true,
+  "decision_frozen_before_fresh_tree_scores": true,
+  "next_gate": "independent fresh-tree exact full base Hessian at the same frozen center; certify B9-RTK local lensing stationarity only if replay agrees within tolerance, exact improvement <=0.005, and Hessian remains positive definite"
+}
