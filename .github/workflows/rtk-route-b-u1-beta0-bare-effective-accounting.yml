@@ -1,0 +1,47 @@
+name: RTK Route-B U1 beta0 bare-effective accounting gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-beta0-bare-effective-accounting-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-accounting:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run bare/effective beta0 accounting theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_beta0_bare_effective_accounting_gate.py
+          python3 rtk/route_b_u1_beta0_bare_effective_accounting_gate.py | tee u1_beta0_bare_effective_accounting.log
+          grep -q 'RTK_ROUTE_B_U1_BETA0_BARE_EFFECTIVE_ACCOUNTING_PASS' u1_beta0_bare_effective_accounting.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_beta0_bare_effective_accounting_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_BETA0_BARE_EFFECTIVE_ACCOUNTING_PASS'
+          assert r['required_beta0_bare']==0
+          assert r['equivalent_beta0_eff_total']==2
+          assert r['old_beta0_bare_2_consequence']['equivalent_beta0_eff_total']==4
+          print('U1_BETA0_BARE_EFFECTIVE_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-beta0-bare-effective-accounting
+          path: |
+            u1_beta0_bare_effective_accounting.log
+            u1_beta0_bare_effective_accounting_result.json
+          if-no-files-found: error
