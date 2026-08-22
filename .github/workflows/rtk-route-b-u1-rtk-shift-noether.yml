@@ -1,0 +1,46 @@
+name: RTK Route-B U1 RTK invariant-shift Noether gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-rtk-shift-noether-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-noether-identity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run invariant-shift Noether identity
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_rtk_shift_noether_identity_gate.py
+          python3 rtk/route_b_u1_rtk_shift_noether_identity_gate.py | tee u1_rtk_shift_noether.log
+          grep -q 'RTK_ROUTE_B_U1_RTK_SHIFT_NOETHER_IDENTITY_PASS' u1_rtk_shift_noether.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_rtk_shift_noether_identity_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_RTK_SHIFT_NOETHER_IDENTITY_PASS'
+          assert r['identity_residual']=='0'
+          assert r['on_shift_constraint']=='0'
+          print('U1_RTK_SHIFT_NOETHER_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-rtk-shift-noether
+          path: |
+            u1_rtk_shift_noether.log
+            u1_rtk_shift_noether_identity_result.json
+          if-no-files-found: error
