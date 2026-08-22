@@ -1,0 +1,70 @@
+name: RTK Route-B U1 classical coupled DOF certification
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-classical-coupled-dof-certification-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Recheck coupled constraint prerequisites
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_second_class_block_reduction_gate.py | tee u1_block_reduction_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_SECOND_CLASS_BLOCK_REDUCTION_PASS' u1_block_reduction_prereq.log
+          python3 rtk/route_b_u1_generic_rank_slice_gate.py | tee u1_generic_rank_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_GENERIC_COUPLED_RANK_SLICE_PASS' u1_generic_rank_prereq.log
+          python3 rtk/route_b_u1_rolling_homogeneous_rank_shift_gate.py | tee u1_rolling_rank_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_ROLLING_HOMOGENEOUS_RANK_SHIFT_PASS' u1_rolling_rank_prereq.log
+      - name: Require corrected v2 action bookkeeping
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FAMILY1_FIXED_IR_SLICE_v2.json'))
+          g=t['gravity_and_matter_frame']
+          assert g['a1']==1 and g['a2']==0 and g['kappa']==1
+          assert g['sigma1']==0 and g['sigma2']==0
+          assert g['beta0_bare']==0 and g['gamma1']==-1
+          assert t['rolling_rtk_mixed_sector']['equivalent_beta0_eff_contribution']==2
+          print('U1_CORRECTED_ACTION_SCOPE_PASS')
+          PY
+      - name: Run scoped classical coupled DOF certification
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_classical_coupled_dof_certification_gate.py
+          python3 rtk/route_b_u1_classical_coupled_dof_certification_gate.py | tee u1_classical_coupled_dof.log
+          grep -q 'RTK_ROUTE_B_U1_CLASSICAL_COUPLED_DOF_CERTIFICATION_PASS' u1_classical_coupled_dof.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_classical_coupled_dof_certification_result.json'))
+          assert r['d3_total_physical_dof']==3
+          assert r['status_scope']=='CLASSICAL_GREEN_SCOPED_DOF_ONLY'
+          print('U1_CLASSICAL_COUPLED_DOF_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-classical-coupled-dof-certification
+          path: |
+            u1_block_reduction_prereq.log
+            u1_generic_rank_prereq.log
+            u1_rolling_rank_prereq.log
+            u1_classical_coupled_dof.log
+            u1_classical_coupled_dof_certification_result.json
+          if-no-files-found: error
