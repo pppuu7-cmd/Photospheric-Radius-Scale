@@ -1,0 +1,41 @@
+{
+  "classification": "B4_NEUTRINO_RTK_RECENTER_V4_HALF_RESOLUTION_TARGET_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "stencil_scale": 0.5,
+  "center": {
+    "As": 2.0953040609439933e-09,
+    "Ob": 0.0472430928395221,
+    "Om": 0.25308763984439225,
+    "h": 0.6883522889542522,
+    "lam": 3009377.414812341,
+    "ns": 0.9657964452888419,
+    "zre": 7.583793661013263
+  },
+  "base_run_id": 32565150038,
+  "base_artifact_id": 9475903472,
+  "base_S_center_eff": 1050.5511025943172,
+  "base_best_exact_S_eff": 1050.5510305213465,
+  "base_best_improvement_eff": 0.0000720729706245038,
+  "base_hessian_positive_definite_eff": false,
+  "base_eigenvalues_eff": [
+    -0.00006643686349509472,
+    0.003148865082623278,
+    0.02015640853404094,
+    0.04674206207886002,
+    0.2563260779622786,
+    3.086770865789688,
+    7.2895976037086925
+  ],
+  "ray_run_id": 32578063680,
+  "ray_artifact_id": 9477266391,
+  "ray_artifact_digest": "sha256:9c34f8dac401d264807d876f81c961c5b91a08bd88f8f6c2280bcfd2b9de29b5",
+  "ray_classification": "B4_RECENTER_V4_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
+  "ray_max_exact_improvement_eff": 0.00020957288847966993,
+  "ray_best_alpha": 4.0,
+  "ray_parent_negative_eigenvalue": -0.00006643686349509472,
+  "decision_frozen_before_half_scores": true,
+  "decision_reason": "base v4 is recenter-clear but has one soft negative Hessian mode; exact eigenmode rays out to |alpha|=4 find no descent above 0.005, so the frozen decision tree requires an independent half-scale Hessian resolution audit at the unchanged center",
+  "next_gate": "run exact scale-0.5 Hessian at unchanged v4 center; if half is recenter-clear and positive definite, treat the base negative mode as unresolved stencil curvature and advance to fresh-tree/multiscale closure; if half remains non-PD, continue frozen ray/resolution diagnostics rather than claiming a local minimum"
+}
