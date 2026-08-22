@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T10:29:30Z
+script_commit: b43a7d56195628fa68b43ee75c2a88f2f971cd12
+workflow_commit: 45f9cf2850b08dbae08310ca3275531778c9127a
+prerequisites: generic coupled-rank run 32567270946 PASS; rolling homogeneous rank-shift run 32567527846 PASS
+reason: combine preserved gauge/primary structure and rank results into a deliberately scoped classical 2-tensor-plus-1-RTK-scalar DOF certification before freezing lambda_HL or attempting full-action static/PPN gates.
