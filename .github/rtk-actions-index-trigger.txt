@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T00:10:00Z
+trigger_utc: 2026-08-22T00:15:00Z
 iteration_started_local: 2026-08-22T02:46:00+03:00
 iteration_started_utc: 2026-08-21T23:46:00Z
-reason: capture U1 classical PPN-DOF intersection, family-I/family-II artifacts, B4 eigenmode rays, B9 RTK half and B9 LCDM recenter-v2.
+reason: capture hardened U1 classical intersection rerun and distinguish first implementation-only failure; also capture B4/B9 active gates.
