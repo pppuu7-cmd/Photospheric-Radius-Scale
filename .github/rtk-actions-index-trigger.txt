@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T10:32:00Z
+trigger_utc: 2026-08-22T10:42:00Z
 iteration_started_local: 2026-08-22T13:21:00+03:00
 iteration_started_utc: 2026-08-22T10:21:00Z
-reason: capture U1 classical coupled DOF certification plus B4-v4 and B9 heavy statuses before freezing an IR lambda_HL representative.
+reason: capture U1 IR TT and static lapse quadratic-equivalence gates plus current B4-v4 and B9 heavy statuses before launching full O2 static Newton/gamma gate.
