@@ -1,0 +1,60 @@
+name: RTK Route-B U1 static O2 Newton gamma gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-o2-newton-gamma-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  static-o2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require v3 representative and static bridge
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
+          g=t['gravity_and_matter_frame']
+          assert (g['a1'],g['a2'],g['kappa'],g['sigma1'],g['sigma2'],g['beta0_bare'],g['gamma1'],g['lambda_HL'])==(1,0,1,0,0,0,-1,1)
+          assert t['rolling_rtk_mixed_sector']['beta0_eff_total']==2
+          print('U1_STATIC_O2_V3_PREREQ_PASS')
+          PY
+          python3 rtk/route_b_u1_static_lapse_quadratic_equivalence_gate.py | tee u1_static_bridge_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_LAPSE_QUADRATIC_EQUIVALENCE_PASS' u1_static_bridge_prereq.log
+      - name: Run complete O2 static Newton-gamma gate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_o2_newton_gamma_gate.py
+          python3 rtk/route_b_u1_static_o2_newton_gamma_gate.py | tee u1_static_o2_newton_gamma.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_O2_NEWTON_GAMMA_GATE_PASS' u1_static_o2_newton_gamma.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_o2_newton_gamma_result.json'))
+          assert r['gamma_PPN_O2']=='1'
+          assert r['f_solution']=='1'
+          assert r['status_scope']=='STATIC_NEWTON_GAMMA_GREEN_O2_ONLY'
+          print('U1_STATIC_O2_NEWTON_GAMMA_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-static-o2-newton-gamma
+          path: |
+            u1_static_bridge_prereq.log
+            u1_static_o2_newton_gamma.log
+            u1_static_o2_newton_gamma_result.json
+          if-no-files-found: error
