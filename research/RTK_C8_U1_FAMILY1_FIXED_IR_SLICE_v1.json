@@ -1,0 +1,29 @@
+{
+  "classification": "RTK_C8_U1_FAMILY1_PARTIAL_IR_SLICE_V1_FROZEN",
+  "status": "CLASSICALLY_OPEN_PARTIAL_TUPLE_NOT_YET_FULL_ACTION",
+  "literature_anchor": "arXiv:1310.6666 Eqs. (4.2)-(4.3), (5.43), (5.50)-(5.51)",
+  "gravity_and_matter_frame": {
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "beta0": 2,
+    "gamma1": -1,
+    "lambda_HL": null
+  },
+  "choice_provenance": {
+    "a1_kappa": "published exact-GR PPN family-I condition",
+    "a2": "explicit representative matter-frame choice; a2 is arbitrary in the published universal IR coupling and a2=0 reduces to the earlier studied coupling; not derived from RTK",
+    "sigma1_sigma2": "special classical nonlinear no-extra-gravity-scalar surface from the nonprojectable U(1) Hamiltonian analysis",
+    "beta0": "direct RTK mixed-kinetic acceleration normalization beta0_RTK=2",
+    "gamma1": "canonical IR curvature normalization",
+    "lambda_HL": "intentionally not frozen until the combined gravity+RTK scalar constraint/DOF calculation identifies the admissible same-action branch"
+  },
+  "eq_5_43_after_a1_kappa_1": "(gamma1+1)*(beta0+2*(gamma1+1))=0",
+  "rtk_branch": "gamma1=-1; Eq. (5.43) is then satisfied identically for beta0=2",
+  "other_branch": "beta0=-2*(gamma1+1); at gamma1=-1 this gives beta0=0 and does not contain the RTK direct slice",
+  "ppn_scope": "The paper states that a1=kappa=1 reduces its PPN parameters to the GR values. This file records that literature branch and exact Eq. (5.43) compatibility only; it is not an independent RTK static solution.",
+  "radiative_warning": "sigma1=sigma2=0 is classically exceptional and remains technically unnatural absent additional protection/RG control; C9 is not passed.",
+  "next_gate": "derive the coupled gravity+RTK scalar constraint/Hamiltonian structure with lambda_HL symbolic, determine whether an admissible lambda_HL domain exists, then freeze one complete action tuple before static/Newton/PPN/GW/cutoff tests"
+}
