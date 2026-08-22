@@ -1,0 +1,45 @@
+name: RTK Route-B U1 generic coupled-rank slice gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-generic-coupled-rank-slice-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-generic-rank-slice:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run generic coupled-rank slice theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_generic_rank_slice_gate.py
+          python3 rtk/route_b_u1_generic_rank_slice_gate.py | tee u1_generic_coupled_rank_slice.log
+          grep -q 'RTK_ROUTE_B_U1_GENERIC_COUPLED_RANK_SLICE_PASS' u1_generic_coupled_rank_slice.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_generic_coupled_rank_slice_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_GENERIC_COUPLED_RANK_SLICE_PASS'
+          assert r['delta_a_on_slice']=='0'
+          print('U1_GENERIC_COUPLED_RANK_SLICE_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-generic-coupled-rank-slice
+          path: |
+            u1_generic_coupled_rank_slice.log
+            u1_generic_coupled_rank_slice_result.json
+          if-no-files-found: error
