@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:24:00Z
+script_commit: 22de33e5f90eb377dd34e705cc8a9e7f3dbed3c4
+workflow_commit: 832bff45069ce191c7572ffcd05b64838a75c04b
+reason: after generic coupled-rank slice PASS, test whether explicit rolling S_mix changes the exceptional U1 cross-block only through the same homogeneous a_i a^i lapse-gradient operator class covered by the arbitrary-L_V rank theorem.
