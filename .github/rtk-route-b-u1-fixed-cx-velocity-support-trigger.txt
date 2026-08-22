@@ -1,0 +1,6 @@
+launch_utc: 2026-08-22T11:20:00Z
+fixed_scalar_action_commit: a33c9708ab76671042d90d33ba9d0485101e5927
+repaired_px_commit: 97f25283a0362f9c36d023a33b2c8f3a816f39ca
+script_commit: 68213828c3b3ed5177bd84d09fa5c09f04afdf68
+workflow_commit: 4e903fc521c7a378bef4de5efe6c73b99095717a
+reason: re-audit primary velocity support after fixing the mixed coefficient to the scalar-velocity-dependent C(X_U)=M_Pl^2/(2X_U), before carrying the earlier coupled DOF certificate onto the new scalar action.
