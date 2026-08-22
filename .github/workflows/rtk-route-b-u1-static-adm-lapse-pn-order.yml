@@ -1,0 +1,54 @@
+name: RTK Route-B U1 static ADM lapse PN-order gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-adm-lapse-pn-order-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  pn-order:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require O2 same-action solution
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_static_lapse_quadratic_equivalence_gate.py | tee u1_static_bridge_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_LAPSE_QUADRATIC_EQUIVALENCE_PASS' u1_static_bridge_prereq.log
+          python3 rtk/route_b_u1_static_o2_newton_gamma_gate.py | tee u1_static_o2_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_O2_NEWTON_GAMMA_GATE_PASS' u1_static_o2_prereq.log
+      - name: Run ADM-lapse PN-order refinement
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_adm_lapse_pn_order_gate.py
+          python3 rtk/route_b_u1_static_adm_lapse_pn_order_gate.py | tee u1_static_adm_lapse_pn_order.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_ADM_LAPSE_PN_ORDER_PASS' u1_static_adm_lapse_pn_order.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_adm_lapse_pn_order_result.json'))
+          assert r['result_n2']=='0'
+          assert r['difference_field_equation_PN_order_on_v3']=='O(8), therefore absent from O(4)/1PN equations'
+          print('U1_STATIC_ADM_LAPSE_PN_ORDER_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-static-adm-lapse-pn-order
+          path: |
+            u1_static_bridge_prereq.log
+            u1_static_o2_prereq.log
+            u1_static_adm_lapse_pn_order.log
+            u1_static_adm_lapse_pn_order_result.json
+          if-no-files-found: error
