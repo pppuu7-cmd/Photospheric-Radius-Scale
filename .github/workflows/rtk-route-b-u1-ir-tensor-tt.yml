@@ -1,0 +1,63 @@
+name: RTK Route-B U1 IR tensor TT gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-ir-tensor-tt-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  tt:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require frozen corrected IR representative v3
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
+          g=t['gravity_and_matter_frame']
+          assert g['lambda_HL']==1 and g['gamma1']==-1 and g['beta0_bare']==0
+          assert g['sigma1']==0 and g['sigma2']==0
+          assert t['rolling_rtk_mixed_sector']['beta0_eff_total']==2
+          print('U1_IR_V3_REPRESENTATIVE_PASS')
+          PY
+      - name: Recheck classical coupled DOF prerequisite
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_classical_coupled_dof_certification_gate.py | tee u1_dof_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_CLASSICAL_COUPLED_DOF_CERTIFICATION_PASS' u1_dof_prereq.log
+      - name: Run exact IR TT gate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_ir_tensor_tt_gate.py
+          python3 rtk/route_b_u1_ir_tensor_tt_gate.py | tee u1_ir_tensor_tt.log
+          grep -q 'RTK_ROUTE_B_U1_IR_TENSOR_TT_GATE_PASS' u1_ir_tensor_tt.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_ir_tensor_tt_result.json'))
+          assert r['c_T_squared_IR']=='1'
+          assert r['status_scope']=='IR_TWO_DERIVATIVE_TT_GREEN_ONLY'
+          print('U1_IR_TENSOR_TT_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-ir-tensor-tt
+          path: |
+            u1_dof_prereq.log
+            u1_ir_tensor_tt.log
+            u1_ir_tensor_tt_result.json
+          if-no-files-found: error
