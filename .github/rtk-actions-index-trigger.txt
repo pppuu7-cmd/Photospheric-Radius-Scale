@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T09:55:00Z
-iteration_started_local: 2026-08-22T12:20:00+03:00
-iteration_started_utc: 2026-08-22T09:20:00Z
-reason: capture B4-v4 plus U1 Eq543, mixed velocity-support, and a2-zero canonical-affinity CI runs; refresh B9 statuses.
+trigger_utc: 2026-08-22T10:04:00Z
+iteration_started_local: 2026-08-22T12:13:00+03:00
+iteration_started_utc: 2026-08-22T09:13:00Z
+reason: capture coupled U1 primary-identity CI and current B4/B9 heavy runs after durable chronology update.
