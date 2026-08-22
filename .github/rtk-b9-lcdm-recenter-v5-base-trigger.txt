@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T17:27:00Z
+parent_run_id: 32577958583
+parent_artifact_id: 9478171422
+reason: B9 LCDM recenter-v4 exact improvement 0.2098489384907225 exceeds frozen 0.005 threshold; run fresh exact base Hessian at frozen v5 center.
