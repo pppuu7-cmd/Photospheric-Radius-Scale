@@ -1,0 +1,61 @@
+name: RTK Route-B U1 elliptic compensator effective coupling transfer
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-elliptic-compensator-effective-coupling-transfer-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require frozen canonical parent
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_U1_ELLIPTIC_MATTER_COMPENSATOR_CANONICAL_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_FULL_COUPLED_DIRAC'
+          assert t['parent_canonical_run_id']==32597148540
+          print('ELLIPTIC_CANONICAL_PARENT_PASS')
+          PY
+      - name: Run exact effective coupling transfer theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_elliptic_compensator_effective_coupling_transfer_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_elliptic_compensator_effective_coupling_transfer_provenance.txt
+          python3 rtk/route_b_u1_elliptic_compensator_effective_coupling_transfer_gate.py | tee u1_elliptic_compensator_effective_coupling_transfer.log
+          grep -q '^RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_EFFECTIVE_COUPLING_TRANSFER_PASS ' u1_elliptic_compensator_effective_coupling_transfer.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_elliptic_compensator_effective_coupling_transfer_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_EFFECTIVE_COUPLING_TRANSFER_PASS'
+          assert r['effective_family_I_coupling']=='a1_eff(k)=k_phys^2/(M_c^2+k_phys^2)'
+          assert r['one_percent_scale_separation']['window_exists_iff']=='k_local/k_cos>=99'
+          print('U1_ELLIPTIC_EFFECTIVE_COUPLING_TRANSFER_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-elliptic-compensator-effective-coupling-transfer
+          path: |
+            u1_elliptic_compensator_effective_coupling_transfer.log
+            u1_elliptic_compensator_effective_coupling_transfer_result.json
+            u1_elliptic_compensator_effective_coupling_transfer_provenance.txt
+            research/RTK_U1_ELLIPTIC_MATTER_COMPENSATOR_CANONICAL_v1.json
+            rtk/route_b_u1_elliptic_compensator_effective_coupling_transfer_gate.py
+          if-no-files-found: error
