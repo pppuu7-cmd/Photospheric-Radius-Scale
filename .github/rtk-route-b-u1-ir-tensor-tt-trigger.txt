@@ -1,0 +1,6 @@
+launch_utc: 2026-08-22T10:34:30Z
+representative_commit: 3f05b99d4f244755c2eeec627779c6d1bfbe3e61
+script_commit: bc5b0af8f12e0f4452877edb6c69207895da4088
+workflow_commit: 54c8f462ea69ab5b883b6f2b186a104f53471877
+prerequisite_dof_run: 32567593997
+reason: test the two-derivative TT principal action on the same corrected IR representative lambda_HL=1, gamma1=-1, beta0_bare=0 with explicit rolling S_mix retained.
