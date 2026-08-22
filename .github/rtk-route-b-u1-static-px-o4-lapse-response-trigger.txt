@@ -1,4 +1,4 @@
-Launch fixed-action static P(X) O(v^4) lapse-response and DBI-domain-budget theorem.
+Relaunch fixed-action static P(X) O(v^4) lapse-response and DBI-domain-budget theorem after correcting only scalar-action JSON schema prerequisites.
 Prerequisites: static-clock run 32568097865 attempt 2 success; ADM-lapse PN-order run 32567940387 success; scale dictionary 32568333920 success.
 Worker commit: e54e57a8985be2c89923205c36f3f14af2199d98
-Workflow commit: c1e583eb67fdcbf8d58ab019ba839a85460445d2
+Corrected workflow commit: 7af390ba313d414f18b72f47d29e66ea71f92df1
