@@ -1,4 +1,4 @@
-launch_utc: 2026-08-22T20:39:00Z
-launch_local: 2026-08-22T23:39:00+03:00
-reason: corrected elliptic prefilter passed; verify exact a2=0 canonical sign, p_nu+J_A identity, lapse affinity, and isolated auxiliary four-second-class rank before freezing the new functional form.
-source: rtk-class-build:rtk/route_b_u1_elliptic_compensator_canonical_affinity_gate.py
+launch_utc: 2026-08-22T20:43:00Z
+launch_local: 2026-08-22T23:43:00+03:00
+reason: rerun unchanged elliptic-compensator canonical architecture after replacing SymPy structural equalities by algebraic simplify checks only.
+source_commit: rtk-class-build:aa480e0ab80e34a0cdeadca830c6df6b2823c9db
