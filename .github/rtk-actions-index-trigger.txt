@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T10:04:00Z
+trigger_utc: 2026-08-22T10:30:00Z
 iteration_started_local: 2026-08-22T12:13:00+03:00
 iteration_started_utc: 2026-08-22T09:13:00Z
-reason: capture coupled U1 primary-identity CI and current B4/B9 heavy runs after durable chronology update.
+reason: capture beta0 bare/effective accounting CI plus current B4-v4, B9-RTK fresh-tree, B9-LCDM-v3, and U1 rank-reduction/source-support statuses.
