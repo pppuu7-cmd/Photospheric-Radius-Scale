@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:18:00Z
+script_commit: b6ed2824400bb17c7c6130254f211645586d9c29
+workflow_commit: 156d757718c2779013b11c1481e87ef97e688d66
+reason: prove the neutral RTK sector does not make the exceptional-U1 second-class block identically singular before attacking the rolling-background determinant.
