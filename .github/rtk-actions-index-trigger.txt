@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T14:11:00Z
+trigger_utc: 2026-08-22T14:22:00Z
 iteration_started_local: 2026-08-22T17:05:00+03:00
 iteration_started_utc: 2026-08-22T14:05:00Z
-reason: capture B9 LCDM recenter-v4 launch, B4 v4 eigenmode-ray launch, U1 local-clock decoupling hierarchy launch, and all newly completed fixed-action/heavy-run statuses.
+reason: capture corrected U1 local-clock hierarchy rerun, static P(X) O4 lapse-response launch, B4 v4 eigenmode rays, and B9 LCDM recenter-v4 base Hessian.
