@@ -28,7 +28,9 @@ jobs:
           import json
           ir=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
           sc=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
-          assert ir['lambda_HL']==1.0 and ir['sigma1']==0.0 and ir['sigma2']==0.0
+          g=ir['gravity_and_matter_frame']
+          assert g['lambda_HL']==1 and g['sigma1']==0 and g['sigma2']==0
+          assert g['a1']==1 and g['a2']==0 and g['kappa']==1
           assert sc['domain']['production_branch']=='X_U > 0'
           assert sc['C_of_X_U']=='M_Pl^2/(2 X_U)'
           print('U1_FIXED_ACTION_PREREQUISITES_PASS')
