@@ -1,0 +1,50 @@
+name: RTK Route-B U1 coordinate-compensator quadratic kinetic rank
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-coordinate-compensator-quadratic-kinetic-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run quadratic kinetic-rank theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_coordinate_compensator_quadratic_kinetic_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_coordinate_compensator_quadratic_kinetic_provenance.txt
+          python3 rtk/route_b_u1_coordinate_compensator_quadratic_kinetic_gate.py | tee u1_coordinate_compensator_quadratic_kinetic.log
+          grep -q '^RTK_ROUTE_B_U1_COORDINATE_COMPENSATOR_QUADRATIC_KINETIC_PASS ' u1_coordinate_compensator_quadratic_kinetic.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_coordinate_compensator_quadratic_kinetic_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_COORDINATE_COMPENSATOR_QUADRATIC_KINETIC_PASS'
+          assert r['status_scope']=='GREEN_SCOPED_QUADRATIC_KINETIC_RANK_PRESERVED_POISSON_RANK_PENDING'
+          assert r['velocity_hessian_result']['rank_before']==r['velocity_hessian_result']['rank_after']==2
+          print('U1_COORDINATE_COMPENSATOR_QUADRATIC_KINETIC_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-coordinate-compensator-quadratic-kinetic
+          path: |
+            u1_coordinate_compensator_quadratic_kinetic.log
+            u1_coordinate_compensator_quadratic_kinetic_result.json
+            u1_coordinate_compensator_quadratic_kinetic_provenance.txt
+            rtk/route_b_u1_coordinate_compensator_quadratic_kinetic_gate.py
+          if-no-files-found: error
