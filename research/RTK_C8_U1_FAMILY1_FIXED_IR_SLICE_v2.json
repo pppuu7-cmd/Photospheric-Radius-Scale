@@ -1,0 +1,51 @@
+{
+  "classification": "RTK_C8_U1_CORRECTED_PARTIAL_IR_SLICE_V2_FROZEN",
+  "status": "CLASSICALLY_OPEN_PARTIAL_TUPLE_CORRECTED_AFTER_BARE_EFFECTIVE_SPLIT",
+  "supersedes_for_full_action_use": "research/RTK_C8_U1_FAMILY1_FIXED_IR_SLICE_v1.json",
+  "correction_gate": {
+    "run_id": 32566078375,
+    "artifact_id": 9474111029,
+    "artifact_digest": "sha256:f2f323b436a5aa63f59d1fe139766abda14173d160a791b4df46c546fd8d530f",
+    "script_commit": "ad101f043df9af55d179fedbbec55c29d5bb5e7b",
+    "classification": "RTK_ROUTE_B_U1_BETA0_BARE_EFFECTIVE_ACCOUNTING_PASS"
+  },
+  "literature_anchor": "arXiv:1310.6666 Eqs. (4.2)-(4.3), (5.43), (5.50)-(5.51); arXiv:1504.07357 exceptional eta1=eta2=0 surface",
+  "gravity_and_matter_frame": {
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "beta0_bare": 0,
+    "gamma1": -1,
+    "lambda_HL": null
+  },
+  "rolling_rtk_mixed_sector": {
+    "operator": "C D_i Theta_U D^i Theta_U",
+    "exact_match": "C q^2 = K_pi/(2 M_K^2) = M_Pl^2",
+    "lapse_gradient_coefficient_from_S_mix": "M_Pl^2",
+    "equivalent_beta0_eff_contribution": 2
+  },
+  "full_action_acceleration_accounting": {
+    "bare_gravity_coefficient": "(M_Pl^2/2) beta0_bare = 0",
+    "mixed_sector_coefficient": "M_Pl^2",
+    "total_lapse_gradient_coefficient": "M_Pl^2",
+    "equivalent_beta0_eff_total": 2
+  },
+  "bare_literature_relations": {
+    "family_I": "a1=kappa=1; Eq. (5.43) factorizes as (gamma1+1)[beta0_bare+2(gamma1+1)]=0, hence gamma1=-1 admits beta0_bare=0",
+    "family_II": "sigma2=4(1-a1)=0 and beta0_bare=-2(gamma1+1)=0 at a1=1,gamma1=-1",
+    "intersection_note": "The corrected bare tuple lies algebraically on both displayed exact-GR bare-gravity PPN families. This is not a full-action PPN proof because the published calculation does not include the explicit rolling RTK S_mix source."
+  },
+  "choice_provenance": {
+    "a1_kappa": "published exact-GR PPN family-I condition",
+    "a2": "structurally selected by the CI-verified canonical-affinity gate so the physical spatial metric has no sigma dependence and p_nu^m+J_A^m=0, dJ_A^m/dN=0",
+    "sigma1_sigma2": "special classical nonlinear no-extra-gravity-scalar surface from the nonprojectable U(1) Hamiltonian analysis",
+    "beta0_bare": "corrected full-action bookkeeping: the explicit rolling RTK S_mix already supplies the entire M_Pl^2 lapse-gradient target, so no additional bare gravity a_i a^i coefficient is allowed",
+    "gamma1": "canonical IR curvature normalization",
+    "lambda_HL": "intentionally unfrozen until the coupled gravity+RTK scalar constraint/rank calculation identifies the admissible same-action domain"
+  },
+  "radiative_warning": "sigma1=sigma2=0 remains classically exceptional and technically unnatural absent additional protection/RG control; C9 is not passed.",
+  "ppn_warning": "Do not reuse published pure-U1 PPN values as a certification of this full action. The explicit rolling S_mix contributes to the weak-field lapse-gradient equations and must be retained in a fresh same-action static/PPN derivation.",
+  "next_gate": "re-evaluate the coupled second-class cross-block with beta0_bare=0 and explicit S_mix; keep lambda_HL symbolic, then freeze a complete action tuple only if the generic and rolling-background ranks remain admissible"
+}
