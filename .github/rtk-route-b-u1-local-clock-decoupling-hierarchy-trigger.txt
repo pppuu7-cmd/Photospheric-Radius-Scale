@@ -1,6 +1,6 @@
-Relaunch quantitative fixed-action local-clock decoupling hierarchy after correcting only the frozen-IR JSON schema prerequisite.
+Relaunch quantitative fixed-action local-clock decoupling hierarchy after correcting the frozen IR and scalar-action JSON schema prerequisites only.
 Scale dictionary run: 32568333920.
 M_K(z=0)=1.1681315109161161 Mpc^-1 from artifact 9474667297, digest sha256:7337f02e8f217e22decf8b425e87e9f730cb3189fa1baad981c8b5ae566f74e8.
 Worker commit: c96d2465436228e545159ebd3ed4cf52628a62a8
-Corrected workflow commit: a12993c103f7e4e82a3fbe76e0f8c61f46400f04
-Prior run 32578154026 failed before the worker due solely to KeyError on top-level lambda_HL.
+Corrected workflow commit: 2b14dae76feabbec0f9a774130060cce9e129e6d
+Prior runs 32578154026 and 32578371945 failed before the scientific worker due only to JSON schema assertions.
