@@ -1,0 +1,35 @@
+{
+  "classification": "RTK_C8_U1_FIXED_SHIFT_SYMMETRIC_SCALAR_ACTION_V1",
+  "status": "FIXED_SCALAR_FUNCTIONS_FOR_PRODUCTION_AND_STATIC_GATES",
+  "kinetic_invariant": "X_U = 1/2 [Theta_U^2 - D_i Sigma D^i Sigma]",
+  "Theta_U": "[dot Sigma-(N^i-N D^i nu)D_i Sigma]/N",
+  "field_normalization": {
+    "X_star": "arbitrary positive constant corresponding to a constant Sigma field rescaling",
+    "u": "sqrt(X_U/X_star)",
+    "production_map": "u=1+r, where r=x/sqrt(1+lambda_D x^2)"
+  },
+  "dbi_px": {
+    "P_8piG_lambda_nonzero": "2 mu_K^2/lambda_D * [1-sqrt(1-lambda_D (sqrt(X_U/X_star)-1)^2)]",
+    "P_8piG_lambda_zero_limit": "mu_K^2 (sqrt(X_U/X_star)-1)^2",
+    "covariant_physical_P": "M_Pl^2 times P_8piG",
+    "shift_symmetry": true,
+    "reconstruction_script": "rtk/route_b_u1_dbi_px_reconstruction_gate.py",
+    "exact_target": "P=p, 2X P_X-P=rho, c_s^2=dp/d rho=c_a^2 on the production branch"
+  },
+  "mixed_operator": {
+    "form": "C(X_U) D_i Theta_U D^i Theta_U",
+    "C": "M_Pl^2/(2 X_U)",
+    "production_identity": "D_i Sigma_bar=0 implies 2X_U=q^2, so C q^2=M_Pl^2 exactly",
+    "quadratic_note": "delta C multiplies an already quadratic (D Theta_U)^2 structure and therefore does not alter the previously matched quadratic kernel"
+  },
+  "domain": {
+    "production_branch": "u=1+r>0 with X_U>0",
+    "C_pole_at_X_zero": "outside the frozen rolling production branch; compact-object/static-boundary approach to X_U=0 remains a separate nonlinear gate"
+  },
+  "non_claims": [
+    "does not fix higher-spatial-derivative gravity UV couplings",
+    "does not protect sigma1=sigma2=0 radiatively",
+    "does not establish the EFT cutoff or compact-object regularity near X_U=0"
+  ],
+  "next_gate": "prove exact consistency of Sigma=q t with D_i Sigma=0 for time-independent static N,g and zero invariant shift using both P(X_U) and C(X_U) terms; then use the result in the static O(4) beta_PPN gate"
+}
