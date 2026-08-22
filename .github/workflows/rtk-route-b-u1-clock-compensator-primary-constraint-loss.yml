@@ -1,0 +1,50 @@
+name: RTK Route-B U1 clock compensator primary-constraint loss
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-clock-compensator-primary-constraint-loss-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run primary-constraint loss theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_clock_compensator_primary_constraint_loss_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_clock_compensator_primary_constraint_loss_provenance.txt
+          python3 rtk/route_b_u1_clock_compensator_primary_constraint_loss_gate.py | tee u1_clock_compensator_primary_constraint_loss.log
+          grep -q '^RTK_ROUTE_B_U1_CLOCK_COMPENSATOR_PRIMARY_CONSTRAINT_LOSS ' u1_clock_compensator_primary_constraint_loss.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_clock_compensator_primary_constraint_loss_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_CLOCK_COMPENSATOR_PRIMARY_CONSTRAINT_LOSS'
+          assert r['status_scope'].startswith('BLACK_SCOPED_NAIVE_SIGMA_FX_COMPENSATOR')
+          assert r['generic_count_if_no_accidental_new_constraints']['d3_dof']==4
+          print('U1_CLOCK_COMPENSATOR_PRIMARY_CONSTRAINT_LOSS_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-clock-compensator-primary-constraint-loss
+          path: |
+            u1_clock_compensator_primary_constraint_loss.log
+            u1_clock_compensator_primary_constraint_loss_result.json
+            u1_clock_compensator_primary_constraint_loss_provenance.txt
+            rtk/route_b_u1_clock_compensator_primary_constraint_loss_gate.py
+          if-no-files-found: error
