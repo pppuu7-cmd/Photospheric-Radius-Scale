@@ -1,0 +1,6 @@
+launch_utc: 2026-08-22T10:46:00Z
+representative_commit: 3f05b99d4f244755c2eeec627779c6d1bfbe3e61
+static_bridge_script_commit: 657ffca002993984681d9c39c3d101616b3bdde0
+script_commit: 2ade3d9018329473676cd95f74dcbd79c8c40205
+workflow_commit: 9bd08a2910fff6ae61999b62790c4cf72f21f6b9
+reason: after proving quadratic static equivalence, assemble the complete literature O(2) Hamiltonian, spatial dynamical and A-constraint system on the explicit-S_mix v3 action and test G_N plus gamma_PPN without importing full 1PN PPN values.
