@@ -55,9 +55,11 @@ assert sp.simplify(smin2-smin2_rat)==0
 Rrank=sp.simplify(Cm/sigma)
 Lcos=sp.simplify(99*kcos**2)
 Ulocal=sp.simplify(klocal**2/99)
-# Exact algebraic equivalence of the pure scale-window condition.
+# Exact algebraic equivalence of the pure scale-window condition.  Compare by
+# simplification rather than literal expression-tree equality.
 ratio_condition=sp.simplify(Ulocal-Lcos)
-assert sp.factor(ratio_condition)==(klocal-99*kcos)*(klocal+99*kcos)/99
+ratio_factored=(klocal-99*kcos)*(klocal+99*kcos)/99
+assert sp.simplify(ratio_condition-ratio_factored)==0
 
 # Entrywise optional bound: if |K_ij|<=kappa, ||K||2<=||K||F<=2 kappa.
 kappa=sp.symbols('kappa', positive=True, finite=True)
