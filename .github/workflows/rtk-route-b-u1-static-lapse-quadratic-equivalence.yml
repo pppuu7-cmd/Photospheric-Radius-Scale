@@ -1,0 +1,58 @@
+name: RTK Route-B U1 static lapse quadratic equivalence
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-lapse-quadratic-equivalence-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  static-bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require corrected IR representative v3
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
+          g=t['gravity_and_matter_frame']
+          assert g['a1']==1 and g['a2']==0 and g['kappa']==1
+          assert g['sigma1']==0 and g['sigma2']==0
+          assert g['beta0_bare']==0 and g['gamma1']==-1 and g['lambda_HL']==1
+          assert t['rolling_rtk_mixed_sector']['beta0_eff_total']==2
+          print('U1_STATIC_V3_PREREQ_PASS')
+          PY
+      - name: Run static lapse bridge theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_lapse_quadratic_equivalence_gate.py
+          python3 rtk/route_b_u1_static_lapse_quadratic_equivalence_gate.py | tee u1_static_lapse_bridge.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_LAPSE_QUADRATIC_EQUIVALENCE_PASS' u1_static_lapse_bridge.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_lapse_quadratic_equivalence_result.json'))
+          assert r['status_scope']=='STATIC_LINEAR_PRINCIPAL_BRIDGE_GREEN_ONLY'
+          assert r['first_nonlinear_action_difference']=='-2*Mpl2*X*n'
+          print('U1_STATIC_LAPSE_BRIDGE_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-static-lapse-quadratic-equivalence
+          path: |
+            u1_static_lapse_bridge.log
+            u1_static_lapse_quadratic_equivalence_result.json
+          if-no-files-found: error
