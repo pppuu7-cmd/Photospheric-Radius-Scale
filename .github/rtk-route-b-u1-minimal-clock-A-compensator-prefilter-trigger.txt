@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:01:00Z
+launch_europe_helsinki: 2026-08-22T23:01:00+03:00
+reason: parallel theory gate while frozen B9 LCDM recenter-v6 stationarity runs; test exact same-clock FLRW A-source compensation before spending on full PPN/C9.
+frozen_target: rtk-class-build:research/RTK_U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER_v1.json
