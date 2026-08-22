@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-22T20:52:00Z
-reason: capture successful Dirac Schur reduction, live B9 LCDM recenter-v6 half-scale stationarity, regular-slice cross-support gate, and effective coupling transfer gate.
+trigger_utc: 2026-08-22T21:02:00Z
+reason: capture successful regular-slice cross-support rerun and effective-coupling transfer, primary-mixing Dirac audit launch, and live B9 half-scale Hessian.
