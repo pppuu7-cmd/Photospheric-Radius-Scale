@@ -29,7 +29,9 @@ beta0_eff=4.
 import json
 import sympy as sp
 
-Mpl2,MK2,q,C,beta_bare=sp.symbols('Mpl2 MK2 q C beta_bare', positive=True, finite=True, real=True)
+Mpl2,MK2,q,C=sp.symbols('Mpl2 MK2 q C', positive=True, finite=True, real=True)
+# beta0_bare must be allowed to vanish; do not declare it strictly positive.
+beta_bare=sp.symbols('beta_bare', finite=True, real=True)
 Kpi=2*Mpl2*MK2
 mix_required=sp.simplify(Kpi/(2*MK2))
 assert mix_required==Mpl2
