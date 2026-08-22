@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-22T20:44:00Z
-reason: capture hardened elliptic compensator canonical-affinity rerun and live B9 LCDM recenter-v6 half-scale stationarity.
+trigger_utc: 2026-08-22T20:48:00Z
+reason: capture successful elliptic canonical-affinity rerun, newly launched elliptic Dirac Schur reduction, and live B9 LCDM recenter-v6 half-scale stationarity.
