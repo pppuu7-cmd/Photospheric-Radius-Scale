@@ -1,0 +1,49 @@
+name: RTK Route-B U1 static branch-B existence theorem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-branchb-existence-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run exact branch-B existence theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_branchb_existence_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_static_branchb_existence_provenance.txt
+          python3 rtk/route_b_u1_static_branchb_existence_gate.py | tee u1_static_branchb_existence.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_BRANCHB_EXISTENCE_UNIQUENESS_PASS ' u1_static_branchb_existence.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_branchb_existence_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_STATIC_BRANCHB_EXISTENCE_UNIQUENESS_PASS'
+          assert r['z0']['N_lower_constant_q']<1
+          assert r['smooth_zero_flux_switch']['N_1_threshold_Mpc_inv']>0
+          print('U1_BRANCHB_EXISTENCE_ARTIFACT_PASS',r['z0']['N_lower_constant_q'],r['smooth_zero_flux_switch']['N_1_threshold_Mpc_inv'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-branchb-existence
+          path: |
+            u1_static_branchb_existence.log
+            u1_static_branchb_existence_result.json
+            u1_static_branchb_existence_provenance.txt
+          if-no-files-found: error
