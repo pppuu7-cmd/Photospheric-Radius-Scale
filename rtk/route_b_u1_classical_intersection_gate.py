@@ -50,19 +50,22 @@ a1,kappa,beta0,gamma1 = sp.symbols('a1 kappa beta0 gamma1', real=True)
 Omega,Lambda_g = sp.symbols('Omega Lambda_g', real=True)
 
 # Same invariant operator basis after eta0 normalization and background-constant match.
-dictionary = {eta0:1, Omega:Lambda_g, eta1:sigma1, eta2:sigma2}
-assert sp.simplify(eta1.subs(dictionary)-sigma1)==0
-assert sp.simplify(eta2.subs(dictionary)-sigma2)==0
+dictionary = {eta0:sp.Integer(1), Omega:Lambda_g, eta1:sigma1, eta2:sigma2}
+assert eta1.subs(dictionary) == sigma1
+assert eta2.subs(dictionary) == sigma2
 
 # Displayed exact-GR PPN family I plus the Hamiltonian no-gravity-scalar subset.
-candidate={a1:1,kappa:1,sigma1:0,sigma2:0,beta0:2,gamma1:-1}
-assert sp.simplify((a1-1).subs(candidate))==0
-assert sp.simplify((kappa-1).subs(candidate))==0
-assert sp.simplify(sigma2.subs(candidate))==0
-assert sp.simpl(eta1.subs(dictionary).subs(candidate))==0
-assert sp.simpl(eta2.subs(dictionary).subs(candidate))==0
-assert sp.simpl(beta0.subs(candidate)-2)==0
-assert sp.simpl(gamma1.subs(candidate)+1)==0
+candidate={
+    a1:sp.Integer(1), kappa:sp.Integer(1), sigma1:sp.Integer(0),
+    sigma2:sp.Integer(0), beta0:sp.Integer(2), gamma1:sp.Integer(-1)
+}
+assert (a1-1).subs(candidate) == 0
+assert (kappa-1).subs(candidate) == 0
+assert sigma2.subs(candidate) == 0
+assert eta1.subs(dictionary).subs(candidate) == 0
+assert eta2.subs(dictionary).subs(candidate) == 0
+assert (beta0-2).subs(candidate) == 0
+assert (gamma1+1).subs(candidate) == 0
 
 out={
   'classification':'RTK_ROUTE_B_U1_CLASSICAL_PPN_DOF_INTERSECTION_OPEN',
