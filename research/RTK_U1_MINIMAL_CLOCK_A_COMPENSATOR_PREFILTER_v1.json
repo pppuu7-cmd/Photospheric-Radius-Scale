@@ -1,0 +1,39 @@
+{
+  "classification": "RTK_U1_MINIMAL_CLOCK_A_COMPENSATOR_PREFILTER_V1",
+  "status": "FROZEN_BEFORE_CI_PREFILTER_RESULT",
+  "frozen_at_utc": "2026-08-22T20:00:00Z",
+  "frozen_at_europe_helsinki": "2026-08-22T23:00:00+03:00",
+  "parent_obstruction": "BLACK_SCOPED_PUBLISHED_UNIVERSAL_MATTER_NO_COMPENSATOR_CLASS",
+  "parent_trilemma_run_id": 32592531836,
+  "parent_trilemma_artifact_id": 9480698523,
+  "candidate": {
+    "matter_frame": "retain family-I a1=1,a2=0 for ordinary matter",
+    "gravity_scalar_surface": "retain sigma1=sigma2=0",
+    "rtk_clock": "retain frozen P(X_U)+C(X_U) with X_U>0",
+    "new_term": "Delta L_M=-sigma rho_comp(X_U)",
+    "sigma": "(A-Acal)/N",
+    "rho_comp": "rho_m0*x(X_U)/x0 + rho_r0*[x(X_U)/x0]^(4/3)",
+    "x_of_X": "with u=sqrt(X_U/X_star), x=(u-1)/sqrt(1-lambda_D*(u-1)^2)"
+  },
+  "preregistered_checks": [
+    "exact inverse clock map x(X_U(a))=x0/a^3",
+    "exact rho_comp(X_U(a))=rho_m0/a^3+rho_r0/a^4",
+    "Delta J_A=-2 rho_comp cancels ordinary homogeneous J_A=+2 rho_H",
+    "conditional sigma=0 homogeneous reduced N/g/Sigma direct variations vanish while A/phi source variations cancel ordinary sources",
+    "compute dot(phi)-dot(Sigma) velocity Hessian and decide whether the previous DOF certificate transfers"
+  ],
+  "decision_rule": {
+    "green_background_prefilter": "all exact reconstruction/source-cancellation identities pass",
+    "dof_transfer_green": "only if the new operator preserves the assumptions of the previous fixed-action constraint/velocity-support proof",
+    "yellow_recount_required": "background prefilter passes but the new operator changes the prepotential-clock velocity structure",
+    "black_candidate": "exact source cancellation fails or the frozen production mapping cannot be reconstructed"
+  },
+  "source_script": "rtk/route_b_u1_minimal_clock_A_compensator_prefilter_gate.py",
+  "source_script_commit": "02f60a8346303883f6d21fc79fa2affd24ddd808",
+  "required_next_gate_if_yellow": "fresh Dirac/Hamiltonian count on the same frozen candidate, plus full homogeneous equation verification, before any PPN/GW/radiative/cutoff promotion",
+  "non_claims": [
+    "no extra physical scalar is inferred from a Hessian block alone",
+    "no PPN or equivalence-principle pass is implied",
+    "no radiative, strong-coupling, UV or compact-object pass is implied"
+  ]
+}
