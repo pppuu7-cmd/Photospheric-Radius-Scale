@@ -1,0 +1,2 @@
+launch_utc: 2026-08-22T17:44:00Z
+reason: test the full fixed scalar's O3 moving-source clock current on the regular family-I lambda_HL != 1 domain before treating published alpha1=alpha2=0 as applicable to the fixed action.
