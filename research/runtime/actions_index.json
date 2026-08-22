@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-22T10:25:12.727847+00:00",
+  "generated_at_utc": "2026-08-22T10:26:43.088394+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-22T10:26:33Z",
+      "display_title": "Refresh RTK Actions index after coupled DOF launch",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "75127fc1659956cfbe7929959512aa09dcc4bc22",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32567611327",
+      "id": 32567611327,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 86,
+      "status": "in_progress",
+      "updated_at": "2026-08-22T10:26:38Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-22T10:26:05Z",
+      "display_title": "Launch U1 classical coupled DOF certification",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "7525cda3c6e5d9b722b15a1faef218c7d01fcc28",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32567593997",
+      "id": 32567593997,
+      "name": "RTK Route-B U1 classical coupled DOF certification",
+      "run_attempt": 1,
+      "run_number": 1,
+      "status": "completed",
+      "updated_at": "2026-08-22T10:26:37Z",
+      "workflow_id": 339961972
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-22T10:25:04Z",
       "display_title": "Refresh RTK Actions index after rolling-rank launch",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 85,
-      "status": "in_progress",
-      "updated_at": "2026-08-22T10:25:08Z",
+      "status": "completed",
+      "updated_at": "2026-08-22T10:25:16Z",
       "workflow_id": 336560028
     },
     {
@@ -1570,38 +1602,6 @@
       "status": "completed",
       "updated_at": "2026-08-21T19:59:37Z",
       "workflow_id": 336560028
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-21T19:59:05Z",
-      "display_title": "Launch C8 gradK fixed-Wilson gate",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "bc272a410e6d44de2665ec3a48770ddb53fbeee5",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32521251025",
-      "id": 32521251025,
-      "name": "RTK Route-B gradK fixed-Wilson gate",
-      "run_attempt": 1,
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-21T19:59:27Z",
-      "workflow_id": 339650602
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-21T19:40:52Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "38116027b3f08d9ac049d540d157a9789132cb57",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32519704121",
-      "id": 32519704121,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 213,
-      "status": "completed",
-      "updated_at": "2026-08-21T19:41:11Z",
-      "workflow_id": 335879021
     }
   ],
   "schema": "RTK_ACTIONS_INDEX_V2",
