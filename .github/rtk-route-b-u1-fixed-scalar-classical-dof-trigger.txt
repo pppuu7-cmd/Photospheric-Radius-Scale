@@ -1,0 +1,8 @@
+launch_utc: 2026-08-22T11:24:30Z
+fixed_scalar_action_commit: a33c9708ab76671042d90d33ba9d0485101e5927
+fixed_cx_velocity_commit: 68213828c3b3ed5177bd84d09fa5c09f04afdf68
+regular_rank_slice_commit: edb7f61feee61d00dfef32979c235825271f3b21
+fixed_cx_rolling_rank_commit: 14ba43704e796e035b41512cc45ddaa05e36367b
+dof_script_commit: 9cb9bf7cb25250c47555fc11d0575c06ec988ed2
+workflow_commit: f0e23658386d67b42b4c45d3e8750e5b0490cdcf
+reason: recertify the classical 2-tensor-plus-1-RTK-scalar DOF count specifically for the fixed P(X_U), C(X_U)=M_Pl^2/(2X_U) action on the regular X_U>0 domain, replacing the invalid X=0 generic slice used before C(X) was frozen.
