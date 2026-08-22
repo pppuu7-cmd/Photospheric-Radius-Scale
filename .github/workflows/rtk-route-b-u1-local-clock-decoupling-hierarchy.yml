@@ -1,0 +1,56 @@
+name: RTK Route-B U1 local clock decoupling hierarchy
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-local-clock-decoupling-hierarchy-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  hierarchy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Require fixed action and run quantitative hierarchy gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          ir=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
+          sc=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert ir['lambda_HL']==1.0 and ir['sigma1']==0.0 and ir['sigma2']==0.0
+          assert sc['domain']['production_branch']=='X_U > 0'
+          assert sc['C_of_X_U']=='M_Pl^2/(2 X_U)'
+          print('U1_FIXED_ACTION_PREREQUISITES_PASS')
+          PY
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_local_clock_decoupling_provenance.txt
+          python3 -m py_compile rtk/route_b_u1_local_clock_decoupling_hierarchy_gate.py
+          python3 rtk/route_b_u1_local_clock_decoupling_hierarchy_gate.py | tee u1_local_clock_decoupling_hierarchy.log
+          grep -q '^RTK_ROUTE_B_U1_LOCAL_CLOCK_DECOUPLING_HIERARCHY_PASS ' u1_local_clock_decoupling_hierarchy.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_local_clock_decoupling_hierarchy_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_LOCAL_CLOCK_DECOUPLING_HIERARCHY_PASS'
+          assert r['scale_dictionary_provenance']['run_id']==32568333920
+          assert r['rows']['1_AU']['epsilon_clock_2MK2_over_k2']<1e-20
+          print('U1_LOCAL_CLOCK_DECOUPLING_ARTIFACT_PASS',r['rows']['1_AU']['epsilon_clock_2MK2_over_k2'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-local-clock-decoupling-hierarchy
+          path: |
+            u1_local_clock_decoupling_hierarchy.log
+            u1_local_clock_decoupling_hierarchy_result.json
+            u1_local_clock_decoupling_provenance.txt
+          if-no-files-found: error
