@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T09:27:00Z
+trigger_utc: 2026-08-22T09:42:00Z
 iteration_started_local: 2026-08-22T12:20:00+03:00
 iteration_started_utc: 2026-08-22T09:20:00Z
-reason: refresh live Actions index after launching B9 RTK fresh-tree certification and B9 LCDM recenter-v3; capture B4 target-v3 status.
+reason: capture B4 recenter-v4 launch, U1 Eq543 fixed-slice gate, and current B9 RTK/LCDM heavy-run status.
