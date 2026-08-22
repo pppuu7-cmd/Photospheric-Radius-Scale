@@ -1,0 +1,45 @@
+{
+  "status": "FROZEN_AFTER_LCDM_RECENTER_V3_IMPROVEMENT_BEFORE_V4_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_run_id": 32564665932,
+  "parent_artifact_id": 9474754868,
+  "parent_artifact_digest": "sha256:9a41b452884a76355bdf81e913f95013524bc926d3d83ee91c762f8742ac9fe6",
+  "parent_center_S_B9": 1058.5610732510386,
+  "best_exact_S_B9": 1058.5031369873836,
+  "improvement_from_parent_center": 0.05793626365493765,
+  "best_label": "cross_3_5_+1_+1",
+  "center": {
+    "As": 2.1045029109474964e-09,
+    "Ob": 0.04847523676526571,
+    "Om": 0.25950316605972396,
+    "h": 0.67979951374,
+    "lam": 0.0,
+    "ns": 0.9658779721177839,
+    "zre": 7.789806125603675
+  },
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "fresh_tree_replay_abs_tolerance": 2e-06,
+  "decision_frozen_before_next_stationarity_scores": true,
+  "parent_hessian_positive_definite_eff": false,
+  "parent_eigenvalues_eff": [
+    -0.03722378011662623,
+    -0.008015859856134988,
+    0.011448414170653932,
+    0.22925111014121674,
+    3.0253647793805785,
+    7.105185257221347
+  ],
+  "decision_reason": "parent v3 exact improvement exceeds the preregistered 0.005 threshold, so recenter is mandatory regardless of parent Hessian sign",
+  "next_gate": "run a fresh exact base Hessian at this v4 LCDM center; if recenter-clear and positive definite advance to independent half-scale, otherwise follow the same frozen recenter/ray decision tree"
+}
