@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T10:36:00Z
-iteration_started_local: 2026-08-22T12:13:00+03:00
-iteration_started_utc: 2026-08-22T09:13:00Z
-reason: capture corrected beta0 accounting rerun, U1 rank/source-support gates, and current B4/B9 heavy statuses.
+trigger_utc: 2026-08-22T10:21:30Z
+iteration_started_local: 2026-08-22T13:21:00+03:00
+iteration_started_utc: 2026-08-22T10:21:00Z
+reason: capture U1 generic coupled-rank slice gate plus current B4-v4 and B9 heavy statuses before advancing rolling-background rank.
