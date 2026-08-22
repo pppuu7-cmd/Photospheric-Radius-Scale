@@ -1,0 +1,56 @@
+name: RTK Route-B U1 fixed C(X) velocity support
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-fixed-cx-velocity-support-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  velocity-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require repaired P(X) reconstruction and fixed scalar action
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_dbi_px_reconstruction_gate.py | tee u1_px_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_DBI_PX_RECONSTRUCTION_PASS' u1_px_prereq.log
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert t['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
+          print('U1_FIXED_CX_ACTION_PREREQ_PASS')
+          PY
+      - name: Run fixed C(X) velocity-support theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_fixed_cx_velocity_support_gate.py
+          python3 rtk/route_b_u1_fixed_cx_velocity_support_gate.py | tee u1_fixed_cx_velocity.log
+          grep -q 'RTK_ROUTE_B_U1_FIXED_CX_VELOCITY_SUPPORT_PASS' u1_fixed_cx_velocity.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_fixed_cx_velocity_support_result.json'))
+          assert r['status_scope']=='PRIMARY_VELOCITY_SUPPORT_GREEN_FOR_FIXED_CX'
+          print('U1_FIXED_CX_VELOCITY_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-fixed-cx-velocity-support
+          path: |
+            u1_px_prereq.log
+            u1_fixed_cx_velocity.log
+            u1_fixed_cx_velocity_support_result.json
+          if-no-files-found: error
