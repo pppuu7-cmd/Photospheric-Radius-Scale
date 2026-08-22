@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:20:00Z
+reason: after background, primary-degeneracy and quadratic kinetic passes, certify that the coordinate compensator is lower spatial order than the fixed RTK/U1 principal constraint symbol before finite-k rank evaluation.
+parent_primary_run_id: 32595918885
+parent_quadratic_run_id: 32596096192
