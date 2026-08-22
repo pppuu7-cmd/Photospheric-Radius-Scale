@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T17:47:00Z
-iteration_started_local: 2026-08-22T20:21:00+03:00
-iteration_started_utc: 2026-08-22T17:21:00Z
-reason: refresh moving-source O3 clock gate and heavy B4/B9 statuses before C9 strong-coupling/radiative continuation.
+trigger_utc: 2026-08-22T18:50:00Z
+iteration_started_local: 2026-08-22T21:50:00+03:00
+iteration_started_utc: 2026-08-22T18:50:00Z
+reason: cross-chat reconciliation audit; capture current B4-v4 half-resolution, B9-LCDM-v5, moving-O3 failure provenance, and U1 family-I FLRW A-constraint status before updating durable summary.
