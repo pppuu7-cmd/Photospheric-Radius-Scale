@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:16:00Z
+reason: after primary-degeneracy rescue success, verify that -sigma F_Sigma(Sigma) creates constraint mixing but no new quadratic kinetic eigenvalue before full finite-k Poisson-rank work.
+parent_run_id: 32595918885
+parent_artifact_id: 9481536547
