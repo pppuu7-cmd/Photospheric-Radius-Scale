@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T20:10:00Z
+launch_europe_helsinki: 2026-08-22T23:10:00+03:00
+reason: test whether the successful background clock-dependent sigma compensator preserves the exceptional U1 primary degeneracy needed to remove the gravity scalar.
+parent_prefilter_run_id: 32595534076
+parent_gauge_pair_run_id: 32595673787
