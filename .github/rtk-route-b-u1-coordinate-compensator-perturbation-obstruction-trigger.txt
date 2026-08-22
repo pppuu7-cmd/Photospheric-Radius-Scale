@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:25:00Z
+launch_local: 2026-08-22T23:25:00+03:00
+reason: high-k rank is preserved but coordinate-only F_Sigma background compensation must be tested against independent linear matter perturbations before any cosmological-completion claim.
+source: rtk-class-build:rtk/route_b_u1_coordinate_compensator_perturbation_obstruction_gate.py
