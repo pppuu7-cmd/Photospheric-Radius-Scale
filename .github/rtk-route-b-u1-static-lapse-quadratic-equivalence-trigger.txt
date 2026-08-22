@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T10:39:00Z
+representative_commit: 3f05b99d4f244755c2eeec627779c6d1bfbe3e61
+script_commit: 657ffca002993984681d9c39c3d101616b3bdde0
+workflow_commit: 449046b90e41b64a13dfacb95debd3192c5d7aa5
+reason: delimit exactly where the explicit rolling S_mix can be represented by beta0_eff=2 in the static weak-field sector: quadratic/Newtonian principal action only, not cubic/1PN PPN.
