@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T17:29:00Z
+base_run_id: 32565150038
+ray_run_id: 32578063680
+ray_artifact_id: 9477266391
+reason: v4 base is recenter-clear but has one soft negative Hessian mode; exact rays through |alpha|=4 show max descent 0.00020957288847966993 < 0.005, so run independent scale-0.5 Hessian at unchanged center.
