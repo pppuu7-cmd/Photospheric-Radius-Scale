@@ -1,0 +1,44 @@
+{
+  "status": "FROZEN_AFTER_LCDM_RECENTER_V2_IMPROVEMENT_BEFORE_V3_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_run_id": 32538512490,
+  "parent_artifact_id": 9467741231,
+  "parent_artifact_digest": "sha256:0282d401e0e1c51ccdadf46701229263e76b98edc430e1af17c9a9006743b3f9",
+  "parent_center_S_B9": 1058.595233025902,
+  "best_exact_S_B9": 1058.5610732510386,
+  "improvement_from_parent_center": 0.03415977486338306,
+  "best_label": "cross_0_4_+1_+1",
+  "center": {
+    "As": 2.1005029109474964e-09,
+    "Ob": 0.04847523676526571,
+    "Om": 0.25950316605972396,
+    "h": 0.67979951374,
+    "lam": 0.0,
+    "ns": 0.9658779721177839,
+    "zre": 7.719806125603674
+  },
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "fresh_tree_replay_abs_tolerance": 2e-06,
+  "decision_frozen_before_next_stationarity_scores": true,
+  "parent_hessian_positive_definite_eff": false,
+  "parent_eigenvalues_eff": [
+    -0.03269962570655514,
+    0.00462288157058642,
+    0.028274994110197835,
+    0.23250442844048333,
+    3.0169961549450375,
+    7.139084808187453
+  ],
+  "next_gate": "run a fresh exact base Hessian at this v3 LCDM center; if recenter-clear and positive definite advance to independent half-scale, otherwise follow the same frozen recenter/ray decision tree"
+}
