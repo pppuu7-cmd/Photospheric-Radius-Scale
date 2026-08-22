@@ -1,0 +1,6 @@
+launch_utc: 2026-08-22T11:03:00Z
+scalar_action_commit: a33c9708ab76671042d90d33ba9d0485101e5927
+reconstruction_script_commit: 59c2a1c835b05e77280718db7e23c00f323686d7
+script_commit: 2615ade2283ee4467c581448c5684cdf869be699
+workflow_commit: c0e00b72c97d6374169e12693df7a7a9c761d880
+reason: prove that the newly fixed shift-symmetric P(X_U)+C(X_U)(DTheta_U)^2 scalar action admits Sigma=q t with no local static deltaSigma profile for arbitrary static lapse and zero invariant shift.
