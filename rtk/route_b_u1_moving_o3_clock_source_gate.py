@@ -34,7 +34,7 @@ import sympy as sp
 # gamma=1: (1-lambda)(2d-1)=0.
 lam,d=sp.symbols('lambda_HL d', finite=True, real=True)
 momentum=sp.factor((1-lam)*(2*d-1))
-assert momentum==(1-lam)*(2*d-1)
+assert sp.simplify(momentum-(1-lam)*(2*d-1))==0
 d_regular=sp.Rational(1,2)
 
 # Shift coefficients c=-4*kappa=-4 and d=1/2.
