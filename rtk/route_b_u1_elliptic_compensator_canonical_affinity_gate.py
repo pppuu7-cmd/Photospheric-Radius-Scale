@@ -44,22 +44,22 @@ pnu_aux=sp.simplify(-sp.diff(Haux,nudot))
 JA_aux=sp.simplify(sp.diff(Haux,A))
 pnu_tot=sp.simplify(-sp.diff(Htot,nudot))
 JA_tot=sp.simplify(sp.diff(Htot,A))
-assert JA_m==-H0 and pnu_m==H0
-assert JA_aux==Q and pnu_aux==-Q
+assert sp.simplify(JA_m+H0)==0 and sp.simplify(pnu_m-H0)==0
+assert sp.simplify(JA_aux-Q)==0 and sp.simplify(pnu_aux+Q)==0
 assert sp.simplify(pnu_tot+JA_tot)==0
 assert sp.simplify(sp.diff(JA_tot,N))==0
 
 # The new Hamiltonian remains affine in A and nudot; no new A/nudot Hessian.
-assert sp.diff(Htot,A,A)==0
-assert sp.diff(Htot,nudot,nudot)==0
-assert sp.diff(Htot,A,nudot)==0
+assert sp.simplify(sp.diff(Htot,A,A))==0
+assert sp.simplify(sp.diff(Htot,nudot,nudot))==0
+assert sp.simplify(sp.diff(Htot,A,nudot))==0
 
 # Auxiliary primary constraints p_Q=p_Lambda=0 generate the two secondaries.
 # C_Q=dH/dQ=(A-Acal)+ell Lambda; C_L=dH/dLambda=ell Q-H0.
 CQ=sp.simplify(sp.diff(Haux,Q))
 CL=sp.simplify(sp.diff(Haux,Lam))
-assert CQ==A-Acal+Lam*ell
-assert CL==Q*ell-H0
+assert sp.simplify(CQ-(A-Acal+Lam*ell))==0
+assert sp.simplify(CL-(Q*ell-H0))==0
 
 # Poisson matrix on (pQ,pLambda,CQ,CL); canonical signs only affect orientation.
 M=sp.Matrix([
@@ -68,17 +68,17 @@ M=sp.Matrix([
     [0,ell,0,0],
     [ell,0,0,0],
 ])
-assert sp.factor(M.det())==ell**4
+assert sp.simplify(sp.factor(M.det())-ell**4)==0
 
 # Solve the auxiliary branch algebraically.
 solQ=sp.solve(sp.Eq(CL,0),Q)[0]
 solLam=sp.solve(sp.Eq(CQ,0),Lam)[0]
-assert solQ==H0/ell
-assert solLam==(-A+Acal)/ell
+assert sp.simplify(solQ-H0/ell)==0
+assert sp.simplify(solLam-(-A+Acal)/ell)==0
 JA_on_aux=sp.simplify(JA_tot.subs(Q,solQ))
-assert JA_on_aux==H0*(1/ell-1)
+assert sp.simplify(JA_on_aux-H0*(1/ell-1))==0
 assert sp.simplify(JA_on_aux.subs(ell,1))==0
-assert sp.limit(JA_on_aux,ell,sp.oo)==-H0
+assert sp.simplify(sp.limit(JA_on_aux,ell,sp.oo)+H0)==0
 
 out={
   'classification':'RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_CANONICAL_AFFINITY_PASS',
