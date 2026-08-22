@@ -1,0 +1,81 @@
+name: RTK Route-B U1 fixed-scalar classical DOF
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-fixed-scalar-classical-dof-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  fixed-action-dof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require fixed scalar action
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_dbi_px_reconstruction_gate.py | tee u1_px_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_DBI_PX_RECONSTRUCTION_PASS' u1_px_prereq.log
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert t['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
+          print('U1_FIXED_SCALAR_ACTION_V1_PASS')
+          PY
+      - name: Recheck fixed-action primary and Noether support
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_fixed_cx_velocity_support_gate.py | tee u1_fixed_cx_velocity.log
+          grep -q 'RTK_ROUTE_B_U1_FIXED_CX_VELOCITY_SUPPORT_PASS' u1_fixed_cx_velocity.log
+          python3 rtk/route_b_u1_rtk_shift_noether_identity_gate.py | tee u1_shift_noether.log
+          grep -q 'RTK_ROUTE_B_U1_RTK_SHIFT_NOETHER_IDENTITY_PASS' u1_shift_noether.log
+          python3 rtk/route_b_u1_rtk_crossblock_source_support_gate.py | tee u1_crossblock_support.log
+          grep -q 'RTK_ROUTE_B_U1_RTK_CROSSBLOCK_SOURCE_SUPPORT_PASS' u1_crossblock_support.log
+      - name: Recheck regular X-positive rank support
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_fixed_scalar_regular_rank_slice_gate.py | tee u1_regular_rank_slice.log
+          grep -q 'RTK_ROUTE_B_U1_FIXED_SCALAR_REGULAR_RANK_SLICE_PASS' u1_regular_rank_slice.log
+          python3 rtk/route_b_u1_fixed_cx_rolling_rank_gate.py | tee u1_fixed_cx_rolling_rank.log
+          grep -q 'RTK_ROUTE_B_U1_FIXED_CX_ROLLING_RANK_PASS' u1_fixed_cx_rolling_rank.log
+      - name: Run fixed-action classical DOF recertification
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_fixed_scalar_classical_dof_gate.py
+          python3 rtk/route_b_u1_fixed_scalar_classical_dof_gate.py | tee u1_fixed_scalar_dof.log
+          grep -q 'RTK_ROUTE_B_U1_FIXED_SCALAR_CLASSICAL_DOF_PASS' u1_fixed_scalar_dof.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_fixed_scalar_classical_dof_result.json'))
+          assert r['d3_total_dof']==3
+          assert r['status_scope']=='CLASSICAL_FIXED_ACTION_DOF_GREEN_X_POSITIVE'
+          print('U1_FIXED_SCALAR_CLASSICAL_DOF_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-fixed-scalar-classical-dof
+          path: |
+            u1_px_prereq.log
+            u1_fixed_cx_velocity.log
+            u1_shift_noether.log
+            u1_crossblock_support.log
+            u1_regular_rank_slice.log
+            u1_fixed_cx_rolling_rank.log
+            u1_fixed_scalar_dof.log
+            u1_fixed_cx_velocity_support_result.json
+            u1_fixed_scalar_regular_rank_slice_result.json
+            u1_fixed_cx_rolling_rank_result.json
+            u1_fixed_scalar_classical_dof_result.json
+          if-no-files-found: error
