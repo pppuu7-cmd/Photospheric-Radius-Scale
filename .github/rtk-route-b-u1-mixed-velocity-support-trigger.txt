@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T09:46:00Z
+script_commit: 490f92018f22d93615095fb3d061f964e065d8b8
+workflow_commit: 80af6e4e46cfada46ae0fcd175b936cdcf5fa8c0
+reason: verify that the U1-invariant RTK mixed operator does not itself add canonical time velocities to gravity/gauge multiplier variables before the full coupled Dirac analysis.
