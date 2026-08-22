@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-22T20:03:38.345295+00:00",
+  "generated_at_utc": "2026-08-22T20:06:13.187220+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-22T20:06:02Z",
+      "display_title": "Refresh Actions index after gauge-pair launch",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "485545b8eed30d54f0f8db8a7ea4ef1fba160fd1",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32595681837",
+      "id": 32595681837,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 100,
+      "status": "in_progress",
+      "updated_at": "2026-08-22T20:06:08Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": null,
+      "created_at": "2026-08-22T20:05:53Z",
+      "display_title": "Launch U1 compensator gauge-pair theorem",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "adf023e1659fce756454dcd16aaaa2cc51ddd7c4",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32595673787",
+      "id": 32595673787,
+      "name": "RTK Route-B U1 compensator gauge-pair preservation",
+      "run_attempt": 1,
+      "run_number": 1,
+      "status": "in_progress",
+      "updated_at": "2026-08-22T20:05:58Z",
+      "workflow_id": 340215913
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-22T20:03:29Z",
       "display_title": "Refresh Actions index for B9 v6 and compensator prefilter",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 99,
-      "status": "in_progress",
-      "updated_at": "2026-08-22T20:03:33Z",
+      "status": "completed",
+      "updated_at": "2026-08-22T20:03:43Z",
       "workflow_id": 336560028
     },
     {
@@ -1569,38 +1601,6 @@
       "run_number": 230,
       "status": "completed",
       "updated_at": "2026-08-22T05:53:11Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-22T05:23:59Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "cb64f35565c7c02a677eada22e30fe63819fce23",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32554237218",
-      "id": 32554237218,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 229,
-      "status": "completed",
-      "updated_at": "2026-08-22T05:24:13Z",
-      "workflow_id": 335879021
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-22T04:53:41Z",
-      "display_title": "RTK autonomous research orchestrator",
-      "event": "schedule",
-      "head_branch": "main",
-      "head_sha": "cb64f35565c7c02a677eada22e30fe63819fce23",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32552904630",
-      "id": 32552904630,
-      "name": "RTK autonomous research orchestrator",
-      "run_attempt": 1,
-      "run_number": 228,
-      "status": "completed",
-      "updated_at": "2026-08-22T04:53:53Z",
       "workflow_id": 335879021
     }
   ],
