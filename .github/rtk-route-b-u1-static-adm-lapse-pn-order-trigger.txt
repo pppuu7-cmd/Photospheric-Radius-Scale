@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:53:00Z
+script_commit: 003dd30b5bd001fdf43c778394047fae4fcfe9b9
+workflow_commit: 748543ad117557ed5237318533613af94986c16e
+reason: refine the generic cubic static mismatch using the actual family-I O2 solution A2=U and physical lapse Ntilde=N-A, which implies n2=0 and can delay explicit-Smix nonlinear differences beyond 1PN.
