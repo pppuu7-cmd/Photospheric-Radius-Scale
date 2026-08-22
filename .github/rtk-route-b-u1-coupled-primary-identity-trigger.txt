@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T09:59:00Z
+script_commit: 9a5ec7125ab2ed0433a6136cdaa44c7b5375a16f
+workflow_commit: 94dca8b407b73cc9cf410440fc8c6f3fbb3f7206
+frozen_partial_slice_commit: 73ac2bb8c7cbee06d525b3af43acccffef3c0d34
+reason: combine exceptional-gravity, a2=0 universal-matter, and RTK-neutral-Sigma identities to test survival of p_nu+J_A and dJ_A/dN=0 before the full coupled Poisson-rank calculation.
