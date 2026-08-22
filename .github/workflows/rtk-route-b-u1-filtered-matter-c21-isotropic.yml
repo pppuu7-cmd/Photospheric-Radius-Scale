@@ -35,7 +35,7 @@ jobs:
           r=json.load(open('u1_filtered_matter_c21_isotropic_result.json'))
           assert r['classification']=='RTK_ROUTE_B_U1_FILTERED_MATTER_C21_ISOTROPIC_PASS'
           assert r['K21']=='k21=V(H0-tau_H)'
-          assert 'does not choose M_c' in r['non_claims']
+          assert any('does not choose M_c' in x for x in r['non_claims'])
           print('U1_FILTERED_MATTER_C21_ISOTROPIC_ARTIFACT_PASS')
           PY
       - uses: actions/upload-artifact@v4
