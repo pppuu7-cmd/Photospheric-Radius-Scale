@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-22T22:36:00Z
-reason: capture hardened c21 rerun, filtered-matter b-c chain relation gate, and current B9 LCDM v7 exact-Hessian status.
+trigger_utc: 2026-08-22T22:25:00Z
+reason: capture flat-FLRW filtered-matter k22 suppression gate and current B9 LCDM v7 exact-Hessian status.
