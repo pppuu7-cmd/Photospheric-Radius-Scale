@@ -1,0 +1,2 @@
+launch_utc: 2026-08-22T17:38:00Z
+reason: use exact family-I matter-source cancellation plus fixed P(X) lapse response to test whether the regular static O4 ADM lapse is forced to n4=0 and whether beta remains 1 in the scoped fixed-action star branch.
