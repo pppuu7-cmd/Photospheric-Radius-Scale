@@ -1,0 +1,38 @@
+{
+  "status": "FROZEN_AFTER_LCDM_RECENTER_V6_BASE_PASS_BEFORE_HALF_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_run_id": 32592618365,
+  "parent_artifact_id": 9481581498,
+  "parent_artifact_digest": "sha256:890a1eb848ce3c9a819f176c5c5190c7470f753c2c7e74e1281540b8a4326730",
+  "parent_center_S_B9": 1058.2447104245823,
+  "parent_best_exact_S_B9": 1058.2447104245823,
+  "parent_best_improvement": 0.0,
+  "parent_hessian_positive_definite_eff": true,
+  "parent_eigenvalues_eff": [0.016466325422027518, 0.07770290821703023, 0.08800640116954664, 0.26844100581525293, 3.0931520001557304, 7.197826455326002],
+  "center": {
+    "As": 2.0970311199020806e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.649806125603674
+  },
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "stencil_scale": 0.5,
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "fresh_tree_replay_abs_tolerance": 2e-06,
+  "decision_frozen_before_half_scores": true,
+  "decision_reason": "v6 base run is exactly recenter-clear and positive definite; preregistered next step is an independent half-scale Hessian at the identical center",
+  "next_gate": "if half-scale is recenter-clear and positive definite, freeze LCDM B9 local stationarity and run final fresh-tree paired B9 replay against the already-certified RTK center; otherwise follow the frozen recenter/ray decision tree"
+}
