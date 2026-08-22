@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T17:40:00Z
+trigger_utc: 2026-08-22T17:47:00Z
 iteration_started_local: 2026-08-22T20:21:00+03:00
 iteration_started_utc: 2026-08-22T17:21:00Z
-reason: refresh U1 static branch-B existence and static 1PN beta theorem plus B4 v4 half-resolution and B9 LCDM v5 heavy-run statuses.
+reason: refresh moving-source O3 clock gate and heavy B4/B9 statuses before C9 strong-coupling/radiative continuation.
