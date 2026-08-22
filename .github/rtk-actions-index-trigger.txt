@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T11:16:30Z
+trigger_utc: 2026-08-22T11:27:30Z
 iteration_started_local: 2026-08-22T13:21:00+03:00
 iteration_started_utc: 2026-08-22T10:21:00Z
-reason: capture repaired DBI P(X) and static-clock reruns, exact static acceleration gate, scale-dictionary rerun, and heavy B4/B9 statuses.
+reason: capture exact static equivalence rerun, fixed-C velocity support, fixed-scalar DOF recertification, scale dictionary, and heavy B4/B9 statuses.
