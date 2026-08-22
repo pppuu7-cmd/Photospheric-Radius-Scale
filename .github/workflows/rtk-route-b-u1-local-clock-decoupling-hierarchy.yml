@@ -31,8 +31,8 @@ jobs:
           g=ir['gravity_and_matter_frame']
           assert g['lambda_HL']==1 and g['sigma1']==0 and g['sigma2']==0
           assert g['a1']==1 and g['a2']==0 and g['kappa']==1
-          assert sc['domain']['production_branch']=='X_U > 0'
-          assert sc['C_of_X_U']=='M_Pl^2/(2 X_U)'
+          assert sc['domain']['production_branch']=='u=1+r>0 with X_U>0'
+          assert sc['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
           print('U1_FIXED_ACTION_PREREQUISITES_PASS')
           PY
           echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_local_clock_decoupling_provenance.txt
