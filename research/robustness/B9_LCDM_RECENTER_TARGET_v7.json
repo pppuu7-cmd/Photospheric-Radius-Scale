@@ -1,0 +1,46 @@
+{
+  "status": "FROZEN_AFTER_LCDM_RECENTER_V6_HALF_IMPROVEMENT_BEFORE_V7_STATIONARITY",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_run_id": 32596694426,
+  "parent_artifact_id": 9482901186,
+  "parent_artifact_digest": "sha256:afa2812d717b7121a0bb1922c34805948e6bdb68fa97b3dfdabeb3823c644fe6",
+  "parent_center_S_B9": 1058.2447104245823,
+  "best_exact_S_B9": 1058.2173424114785,
+  "improvement_from_parent_center": 0.02736801310379633,
+  "best_label": "cross_3_5_+1_+1",
+  "parent_stencil_scale": 0.5,
+  "parent_hessian_positive_definite_eff": false,
+  "parent_eigenvalues_eff": [
+    -0.006081635538921822,
+    0.013624741041440442,
+    0.03282687904048778,
+    0.08851825626564024,
+    0.7850595846626183,
+    1.7953260438478107
+  ],
+  "center": {
+    "As": 2.099031119902081e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.684806125603674
+  },
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "fresh_tree_replay_abs_tolerance": 2e-06,
+  "decision_frozen_before_next_stationarity_scores": true,
+  "decision_reason": "parent v6 half-scale exact improvement 0.02736801310379633 exceeds the preregistered 0.005 threshold, so recenter is mandatory. The parent half-scale Hessian is also non-positive-definite, but the descent threshold alone already forces this v7 recenter.",
+  "next_gate": "run a fresh exact base Hessian at this v7 LCDM center with stencil scale 1.0; if recenter-clear and positive definite advance to an independent half-scale check, otherwise follow the same frozen recenter/ray decision tree"
+}
