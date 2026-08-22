@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T10:30:00Z
+trigger_utc: 2026-08-22T10:36:00Z
 iteration_started_local: 2026-08-22T12:13:00+03:00
 iteration_started_utc: 2026-08-22T09:13:00Z
-reason: capture beta0 bare/effective accounting CI plus current B4-v4, B9-RTK fresh-tree, B9-LCDM-v3, and U1 rank-reduction/source-support statuses.
+reason: capture corrected beta0 accounting rerun, U1 rank/source-support gates, and current B4/B9 heavy statuses.
