@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:15:00Z
+script_commit: 50ed6ded2a883d2685009e3481d057c23b1ffce0
+workflow_commit: 95ce3683356d9e8e22423d00a2489fa2d433785b
+reason: reduce the coupled four-constraint rank decision to det of the 2x2 cross block once pi_N-J_A=0 survives coupling, and verify the conditional 2 tensor + 1 RTK scalar DOF count in d=3.
