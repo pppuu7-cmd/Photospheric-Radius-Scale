@@ -1,0 +1,63 @@
+name: RTK Route-B U1 rolling homogeneous rank-shift gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-rolling-homogeneous-rank-shift-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-rank-shift:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require corrected U1 full-action slice
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FAMILY1_FIXED_IR_SLICE_v2.json'))
+          g=t['gravity_and_matter_frame']
+          assert g['beta0_bare']==0
+          assert g['sigma1']==0 and g['sigma2']==0
+          assert t['rolling_rtk_mixed_sector']['equivalent_beta0_eff_contribution']==2
+          print('U1_CORRECTED_V2_SLICE_PREREQ_PASS')
+          PY
+      - name: Recheck source-support prerequisite
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_rtk_crossblock_source_support_gate.py | tee u1_crossblock_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_RTK_CROSSBLOCK_SOURCE_SUPPORT_PASS' u1_crossblock_prereq.log
+      - name: Run rolling homogeneous rank-shift theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_rolling_homogeneous_rank_shift_gate.py
+          python3 rtk/route_b_u1_rolling_homogeneous_rank_shift_gate.py | tee u1_rolling_rank_shift.log
+          grep -q 'RTK_ROUTE_B_U1_ROLLING_HOMOGENEOUS_RANK_SHIFT_PASS' u1_rolling_rank_shift.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_rolling_homogeneous_rank_shift_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_ROLLING_HOMOGENEOUS_RANK_SHIFT_PASS'
+          assert r['beta0_bare']==0 and r['beta0_eff_total']=='2'
+          print('U1_ROLLING_HOMOGENEOUS_RANK_SHIFT_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-rolling-homogeneous-rank-shift
+          path: |
+            u1_crossblock_prereq.log
+            u1_rolling_rank_shift.log
+            u1_rolling_homogeneous_rank_shift_result.json
+          if-no-files-found: error
