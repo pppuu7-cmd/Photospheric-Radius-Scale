@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:21:00Z
+script_commit: 0f9b9ea317a74872b8f9fb7ba8dd2ce15f72aeda
+workflow_commit: b7bed2dd3faab2f7b712b373cc4f88e6dc35702d
+reason: determine exactly which entries of the exceptional U1 second-class cross block can receive direct neutral-RTK-Sigma corrections before attempting the final determinant/rank decision.
