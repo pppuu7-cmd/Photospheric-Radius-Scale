@@ -1,0 +1,49 @@
+name: RTK Route-B U1 static 1PN beta Yukawa theorem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-1pn-beta-yukawa-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run static 1PN beta theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_1pn_beta_yukawa_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_static_1pn_beta_yukawa_provenance.txt
+          python3 rtk/route_b_u1_static_1pn_beta_yukawa_gate.py | tee u1_static_1pn_beta_yukawa.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_1PN_BETA_YUKAWA_PASS ' u1_static_1pn_beta_yukawa.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_1pn_beta_yukawa_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_STATIC_1PN_BETA_YUKAWA_PASS'
+          assert r['status_scope']=='STATIC_1PN_BETA_GREEN_FIXED_ACTION_REGULAR_STAR'
+          assert r['frozen_tuple']['beta0_eff_static']==2
+          print('U1_STATIC_1PN_BETA_ARTIFACT_PASS',r['z0_M_K_Mpc_inv'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-1pn-beta-yukawa
+          path: |
+            u1_static_1pn_beta_yukawa.log
+            u1_static_1pn_beta_yukawa_result.json
+            u1_static_1pn_beta_yukawa_provenance.txt
+          if-no-files-found: error
