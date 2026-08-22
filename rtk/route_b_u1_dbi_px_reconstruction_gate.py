@@ -45,8 +45,7 @@ assert sp.simplify(P_u.subs(map_u)-p_prod)==0
 assert sp.simplify(enthalpy_u.subs(map_u)-enthalpy_prod)==0
 assert sp.simplify(rho_u.subs(map_u)-rho_prod)==0
 
-# Sound speed c_s^2 = P_X/(P_X+2X P_XX) = (dP/du)/(u d/du[u dP/du])
-# after X=Xs u^2. Equivalently dp/d rho along u.
+# Sound speed c_s^2 = P_X/(P_X+2X P_XX); equivalently dp/d rho along u.
 dpdu=sp.diff(P_u,u)
 drhdu=sp.diff(rho_u,u)
 cs2_u=sp.factor(dpdu/drhdu)
@@ -57,9 +56,9 @@ assert sp.simplify(cs2_u.subs(map_u)-cs2_prod)==0
 ratio_u=sp.simplify(dpdu/enthalpy_u)
 assert sp.simplify(ratio_u-1/u)==0
 
-# lambda->0 continuous limit.
+# lambda->0 continuous limit. Use algebraic equality rather than structural AST equality.
 P_lam0=sp.simplify(sp.limit(P_u,lam,0,dir='+'))
-assert P_lam0==mu**2*(u-1)**2
+assert sp.simplify(P_lam0-mu**2*(u-1)**2)==0
 
 out={
   'classification':'RTK_ROUTE_B_U1_DBI_PX_RECONSTRUCTION_PASS',
@@ -68,14 +67,14 @@ out={
   'P_8piG':'2 mu_K^2/lambda_D * [1-sqrt(1-lambda_D (sqrt(X_U/X_star)-1)^2)]',
   'lambda_zero_limit':'mu_K^2 (sqrt(X_U/X_star)-1)^2',
   'field_normalization':'X_star>0 arbitrary; changing X_star is a Sigma field rescaling and does not alter production rho,p,c_s when the trajectory is rescaled consistently',
-  'exact_checks':['P=p_production','2X P_X-P=rho_production','2X P_X=rho+p=2 mu_K^2 x(1+r)','c_s^2=dp/d rho=c_a^2 production','d ln u=dp/(rho+p)'],
+  'exact_checks':['P=p_production','2X P_X-P=rho_production','2X P_X=rho+p=2 mu_K^2 x(1+r)','c_s^2=dp/d rho=c_a^2 production','d ln u=dp/(rho+p)','lambda_D->0 limit algebraically exact'],
   'status_scope':'FIXED_SHIFT_SYMMETRIC_DBI_CLOCK_GREEN_BACKGROUND_ACTION',
   'non_claims':[
     'does not by itself include the separate mixed operator C(state) D_i Theta_U D^i Theta_U',
     'does not establish radiative stability or a UV completion',
     'does not prove all inhomogeneous DBI solutions are healthy beyond the already tested quadratic production branch'
   ],
-  'next_gate':'use shift symmetry of the reconstructed P(X_U) plus the explicit S_mix to prove that Sigma=q t with D_i Sigma=0 is a consistent static local clock solution for time-independent lapse/spatial metric and zero shift; then complete the static O(4) beta_PPN equivalence test'
+  'next_gate':'use shift symmetry of the reconstructed P(X_U) plus the explicit S_mix to prove that Sigma=q t with D_i Sigma=0 is a consistent static local clock solution for time-independent lapse/spatial metric and zero shift; then complete the static beta_PPN equivalence test'
 }
 open('u1_dbi_px_reconstruction_result.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
 print(out['classification'],json.dumps(out,sort_keys=True))
