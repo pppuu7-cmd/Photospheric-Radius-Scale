@@ -1,5 +1,5 @@
 iteration_started_local=2026-08-22T02:46:00+03:00
 iteration_started_utc=2026-08-21T23:46:00Z
-research_source_commit=38e6092e51e8d5b08621e15df9209d64933e0527
+research_source_commit=1e42d4ad0b310965b9ab3e3d269ea32d0b34e1d4
 literature=arXiv:1310.6666;arXiv:1504.07357
-purpose=verify nonempty classical intersection of GR-PPN family I, nonlinear no-gravity-scalar surface, and direct RTK beta0=2 slice after explicit action dictionary
+purpose=rerun exact classical intersection after hardening exact substitution guards; first red run was implementation-only
