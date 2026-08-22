@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T20:06:00Z
+launch_europe_helsinki: 2026-08-22T23:06:00+03:00
+reason: follow successful minimal-clock A-compensator background prefilter with exact U1 gauge-pair preservation theorem before full constraint-rank audit.
+parent_run_id: 32595534076
+parent_artifact_id: 9481435646
