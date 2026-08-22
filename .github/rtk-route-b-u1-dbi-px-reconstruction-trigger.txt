@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:58:00Z
+script_commit: 59c2a1c835b05e77280718db7e23c00f323686d7
+workflow_commit: 35facdf01a66e64e4905f09ee19eb36f245d5af5
+reason: reconstruct a fixed shift-symmetric P(X_U) action directly from the frozen production rho,p,c_a^2 functions so the U1 completion no longer leaves S_DBI schematic in static-sector tests.
