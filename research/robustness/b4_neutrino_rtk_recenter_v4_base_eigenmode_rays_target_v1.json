@@ -1,0 +1,67 @@
+{
+  "classification": "B4_NEUTRINO_RTK_RECENTER_V4_BASE_EIGENMODE_RAYS_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "parent_base_run_id": 32565150038,
+  "parent_base_artifact_id": 9475903472,
+  "parent_base_artifact_digest": "sha256:ae0f4198a3b3ebfa8b55bcf63ac611bdb5f91b9eb9cbc9b29253a52256c3ea46",
+  "parent_stencil_scale": 1.0,
+  "parent_positive_definite_eff": false,
+  "S_center_eff": 1050.5511025943172,
+  "best_exact_S_eff": 1050.5510305213465,
+  "best_improvement_eff": 0.0000720729706245038,
+  "best_label": "axis_0_+1",
+  "recenter_tolerance_S": 0.005,
+  "center": {
+    "As": 2.0953040609439933e-09,
+    "Ob": 0.0472430928395221,
+    "Om": 0.25308763984439225,
+    "h": 0.6883522889542522,
+    "lam": 3009377.414812341,
+    "ns": 0.9657964452888419,
+    "zre": 7.583793661013263
+  },
+  "axes": ["loglam", "h", "Ob", "Om", "As", "ns", "zre"],
+  "steps": {
+    "loglam": 0.05,
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "eigenmodes": [
+    {
+      "mode_index": 0,
+      "reason": "negative_base_mode",
+      "eigenvalue_y": -0.00006643686349509472,
+      "eigenvector_y": [
+        0.9999989662757648,
+        0.000573451477719648,
+        -0.0004535447756297834,
+        -0.00037261582971298844,
+        0.0006254523683749398,
+        0.0000014166689019689041,
+        0.0010014303331832874
+      ]
+    }
+  ],
+  "ray_amplitudes": [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0],
+  "decision_rule": {
+    "no_clipping": true,
+    "if_any_exact_improvement_gt_0p005": "freeze best exact ray point as B4 recenter-v5 target",
+    "if_no_ray_improvement_gt_0p005": "run an independent half-scale Hessian resolution audit at the unchanged v4 center; do not call the base Hessian positive definite",
+    "reason": "base exact improvement is recenter-clear but the base Hessian has one very soft negative eigenvalue dominated by loglambda"
+  },
+  "parent_eigenvalues_eff": [
+    -0.00006643686349509472,
+    0.003148865082623278,
+    0.02015640853404094,
+    0.04674206207886002,
+    0.2563260779622786,
+    3.086770865789688,
+    7.2895976037086925
+  ],
+  "warning": "B4 minimal-neutrino robustness only; separate objective from massless A1-A5 and no global-minimum claim. Frozen before any v4 eigenmode-ray score."
+}
