@@ -45,7 +45,7 @@ jobs:
           r=json.load(open('u1_elliptic_compensator_primary_mixing_dirac_result.json'))
           assert r['classification']=='RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_PRIMARY_MIXING_DIRAC_AUDIT_PASS'
           assert r['exact_nonzero_primary_bracket'].startswith('{G,p_Q}=+1')
-          assert 'not yet justified' in r['basis_correction']
+          assert 'must not be called the actual Dirac constraint basis' in r['basis_correction']
           print('U1_ELLIPTIC_PRIMARY_MIXING_DIRAC_ARTIFACT_PASS')
           PY
       - uses: actions/upload-artifact@v4
