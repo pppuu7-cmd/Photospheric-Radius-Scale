@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T09:53:00Z
+script_commit: 816aaf48c1cf0e2e6286ed0121a43ae4697749dc
+workflow_commit: 8b9eda8a0eb0a3fa45cff1fe61835d986e167c6a
+frozen_partial_slice_commit: 73ac2bb8c7cbee06d525b3af43acccffef3c0d34
+reason: test whether a2=0 preserves the canonical p_nu+J_A and dJ_A/dN identities behind the exceptional U1 constraint chain for generic ADM matter generators.
