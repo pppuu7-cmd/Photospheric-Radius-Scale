@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:31:00Z
+launch_local: 2026-08-22T23:31:00+03:00
+reason: coordinate-only F_Sigma cannot cancel independent matter perturbations; test a velocity-degenerate elliptic auxiliary source that cancels k=0 exactly and decouples at high k.
+source: rtk-class-build:rtk/route_b_u1_elliptic_matter_compensator_prefilter_gate.py
