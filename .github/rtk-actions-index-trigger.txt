@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-22T21:20:00Z
-reason: capture primary-mixing hardened rerun, Dirac projection, reduced-chain support, resolvent metric-variation gate, and B9 half-scale Hessian.
+trigger_utc: 2026-08-22T21:36:00Z
+reason: capture reduced constraint-chain recovery, k0 ordinary-matter rank inheritance, homogeneous RTK lapse-affinity, successful resolvent metric variation, and live B9 half-scale Hessian.
