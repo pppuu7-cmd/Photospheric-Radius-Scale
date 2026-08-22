@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T09:40:00Z
+research_target_commit: 73ac2bb8c7cbee06d525b3af43acccffef3c0d34
+script_commit: 8ea66e5fa6722427ba0bbf20e4730477a35bc268
+workflow_commit: 2afbb1bdbdb5def9ad64cd02cf1805b0864f0565
+reason: independently verify Eq. (5.43) factorization and RTK beta0=2 compatibility on the frozen family-I partial IR slice before any full-action claim.
