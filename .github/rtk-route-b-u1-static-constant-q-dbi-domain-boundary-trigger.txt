@@ -1,0 +1,4 @@
+Launch exact constant-q static DBI real-domain boundary gate on the fixed scalar action.
+Uses z=0 production values from scale dictionary run 32568333920 and exact static-clock branch from run 32568097865.
+Worker commit: 0db08fb11e246750cc130b7e855ca8cec66bc1c7
+Workflow commit: 5746cfcab2a4d7f9b0ad87faeb0e10b56296a5be
