@@ -29,8 +29,8 @@ jobs:
           python3 - <<'PY'
           import json
           sc=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
-          assert sc['domain']['production_branch']=='X_U > 0'
-          assert sc['C_of_X_U']=='M_Pl^2/(2 X_U)'
+          assert sc['domain']['production_branch']=='u=1+r>0 with X_U>0'
+          assert sc['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
           print('U1_STATIC_PX_O4_FIXED_ACTION_PASS')
           PY
           echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_static_px_o4_lapse_response_provenance.txt
