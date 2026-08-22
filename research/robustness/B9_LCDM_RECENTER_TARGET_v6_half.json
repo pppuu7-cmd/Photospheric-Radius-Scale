@@ -7,6 +7,7 @@
   "parent_artifact_digest": "sha256:890a1eb848ce3c9a819f176c5c5190c7470f753c2c7e74e1281540b8a4326730",
   "parent_center_S_B9": 1058.2447104245823,
   "parent_best_exact_S_B9": 1058.2447104245823,
+  "best_exact_S_B9": 1058.2447104245823,
   "parent_best_improvement": 0.0,
   "parent_hessian_positive_definite_eff": true,
   "parent_eigenvalues_eff": [0.016466325422027518, 0.07770290821703023, 0.08800640116954664, 0.26844100581525293, 3.0931520001557304, 7.197826455326002],
