@@ -1,0 +1,2 @@
+launch_utc: 2026-08-22T19:04:00Z
+reason: B9 LCDM v5 run 32587768594 was positive definite but exact improvement 0.04857762431061019 exceeded the frozen 0.005 recenter tolerance; launch exact base Hessian at the frozen v6 best point.
