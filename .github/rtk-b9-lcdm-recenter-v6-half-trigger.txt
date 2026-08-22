@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:24:00Z
+launch_local: 2026-08-22T23:24:00+03:00
+reason: B9 LCDM recenter-v6 base run 32592618365 is exact-recenter-clear (best improvement 0.0) and positive definite; execute preregistered independent half-scale Hessian at identical center.
+frozen_target: rtk-class-build:research/robustness/B9_LCDM_RECENTER_TARGET_v6_half.json
