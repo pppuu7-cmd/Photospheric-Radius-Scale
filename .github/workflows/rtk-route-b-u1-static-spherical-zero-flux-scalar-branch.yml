@@ -1,0 +1,56 @@
+name: RTK Route-B U1 static spherical zero-flux scalar branch
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-spherical-zero-flux-scalar-branch-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run exact zero-flux scalar branch theorem
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          sc=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert sc['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
+          assert sc['dbi_px']['shift_symmetry'] is True
+          print('U1_ZERO_FLUX_FIXED_ACTION_PASS')
+          PY
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_static_spherical_zero_flux_scalar_branch_provenance.txt
+          python3 -m py_compile rtk/route_b_u1_static_spherical_zero_flux_scalar_branch_gate.py
+          python3 rtk/route_b_u1_static_spherical_zero_flux_scalar_branch_gate.py | tee u1_static_spherical_zero_flux_scalar_branch.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_SPHERICAL_ZERO_FLUX_SCALAR_BRANCH_PASS ' u1_static_spherical_zero_flux_scalar_branch.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_spherical_zero_flux_scalar_branch_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_STATIC_SPHERICAL_ZERO_FLUX_SCALAR_BRANCH_PASS'
+          assert r['branch_B_exact_condition']=='(rho+p)_8piG = Y/X'
+          assert r['conditional_PN_rows']['solar_surface']['absC4_for_ADM_grad_n4_equal_background_branchB_threshold']>0
+          print('U1_ZERO_FLUX_SCALAR_BRANCH_ARTIFACT_PASS',r['z0_production'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-spherical-zero-flux-scalar-branch
+          path: |
+            u1_static_spherical_zero_flux_scalar_branch.log
+            u1_static_spherical_zero_flux_scalar_branch_result.json
+            u1_static_spherical_zero_flux_scalar_branch_provenance.txt
+          if-no-files-found: error
