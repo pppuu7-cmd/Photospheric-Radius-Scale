@@ -1,0 +1,53 @@
+name: RTK Route-B U1 static exact acceleration equivalence
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-exact-acceleration-equivalence-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-static:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require fixed scalar action and static clock
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_dbi_px_reconstruction_gate.py | tee u1_dbi_px_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_DBI_PX_RECONSTRUCTION_PASS' u1_dbi_px_prereq.log
+          python3 rtk/route_b_u1_static_clock_consistency_gate.py | tee u1_static_clock_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_CLOCK_CONSISTENCY_PASS' u1_static_clock_prereq.log
+      - name: Run exact static acceleration equivalence
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_exact_acceleration_equivalence_gate.py
+          python3 rtk/route_b_u1_static_exact_acceleration_equivalence_gate.py | tee u1_static_exact_acceleration.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_EXACT_ACCELERATION_EQUIVALENCE_PASS' u1_static_exact_acceleration.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_exact_acceleration_equivalence_result.json'))
+          assert r['beta0_bare']==0 and r['beta0_eff_static']==2
+          print('U1_STATIC_EXACT_ACCELERATION_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-static-exact-acceleration-equivalence
+          path: |
+            u1_dbi_px_prereq.log
+            u1_static_clock_prereq.log
+            u1_static_exact_acceleration.log
+            u1_static_exact_acceleration_equivalence_result.json
+          if-no-files-found: error
