@@ -1,0 +1,55 @@
+name: RTK Route-B U1 static constant-q DBI domain boundary
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-constant-q-dbi-domain-boundary-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  boundary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run exact constant-q DBI domain boundary
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          sc=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert sc['domain']['production_branch']=='u=1+r>0 with X_U>0'
+          assert sc['dbi_px']['shift_symmetry'] is True
+          print('U1_CONSTANT_Q_DBI_FIXED_ACTION_PASS')
+          PY
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_static_constant_q_dbi_domain_boundary_provenance.txt
+          python3 -m py_compile rtk/route_b_u1_static_constant_q_dbi_domain_boundary_gate.py
+          python3 rtk/route_b_u1_static_constant_q_dbi_domain_boundary_gate.py | tee u1_static_constant_q_dbi_domain_boundary.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_CONSTANT_Q_DBI_DOMAIN_BOUNDARY_PASS ' u1_static_constant_q_dbi_domain_boundary.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_constant_q_dbi_domain_boundary_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_STATIC_CONSTANT_Q_DBI_DOMAIN_BOUNDARY_PASS'
+          assert r['scientific_status'].startswith('BLACK_SCOPED')
+          assert r['exact_interval']['N_lower']<1<r['exact_interval']['N_upper']
+          assert r['exact_interval']['negative_lapse_margin_from_1']<1e-8
+          print('U1_CONSTANT_Q_DBI_BOUNDARY_ARTIFACT_PASS',r['exact_interval'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-constant-q-dbi-domain-boundary
+          path: |
+            u1_static_constant_q_dbi_domain_boundary.log
+            u1_static_constant_q_dbi_domain_boundary_result.json
+            u1_static_constant_q_dbi_domain_boundary_provenance.txt
+          if-no-files-found: error
