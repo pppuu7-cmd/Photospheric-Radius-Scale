@@ -1,0 +1,49 @@
+name: RTK Route-B U1 moving-source O3 clock cancellation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-moving-o3-clock-source-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run moving-source O3 clock theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_moving_o3_clock_source_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_moving_o3_clock_source_provenance.txt
+          python3 rtk/route_b_u1_moving_o3_clock_source_gate.py | tee u1_moving_o3_clock_source.log
+          grep -q '^RTK_ROUTE_B_U1_MOVING_O3_CLOCK_SOURCE_CANCELLATION_PASS ' u1_moving_o3_clock_source.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_moving_o3_clock_source_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_MOVING_O3_CLOCK_SOURCE_CANCELLATION_PASS'
+          assert r['clock_source_residual']=='0'
+          assert r['status_scope']=='MOVING_O3_PREFERRED_FRAME_GREEN_FOR_REGULAR_LAMBDA_NOT_1'
+          print('U1_MOVING_O3_CLOCK_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-moving-o3-clock-source
+          path: |
+            u1_moving_o3_clock_source.log
+            u1_moving_o3_clock_source_result.json
+            u1_moving_o3_clock_source_provenance.txt
+          if-no-files-found: error
