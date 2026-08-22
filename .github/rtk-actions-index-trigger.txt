@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-22T20:40:00Z
-reason: capture successful corrected elliptic prefilter, newly launched elliptic compensator canonical-affinity gate, and live B9 LCDM recenter-v6 half-scale stationarity.
+trigger_utc: 2026-08-22T20:44:00Z
+reason: capture hardened elliptic compensator canonical-affinity rerun and live B9 LCDM recenter-v6 half-scale stationarity.
