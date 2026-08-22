@@ -1,0 +1,2 @@
+launch_utc: 2026-08-22T18:59:00Z
+reason: independently certify the scoped incompatibility among evolving flat-FLRW ordinary matter, the sigma1=sigma2=0 no-extra-gravity-scalar surface, and the published universal-matter PPN branch without an A-charged compensator.
