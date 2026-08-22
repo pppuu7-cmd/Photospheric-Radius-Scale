@@ -70,9 +70,9 @@ X=sp.Matrix([
     [g,h,i,j],
 ])
 Delta=sp.simplify(X*Einv*X.T)
-assert Delta + Delta.T == sp.zeros(4)
-assert Delta[0,:] == sp.zeros(1,4)
-assert Delta[:,0] == sp.zeros(4,1)
+assert all(sp.simplify(v)==0 for v in (Delta+Delta.T))
+assert all(sp.simplify(Delta[0,cidx])==0 for cidx in range(4))
+assert all(sp.simplify(Delta[ridx,0])==0 for ridx in range(4))
 assert sp.simplify(Delta[1,2]-d/ell)==0
 assert sp.simplify(Delta[1,3]-(-a*h-b*g+j)/ell)==0
 assert sp.simplify(Delta[2,3]-(-c*h-d*g)/ell)==0
