@@ -1,0 +1,2 @@
+launch_utc: 2026-08-22T17:33:00Z
+reason: characterize exact algebraic existence/uniqueness and smooth A-to-B switching for the fixed-action zero-flux scalar branch, after the constant-q DBI boundary and zero-flux branch theorem.
