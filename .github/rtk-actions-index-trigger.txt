@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-22T22:19:00Z
-reason: capture B9 LCDM v7 recenter launch, hardened neutral-RTK low-k e11 theorem, and filtered-matter symbolic rank-window gate.
+trigger_utc: 2026-08-22T22:28:00Z
+reason: capture hardened filtered-matter rank-window rerun and new sparse low-k scaling-support gate while B9 LCDM v7 base Hessian remains active.
