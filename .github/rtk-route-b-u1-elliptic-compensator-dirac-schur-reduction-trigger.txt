@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T20:47:00Z
+launch_local: 2026-08-22T23:47:00+03:00
+reason: canonical elliptic compensator passed and is frozen; reduce the enlarged 8-constraint rank problem exactly to the 4x4 Schur-deformed U1 block before deriving individual cross brackets.
+frozen_parent: rtk-class-build:research/RTK_U1_ELLIPTIC_MATTER_COMPENSATOR_CANONICAL_v1.json
