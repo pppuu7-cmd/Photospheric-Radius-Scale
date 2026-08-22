@@ -1,0 +1,46 @@
+{
+  "classification": "RTK_C8_U1_CORRECTED_FIXED_IR_REPRESENTATIVE_V3",
+  "status": "CLASSICALLY_GREEN_SCOPED_DOF_IR_REPRESENTATIVE_NOT_UV_COMPLETION",
+  "supersedes_as_IR_representative": "research/RTK_C8_U1_FAMILY1_FIXED_IR_SLICE_v2.json",
+  "scope": "low-energy representative for same-action tensor and static tests; higher-spatial-derivative UV couplings remain unfrozen",
+  "classical_dof_gate": {
+    "run_id": 32567593997,
+    "classification": "RTK_ROUTE_B_U1_CLASSICAL_COUPLED_DOF_CERTIFICATION_PASS",
+    "result": "d=3 gives 3 physical DOF = 2 tensor + 1 intended RTK/DBI scalar",
+    "scope_warning": "classical generic/rolling-background rank only; not radiative, PPN, cutoff, or UV certification"
+  },
+  "gravity_and_matter_frame": {
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "beta0_bare": 0,
+    "gamma1": -1,
+    "lambda_HL": 1
+  },
+  "lambda_choice": {
+    "value": 1,
+    "reason": "canonical GR-kinetic IR representative; it is away from the inverse-DeWitt singular value lambda_HL=1/d=1/3 in d=3, while the displayed exact-GR PPN family does not require a different lambda",
+    "non_claim": "lambda_HL=1 is a representative chosen for the next same-action IR gates, not derived as the unique allowed value"
+  },
+  "rolling_rtk_mixed_sector": {
+    "operator": "C(state) D_i Theta_U D^i Theta_U",
+    "Theta_U": "[dot Sigma-(N^i-N D^i nu)D_i Sigma]/N",
+    "exact_match": "C q^2 = K_pi/(2 M_K^2) = M_Pl^2",
+    "beta0_eff_contribution_on_homogeneous_rolling_background": 2,
+    "beta0_eff_total": 2
+  },
+  "full_action_bookkeeping": {
+    "bare_gravity_acceleration": "beta0_bare=0",
+    "explicit_mixed_operator": "retained; never absorb it into beta0_bare in same-action tests",
+    "warning": "published pure-U1 PPN expressions do not include explicit rolling S_mix and therefore are not a full-action PPN certification"
+  },
+  "uv_status": {
+    "higher_spatial_derivative_gravity_couplings": "unfrozen",
+    "radiative_protection_of_sigma1_sigma2_zero": "open",
+    "strong_coupling_cutoff": "open",
+    "compact_object_nonlinear_sector": "open"
+  },
+  "next_gate": "derive the pure TT quadratic action on this exact IR representative, retaining explicit S_mix and homogeneous rolling Sigma background; then derive static/Newton/PPN equations from the same action rather than importing pure-U1 PPN values"
+}
