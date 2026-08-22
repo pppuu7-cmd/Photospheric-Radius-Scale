@@ -1,0 +1,51 @@
+name: RTK Route-B U1 RTK cross-block source-support gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-rtk-crossblock-source-support-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-source-support:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Recheck prerequisite invariant-shift identity
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_rtk_shift_noether_identity_gate.py | tee u1_rtk_shift_noether_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_RTK_SHIFT_NOETHER_IDENTITY_PASS' u1_rtk_shift_noether_prereq.log
+      - name: Run coupled cross-block source-support theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_rtk_crossblock_source_support_gate.py
+          python3 rtk/route_b_u1_rtk_crossblock_source_support_gate.py | tee u1_rtk_crossblock_source_support.log
+          grep -q 'RTK_ROUTE_B_U1_RTK_CROSSBLOCK_SOURCE_SUPPORT_PASS' u1_rtk_crossblock_source_support.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_rtk_crossblock_source_support_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_RTK_CROSSBLOCK_SOURCE_SUPPORT_PASS'
+          assert r['delta_det_B']=='d_g*delta_a'
+          print('U1_RTK_CROSSBLOCK_SOURCE_SUPPORT_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-rtk-crossblock-source-support
+          path: |
+            u1_rtk_shift_noether_prereq.log
+            u1_rtk_crossblock_source_support.log
+            u1_rtk_crossblock_source_support_result.json
+          if-no-files-found: error
