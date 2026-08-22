@@ -1,0 +1,4 @@
+launch_utc: 2026-08-22T10:10:00Z
+script_commit: 804867be79c6a0d35d781aebff1c165eae64b038
+workflow_commit: 6facbf0eb401f5ca635fa5228fa2af99e3a97898
+reason: prove the invariant-shift RTK Sigma sector nu equation is the divergence of its shift equation before evaluating the coupled second-class Poisson submatrix.
