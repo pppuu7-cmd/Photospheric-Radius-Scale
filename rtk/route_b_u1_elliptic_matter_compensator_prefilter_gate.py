@@ -32,7 +32,7 @@ stability must still be recomputed on one frozen action.
 import json
 import sympy as sp
 
-y, Mc, eps = sp.symbols('y M_c epsilon', positive=True, finite=True, real=True)
+y, Mc = sp.symbols('y M_c', positive=True, finite=True, real=True)
 L = 1 + y/Mc**2
 f = sp.simplify(1/L)
 assert sp.simplify(f.subs(y,0)-1)==0
@@ -53,22 +53,21 @@ detM = sp.factor(M.det())
 assert detM == ell**4
 assert sp.simplify(detM.subs(ell,L)) > 0
 
-# Simultaneous scale-separation window. Demand compensation fraction
-# f(k_cos)>=1-eps and f(k_local)<=eps. In terms of wavenumbers this requires
-# Mc >= k_cos sqrt((1-eps)/eps) and Mc <= k_local sqrt(eps/(1-eps)).
+# Preregistered 1% scale-separation window. Demand compensation fraction
+# f(k_cos)>=0.99 and f(k_local)<=0.01. This gives
+# Mc >= sqrt(99) k_cos and Mc <= k_local/sqrt(99), hence a nonempty interval
+# iff k_local/k_cos >= 99.  Use exact rationals so no branch assumptions on a
+# generic epsilon are hidden inside symbolic square-root simplification.
 kcos, klocal = sp.symbols('k_cos k_local', positive=True, finite=True, real=True)
-Mc_min = sp.simplify(kcos*sp.sqrt((1-eps)/eps))
-Mc_max = sp.simplify(klocal*sp.sqrt(eps/(1-eps)))
-ratio_required = sp.simplify(Mc_min/kcos / (Mc_max/klocal))
-assert sp.simplify(ratio_required-(1-eps)/eps)==0
-ratio_1pct = sp.simplify(ratio_required.subs(eps,sp.Rational(1,100)))
+eps1 = sp.Rational(1,100)
+Mc_min_1pct = sp.sqrt(99)*kcos
+Mc_max_1pct = klocal/sp.sqrt(99)
+ratio_1pct = sp.simplify((Mc_min_1pct/kcos)/(Mc_max_1pct/klocal))
 assert ratio_1pct == 99
-
-# Verify boundary fractions exactly.
-fcos_boundary = sp.simplify(1/(1+(kcos/Mc_min)**2))
-flocal_boundary = sp.simplify(1/(1+(klocal/Mc_max)**2))
-assert sp.simplify(fcos_boundary-(1-eps))==0
-assert sp.simplify(flocal_boundary-eps)==0
+fcos_boundary = sp.simplify(1/(1+(kcos/Mc_min_1pct)**2))
+flocal_boundary = sp.simplify(1/(1+(klocal/Mc_max_1pct)**2))
+assert fcos_boundary == 1-eps1
+assert flocal_boundary == eps1
 
 out={
   'classification':'RTK_ROUTE_B_U1_ELLIPTIC_MATTER_COMPENSATOR_PREFILTER_PASS',
