@@ -1,0 +1,2 @@
+launch_utc: 2026-08-22T17:52:00Z
+reason: test same-action cosmological consistency of the a1=1,a2=0 universal family-I matter frame before further C9 optimization; exact A constraint appears incompatible with evolving dust/radiation on flat FLRW when the fixed RTK scalar is A-neutral.
