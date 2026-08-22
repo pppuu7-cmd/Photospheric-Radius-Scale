@@ -1,0 +1,54 @@
+{
+  "classification": "RTK_U1_ELLIPTIC_MATTER_COMPENSATOR_CANONICAL_V1",
+  "status": "FROZEN_BEFORE_FULL_COUPLED_DIRAC",
+  "frozen_at_utc": "2026-08-22T20:38:00Z",
+  "parent_prefilter_run_id": 32596939267,
+  "parent_prefilter_artifact_id": 9481806357,
+  "parent_prefilter_digest": "sha256:5057f93978e516a3ac597316056f612873366f91ecba52c75e49a3b80b5cf082",
+  "parent_canonical_run_id": 32597148540,
+  "parent_canonical_artifact_id": 9481859928,
+  "parent_canonical_digest": "sha256:f77902d2fb2027beb3008b5078a46d48eebdbd5ae249e555eeb5b5ec935f5796",
+  "frozen_parent_u1": {
+    "matter_frame": "a1=1,a2=0",
+    "gravity_scalar_surface": "sigma1=sigma2=0",
+    "rtk_scalar": "retain existing fixed P(X_U)+C(X_U) action on X_U>0"
+  },
+  "canonical_form": {
+    "Acal": "-dot(nu)+N^i D_i nu + (N/2) D_i nu D^i nu",
+    "ordinary_matter_H": "[N-(A-Acal)] H0 + (N^i+N D^i nu) H_i",
+    "auxiliary_H": "(A-Acal) Q + Lambda[(1-D^2/M_c^2)Q-H0]",
+    "Q": "neutral auxiliary scalar with no time kinetic term",
+    "Lambda": "neutral auxiliary multiplier with no time kinetic term",
+    "M_c": "positive symbolic scale; intentionally unfixed before full coupled Dirac and observable-window gates"
+  },
+  "fourier_dictionary": {
+    "ell": "1+k_phys^2/M_c^2",
+    "Q_on_auxiliary_constraint": "H0/ell",
+    "J_A_total_on_auxiliary_constraint": "H0(1/ell-1)",
+    "k0": "ell=1 -> J_A_total=0",
+    "high_k": "ell->infinity -> J_A_total=-H0, recovering the original local family-I source"
+  },
+  "certified_before_freeze": [
+    "corrected elliptic prefilter reconstructs independent matter state and has isolated auxiliary rank det=ell^4",
+    "p_nu_total+J_A_total=0 exactly",
+    "dJ_A_total/dN=0 exactly",
+    "Hamiltonian remains affine in A and dot(nu)",
+    "isolated Q,Lambda four-second-class block is invertible for ell>0",
+    "isolated Q,Lambda sector adds zero propagating DOF"
+  ],
+  "preregistered_full_dirac_gate": {
+    "constraint_basis_old_u1": ["pi_N","J_A_total","H_perp_total","phi_A_total"],
+    "constraint_basis_aux": ["p_Q","p_Lambda","C_Q","C_Lambda"],
+    "required_result": "show the enlarged eight-constraint second-class matrix is rank 8 on the frozen rolling X_U>0 branch for physical k>=0, or classify the exact rank-loss locus",
+    "method": "derive exact cross-bracket support and use the invertible auxiliary block Schur complement; do not assume block factorization",
+    "failure_rule": "if the physical rank is below 8 on a generic rolling branch, this canonical candidate is BLACK scoped and must not proceed to observable tuning",
+    "pass_rule": "only a generic rank-8 proof permits a same-action 3-DOF recertification and subsequent M_c observable-window scan"
+  },
+  "non_claims": [
+    "not yet a full coupled 3-DOF certificate",
+    "not yet a finite-k cosmological perturbation pass",
+    "not yet a PPN/equivalence-principle pass",
+    "not yet radiatively protected",
+    "not yet a strong-coupling/cutoff or compact-object completion"
+  ]
+}
