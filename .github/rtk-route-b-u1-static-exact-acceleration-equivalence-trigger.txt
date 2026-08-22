@@ -1,0 +1,5 @@
+launch_utc: 2026-08-22T11:10:30Z
+fixed_scalar_action_commit: a33c9708ab76671042d90d33ba9d0485101e5927
+script_commit: 31939c06951d90ced369cf5ac177318875392748
+workflow_commit: 01bb51eaecae29d555db81e1a855d5dd61ba6d0a
+reason: supersede the intermediate fixed-C static mismatch using the final fixed C(X_U)=M_Pl^2/(2X_U) scalar action and exact static clock solution; test all-order equivalence to beta0_eff=2 in the static zero-shift channel.
