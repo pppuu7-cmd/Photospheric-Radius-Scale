@@ -1,4 +1,4 @@
-trigger_utc: 2026-08-22T09:42:00Z
+trigger_utc: 2026-08-22T09:48:00Z
 iteration_started_local: 2026-08-22T12:20:00+03:00
 iteration_started_utc: 2026-08-22T09:20:00Z
-reason: capture B4 recenter-v4 launch, U1 Eq543 fixed-slice gate, and current B9 RTK/LCDM heavy-run status.
+reason: capture B4-v4, U1 Eq543 and velocity-support launches; refresh heavy B9 statuses.
