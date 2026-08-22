@@ -1,0 +1,46 @@
+name: RTK Route-B U1 second-class block reduction gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-second-class-block-reduction-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-rank-reduction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run second-class block reduction theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_second_class_block_reduction_gate.py
+          python3 rtk/route_b_u1_second_class_block_reduction_gate.py | tee u1_second_class_block_reduction.log
+          grep -q 'RTK_ROUTE_B_U1_SECOND_CLASS_BLOCK_REDUCTION_PASS' u1_second_class_block_reduction.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_second_class_block_reduction_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_SECOND_CLASS_BLOCK_REDUCTION_PASS'
+          assert r['det_M']=='(a*d - b*c)**2'
+          assert r['conditional_DOF_count']['d3']==3
+          print('U1_SECOND_CLASS_BLOCK_REDUCTION_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-second-class-block-reduction
+          path: |
+            u1_second_class_block_reduction.log
+            u1_second_class_block_reduction_result.json
+          if-no-files-found: error
