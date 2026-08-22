@@ -1,0 +1,58 @@
+name: RTK Route-B U1 static clock consistency
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-clock-consistency-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  static-clock:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Require fixed scalar action reconstruction
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_dbi_px_reconstruction_gate.py | tee u1_dbi_px_prereq.log
+          grep -q 'RTK_ROUTE_B_U1_DBI_PX_RECONSTRUCTION_PASS' u1_dbi_px_prereq.log
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert t['dbi_px']['shift_symmetry'] is True
+          assert t['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
+          print('U1_FIXED_SCALAR_ACTION_PREREQ_PASS')
+          PY
+      - name: Run exact static clock equation gate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_static_clock_consistency_gate.py
+          python3 rtk/route_b_u1_static_clock_consistency_gate.py | tee u1_static_clock.log
+          grep -q 'RTK_ROUTE_B_U1_STATIC_CLOCK_CONSISTENCY_PASS' u1_static_clock.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_clock_consistency_result.json'))
+          assert r['generalized_Euler_Lagrange_result'].startswith('0 exactly')
+          assert r['status_scope']=='STATIC_CLOCK_GREEN_ZERO_SHIFT'
+          print('U1_STATIC_CLOCK_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-static-clock-consistency
+          path: |
+            u1_dbi_px_prereq.log
+            u1_static_clock.log
+            u1_static_clock_consistency_result.json
+          if-no-files-found: error
