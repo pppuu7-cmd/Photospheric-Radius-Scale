@@ -1,0 +1,48 @@
+name: RTK Route-B U1 a2-zero canonical-affinity gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-a2zero-canonical-affinity-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-canonical-affinity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run a2-zero canonical-affinity theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_a2zero_canonical_affinity_gate.py
+          python3 rtk/route_b_u1_a2zero_canonical_affinity_gate.py | tee u1_a2zero_canonical_affinity.log
+          grep -q 'RTK_ROUTE_B_U1_A2ZERO_CANONICAL_AFFINITY_GATE_PASS' u1_a2zero_canonical_affinity.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_a2zero_canonical_affinity_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_A2ZERO_CANONICAL_AFFINITY_GATE_PASS'
+          assert r['matter_primary_identity']['pnu_plus_JA']=='0'
+          assert r['piN_JA_bracket_proxy_dJA_dN']=='0'
+          assert all(v=='0' for v in r['pure_second_derivatives_of_Hm'].values())
+          print('U1_A2ZERO_CANONICAL_AFFINITY_ARTIFACT_ASSERTIONS_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-route-b-u1-a2zero-canonical-affinity
+          path: |
+            u1_a2zero_canonical_affinity.log
+            u1_a2zero_canonical_affinity_result.json
+            research/RTK_C8_U1_FAMILY1_FIXED_IR_SLICE_v1.json
+          if-no-files-found: error
