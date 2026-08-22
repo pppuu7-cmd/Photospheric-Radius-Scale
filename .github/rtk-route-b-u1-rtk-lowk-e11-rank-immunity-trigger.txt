@@ -1,1 +1,1 @@
-launch 2026-08-22T22:09Z
+rerun 2026-08-22T22:15Z after conditioning-caveat hardening
