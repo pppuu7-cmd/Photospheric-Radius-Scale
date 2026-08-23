@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T22:18:00Z
+reason: certify the constant-conformal soft theorem K3_soft=(d-2z)K2 and test whether any purely intrinsic six-spatial-derivative linear combination can remove the bare soft vertex while retaining the p6 quadratic carrier.
