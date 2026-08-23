@@ -11,8 +11,10 @@ support, and is used only as a safety envelope.
 
 For each z we recompute the single-channel P(X) l=0/l=2 tree partial-wave
 cutoff from the exact RTK dispersion and DBI coefficients, then compare the
-first crossing |g a_l|=1/2 with k_phys,max.  This gate does not promote the
-single-channel cutoff to an all-sector EFT theorem.
+first crossing |g a_l|=1/2 with k_phys,max.  The cutoff is NOT assumed monotone
+in redshift: the dense scan records its finite transition-region overshoot
+before the early DBI-edge plateau.  This gate does not promote the single-channel
+cutoff to an all-sector EFT theorem.
 """
 import json, math
 import numpy as np
@@ -50,8 +52,8 @@ def state(z):
 
 def ga(z,y):
     ca2,MK,C3t,C3s,C4t,C4ts,C4s=state(z)
-    ca=math.sqrt(ca2); Z=1+y*y; k=y*MK; w=ca*k/math.sqrt(Z)
-    a0=(48*C4t*w**4-16*C4ts*k*k*w*w+(80/3)*C4s*k**4+8*(C3s*k*k-3*C3t*w*w)**2)/(32*math.pi*Z**2)
+    ca=math.sqrt(ca2); Z=1.0+y*y; k=y*MK; w=ca*k/math.sqrt(Z)
+    a0=(48*C4t*w**4-16*C4ts*k*k*w*w+(80.0/3.0)*C4s*k**4+8*(C3s*k*k-3*C3t*w*w)**2)/(32*math.pi*Z**2)
     a2=2*C4s*k**4/(15*math.pi*Z**2)
     g=Z**2.5/(2*ca**3)
     return g*a0,g*a2,k
@@ -62,7 +64,7 @@ def cutoff(z):
     assert max(abs(ga(z,lo)[0]),abs(ga(z,lo)[1]))<0.5
     hi=lo
     for _ in range(110):
-        hi*=10
+        hi*=10.0
         a0,a2,_=ga(z,hi)
         if max(abs(a0),abs(a2))>=0.5: break
     else: raise AssertionError('cutoff bracket failed')
@@ -78,19 +80,21 @@ def cutoff(z):
 zs=sorted(set([0.0,1.0,10.0,100.0,1100.0,1e4,1e5,1e6,1e7,1e9]+[10.0**u-1.0 for u in np.linspace(0,9,181)]))
 rows=[]
 min_margin=(float('inf'),None)
-last_kunit=0.0
-monotonic_violations=0
 for z in zs:
     c=cutoff(float(z))
     kphys=kcom_max_eV*(1.0+z)
     margin=c['k_unit_eV']/kphys
-    if c['k_unit_eV'] < last_kunit*(1-2e-10): monotonic_violations+=1
-    last_kunit=max(last_kunit,c['k_unit_eV'])
     row={'z':float(z),'k_phys_envelope_eV':kphys,'margin_kunit_over_kphys':margin,**c}
     rows.append(row)
     if margin<min_margin[0]: min_margin=(margin,row.copy())
-assert monotonic_violations==0
 assert min_margin[0] > 1e15
+
+# Record, rather than forbid, the finite transition-region overshoot.
+peak=max(rows,key=lambda r:r['k_unit_eV'])
+decrease_steps=sum(1 for a,b in zip(rows,rows[1:]) if b['k_unit_eV'] < a['k_unit_eV']*(1-2e-10))
+assert decrease_steps>0
+assert 3e5 < peak['z'] < 6e5
+assert 2.4e-4 < peak['k_unit_eV'] < 2.8e-4
 
 # Reproduce the early plateau analytically and compare the z=1e9 root.
 kearly=(24.0*math.pi*MPL**2*mu_eV**2*math.sqrt(math.sqrt(lambdaD)+1.0)/(29.0*lambdaD))**0.25
@@ -99,9 +103,7 @@ assert abs(r1e9['k_unit_eV']/kearly-1)<3e-12
 
 # Key rows kept compact in the primary result.
 keyz=[0.0,1100.0,1e6,1e9]
-keyrows=[]
-for z in keyz:
-    keyrows.append(min(rows,key=lambda r:abs(r['z']-z)))
+keyrows=[min(rows,key=lambda r:abs(r['z']-z)) for z in keyz]
 
 out={
  'classification':'RTK_C9_RTK_SCALAR_UNITARITY_B9_K_WINDOW_PASS',
@@ -115,7 +117,11 @@ out={
  'conservative_extension':'Treat the full configured 5 h/Mpc comoving envelope as present at every epoch through z=1e9, k_phys=k_com(1+z). This intentionally overstates the actual B9 physical-k demand.',
  'redshift_scan':{'z_min':0.0,'z_max':1e9,'points':len(rows),'parameterization':'dense uniform grid in log10(1+z), plus key epochs'},
  'cutoff_definition':'first positive momentum where max(|g a0|,|g a2|)=1/2 for the certified P(X)-only tree partial waves',
- 'monotonic_kunit_violations_on_grid':monotonic_violations,
+ 'transition_structure':{
+   'decrease_steps_after_peak_on_grid':decrease_steps,
+   'peak_cutoff_row':peak,
+   'interpretation':'k_unit(z) rises from its late-time value, overshoots near z~4e5, then relaxes toward the exact early DBI-edge plateau; strict redshift monotonicity is false and is not required for the safety margin.'
+ },
  'minimum_margin':min_margin[1],
  'key_rows':keyrows,
  'early_plateau_k_unit_eV':kearly,
@@ -130,4 +136,4 @@ out={
  'next_gate':'derive a UV-completion window for higher-spatial quadratic operators: keep corrections negligible over the certified B9 k envelope while forcing omega(k) to grow before the partial-wave phase-space cutoff.'
 }
 open('c9_rtk_scalar_unitarity_b9_k_window_result.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
-print(out['classification'],json.dumps({'minimum_margin':out['minimum_margin'],'key_rows':keyrows},sort_keys=True))
+print(out['classification'],json.dumps({'minimum_margin':out['minimum_margin'],'peak':peak,'key_rows':keyrows},sort_keys=True))
