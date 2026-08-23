@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:58:00Z
+reason: evaluate the replay-certified current-point ordering between the low-k DBI cubic coefficient scale and the exact rational-mode frequency cap c_a M_K as a function of redshift.
