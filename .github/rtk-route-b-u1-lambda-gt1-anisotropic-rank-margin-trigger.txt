@@ -1,2 +1,2 @@
-launch_utc: 2026-08-23T19:25:00Z
-reason: quantify open-neighborhood response and full-block rank margins around exact lambda>1 barotropic FLRW theorem.
+launch_utc: 2026-08-23T19:50:00Z
+reason: rerun unchanged anisotropic-margin theorem after removing SymPy sqrt-square branch ambiguity from saturation assertion.
