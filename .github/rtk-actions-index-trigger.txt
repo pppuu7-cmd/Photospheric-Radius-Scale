@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:53:00Z
-reason: capture B9 k-window rerun, intrinsic-curvature UV carrier, partial-wave and higher-spatial UV results before durable checkpoint and nonlinear carrier expansion.
+trigger_utc: 2026-08-23T22:02:00Z
+reason: capture B9 k-window rerun plus intrinsic-curvature and curvature-powercount UV carrier gates for durable C9 checkpoint.
