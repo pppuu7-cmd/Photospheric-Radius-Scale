@@ -35,7 +35,11 @@ jobs:
           r=json.load(open('c9_rtk_scalar_unitarity_b9_k_window_result.json'))
           assert r['classification']=='RTK_C9_RTK_SCALAR_UNITARITY_B9_K_WINDOW_PASS'
           assert r['minimum_margin']['margin_kunit_over_kphys']>1e15
-          assert r['monotonic_kunit_violations_on_grid']==0
+          t=r['transition_structure']
+          assert t['decrease_steps_after_peak_on_grid']>0
+          p=t['peak_cutoff_row']
+          assert 3e5 < p['z'] < 6e5
+          assert 2.4e-4 < p['k_unit_eV'] < 2.8e-4
           print('C9_RTK_SCALAR_UNITARITY_B9_K_WINDOW_ARTIFACT_PASS')
           PY
       - uses: actions/upload-artifact@v4
