@@ -1,0 +1,50 @@
+name: RTK Route-B U1 flat FLRW lambda>1 near-GR background
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-flat-flrw-lambda-gt1-near-gr-background-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run near-GR lambda>1 background theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_flat_flrw_lambda_gt1_near_gr_background_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_flat_flrw_lambda_gt1_near_gr_background_provenance.txt
+          python3 rtk/route_b_u1_flat_flrw_lambda_gt1_near_gr_background_gate.py | tee u1_flat_flrw_lambda_gt1_near_gr_background.log
+          grep -q '^RTK_ROUTE_B_U1_FLAT_FLRW_LAMBDA_GT1_NEAR_GR_BACKGROUND_PASS ' u1_flat_flrw_lambda_gt1_near_gr_background.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_flat_flrw_lambda_gt1_near_gr_background_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_FLAT_FLRW_LAMBDA_GT1_NEAR_GR_BACKGROUND_PASS'
+          assert '2/(3 lambda-1)' in r['ratio']
+          assert 'lambda_D' in r['pipeline_warning']
+          print('U1_FLAT_FLRW_LAMBDA_GT1_NEAR_GR_BACKGROUND_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-flat-flrw-lambda-gt1-near-gr-background
+          path: |
+            u1_flat_flrw_lambda_gt1_near_gr_background.log
+            u1_flat_flrw_lambda_gt1_near_gr_background_result.json
+            u1_flat_flrw_lambda_gt1_near_gr_background_provenance.txt
+            rtk/route_b_u1_flat_flrw_lambda_gt1_near_gr_background_gate.py
+          if-no-files-found: error
