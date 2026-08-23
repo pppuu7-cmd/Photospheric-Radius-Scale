@@ -1,0 +1,50 @@
+name: RTK C9 projectable integration-constant dust degeneracy
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-projectable-integration-constant-dust-degeneracy-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run projectable dust-degeneracy theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_projectable_integration_constant_dust_degeneracy_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_projectable_integration_constant_dust_degeneracy_provenance.txt
+          python3 rtk/c9_projectable_integration_constant_dust_degeneracy_gate.py | tee c9_projectable_integration_constant_dust_degeneracy.log
+          grep -q '^RTK_C9_PROJECTABLE_INTEGRATION_CONSTANT_DUST_DEGENERACY_PASS ' c9_projectable_integration_constant_dust_degeneracy.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_projectable_integration_constant_dust_degeneracy_result.json'))
+          assert r['classification']=='RTK_C9_PROJECTABLE_INTEGRATION_CONSTANT_DUST_DEGENERACY_PASS'
+          assert r['status_scope'].startswith('YELLOW_EXACT_BACKGROUND_DEGENERACY')
+          assert r['background_jacobian_rank'].startswith('1 ')
+          print('C9_PROJECTABLE_INTEGRATION_CONSTANT_DUST_DEGENERACY_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-projectable-integration-constant-dust-degeneracy
+          path: |
+            c9_projectable_integration_constant_dust_degeneracy.log
+            c9_projectable_integration_constant_dust_degeneracy_result.json
+            c9_projectable_integration_constant_dust_degeneracy_provenance.txt
+            rtk/c9_projectable_integration_constant_dust_degeneracy_gate.py
+          if-no-files-found: error
