@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T19:03:00Z
-reason: capture B9 half-scale, barotropic lambda>1 rerun, parent PPN lambda compatibility, near-GR background, static O2/O4 lambda-branch, and moving O3 preferred-frame recertification.
+trigger_utc: 2026-08-23T19:12:00Z
+reason: refresh after moving-O3 recertification; capture B9 half-scale, homogeneous elliptic A-source supersession, lambda>1 rank/PPN gates, and new C9/generic-background research.
