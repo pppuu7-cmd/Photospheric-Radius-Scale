@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T21:50:00Z
+reason: certify R3-squared and grad-R3-squared as spatial-only scalar UV carriers preserving the certified rational kinetic denominator and flat-FLRW quadratic tensor dispersion.
