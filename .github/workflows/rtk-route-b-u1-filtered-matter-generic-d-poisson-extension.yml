@@ -35,7 +35,8 @@ jobs:
           r=json.load(open('u1_filtered_matter_generic_d_poisson_extension_result.json'))
           assert r['classification']=='RTK_ROUTE_B_U1_FILTERED_MATTER_GENERIC_D_POISSON_EXTENSION_PASS'
           assert 'a_eff^2 V' in r['isotropic_extra_d']
-          assert 'barotropic' in r['barotropic_limit'].lower()
+          assert '{H0,tau_H}_matter=0' in r['barotropic_limit']
+          assert any('generic canonical matter' in x for x in r['non_claims'])
           print('U1_FILTERED_MATTER_GENERIC_D_POISSON_EXTENSION_ARTIFACT_PASS')
           PY
       - uses: actions/upload-artifact@v4
