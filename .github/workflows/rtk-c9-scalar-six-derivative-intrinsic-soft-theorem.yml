@@ -1,0 +1,49 @@
+name: RTK C9 scalar six-derivative intrinsic soft theorem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-scalar-six-derivative-intrinsic-soft-theorem-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run intrinsic soft theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_provenance.txt
+          python3 rtk/c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_gate.py | tee c9_rtk_scalar_six_derivative_intrinsic_soft_theorem.log
+          grep -q '^RTK_C9_RTK_SCALAR_SIX_DERIVATIVE_INTRINSIC_SOFT_THEOREM_PASS ' c9_rtk_scalar_six_derivative_intrinsic_soft_theorem.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_result.json'))
+          assert r['classification']=='RTK_C9_RTK_SCALAR_SIX_DERIVATIVE_INTRINSIC_SOFT_THEOREM_PASS'
+          assert r['current_d3_six_derivative']=='K3_soft=-3 K2_hard-hard'
+          print('C9_RTK_SCALAR_SIX_DERIVATIVE_INTRINSIC_SOFT_THEOREM_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-scalar-six-derivative-intrinsic-soft-theorem
+          path: |
+            c9_rtk_scalar_six_derivative_intrinsic_soft_theorem.log
+            c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_result.json
+            c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_provenance.txt
+            rtk/c9_rtk_scalar_six_derivative_intrinsic_soft_theorem_gate.py
+          if-no-files-found: error
