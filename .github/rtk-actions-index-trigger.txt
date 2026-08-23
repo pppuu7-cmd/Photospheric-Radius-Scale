@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T19:46:00Z
-reason: refresh current front after launching lambda>1 cosmology-anisotropy compatibility and RTK intended-scalar interaction-dictionary gates; capture B9 v7 half-scale status and projectable C9 branch results.
+trigger_utc: 2026-08-23T19:54:00Z
+reason: capture cosmology-anisotropy rerun, DBI derivative-edge gate, intended-scalar interaction artifact, and B9 v7 half-scale status.
