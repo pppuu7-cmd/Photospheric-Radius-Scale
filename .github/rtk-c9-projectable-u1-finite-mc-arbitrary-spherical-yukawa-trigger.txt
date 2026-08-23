@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:41:00Z
+reason: certify the exact exterior source-profile form factor and profile-independent bound while O4 and scalar amplitude branches continue independently.
