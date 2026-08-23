@@ -1,0 +1,37 @@
+name: RTK C9 scalar curvature-carrier UV powercount
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-rtk-scalar-curvature-carrier-uv-powercount-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Run curvature-carrier UV power-count theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_rtk_scalar_curvature_carrier_uv_powercount_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_rtk_scalar_curvature_carrier_uv_powercount_provenance.txt
+          python3 rtk/c9_rtk_scalar_curvature_carrier_uv_powercount_gate.py | tee c9_rtk_scalar_curvature_carrier_uv_powercount.log
+          grep -q '^RTK_C9_RTK_SCALAR_CURVATURE_CARRIER_UV_POWERCOUNT_PASS ' c9_rtk_scalar_curvature_carrier_uv_powercount.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-rtk-scalar-curvature-carrier-uv-powercount
+          path: |
+            c9_rtk_scalar_curvature_carrier_uv_powercount.log
+            c9_rtk_scalar_curvature_carrier_uv_powercount_result.json
+            c9_rtk_scalar_curvature_carrier_uv_powercount_provenance.txt
+            rtk/c9_rtk_scalar_curvature_carrier_uv_powercount_gate.py
+          if-no-files-found: error
