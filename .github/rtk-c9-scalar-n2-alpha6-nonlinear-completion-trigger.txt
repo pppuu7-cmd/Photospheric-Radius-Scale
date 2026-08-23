@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T22:09:00Z
+reason: certify nonlinear lapse/state-function ambiguity of alpha6 and test the exact sqrt(X) completion against the soft-s curvature warning.
