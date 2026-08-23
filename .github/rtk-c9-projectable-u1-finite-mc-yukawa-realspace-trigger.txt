@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T20:07:00Z
+reason: translate the certified finite-Mc Fourier Newton transfer into the exact point-source Yukawa potential/force kernel and a real-space force-tolerance dictionary.
