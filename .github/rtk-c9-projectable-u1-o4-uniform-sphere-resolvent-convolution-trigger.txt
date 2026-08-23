@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:25:00Z
+reason: run the source-specific finite-Mc O4 resolvent mode-mixing convolution over a broad (M_c R,kR) grid with independent resolution audit while lighter symbolic gates proceed in parallel.
