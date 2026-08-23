@@ -1,0 +1,53 @@
+{
+  "classification": "B9_LCDM_RECENTER_V7_HALF_SCALE_AUDIT_TARGET_V1_FROZEN",
+  "status": "FROZEN_AFTER_V7_BASE_AND_EIGENMODE_RAYS_BEFORE_HALF_SCALE_HESSIAN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "center": {
+    "As": 2.099031119902081e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.684806125603674
+  },
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "audit_stencil_scale": 0.5,
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "fresh_tree_replay_abs_tolerance": 2e-06,
+  "parent_base": {
+    "run_id": 32601673857,
+    "artifact_id": 9483908098,
+    "artifact_digest": "sha256:112287b292c315a1d603d66d390e1caf1e63983dd40dae591c7275686305b9f7",
+    "stencil_scale": 1.0,
+    "S_center_eff": 1058.2173424114785,
+    "best_improvement_eff": 0.0,
+    "positive_definite_eff": false,
+    "min_eigenvalue_eff": -0.001225093918953372
+  },
+  "parent_rays": {
+    "run_id": 32638574993,
+    "artifact_id": 9493118573,
+    "artifact_digest": "sha256:684244ab58b7cd1d81cb2ec05f92b5ee68b12d290abb1b3059ed4c0011daa37c",
+    "classification": "B9_LCDM_RECENTER_V7_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
+    "max_exact_improvement_eff": -0.032991460094535796,
+    "best_alpha": -0.5,
+    "best_exact_S_eff": 1058.250333871573
+  },
+  "decision_rule": {
+    "center_must_remain_unchanged": true,
+    "if_half_scale_improvement_gt_0p005": "freeze the best exact half-scale point as the next LCDM recenter target; do not call stationarity closed",
+    "if_half_scale_improvement_le_0p005_and_positive_definite": "close the v7 LCDM local stationarity-resolution audit",
+    "if_half_scale_improvement_le_0p005_and_not_positive_definite": "retain non-PD status and freeze a next diagnostic from the half-scale eigensystem; do not recenter without exact descent"
+  },
+  "warning": "Local B9 LCDM Planck-R3-lensing robustness only; no global-minimum, posterior, AIC/BIC or Bayes-factor claim. Frozen before any half-scale score."
+}
