@@ -1,0 +1,50 @@
+name: RTK Route-B U1 filtered-matter exact flat b-c
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-filtered-matter-bc-exact-flat-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run exact filtered b-c theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_filtered_matter_bc_exact_flat_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_filtered_matter_bc_exact_flat_provenance.txt
+          python3 rtk/route_b_u1_filtered_matter_bc_exact_flat_gate.py | tee u1_filtered_matter_bc_exact_flat.log
+          grep -q '^RTK_ROUTE_B_U1_FILTERED_MATTER_BC_EXACT_FLAT_PASS ' u1_filtered_matter_bc_exact_flat.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_filtered_matter_bc_exact_flat_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_FILTERED_MATTER_BC_EXACT_FLAT_PASS'
+          assert r['exact_b_m']=='-c_m'
+          assert 'M_c^4' in r['q2_coefficient']
+          print('U1_FILTERED_MATTER_BC_EXACT_FLAT_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-filtered-matter-bc-exact-flat
+          path: |
+            u1_filtered_matter_bc_exact_flat.log
+            u1_filtered_matter_bc_exact_flat_result.json
+            u1_filtered_matter_bc_exact_flat_provenance.txt
+            rtk/route_b_u1_filtered_matter_bc_exact_flat_gate.py
+          if-no-files-found: error
