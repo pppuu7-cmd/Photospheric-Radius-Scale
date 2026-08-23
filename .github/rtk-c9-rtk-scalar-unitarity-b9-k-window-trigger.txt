@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:42:00Z
-reason: rerun B9 k-window margin after replacing false strict-redshift-monotonicity assumption with explicit transition-overshoot measurement; safety criterion unchanged.
+trigger_utc: 2026-08-23T22:06:00Z
+reason: final rerun after CI-only post-check update; preserve measured nonmonotonic cutoff peak and certify B9 safety margin.
