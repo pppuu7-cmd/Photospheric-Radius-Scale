@@ -1,2 +1,2 @@
-launch_utc: 2026-08-22T18:58:00Z
-reason: rerun after replacing a SymPy structural-equality assertion by algebraic simplification; physical theorem and frozen scope unchanged.
+launch_utc: 2026-08-23T19:02:00Z
+reason: fresh recertification of the already algebraically corrected moving-source O3 clock cancellation; lambda_HL>1 lies inside the theorem's regular lambda_HL != 1 domain.
