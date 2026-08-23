@@ -43,9 +43,11 @@ KA=sp.factor(Ka3.subs({q2:k2,pq:0}))
 KB=sp.factor(Ka3.subs({q2:k2/4,pq:k2/4}))
 diff=sp.factor(KA-KB)
 assert diff != 0
-# Prove the difference cannot vanish for positive M2,k2,gamma.
+# Exact difference and positivity proof for M2,k2,gamma>0.
+diff_expected=-M2*gamma*k2*(7*M2+k2)/((M2+k2)**2*(4*M2+k2))
+assert sp.simplify(diff-diff_expected)==0
 num=sp.factor(sp.together(diff).as_numer_denom()[0])
-assert sp.factor(num)==-sp.Rational(3,4)*M2*gamma*k2*(2*M2+k2)
+assert sp.simplify(num+M2*gamma*k2*(7*M2+k2))==0
 
 # Parent/local limit M_c^2 -> 0 at fixed nonzero momenta removes this specific
 # resolvent-metric-variation correction, consistently with a_eff -> 1.
@@ -62,7 +64,7 @@ out={
   'fourier_resolvent_kernel':'-M_c^2 gamma[2 q^2-(d-2)p.q]/[(M_c^2+k^2)(M_c^2+q^2)]',
   'd3_fixed_k_partition_A':'p=0,q=k',
   'd3_fixed_k_partition_B':'p=q=k/2 collinear',
-  'partition_difference_numerator':'-(3/4) M_c^2 gamma k^2 (2 M_c^2+k^2) != 0 for positive M_c^2,k^2,gamma',
+  'partition_difference':'-M_c^2 gamma k^2(7M_c^2+k^2)/[(M_c^2+k^2)^2(4M_c^2+k^2)] !=0 for positive M_c^2,k^2,gamma',
   'interpretation':'At O(4) finite M_c produces genuine momentum-partition dependence. A single substitution kappa->1/f(k), or ten constant PPN parameters, cannot encode the full nonlinear response. The next heavy gate must solve generalized convolution kernels or direct extended-source observables.',
   'parent_limit':'M_c^2->0 at fixed nonzero momenta gives this resolvent-variation kernel ->0 and recovers the local parent response.',
   'non_claims':[
