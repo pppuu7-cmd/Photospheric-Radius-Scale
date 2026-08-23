@@ -19,7 +19,14 @@ e=sp.symbols('eps_G', positive=True, finite=True)
 lammax=sp.factor(1+2*e/(3*(1-e)))
 rmax=sp.factor((sp.sqrt(2)-2/sp.sqrt(3*lammax-1))/sp.sqrt(3))
 rclosed=sp.sqrt(sp.Rational(2,3))*(1-sp.sqrt(1-e))
-assert sp.simplify(rmax-rclosed)==0
+# Exact principal-root proof without relying on SymPy to infer 0<e<1 from
+# positivity alone. Set t=sqrt(1-e)>0, so e=1-t^2 and all radicals have a
+# manifest positive branch.
+t=sp.symbols('t', positive=True, finite=True)
+assert sp.simplify((3*lammax-1)-2/(1-e))==0
+rmax_t=sp.simplify(rmax.subs(e,1-t**2))
+rclosed_t=sp.simplify(rclosed.subs(e,1-t**2))
+assert sp.simplify(rmax_t-rclosed_t)==0
 # Small-e slope.
 slope=sp.simplify(sp.diff(rclosed,e).subs(e,0))
 assert slope==1/sp.sqrt(6)
