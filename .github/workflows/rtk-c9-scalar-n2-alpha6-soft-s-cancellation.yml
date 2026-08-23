@@ -34,7 +34,8 @@ jobs:
           import json
           r=json.load(open('c9_rtk_scalar_n2_alpha6_soft_s_cancellation_result.json'))
           assert r['classification']=='RTK_C9_RTK_SCALAR_N2_ALPHA6_SOFT_S_CANCELLATION_OBSTRUCTION_PASS'
-          assert 'finite momentum interval' in r['interpretation']
+          assert r['status_scope'].startswith('YELLOW_LOCAL_ALPHA6_STATE_DEPENDENCE_CANNOT_CANCEL_SOFT_S')
+          assert r['necessary_cancellation_magnitude']=='|1-2s1|=3H/[2 omega(k)]'
           print('C9_RTK_SCALAR_N2_ALPHA6_SOFT_S_CANCELLATION_ARTIFACT_PASS')
           PY
       - uses: actions/upload-artifact@v4
