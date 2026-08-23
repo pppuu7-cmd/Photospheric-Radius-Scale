@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:24:00Z
-reason: compare the exact P(X) single-channel partial-wave momentum cutoff to the configured B9 5 h/Mpc comoving envelope conservatively redshifted through z=1e9.
+trigger_utc: 2026-08-23T21:42:00Z
+reason: rerun B9 k-window margin after replacing false strict-redshift-monotonicity assumption with explicit transition-overshoot measurement; safety criterion unchanged.
