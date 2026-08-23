@@ -1,0 +1,50 @@
+name: RTK Route-B U1 flat FLRW no-root sufficient domain
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-flat-flrw-no-root-sufficient-domain-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run all-q sufficient-domain theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_flat_flrw_no_root_sufficient_domain_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_flat_flrw_no_root_sufficient_domain_provenance.txt
+          python3 rtk/route_b_u1_flat_flrw_no_root_sufficient_domain_gate.py | tee u1_flat_flrw_no_root_sufficient_domain.log
+          grep -q '^RTK_ROUTE_B_U1_FLAT_FLRW_NO_ROOT_SUFFICIENT_DOMAIN_PASS ' u1_flat_flrw_no_root_sufficient_domain.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_flat_flrw_no_root_sufficient_domain_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_FLAT_FLRW_NO_ROOT_SUFFICIENT_DOMAIN_PASS'
+          assert 'det B(q)=F(q)^2+a(q)d(q)>0' in r['determinant_conclusion']
+          assert any('does not choose M_c' in x for x in r['non_claims'])
+          print('U1_FLAT_FLRW_NO_ROOT_SUFFICIENT_DOMAIN_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-flat-flrw-no-root-sufficient-domain
+          path: |
+            u1_flat_flrw_no_root_sufficient_domain.log
+            u1_flat_flrw_no_root_sufficient_domain_result.json
+            u1_flat_flrw_no_root_sufficient_domain_provenance.txt
+            rtk/route_b_u1_flat_flrw_no_root_sufficient_domain_gate.py
+          if-no-files-found: error
