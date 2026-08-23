@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T22:16:00Z
-reason: test whether any local momentum-independent alpha6(X) state response can cancel the exact n2 soft-spatial s-channel over a finite k interval after substituting the certified linear lapse solution.
+trigger_utc: 2026-08-23T22:22:00Z
+reason: rerun the already-passing alpha6 soft-s cancellation obstruction theorem after replacing a brittle artifact-string check; scientific theorem unchanged.
