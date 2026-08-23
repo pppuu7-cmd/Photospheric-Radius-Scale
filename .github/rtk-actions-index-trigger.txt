@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T12:13:00Z
-reason: capture B9 v7 eigenmode-ray launch plus rerun elliptic-filter remainder and ordinary-multifluid scope gates.
+trigger_utc: 2026-08-23T12:21:00Z
+reason: capture B9 eigenmode rays, rerun remainder/multifluid gates, pure-gravity d4 and canonical RTK lapse-gradient immunity gates.
