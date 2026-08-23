@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:16:00Z
+reason: classify whether small radiatively generated eta1,eta2 can protect exact 3-DOF nonprojectable U1 completion; theorem keeps symmetry/RG/structural alternatives open.
