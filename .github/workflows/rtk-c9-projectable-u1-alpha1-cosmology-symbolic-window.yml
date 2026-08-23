@@ -1,0 +1,39 @@
+name: RTK C9 projectable alpha1 cosmology symbolic window
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-projectable-u1-alpha1-cosmology-symbolic-window-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run alpha1-cosmology symbolic window theorem
+        run: |
+          set -euo pipefail
+          python3 rtk/c9_projectable_u1_alpha1_cosmology_symbolic_window_gate.py | tee c9_projectable_u1_alpha1_cosmology_symbolic_window.log
+          grep -q '^RTK_C9_PROJECTABLE_U1_ALPHA1_COSMOLOGY_SYMBOLIC_WINDOW_PASS ' c9_projectable_u1_alpha1_cosmology_symbolic_window.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-projectable-u1-alpha1-cosmology-symbolic-window
+          path: |
+            c9_projectable_u1_alpha1_cosmology_symbolic_window.log
+            c9_projectable_u1_alpha1_cosmology_symbolic_window_result.json
+            rtk/c9_projectable_u1_alpha1_cosmology_symbolic_window_gate.py
+          if-no-files-found: error
