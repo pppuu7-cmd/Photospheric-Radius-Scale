@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T19:54:00Z
-reason: capture cosmology-anisotropy rerun, DBI derivative-edge gate, intended-scalar interaction artifact, and B9 v7 half-scale status.
+trigger_utc: 2026-08-23T20:08:00Z
+reason: capture DBI derivative edge, current-point frequency crossover, finite-Mc moving O3, Yukawa real-space, cosmology-anisotropy rerun, and B9 v7 half-scale.
