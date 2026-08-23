@@ -1,0 +1,51 @@
+name: RTK C9 intended scalar interaction dictionary
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-rtk-scalar-interaction-dictionary-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run intended-scalar interaction dictionary theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_rtk_scalar_interaction_dictionary_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_rtk_scalar_interaction_dictionary_provenance.txt
+          python3 rtk/c9_rtk_scalar_interaction_dictionary_gate.py | tee c9_rtk_scalar_interaction_dictionary.log
+          grep -q '^RTK_C9_RTK_SCALAR_INTERACTION_DICTIONARY_PASS ' c9_rtk_scalar_interaction_dictionary.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_rtk_scalar_interaction_dictionary_result.json'))
+          assert r['classification']=='RTK_C9_RTK_SCALAR_INTERACTION_DICTIONARY_PASS'
+          assert r['lowk_canonical_mixed']['background_q_cancellation']=='exact'
+          assert 'M_K^3/k' in r['highk_mixed_vertex_scaling']['cubic_spatial_prefactor']
+          assert 'not certified strong-coupling cutoffs' in r['dimensional_scales_not_cutoffs']['warning']
+          print('C9_RTK_SCALAR_INTERACTION_DICTIONARY_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-rtk-scalar-interaction-dictionary
+          path: |
+            c9_rtk_scalar_interaction_dictionary.log
+            c9_rtk_scalar_interaction_dictionary_result.json
+            c9_rtk_scalar_interaction_dictionary_provenance.txt
+            rtk/c9_rtk_scalar_interaction_dictionary_gate.py
+          if-no-files-found: error
