@@ -13,7 +13,7 @@ Set
 Then the exact metric-response tensor entering d(q) obeys
  A/A0=1+z r^2,
  T/A0=trX/A0=-2+z r^2+c z r.
-For c>=0, T>=-2A.  Also T<=2A follows if z r(c-r)<=4.
+For c>=0, T>=-2A. Also T<=2A follows if z r(c-r)<=4.
 For 0<=c<=2, max_{0<=r<=1} r(c-r)=c^2/4, so z<=16/c^2
 (or vacuously w=0) implies |T|<=2A for every q.
 For lambda>1, 3 lambda-1>2, hence
@@ -30,7 +30,6 @@ lower=sp.factor(T+2*A)
 upper=sp.factor(2*A-T)
 assert sp.simplify(lower-z*r*(3*r+c))==0
 assert sp.simplify(upper-(4-z*r*(c-r)))==0
-# Complete square: r(c-r)=c^2/4-(r-c/2)^2 <= c^2/4.
 quad=sp.expand(r*(c-r))
 complete=sp.expand(c**2/sp.Integer(4)-(r-c/sp.Integer(2))**2)
 assert sp.simplify(quad-complete)==0
@@ -38,8 +37,12 @@ assert sp.simplify(quad-complete)==0
 w,eta,Mpl,M2,rho=sp.symbols('w eta0 M_Pl M_c_squared rho', positive=True, finite=True)
 zdef=sp.factor(2*rho/(eta*Mpl**2*M2))
 bound_M2=sp.factor(sp.Rational(9,32)*w**2*rho/(eta*Mpl**2))
-# z <= 64/(9w^2) is algebraically equivalent to M2 >= bound_M2 for positive vars.
-assert sp.simplify((sp.Rational(64,9)/w**2) * eta*Mpl**2*M2/2 - rho) == sp.factor(32*eta*Mpl**2*M2/(9*w**2)-rho)
+# Exact factorization proving z<=64/(9w^2) iff M2>=bound_M2 for positive variables.
+margin_z=sp.factor(sp.Rational(64,9)/w**2-zdef)
+margin_M=sp.factor(32*eta*Mpl**2*M2-9*w**2*rho)
+pref=sp.factor(sp.Rational(2,9)/(w**2*eta*Mpl**2*M2))
+assert sp.simplify(margin_z-pref*margin_M)==0
+assert sp.simplify(bound_M2-sp.Rational(9,32)*w**2*rho/(eta*Mpl**2))==0
 
 out={
   'classification':'RTK_ROUTE_B_U1_FLAT_FLRW_BAROTROPIC_LAMBDA_GT1_NO_ROOT_PASS',
