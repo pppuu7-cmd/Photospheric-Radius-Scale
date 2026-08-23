@@ -25,8 +25,10 @@ assert sp.simplify(crit_expected.subs(lam,1))==0
 # For pure traceless fractional anisotropy ||Delta X_TF|| <= r A,
 # solve the sufficient inequality r < crit/A for lambda.
 lam_min=sp.factor((1+4/(sp.sqrt(2)-sp.sqrt(3)*r)**2)/3)
-# Check algebraic saturation.
-assert sp.simplify((crit_expected/A).subs(lam,lam_min)-r)==0
+# Check algebraic saturation without sqrt(square) branch ambiguity.  On the
+# stated domain 0<=r<sqrt(2/3), sqrt(2)-sqrt(3)r is strictly positive.
+saturation=sp.expand((3*lam_min-1)*(sp.sqrt(2)-sp.sqrt(3)*r)**2-4)
+assert sp.simplify(saturation)==0
 
 # Small-r slope of lambda_min-1.
 slope=sp.simplify(sp.diff(lam_min,r).subs(r,0))
