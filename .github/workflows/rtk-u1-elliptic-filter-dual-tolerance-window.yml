@@ -1,0 +1,50 @@
+name: RTK U1 elliptic filter dual-tolerance window
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-u1-elliptic-filter-dual-tolerance-window-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run dual-tolerance scale-window theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/u1_elliptic_filter_dual_tolerance_window_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_elliptic_filter_dual_tolerance_window_provenance.txt
+          python3 rtk/u1_elliptic_filter_dual_tolerance_window_gate.py | tee u1_elliptic_filter_dual_tolerance_window.log
+          grep -q '^RTK_U1_ELLIPTIC_FILTER_DUAL_TOLERANCE_WINDOW_PASS ' u1_elliptic_filter_dual_tolerance_window.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_elliptic_filter_dual_tolerance_window_result.json'))
+          assert r['classification']=='RTK_U1_ELLIPTIC_FILTER_DUAL_TOLERANCE_WINDOW_PASS'
+          assert '>=99' in r['symmetric_1pct_check']
+          assert '3146.4' in r['illustrative_strict_local_check']
+          print('U1_ELLIPTIC_FILTER_DUAL_TOLERANCE_WINDOW_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-u1-elliptic-filter-dual-tolerance-window
+          path: |
+            u1_elliptic_filter_dual_tolerance_window.log
+            u1_elliptic_filter_dual_tolerance_window_result.json
+            u1_elliptic_filter_dual_tolerance_window_provenance.txt
+            rtk/u1_elliptic_filter_dual_tolerance_window_gate.py
+          if-no-files-found: error
