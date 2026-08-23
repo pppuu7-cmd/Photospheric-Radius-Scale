@@ -1,0 +1,50 @@
+name: RTK Route-B U1 lambda>1 anisotropic rank margin
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-lambda-gt1-anisotropic-rank-margin-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run anisotropic rank-margin theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_lambda_gt1_anisotropic_rank_margin_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_lambda_gt1_anisotropic_rank_margin_provenance.txt
+          python3 rtk/route_b_u1_lambda_gt1_anisotropic_rank_margin_gate.py | tee u1_lambda_gt1_anisotropic_rank_margin.log
+          grep -q '^RTK_ROUTE_B_U1_LAMBDA_GT1_ANISOTROPIC_RANK_MARGIN_PASS ' u1_lambda_gt1_anisotropic_rank_margin.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_lambda_gt1_anisotropic_rank_margin_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_LAMBDA_GT1_ANISOTROPIC_RANK_MARGIN_PASS'
+          assert '2 sqrt(6)/3' in r['pure_traceless_fractional_bound']['small_r_expansion']
+          assert 'preserves rank' in r['full_block_pointwise_margin']['sufficient_condition']
+          print('U1_LAMBDA_GT1_ANISOTROPIC_RANK_MARGIN_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-lambda-gt1-anisotropic-rank-margin
+          path: |
+            u1_lambda_gt1_anisotropic_rank_margin.log
+            u1_lambda_gt1_anisotropic_rank_margin_result.json
+            u1_lambda_gt1_anisotropic_rank_margin_provenance.txt
+            rtk/route_b_u1_lambda_gt1_anisotropic_rank_margin_gate.py
+          if-no-files-found: error
