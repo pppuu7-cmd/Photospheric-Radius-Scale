@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T18:41:00Z
-reason: capture B9 half-scale progress, flat-TT stability, FLRW lambda/source-sign gate, dust lambda>1 no-root, and barotropic lambda>1 no-root gates.
+trigger_utc: 2026-08-23T19:03:00Z
+reason: capture B9 half-scale, barotropic lambda>1 rerun, parent PPN lambda compatibility, near-GR background, static O2/O4 lambda-branch, and moving O3 preferred-frame recertification.
