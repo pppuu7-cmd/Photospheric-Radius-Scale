@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:52:00Z
+reason: certify exact frozen-DBI P1..P4, canonical cubic/quartic couplings, production edge identity and fixed-k versus coefficient-scale asymptotics before any unitarity-cutoff claim.
