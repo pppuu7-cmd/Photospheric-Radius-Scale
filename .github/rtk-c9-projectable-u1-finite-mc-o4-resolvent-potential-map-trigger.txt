@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T22:02:00Z
+reason: map the certified single-resolvent O4 source into the published projectable A4 equation and prove whether it is generically a new nonlocal potential or a constant PPN shift.
