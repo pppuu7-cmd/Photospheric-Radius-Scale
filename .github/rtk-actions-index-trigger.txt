@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T18:27:00Z
-reason: capture B9 v7 half-scale progress, generic d Poisson-extension rerun, exact barotropic block, all-q no-root gate, and parent-UV compatibility gate.
+trigger_utc: 2026-08-23T18:31:00Z
+reason: capture flat-TT all-q stability gate plus B9 half-scale, parent-UV compatibility, and generic-d rerun statuses.
