@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T21:57:00Z
+reason: certify asymptotic vertex, amplitude and phase-space weighted partial-wave scaling for intrinsic-curvature UV carrier family n=1..4.
