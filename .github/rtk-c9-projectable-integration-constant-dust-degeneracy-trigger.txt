@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:45:00Z
+reason: certify exact background amplitude degeneracy of projectable C_int/a^3 with RTK dust tail/CDM and freeze resolution routes.
