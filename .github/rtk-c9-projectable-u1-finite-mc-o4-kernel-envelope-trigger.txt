@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:22:00Z
+reason: prove a global finite bound on the isolated O4 resolvent metric-variation kernel while the heavier generalized observable branch runs.
