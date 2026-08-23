@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:18:00Z
+reason: certify the exact uniform-sphere exterior Yukawa form factor and finite-source force transfer independently of the heavy O4 PPN branch.
