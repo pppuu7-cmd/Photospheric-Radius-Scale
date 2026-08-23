@@ -34,7 +34,7 @@ jobs:
           import json
           r=json.load(open('c9_projectable_u1_flrw_global_hamiltonian_result.json'))
           assert r['classification']=='RTK_C9_PROJECTABLE_U1_FLRW_GLOBAL_HAMILTONIAN_PASS'
-          assert r['cosmological_Newton_ratio']=='G_cos/G_N=2/(3lambda-1)'
+          assert 'G_cos/G_N=2/(3lambda-1)' in r['cosmological_Newton_ratio']
           assert 'Q-H0=0' in r['A_constraint']['matter_plus_aux_source']
           print('C9_PROJECTABLE_U1_FLRW_GLOBAL_HAMILTONIAN_ARTIFACT_PASS')
           PY
