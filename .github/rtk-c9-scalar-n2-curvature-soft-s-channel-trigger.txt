@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T22:04:00Z
+reason: correct generic n2 UV power counting for the exact elastic s-channel with q_internal=0 and nonzero K3_s; determine whether n2 remains asymptotically soft before full constraint reduction.
