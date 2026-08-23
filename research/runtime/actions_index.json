@@ -1,10 +1,42 @@
 {
   "api_window": 100,
-  "generated_at_utc": "2026-08-23T21:31:45.902701+00:00",
+  "generated_at_utc": "2026-08-23T21:33:52.054858+00:00",
   "repository": "pppuu7-cmd/Photospheric-Radius-Scale",
   "runs": [
     {
       "conclusion": null,
+      "created_at": "2026-08-23T21:33:44Z",
+      "display_title": "Refresh Actions index for final C9 parallel results",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "0261c89d930bbffa58faf5a86c34b01a81d59eb0",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32667896638",
+      "id": 32667896638,
+      "name": "RTK lightweight Actions run index",
+      "run_attempt": 1,
+      "run_number": 147,
+      "status": "in_progress",
+      "updated_at": "2026-08-23T21:33:48Z",
+      "workflow_id": 336560028
+    },
+    {
+      "conclusion": "success",
+      "created_at": "2026-08-23T21:33:26Z",
+      "display_title": "Rerun B9 k-window after final CI post-check fix",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "de9b658f17e04e6b13a815543faec278d8829f02",
+      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32667878699",
+      "id": 32667878699,
+      "name": "RTK C9 scalar unitarity B9 k-window",
+      "run_attempt": 1,
+      "run_number": 3,
+      "status": "completed",
+      "updated_at": "2026-08-23T21:33:47Z",
+      "workflow_id": 340780691
+    },
+    {
+      "conclusion": "success",
       "created_at": "2026-08-23T21:31:37Z",
       "display_title": "Refresh Actions index for C9 UV carrier results",
       "event": "push",
@@ -15,8 +47,8 @@
       "name": "RTK lightweight Actions run index",
       "run_attempt": 1,
       "run_number": 146,
-      "status": "in_progress",
-      "updated_at": "2026-08-23T21:31:41Z",
+      "status": "completed",
+      "updated_at": "2026-08-23T21:31:50Z",
       "workflow_id": 336560028
     },
     {
@@ -1570,38 +1602,6 @@
       "status": "completed",
       "updated_at": "2026-08-23T12:25:07Z",
       "workflow_id": 340545381
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-23T12:22:22Z",
-      "display_title": "Launch exact flat filtered-matter b-c gate",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "e26ccbc147cd20753129be50d8f149e6175fc5fe",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32639202563",
-      "id": 32639202563,
-      "name": "RTK Route-B U1 filtered-matter exact flat b-c",
-      "run_attempt": 1,
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-23T12:22:51Z",
-      "workflow_id": 340544346
-    },
-    {
-      "conclusion": "success",
-      "created_at": "2026-08-23T12:21:10Z",
-      "display_title": "Launch flat-FLRW total d4 DeWitt-square gate",
-      "event": "push",
-      "head_branch": "main",
-      "head_sha": "46beea7f68babdcb99815abdf30dc679165a2ac1",
-      "html_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32639146712",
-      "id": 32639146712,
-      "name": "RTK Route-B U1 flat FLRW total d4 DeWitt square",
-      "run_attempt": 1,
-      "run_number": 1,
-      "status": "completed",
-      "updated_at": "2026-08-23T12:21:39Z",
-      "workflow_id": 340543812
     }
   ],
   "schema": "RTK_ACTIONS_INDEX_V2",
