@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:55:00Z
+reason: derive exact finite-Mc projectable static O2 Newton-transfer law and gamma_PPN result from published Eqs.(6.14),(6.15).
