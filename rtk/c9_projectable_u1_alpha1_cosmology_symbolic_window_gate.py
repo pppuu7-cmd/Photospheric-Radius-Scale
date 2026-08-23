@@ -26,7 +26,7 @@ assert sp.simplify((upper-lower).subs(kl,ratio_req*kc))==0
 # Equivalent dimensionless condition.
 R=sp.symbols('R', positive=True, finite=True)
 expr=sp.factor((upper-lower).subs(kl,R*kc)/kc**2)
-assert expr==eps*R**2/8-99
+assert sp.simplify(expr-(eps*R**2/8-99))==0
 
 illustrative={}
 for e in [1e-4,1e-5,6e-6,1e-6]:
