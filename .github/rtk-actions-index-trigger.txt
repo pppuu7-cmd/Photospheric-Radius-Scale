@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:08:00Z
-reason: refresh after exact P(X) elastic 2to2 benchmark; capture alpha1 window rerun and prepare partial-wave/phase-space unitarity continuation plus full finite-Mc O4 source-transfer work.
+trigger_utc: 2026-08-23T21:16:00Z
+reason: capture scalar partial-wave phase-space unitarity gate launched from b4e959425b5d595826cfe656c663767582d9d75d and continue cosmology-k safety plus O4 source support.
