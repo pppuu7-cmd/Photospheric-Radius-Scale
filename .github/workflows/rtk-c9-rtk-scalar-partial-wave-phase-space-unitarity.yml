@@ -36,7 +36,7 @@ jobs:
           assert r['classification']=='RTK_C9_RTK_SCALAR_PARTIAL_WAVE_PHASE_SPACE_UNITARITY_PASS'
           assert 1.9e-4 < r['early_edge']['k_unitarity_eV'] < 2.1e-4
           assert r['crossing_rows'][0]['dominant_partial_wave']=='l=0'
-          assert abs(r['early_edge']['g_a2_over_g_a0']-1/145)<1e-15
+          assert r['early_edge']['g_a2_over_g_a0']=='1/145'
           print('C9_RTK_SCALAR_PARTIAL_WAVE_PHASE_SPACE_UNITARITY_ARTIFACT_PASS')
           PY
       - uses: actions/upload-artifact@v4
