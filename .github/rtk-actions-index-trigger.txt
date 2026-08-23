@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T12:05:00Z
-reason: refresh after completed B9 LCDM v7 base Hessian and capture latest low-k remainder/source-scope gates before continuing research.
+trigger_utc: 2026-08-23T12:13:00Z
+reason: capture B9 v7 eigenmode-ray launch plus rerun elliptic-filter remainder and ordinary-multifluid scope gates.
