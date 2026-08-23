@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T20:03:00Z
+reason: combine exact G_cos/G_N tolerance with conservative lambda>1 anisotropic rank margin and derive the joint r-eps_G window.
