@@ -1,0 +1,50 @@
+name: RTK Route-B U1 current full-action leading rank margin
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-current-full-action-leading-rank-margin-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run current full-action leading-rank theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_current_full_action_leading_rank_margin_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_current_full_action_leading_rank_margin_provenance.txt
+          python3 rtk/route_b_u1_current_full_action_leading_rank_margin_gate.py | tee u1_current_full_action_leading_rank_margin.log
+          grep -q '^RTK_ROUTE_B_U1_CURRENT_FULL_ACTION_LEADING_RANK_MARGIN_PASS ' u1_current_full_action_leading_rank_margin.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_current_full_action_leading_rank_margin_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_CURRENT_FULL_ACTION_LEADING_RANK_MARGIN_PASS'
+          assert 'isolated root' in r['correction_to_old_bound']
+          assert 'q C <' in r['finite_q_margin']
+          print('U1_CURRENT_FULL_ACTION_LEADING_RANK_MARGIN_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-current-full-action-leading-rank-margin
+          path: |
+            u1_current_full_action_leading_rank_margin.log
+            u1_current_full_action_leading_rank_margin_result.json
+            u1_current_full_action_leading_rank_margin_provenance.txt
+            rtk/route_b_u1_current_full_action_leading_rank_margin_gate.py
+          if-no-files-found: error
