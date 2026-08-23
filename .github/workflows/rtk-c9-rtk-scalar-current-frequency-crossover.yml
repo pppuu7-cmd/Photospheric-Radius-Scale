@@ -1,0 +1,45 @@
+name: RTK C9 current-point scalar frequency crossover
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-rtk-scalar-current-frequency-crossover-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Run current-point frequency-crossover theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_rtk_scalar_current_frequency_crossover_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_rtk_scalar_current_frequency_crossover_provenance.txt
+          python3 rtk/c9_rtk_scalar_current_frequency_crossover_gate.py | tee c9_rtk_scalar_current_frequency_crossover.log
+          grep -q '^RTK_C9_RTK_SCALAR_CURRENT_FREQUENCY_CROSSOVER_PASS ' c9_rtk_scalar_current_frequency_crossover.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_rtk_scalar_current_frequency_crossover_result.json'))
+          assert r['classification']=='RTK_C9_RTK_SCALAR_CURRENT_FREQUENCY_CROSSOVER_PASS'
+          assert 4e12 < r['crossing']['z'] < 5e12
+          assert r['reference_rows'][2]['Lambda3_over_omega_inf']>1e8
+          print('C9_RTK_SCALAR_CURRENT_FREQUENCY_CROSSOVER_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-rtk-scalar-current-frequency-crossover
+          path: |
+            c9_rtk_scalar_current_frequency_crossover.log
+            c9_rtk_scalar_current_frequency_crossover_result.json
+            c9_rtk_scalar_current_frequency_crossover_provenance.txt
+            rtk/c9_rtk_scalar_current_frequency_crossover_gate.py
+          if-no-files-found: error
