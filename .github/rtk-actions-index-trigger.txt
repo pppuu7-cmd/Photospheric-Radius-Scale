@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:38:00Z
-reason: capture partial-wave rerun, O4 single-resolvent support, B9 k-window unitarity, and higher-spatial UV-window results for durable C9 checkpoint.
+trigger_utc: 2026-08-23T21:53:00Z
+reason: capture B9 k-window rerun, intrinsic-curvature UV carrier, partial-wave and higher-spatial UV results before durable checkpoint and nonlinear carrier expansion.
