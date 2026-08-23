@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T20:20:00Z
-reason: certify exact O4 resolvent metric-variation mode mixing before the heavy generalized PPN solve; forbid naive kappa->1/f substitution if the kernel depends on momentum partition.
+trigger_utc: 2026-08-23T20:37:00Z
+reason: rerun exact O4 resolvent mode-mixing theorem after correcting only the partition-difference factorization assertion; physical kernel formula unchanged.
