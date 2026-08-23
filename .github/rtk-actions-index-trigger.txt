@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T20:31:00Z
-reason: capture uniform-sphere Yukawa, O4 nonlocal kernel/envelope, heavy O4 uniform-sphere convolution, RTK P(X) tree-powercount scan, plus completed B9 and moving-O3 frontier.
+trigger_utc: 2026-08-23T20:48:00Z
+reason: capture corrected O4 nonlocal/envelope reruns, alpha1-cosmology window, arbitrary spherical Yukawa, exact P(X) elastic 2to2 tree benchmark, heavy O4 convolution and powercount artifacts.
