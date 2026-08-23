@@ -1,0 +1,50 @@
+name: RTK Route-B U1 RTK canonical lapse-gradient immunity
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-rtk-canonical-lapse-gradient-immunity-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run canonical RTK lapse-gradient immunity theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_rtk_canonical_lapse_gradient_immunity_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_rtk_canonical_lapse_gradient_immunity_provenance.txt
+          python3 rtk/route_b_u1_rtk_canonical_lapse_gradient_immunity_gate.py | tee u1_rtk_canonical_lapse_gradient_immunity.log
+          grep -q '^RTK_ROUTE_B_U1_RTK_CANONICAL_LAPSE_GRADIENT_IMMUNITY_PASS ' u1_rtk_canonical_lapse_gradient_immunity.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_rtk_canonical_lapse_gradient_immunity_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_RTK_CANONICAL_LAPSE_GRADIENT_IMMUNITY_PASS'
+          assert r['direct_crossblock_consequence'].endswith('every lapse Fourier mode')
+          assert any('does not remove the physical static/PPN acceleration effect' in z for z in r['non_claims'])
+          print('U1_RTK_CANONICAL_LAPSE_GRADIENT_IMMUNITY_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-rtk-canonical-lapse-gradient-immunity
+          path: |
+            u1_rtk_canonical_lapse_gradient_immunity.log
+            u1_rtk_canonical_lapse_gradient_immunity_result.json
+            u1_rtk_canonical_lapse_gradient_immunity_provenance.txt
+            rtk/route_b_u1_rtk_canonical_lapse_gradient_immunity_gate.py
+          if-no-files-found: error
