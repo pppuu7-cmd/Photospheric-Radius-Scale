@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T19:12:00Z
-reason: refresh after moving-O3 recertification; capture B9 half-scale, homogeneous elliptic A-source supersession, lambda>1 rank/PPN gates, and new C9/generic-background research.
+trigger_utc: 2026-08-23T19:42:00Z
+reason: capture C9 tuning-only no-go, projectable compatibility/coupled-DOF/FLRW gates, anisotropic rank margin, dual-tolerance filter window, B9 half-scale, moving O3 and A-source results.
