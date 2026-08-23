@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T22:12:00Z
+reason: transform the certified uniform-sphere O4 single-resolvent source convolution into the source-specific real-space generalized potential Psi_res and acceleration-shape profile with convergence audits.
