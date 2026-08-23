@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T18:03:00Z
-reason: refresh current research status for summary; capture B9 v7 rays and all low-k gates launched after 12:14Z.
+trigger_utc: 2026-08-23T18:21:00Z
+reason: capture B9 v7 half-scale launch, exact flat-FLRW barotropic block gate, and all-q no-root sufficient-domain gate.
