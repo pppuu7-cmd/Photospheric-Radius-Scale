@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:12:00Z
-reason: certify generalized identical-scalar phase-space factor, exact RTK P(X) partial waves, finite momentum unitarity cutoff and early-DBI-edge asymptote.
+trigger_utc: 2026-08-23T21:31:00Z
+reason: rerun exact scalar partial-wave phase-space unitarity after CI-only JSON exact-ratio type fix; theorem and numerical output unchanged.
