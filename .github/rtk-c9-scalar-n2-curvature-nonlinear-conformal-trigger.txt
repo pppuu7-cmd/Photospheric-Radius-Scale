@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T21:58:00Z
+reason: certify exact cubic/quartic conformal-scalar expansion and elastic COM bare kernels of the preferred n=2 intrinsic-curvature UV carrier before lapse/shift reduction.
