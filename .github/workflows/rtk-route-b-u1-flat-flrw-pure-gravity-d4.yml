@@ -1,0 +1,50 @@
+name: RTK Route-B U1 flat FLRW pure-gravity d4
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-flat-flrw-pure-gravity-d4-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run flat-FLRW pure-gravity d4 theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_flat_flrw_pure_gravity_d4_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee u1_flat_flrw_pure_gravity_d4_provenance.txt
+          python3 rtk/route_b_u1_flat_flrw_pure_gravity_d4_gate.py | tee u1_flat_flrw_pure_gravity_d4.log
+          grep -q '^RTK_ROUTE_B_U1_FLAT_FLRW_PURE_GRAVITY_D4_PASS ' u1_flat_flrw_pure_gravity_d4.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_flat_flrw_pure_gravity_d4_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_FLAT_FLRW_PURE_GRAVITY_D4_PASS'
+          assert '(lambda-1)' in r['d_kernel']
+          assert any('does not choose lambda' in z for z in r['non_claims'])
+          print('U1_FLAT_FLRW_PURE_GRAVITY_D4_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-flat-flrw-pure-gravity-d4
+          path: |
+            u1_flat_flrw_pure_gravity_d4.log
+            u1_flat_flrw_pure_gravity_d4_result.json
+            u1_flat_flrw_pure_gravity_d4_provenance.txt
+            rtk/route_b_u1_flat_flrw_pure_gravity_d4_gate.py
+          if-no-files-found: error
