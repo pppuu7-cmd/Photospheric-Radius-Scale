@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:28:00Z
-reason: capture partial-wave phase-space unitarity, O4 single-resolvent support, and B9 k-window unitarity runs before launching symbolic higher-spatial UV-completion window.
+trigger_utc: 2026-08-23T21:38:00Z
+reason: capture partial-wave rerun, O4 single-resolvent support, B9 k-window unitarity, and higher-spatial UV-window results for durable C9 checkpoint.
