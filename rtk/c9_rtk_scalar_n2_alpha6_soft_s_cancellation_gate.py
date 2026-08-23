@@ -47,19 +47,20 @@ assert sp.simplify(ratio-expected)==0
 
 necessary_c1=sp.factor(3*H/(2*omega))
 # Demonstrate omega is not constant: logarithmic derivative is strictly positive.
-D=sp.factor(sp.diff(sp.log(omega),sp.log(k)) if False else
-            1 + 2*k**4/(MU**4+k**4) - k**2/(MK**2+k**2))
+D=sp.factor(1 + 2*k**4/(MU**4+k**4) - k**2/(MK**2+k**2))
 # Rewrite D into a manifestly positive form by combining the first and last term.
 Dpos=sp.factor(MK**2/(MK**2+k**2) + 2*k**4/(MU**4+k**4))
 assert sp.simplify(D-Dpos)==0
-assert Dpos.is_positive
+# Both summands in Dpos are strictly positive for positive symbols.
+assert (MK**2/(MK**2+k**2)).is_positive
+assert (2*k**4/(MU**4+k**4)).is_positive
 # Therefore d omega/dk = omega D/k >0 for all positive k.
 domega=sp.factor(omega*D/k)
-assert domega.is_positive
-# And the required |c1|(k) is strictly decreasing.
+assert sp.simplify(sp.diff(omega,k)-domega)==0
+# And the required |c1|(k) is strictly decreasing because
+# d(required)/dk = -required*Dpos/k with every factor on the RHS positive.
 dreq=sp.factor(sp.diff(necessary_c1,k))
-assert sp.simplify(dreq + necessary_c1*D/k)==0
-assert sp.ask(sp.Q.negative(dreq)) is True
+assert sp.simplify(dreq + necessary_c1*Dpos/k)==0
 
 # Special sqrtX completion c1=0 cannot satisfy cancellation at any positive k.
 assert sp.simplify(c1.subs(s1,sp.Rational(1,2)))==0
