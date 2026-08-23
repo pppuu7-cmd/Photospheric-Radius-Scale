@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T22:08:00Z
-reason: capture final B9 k-window rerun, intrinsic-curvature UV carrier, and curvature-carrier UV powercount results for checkpoint.
+trigger_utc: 2026-08-23T22:12:00Z
+reason: final status refresh after B9 safety rerun and completed intrinsic-curvature / UV-powercount carrier gates.
