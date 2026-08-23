@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T20:14:00Z
-reason: capture B9 v7 half-scale final PASS, finite-Mc moving-O3 rerun, Yukawa real-space, current-frequency crossover, DBI-edge and current C9 frontier.
+trigger_utc: 2026-08-23T20:31:00Z
+reason: capture uniform-sphere Yukawa, O4 nonlocal kernel/envelope, heavy O4 uniform-sphere convolution, RTK P(X) tree-powercount scan, plus completed B9 and moving-O3 frontier.
