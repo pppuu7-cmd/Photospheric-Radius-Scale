@@ -1,0 +1,51 @@
+name: RTK C9 U1 radiative tuning-only no-go
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-u1-radiative-tuning-only-nogo-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run C9 tuning-only obstruction theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_u1_radiative_tuning_only_nogo_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_u1_radiative_tuning_only_nogo_provenance.txt
+          python3 rtk/c9_u1_radiative_tuning_only_nogo_gate.py | tee c9_u1_radiative_tuning_only_nogo.log
+          grep -q '^RTK_C9_U1_RADIATIVE_TUNING_ONLY_NOGO_PASS ' c9_u1_radiative_tuning_only_nogo.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_u1_radiative_tuning_only_nogo_result.json'))
+          assert r['classification']=='RTK_C9_U1_RADIATIVE_TUNING_ONLY_NOGO_PASS'
+          assert r['status_scope'].startswith('BLACK_TUNING_ONLY')
+          assert r['codimension']=='2'
+          assert 'eta1=eta2=0' in r['published_exact_dof_surface']
+          print('C9_U1_RADIATIVE_TUNING_ONLY_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-u1-radiative-tuning-only-nogo
+          path: |
+            c9_u1_radiative_tuning_only_nogo.log
+            c9_u1_radiative_tuning_only_nogo_result.json
+            c9_u1_radiative_tuning_only_nogo_provenance.txt
+            rtk/c9_u1_radiative_tuning_only_nogo_gate.py
+          if-no-files-found: error
