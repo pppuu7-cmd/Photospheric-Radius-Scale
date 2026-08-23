@@ -1,0 +1,73 @@
+{
+  "classification": "B9_LCDM_RECENTER_V7_BASE_EIGENMODE_RAYS_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "parent_base_run_id": 32601673857,
+  "parent_base_artifact_id": 9483908098,
+  "parent_base_artifact_digest": "sha256:112287b292c315a1d603d66d390e1caf1e63983dd40dae591c7275686305b9f7",
+  "parent_stencil_scale": 1.0,
+  "parent_positive_definite_eff": false,
+  "S_center_eff": 1058.217342411477,
+  "best_exact_S_eff": 1058.217342411477,
+  "best_improvement_eff": 0.0,
+  "best_label": "center",
+  "recenter_tolerance_S": 0.005,
+  "fresh_tree_replay_abs_tolerance": 0.000002,
+  "center": {
+    "As": 2.099031119902081e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.684806125603674
+  },
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "eigenmodes": [
+    {
+      "mode_index": 0,
+      "reason": "negative_base_mode",
+      "eigenvalue_y": -0.001225093918953372,
+      "eigenvector_y": [
+        0.7171186670025415,
+        -0.28141431375649784,
+        -0.08282453393304301,
+        0.455002159972433,
+        0.23939329955664845,
+        0.36790050363655813
+      ]
+    }
+  ],
+  "ray_amplitudes": [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0],
+  "decision_rule": {
+    "no_clipping": true,
+    "if_any_exact_improvement_gt_0p005": "freeze best exact ray point as B9 LCDM recenter-v8 target",
+    "if_no_ray_improvement_gt_0p005": "run an independent half-scale Hessian resolution audit at the unchanged v7 center; do not call the base Hessian positive definite",
+    "reason": "v7 base is exact-recenter-clear but has one soft negative Hessian eigenvalue"
+  },
+  "parent_eigenvalues_eff": [
+    -0.001225093918953372,
+    0.02777491107555288,
+    0.06366650286935963,
+    0.2311468510985081,
+    3.073712173552051,
+    7.16299523763092
+  ],
+  "parent_gradient_y": [
+    -0.02632704289032972,
+    0.008105766706421491,
+    0.030966769350698087,
+    -0.0005045655110507141,
+    -0.003933671776508163,
+    0.016269557266241463
+  ],
+  "warning": "B9 local LCDM stationarity/lensing robustness only; frozen before any v7 eigenmode-ray score and not a global-minimum, posterior, AIC/BIC or Bayes-factor claim."
+}
