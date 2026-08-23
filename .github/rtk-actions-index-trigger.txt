@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T22:12:00Z
-reason: final status refresh after B9 safety rerun and completed intrinsic-curvature / UV-powercount carrier gates.
+trigger_utc: 2026-08-23T22:00:00Z
+reason: capture exact nonlinear n2 curvature conformal gate plus current Formula Bible/checkpoint update and prepare parallel full-O4 continuation.
