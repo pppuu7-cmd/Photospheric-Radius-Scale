@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T22:02:00Z
-reason: capture B9 k-window rerun plus intrinsic-curvature and curvature-powercount UV carrier gates for durable C9 checkpoint.
+trigger_utc: 2026-08-23T22:08:00Z
+reason: capture final B9 k-window rerun, intrinsic-curvature UV carrier, and curvature-carrier UV powercount results for checkpoint.
