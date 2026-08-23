@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:20:00Z
+reason: test projectable U1 as structural C9 escape while retaining exact RTK rational dispersion and elliptic A-source compensator.
