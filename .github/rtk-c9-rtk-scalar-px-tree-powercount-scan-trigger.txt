@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:29:00Z
+reason: run a resolution-audited exact-background tree power-counting proxy across k/M_K and redshift while the projectable O4 convolution branch runs independently.
