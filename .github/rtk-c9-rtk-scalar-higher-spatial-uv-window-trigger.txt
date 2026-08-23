@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T21:35:00Z
+reason: certify symbolic observation-preserving UV-turnover windows for n=1 and n=2 spatial-only quadratic numerator completions after the partial-wave phase-space cutoff signal.
