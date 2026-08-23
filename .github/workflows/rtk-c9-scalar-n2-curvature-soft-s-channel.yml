@@ -1,0 +1,50 @@
+name: RTK C9 scalar n2 curvature soft s-channel
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-scalar-n2-curvature-soft-s-channel-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run n2 soft s-channel theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_rtk_scalar_n2_curvature_soft_s_channel_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c9_rtk_scalar_n2_curvature_soft_s_channel_provenance.txt
+          python3 rtk/c9_rtk_scalar_n2_curvature_soft_s_channel_gate.py | tee c9_rtk_scalar_n2_curvature_soft_s_channel.log
+          grep -q '^RTK_C9_RTK_SCALAR_N2_CURVATURE_SOFT_S_CHANNEL_WARNING_PASS ' c9_rtk_scalar_n2_curvature_soft_s_channel.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_rtk_scalar_n2_curvature_soft_s_channel_result.json'))
+          assert r['classification']=='RTK_C9_RTK_SCALAR_N2_CURVATURE_SOFT_S_CHANNEL_WARNING_PASS'
+          assert 'constant' in r['intermediate_MU_ll_k_ll_MK']
+          assert 'growing linearly' in r['deep_k_ll_none']
+          print('C9_RTK_SCALAR_N2_CURVATURE_SOFT_S_CHANNEL_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-scalar-n2-curvature-soft-s-channel
+          path: |
+            c9_rtk_scalar_n2_curvature_soft_s_channel.log
+            c9_rtk_scalar_n2_curvature_soft_s_channel_result.json
+            c9_rtk_scalar_n2_curvature_soft_s_channel_provenance.txt
+            rtk/c9_rtk_scalar_n2_curvature_soft_s_channel_gate.py
+          if-no-files-found: error
