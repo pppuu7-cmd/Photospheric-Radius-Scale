@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:34:00Z
+reason: certify the exact scale-hierarchy condition implied jointly by 1% cosmological compensation and finite-Mc O3 alpha1, without assigning an experimental k=1/r mapping.
