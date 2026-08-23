@@ -25,7 +25,8 @@ xstar=3*m**2+m*sp.sqrt(9*m**2+1)
 assert sp.simplify((xstar**2-6*m**2*xstar-m**2))==0
 # derivative numerator changes from + at x=0 to - after xstar, so this is max.
 num=sp.factor(sp.together(dE).as_numer_denom()[0])
-assert num==m**2*(6*m**2*x+m**2-x**2)
+expected_num=m**2*(6*m**2*x+m**2-x**2)
+assert sp.simplify(num-expected_num)==0
 Emax=sp.factor(E.subs(x,xstar))
 # asymptotic limits.
 assert sp.limit(Emax,m,0,dir='+')==0
