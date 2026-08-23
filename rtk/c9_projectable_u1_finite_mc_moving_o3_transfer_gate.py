@@ -30,33 +30,23 @@ import sympy as sp
 
 f,lam=sp.symbols('f lambda_HL', positive=True, finite=True)
 d,c,kappa,gamma=sp.symbols('d c kappa gamma', real=True, finite=True)
-# Certified O(2): gamma=1 and 1=kappa*f.
 vals={gamma:sp.Integer(1),kappa:1/f}
 
-# Projectable O(3) momentum equation specialized to a2=0.
 Emom=sp.expand(gamma+2*d-lam*(3*gamma+2*d-4*kappa)-2*kappa)
 d_mom=sp.factor(sp.solve(sp.Eq(Emom.subs(vals),0),d)[0])
 
-# Filtered prepotential equation.
 Ephi=sp.expand((1-lam)*(3*gamma+2*d-4*kappa)-2*kappa*(f-1))
 d_phi=sp.factor(sp.solve(sp.Eq(Ephi.subs(vals),0),d)[0])
 assert sp.simplify(d_mom-d_phi)==0
 
 d_exact=sp.factor(d_mom)
-# c=-4kappa from the transverse/vector part of the parent momentum constraint.
 c_exact=-4/f
 
-# With chi_,0i=V_i-W_i, h0i=(c+d)V_i-d W_i.  Compare to the standard PPN
-# metric (5.22):
-# V coefficient = -1/2(3+4gamma+alpha1-alpha2+zeta1-2xi)
-# W coefficient = -1/2(1+alpha2-zeta1+2xi).
-# Eliminating the second combination gives alpha1=-4-4gamma-2c.
 alpha1=sp.factor(-4-4*sp.Integer(1)-2*c_exact)
-combo=sp.factor(2*d_exact-1) # alpha2-zeta1+2xi
+combo=sp.factor(2*d_exact-1)
 assert sp.simplify(alpha1-8*(1/f-1))==0
 assert sp.simplify(combo-2*(1-f)*(2*lam-1)/(f*(lam-1)))==0
 
-# Replace f=q/(M2+q): the deviations are exactly proportional to M2/q.
 q,M2=sp.symbols('q M_c_squared', positive=True, finite=True)
 fq=q/(M2+q)
 alpha1_q=sp.factor(alpha1.subs(f,fq))
@@ -64,9 +54,8 @@ combo_q=sp.factor(combo.subs(f,fq))
 assert sp.simplify(alpha1_q-8*M2/q)==0
 assert sp.simplify(combo_q-2*M2*(2*lam-1)/(q*(lam-1)))==0
 
-# Parent limit.
 assert sp.simplify(alpha1.subs(f,1))==0
-assert sp.simpl(combo.subs(f,1))==0
+assert sp.simplify(combo.subs(f,1))==0
 assert sp.simplify(d_exact.subs(f,1)-sp.Rational(1,2))==0
 
 out={
