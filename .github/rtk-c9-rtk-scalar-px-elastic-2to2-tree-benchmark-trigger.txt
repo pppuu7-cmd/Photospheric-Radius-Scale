@@ -1,0 +1,2 @@
+trigger_utc: 2026-08-23T20:46:00Z
+reason: run the exact P(X)-sector elastic COM tree amplitude with full finite-k normalization, exact s-channel exchange and y-resolution audit while O4 source kernels proceed independently.
