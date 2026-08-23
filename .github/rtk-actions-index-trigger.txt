@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T18:21:00Z
-reason: capture B9 v7 half-scale launch, exact flat-FLRW barotropic block gate, and all-q no-root sufficient-domain gate.
+trigger_utc: 2026-08-23T18:27:00Z
+reason: capture B9 v7 half-scale progress, generic d Poisson-extension rerun, exact barotropic block, all-q no-root gate, and parent-UV compatibility gate.
