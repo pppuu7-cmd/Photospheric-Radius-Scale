@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:35:00Z
+reason: certify scoped projectable carrier count 2 tensor + 1 RTK scalar using all-q d(q)>0 pair rank and invertible elliptic auxiliary block.
