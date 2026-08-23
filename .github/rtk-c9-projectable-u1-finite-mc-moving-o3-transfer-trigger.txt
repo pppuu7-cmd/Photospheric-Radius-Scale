@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T20:03:00Z
+reason: certify finite-Mc projectable moving-source O3 source transfer, exact momentum/prepotential consistency, alpha1(k), and the unresolved alpha2-zeta1+2xi combination before O4.
