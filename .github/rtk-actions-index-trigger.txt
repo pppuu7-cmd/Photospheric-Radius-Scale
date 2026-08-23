@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T20:48:00Z
-reason: capture corrected O4 nonlocal/envelope reruns, alpha1-cosmology window, arbitrary spherical Yukawa, exact P(X) elastic 2to2 tree benchmark, heavy O4 convolution and powercount artifacts.
+trigger_utc: 2026-08-23T21:08:00Z
+reason: refresh after exact P(X) elastic 2to2 benchmark; capture alpha1 window rerun and prepare partial-wave/phase-space unitarity continuation plus full finite-Mc O4 source-transfer work.
