@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T21:16:00Z
-reason: capture scalar partial-wave phase-space unitarity gate launched from b4e959425b5d595826cfe656c663767582d9d75d and continue cosmology-k safety plus O4 source support.
+trigger_utc: 2026-08-23T21:28:00Z
+reason: capture partial-wave phase-space unitarity, O4 single-resolvent support, and B9 k-window unitarity runs before launching symbolic higher-spatial UV-completion window.
