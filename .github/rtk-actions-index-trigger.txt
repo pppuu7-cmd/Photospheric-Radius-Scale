@@ -1,2 +1,2 @@
-trigger_utc: 2026-08-23T22:00:00Z
-reason: capture exact nonlinear n2 curvature conformal gate plus current Formula Bible/checkpoint update and prepare parallel full-O4 continuation.
+trigger_utc: 2026-08-23T22:06:00Z
+reason: capture finite-Mc O4 resolvent-potential map and n2 curvature soft-spatial s-channel correction after exact nonlinear conformal gate.
