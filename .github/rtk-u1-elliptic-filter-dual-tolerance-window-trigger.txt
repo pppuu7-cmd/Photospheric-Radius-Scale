@@ -1,0 +1,2 @@
+launch_utc: 2026-08-23T19:30:00Z
+reason: derive exact simultaneous cosmological-source suppression and local-parent-coupling recovery window without choosing M_c.
