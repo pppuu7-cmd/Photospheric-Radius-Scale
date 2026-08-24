@@ -1,0 +1,93 @@
+name: RTK C10 U1 linear Ward constraint reduction
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-u1-linear-ward-reduction-trigger.txt'
+      - 'rtk/route_b_u1_linear_ward_constraint_reduction_gate.py'
+      - 'research/theory_targets/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_TARGET_v1.json'
+      - '.github/workflows/rtk-c10-u1-linear-ward-constraint-reduction.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-c10-u1-linear-ward-constraint-reduction
+  cancel-in-progress: false
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_TARGET_v1.json'))
+          assert t['schema']=='RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_TARGET_v1'
+          assert t['status']=='FROZEN_BEFORE_EXECUTABLE_RESULT'
+          assert t['pass_classification']=='C10_U1_LINEAR_PREPOTENTIAL_REDUNDANCY_PASS_K_GT_0_SCOPED'
+          for p in t['parent_results']:
+            json.load(open(p))
+          print('C10_LINEAR_WARD_REDUCTION_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_u1_linear_ward_reduction_provenance.txt
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run exact reduction theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_linear_ward_constraint_reduction_gate.py
+          python3 rtk/route_b_u1_linear_ward_constraint_reduction_gate.py | tee c10_u1_linear_ward_reduction.log
+          grep -q '^C10_U1_LINEAR_PREPOTENTIAL_REDUNDANCY_PASS_K_GT_0_SCOPED ' c10_u1_linear_ward_reduction.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_linear_ward_constraint_reduction_result.json'))
+          assert r['classification']=='C10_U1_LINEAR_PREPOTENTIAL_REDUNDANCY_PASS_K_GT_0_SCOPED'
+          assert r['symbolic_residual']=='0'
+          assert 'only for k>0' in r['k0_guard']
+          print('C10_LINEAR_WARD_REDUCTION_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-u1-linear-ward-constraint-reduction
+          path: |
+            c10_u1_linear_ward_reduction.log
+            c10_u1_linear_ward_reduction_provenance.txt
+            u1_linear_ward_constraint_reduction_result.json
+          if-no-files-found: error
+      - name: Persist authoritative scoped result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_linear_ward_constraint_reduction_result.json /tmp/c10_u1_linear_ward_reduction_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_u1_linear_ward_reduction_result.json research/theory_results/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_RESULT_v1.json
+            if git diff --cached --quiet; then
+              echo 'Result already persisted.'
+              exit 0
+            fi
+            git commit -m 'Persist C10 linear U1 Ward-constraint reduction result'
+            if git push origin HEAD:rtk-class-build; then
+              exit 0
+            fi
+            echo "Push conflict on attempt $attempt; retrying"
+          done
+          exit 1
