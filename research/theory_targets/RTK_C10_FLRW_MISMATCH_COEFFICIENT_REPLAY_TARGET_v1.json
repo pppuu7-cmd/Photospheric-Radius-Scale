@@ -1,0 +1,18 @@
+{
+  "schema": "RTK_C10_FLRW_MISMATCH_COEFFICIENT_REPLAY_TARGET_v1",
+  "created_utc": "2026-08-24T22:38:00Z",
+  "status": "FROZEN_AFTER_MISMATCH_THEOREM_BEFORE_NUMERIC_REPLAY",
+  "purpose": "Evaluate the dimensionless lower-derivative Euler-friction mismatch coefficient epsilon_theta=3|c_a^2-c_s^2| on the replay-certified historical RTK point, separately on the BOSS window and the technical dense-Pk endpoint.",
+  "reference": {
+    "gamma": 0.05170371280716,
+    "required_score": 1050.249912429787,
+    "required_MK_z0_Mpc_inv": 1.1681315109161161
+  },
+  "boss": {"redshifts": [0.38,0.51,0.61], "k_h_Mpc_max": 0.24},
+  "technical": {"P_k_max_h_Mpc": 5.0, "use_dense_z_pk": true},
+  "non_claims": [
+    "epsilon_theta is a coefficient multiplying H*theta in the derivative equation, not an observable fractional error",
+    "the density-equation residual also depends on the perturbation-state combination delta+3H(1+w)theta/k^2 and is not bounded by this coefficient alone",
+    "not a likelihood result"
+  ]
+}
