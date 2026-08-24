@@ -1,0 +1,51 @@
+{
+  "schema": "RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_TARGET_v1",
+  "created_utc": "2026-08-24T23:28:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "After the certified Newtonian/Stueckelberg metric bridge, can total and ordinary matter sources be represented consistently in Newtonian coordinates while chi=B retains preferred-foliation information, without creating a new finite-k algebraic pole beyond the already-certified preferred-coordinate rank/lapse domain?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_TRACE_MOMENTUM_CONSERVATION_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json"
+  ],
+  "literature_anchors": [
+    "Zhu-Shu-Wu-Wang, Phys.Rev.D85 044053 (2012), arXiv:1110.5106, scalar perturbation/source conventions Eqs.(7.10)-(7.18)",
+    "Malik-Wands, Phys.Rept.475 (2009) 1-51, arXiv:0809.4944, first-order scalar gauge transformations"
+  ],
+  "frozen_conventions": {
+    "metric": "ds^2=a^2[-(1+2Phi)deta^2+2 partial_i B dx^i deta+((1-2Psi)delta_ij+2 partial_i partial_j E)dx^i dx^j]",
+    "coordinate_rules": [
+      "Phi -> Phi-H T-T_prime",
+      "Psi -> Psi+H T",
+      "B -> B+T-L_prime",
+      "E -> E-L"
+    ],
+    "quasilongitudinal_to_newtonian": "E_pref=0, sigma_pref=B; choose L=0,T=-B; define chi_N=B",
+    "hl_momentum_source": "q=-a(rho+p)(v+B), as already certified from primary Eq.(7.18)",
+    "laplacian": "L=partial^2=-k^2 for a Fourier mode",
+    "D_r": "D=3 lambda_HL-1; r=lambda_HL-1; certified branch lambda_HL>1",
+    "A_source": "deltaP_pref=a1_eff deltaH0_pref, a1_eff=k^2/(k^2+a^2 M_c^2), J_A=2 deltaP_pref; RTK/Khronon is U1-neutral in J_A"
+  },
+  "acceptance": [
+    "derive the linear scalar source transforms delta_mu_N=delta_mu_pref+rho_prime B and delta_p_N=delta_p_pref+p_prime B",
+    "derive q_N=q_pref+a(rho+p)B from q=-a(rho+p)(v+B) and B_N=0, with anisotropic stress invariant at first order",
+    "apply the same covariant source transform species-by-species and to the total source, while keeping the elliptic ordinary-only A-source as a preferred-slice object reconstructed from Newtonian ordinary density plus chi",
+    "show deltaH0_pref=deltaH0_N-H0_prime chi and therefore deltaP_pref=a1_eff[deltaH0_N-H0_prime chi] rather than treating deltaP as an independently gauge-transformed covariant density",
+    "construct the transformed preferred-coordinate A/momentum/Hamiltonian algebraic constraints with chi retained internally and Newtonian total sources as inputs",
+    "audit the source-map Jacobian and the transformed constraint determinant for finite-k poles over the already-certified rank-safe domain",
+    "distinguish a true physical/rank pole from a zero of a solve ordering or coordinate/Stueckelberg parametrization minor; require a reordering or coupled solve if an individual scalar denominator vanishes while the full determinant remains nonzero",
+    "do not alter the production CLASS path and do not transfer the historical phenomenological likelihood score to the completed-U1 system"
+  ],
+  "pass_classification": "C10_U1_NEWTONIAN_SOURCE_TRANSFORM_AND_POLE_AUDIT_PASS_SCOPED",
+  "yellow_classification": "C10_U1_NEWTONIAN_SOURCE_TRANSFORM_VALID_REORDERED_SOLVE_REQUIRED_SCOPED",
+  "fail_classification": "C10_U1_NEWTONIAN_SOURCE_TRANSFORM_FULL_DETERMINANT_POLE_OR_INCONSISTENCY_FAIL_SCOPED",
+  "non_claims": [
+    "not a completed CLASS Boltzmann implementation",
+    "not a completed-action likelihood or refit",
+    "not an exact k=0 perturbation theorem",
+    "not a nonlinear source-transform theorem",
+    "not a B4 massive-neutrino completion-source implementation",
+    "not a compact-object or radiative-protection result"
+  ]
+}
