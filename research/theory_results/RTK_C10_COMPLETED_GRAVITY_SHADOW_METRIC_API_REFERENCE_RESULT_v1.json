@@ -1,0 +1,68 @@
+{
+  "schema": "RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_RESULT_v1",
+  "classification": "C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_PASS_SCOPED",
+  "status_scope": "GREEN_STANDALONE_REFERENCE_ALGEBRA_AND_DETERMINISTIC_SMOKE_TEST_PRODUCTION_UNTOUCHED",
+  "target": "research/theory_targets/RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_TARGET_v1.json",
+  "implementation": "research/shadow/rtk_c10_completed_metric_shadow_v1.py",
+  "implementation_commit": "dcfd53ac7b84ac68dfb77dbfc6dcbcbc71921f56",
+  "implementation_blob_sha": "12c994ce75df1abc8262b924033db561d31bd4e6",
+  "implemented_contract": [
+    "reject exact k=0 and route it to the separate homogeneous bridge",
+    "reconstruct preferred ordinary/total sources from Newtonian inputs plus internal chi",
+    "apply the ordinary-only elliptic A filter only after preferred-slice deltaH0 reconstruction",
+    "solve the A constraint for psi",
+    "solve the certified coupled (phi,chi_prime) momentum/Hamiltonian system",
+    "reconstruct preferred residuals and physical Phi_N/Psi_N",
+    "return determinant, filter, lapse and source-roundtrip diagnostics",
+    "no production CLASS import or patch"
+  ],
+  "deterministic_smoke_test": {
+    "kind": "local deterministic execution of the same frozen algebra implemented in the committed reference module; not a cosmological history, CLASS or likelihood test",
+    "sample": {
+      "G": 1.0,
+      "lambda_hl": 1.2,
+      "E_th": 2.0,
+      "M_c": 0.4,
+      "Pcal": 0.1,
+      "alpha1": 0.01,
+      "a": 0.8,
+      "H": 0.2,
+      "H0_prime": -0.1,
+      "H0_double_prime": 0.03,
+      "rho_total_prime": -0.2,
+      "p_total_prime": -0.02,
+      "W_total": 0.3,
+      "k": 0.5,
+      "chi": 0.002
+    },
+    "determinant": -0.5933723241286508,
+    "determinant_factorized": -0.5933723241286509,
+    "determinant_abs_error": 1.1102230246251565e-16,
+    "momentum_residual": 7.227562732331494e-17,
+    "hamiltonian_residual": 0.0,
+    "source_roundtrip_max_abs_error": 0.0,
+    "filter_denominator": 0.35240000000000005,
+    "preferred_lapse_denominator": -0.30799999999999994,
+    "a1_eff": 0.7094211123723041,
+    "Phi_N": 0.5687050245525279,
+    "Psi_N": -0.4614046518230288,
+    "chi_prime": 0.06276148157284411,
+    "phi_pref": 1.1611579101470877,
+    "psi_pref": -0.4610046518230288
+  },
+  "additional_exact_controls": {
+    "M_c_zero_finite_k": "a1_eff=1 exactly in the reference self-test",
+    "chi_zero": "covariant Newtonian/preferred source map reduces to the identity",
+    "k_zero": "reference API explicitly raises HomogeneousModeRequired rather than dividing by the finite-k determinant"
+  },
+  "interpretation": "The frozen C10 finite-k Newtonian/Stueckelberg algebra now has an executable standalone reference form with machine-level algebraic residuals in a deterministic smoke test. This closes only the reference-API gate; it does not yet certify time integration, real RTK background histories, Boltzmann coupling or observables.",
+  "next_gate": "Freeze and run deterministic prescribed-history plus near-k0 conditioning controls for the standalone metric solver before any opt-in Boltzmann-shadow integration.",
+  "non_claims": [
+    "not a production CLASS implementation",
+    "not a completed-U1 Boltzmann hierarchy",
+    "not a physical cosmological-history validation",
+    "not a completed-action spectra result",
+    "not a likelihood or refit",
+    "not nonlinear perturbation closure"
+  ]
+}
