@@ -1,0 +1,151 @@
+name: RTK A5 final replacement paired fresh-tree replay
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-a5-final-replacement-paired-replay
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and completed stationarity prerequisites
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_TARGET_v1.json'))
+          p=t['prerequisites']
+          c=json.load(open(p['cross_basin_result']))
+          b=json.load(open(p['base_result']))
+          r=json.load(open(p['base_rays_result']))
+          h=json.load(open(p['half_result']))
+          assert t['classification']=='A5_FINAL_REPLACEMENT_PAIRED_REPLAY_TARGET_V1_FROZEN'
+          assert t['status']=='CONDITIONAL_PREREGISTRATION_BEFORE_NEW_LCDM_HALF_SCALE_RESULT'
+          assert c['classification']==p['cross_basin_classification']
+          assert b['eff']['best_improvement']<=p['base_required_best_improvement_le']==0.005
+          assert r['classification']==p['base_rays_classification']
+          assert r['max_exact_improvement_eff']<=0.005
+          assert h['stencil_scale']==p['half_required_scale']==0.5
+          assert h['eff']['best_improvement']<=p['half_required_best_improvement_le']==0.005
+          assert h['eff']['positive_definite'] is True
+          assert h['center']==t['lcdm']['params']
+          print('A5_FINAL_REPLACEMENT_TARGET_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/a5_final_replacement_paired_replay.py rtk/prepare_inference_core.py
+          git rev-parse HEAD | tee a5_final_replacement_source.txt
+      - name: Prepare genuinely fresh pinned CLASS tree
+        run: |
+          set -euo pipefail
+          rm -rf class_public
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/a5_final_replacement_paired_replay.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+      - name: Build CLASS and install locked runtime
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 -m pip freeze | sort | tee a5_final_replacement_pip_freeze.txt
+      - name: Download and verify official Planck baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          sha256sum planck.tar.gz | tee ../a5_final_replacement_planck_sha256.txt
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+      - name: Replay replacement local pair exactly
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 a5_final_replacement_paired_replay.py | tee ../a5_final_replacement_replay.log
+          grep -q '^A5_FINAL_REPLACEMENT_PAIRED_REPLAY_PASS$' ../a5_final_replacement_replay.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-a5-final-replacement-paired-replay
+          path: |
+            a5_final_replacement_replay.log
+            a5_final_replacement_source.txt
+            a5_final_replacement_pip_freeze.txt
+            a5_final_replacement_planck_sha256.txt
+            output/a5_final_replacement_paired_replay/
+          if-no-files-found: warn
+      - name: Persist replacement paired result and live state
+        if: success()
+        run: |
+          set -euo pipefail
+          cp output/a5_final_replacement_paired_replay/summary.json /tmp/a5_final_pair.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/a5_final_pair.json research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_RESULT_v1.json
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          r=json.load(open('research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_RESULT_v1.json'))
+          assert r['classification']=='A5_FINAL_REPLACEMENT_PAIRED_FRESH_TREE_REPLAY_PASS'
+          s={
+            'schema':'A5_B9_CROSS_BASIN_CURRENT_v4',
+            'updated_utc':datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z'),
+            'status':'A5_REPLACEMENT_LOCAL_PAIR_FRESH_TREE_REPLAY_PASS_READY_TO_REFREEZE',
+            'objective':r['objective'],
+            'objective_fingerprint':r['objective_fingerprint'],
+            'production_mapping':'eff',
+            'replacement_pair':{
+              'S_LCDM':r['S_LCDM'],'S_RTK':r['S_RTK'],'delta_RTK_minus_LCDM':r['delta_S_RTK_minus_LCDM'],
+              'lcdm_replay_error':r['replay_errors']['lcdm'],'rtk_replay_error':r['replay_errors']['rtk'],'delta_replay_error':r['replay_errors']['delta'],
+              'classification':r['classification'],'result':'research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_RESULT_v1.json'},
+            'historical_pair':{'S_LCDM':1049.966118347761,'S_RTK':1050.249912429787,'delta_RTK_minus_LCDM':0.2837940820259064,'status':'HISTORICAL_VALID_LOCAL_PAIR_SUPERSEDED_AS_BEST_KNOWN_REFERENCE'},
+            'next_gate':'Update the canonical A5 best-known reference state without erasing historical provenance, then refresh A6 statistics under their own preregistered protocols.',
+            'guard':r['warning']}
+          json.dump(s,open('research/state/A5_cross_basin_current.json','w'),indent=2,sort_keys=True)
+          open('research/state/A5_cross_basin_current.json','a').write('\n')
+          PY
+          git config user.name 'rtk-a5-final-replay'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_RESULT_v1.json research/state/A5_cross_basin_current.json
+          git commit -m 'Record final A5 replacement paired fresh-tree replay'
+          git push origin HEAD:rtk-class-build
