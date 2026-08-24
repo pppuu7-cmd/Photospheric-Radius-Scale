@@ -1,0 +1,51 @@
+{
+  "schema": "RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_TARGET_v1",
+  "created_utc": "2026-08-24T23:43:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "question": "Can a standalone reference metric solver implement the certified completed-U1 finite-k algebra without touching production CLASS, taking Newtonian-coordinate sources as inputs, retaining chi internally, and returning Phi_N/Psi_N plus exact constraint diagnostics?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json"
+  ],
+  "reference_implementation": "research/shadow/rtk_c10_completed_metric_shadow_v1.py",
+  "required_inputs": [
+    "mode k>0 and current internal chi",
+    "background a,H,H0_prime,H0_double_prime,rho_total_prime,p_total_prime,W_total",
+    "Newtonian ordinary deltaH0_N and deltaH0_N_prime",
+    "Newtonian total delta_mu_N,q_N,delta_p_N,Pi_N",
+    "frozen action parameters G,lambda_HL,E_th,M_c,Pcal,alpha1"
+  ],
+  "required_internal_steps": [
+    "compute a1_eff and K=4 pi G a^2 a1_eff/L",
+    "reconstruct deltaH0_pref, delta_mu_pref, q_pref, delta_p_pref and Pi_pref from Newtonian sources plus chi",
+    "solve A constraint for psi",
+    "differentiate the A constraint with chi_prime isolated",
+    "solve the certified 2x2 system for phi and chi_prime",
+    "reconstruct psi_prime and the preferred momentum/Hamiltonian residuals",
+    "return Phi_N=(1-Pcal)phi+psi+alpha1 L psi-H chi-8 pi G a^2 Pi_N and Psi_N=psi-H chi"
+  ],
+  "mandatory_controls": [
+    "exact source-map round trip to machine precision",
+    "exact agreement between direct determinant and 4 pi G a^2 D r E_th H0_prime a1_eff factorization",
+    "positive finite filter denominator k^2+a^2 M_c^2",
+    "nonzero determinant on the certified branch; exact k=0 must be routed away rather than divided through",
+    "preferred momentum and Hamiltonian equation residuals near machine precision on internally generated solutions",
+    "chi=0 source reconstruction reduces to identity between Newtonian and preferred covariant sources",
+    "M_c->0 finite-k control gives a1_eff->1",
+    "no import, patch or write into the production CLASS path"
+  ],
+  "pass_classification": "C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_PASS_SCOPED",
+  "fail_classification": "C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_FAIL_SCOPED",
+  "decision": {
+    "if_pass": "Run deterministic prescribed-history and near-boundary conditioning tests, then freeze an opt-in completed-U1 Boltzmann-shadow integration gate.",
+    "if_fail": "Do not connect any completed-U1 metric path to CLASS; repair the source map or coupled solve and refreeze a new API target."
+  },
+  "non_claims": [
+    "not a production CLASS implementation",
+    "not a Boltzmann hierarchy",
+    "not a completed-action likelihood or refit",
+    "not an exact k=0 solver",
+    "not nonlinear perturbation closure"
+  ]
+}
