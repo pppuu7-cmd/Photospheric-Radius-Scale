@@ -1,0 +1,64 @@
+{
+  "schema": "RTK_C10_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_TARGET_v1",
+  "created_utc": "2026-08-25T00:03:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "question": "Do real Newtonian-coordinate source histories from the existing RTK CLASS production solution satisfy the completed-U1 shadow metric regularity and constraint requirements when replayed read-only through shadow-v2, before any completed-gravity feedback is allowed?",
+  "parents": [
+    "research/theory_results/RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_SHADOW_METRIC_HISTORY_CONDITIONING_RESULT_v1.json"
+  ],
+  "required_export": {
+    "ordinary_channel": [
+      "deltaH0_N",
+      "deltaH0_N_prime",
+      "H0_prime",
+      "H0_double_prime"
+    ],
+    "total_metric_channel": [
+      "delta_mu_N",
+      "q_N",
+      "delta_p_N",
+      "Pi_N",
+      "rho_total_prime",
+      "p_total_prime",
+      "rho_total_plus_p_total"
+    ],
+    "background_and_mode": [
+      "a",
+      "H",
+      "k",
+      "conformal-time or monotonic history coordinate"
+    ],
+    "provenance": [
+      "exact production parameter point",
+      "CLASS build/commit fingerprint",
+      "species composition used in the ordinary H0 channel",
+      "units and sign conventions"
+    ]
+  },
+  "architecture_guard": "Export is read-only. It may add diagnostics or a detached replay artifact, but it must not replace production metric equations, alter the production objective, or feed shadow Phi_N/Psi_N back into the Boltzmann hierarchy at this gate.",
+  "acceptance": [
+    "replay exported histories through research/shadow/rtk_c10_completed_metric_shadow_v2.py",
+    "verify finite filter and preferred lapse denominators and the certified determinant sign for every finite k>0 sample",
+    "verify source-map roundtrip and preferred momentum/Hamiltonian residuals at numerical precision",
+    "for a small-k ladder at fixed epochs test convergence of R_reg/k^2 where R_reg=R_H+2 H R_M",
+    "require physical Phi_N and Psi_N to remain finite on the tested small-k ladder; distinguish a convention/unit mismatch from a genuine regularity failure",
+    "compare overlapping moderate-k samples against the direct shadow-v1 solve as an independent algebraic replay control",
+    "record any species-source omission explicitly; in particular do not drop neutral RTK/Khronon momentum from q_total",
+    "do not start completed-U1 spectra or likelihood until this replay gate is classified"
+  ],
+  "pass_classification": "C10_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_PASS_SCOPED",
+  "yellow_classification": "C10_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_CONVENTION_OR_SOURCE_GAP_OPEN_SCOPED",
+  "fail_classification": "C10_PHYSICAL_CLASS_SOURCE_HISTORY_REGULARITY_OR_CONSTRAINT_FAIL_SCOPED",
+  "decision": {
+    "if_pass": "Freeze an opt-in completed-U1 Boltzmann-shadow integration target using the same exported/source conventions.",
+    "if_yellow": "Repair source export/conventions and rerun read-only replay; do not feed back completed gravity.",
+    "if_fail": "Treat the completed-U1 cosmology bridge as not closed; diagnose whether the fixed completion or phenomenological source history is incompatible before any spectra claim."
+  },
+  "non_claims": [
+    "not a completed-U1 Boltzmann integration",
+    "not a spectra comparison",
+    "not a completed-action likelihood or refit",
+    "not a modification of the historical production fit"
+  ]
+}
