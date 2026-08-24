@@ -1,0 +1,77 @@
+name: RTK Route-B U1 elliptic k0 RTK lapse rank
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-elliptic-k0-rtk-lapse-rank-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Verify frozen target and parent support
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_V1_FROZEN'
+          assert t['status']=='FROZEN_BEFORE_K0_RTK_LAPSE_RANK_RESULT'
+          print('ELLIPTIC_K0_RTK_LAPSE_TARGET_PASS')
+          PY
+          test -f research/RTK_U1_ELLIPTIC_MATTER_COMPENSATOR_CANONICAL_v1.json
+          test -f rtk/route_b_u1_elliptic_compensator_k0_matter_rank_inheritance_gate.py
+          test -f rtk/route_b_u1_rtk_crossblock_source_support_gate.py
+          python3 -m py_compile rtk/route_b_u1_elliptic_k0_rtk_lapse_rank_gate.py
+          git rev-parse HEAD | tee u1_elliptic_k0_rtk_lapse_rank_source.txt
+      - name: Run theorem
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_elliptic_k0_rtk_lapse_rank_gate.py | tee u1_elliptic_k0_rtk_lapse_rank.log
+          grep -q '^RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_EXACT_PASS ' u1_elliptic_k0_rtk_lapse_rank.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_elliptic_k0_rtk_lapse_rank_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_EXACT_PASS'
+          assert r['canonical_derivation']['delta_a_RTK']=='{pi_N,H_perp}_RTK=0'
+          print('ELLIPTIC_K0_RTK_LAPSE_RESULT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-elliptic-k0-rtk-lapse-rank
+          path: |
+            u1_elliptic_k0_rtk_lapse_rank.log
+            u1_elliptic_k0_rtk_lapse_rank_result.json
+            u1_elliptic_k0_rtk_lapse_rank_source.txt
+            research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_v1.json
+            rtk/route_b_u1_elliptic_k0_rtk_lapse_rank_gate.py
+          if-no-files-found: error
+      - name: Persist scientific result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_elliptic_k0_rtk_lapse_rank_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          mkdir -p research/theory_results
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_RESULT_v1.json
+          git commit -m 'Record elliptic k0 RTK lapse-rank theorem'
+          git push origin HEAD:rtk-class-build
