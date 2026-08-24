@@ -1,0 +1,27 @@
+{
+  "classification": "RTK_ROUTE_B_U1_ELLIPTIC_LINEAR_FLRW_SOURCE_PASS",
+  "fourier_result": {
+    "Q_transfer": "1/ell=M_c^2/(M_c^2+k_phys^2)",
+    "a1_eff": "k_phys^2/(M_c^2+k_phys^2)",
+    "delta_J_A_total": "-a1_eff delta H0",
+    "delta_Q": "delta H0/ell",
+    "delta_p_nu_total": "+a1_eff delta H0",
+    "ell": "1+k_phys^2/M_c^2",
+    "gauge_pair_identity": "delta p_nu_total+delta J_A_total=0"
+  },
+  "homogeneous_identity": "D_i H0_bar=0 => (delta D^2)H0_bar=0 => (delta L)H0_bar=0",
+  "implementation_consequence": "On homogeneous FLRW, the first-order ordinary+auxiliary projected A/prepotential source can be represented by the scalar transfer a1_eff(k,a), but the final CLASS metric equations still require an explicit reduction/mapping of the U1 constraints; this theorem is not permission to alter only RTK fluid cs2.",
+  "linearization": "delta Q=L0^{-1}delta H0-L0^{-1}(delta L)L0^{-1}H0_bar",
+  "next_gate": "extend the standalone completion shadow module with the certified linear source transfer and freeze the reduced metric-constraint mapping required to insert this source into CLASS.",
+  "non_claims": [
+    "does not derive the final reduced Einstein/CLASS metric constraint equations",
+    "does not cover nonlinear perturbations or inhomogeneous backgrounds",
+    "does not solve massive-neutrino anisotropic stress",
+    "does not choose M_c or lambda_HL",
+    "does not provide a likelihood result"
+  ],
+  "operator_equation": "L Q=H0, L=1-D^2/M_c^2",
+  "perturbative_order_guard": "The product (delta a_eff)(delta H0) is second order and is not part of the linear source. Metric-resolvent variation re-enters for nonlinear perturbations or inhomogeneous backgrounds.",
+  "status_scope": "GREEN_EXACT_LINEAR_PROJECTED_SOURCE_TRANSFER_REDUCED_METRIC_CONSTRAINT_MAPPING_PENDING",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_LINEAR_FLRW_SOURCE_TARGET_v1.json"
+}
