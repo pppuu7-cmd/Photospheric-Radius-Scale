@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_TARGET_v1",
+  "created_utc": "2026-08-24T22:57:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "Transform the total and ordinary matter stress sources from the preferred/quasilongitudinal representation used by the U1 constraints to the Newtonian-coordinate physical-metric representation, while keeping the preferred shear/Stueckelberg variable B explicit and without prematurely dividing by any partial elimination coefficient.",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_A_SOURCE_NORMALIZATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_TRACE_MOMENTUM_CONSERVATION_CLOSURE_RESULT_v1.json"
+  ],
+  "conventions": {
+    "coordinate_change": "eta_new=eta+T; Newtonian representation uses T=-B on the quasilongitudinal E=0 branch",
+    "scalar_transform": "delta f_new=delta f_old-fbar_prime T",
+    "primary_momentum_definition": "q_QL=-a(rho+p)(v+B)",
+    "mixed_stress_transform": "q_new=q_old-a(rho+p)T",
+    "Pi": "linear anisotropic stress is time-slicing invariant because its FLRW background vanishes"
+  },
+  "acceptance": [
+    "derive delta_mu_N=delta_mu_QL+rho_prime B and therefore delta_mu_QL=delta_mu_N-rho_prime B",
+    "derive delta_p_N=delta_p_QL+p_prime B and therefore delta_p_QL=delta_p_N-p_prime B",
+    "derive q_N=q_QL+a(rho+p)B and therefore q_QL=q_N-a(rho+p)B",
+    "derive Pi_N=Pi_QL",
+    "apply the density transformation separately to the ordinary filtered source entering J_A; do not insert neutral Khronon density into H0_ordinary",
+    "rewrite the Helmholtz A constraint as (k^2+a^2 M_c^2)psi=-4 pi G a^2[delta H0_N-H0_prime B]",
+    "rewrite the total momentum constraint as [(lambda-1)L+8 pi G a^2(rho_total+p_total)]B=8 pi G a q_N-(3lambda-1)(psi_prime+H phi)",
+    "define K_B_partial=(lambda-1)L+8 pi G a^2(rho_total+p_total) but forbid interpreting K_B_partial=0 as a physical pole before the differentiated A constraint and total conservation equations are included",
+    "show that the inverse source map recovers the original quasilongitudinal variables exactly"
+  ],
+  "pass_classification": "C10_U1_NEWTONIAN_TOTAL_SOURCE_TRANSFORM_PASS_SCOPED",
+  "decision": {
+    "if_pass": "Freeze a DAE/full-determinant audit that includes the transformed A constraint, its time derivative, momentum/Hamiltonian constraints and total conservation before any pole classification or CLASS implementation.",
+    "if_fail": "Revisit the physical-coordinate transformation conventions before progressing the Boltzmann bridge."
+  },
+  "non_claims": [
+    "K_B_partial is not a physical dispersion denominator or no-go by itself",
+    "not a completed transformed gravity solver",
+    "not a CLASS implementation",
+    "not a massive-neutrino source extension",
+    "not a likelihood result"
+  ]
+}
