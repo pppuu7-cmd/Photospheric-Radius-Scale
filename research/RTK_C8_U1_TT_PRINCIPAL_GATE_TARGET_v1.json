@@ -1,0 +1,33 @@
+{
+  "classification": "RTK_C8_U1_TT_PRINCIPAL_GATE_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_EXECUTABLE_TT_GATE_RESULT",
+  "parent_ir_representative": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+  "parent_scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "gravity_ir": {
+    "lambda_HL": 1,
+    "gamma1": -1,
+    "beta0_bare": 0,
+    "sigma1": 0,
+    "sigma2": 0
+  },
+  "scalar_background": {
+    "Sigma": "homogeneous Sigma(t)",
+    "D_i_Sigma": 0,
+    "Theta_U": "dot(Sigma)/N",
+    "X_U": "Theta_U^2/2"
+  },
+  "mixed_operator": "C(X_U) D_i Theta_U D^i Theta_U, C=M_Pl^2/(2 X_U)",
+  "question": "Does the explicit fixed-action mixed operator alter the principal two-derivative pure-TT kinetic or gradient coefficients on a homogeneous rolling scalar background?",
+  "required_checks": [
+    "TT trace vanishes",
+    "ADM lambda=1 kinetic principal quadratic form equals standard GR TT form",
+    "spatial Ricci principal quadratic form equals standard GR TT gradient form",
+    "D_i Theta_U vanishes identically in the pure TT sector with homogeneous lapse/scalar and zero invariant shift",
+    "P(X_U) contains no metric-derivative principal TT term",
+    "S_mix contains no principal TT term",
+    "resulting c_T^2 equals 1"
+  ],
+  "scope": "principal two-derivative pure-TT quadratic sector only; algebraic background mass terms, scalar/vector mixing away from pure TT, higher-spatial-derivative UV operators, radiative stability and compact-object sectors are excluded",
+  "pass_rule": "all required checks exact and c_T_squared=1",
+  "guard": "A PASS is a same-action IR TT principal theorem, not a full C7/C8/C9 completion or UV/radiative certificate."
+}
