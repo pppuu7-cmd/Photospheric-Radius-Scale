@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_ROUTE_B_U1_STATIC_DBI_DOMAIN_INTERPRETATION_CORRECTION_v1",
+  "classification": "RTK_ROUTE_B_U1_STATIC_DBI_DOMAIN_PHYSICAL_LAPSE_INTERPRETATION_CORRECTED",
+  "status": "SUPERSEDES_PHYSICAL_INTERPRETATION_OF_FIXED_BARE_LAPSE_DIAGNOSTIC_NOT_ITS_ALGEBRA",
+  "superseded_interpretation_source": "research/theory_results/RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_RESULT_v1.json",
+  "authoritative_new_prerequisites": [
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json"
+  ],
+  "universal_matter_frame": {
+    "parameters": {"a1": 1, "a2": 0},
+    "gauge": "varphi=0",
+    "exact_relation": "tilde N = F(sigma) N = N-A",
+    "meaning": "tilde N is the physical matter lapse; N is the bare gravitational lapse entering X_U for Sigma=q t with D_iSigma=0"
+  },
+  "certified_static_branch": {
+    "bare_lapse": "N=1 exactly",
+    "Theta_U": "q",
+    "X_U": "X_star=q^2/2",
+    "DBI_r": "1/N-1=0",
+    "R_DBI": "1-lambda_D r^2 = 1",
+    "P": "0",
+    "P_N": "0",
+    "physical_redshift_carrier": "A and the physical metric combination tilde N=N-A may vary while bare N remains 1"
+  },
+  "correction": [
+    "The algebraic statement R_DBI=1-lambda_D(1/N-1)^2 and its fixed-bare-N reality bound remain correct.",
+    "A Schwarzschild or other physical-metric lapse must not be identified with the bare N on the frozen a1=1,a2=0 U1 matter frame after the exact N=1 theorem.",
+    "Therefore the earlier solar-reference lambda_D_max obtained by inserting a physical Schwarzschild lapse is not a physical bound on the certified N=1 static branch and must not be used to exclude B10 tail anchors or compact objects in that branch.",
+    "The formal statement that lambda_D->infinity is nonuniform at fixed nonzero bare-lapse excursion remains mathematically true, but the certified static branch has zero bare-lapse excursion."
+  ],
+  "B10_consequence": "No change to the frozen cosmological B10 numerical-identifiability result; also no local static-tail restriction follows from the old fixed-bare-lapse diagnostic on the certified N=1 branch.",
+  "compact_object_consequence": "Compact-object viability must instead be tested by solving the nonlinear A, spatial-metric, shift/U1 and scalar system and checking regularity/causal structure; the physical redshift alone does not force the DBI clock toward its reality boundary on the N=1 branch.",
+  "non_claims": [
+    "does not prove existence or regularity of neutron-star or black-hole solutions",
+    "does not prove the N=1 branch survives higher-spatial UV terms or nonzero invariant shift/rotation",
+    "does not solve universal-horizon or causal-structure questions",
+    "does not change the exact algebra of the earlier DBI reality-domain result"
+  ],
+  "next_gate": "derive or numerically solve a strong-field static/spherical A+g_ij system on the N=1 branch before any compact-object claim"
+}
