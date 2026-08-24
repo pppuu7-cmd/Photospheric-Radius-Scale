@@ -1,0 +1,2 @@
+launch 2026-08-24T08:20:00Z
+reason: independently test whether the B9-derived LCDM center is a materially better basin of the unchanged matched-ultra-linstep2+dense-BOSS objective; no optimization in this gate.
