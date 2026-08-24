@@ -1,0 +1,2 @@
+launch_utc: 2026-08-24T20:48:00Z
+reason: execute frozen shadow linear-source extension after independent exact linear-FLRW source theorem PASS; no CLASS metric coupling or likelihood score.
