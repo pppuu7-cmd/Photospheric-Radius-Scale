@@ -1,0 +1,60 @@
+name: RTK Route-B U1 minimal higher-spatial rescue bound
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-minimal-higher-spatial-rescue-bound-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Replay analytic rescue compatibility bound
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_TARGET_v1.json'))
+          p=json.load(open(t['prerequisite']))
+          assert t['classification']=='RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_TARGET_V1'
+          assert p['classification']=='RTK_C8_U1_LOCAL_REST_CANONICAL_RANK_COLLAPSE_SCALING_EXACT_PASS'
+          print('HIGHER_SPATIAL_RESCUE_BOUND_TARGET_PASS')
+          PY
+          python3 -m py_compile rtk/route_b_u1_minimal_higher_spatial_rescue_bound.py
+          git rev-parse HEAD | tee u1_higher_spatial_rescue_bound_provenance.txt
+          python3 rtk/route_b_u1_minimal_higher_spatial_rescue_bound.py | tee u1_higher_spatial_rescue_bound.log
+          grep -q '^RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_COMPATIBILITY_BOUND_REPLAY_PASS ' u1_higher_spatial_rescue_bound.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-minimal-higher-spatial-rescue-bound
+          path: |
+            u1_higher_spatial_rescue_bound.log
+            u1_higher_spatial_rescue_bound_provenance.txt
+            u1_minimal_higher_spatial_rescue_bound_result.json
+          if-no-files-found: error
+      - name: Persist replay result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_minimal_higher_spatial_rescue_bound_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_RESULT_v1.json
+          git config user.name 'rtk-u1-higher-spatial-rescue'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_RESULT_v1.json
+          git commit -m 'Persist minimal higher-spatial rescue compatibility bound'
+          git push origin HEAD:rtk-class-build
