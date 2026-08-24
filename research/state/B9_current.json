@@ -1,15 +1,8 @@
 {
   "active_gate": {
-    "cross_run_replay_abs_error": 0.0,
-    "fresh_best_exact_S_eff": 1059.2719553175134,
-    "fresh_best_improvement_eff": 0.0,
-    "fresh_center_S_eff": 1059.2719553175134,
-    "fresh_min_eigenvalue_eff": 0.0005825694001738223,
-    "name": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION",
-    "result": "research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json",
-    "status": "PASS",
-    "workflow_run_id": 32705909941,
-    "workflow_run_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32705909941"
+    "name": "B9_FINAL_PAIRED_EXACT_REPLAY",
+    "result": "research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json",
+    "status": "PASS"
   },
   "closure_note": "research/robustness/B9_FINAL_LOCAL_ROBUSTNESS_CLOSURE_2026-08-24.md",
   "decomposition": {
@@ -47,7 +40,7 @@
   "methodology": "research/methodology/B9_LIVE_RECOVERY_METHOD.md",
   "methodology_addendum": "research/methodology/RTK_B9_A5_CROSS_BASIN_ADDENDUM_2026-08-24.md",
   "next": "B9 itself requires no further local robustness calculation under protocol v1. Continue the separate A5 cross-basin stationarity chain and other open robustness/theory gates.",
-  "next_if_pass": "Dispatch the already-preregistered B9 final paired exact replay; do not reoptimize or change the frozen centers.",
+  "next_if_pass": "B9 local matched Planck-lensing robustness chain is closed. Keep global-optimality/model-selection claims separate; continue with other open robustness/theory gates.",
   "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
   "paired_local_comparison": {
     "S_LCDM": 1058.2173424114785,
@@ -55,7 +48,6 @@
     "delta_S_RTK_minus_LCDM": 1.0546129060348903,
     "delta_replay_abs_error": 9.769962616701378e-15,
     "lcdm_replay_abs_error": 0.0,
-    "result": "research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json",
     "rtk_replay_abs_error": 0.0,
     "status": "FINAL_LOCAL_B9_PAIRED_REPLAY_PASS",
     "warning": "Local frozen B9 robustness comparison only; not global optimality, significance, AIC/BIC, posterior preference or Bayes factor."
@@ -93,11 +85,11 @@
   },
   "schema": "RTK_B9_CURRENT_STATE_v3",
   "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
-  "status": "RTK_FRESH_TREE_CERTIFICATION_PASS_FINAL_PAIRED_DISPATCH_READY",
+  "status": "B9_FINAL_PAIRED_EXACT_REPLAY_PASS",
   "tolerances": {
     "exact_descent_S": 0.005,
     "final_delta_replay_abs": 4e-06,
     "fresh_tree_replay_abs": 2e-06
   },
-  "updated_utc": "2026-08-24T13:34:08Z"
+  "updated_utc": "2026-08-24T13:37:47Z"
 }

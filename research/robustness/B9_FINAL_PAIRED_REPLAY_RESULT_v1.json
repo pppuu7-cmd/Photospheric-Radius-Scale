@@ -30,17 +30,17 @@
       "fresh_center_S_eff": 1059.2719553175134,
       "fresh_min_eigenvalue_eff": 0.0005825694001738223,
       "fresh_positive_definite_eff": true,
-      "observed_utc": "2026-08-24T10:51:34Z",
+      "observed_utc": "2026-08-24T13:34:08Z",
       "tolerance": 2e-06,
       "workflow_conclusion": "success",
-      "workflow_head_sha": "f1101bb060e83484e5a1e6cb8c4282a3c2f50009",
-      "workflow_run_id": 32704596153,
-      "workflow_run_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32704596153"
+      "workflow_head_sha": "58d6e9943bc753eda2ebbcc58fe7a5bbe88aa482",
+      "workflow_run_id": 32705909941,
+      "workflow_run_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32705909941"
     },
     "numpy_version": "2.5.2",
     "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
     "python_version": "3.12.3",
-    "research_source_commit": "7a427c7a3db449d1686a792dcce4ab57dfcf57af",
+    "research_source_commit": "efb12ec3afa7c45606a780761ccfb4c0a845a962",
     "target_fingerprint": "698e82774f532c695d599348d1dc3288c73287dc7d72d4db4cf6a985d77d0a88"
   },
   "replay_abs_tolerance_each": 2e-06,
