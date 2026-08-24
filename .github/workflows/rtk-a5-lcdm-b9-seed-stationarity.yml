@@ -108,7 +108,12 @@ jobs:
           set -euo pipefail
           python3 a5_lcdm_b9_seed_stationarity.py | tee ../a5_lcdm_b9_seed_stationarity.log
           grep -q 'A5_LCDM_B9_SEED_STATIONARITY_HESSIAN_COMPLETE' ../a5_lcdm_b9_seed_stationarity.log
-          test -s ../output/a5_lcdm_b9_seed_stationarity/scale_${{ inputs.scale }}/summary.json
+          scale_dir="$(python3 - <<'PY'
+          import os
+          print(f"{float(os.environ['RTK_A5_LCDM_STENCIL_SCALE']):g}")
+          PY
+          )"
+          test -s "../output/a5_lcdm_b9_seed_stationarity/scale_${scale_dir}/summary.json"
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -118,7 +123,7 @@ jobs:
             a5_lcdm_b9_seed_stationarity.log
             a5_lcdm_b9_seed_stationarity_source.txt
             a5_lcdm_b9_seed_stationarity_pip_freeze.txt
-            output/a5_lcdm_b9_seed_stationarity/scale_${{ inputs.scale }}/
+            output/a5_lcdm_b9_seed_stationarity/
           if-no-files-found: warn
 
       - name: Persist exact stationarity result
@@ -126,7 +131,12 @@ jobs:
         run: |
           set -euo pipefail
           safe_scale="${{ inputs.scale }}"
-          cp "output/a5_lcdm_b9_seed_stationarity/scale_${safe_scale}/summary.json" /tmp/a5_lcdm_stationarity.json
+          scale_dir="$(python3 - <<'PY'
+          import os
+          print(f"{float(os.environ['RTK_A5_LCDM_STENCIL_SCALE']):g}")
+          PY
+          )"
+          cp "output/a5_lcdm_b9_seed_stationarity/scale_${scale_dir}/summary.json" /tmp/a5_lcdm_stationarity.json
           git fetch origin rtk-class-build
           git reset --hard origin/rtk-class-build
           if [ "$safe_scale" = "1.0" ]; then
