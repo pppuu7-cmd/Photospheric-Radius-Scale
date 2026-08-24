@@ -1,0 +1,4 @@
+launch_sequence=1
+purpose=exact baseline A5 straight-line profile from the historical LCDM local center to the independently confirmed lower cross-basin seed
+frozen_target=research/robustness/A5_LCDM_OLD_TO_NEW_BASIN_LINE_PROFILE_TARGET_v1.json
+scientific_guard=diagnostic only; do not replace multiscale stationarity or make a global-minimum claim
