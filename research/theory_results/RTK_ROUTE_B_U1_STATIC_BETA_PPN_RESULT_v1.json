@@ -1,0 +1,31 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_BETA_PPN_EXACT_PASS",
+  "interpretation": "The fixed RTK scalar does not alter the O(v^4) static Eddington beta coefficient on the certified regular asymptotically-flat zero-invariant-shift branch; beta=1 and gamma=1 there.",
+  "literature_algebra": {
+    "Eq543_beta0_bare_0": "0=0",
+    "Eq543_static_beta0_eff_2": "0=0",
+    "beta_family_I_after_a1_kappa_1": "1",
+    "gamma1_minus1_limit": "regular after algebraic cancellation",
+    "gamma_family_I_after_a1_kappa_1_a2_0": "1",
+    "source": "Lin-Mukohyama-Wang-Zhu arXiv:1310.6666v4 Eqs.(5.42),(5.43),(5.50),(5.51), Appendix E"
+  },
+  "next_gate": "derive O(v^3) moving-source/vector equations with explicit S_mix and fixed P(X_U) before alpha1/alpha2 claims",
+  "non_claims": [
+    "does not certify moving-source alpha1 or alpha2 for the full RTK action",
+    "does not certify stationary rotating solutions with nonzero invariant shift",
+    "does not cover spatial Sigma gradients, DBI-boundary configurations or X_U->0 compact objects",
+    "does not establish radiative stability, strong-coupling scale, higher-spatial UV completion or EFT cutoff",
+    "does not turn a static PPN result into a global theorem for all nonlinear solutions"
+  ],
+  "prerequisite": "research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json",
+  "same_action_reduction": {
+    "RTK_DBI": "P=P_N=0 on that branch",
+    "RTK_mixed": "a_i=0 on the solution; its exact static variation is the beta0_eff=2 acceleration structure used in the uniqueness equation",
+    "bare_lapse": "N=1 exactly on the certified static branch",
+    "remaining_equations": "corresponding nonprojectable U1 family-I static equations with the same universal matter frame"
+  },
+  "static_beta_PPN": 1,
+  "static_gamma_PPN": 1,
+  "status": "STATIC_O4_BETA_GREEN_ON_CERTIFIED_ZERO_SHIFT_BRANCH",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_STATIC_BETA_PPN_INHERITANCE_TARGET_v1.json"
+}
