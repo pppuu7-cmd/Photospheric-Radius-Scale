@@ -1,0 +1,25 @@
+{
+  "action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "classification": "RTK_C8_U1_LOCAL_REST_SCALAR_SPATIAL_PRINCIPAL_DEGENERACY_EXACT_PASS",
+  "exact_identities": {
+    "P_XX_at_Xstar": "mu_K^2/(2 X_star^2)",
+    "P_X_at_Xstar": "0",
+    "c_s2_at_Xstar": "0",
+    "fourier_scalar_sector_kernel": "(mu_K^2+k^2) omega^2",
+    "quadratic_L_over_Mpl2": "mu_K^2 dot(phi)^2 + |grad dot(phi)|^2",
+    "quadratic_grad_phi2_coefficient": "0",
+    "static_first_spatial_DBI_term": "+mu_K^2/4 [|grad phi|^2]^2"
+  },
+  "interpretation": "On the exact local PPN rest vacuum, the frozen two-derivative RTK scalar sector has positive time-kinetic support but no quadratic spatial restoring term. Higher-spatial operators or a separately demonstrated gravity/U1 constraint-induced restoring term are required before a physical local scalar dispersion or cutoff can be claimed.",
+  "next_gate": "derive and eliminate the complete local-rest quadratic metric/lapse/shift/U1 constraint system on the identical fixed action; if the physical scalar eigenmode remains spatially degenerate, freeze a minimal higher-spatial completion basis and require preservation of the cosmological RTK kernel, c_T=1, PPN quartet, and classical DOF count.",
+  "non_claims": [
+    "does not imply a ghost",
+    "does not by itself prove a dynamical instability",
+    "does not yet diagonalize the full coupled metric/U1/scalar quadratic system around the local rest vacuum",
+    "does not exclude a restoring term generated after full nondynamical gravity/U1 constraint elimination",
+    "does not apply to the cosmological rolling branch where P_X is nonzero",
+    "does not compute the physical strong-coupling scale or UV cutoff"
+  ],
+  "status": "SCALAR_SECTOR_LOCAL_REST_SPATIAL_PRINCIPAL_DEGENERATE_AT_TWO_DERIVATIVE_LEVEL",
+  "target": "research/theory_targets/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_TARGET_v1.json"
+}
