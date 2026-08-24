@@ -1,0 +1,4 @@
+2026-08-24T08:01:00Z
+Gate: B9 RTK independent fresh-tree full base-Hessian certification
+Frozen center source: research/robustness/B9_RTK_RECENTER_HALF_DECISION_v1.json
+Criteria unchanged: replay <= 2e-6; exact improvement <= 0.005; positive-definite Hessian.
