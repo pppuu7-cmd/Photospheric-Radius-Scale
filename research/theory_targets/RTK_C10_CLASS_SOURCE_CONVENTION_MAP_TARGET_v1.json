@@ -1,0 +1,32 @@
+{
+  "schema": "RTK_C10_CLASS_SOURCE_CONVENTION_MAP_TARGET_v1",
+  "created_utc": "2026-08-25T00:18:00Z",
+  "status": "FROZEN_BEFORE_RESULT",
+  "question": "What exact factors and signs map RT-CLASS Newtonian-gauge aggregate source variables rho_plus_p_theta and rho_plus_p_shear onto the q and Pi conventions already frozen in the C10 U(1) metric equations, so a physical history replay cannot fail from a convention mismatch?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_TRACE_MOMENTUM_CONSERVATION_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json"
+  ],
+  "literature_anchors": [
+    "Ma & Bertschinger, Astrophys.J.455:7-25 (1995), arXiv:astro-ph/9506072, Eq.(22) and conformal-Newtonian Euler equation Eq.(30): (rho+p)theta=ik^j delta T^0_j and theta is the velocity divergence",
+    "Zhu, Shu, Wu & Wang, Phys.Rev.D85,044053 (2012), arXiv:1110.5106, Eq.(7.18) and definition q=-a(rho+p)(v+B)"
+  ],
+  "frozen_c10_conservation": "q_prime+3H q=a[(rho+p)phi+delta_p+(2/3)L Pi], with L=-k^2",
+  "class_aggregate_semantics": [
+    "rho_plus_p_theta_CLASS=sum_i (rho_i+p_i) theta_i",
+    "rho_plus_p_shear_CLASS=sum_i (rho_i+p_i) sigma_i"
+  ],
+  "acceptance": [
+    "derive q_N from the CLASS Newtonian Euler equation and the frozen C10 q-conservation equation without guessing the velocity-potential sign",
+    "derive Pi_N by matching the CLASS anisotropic-stress term -k^2 sigma to the C10 +(2/3)L Pi term",
+    "verify dimensions: q carries one factor a/k^2 times the CLASS momentum-divergence aggregate and Pi carries one factor 1/k^2 times the shear aggregate",
+    "state exact k=0 exclusion explicitly",
+    "use the resulting map in the read-only physical source-history replay"
+  ],
+  "pass_classification": "C10_CLASS_TO_U1_SOURCE_CONVENTION_MAP_PASS_K_GT_0_SCOPED",
+  "non_claims": [
+    "not a physical source-history regularity test",
+    "not a CLASS dynamics modification",
+    "not a completed-U1 spectra or likelihood result"
+  ]
+}
