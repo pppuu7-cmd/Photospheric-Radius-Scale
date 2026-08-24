@@ -1,0 +1,92 @@
+name: RTK C10 U1 prepotential Ward normalization
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-u1-prepotential-ward-trigger.txt'
+      - 'rtk/route_b_u1_prepotential_ward_normalization_gate.py'
+      - 'research/theory_targets/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_TARGET_v1.json'
+      - '.github/workflows/rtk-c10-u1-prepotential-ward-normalization.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-c10-u1-prepotential-ward-normalization
+  cancel-in-progress: false
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify preregistration
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_TARGET_v1.json'))
+          assert t['schema']=='RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_TARGET_v1'
+          assert t['status']=='FROZEN_BEFORE_SYMBOLIC_RESULT'
+          assert t['pass_classification']=='C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_PASS_SCOPED'
+          print('C10_PREPOTENTIAL_WARD_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_u1_prepotential_ward_provenance.txt
+      - name: Install exact symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run exact source-side Ward theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_prepotential_ward_normalization_gate.py
+          python3 rtk/route_b_u1_prepotential_ward_normalization_gate.py | tee c10_u1_prepotential_ward.log
+          grep -q '^C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_PASS_SCOPED ' c10_u1_prepotential_ward.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_prepotential_ward_normalization_result.json'))
+          assert r['classification']=='C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_PASS_SCOPED'
+          assert 'dot(a1_eff)' in r['mandatory_product_rule']
+          assert 'not an independent freely specifiable' in r['architectural_consequence']
+          print('C10_PREPOTENTIAL_WARD_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-u1-prepotential-ward-normalization
+          path: |
+            c10_u1_prepotential_ward.log
+            c10_u1_prepotential_ward_provenance.txt
+            u1_prepotential_ward_normalization_result.json
+          if-no-files-found: error
+      - name: Persist authoritative scoped result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_prepotential_ward_normalization_result.json /tmp/c10_u1_prepotential_ward_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_u1_prepotential_ward_result.json research/theory_results/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_RESULT_v1.json
+            if git diff --cached --quiet; then
+              echo 'Result already persisted.'
+              exit 0
+            fi
+            git commit -m 'Persist C10 U1 prepotential Ward normalization result'
+            if git push origin HEAD:rtk-class-build; then
+              exit 0
+            fi
+            echo "Push conflict on attempt $attempt; retrying from latest branch"
+          done
+          echo 'Unable to persist result after retries' >&2
+          exit 1
