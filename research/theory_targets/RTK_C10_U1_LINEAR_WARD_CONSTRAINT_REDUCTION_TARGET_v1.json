@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_TARGET_v1",
+  "created_utc": "2026-08-24T21:27:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "On the flat-FLRW quasilongitudinal scalar sector of the primary nonprojectable local-U1 equations, is the Newtonian-prepotential constraint Eq.(7.10) a derived Ward-consistency equation once the A constraint Eq.(7.11), momentum constraint Eq.(7.12), and the locally U1-invariant matter-source Ward identity are imposed for k>0?",
+  "primary_equations": {
+    "source": "Zhu-Shu-Wu-Wang arXiv:1110.5106",
+    "gauge_background": "flat FLRW; quasilongitudinal gauge E=delta_varphi=0; background N=a and N^i=0",
+    "eq_7_10": "partial2[2 H(psi-phi)+(1-lambda)(partial2 B+3 psi_prime+3 H phi)] = 8 pi G a^3 delta J_varphi",
+    "eq_7_11": "partial2 psi = 2 pi G a^2 delta J_A",
+    "eq_7_12": "(3 lambda-1)(psi_prime+H phi)+(lambda-1) partial2 B = 8 pi G a q",
+    "eq_7_16": "delta J^i = a^-2 partial^i q",
+    "general_current_definition": "J^i=-N delta L_M/delta N_i"
+  },
+  "parent_results": [
+    "research/theory_results/RTK_C10_U1_A_SOURCE_NORMALIZATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_RESULT_v1.json"
+  ],
+  "frozen_source_map": {
+    "P": "H0-Q",
+    "delta_J_A": "2 delta P",
+    "linear_Ward_FLRW": "delta J_varphi = a^-1[(delta P)'+3 H delta P-a^-1 partial2 q]",
+    "note": "The q term follows from delta J^i=a^-2 partial^i q and J^i=-s^i in the family-I source bridge."
+  },
+  "acceptance": [
+    "derive 8 pi G a^3 delta J_varphi = 8 pi G a^2[(delta P)'+3 H delta P]-8 pi G a partial2 q",
+    "differentiate Eq.(7.11) with delta J_A=2 delta P and retain the derivative of a^-2 exactly",
+    "show 8 pi G a^2[(delta P)'+3 H delta P] = 2 partial2(psi_prime+H psi)",
+    "therefore show the prepotential RHS equals partial2[2(psi_prime+H psi)-8 pi G a q]",
+    "for k>0 cancel the common partial2 operator only after explicitly stating the k=0 exclusion",
+    "substitute Eq.(7.12) for 8 pi G a q",
+    "prove the resulting bracket is exactly 2 H(psi-phi)+(1-lambda)(partial2 B+3 psi_prime+3 H phi), with zero symbolic residual",
+    "classify Eq.(7.10) as a derived linear Ward-consistency relation in this scoped sector, not as an independent source equation",
+    "preserve Eq.(7.11) as the extra A constraint responsible for the non-GR scalar restriction; do not claim all extra U1 constraints disappear"
+  ],
+  "pass_classification": "C10_U1_LINEAR_PREPOTENTIAL_REDUNDANCY_PASS_K_GT_0_SCOPED",
+  "non_claims": [
+    "does not cover the exact homogeneous k=0 mode where partial2 cannot be cancelled",
+    "does not prove nonlinear prepotential-equation redundancy",
+    "does not close the Hamiltonian constraint Eq.(7.13)",
+    "does not close trace/traceless dynamical Eqs.(7.14)-(7.15)",
+    "does not implement CLASS or alter any likelihood",
+    "does not close massive-neutrino anisotropic stress or B4"
+  ]
+}
