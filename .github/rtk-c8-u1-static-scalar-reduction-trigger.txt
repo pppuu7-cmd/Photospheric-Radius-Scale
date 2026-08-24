@@ -1,0 +1,2 @@
+triggered_utc=2026-08-24T14:08:00Z
+reason=replay_frozen_static_scalar_reduction_theorem
