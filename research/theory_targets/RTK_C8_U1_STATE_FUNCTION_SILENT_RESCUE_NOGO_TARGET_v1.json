@@ -1,0 +1,29 @@
+{
+  "schema": "RTK_C8_U1_STATE_FUNCTION_SILENT_RESCUE_NOGO_TARGET_v1",
+  "status": "ANALYTIC_NOGO_DERIVED_BEFORE_SYMBOLIC_REPLAY",
+  "classification": "RTK_C8_U1_STATE_FUNCTION_SILENT_RESCUE_NOGO_TARGET_V1",
+  "question": "Can a continuous state-function coefficient eta(X_U) multiplying the same minimal (D^2 Sigma)^2 operator be exactly silent in the quadratic cosmological RTK kernel for the entire rolling production branch while remaining nonzero at the exact local-rest point X_U=X_star?",
+  "production_identity": "u=sqrt(X_U/X_star)=1+r with r=x/sqrt(1+lambda_D x^2)>0 on every finite-a rolling production state and r->0 as a->infinity, hence X_U->X_star from above",
+  "operator": "Delta L = -M_Pl^2 eta(X_U)/(2 X_star) (D^2 Sigma)^2",
+  "assumptions": [
+    "eta(X_U) is continuous at X_star",
+    "the added operator is required to make exactly zero quadratic contribution to the RTK cosmological scalar kernel for every state on the full rolling production branch",
+    "no cancellation with distinct higher-spatial operators is invoked"
+  ],
+  "target_logic": [
+    "the linear/quadratic rolling-branch k^4 contribution from this operator is proportional to eta(X_bar) times a nonzero background factor",
+    "exact preservation of the cosmological RTK kernel therefore requires eta(X_bar)=0 for every X_bar in the continuous rolling interval above X_star",
+    "the rolling interval has X_star as an accumulation point",
+    "continuity implies eta(X_star)=lim_{X->X_star+} eta(X)=0",
+    "therefore this single continuous state-function coefficient cannot be exactly cosmology-silent and simultaneously provide a nonzero local-rest quadratic rescue"
+  ],
+  "expected_classification": "RTK_C8_U1_CONTINUOUS_STATE_FUNCTION_EXACT_SILENT_SINGLE_OPERATOR_RESCUE_NOGO_PASS",
+  "non_claims": [
+    "does not rule out an approximately silent small coefficient such as the eta4 compatibility window already quantified",
+    "does not rule out cancellations among several independent higher-spatial operators",
+    "does not rule out operators whose cosmological projection vanishes structurally rather than by a state-function coefficient",
+    "does not rule out discontinuous/nonanalytic coefficients, although such choices require separate EFT and well-posedness justification",
+    "does not rule out a changed cosmological kernel followed by a new full likelihood refit"
+  ],
+  "next_gate": "search a minimal multi-operator or structurally FLRW-null higher-spatial basis; any claimed exact-silent rescue must evade one of the explicit assumptions of this no-go"
+}
