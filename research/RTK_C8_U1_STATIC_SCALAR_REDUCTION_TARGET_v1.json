@@ -1,0 +1,33 @@
+{
+  "classification": "RTK_C8_U1_STATIC_SCALAR_REDUCTION_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_EXECUTABLE_STATIC_REDUCTION_RESULT",
+  "parent_ir_representative": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+  "parent_scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "ansatz": {
+    "metric": "time-independent N(x), g_ij(x), zero invariant shift",
+    "Sigma": "q t",
+    "D_i_Sigma": 0,
+    "q": "constant nonzero"
+  },
+  "questions": [
+    "is Sigma=q t an exact scalar-EOM solution on the static ansatz despite spatially varying lapse",
+    "what does C(X) D_i Theta D^i Theta reduce to exactly",
+    "what bare-gravity beta0 convention corresponds to the reduced mixed term",
+    "what is the weak-lapse expansion of P(X) around the r=0/u=1 asymptotic branch"
+  ],
+  "conventions": {
+    "Theta_U": "dot(Sigma)/N on zero invariant shift",
+    "X_U": "Theta_U^2/2 when D_i Sigma=0",
+    "C_X": "M_Pl^2/(2 X_U)",
+    "gravity_acceleration_term": "(M_Pl^2/2) beta0 a_i a^i with a_i=D_i ln N",
+    "asymptotic_normalization": "q^2=2 X_star so u=sqrt(X_U/X_star)=1/N and r=u-1=0 at N=1"
+  },
+  "pass_requirements": [
+    "static scalar EOM vanishes identically for Sigma=q t by shift symmetry/time independence and zero spatial Sigma current",
+    "mixed term equals M_Pl^2 a_i a^i exactly",
+    "equivalent static beta0 contribution equals 2 in the stated gravity convention",
+    "P(X) has no linear term in lapse perturbation n=N-1 around u=1 and begins at M_Pl^2 mu_K^2 n^2",
+    "all scope limits explicitly retained"
+  ],
+  "guard": "Restricted static-sector theorem only. Substituting the ansatz does not by itself establish the full PPN solution, scalar/vector constraint algebra, compact-object regularity, UV cutoff or radiative stability."
+}
