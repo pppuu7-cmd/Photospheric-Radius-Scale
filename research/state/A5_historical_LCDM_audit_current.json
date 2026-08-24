@@ -1,0 +1,32 @@
+{
+  "schema": "A5_HISTORICAL_LCDM_AUDIT_CURRENT_v1",
+  "updated_utc": "2026-08-24T13:26:00Z",
+  "status": "HISTORICAL_ACCEPTED_SCORE_POINT_NOT_HESSIAN_CERTIFIED_LINE_PROFILE_DESCENT_CONFIRMED",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "historical_exact_score_point": {
+    "S_LCDM": 1049.966118347761,
+    "Ob": 0.04858764689799632,
+    "fresh_tree_score_status": "VALID"
+  },
+  "historical_hessian_center": {
+    "Ob": 0.04865764689799632,
+    "delta_Ob_from_score_point": 0.00007,
+    "delta_in_frozen_base_Ob_steps": 1.0,
+    "scope": "Hessian certificate applies to this neighboring recorded center, not to the accepted-score point."
+  },
+  "line_profile": {
+    "result": "research/robustness/A5_LCDM_OLD_TO_NEW_BASIN_LINE_PROFILE_RESULT_v1.json",
+    "classification": "A5_LCDM_LINE_PROFILE_HISTORICAL_LOCAL_INTERPRETATION_AUDIT_REQUIRED",
+    "endpoint_replay_errors": 0.0,
+    "first_sample_below_historical_t": 0.01,
+    "improvement_at_t_0p01": 0.013049143579337397,
+    "near_center_max_exact_improvement": 0.029499863074988752,
+    "recenter_tolerance_S": 0.005
+  },
+  "interpretation": "Historical exact A5 LCDM score provenance remains valid. The accepted-score point must not be called a Hessian-certified local minimum. The historical paired score delta remains a historical exact raw-objective comparison only.",
+  "audit_note": "research/robustness/A5_HISTORICAL_LCDM_STATIONARITY_SEMANTICS_AUDIT_2026-08-24.md",
+  "current_new_LCDM_gate": "independent scale-0.5 Hessian at the unchanged new LCDM seed after base non-PD exact rays found zero descent",
+  "guard": "No global-minimum, sigma/Wilks, posterior, AIC/BIC or Bayes claim is authorized."
+}
