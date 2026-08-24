@@ -1,0 +1,32 @@
+{
+  "classification": "RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_SHADOW_INTERFACE_RESULT",
+  "frozen_at_utc": "2026-08-24T20:30:00Z",
+  "parent_protocol": "research/theory_targets/RTK_ROUTE_B_U1_PRODUCTION_COMPLETION_IMPLEMENTATION_PROTOCOL_v1.json",
+  "scope": "standalone software/algebra shadow module only; no CLASS metric/source modification and no likelihood scoring",
+  "required_parameters": {
+    "lambda_HL": "finite and strictly >1",
+    "M_c": "finite and >0 in the same inverse-length units as k_phys",
+    "eta0": "finite and >0; retained for later history-bound audit",
+    "lambda_D": "must not appear in this interface because its existing DBI meaning remains in khronon_background"
+  },
+  "required_functions": [
+    "H2_ratio(lambda_HL)=2/(3 lambda_HL-1)",
+    "k_phys=k_com/a",
+    "Q_over_H0=M_c^2/(M_c^2+k_phys^2)",
+    "a1_eff=1-Q_over_H0",
+    "a1_eff(k=0)=0 and Q_over_H0(k=0)=1",
+    "0<=a1_eff<1 and 0<Q_over_H0<=1 for finite k_phys",
+    "a1_eff+Q_over_H0=1 by construction",
+    "high-k limit a1_eff->1, Q_over_H0->0",
+    "lambda_HL->1+ gives H2_ratio->1"
+  ],
+  "pass_rule": "compile and run exact/numerical control tests with no modification of the existing production Khronon module; persist a result JSON only if all tests pass.",
+  "non_claims": [
+    "not the projected U1 constraint implementation",
+    "not a cosmological perturbation implementation",
+    "not a source-history audit",
+    "not a likelihood result",
+    "not a PPN transfer certificate"
+  ]
+}
