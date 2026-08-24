@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  actions: read
+  actions: write
 
 jobs:
   persist:
@@ -30,12 +30,12 @@ jobs:
           gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" -n rtk-b4-target-v2-half-eigenmode-rays -D /tmp/b4-rays
           find /tmp/b4-rays -type f -maxdepth 6 -print
           test -s /tmp/b4-rays/output/b4_neutrino_target_v2_half_eigenmode_rays/summary.json
-      - name: Validate and persist scientific result
+      - name: Validate, persist, and route frozen next gate
         run: |
           set -euo pipefail
           cp /tmp/b4-rays/output/b4_neutrino_target_v2_half_eigenmode_rays/summary.json /tmp/summary.json
           python3 - <<'PY'
-          import json, os
+          import json
           s=json.load(open('/tmp/summary.json'))
           t=json.load(open('research/robustness/b4_neutrino_rtk_target_v2_half_eigenmode_rays_target_v1.json'))
           assert t['classification']=='B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_TARGET_V1_FROZEN'
@@ -56,8 +56,8 @@ jobs:
               decision='RECENTER_REQUIRED_FROM_HALF_EIGENMODE_RAYS'
               nxt='Freeze best exact ray point as next B4 RTK recenter target before any new Hessian.'
           else:
-              decision='HALF_EIGENMODE_RAYS_CLEAR_QUARTER_SCALE_PREREGISTRATION_REQUIRED'
-              nxt='Preregister quarter-scale Hessian resolution audit at the unchanged target-v2 center before executing it.'
+              decision='HALF_EIGENMODE_RAYS_CLEAR_QUARTER_SCALE_DISPATCH_ALLOWED'
+              nxt='Dispatch the conditionally preregistered quarter-scale Hessian at the unchanged target-v2 center.'
           state={
             'schema':'RTK_B4_CURRENT_STATE_v1',
             'updated_utc':datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z'),
@@ -82,3 +82,7 @@ jobs:
           git add research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json research/state/B4_current.json
           git commit -m "Record B4 target-v2 half eigenmode-ray result from run ${RUN_ID}"
           git push origin HEAD:rtk-class-build
+          classification=$(python3 -c "import json;print(json.load(open('/tmp/summary.json'))['classification'])")
+          if [ "$classification" = 'B4_TARGET_V2_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005' ]; then
+            gh workflow run rtk-b4-neutrino-rtk-target-v2-quarter.yml --repo "$GITHUB_REPOSITORY" --ref main
+          fi
