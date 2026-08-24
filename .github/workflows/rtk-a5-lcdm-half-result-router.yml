@@ -1,0 +1,44 @@
+name: RTK A5 LCDM half-result router
+
+on:
+  workflow_run:
+    workflows: ['RTK A5 LCDM B9-seed stationarity']
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  route:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Route only a persisted passing half-scale result
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin rtk-class-build
+          if [ ! -s research/robustness/A5_LCDM_B9_SEED_HALF_RESULT_v1.json ]; then
+            echo 'No persisted half result; this may have been a base-scale or non-half run. No dispatch.'
+            exit 0
+          fi
+          python3 - <<'PY'
+          import json
+          h=json.load(open('research/robustness/A5_LCDM_B9_SEED_HALF_RESULT_v1.json'))
+          r=json.load(open('research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_RESULT_v1.json'))
+          t=json.load(open('research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_TARGET_v1.json'))
+          assert r['classification']=='A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005'
+          assert h['stencil_scale']==0.5
+          assert h['center']==t['lcdm']['params']
+          assert h['center_replay_abs_error']<=2e-6
+          if h['eff']['best_improvement']>0.005 or not h['eff']['positive_definite']:
+              raise SystemExit('A5_HALF_NOT_PASSING_REPLACEMENT_GATE')
+          print('A5_LCDM_HALF_PASS_FINAL_REPLACEMENT_REPLAY_ALLOWED',h['eff']['best_improvement'],min(h['eff']['eigenvalues_y']))
+          PY
+          gh workflow run rtk-a5-final-replacement-paired-replay.yml --repo "$GITHUB_REPOSITORY" --ref main
