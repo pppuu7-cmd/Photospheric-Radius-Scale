@@ -1,0 +1,28 @@
+{
+  "schema": "RTK_C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_TARGET_v1",
+  "created_utc": "2026-08-24T22:05:00Z",
+  "status": "FROZEN_AFTER_ANALYTIC_RATIO_THEOREM_BEFORE_NUMERIC_REPLAY",
+  "purpose": "Deterministically evaluate the already-proved action-level lapse-source ratio excess R=k_phys^2/M_K^2 on the replay-certified historical RTK reference, separating the actual BOSS k-window from the technical production P_k_max endpoint.",
+  "reference": {
+    "state": "research/state/current.json",
+    "required_rtk_score": 1050.249912429787,
+    "gamma_certified": 0.05170371280716,
+    "gamma_source": "route-B scale-dictionary run 32568333920",
+    "required_MK_z0_Mpc_inv": 1.1681315109161161,
+    "MK_z0_abs_tolerance": 1e-12
+  },
+  "boss": {
+    "redshifts": [0.38, 0.51, 0.61],
+    "k_h_Mpc": [0.02, 0.24]
+  },
+  "technical_domain": {
+    "dense_z_pk_from_current_objective": true,
+    "P_k_max_h_Mpc": 5.0
+  },
+  "non_claims": [
+    "R is an action-level scalar/lapse functional-derivative ratio excess, not a fractional likelihood or observable error",
+    "the technical P_k_max endpoint need not have equal weight in any likelihood",
+    "this replay does not replace the completed U1 metric implementation",
+    "this replay uses the historical replay-certified RTK local point until A5 is re-frozen"
+  ]
+}
