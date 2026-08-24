@@ -66,3 +66,27 @@ int rtk_u1_shadow_eval(const rtk_u1_shadow_params *p,
   out->h2_ratio = h2_ratio;
   return RTK_U1_SHADOW_OK;
 }
+
+int rtk_u1_shadow_linear_source_eval(const rtk_u1_shadow_state *state,
+                                     double delta_h0,
+                                     rtk_u1_shadow_linear_source *out) {
+  double delta_q, delta_j_a, delta_p_nu;
+  if (state == NULL || out == NULL) return RTK_U1_SHADOW_BAD_INPUT;
+  if (!isfinite(delta_h0) || !isfinite(state->q_over_h0) || !isfinite(state->a1_eff))
+    return RTK_U1_SHADOW_BAD_INPUT;
+  if (state->q_over_h0 < 0.0 || state->q_over_h0 > 1.0 ||
+      state->a1_eff < 0.0 || state->a1_eff > 1.0)
+    return RTK_U1_SHADOW_UNPHYSICAL;
+
+  delta_q = state->q_over_h0 * delta_h0;
+  delta_j_a = -state->a1_eff * delta_h0;
+  delta_p_nu = state->a1_eff * delta_h0;
+  if (!isfinite(delta_q) || !isfinite(delta_j_a) || !isfinite(delta_p_nu))
+    return RTK_U1_SHADOW_NONFINITE;
+
+  out->delta_h0 = delta_h0;
+  out->delta_q = delta_q;
+  out->delta_j_a = delta_j_a;
+  out->delta_p_nu = delta_p_nu;
+  return RTK_U1_SHADOW_OK;
+}
