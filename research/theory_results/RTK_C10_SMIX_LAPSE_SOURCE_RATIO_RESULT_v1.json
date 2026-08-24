@@ -1,0 +1,19 @@
+{
+  "K_pi": "q^2(P_X+q^2 P_XX)",
+  "M_K_squared": "K_pi/(2 C q^2)",
+  "classification": "C10_SMIX_LAPSE_SOURCE_RATIO_AND_RATIONAL_INERTIA_PASS_SCOPED",
+  "delta_rho_DBI": "K_pi (pi_dot-phi)",
+  "effective_quadratic_inertia": "K_pi [1+k_phys^2/M_K^2]",
+  "interpretation": "The same mixed operator responsible for the rational scalar inertia also changes the scalar-sector lapse functional derivative at fixed field perturbation by the identical rational-inertia factor. Therefore changing only c_s^2(k) in a phenomenological fluid implementation is not, by itself, a proof of equivalence to the completed action metric sourcing.",
+  "isolated_scalar_dispersion": "omega^2=c_a^2 k_phys^2/[1+k_phys^2/M_K^2]",
+  "lapse_ratio_to_pure_DBI_density": "1+k_phys^2/M_K^2",
+  "non_claims": [
+    "does not prescribe multiplying an existing CLASS delta_rho source by this factor without the full reduced U1 normalization",
+    "does not include lower-derivative FLRW q-dot terms",
+    "does not derive nonlinear stress or anisotropic stress",
+    "does not include the separate B4 massive-neutrino extension"
+  ],
+  "scalar_lapse_functional_derivative": "-dL2_scalar/dphi = delta_rho_DBI [1+k_phys^2/M_K^2]",
+  "status_scope": "GREEN_EXACT_QUADRATIC_ACTION_RATIO_FINAL_U1_CLASS_SOURCE_NORMALIZATION_OPEN",
+  "target": "research/theory_targets/RTK_C10_SMIX_LAPSE_SOURCE_RATIO_TARGET_v1.json"
+}
