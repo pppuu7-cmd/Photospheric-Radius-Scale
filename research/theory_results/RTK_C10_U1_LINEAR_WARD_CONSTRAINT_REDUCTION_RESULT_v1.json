@@ -1,0 +1,27 @@
+{
+  "A_constraint": "partial^2 psi=4 pi G a^2 delta P",
+  "classification": "C10_U1_LINEAR_PREPOTENTIAL_REDUNDANCY_PASS_K_GT_0_SCOPED",
+  "current_convention": "Eq.(3.16) defines J^i=-N delta L_M/delta N_i; Eq.(7.16) uses delta J^i=a^-2 partial^i q.",
+  "density_source_identity": "8 pi G a^2[(delta P)'+3H delta P]=2 partial^2(psi'+H psi)",
+  "differentiated_A_constraint": "delta P'=[partial^2 psi'-2H partial^2 psi]/(4 pi G a^2)",
+  "exact_reduced_bracket": "2H(psi-phi)+(1-lambda)(partial^2 B+3psi'+3H phi)",
+  "important_remaining_constraint": "Eq.(7.11) remains an independent extra A constraint relative to GR; this result does not remove the U1 scalar restriction that eliminates the unwanted gravitational scalar mode.",
+  "interpretation": "For every nonzero scalar Fourier mode, Eq.(7.10) is exactly the Ward-consistency consequence of the A constraint Eq.(7.11), momentum constraint Eq.(7.12), and the locally U1-consistent source definitions. It is not an additional independent linear source constraint in this scoped flat-FLRW gauge sector.",
+  "k0_guard": "The common partial^2 operator may be cancelled only for k>0. Exact k=0 remains governed by the separately certified homogeneous bridge and is outside this theorem.",
+  "linear_Ward_source": "delta J_varphi=a^-1[(delta P)'+3H delta P-a^-1 partial^2 q], with delta J_A=2 delta P",
+  "momentum_constraint": "8 pi G a q=(3lambda-1)(psi'+H phi)+(lambda-1)partial^2 B",
+  "next_gate": "Reduce Eqs.(7.13)-(7.15) on the same source/action conventions, determine a minimal independent metric system after eliminating the derived Eq.(7.10), and only then define a CLASS implementation interface.",
+  "non_claims": [
+    "not a nonlinear Ward/redundancy theorem",
+    "not an exact k=0 theorem",
+    "does not close Eq.(7.13) Hamiltonian constraint",
+    "does not close Eqs.(7.14)-(7.15) trace/traceless dynamics",
+    "does not implement CLASS or change any likelihood result",
+    "does not include the separate B4 massive-neutrino extension"
+  ],
+  "prepotential_RHS_after_Ward_and_A": "partial^2[2(psi'+H psi)-8 pi G a q]",
+  "primary_equations": "Zhu-Shu-Wu-Wang arXiv:1110.5106 Eqs.(7.10)-(7.12),(7.16)",
+  "status_scope": "GREEN_EXACT_LINEAR_WARD_CONSISTENCY_K_GT_0_HAMILTONIAN_AND_DYNAMICAL_SECTOR_OPEN",
+  "symbolic_residual": "0",
+  "target": "research/theory_targets/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_TARGET_v1.json"
+}
