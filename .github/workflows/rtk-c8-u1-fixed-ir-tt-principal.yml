@@ -1,0 +1,47 @@
+name: RTK C8 U1 fixed IR TT principal theorem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c8-u1-fixed-ir-tt-principal-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install exact symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Replay fixed-action TT theorem
+        run: |
+          set -euo pipefail
+          cp research/RTK_C8_U1_TT_PRINCIPAL_GATE_RESULT_v1.json /tmp/expected.json
+          python3 rtk/route_b_u1_fixed_ir_tt_principal_gate.py | tee rtk_c8_u1_tt_principal.log
+          grep -q '^RTK_C8_U1_FIXED_ACTION_TT_PRINCIPAL_PASS$' rtk_c8_u1_tt_principal.log
+          python3 - <<'PY'
+          import json
+          e=json.load(open('/tmp/expected.json'))
+          r=json.load(open('research/RTK_C8_U1_TT_PRINCIPAL_GATE_RESULT_v1.json'))
+          assert r['classification']==e['classification']=='RTK_C8_U1_FIXED_ACTION_TT_PRINCIPAL_PASS'
+          assert all(r['checks'].values())
+          assert r['exact_algebra']['c_T_squared']=='1'
+          assert r['exact_algebra']['S_mix_principal_TT']=='0'
+          print('RTK_C8_U1_TT_CI_REPLAY_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-c8-u1-fixed-ir-tt-principal
+          path: |
+            rtk_c8_u1_tt_principal.log
+            research/RTK_C8_U1_TT_PRINCIPAL_GATE_RESULT_v1.json
