@@ -1,0 +1,50 @@
+{
+  "S_LCDM": 1058.2173424114785,
+  "S_RTK": 1059.2719553175134,
+  "classification": "B9_FINAL_PAIRED_EXACT_REPLAY_PASS",
+  "delta_S_RTK_minus_LCDM": 1.0546129060348903,
+  "delta_replay_abs_error": 9.769962616701378e-15,
+  "delta_replay_abs_tolerance": 4e-06,
+  "lcdm_replay_abs_error": 0.0,
+  "lensing_lmax": [
+    2500,
+    2500,
+    2500,
+    -1,
+    2500,
+    -1,
+    -1
+  ],
+  "lensing_product": "baseline/plc_3.0/lensing/smicadx12_Dec5_ftl_mv2_ndclpp_p_teb_consext8.clik_lensing",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "provenance": {
+    "b9_protocol_fingerprint": "32f93090720b64cc15dd0b2ce027bbbf75d62275fd3a81eee8d14ffc3720e838",
+    "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "fresh_tree_precondition": {
+      "classification": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
+      "cross_run_replay_abs_error": 0.0,
+      "expected_center_S_eff": 1059.2719553175134,
+      "fresh_best_exact_S_eff": 1059.2719553175134,
+      "fresh_best_improvement_eff": 0.0,
+      "fresh_center_S_eff": 1059.2719553175134,
+      "fresh_min_eigenvalue_eff": 0.0005825694001738223,
+      "fresh_positive_definite_eff": true,
+      "observed_utc": "2026-08-24T10:51:34Z",
+      "tolerance": 2e-06,
+      "workflow_conclusion": "success",
+      "workflow_head_sha": "f1101bb060e83484e5a1e6cb8c4282a3c2f50009",
+      "workflow_run_id": 32704596153,
+      "workflow_run_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32704596153"
+    },
+    "numpy_version": "2.5.2",
+    "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+    "python_version": "3.12.3",
+    "research_source_commit": "7a427c7a3db449d1686a792dcce4ab57dfcf57af",
+    "target_fingerprint": "698e82774f532c695d599348d1dc3288c73287dc7d72d4db4cf6a985d77d0a88"
+  },
+  "replay_abs_tolerance_each": 2e-06,
+  "rtk_replay_abs_error": 0.0,
+  "target_fingerprint": "698e82774f532c695d599348d1dc3288c73287dc7d72d4db4cf6a985d77d0a88",
+  "warning": "Local frozen B9 robustness comparison only; not global optimality, significance, AIC/BIC, posterior preference or Bayes factor."
+}

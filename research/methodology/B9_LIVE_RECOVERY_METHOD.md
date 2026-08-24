@@ -214,3 +214,19 @@ The preregistered RTK independent fresh-tree certification passed. Canonical res
 - positive definite `True`
 
 The next gate remains the previously preregistered final paired exact replay.
+
+
+## 13. Final paired replay — automatic closure record
+
+<!-- B9_FINAL_PAIRED_RESULT:AUTO -->
+
+The preregistered final paired fresh-tree replay passed. Canonical result: `research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json`.
+
+- `S_B9,LCDM = 1058.2173424114785`
+- `S_B9,RTK = 1059.2719553175134`
+- `Delta S_B9 = 1.0546129060348903` (`RTK-LCDM`)
+- LCDM replay error `0.0`
+- RTK replay error `0.0`
+- paired-delta replay error `9.769962616701378e-15`
+
+This closes the **local matched B9 Planck-lensing robustness chain only**. It is not global optimality, significance, AIC/BIC, posterior preference or Bayes evidence.
