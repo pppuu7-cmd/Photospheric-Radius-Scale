@@ -1,0 +1,54 @@
+{
+  "anchors": {
+    "B10_factor16384": {
+      "R_DBI": 0.983801689271521,
+      "lambda_D": 3595592871.3405743,
+      "lambda_delta2": 0.016198310728478982,
+      "lambda_max_over_lambda": 61.73483252434803,
+      "real_static_clock_domain": true
+    },
+    "B10_factor64": {
+      "R_DBI": 0.9999367253487169,
+      "lambda_D": 14045284.653674118,
+      "lambda_delta2": 6.327465128312103e-05,
+      "lambda_max_over_lambda": 15804.117126233095,
+      "real_static_clock_domain": true
+    },
+    "finite_certified": {
+      "R_DBI": 0.9999990113335737,
+      "lambda_D": 219457.5727136581,
+      "lambda_delta2": 9.88666426298766e-07,
+      "lambda_max_over_lambda": 1011463.4960789181,
+      "real_static_clock_domain": true
+    }
+  },
+  "classification": "RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_SCOPED_PASS_WITH_NONUNIFORM_TAIL_BOUND",
+  "domain": {
+    "R_DBI": "1-lambda_D(1/N-1)^2",
+    "fixed_nonzero_lapse_lambda_to_infinity": "R_DBI -> -infinity; the static-clock real branch cannot be continued uniformly to lambda_D=infinity",
+    "lambda_D_max_on_reference": 221973323737.95
+  },
+  "interpretation": [
+    "The certified finite lambda_D and both preregistered B10 tail anchors remain inside the real DBI domain at the nominal solar photospheric weak-field reference.",
+    "The largest B10 factor-16384 anchor retains a finite domain margin, but only about lambda_max/lambda ~= 61.7348 further multiplicative room on this reference.",
+    "Therefore B10 cosmological numerical non-identifiability does not justify treating lambda_D=infinity as a uniformly admissible local static-clock limit."
+  ],
+  "next_gate": "use the exact static variation bridge plus finite-lambda DBI source to derive the Solar-System finite-mu_K correction bound; separately investigate whether alternative scalar profiles can extend the local domain beyond lambda_D_max",
+  "non_claims": [
+    "does not invalidate B10 cosmological protocol-v1 closure",
+    "does not rule out alternative local solutions with spatial Sigma gradients or nonzero invariant shift for larger lambda_D",
+    "does not assert the exact modified-gravity solar solution is Schwarzschild",
+    "does not extrapolate this weak-field photospheric gate to neutron stars or black holes",
+    "does not establish compact-object regularity near X_U=0"
+  ],
+  "solar_reference": {
+    "GM_sun_nominal_m3_s2": 1.3271244e+20,
+    "N_schwarzschild_exterior_at_Rsun": 0.9999978774951773,
+    "R_sun_nominal_m": 695700000.0,
+    "c_m_s": 299792458.0,
+    "compactness_GM_over_Rc2": 2.1225025701453566e-06,
+    "delta_abs_1_over_N_minus_1": 2.1225093276289186e-06,
+    "source": "IAU 2015 Resolution B3 nominal conversion constants; c exact SI"
+  },
+  "status": "FINITE_AND_PREREGISTERED_B10_ANCHORS_REAL_ON_SOLAR_REFERENCE;_FORMAL_INFINITE_TAIL_NOT_UNIFORM"
+}
