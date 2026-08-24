@@ -1,7 +1,7 @@
 {
   "schema": "RTK_B9_CURRENT_STATE_v1",
-  "updated_utc": "2026-08-24T08:09:40Z",
-  "status": "RTK_FRESH_TREE_TRIGGER_COMMITTED_RUN_NOT_YET_OBSERVED",
+  "updated_utc": "2026-08-24T08:19:00Z",
+  "status": "RTK_FRESH_TREE_MAIN_TRIGGER_COMMITTED_RESULT_ROUTER_ARMED",
   "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
   "production_mapping": "eff",
   "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
@@ -57,19 +57,36 @@
   },
   "active_gate": {
     "name": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION",
-    "workflow": ".github/workflows/rtk-b9-rtk-recenter-fresh-tree.yml",
-    "workflow_restore_commit": "7369e6703f7448bd7c32c85d67be47dd969ff003",
-    "trigger": ".github/rtk-b9-rtk-recenter-fresh-tree-trigger.txt",
-    "trigger_commit": "f1101bb060e83484e5a1e6cb8c4282a3c2f50009",
+    "workflow": "main:.github/workflows/rtk-b9-rtk-recenter-fresh-tree.yml",
+    "compute_checkout_ref": "rtk-class-build",
+    "main_trigger": ".github/rtk-b9-rtk-recenter-fresh-tree-trigger.txt",
+    "main_trigger_commit": "58d6e9943bc753eda2ebbcc58fe7a5bbe88aa482",
     "run_id": null,
-    "run_observation": "The trigger commit is verified in the branch, but no Actions run ID/status was exposed by the available commit-run/status connector checks at the last observation. This is infrastructure/observability state, not a scientific result.",
+    "run_observation": "The proven historical trigger route on main has been used. No run ID is yet exposed by the available connector view; absence of an observed ID is infrastructure/observability state, not a scientific result.",
     "pass_conditions": [
       "fresh center score reproduces expected RTK center within 2e-6",
       "fresh exact best improvement <= 0.005",
       "fresh base Hessian is positive definite"
     ]
   },
+  "result_routing": {
+    "workflow": "main:.github/workflows/rtk-b9-fresh-tree-result-router.yml",
+    "workflow_commit": "db13e0e5a3a938240adbe0946642b31d6f91305a",
+    "behavior_on_pass": "Persist B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json and dispatch the preregistered final paired replay.",
+    "behavior_on_non_success": "Persist workflow/run status only; do not infer scientific PASS or FAIL automatically."
+  },
   "preregistered_next_gate": "research/robustness/B9_FINAL_PAIRED_REPLAY_TARGET_v1.json",
-  "next_if_pass": "Persist fresh-tree artifact/result, then run the preregistered independent paired exact replay of the certified LCDM-v7 and RTK centers and freeze final local B9 Delta S only if both replay tolerances pass.",
-  "next_if_fail": "Do not average or relax tolerances. Diagnose replay mismatch, exact descent direction, or non-PD Hessian as separate reproducibility/stationarity failures and preserve the negative result."
+  "paired_replay_worker": {
+    "path": "rtk/b9_final_paired_replay.py",
+    "commit": "3edcd6fed40e599ed785138af40a0154b8d0957d"
+  },
+  "paired_replay_workflow": {
+    "path": "main:.github/workflows/rtk-b9-final-paired-replay.yml",
+    "commit": "412565dbfbed84f8f2a441476bff7b00315c3184",
+    "dispatch_precondition": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
+    "replay_abs_tolerance_each": 0.000002,
+    "delta_replay_abs_tolerance": 0.000004
+  },
+  "next_if_pass": "The result router dispatches the already-preregistered final paired exact replay. Freeze local B9 Delta S only if that replay passes all tolerances.",
+  "next_if_fail": "Do not average or relax tolerances. Diagnose replay mismatch, exact descent direction, non-PD Hessian, or infrastructure failure separately and preserve the negative/indeterminate result."
 }
