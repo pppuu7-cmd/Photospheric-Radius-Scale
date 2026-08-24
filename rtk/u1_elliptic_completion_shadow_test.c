@@ -12,6 +12,7 @@ static int close_rel(double a, double b, double tol) {
 int main(void) {
   rtk_u1_shadow_params p = {1.001, 2.0, 1.0};
   rtk_u1_shadow_state s0, s1, s2;
+  rtk_u1_shadow_linear_source src0, src1, src2;
   rtk_u1_shadow_params bad;
   double near_gr;
 
@@ -39,12 +40,28 @@ int main(void) {
   assert(s2.a1_eff > 0.9999);
   assert(s2.a1_eff + s2.q_over_h0 == 1.0);
 
+  /* Frozen linear projected-source theorem. */
+  assert(rtk_u1_shadow_linear_source_eval(&s0, 3.0, &src0) == RTK_U1_SHADOW_OK);
+  assert(src0.delta_q == 3.0);
+  assert(src0.delta_j_a == 0.0);
+  assert(src0.delta_p_nu == 0.0);
+
+  assert(rtk_u1_shadow_linear_source_eval(&s1, 3.0, &src1) == RTK_U1_SHADOW_OK);
+  assert(close_rel(src1.delta_q, 1.5, 1e-15));
+  assert(close_rel(src1.delta_j_a, -1.5, 1e-15));
+  assert(close_rel(src1.delta_p_nu, 1.5, 1e-15));
+  assert(src1.delta_j_a + src1.delta_p_nu == 0.0);
+
+  assert(rtk_u1_shadow_linear_source_eval(&s2, 3.0, &src2) == RTK_U1_SHADOW_OK);
+  assert(fabs(src2.delta_j_a) > fabs(src1.delta_j_a));
+  assert(src2.delta_j_a + src2.delta_p_nu == 0.0);
+
   /* The lambda_HL->1+ homogeneous normalization is continuous. */
   near_gr = rtk_u1_shadow_h2_ratio(1.0 + 1e-9);
   assert(isfinite(near_gr));
   assert(fabs(near_gr-1.0) < 2e-9);
 
-  /* Structural-domain validation is separate from lambda_D. */
+  /* Structural-domain validation is separate from the existing DBI-tail parameter. */
   bad = p; bad.lambda_HL = 1.0;
   assert(rtk_u1_shadow_validate(&bad) == RTK_U1_SHADOW_UNPHYSICAL);
   bad = p; bad.M_c = 0.0;
@@ -53,5 +70,6 @@ int main(void) {
   assert(rtk_u1_shadow_validate(&bad) == RTK_U1_SHADOW_UNPHYSICAL);
 
   printf("RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_PASS\n");
+  printf("RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_PASS\n");
   return 0;
 }
