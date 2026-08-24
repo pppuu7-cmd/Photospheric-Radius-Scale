@@ -1,0 +1,157 @@
+name: RTK A5 B9 cross-basin fresh-tree replay
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-a5-b9-cross-basin-replay-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-a5-b9-cross-basin-fresh-tree-replay
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CACHE_KEY_VERSION: 'clean-room-exact-float-v2'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Freeze-check cross-basin target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/robustness/A5_B9_CROSS_BASIN_REPLAY_TARGET_v1.json'))
+          assert t['status']=='PREREGISTERED_BEFORE_INDEPENDENT_CROSS_BASIN_REPLAY'
+          assert t['objective']=='matched-ultra-linstep2+dense-BOSS'
+          assert t['objective_fingerprint']=='754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666'
+          assert t['score_tolerance_abs']==2e-6
+          assert t['recenter_tolerance_S']==0.005
+          print('A5_B9_CROSS_BASIN_TARGET_LOCK_PASS')
+          PY
+          python3 -m py_compile rtk/a5_b9_cross_basin_replay.py rtk/prepare_inference_core.py
+          git rev-parse HEAD | tee a5_b9_cross_basin_source_sha.txt
+
+      - name: Prepare pristine pinned CLASS and likelihood tree
+        run: |
+          set -euo pipefail
+          rm -rf class_public
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          {
+            echo "class_upstream_sha=$(git -C class_public rev-parse HEAD)"
+            echo "pantheon_sha=$(git -C class_public/pantheon rev-parse HEAD)"
+          } | tee a5_b9_cross_basin_external_git.txt
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/a5_b9_cross_basin_replay.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q 'RTK_PLANCK_DATA' inference_core.py
+          rm -rf output profile_*.ini profile_*.log __pycache__
+
+      - name: Build CLASS and install locked likelihood stack
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 -m pip freeze | sort | tee a5_b9_cross_basin_pip_freeze.txt
+
+      - name: Download and verify official Planck baseline fresh
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+
+      - name: Replay historical pair and B9 cross-seeds
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 a5_b9_cross_basin_replay.py | tee ../a5_b9_cross_basin_replay.log
+          grep -q 'A5_B9_CROSS_BASIN_REPLAY_PASS' ../a5_b9_cross_basin_replay.log
+          test -s output/a5_b9_cross_basin_replay/summary.json
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-a5-b9-cross-basin-fresh-tree-replay
+          path: |
+            a5_b9_cross_basin_replay.log
+            a5_b9_cross_basin_source_sha.txt
+            a5_b9_cross_basin_external_git.txt
+            a5_b9_cross_basin_pip_freeze.txt
+            class_public/output/a5_b9_cross_basin_replay/
+          if-no-files-found: warn
+
+      - name: Persist independent cross-basin result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp class_public/output/a5_b9_cross_basin_replay/summary.json /tmp/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          r=json.load(open('research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json'))
+          assert r['status']=='PASS'
+          state={
+            'schema':'A5_B9_CROSS_BASIN_CURRENT_v1',
+            'updated_utc':datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z'),
+            'status':r['classification'],
+            'objective':r['objective']['name'],
+            'objective_fingerprint':r['objective_fingerprint'],
+            'historical_delta_RTK_minus_LCDM':r['historical_delta_RTK_minus_LCDM'],
+            'cross_seed_delta_RTK_minus_LCDM':r['cross_seed_delta_RTK_minus_LCDM'],
+            'delta_change':r['delta_change'],
+            'LCDM_improvement_historical_minus_B9seed':r['LCDM_improvement_historical_minus_B9seed'],
+            'RTK_change_B9seed_minus_historical':r['RTK_change_B9seed_minus_historical'],
+            'result':'research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json',
+            'next_if_confirmed':'Freeze and execute a baseline-objective LCDM stationarity/reoptimization chain around the B9-v7 LCDM seed before superseding the historical A5 best-known pair.',
+            'guard':'Historical A5 remains a valid local-basin certificate; do not silently rewrite it or claim a global minimum.'
+          }
+          json.dump(state,open('research/state/A5_cross_basin_current.json','w'),indent=2,sort_keys=True)
+          open('research/state/A5_cross_basin_current.json','a').write('\n')
+          PY
+          git config user.name 'rtk-cross-basin-audit'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json research/state/A5_cross_basin_current.json
+          git commit -m 'Record independent A5 B9 cross-basin replay'
+          git push origin HEAD:rtk-class-build
