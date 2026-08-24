@@ -1,0 +1,2 @@
+triggered_utc=2026-08-24T14:38:00Z
+purpose=execute frozen variation-level static bridge after scalar-EOM PASS
