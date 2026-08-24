@@ -1,0 +1,50 @@
+name: RTK A5 LCDM forward extension router
+
+on:
+  workflow_run:
+    workflows: ['RTK A5 LCDM t1p1 forward line']
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  route:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Dispatch v2 only from persisted scientific boundary result
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin rtk-class-build
+          RESULT=research/robustness/A5_LCDM_T1P1_FORWARD_LINE_CONTINUATION_RESULT_v1.json
+          TARGET=research/robustness/A5_LCDM_T1P9_FORWARD_LINE_CONTINUATION_TARGET_v2.json
+          if [ ! -s "$RESULT" ]; then
+            echo 'No persisted v1 scientific result; no dispatch.'
+            exit 0
+          fi
+          python3 - <<'PY'
+          import json
+          p=json.load(open('research/robustness/A5_LCDM_T1P1_FORWARD_LINE_CONTINUATION_RESULT_v1.json'))
+          t=json.load(open('research/robustness/A5_LCDM_T1P9_FORWARD_LINE_CONTINUATION_TARGET_v2.json'))
+          r=t['prerequisite']
+          assert t['frozen_before_v1_forward_result'] is True
+          if p.get('classification') != r['required_classification']:
+              raise SystemExit('A5_V1_CLASSIFICATION_NOT_AUTHORIZED')
+          if p.get('decision') != r['required_decision']:
+              print('A5_V1_DOES_NOT_REQUIRE_FORWARD_EXTENSION',p.get('decision'))
+              raise SystemExit(0)
+          if abs(float(p.get('best_sample_t'))-float(r['required_best_sample_t'])) > 1e-12:
+              raise SystemExit('A5_V1_BOUNDARY_MISMATCH')
+          if not float(p.get('improvement_vs_t1p1')) > float(r['required_improvement_gt']):
+              raise SystemExit('A5_V1_IMPROVEMENT_BELOW_EXTENSION_THRESHOLD')
+          print('A5_V1_BOUNDARY_EXTENSION_V2_ALLOWED',p['best_sample_score'],p['improvement_vs_t1p1'])
+          PY
+          gh workflow run rtk-a5-lcdm-t1p9-forward-line-v2.yml --repo "$GITHUB_REPOSITORY" --ref main
