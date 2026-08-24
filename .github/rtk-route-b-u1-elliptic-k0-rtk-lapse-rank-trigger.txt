@@ -1,0 +1,4 @@
+triggered_utc=2026-08-24T19:53:00Z
+scientific_target=research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_v1.json
+purpose=certify_delta_a_RTK_k0_zero_after_elliptic_projection
+science_change=none_after_target_freeze
