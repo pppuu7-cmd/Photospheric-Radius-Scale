@@ -29,7 +29,9 @@ jobs:
           print('SHADOW_INTERFACE_TARGET_PASS')
           PY
           grep -q 'lambda_D' rtk/khronon_background.h
-          if grep -R -n 'lambda_D' rtk/u1_elliptic_completion_shadow.[ch] rtk/u1_elliptic_completion_shadow_test.c; then
+          # Only the production interface files are forbidden from reusing lambda_D.
+          # A test comment may mention the symbol when documenting semantic separation.
+          if grep -n 'lambda_D' rtk/u1_elliptic_completion_shadow.h rtk/u1_elliptic_completion_shadow.c; then
             echo 'lambda_D must not enter the independent completion shadow interface' >&2
             exit 1
           fi
@@ -51,7 +53,7 @@ jobs:
             'status':'GREEN_STANDALONE_SHADOW_INTERFACE_PROJECTED_CONSTRAINT_IMPLEMENTATION_PENDING',
             'target':'research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_TARGET_v1.json',
             'files':['rtk/u1_elliptic_completion_shadow.h','rtk/u1_elliptic_completion_shadow.c','rtk/u1_elliptic_completion_shadow_test.c'],
-            'certified':['lambda_HL is an independent strictly-greater-than-one parameter in this shadow module','M_c>0 and eta0>0 validation','k_phys=k_com/a','Q_over_H0=M_c^2/(M_c^2+k_phys^2)','a1_eff=1-Q_over_H0','exact k=0 Q/H0=1 and a1_eff=0','high-k recovery trend','H2_ratio=2/(3 lambda_HL-1)','lambda_HL->1+ near-GR continuity','shadow interface contains no lambda_D symbol while existing Khronon background retains lambda_D'],
+            'certified':['lambda_HL is an independent strictly-greater-than-one parameter in this shadow module','M_c>0 and eta0>0 validation','k_phys=k_com/a','Q_over_H0=M_c^2/(M_c^2+k_phys^2)','a1_eff=1-Q_over_H0','exact k=0 Q/H0=1 and a1_eff=0','high-k recovery trend','H2_ratio=2/(3 lambda_HL-1)','lambda_HL->1+ near-GR continuity','shadow interface header/source contain no lambda_D symbol while existing Khronon background retains lambda_D'],
             'critical_boundary':'The projected U1 metric/source constraint equations are not yet encoded; this module must not be connected to likelihood as if a1_eff were merely a fluid sound-speed correction.',
             'non_claims':['not a CLASS completion implementation','not a cosmological perturbation constraint solver','not a likelihood result','not a same-action PPN transfer certificate','does not select M_c or lambda_HL']
           }
