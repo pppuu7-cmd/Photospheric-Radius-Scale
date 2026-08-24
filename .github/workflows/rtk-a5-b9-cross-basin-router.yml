@@ -1,0 +1,38 @@
+name: RTK A5 B9 cross-basin result router
+
+on:
+  workflow_run:
+    workflows: ['RTK A5 B9 cross-basin fresh-tree replay']
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  route:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Verify persisted independent cross-basin classification
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin rtk-class-build
+          python3 - <<'PY'
+          import json
+          r=json.load(open('research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json'))
+          assert r['status']=='PASS'
+          assert r['classification']=='A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED'
+          assert r['LCDM_improvement_historical_minus_B9seed']>0.005
+          print('A5_B9_CROSS_BASIN_NEW_LCDM_SEED_CONFIRMED',r['LCDM_improvement_historical_minus_B9seed'])
+          PY
+      - name: Dispatch preregistered baseline LCDM base-scale stationarity
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh workflow run rtk-a5-lcdm-b9-seed-stationarity.yml --ref main -f scale=1.0
