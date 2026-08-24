@@ -1,0 +1,62 @@
+{
+  "schema": "RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_TARGET_v1",
+  "created_utc": "2026-08-24T22:47:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "Can the completed U1 physical matter metric be represented in standard scalar Newtonian coordinates while retaining the preferred-foliation information in a separate Stückelberg field, and do the already-reduced U1 constraints give Newtonian matter potentials without introducing a B-prime evolution variable?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_PHYSICAL_METRIC_CLASS_GAUGE_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_RESULT_v1.json"
+  ],
+  "conventions": {
+    "physical_scalar_metric": "ds^2=a^2[-(1+2Phi)deta^2+2 partial_i B dx^i deta+((1-2Psi)delta_ij+2 partial_i partial_j E)dx^i dx^j]",
+    "coordinate_change": "eta -> eta+T, x^i -> x^i+partial^i L",
+    "metric_rules": [
+      "Phi -> Phi-H T-T_prime",
+      "Psi -> Psi+H T",
+      "B -> B+T-L_prime",
+      "E -> E-L"
+    ],
+    "physical_shear": "sigma=B-E_prime",
+    "newtonian_choice": "L=E, T=-sigma"
+  },
+  "frozen_u1_branch": {
+    "a1": 1,
+    "a2": 0,
+    "Ahat": 0,
+    "quasilongitudinal": "E=0, delta_varphi=0",
+    "Phi_matter": "phi-deltaA/a",
+    "Psi_matter": "psi",
+    "sigma_phys": "B"
+  },
+  "preferred_foliation_stueckelberg": {
+    "definition": "Introduce a separate scalar T_fol=eta+chi that covariantizes the preferred foliation; chi=0 in preferred/unitary coordinates.",
+    "transform": "chi -> chi-T",
+    "newtonian_coordinate_value": "chi_N=sigma_phys",
+    "strict_non_identification": "T_fol/chi is not the RTK/DBI scalar Sigma and is not the U1 Newtonian prepotential varphi. No identification is allowed without a separately frozen action hypothesis."
+  },
+  "existing_traceless_solve": "deltaA=Ahat psi+a[8 pi G a^2 Pi_total+B_prime+2H B-psi+Pcal phi-alpha1 Lpsi]",
+  "acceptance": [
+    "derive Phi_N=Phi_matter+H sigma+sigma_prime and Psi_N=Psi_matter-H sigma",
+    "on the frozen quasilongitudinal Ahat=0 branch set sigma=B",
+    "substitute the existing exact traceless deltaA solve into Phi_N and prove all B_prime terms cancel identically",
+    "derive Phi_N=(1-Pcal)phi+psi+alpha1 Lpsi-H B-8 pi G a^2 Pi_total",
+    "derive Psi_N=psi-H B",
+    "derive the slip Phi_N-Psi_N=(1-Pcal)phi+alpha1 Lpsi-8 pi G a^2 Pi_total, independent of B and B_prime",
+    "show chi_N=B carries the preferred-foliation information after the coordinate representation is made Newtonian",
+    "state that this is a coordinate/Stueckelberg representation, not an allowed local-time FDiff gauge fixing of the unitary-gauge Hořava action",
+    "do not declare a CLASS implementation complete until total source variables are transformed consistently and the transformed algebraic system is pole-audited"
+  ],
+  "pass_classification": "C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_PASS_SCOPED",
+  "decision": {
+    "if_pass": "Freeze a total-source transformation and transformed-constraint pole audit. A future CLASS bridge may feed standard Newtonian matter potentials while retaining chi/B internally in the completed gravity solver.",
+    "if_fail": "Use a shear-aware Boltzmann hierarchy directly in preferred coordinates instead of standard CLASS Newtonian representation."
+  },
+  "non_claims": [
+    "not a proof that the transformed completed gravity equations equal GR",
+    "not a proof that chi is dynamically zero",
+    "not a new physical degree of freedom count",
+    "not a CLASS implementation",
+    "not a likelihood result",
+    "not an identification of the preferred-foliation Stückelberg with the RTK scalar Sigma"
+  ]
+}
