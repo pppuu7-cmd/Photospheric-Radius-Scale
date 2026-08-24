@@ -1,0 +1,64 @@
+{
+  "abs_shadow_minus_production_score_eff": 1.8189894035458565e-10,
+  "classification": "ACTION_SHADOW_FIXED_LIKELIHOOD_INDISTINGUISHABLE_AT_0P005",
+  "component_shadow_minus_production": {
+    "chi2_BOSS_eff": 1.8213341945738648e-10,
+    "chi2_BOSS_k01": 4.857998447960199e-10,
+    "chi2_SN": 0.0,
+    "logL_high": 1.1368683772161603e-13,
+    "logL_lowE": 0.0,
+    "logL_lowT": 0.0,
+    "logL_planck": 1.1368683772161603e-13,
+    "rd": 0.0
+  },
+  "non_claims": [
+    "not a completed U1 metric-solver likelihood",
+    "not a completed-action refit",
+    "not a new RTK vs LCDM comparison",
+    "not AIC/BIC/Bayes/significance",
+    "not evidence that the elliptic compensator has been implemented in CLASS"
+  ],
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production": {
+    "chi2_BOSS_eff": 7.626492028405815,
+    "chi2_BOSS_k01": 7.626777545351349,
+    "chi2_SN": 39.59899396804523,
+    "logL_high": -291.96710495344223,
+    "logL_lowE": -197.8321092635595,
+    "logL_lowT": -11.712998999666183,
+    "logL_planck": -501.5122132166679,
+    "rd": 146.982681,
+    "score": 1050.249912429787,
+    "score_k01": 1050.2501979467324
+  },
+  "production_replay_abs_error": 0.0,
+  "production_score_eff": 1050.249912429787,
+  "recenter_tolerance_S": 0.005,
+  "reference_params": {
+    "As": 2.0877827951474356e-09,
+    "Ob": 0.046800730927437424,
+    "Om": 0.2522864064078236,
+    "h": 0.691103719964454,
+    "lam": 219457.5727136581,
+    "ns": 0.9645577770978523,
+    "zre": 7.328459220286924
+  },
+  "shadow": {
+    "chi2_BOSS_eff": 7.626492028587949,
+    "chi2_BOSS_k01": 7.6267775458371485,
+    "chi2_SN": 39.59899396804523,
+    "logL_high": -291.9671049534421,
+    "logL_lowE": -197.8321092635595,
+    "logL_lowT": -11.712998999666183,
+    "logL_planck": -501.51221321666776,
+    "rd": 146.982681,
+    "score": 1050.2499124299688,
+    "score_k01": 1050.2501979472179
+  },
+  "shadow_minus_production_score_eff": 1.8189894035458565e-10,
+  "shadow_minus_production_score_k01": 4.854427970713004e-10,
+  "shadow_score_eff": 1050.2499124299688,
+  "status_scope": "FIXED_HISTORICAL_RTK_POINT_EXACT_MATCHED_OBJECTIVE_ACTION_SHADOW_SENSITIVITY",
+  "target": "research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json"
+}
