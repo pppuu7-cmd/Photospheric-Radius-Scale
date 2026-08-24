@@ -1,0 +1,65 @@
+{
+  "schema": "RTK_MATCHED_MULTI_MODEL_BENCHMARK_PROTOCOL_v1",
+  "status": "FROZEN_BEFORE_WCDM_OR_CPL_BENCHMARK_SCORES",
+  "classification": "RTK_MATCHED_MULTI_MODEL_BENCHMARK_PROTOCOL_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "datasets": ["Planck2018 baseline lowT+lowE+Plik-lite TTTEEE", "Pantheon binned SN", "BOSS DR12 consensus geometry+growth"],
+  "environment_lock": {
+    "CLASS": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "Pantheon": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+    "Planck_SHA256": "0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6",
+    "Python": "3.12.3",
+    "NumPy": "2.5.2",
+    "SciPy": "1.18.0",
+    "clipy_like": "0.15"
+  },
+  "common_shared_parameters": ["h", "Omega_b", "Omega_cdm_or_RTK_equivalent_dark_density", "A_s", "n_s", "z_reio"],
+  "models": {
+    "LCDM": {
+      "extra_parameters": [],
+      "status": "ACTIVE_REFERENCE_REQUIRES_CURRENT_A5_RECENTER_CHAIN_TO_FINISH"
+    },
+    "RTK": {
+      "extra_parameters": ["lambda_D"],
+      "status": "HISTORICAL_LOCAL_REFERENCE_CERTIFIED;_NEW_PAIRED_REFERENCE_WAITS_FOR_A5"
+    },
+    "wCDM": {
+      "CLASS_configuration": ["model=0", "Omega_Lambda=0", "Omega_fld inferred by closure", "wa_fld=0", "cs2_fld=1"],
+      "extra_parameters": ["w0_fld"],
+      "status": "IMPLEMENTABLE_ON_CURRENT_PINNED_CLASS",
+      "guard": "w0_fld=-1 exactly must use the LCDM branch rather than the fluid branch because the pinned CLASS perturbation module explicitly rejects (w0,wa)=(-1,0)."
+    },
+    "CPL_w0waCDM": {
+      "CLASS_configuration": ["model=0", "Omega_Lambda=0", "Omega_fld inferred by closure", "w0_fld free", "wa_fld free", "cs2_fld=1"],
+      "extra_parameters": ["w0_fld", "wa_fld"],
+      "status": "BLOCKED_FOR_FULL_BENCHMARK_ON_CURRENT_PINNED_CLASS",
+      "blocker": "Pinned CLASS nonlocal branch rejects trajectories for which w(a) crosses -1 because its fluid perturbation equations diverge. A non-crossing subset must not be presented as the full contemporary CPL competitor.",
+      "required_unblock_gate": "freeze and validate a crossing-safe PPF/fluid implementation or a new explicitly pinned CLASS boundary, then replay LCDM/wCDM controls before any CPL score comparison"
+    }
+  },
+  "entry_condition": "Do not launch wCDM local optimization until the current A5 LCDM recenter chain has produced the accepted best-known LCDM center used as the common seed/reference boundary.",
+  "stationarity_rule": {
+    "recenter_tolerance_S": 0.005,
+    "exact_float_success_only_cache": true,
+    "base_then_half": true,
+    "nonPD_requires_exact_rays_before_smaller_scale": true,
+    "fresh_tree_required": true
+  },
+  "comparison_outputs": [
+    "matched raw S at independently certified local centers",
+    "component decomposition Planck/SN/BOSS",
+    "parameter displacement relative to current LCDM reference",
+    "fresh-tree replay errors"
+  ],
+  "forbidden_in_v1": [
+    "sigma/Wilks conversion",
+    "Bayes factor",
+    "AIC/BIC claim",
+    "global-minimum claim",
+    "calling a non-crossing CPL subset the full CPL model",
+    "cross-objective absolute-score comparison"
+  ],
+  "next_step": "finish A5 LCDM recenter chain; then create and run a frozen wCDM navigation/recenter target on the identical likelihood. In parallel design the crossing-safe CPL implementation gate."
+}
