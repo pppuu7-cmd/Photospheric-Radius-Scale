@@ -1,0 +1,144 @@
+name: RTK B9 RTK recenter fresh-tree certification
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b9-rtk-recenter-fresh-tree-trigger.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rtk-b9-rtk-recenter-fresh-tree-certification
+  cancel-in-progress: false
+
+jobs:
+  fresh-tree:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
+      RTK_B9_STENCIL_SCALE: '1.0'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Freeze-check prior base and half gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/robustness/B9_RTK_RECENTER_HALF_DECISION_v1.json'))
+          t=json.load(open('research/robustness/B9_RTK_RECENTER_TARGET_v1.json'))
+          assert d['status']=='HALF_SCALE_PASS_FROZEN_BEFORE_FRESH_TREE'
+          assert d['half_run_id']==32538458738 and d['half_artifact_id']==9468954931
+          assert d['half_best_improvement_eff']<=d['recenter_tolerance_S']==0.005
+          assert d['half_positive_definite_eff'] and d['half_min_eigenvalue_eff']>0
+          assert d['half_center_replay_abs_error']<=d['fresh_tree_replay_abs_tolerance']
+          assert d['center']==t['center']
+          print('B9_RTK_HALF_GATE_PASS',d['expected_center_S_eff'],d['half_min_eigenvalue_eff'])
+          PY
+          python3 -m py_compile rtk/b9_rtk_stationarity_hessian.py rtk/prepare_inference_core.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee b9_rtk_fresh_tree_provenance.txt
+
+      - name: Build genuinely fresh pinned CLASS tree
+        run: |
+          set -euo pipefail
+          rm -rf class_public
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/b9_rtk_stationarity_hessian.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q 'RTK_PLANCK_DATA' inference_core.py
+
+      - name: Build CLASS and install locked likelihood stack
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 -m pip freeze | sort | tee b9_rtk_fresh_tree_pip_freeze.txt
+
+      - name: Download and verify fresh Planck R3 baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+          test -d planck_data/baseline/plc_3.0/lensing/smicadx12_Dec5_ftl_mv2_ndclpp_p_teb_consext8.clik_lensing
+
+      - name: Run independent fresh-tree full base Hessian and certify
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 b9_rtk_stationarity_hessian.py | tee ../b9_rtk_fresh_tree.log
+          grep -q 'B9_RTK_STATIONARITY_HESSIAN_COMPLETE 1.0' ../b9_rtk_fresh_tree.log
+          python3 - <<'PY'
+          import json
+          s=json.load(open('../output/b9_rtk_stationarity/scale_1/summary.json'))
+          d=json.load(open('../research/robustness/B9_RTK_RECENTER_HALF_DECISION_v1.json'))
+          assert s['model']=='RTK' and s['objective']==d['objective'] and s['center']==d['center']
+          replay=abs(s['eff']['S_center']-d['expected_center_S_eff'])
+          assert replay<=d['fresh_tree_replay_abs_tolerance'], replay
+          assert s['center_replay_abs_error']<=d['fresh_tree_replay_abs_tolerance']
+          assert s['eff']['best_improvement']<=d['recenter_tolerance_S']
+          assert s['eff']['positive_definite']
+          result={
+            'classification':'B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS',
+            'expected_center_S_eff':d['expected_center_S_eff'],
+            'fresh_center_S_eff':s['eff']['S_center'],
+            'fresh_best_exact_S_eff':s['eff']['best_exact_S'],
+            'fresh_best_improvement_eff':s['eff']['best_improvement'],
+            'fresh_positive_definite_eff':s['eff']['positive_definite'],
+            'fresh_min_eigenvalue_eff':min(s['eff']['eigenvalues_y']),
+            'cross_run_replay_abs_error':replay,
+            'tolerance':d['fresh_tree_replay_abs_tolerance']
+          }
+          json.dump(result,open('../b9_rtk_fresh_tree_certification.json','w'),indent=2,sort_keys=True)
+          print('B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS',result)
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b9-rtk-recenter-fresh-tree-certification
+          path: |
+            b9_rtk_fresh_tree.log
+            b9_rtk_fresh_tree_provenance.txt
+            b9_rtk_fresh_tree_pip_freeze.txt
+            b9_rtk_fresh_tree_certification.json
+            output/b9_rtk_stationarity/scale_1/
+          if-no-files-found: warn
