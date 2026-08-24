@@ -1,0 +1,64 @@
+name: RTK C10 action-fluid shadow interface
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/khronon_action_shadow.h'
+      - 'rtk/khronon_action_shadow.c'
+      - 'rtk/khronon_action_shadow_test.c'
+      - 'research/theory_targets/RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_TARGET_v1.json'
+      - '.github/rtk-c10-action-fluid-shadow-interface-trigger.txt'
+      - '.github/workflows/rtk-c10-action-fluid-shadow-interface.yml'
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Build and test standalone shadow
+        run: |
+          set -euo pipefail
+          cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic -Irtk rtk/khronon_action_shadow.c rtk/khronon_action_shadow_test.c -lm -o /tmp/khr_action_shadow_test
+          /tmp/khr_action_shadow_test | tee c10_action_fluid_shadow.log
+          grep -q '^C10_ACTION_FLUID_SHADOW_INTERFACE_PASS$' c10_action_fluid_shadow.log
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cat > /tmp/result.json <<'JSON'
+          {
+            "classification": "C10_ACTION_FLUID_SHADOW_INTERFACE_PASS",
+            "status_scope": "GREEN_STANDALONE_ACTION_DERIVED_FLUID_API_NOT_CONNECTED_TO_PRODUCTION_CLASS",
+            "production_modified": false,
+            "equations": {
+              "delta_prime": "-(1+w)(theta-3phi_prime)-3H(c_a^2-w)delta",
+              "theta_prime": "-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+psi]",
+              "delta_p_over_rho": "c_s^2 delta"
+            },
+            "controls": ["exact production equality when c_s^2=c_a^2", "symbolic residual-equivalent numerical checks when c_s^2!=c_a^2", "finite/unphysical guards"],
+            "next_gate": "Build an opt-in shadow CLASS patch and compare spectra/objective at fixed RTK parameters before any production replacement.",
+            "non_claims": ["not a CLASS observable result", "not the completed U1 metric solver", "not a likelihood rerun"]
+          }
+          JSON
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_RESULT_v1.json
+            git commit -m 'Record C10 action-fluid shadow interface result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-action-fluid-shadow-interface
+          path: c10_action_fluid_shadow.log
+          if-no-files-found: error
