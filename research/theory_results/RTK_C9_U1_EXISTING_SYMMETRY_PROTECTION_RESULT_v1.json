@@ -1,0 +1,35 @@
+{
+  "allowed_next_mechanisms": [
+    "additional exact symmetry/Ward identity",
+    "counterterm-stable structural degeneracy",
+    "explicit RG fixed surface with both beta functions zero",
+    "quantitative induced-coupling tolerance below a demonstrated physical EFT cutoff"
+  ],
+  "classification": "RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_NEGATIVE_CLOSED",
+  "external_source": "Mukohyama-Namba-Saitou-Watanabe arXiv:1504.07357v2",
+  "fixed_surface": {
+    "sigma1": 0,
+    "sigma2": 0
+  },
+  "next_gate": "search for and freeze one explicit additional protection mechanism: Ward symmetry, counterterm-stable degeneracy, explicit beta-function fixed surface, or quantitative induced-coupling tolerance below the physical EFT cutoff",
+  "non_claims": [
+    "does not compute one-loop beta functions for the final U1+RTK action",
+    "does not rule out an additional exact symmetry/Ward identity not currently present",
+    "does not rule out a structural degeneracy that remains effective after the allowed counterterms are included",
+    "does not rule out an RG fixed surface or quantitatively controlled tuning below a sufficiently high cutoff",
+    "does not reopen the classical DOF or weak-field PPN theorems"
+  ],
+  "operator_dictionary": {
+    "eta1/sigma1": "a_i a^i sigma",
+    "eta2/sigma2": "D_i a^i sigma"
+  },
+  "scientific_consequence": "C9 cannot be closed by appealing to the presently declared U(1) x Diff(M,F) plus Sigma-shift symmetries. A new protection mechanism or a quantitative counterterm/tuning analysis is mandatory.",
+  "status": "SCOPED_NEGATIVE_CLOSURE_EXISTING_SYMMETRY_DOES_NOT_PROTECT_EXCEPTIONAL_SURFACE",
+  "target": "research/theory_targets/RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_TARGET_v1.json",
+  "verified_logic": [
+    "Fully nonlinear classical removal of the unwanted gravity scalar requires both exceptional couplings to vanish exactly in the cited Hamiltonian theorem.",
+    "Both operators are marginal and are members of the most-general nonprojectable gravity action respecting the same local U(1) and foliation-preserving diffeomorphism symmetry.",
+    "The additional RTK internal Sigma shift symmetry does not transform these pure-gravity operators and therefore cannot forbid them.",
+    "Therefore the symmetry content already declared in the frozen action does not protect sigma1=sigma2=0."
+  ]
+}
