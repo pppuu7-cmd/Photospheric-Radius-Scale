@@ -1,7 +1,7 @@
 {
   "schema": "RTK_B9_CURRENT_STATE_v1",
-  "updated_utc": "2026-08-24T08:01:00Z",
-  "status": "RTK_FRESH_TREE_CERTIFICATION_LAUNCHED",
+  "updated_utc": "2026-08-24T08:09:40Z",
+  "status": "RTK_FRESH_TREE_TRIGGER_COMMITTED_RUN_NOT_YET_OBSERVED",
   "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
   "production_mapping": "eff",
   "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
@@ -61,12 +61,15 @@
     "workflow_restore_commit": "7369e6703f7448bd7c32c85d67be47dd969ff003",
     "trigger": ".github/rtk-b9-rtk-recenter-fresh-tree-trigger.txt",
     "trigger_commit": "f1101bb060e83484e5a1e6cb8c4282a3c2f50009",
+    "run_id": null,
+    "run_observation": "The trigger commit is verified in the branch, but no Actions run ID/status was exposed by the available commit-run/status connector checks at the last observation. This is infrastructure/observability state, not a scientific result.",
     "pass_conditions": [
       "fresh center score reproduces expected RTK center within 2e-6",
       "fresh exact best improvement <= 0.005",
       "fresh base Hessian is positive definite"
     ]
   },
-  "next_if_pass": "Persist fresh-tree artifact/result, then run an independent paired exact replay of the certified LCDM-v7 and RTK centers and freeze final local B9 Delta S only if both replay tolerances pass.",
+  "preregistered_next_gate": "research/robustness/B9_FINAL_PAIRED_REPLAY_TARGET_v1.json",
+  "next_if_pass": "Persist fresh-tree artifact/result, then run the preregistered independent paired exact replay of the certified LCDM-v7 and RTK centers and freeze final local B9 Delta S only if both replay tolerances pass.",
   "next_if_fail": "Do not average or relax tolerances. Diagnose replay mismatch, exact descent direction, or non-PD Hessian as separate reproducibility/stationarity failures and preserve the negative result."
 }
