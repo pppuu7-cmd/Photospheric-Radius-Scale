@@ -1,0 +1,84 @@
+name: RTK B4 target-v2 half eigenmode rays result router
+
+on:
+  workflow_run:
+    workflows: ['RTK B4 target-v2 half eigenmode rays']
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  persist:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Download exact frozen-ray artifact
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/b4-rays
+          mkdir -p /tmp/b4-rays
+          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" -n rtk-b4-target-v2-half-eigenmode-rays -D /tmp/b4-rays
+          find /tmp/b4-rays -type f -maxdepth 6 -print
+          test -s /tmp/b4-rays/output/b4_neutrino_target_v2_half_eigenmode_rays/summary.json
+      - name: Validate and persist scientific result
+        run: |
+          set -euo pipefail
+          cp /tmp/b4-rays/output/b4_neutrino_target_v2_half_eigenmode_rays/summary.json /tmp/summary.json
+          python3 - <<'PY'
+          import json, os
+          s=json.load(open('/tmp/summary.json'))
+          t=json.load(open('research/robustness/b4_neutrino_rtk_target_v2_half_eigenmode_rays_target_v1.json'))
+          assert t['classification']=='B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_TARGET_V1_FROZEN'
+          assert s['classification'] in ('B4_TARGET_V2_HALF_EIGENMODE_RECENTER_REQUIRED','B4_TARGET_V2_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005')
+          assert len(s['mode_results'])==2
+          assert abs(float(s['S_center_eff'])-float(t['S_center_eff']))<=2e-6
+          assert float(s['recenter_tolerance_S'])==float(t['recenter_tolerance_S'])==0.005
+          print('B4_HALF_EIGENMODE_ROUTER_VALIDATED',s['classification'],s['max_exact_improvement_eff'])
+          PY
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/summary.json research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          r=json.load(open('research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json'))
+          if r['classification']=='B4_TARGET_V2_HALF_EIGENMODE_RECENTER_REQUIRED':
+              decision='RECENTER_REQUIRED_FROM_HALF_EIGENMODE_RAYS'
+              nxt='Freeze best exact ray point as next B4 RTK recenter target before any new Hessian.'
+          else:
+              decision='HALF_EIGENMODE_RAYS_CLEAR_QUARTER_SCALE_PREREGISTRATION_REQUIRED'
+              nxt='Preregister quarter-scale Hessian resolution audit at the unchanged target-v2 center before executing it.'
+          state={
+            'schema':'RTK_B4_CURRENT_STATE_v1',
+            'updated_utc':datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z'),
+            'objective':'matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1',
+            'status':decision,
+            'center':r.get('center'),
+            'S_center_eff':r['S_center_eff'],
+            'max_exact_improvement_eff':r['max_exact_improvement_eff'],
+            'recenter_tolerance_S':r['recenter_tolerance_S'],
+            'classification':r['classification'],
+            'result':'research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json',
+            'workflow_run_id':int(os.environ['RUN_ID']),
+            'workflow_head_sha':os.environ['HEAD_SHA'],
+            'next_gate':nxt,
+            'guard':'B4 is a separate minimal-neutrino objective; do not compare its absolute score directly with massless A1-A5.'
+          }
+          json.dump(state,open('research/state/B4_current.json','w'),indent=2,sort_keys=True)
+          open('research/state/B4_current.json','a').write('\n')
+          PY
+          git config user.name 'rtk-b4-result-router'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json research/state/B4_current.json
+          git commit -m "Record B4 target-v2 half eigenmode-ray result from run ${RUN_ID}"
+          git push origin HEAD:rtk-class-build
