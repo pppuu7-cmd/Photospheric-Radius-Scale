@@ -1,0 +1,77 @@
+name: RTK Route-B U1 PPN O3 scalar silence vector
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-ppn-o3-scalar-silence-vector-trigger.txt'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  o3-vector:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen O3 target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_TARGET_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_TARGET_V1_FROZEN'
+          assert t['status']=='FROZEN_BEFORE_O3_MOVING_SOURCE_RESULT'
+          for p in t['prerequisites']:
+              json.load(open(p))
+          print('O3_SCALAR_SILENCE_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee u1_ppn_o3_source.txt
+      - name: Run O3 symbolic theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_ppn_o3_scalar_silence_vector.py
+          python3 rtk/route_b_u1_ppn_o3_scalar_silence_vector.py | tee u1_ppn_o3_scalar_silence.log
+          grep -q '^RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_EXACT_PASS ' u1_ppn_o3_scalar_silence.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_ppn_o3_scalar_silence_vector_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_EXACT_PASS'
+          print('O3_SCALAR_SILENCE_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-ppn-o3-scalar-silence-vector
+          path: |
+            u1_ppn_o3_scalar_silence.log
+            u1_ppn_o3_scalar_silence_vector_result.json
+            u1_ppn_o3_source.txt
+          if-no-files-found: error
+      - name: Persist O3 result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_ppn_o3_scalar_silence_vector_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_RESULT_v1.json
+          git config user.name 'rtk-u1-o3-vector'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_RESULT_v1.json
+          git commit -m 'Persist O3 moving-source scalar-silence theorem'
+          git push origin HEAD:rtk-class-build
+      - name: Dispatch preregistered preferred-frame gate
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run rtk-route-b-u1-preferred-frame-inheritance.yml --ref main
