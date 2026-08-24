@@ -1,0 +1,23 @@
+{
+  "a1_eff_time_derivative": "dot(a1_eff)=-2 (dot a/a) a1_eff (1-a1_eff) for constant comoving k and constant M_c",
+  "architectural_consequence": "J_varphi is not an independent freely specifiable completion source once J_A and J^i are fixed; the local-U1 Ward identity determines it. The reduced CLASS source bridge should therefore compute J_varphi from J_A plus the ordinary momentum current rather than add a second phenomenological filter.",
+  "classification": "C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_PASS_SCOPED",
+  "critical_correction": "delta_p_nu=a1_eff deltaH0 is a canonical coefficient, not the primary-literature J_varphi. Direct algebraic insertion into Eq.(7.10) would drop both the time-derivative/product-rule term and ordinary momentum divergence.",
+  "elliptic_compensator_map": "P=H0-Q=p_nu_total, literature J_A=2P, auxiliary shift-current contribution from (A-Acal)Q vanishes in varphi=0 gauge, so J_varphi=[Dt(P)-div(P N^i)+div(N s^i)]/N on the frozen source bridge",
+  "family_I_check": "a1=1,a2=0,Omega=1,varphi=0 with J_A=2 rho_H and J^i=-s^i gives J_varphi=[Dt(rho_H)-div(rho_H N^i)+div(N s^i)]/N",
+  "filtered_linear_transfer": "delta P=a1_eff delta H0 with a1_eff=k^2/(k^2+a^2 M_c^2)",
+  "homogeneous_background": "k=0 -> P=0; with homogeneous momentum current zero, J_varphi_bar=0 exactly",
+  "linear_flat_FLRW": "delta J_varphi=[Dt(delta P)+div(Nbar delta s^i)]/Nbar because P_bar=Nbar^i=s_bar^i=0",
+  "mandatory_product_rule": "Dt(delta P)=a1_eff Dt(delta H0)+dot(a1_eff) delta H0",
+  "non_claims": [
+    "does not close the gravitational left-hand side of the prepotential constraint",
+    "does not prove full nonlinear redundancy of the prepotential equation",
+    "does not close Hamiltonian/momentum/trace/traceless metric reduction",
+    "does not implement CLASS or change likelihood results",
+    "does not include the separate B4 massive-neutrino same-action extension"
+  ],
+  "solved_J_varphi": "J_varphi = [Dt(J_A)-div(J_A N^i)]/(2N) - div(N J^i)/N",
+  "status_scope": "GREEN_EXACT_SOURCE_SIDE_WARD_NORMALIZATION_FULL_REDUCED_GRAVITATIONAL_SYSTEM_OPEN",
+  "target": "research/theory_targets/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_TARGET_v1.json",
+  "ward_identity": "N J_varphi - 1/2 Dt(J_A) + 1/2 div(J_A N^i) + div(N J^i) = 0"
+}
