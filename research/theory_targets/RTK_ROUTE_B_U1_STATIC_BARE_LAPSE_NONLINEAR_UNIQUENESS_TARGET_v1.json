@@ -1,0 +1,58 @@
+{
+  "schema": "RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_TARGET_v1",
+  "status": "FROZEN_BEFORE_NONLINEAR_UNIQUENESS_RESULT",
+  "classification": "RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_TARGET_V1_FROZEN",
+  "fixed_action": {
+    "ir_representative": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+    "scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "gamma1": -1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "beta0_bare": 0,
+    "explicit_static_Smix_beta0_equivalent": 2
+  },
+  "prerequisites": [
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json"
+  ],
+  "sector": {
+    "time_independent": true,
+    "invariant_shift": 0,
+    "D_i_Sigma": 0,
+    "Sigma": "q t",
+    "N_positive": true,
+    "DBI_real_interior": "1-lambda_D(1/N-1)^2>0",
+    "asymptotic_boundary": "N->1 and the uniqueness integration-by-parts boundary term vanishes"
+  },
+  "external_identity": {
+    "source": "Lin-Mukohyama-Wang-Zhu arXiv:1310.6666v4 Eqs.(4.15),(5.5),(5.14)",
+    "ordinary_matter_cancellation": "for a2=0, Omega=1: Jt=-2 rho_H and JA=2 a1 rho_H; at a1=1 and gamma1=-1 the Hamiltonian-minus-gamma1*A combination has Jt+JA=0 exactly"
+  },
+  "dbi_definition": {
+    "r": "1/N-1",
+    "s": "sqrt(1-lambda_D r^2)",
+    "p_8piG": "2 mu_K^2/lambda_D * (1-s), with smooth lambda_D->0 limit mu_K^2 r^2",
+    "F_N": "d[N p_8piG]/dN"
+  },
+  "target_identities": [
+    "2 D_i a^i + a_i a^i = F_N on the exact static fixed-action branch after ordinary-matter cancellation",
+    "F_N = -2 mu_K^2 r(1+s+r)/(s(1+s)) for lambda_D>0, with the continuous lambda_D=0 limit",
+    "sign(F_N)=sign(N-1) throughout N>0 and s>0",
+    "with u=sqrt(N), 2 Delta ln N + |grad ln N|^2 = 4 Delta u/u",
+    "multiplying 4 Delta u = u F_N by u-1 and integrating gives -4 integral|grad u|^2 = integral u(u-1)F_N",
+    "the left side is non-positive and the right side non-negative, hence u=1 and N=1 uniquely under the frozen boundary conditions"
+  ],
+  "pass_consequence": "the fixed DBI P(X_U) and exact mixed operator are background-silent on the unique regular asymptotically-flat static zero-shift branch: N=1, a_i=0, P=0, P_N=0; static metric/U1 equations then reduce to the corresponding pure-U1 family-I equations on this branch",
+  "non_claims": [
+    "does not cover stationary rotation or nonzero invariant shift",
+    "does not cover solutions with spatial Sigma gradients",
+    "does not cover DBI boundary s=0 or X_U->0 compact-object configurations",
+    "does not by itself certify moving-source alpha1 or alpha2",
+    "does not establish radiative stability, UV completion or EFT cutoff"
+  ],
+  "next_gate_if_pass": "freeze a static beta_PPN inheritance gate using the exact N=1 theorem and the family-I O(v^4) equations; keep moving-source preferred-frame parameters separate"
+}
