@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_U1_PHYSICAL_METRIC_CLASS_GAUGE_BRIDGE_TARGET_v1",
+  "created_utc": "2026-08-24T22:39:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "Map the frozen a1=1,a2=0 universal-matter U1 variables to the physical metric seen by baryons/photons and determine whether the completed linear scalar system can be identified directly with standard CLASS Newtonian-gauge metric sources.",
+  "primary_sources": [
+    {
+      "paper": "K. Lin, S. Mukohyama, A. Wang, T. Zhu, arXiv:1310.6666v4",
+      "equations": ["2.1", "2.5", "4.2", "4.3"]
+    },
+    {
+      "paper": "T. Zhu, F.-W. Shu, Q. Wu, A. Wang, arXiv:1110.5106v2",
+      "equations": ["6.8", "6.9", "6.10", "7.1", "7.3"]
+    }
+  ],
+  "frozen_slice": {
+    "a1": 1,
+    "a2": 0,
+    "background_spatial_curvature": 0,
+    "Lambda_g": 0,
+    "homogeneous_compensated_JA": 0,
+    "homogeneous_compensated_Jvarphi": 0
+  },
+  "acceptance": [
+    "derive tilde_N=N-A+mathcalA, tilde_N^i=N^i+N g^ij nabla_j varphi and tilde_g_ij=g_ij on a1=1,a2=0",
+    "show that in quasilongitudinal U1 gauge delta_varphi=0 the physical lapse is tilde_N=N-A and the physical shift scalar equals bare B",
+    "show at linear order that the general physical shift scalar is B_phys=B+delta_varphi/a and is invariant under the local U1 transformation delta B=alpha/a, delta varphi=-alpha",
+    "show that the allowed scalar spatial FDiff leaves the physical shear combination Sigma_phys=B_phys-E_prime invariant, so after fixing E=0 there is no remaining k>0 scalar spatial gauge freedom to set B_phys=0 unless Sigma_phys vanishes dynamically",
+    "use flat k=0, Lambda_g=0 background equations to show A_hat drops out of the background dynamical equation; record A_hat=0 as an admissible production-matching branch choice, not as a forced equation or a second gauge fixing",
+    "on A_hat=0 branch derive Phi_matter=phi-deltaA/a, Psi_matter=psi and B_matter=B in quasilongitudinal gauge",
+    "conclude that direct identification with standard CLASS Newtonian gauge B=E=0 is not justified unless the reduced dynamics separately implies Sigma_phys=0; otherwise a shear-aware/gauge-invariant Boltzmann bridge is mandatory"
+  ],
+  "pass_classification": "C10_U1_PHYSICAL_METRIC_MAP_PASS_CLASS_NEWTONIAN_DIRECT_IDENTIFICATION_BLOCKED_SCOPED",
+  "decision": {
+    "if_pass": "Do not patch the completed metric solver directly into CLASS newtonian phi/psi variables. Next derive either gauge-invariant photon/baryon source combinations in the preferred foliation or an explicit shear-aware CLASS metric layer.",
+    "if_fail": "Revisit the universal matter-frame mapping before any completed-action CLASS work."
+  },
+  "non_claims": [
+    "not a no-go for CLASS or Boltzmann implementation",
+    "not a claim that physical shear is observationally large",
+    "not a completed photon or baryon hierarchy",
+    "not a likelihood result",
+    "not an exact k=0 perturbation gauge statement"
+  ]
+}
