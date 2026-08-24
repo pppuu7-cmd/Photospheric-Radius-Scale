@@ -1,0 +1,66 @@
+name: RTK Route-B U1 static variation bridge
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-variation-bridge-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-route-b-u1-static-variation-bridge
+  cancel-in-progress: false
+
+jobs:
+  bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify prerequisites and execute exact bridge
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 - <<'PY'
+          import json
+          p=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json'))
+          t=json.load(open('research/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_TARGET_v1.json'))
+          a=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert p['classification']=='RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_EXACT_PASS'
+          assert t['classification']=='RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_TARGET_V1_FROZEN'
+          assert a['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
+          print('STATIC_VARIATION_BRIDGE_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/route_b_u1_static_variation_bridge_gate.py
+          python3 rtk/route_b_u1_static_variation_bridge_gate.py | tee u1_static_variation_bridge.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_EXACT_PASS ' u1_static_variation_bridge.log
+      - name: Persist scientific result to rtk-class-build
+        run: |
+          set -euo pipefail
+          mkdir -p research/theory_results
+          cp u1_static_variation_bridge_result.json research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json
+          if git diff --cached --quiet; then
+            echo 'Result already persisted identically.'
+          else
+            git commit -m 'theory: persist exact static variation bridge result'
+            git push origin HEAD:rtk-class-build
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-variation-bridge
+          path: |
+            u1_static_variation_bridge.log
+            u1_static_variation_bridge_result.json
+          if-no-files-found: error
