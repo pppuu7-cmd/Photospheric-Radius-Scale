@@ -1,0 +1,4 @@
+triggered_utc=2026-08-24T20:05:00Z
+scientific_target=research/theory_targets/RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CONSOLIDATION_TARGET_v1.json
+purpose=current_lineage_replay_of_finite_k_all_q_rank_domain
+science_change=none_after_target_freeze
