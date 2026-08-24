@@ -1,0 +1,52 @@
+{
+  "schema": "A5_LCDM_T1P1_HALF_STATIONARITY_TARGET_v1",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_T1P1_BASE_RESULT",
+  "classification": "A5_LCDM_T1P1_HALF_STATIONARITY_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "center": {
+    "As": 2.0983938219102527e-09,
+    "Ob": 0.04838888999978602,
+    "Om": 0.2584441959848294,
+    "h": 0.6805163510946404,
+    "lam": 0.0,
+    "ns": 0.96638264917319,
+    "zre": 7.674455444668947
+  },
+  "expected_center_S_eff": 1049.3633203461366,
+  "stencil_scale": 0.5,
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "scaled_steps": {
+    "h": 0.000175,
+    "Ob": 0.000035,
+    "Om": 0.00035,
+    "As": 2e-12,
+    "ns": 0.000175,
+    "zre": 0.035
+  },
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "center_replay_abs_tolerance": 0.000002,
+  "prerequisite": {
+    "result": "research/robustness/A5_LCDM_T1P1_BASE_RESULT_v1.json",
+    "required_scale": 1.0,
+    "required_center_identical": true,
+    "required_center_replay_abs_error_lte": 0.000002,
+    "required_best_improvement_lte": 0.005,
+    "required_positive_definite": true
+  },
+  "decision": {
+    "if_best_improvement_gt_0p005": "mandatory recenter at exact best point",
+    "if_recenter_clear_and_PD": "advance to independent fresh-tree replay at identical center",
+    "if_recenter_clear_and_nonPD": "freeze exact negative/soft eigenmode rays before any smaller-scale fallback"
+  },
+  "guard": "This target is frozen before the t1p1 base Hessian result. It is executable only if the persisted base result satisfies every prerequisite. Half-scale cannot rescue a non-PD base without the required eigenmode-ray gate."
+}
