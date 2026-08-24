@@ -1,0 +1,46 @@
+{
+  "classification": "RTK_ROUTE_B_U1_HISTORY_WIDE_MC_WINDOW_PASS",
+  "domain": {
+    "eta0": "eta0>0",
+    "history": "declared a_EFT with H(a)<=H_EFT for every audited a>=a_EFT",
+    "lambda_HL": "lambda_HL=1+epsilon with epsilon>0",
+    "matter_scope": "nonnegative-pressure barotropic all-q theorem; massive-neutrino anisotropic stress excluded",
+    "source_assumption": "0<=rho_filtered(a)<=rho_eff(a)",
+    "units": "c=1, so H and physical wavenumbers carry the same inverse-length units"
+  },
+  "exact_margins": {
+    "H_ceiling_squared": "64 eta0 k_local_phys^2/[297(3 lambda_HL-1)]",
+    "history_margin": "[3(3 lambda_HL-1)/(64 eta0)](H_ceiling^2-H_EFT^2)",
+    "scale_margin": "k_local_phys^2/99-99 k_cos_phys^2 = (k_local_phys-99 k_cos_phys)(k_local_phys+99 k_cos_phys)/99"
+  },
+  "history_bound_derivation": {
+    "conservative_instantaneous_bound": "M_c^2 >= 3(3 lambda_HL-1) H^2/(64 eta0)",
+    "history_wide_bound": "M_c^2 >= L_history := 3(3 lambda_HL-1) H_EFT^2/(64 eta0)",
+    "parent_source_bound": "M_c^2 >= rho_filtered/(32 eta0 M_Pl^2)",
+    "same_action_rho_eff": "rho_eff=(3/2)(3 lambda_HL-1) M_Pl^2 H^2"
+  },
+  "interpretation": "A fixed M_c can satisfy both the constructive all-q rank requirement and the 1% cosmology/local filter separation over a declared finite EFT history if the two displayed interval conditions hold. Because the sufficient source lower bound grows with H, extending the same fixed-M_c theorem arbitrarily toward an H->infinity early-time limit is not certified; an EFT onset or a different UV regime is mandatory.",
+  "joint_pre_root_exclusion_window": "max(99 k_cos_phys^2, L_history) <= M_c^2 <= k_local_phys^2/99",
+  "near_GR_background": {
+    "lambda_HL_1_plus_epsilon_deviation": "1-R=3 epsilon/(2+3 epsilon)",
+    "ratio": "H^2(lambda_HL)/H^2(1)=2/(3 lambda_HL-1)"
+  },
+  "next_gate": "freeze a production-completion implementation protocol that exposes lambda_HL separately from lambda_D, evaluates k_phys=k_com/a, implements the projected filtered source/constraint equations, and audits the source-history assumptions before any new likelihood score.",
+  "non_claims": [
+    "does not prove rho_filtered<=rho_eff for the production source composition",
+    "does not include massive-neutrino anisotropic stress",
+    "does not implement lambda_HL or the elliptic filtered source in CLASS",
+    "does not provide a likelihood score",
+    "does not prove generic inhomogeneous rank",
+    "does not cure the local-rest C8 rank collapse or C9 radiative-naturalness obstruction"
+  ],
+  "nonempty_conditions": [
+    "k_local_phys/k_cos_phys >= 99",
+    "L_history <= k_local_phys^2/99",
+    "equivalently H_EFT <= 8 sqrt[eta0/(297(3 lambda_HL-1))] k_local_phys"
+  ],
+  "parameter_freeze": "No numerical M_c, lambda_HL, epsilon, eta0, a_EFT, k_cos_phys, k_local_phys or H_EFT is selected.",
+  "root_exclusion": "The isolated leading rank-loss root M_c^2=-x/b2, when positive, remains a separate point/buffer exclusion inside any otherwise allowed interval; this theorem does not replace it by a one-sided bound.",
+  "status_scope": "GREEN_EXACT_HISTORY_WINDOW_ALGEBRA_SOURCE_COMPOSITION_AND_PRODUCTION_IMPLEMENTATION_PENDING",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_HISTORY_WIDE_MC_WINDOW_TARGET_v1.json"
+}
