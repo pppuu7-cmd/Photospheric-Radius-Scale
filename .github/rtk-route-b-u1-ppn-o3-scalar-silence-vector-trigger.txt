@@ -1,0 +1,4 @@
+triggered_utc=2026-08-24T17:34:00Z
+frozen_target=research/theory_targets/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_TARGET_v1.json
+conditional_next=research/theory_targets/RTK_ROUTE_B_U1_PREFERRED_FRAME_INHERITANCE_TARGET_v1.json
+purpose=certify_no_RTK_scalar_source_in_standard_PPN_vector_sector_through_O3
