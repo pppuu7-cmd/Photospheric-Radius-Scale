@@ -1,0 +1,3 @@
+triggered_utc=2026-08-24T13:34:00Z
+scientific_target=research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_TARGET_v1.json
+scope=linear_growth_scale_dependence_only
