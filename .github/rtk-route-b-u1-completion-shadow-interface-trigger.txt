@@ -1,2 +1,2 @@
-launch_utc: 2026-08-24T20:32:00Z
-reason: execute frozen standalone completion interface before any projected-constraint CLASS modification or likelihood score.
+launch_utc: 2026-08-24T20:41:00Z
+reason: rerun unchanged frozen shadow-interface science after restricting lambda_D grep to interface header/source; prior failure, if any, was CI comment matching only.
