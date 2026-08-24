@@ -1,0 +1,57 @@
+name: RTK C10 local effective-fluid equivalence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/route_b_u1_local_effective_fluid_equivalence_gate.py'
+      - 'research/theory_targets/RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_TARGET_v1.json'
+      - '.github/rtk-c10-local-effective-fluid-equivalence-trigger.txt'
+      - '.github/workflows/rtk-c10-local-effective-fluid-equivalence.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run theorem
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_local_effective_fluid_equivalence_gate.py
+          python3 rtk/route_b_u1_local_effective_fluid_equivalence_gate.py | tee c10_local_effective_fluid.log
+          grep -q '^C10_LOCAL_FULL_ACTION_EFFECTIVE_FLUID_EQUIVALENCE_PASS_SCOPED ' c10_local_effective_fluid.log
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp u1_local_effective_fluid_equivalence_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_RESULT_v1.json
+            git commit -m 'Record C10 local effective-fluid equivalence result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-local-effective-fluid-equivalence
+          path: |
+            c10_local_effective_fluid.log
+            u1_local_effective_fluid_equivalence_result.json
+          if-no-files-found: error
