@@ -1,0 +1,56 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_EXACT_PASS",
+  "dbi": {
+    "F_N_factorized": "-2 mu_K^2 r (1+s+r)/[s(1+s)]",
+    "lambda_D_zero_limit": "-mu_K^2 r(2+r)",
+    "p_8piG": "2 mu_K^2/lambda_D (1-s)",
+    "r": "1/N-1",
+    "s": "sqrt(1-lambda_D r^2)",
+    "sign_statement": "for N>0 and s>0, sign(F_N)=sign(N-1)"
+  },
+  "elliptic_transform": {
+    "equation": "4 Delta u = u F_N",
+    "identity": "2 Delta ln N + |grad ln N|^2 = 4 Delta u/u",
+    "sign_core": "(u-1)(-r)=(u-1)^2(u+1)/u^2 >= 0",
+    "u": "sqrt(N)"
+  },
+  "exact_static_equation": "2 D_i a^i + a_i a^i = F_N, with F_N=d[N p_8piG]/dN",
+  "fixed_sector": {
+    "DBI_real_interior": "1-lambda_D(1/N-1)^2>0",
+    "D_i_Sigma": 0,
+    "N_positive": true,
+    "Sigma": "q t",
+    "asymptotic_boundary": "N->1 and the uniqueness integration-by-parts boundary term vanishes",
+    "invariant_shift": 0,
+    "time_independent": true
+  },
+  "next_gate": "static beta_PPN inheritance on the identical action; moving-source alpha1/alpha2 remain separate",
+  "non_claims": [
+    "does not cover stationary rotation or nonzero invariant shift",
+    "does not cover solutions with spatial Sigma gradients",
+    "does not cover DBI boundary s=0 or X_U->0 compact-object configurations",
+    "does not by itself certify moving-source alpha1 or alpha2",
+    "does not establish radiative stability, UV completion or EFT cutoff"
+  ],
+  "ordinary_matter_cancellation": {
+    "a1_1_gamma1_minus1": "Jt_m-gamma1*JA_m=Jt_m+JA_m=0 exactly",
+    "a2_0_Omega_1": "Jt_m=-2 rho_H; JA_m=2 a1 rho_H",
+    "source": "arXiv:1310.6666v4 Eqs.(4.15),(5.5),(5.14)"
+  },
+  "static_scalar_consequence": {
+    "N": "1",
+    "P": "0",
+    "P_N": "0",
+    "a_i": "0",
+    "interpretation": "the fixed RTK scalar is exactly background-silent in the certified static zero-invariant-shift branch; no forced spatial Sigma profile is needed",
+    "r": "0"
+  },
+  "status": "EXACT_STATIC_ZERO_SHIFT_UNIQUENESS_ON_REAL_DBI_INTERIOR",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_TARGET_v1.json",
+  "uniqueness_integral": {
+    "after_multiply_by_u_minus_1": "-4 integral |grad u|^2 = integral u(u-1)F_N",
+    "conclusion": "both sides vanish; u=1, hence N=1 uniquely under the frozen regular/asymptotically-flat boundary conditions",
+    "lhs": "non-positive",
+    "rhs": "non-negative on the frozen domain"
+  }
+}
