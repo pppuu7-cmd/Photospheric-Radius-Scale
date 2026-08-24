@@ -28,7 +28,7 @@ assert sp.simplify(sigma_t-(sigma+T))==0
 # Newtonian-coordinate choice L=E, T=-sigma.
 Phi_N_general=sp.expand(Phi+H*sigma+sp.Symbol('sigmaprime'))
 Psi_N_general=sp.expand(Psi-H*sigma)
-assert sp.simplify((B+(-sigma)-Ep))==0  # B_N with L'=E'
+assert sp.simplify(B-sigma-Ep)==0  # B_N with L'=E' and T=-sigma
 assert sp.simplify(E-E)==0
 
 # Preferred/unitary coordinates have chi=0; scalar T_fol perturb transforms chi->chi-T.
@@ -42,12 +42,17 @@ Psi_m=psi
 Phi_N=sp.expand(Phi_m+H*B+Bp)
 Psi_N=sp.expand(Psi_m-H*B)
 
-# Existing exact traceless solution from C10 minimal reduction.
+# Existing exact traceless solution from C10 minimal reduction.  Apply the
+# frozen Ahat=0 branch to the replacement expression before inserting it;
+# SymPy does not recursively reapply a same-call dict substitution inside a
+# newly inserted replacement in all cases.
 dA_expr=Ahat*psi+a*(8*sp.pi*G*a**2*Pi+Bp+2*H*B-psi+Pcal*phi-alpha1*L*psi)
-Phi_N_reduced=sp.factor(Phi_N.subs({dA:dA_expr,Ahat:0}))
+dA_expr_Ahat0=sp.expand(dA_expr.subs(Ahat,0))
+Phi_N_reduced=sp.factor(Phi_N.subs(dA,dA_expr_Ahat0))
 Phi_N_expected=sp.expand((1-Pcal)*phi+psi+alpha1*L*psi-H*B-8*sp.pi*G*a**2*Pi)
 assert sp.simplify(Phi_N_reduced-Phi_N_expected)==0
 assert not Phi_N_reduced.has(Bp)
+assert not Phi_N_reduced.has(Ahat)
 
 Psi_N_expected=sp.expand(psi-H*B)
 assert sp.simplify(Psi_N-Psi_N_expected)==0
@@ -80,7 +85,7 @@ out={
     'Psi_N':'psi-H B',
     'Phi_N_minus_Psi_N':'(1-Pcal)phi+alpha1 L psi-8 pi G a^2 Pi_total'
   },
-  'Bprime_cancellation':'exact after substituting the already-certified traceless deltaA solve',
+  'Bprime_cancellation':'exact after substituting the already-certified traceless deltaA solve on the frozen Ahat=0 branch',
   'interpretation':'A standard Newtonian-coordinate matter metric can be constructed without discarding preferred-foliation information: the latter is carried by chi_N=B internally. The physical Newtonian potentials require no B-prime variable after the exact traceless constraint is used. This is a constructive route to a CLASS interface, not a direct unitary-gauge identification.',
   'next_gate':'transform total density/momentum/pressure sources between preferred/quasilongitudinal and Newtonian coordinates and audit the transformed algebraic constraints for poles over the certified finite-k rank domain',
   'non_claims':[
