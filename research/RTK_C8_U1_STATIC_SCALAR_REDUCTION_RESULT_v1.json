@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "classification": "RTK_C8_U1_STATIC_SCALAR_REDUCTION_PASS",
+  "target": "research/RTK_C8_U1_STATIC_SCALAR_REDUCTION_TARGET_v1.json",
+  "checks": {
+    "scalar_eom_zero_on_static_qt_ansatz": true,
+    "Smix_exactly_Mpl2_a2": true,
+    "beta0_static_contribution_two": true,
+    "P_linear_lapse_term_zero": true,
+    "P_quadratic_lapse_term_Mpl2_muK2": true
+  },
+  "exact_algebra": {
+    "Theta_U": "q/N",
+    "X_U": "q**2/(2*N**2)",
+    "C_X": "M_Pl**2*N**2/q**2",
+    "D_i_Theta_U": "-(q/N**2) D_i N",
+    "S_mix_reduced": "M_Pl**2 (D_i N D^i N)/N**2 = M_Pl**2 a_i a^i",
+    "beta0_equivalent_contribution": "2",
+    "scalar_EOM_on_ansatz": "0",
+    "asymptotic_branch": "q**2=2 X_star, u=1/N, r=1/N-1",
+    "r_for_N_1_plus_n": "-n/(1+n)",
+    "P_weak_lapse_through_n4": "M_Pl**2*mu_K**2*n**2 - 2*M_Pl**2*mu_K**2*n**3 + M_Pl**2*mu_K**2*(3+lambda_D/4)*n**4 + O(n**5)",
+    "P_coeff_n1": "0",
+    "P_coeff_n2": "M_Pl**2*mu_K**2"
+  },
+  "eom_reason": "Shift symmetry removes explicit Sigma. On Sigma=q t with zero invariant shift, the spatial Sigma current vanishes at D_i Sigma=0. The remaining canonical and mixed Euler terms contain a time derivative of coefficients depending only on static N(x), g_ij(x), so they vanish.",
+  "interpretation": "The rolling scalar ansatz is exactly compatible with the restricted static scalar EOM. The mixed operator nevertheless reduces exactly to M_Pl^2 a_i a^i, producing beta0_eff contribution 2 in the frozen gravity convention. The DBI P term begins quadratically in weak lapse perturbations on the r=0 asymptotic branch.",
+  "verification": {
+    "method": "exact symbolic algebra with SymPy using rtk/route_b_u1_static_scalar_reduction_gate.py",
+    "target_frozen_before_result": true,
+    "numeric_approximation_used": false
+  },
+  "next_gate": "derive and solve the weak-field static lapse/spatial-metric/U(1) constraint equations including beta0_eff=2 and the quadratic DBI lapse term; do not import pure-U1 PPN formulae that omit S_mix",
+  "guard": "Restricted static-sector theorem only. It does not establish the full PPN solution, scalar/vector constraint algebra, compact-object regularity, UV cutoff or radiative stability."
+}
