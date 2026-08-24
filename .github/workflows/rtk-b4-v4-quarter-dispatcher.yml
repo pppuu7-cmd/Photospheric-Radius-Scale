@@ -1,0 +1,22 @@
+name: RTK B4 v4 quarter dispatch bridge
+
+on:
+  push:
+    paths:
+      - '.github/rtk-b4-v4-quarter-dispatch-trigger.txt'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Dispatch existing preregistered B4 v4 quarter workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run rtk-b4-recenter-v4-quarter-stationarity.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo B4_V4_QUARTER_DISPATCHED
