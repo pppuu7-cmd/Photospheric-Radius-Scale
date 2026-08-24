@@ -1,0 +1,78 @@
+{
+  "classification": "RTK_ROUTE_B_U1_PRODUCTION_COMPLETION_IMPLEMENTATION_PROTOCOL_V1_FROZEN",
+  "status": "FROZEN_BEFORE_COMPLETION_CODE_OR_LIKELIHOOD_SCORES",
+  "frozen_at_utc": "2026-08-24T20:28:00Z",
+  "scientific_parents": [
+    "research/theory_results/RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CONSOLIDATION_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CONSOLIDATION_RESULT_v1.json",
+    "research/theory_targets/RTK_ROUTE_B_U1_HISTORY_WIDE_MC_WINDOW_TARGET_v1.json"
+  ],
+  "current_code_boundary": {
+    "background_header": "rtk/khronon_background.h",
+    "background_source": "rtk/khronon_background.c",
+    "perturbation_header": "rtk/khronon_perturbations.h",
+    "perturbation_source": "rtk/khronon_perturbations.c",
+    "build_workflow": ".github/workflows/rtk-class-build.yml",
+    "observed_state": [
+      "khr_params currently exposes H0,gamma,lambda_D,Omega_K0 only",
+      "lambda_D is the DBI/Khronon finite-tail parameter and must never be identified with lambda_HL",
+      "current perturbation module is an effective-fluid delta/theta implementation and does not contain the elliptic U1 constraint/source system",
+      "current build stages the Khronon modules into the public RT-CLASS nonlocal branch"
+    ]
+  },
+  "new_parameters_and_semantics": {
+    "lambda_D": "retain existing RTK/DBI meaning unchanged",
+    "lambda_HL": "new independent gravitational kinetic parameter; structural rank-safe branch requires lambda_HL>1 in the current all-q sufficient theorem",
+    "M_c": "new positive elliptic filter scale in the same inverse-length units as physical k",
+    "eta0": "retain explicit normalization in theorem/validation layer; do not silently absorb it when testing history-wide source bounds",
+    "UV_rank_domain": "beta24<=0 and beta8<0 in the frozen convention; these are structural-domain inputs, not cosmological fit parameters in implementation v1"
+  },
+  "required_equations": {
+    "physical_wavenumber": "k_phys=k_com/a",
+    "elliptic_operator_symbol": "ell=1+k_phys^2/M_c^2",
+    "Q_over_H0": "1/ell=M_c^2/(M_c^2+k_phys^2)",
+    "a1_eff": "1-1/ell=k_phys^2/(M_c^2+k_phys^2)",
+    "homogeneous_limit": "k_com=0 -> Q=H0 and a1_eff=0 exactly",
+    "local_high_k_limit": "k_phys/M_c -> infinity -> a1_eff->1",
+    "flat_background_normalization": "H^2(lambda_HL)/H^2(lambda_HL=1)=2/(3 lambda_HL-1) at fixed frozen homogeneous source in the certified scope"
+  },
+  "implementation_sequence": [
+    "I0: create a standalone shadow completion module implementing only parameter validation, lambda_HL background ratio, ell, Q/H0 and a1_eff; no likelihood coupling",
+    "I1: exact/unit replay of k=0, high-k, positivity/no-pole, k_phys=k_com/a and lambda_HL->1+ limits",
+    "I2: derive and encode the projected U1 metric/source constraint modifications; do not emulate them by modifying only RTK fluid cs2 or w",
+    "I3: audit production ordinary-source composition entering H0 and verify the history-wide rho_filtered/source assumptions, including a separate massive-neutrino anisotropic-stress gate",
+    "I4: run zero/near-deformation shadow comparisons of background and linear observables without likelihood optimization; differences must be traced to declared completion terms",
+    "I5: only after I0-I4 and same-action local PPN/TT re-audit, freeze a completion likelihood objective and parameter domain before any score",
+    "I6: optimize/recenter/fresh-tree the completed RTK action from scratch under the same numerical hygiene as A5; the historical phenomenological RTK score is navigation/provenance only and cannot be inherited"
+  ],
+  "hard_guards": [
+    "never set lambda_HL=lambda_D",
+    "never claim the current CLASS score belongs to the elliptic-completed action",
+    "never implement the elliptic completion by changing only effective-fluid sound speed",
+    "never fit M_c before its history/source domain is audited",
+    "never infer same-action PPN inheritance merely from high-k a1_eff->1; rerun the local equations on the implemented action",
+    "never compare a completed-action score to old RTK using different objective/source equations without an explicit common-likelihood replay"
+  ],
+  "first_code_gate": {
+    "name": "RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_V1",
+    "scope": "software/algebra control only",
+    "required": [
+      "lambda_HL>1 validation independent of lambda_D",
+      "M_c>0 validation",
+      "exact a1_eff and Q/H0 complementary identity",
+      "0<=a1_eff<1 for finite physical k and M_c>0",
+      "a1_eff(k=0)=0",
+      "a1_eff(k->infinity)=1",
+      "H2_ratio=2/(3 lambda_HL-1) and limit lambda_HL->1+=1"
+    ]
+  },
+  "score_lock": "NO_NEW_COMPLETED_ACTION_LIKELIHOOD_SCORE_BEFORE_I0_I4_AND_A_SEPARATELY_FROZEN_LIKELIHOOD_TARGET",
+  "non_claims": [
+    "this protocol is not itself a CLASS implementation",
+    "does not select M_c or lambda_HL",
+    "does not prove source-history compatibility before the history/source audits pass",
+    "does not cure local-rest C8 rank collapse",
+    "does not cure C9 naturalness",
+    "does not close compact objects or nonlinear galaxies"
+  ]
+}
