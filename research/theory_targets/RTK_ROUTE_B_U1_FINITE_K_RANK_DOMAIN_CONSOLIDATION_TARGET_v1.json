@@ -1,0 +1,36 @@
+{
+  "schema": "RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CONSOLIDATION_TARGET_v1",
+  "classification": "RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CONSOLIDATION_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_CURRENT_LINEAGE_FINITE_K_REPLAY",
+  "purpose": "Replay and consolidate the surviving finite-k and all-q U1+elliptic-compensator rank theorems on the current tree without choosing M_c, lambda_HL, or UV Wilson coefficients and without claiming production CLASS equivalence.",
+  "required_workers": [
+    "rtk/route_b_u1_flat_flrw_lowk_pure_gravity_rank_gate.py",
+    "rtk/route_b_u1_lowk_rank_perturbation_bound_gate.py",
+    "rtk/route_b_u1_rtk_lowk_e11_rank_immunity_gate.py",
+    "rtk/route_b_u1_filtered_matter_rank_density_cancellation_gate.py",
+    "rtk/route_b_u1_filtered_matter_perfect_fluid_rank_bound_gate.py",
+    "rtk/route_b_u1_filtered_matter_rank_window_gate.py",
+    "rtk/route_b_u1_current_full_action_leading_rank_margin_gate.py",
+    "rtk/route_b_u1_flat_flrw_barotropic_lambda_gt1_no_root_gate.py",
+    "rtk/route_b_u1_flat_flrw_lambda_gt1_near_gr_background_gate.py",
+    "rtk/route_b_u1_lambda_gt1_anisotropic_rank_margin_gate.py",
+    "rtk/u1_lambda_gt1_cosmology_anisotropy_window_gate.py",
+    "rtk/route_b_u1_flat_tt_allq_stability_gate.py"
+  ],
+  "acceptance": {
+    "low_k": "neutral RTK does not change the leading |k|^4 determinant and filtered matter has an explicit symbolic rank window/root condition",
+    "all_q": "there exists a sufficient flat-FLRW barotropic lambda_HL>1 domain with det B(q)>0 for every q>0",
+    "near_GR": "lambda_HL>1 has a nonempty arbitrarily-near-GR homogeneous normalization interval",
+    "tensor": "the same UV lapse-sign choices do not by themselves obstruct flat TT stability, whose gamma3/gamma5 domain remains separate",
+    "parameters": "no numerical M_c, lambda_HL, beta24, beta8, gamma3 or gamma5 is selected"
+  },
+  "expected_classification": "RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CURRENT_LINEAGE_REPLAY_PASS",
+  "critical_nonclaims": [
+    "does not implement the elliptic filtered source in production CLASS",
+    "does not prove the all-q sufficient domain for massive-neutrino anisotropic stress or arbitrary nonbarotropic matter",
+    "does not certify anisotropic/inhomogeneous backgrounds globally",
+    "does not freeze an EFT starting epoch or history-wide M_c lower bound",
+    "does not solve C9 radiative naturalness or the local-rest strong-coupling/rank-collapse problem"
+  ],
+  "next_gate_if_pass": "freeze the production completion implementation protocol with explicit lambda_HL and a1_eff(a,k), plus a source-history/M_c domain audit before any new likelihood score"
+}
