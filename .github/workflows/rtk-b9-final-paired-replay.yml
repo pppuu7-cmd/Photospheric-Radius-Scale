@@ -1,0 +1,165 @@
+name: RTK B9 final paired exact replay
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-b9-final-paired-exact-replay
+  cancel-in-progress: false
+
+jobs:
+  paired-replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_PLANCK_DATA: 'planck_data'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+      RTK_NUMPY_VERSION: '2.5.2'
+      RTK_SCIPY_VERSION: '1.18.0'
+      RTK_PYTHON_VERSION: '3.12.3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Freeze-check preregistered target and fresh-tree precondition
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/robustness/B9_FINAL_PAIRED_REPLAY_TARGET_v1.json'))
+          f=json.load(open('research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json'))
+          assert t['status']=='PREREGISTERED_BEFORE_RTK_FRESH_TREE_RESULT_IS_INSPECTED'
+          assert t['objective']=='matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1'
+          assert t['production_mapping']=='eff'
+          assert t['replay_abs_tolerance_each']==2e-6
+          assert t['delta_replay_abs_tolerance']==4e-6
+          assert f['classification']=='B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS'
+          print('B9_FINAL_PAIRED_PRECONDITION_PASS')
+          PY
+          python3 -m py_compile rtk/b9_final_paired_replay.py rtk/prepare_inference_core.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee b9_final_paired_source.txt
+
+      - name: Build genuinely fresh pinned CLASS tree
+        run: |
+          set -euo pipefail
+          rm -rf class_public
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_public/pantheon
+          git -C class_public/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/b9_final_paired_replay.py class_public/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_public/
+          cd class_public
+          python3 prepare_inference_core.py joint_profile_runner.py inference_core.py
+          ! grep -q 'A_s_ad\|n_s_ad' inference_core.py
+          ! grep -q 'round(float(p\[k\]),12)' inference_core.py
+          grep -q 'RTK_PLANCK_DATA' inference_core.py
+
+      - name: Build CLASS and install locked likelihood stack
+        run: |
+          set -euo pipefail
+          make -C class_public -j2 class
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = "$RTK_PYTHON_VERSION"
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' "numpy==$RTK_NUMPY_VERSION" "scipy==$RTK_SCIPY_VERSION"
+          python3 -m pip freeze | sort | tee b9_final_paired_pip_freeze.txt
+
+      - name: Download and verify fresh Planck R3 baseline
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 3 --retry-delay 5 -o planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  planck.tar.gz" | sha256sum -c -
+          mkdir planck_data && tar -xzf planck.tar.gz -C planck_data
+          test -d planck_data/baseline/plc_3.0/lensing/smicadx12_Dec5_ftl_mv2_ndclpp_p_teb_consext8.clik_lensing
+
+      - name: Run exact paired replay
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 b9_final_paired_replay.py | tee ../b9_final_paired_replay.log
+          grep -q 'B9_FINAL_PAIRED_EXACT_REPLAY_PASS' ../b9_final_paired_replay.log
+          test -s ../output/b9_final_paired_replay/result.json
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b9-final-paired-exact-replay
+          path: |
+            b9_final_paired_replay.log
+            b9_final_paired_source.txt
+            b9_final_paired_pip_freeze.txt
+            output/b9_final_paired_replay/
+          if-no-files-found: warn
+
+      - name: Persist certified paired result to canonical branch
+        if: success()
+        run: |
+          set -euo pipefail
+          cp output/b9_final_paired_replay/result.json /tmp/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json
+          python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          rp='research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json'
+          sp='research/state/B9_current.json'
+          mp='research/methodology/B9_LIVE_RECOVERY_METHOD.md'
+          r=json.load(open(rp))
+          assert r['classification']=='B9_FINAL_PAIRED_EXACT_REPLAY_PASS'
+          s=json.load(open(sp))
+          s['updated_utc']=datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z')
+          s['status']='B9_FINAL_PAIRED_EXACT_REPLAY_PASS'
+          s['active_gate']={
+            'name':'B9_FINAL_PAIRED_EXACT_REPLAY',
+            'status':'PASS',
+            'result':'research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json'
+          }
+          s['paired_local_comparison']={
+            'status':'FINAL_LOCAL_B9_PAIRED_REPLAY_PASS',
+            'S_LCDM':r['S_LCDM'],
+            'S_RTK':r['S_RTK'],
+            'delta_S_RTK_minus_LCDM':r['delta_S_RTK_minus_LCDM'],
+            'lcdm_replay_abs_error':r['lcdm_replay_abs_error'],
+            'rtk_replay_abs_error':r['rtk_replay_abs_error'],
+            'delta_replay_abs_error':r['delta_replay_abs_error'],
+            'warning':r['warning']
+          }
+          s['next_if_pass']='B9 local matched Planck-lensing robustness chain is closed. Keep global-optimality/model-selection claims separate; continue with other open robustness/theory gates.'
+          json.dump(s,open(sp,'w'),indent=2,sort_keys=True)
+          open(sp,'a').write('\n')
+          marker='<!-- B9_FINAL_PAIRED_RESULT:AUTO -->'
+          text=open(mp).read()
+          if marker not in text:
+            text += f'''\n\n## 13. Final paired replay — automatic closure record\n\n{marker}\n\nThe preregistered final paired fresh-tree replay passed. Canonical result: `research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json`.\n\n- `S_B9,LCDM = {r['S_LCDM']}`\n- `S_B9,RTK = {r['S_RTK']}`\n- `Delta S_B9 = {r['delta_S_RTK_minus_LCDM']}` (`RTK-LCDM`)\n- LCDM replay error `{r['lcdm_replay_abs_error']}`\n- RTK replay error `{r['rtk_replay_abs_error']}`\n- paired-delta replay error `{r['delta_replay_abs_error']}`\n\nThis closes the **local matched B9 Planck-lensing robustness chain only**. It is not global optimality, significance, AIC/BIC, posterior preference or Bayes evidence.\n'''
+            open(mp,'w').write(text)
+          PY
+          git config user.name 'rtk-b9-certification-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json research/state/B9_current.json research/methodology/B9_LIVE_RECOVERY_METHOD.md
+          git commit -m 'Certify final paired B9 Planck-lensing replay'
+          git push origin HEAD:rtk-class-build
