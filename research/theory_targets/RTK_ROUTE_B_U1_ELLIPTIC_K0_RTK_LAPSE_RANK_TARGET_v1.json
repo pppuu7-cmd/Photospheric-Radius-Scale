@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_v1",
+  "classification": "RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_K0_RTK_LAPSE_RANK_RESULT",
+  "question": "On the homogeneous rolling X_U>0 branch after elliptic-compensator projection, does the neutral fixed RTK scalar change the lapse-stability cross-block entry {pi_N,H_perp} at k=0?",
+  "fixed_inputs": [
+    "research/RTK_U1_ELLIPTIC_MATTER_COMPENSATOR_CANONICAL_v1.json",
+    "rtk/route_b_u1_elliptic_compensator_k0_matter_rank_inheritance_gate.py",
+    "rtk/route_b_u1_rtk_crossblock_source_support_gate.py",
+    "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json"
+  ],
+  "domain": {
+    "mode": "spatial homogeneous k=0",
+    "scalar": "rolling Sigma(t), X_U>0, no spatial Sigma gradient",
+    "invariant_shift": "zero homogeneous support",
+    "elliptic_filter": "ell(k=0)=1, hence a1_eff=0",
+    "gravity_surface": "sigma1=sigma2=0 special U1 branch"
+  },
+  "target_identities": [
+    "For homogeneous shift-symmetric P(X_U), p_Sigma=sqrt(g) P_X Theta depends on Theta but not separately on N.",
+    "After solving Theta=Theta(p_Sigma,g), H_Sigma=N [p_Sigma Theta-sqrt(g)P(Theta^2/2)] is exactly affine in N.",
+    "Therefore H_perp^Sigma=dH_Sigma/dN at fixed canonical variables is N-independent and {pi_N,H_perp^Sigma}=0.",
+    "The fixed mixed operator C(X_U) D_iTheta D^iTheta vanishes identically on the homogeneous k=0 support and gives no homogeneous lapse-stability correction.",
+    "Hence delta_a_RTK(k=0)=0 in the cross-block support theorem."
+  ],
+  "decision_rule": {
+    "if_all_hold": "classify the homogeneous neutral-RTK lapse-rank correction as exactly zero; combine only with the separately certified k0 ordinary-matter inheritance theorem, without claiming finite-k rank",
+    "if_any_fail": "do not inherit the pure-gravity k0 cross-block; derive the nonzero correction explicitly"
+  },
+  "expected_classification": "RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_EXACT_PASS",
+  "non_claims": [
+    "does not prove the pure-gravity homogeneous cross-block is nonzero under every global zero-mode boundary condition",
+    "does not prove finite-k rank where D_iTheta and metric dependence of L^{-1} are active",
+    "does not choose M_c",
+    "does not certify production cosmological perturbations of the elliptic completion",
+    "does not address radiative stability"
+  ],
+  "next_gate_if_pass": "freeze a current-lineage homogeneous bridge closure record and then attack the finite-k reduced Pfaffian with resolvent metric variation retained"
+}
