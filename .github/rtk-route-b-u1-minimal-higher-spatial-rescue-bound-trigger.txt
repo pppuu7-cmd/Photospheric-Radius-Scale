@@ -1,0 +1,4 @@
+triggered_utc=2026-08-24T19:00:00Z
+analytic_target=research/theory_targets/RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_TARGET_v1.json
+purpose=replay_single_operator_higher_spatial_rescue_compatibility_bound
+science_change=none_after_analytic_derivation
