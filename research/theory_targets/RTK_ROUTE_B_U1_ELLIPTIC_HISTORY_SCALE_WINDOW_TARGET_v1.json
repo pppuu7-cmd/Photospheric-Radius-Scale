@@ -1,0 +1,24 @@
+{
+  "schema": "RTK_ROUTE_B_U1_ELLIPTIC_HISTORY_SCALE_WINDOW_TARGET_v1",
+  "classification": "RTK_ROUTE_B_U1_ELLIPTIC_HISTORY_SCALE_WINDOW_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_HISTORY_SCALE_WINDOW_RESULT",
+  "question": "For constant M_c and a1_eff(a,k)=k_com^2/(a^2 M_c^2+k_com^2), what exact condition allows simultaneous cosmological compensation over a declared history a>=a_min,k<=k_cos_max and local family-I recovery at k_local?",
+  "fixed_filter": "a1_eff=k_phys^2/(M_c^2+k_phys^2), k_phys=k_com/a",
+  "tolerance": "0<epsilon<1/2; cosmology requires a1_eff<=epsilon, local recovery requires a1_eff>=1-epsilon",
+  "target_identities": [
+    "cosmology over a>=a_min,k<=k_cos_max requires M_c^2 >= ((1-epsilon)/epsilon) k_cos_max^2/a_min^2",
+    "local recovery requires M_c^2 <= (epsilon/(1-epsilon)) k_local^2",
+    "a constant-M_c window exists iff k_local/(k_cos_max/a_min) >= (1-epsilon)/epsilon",
+    "for epsilon=0.01 the ratio threshold is exactly 99",
+    "for fixed nonzero k_com, a1_eff->1 as a->0, so no finite constant M_c can maintain cosmological compensation to arbitrarily early a"
+  ],
+  "expected_classification": "RTK_ROUTE_B_U1_ELLIPTIC_HISTORY_SCALE_WINDOW_EXACT_PASS",
+  "non_claims": [
+    "does not select a_min; the EFT starting epoch must be physically declared",
+    "does not identify k_local with a particular Solar-System experiment",
+    "does not prove that a1_eff<=epsilon is sufficient to keep the full cosmological likelihood within epsilon",
+    "does not exclude time/state-dependent M_c or a different auxiliary operator",
+    "does not implement the completion in CLASS"
+  ],
+  "next_gate_if_pass": "audit the actual production CLASS integration/source history to freeze a physically relevant a_min and k_cos_max, then test whether a constant-M_c interval survives before implementing the completion"
+}
