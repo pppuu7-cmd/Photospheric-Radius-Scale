@@ -1,0 +1,51 @@
+{
+  "schema": "RTK_C10_SHADOW_METRIC_HISTORY_CONDITIONING_RESULT_v1",
+  "classification": "C10_SHADOW_METRIC_REORDERED_SOLVE_PASS_PHYSICAL_SMALL_K_REGULARITY_HISTORY_OPEN_SCOPED",
+  "status_scope": "YELLOW_REORDERED_FINITE_K_SOLVE_GREEN_SYNTHETIC_ARBITRARY_SOURCES_EXPOSE_REQUIRED_SUPERHORIZON_REGULARITY_CONDITION",
+  "target": "research/theory_targets/RTK_C10_SHADOW_METRIC_HISTORY_CONDITIONING_TARGET_v1.json",
+  "implementation": "research/shadow/rtk_c10_completed_metric_shadow_v2.py",
+  "implementation_commit": "7a844cd75f9c35f6ee0543ae4654eb8e45d76dcb",
+  "exact_reordering": {
+    "definition": "y=K H0_prime chi_prime",
+    "momentum": "D H phi-D y=R_M",
+    "hamiltonian": "Delta_phi phi+2 D H y=R_H",
+    "identity": "r E_th L phi=R_H+2 H R_M",
+    "backsolve": "y=H phi-R_M/D; chi_prime=y/(K H0_prime); psi_prime=S_psi-y",
+    "symbolic_residual": "0"
+  },
+  "numerical_interpretation": "The reordered solve removes the avoidable direct-2x2 high-k determinant cancellation from the phi solve. Its only structural denominator is r E_th L=-(lambda_HL-1)E_th k^2, so exact k=0 is explicitly separated.",
+  "deterministic_crosscheck": {
+    "reference_sample_k_0p5": {
+      "phi_pref": 1.1611579101470877,
+      "chi_prime": 0.06276148157284411,
+      "momentum_residual": -1.0991099523571801e-17,
+      "hamiltonian_residual": 0.0,
+      "R_reg": -0.11611579101470874,
+      "R_reg_over_k2": -0.464463164058835
+    },
+    "direct_vs_reordered": "At moderate finite k the reordered solution agrees with the direct 2x2 solution at floating-point precision. The direct Cramer representation loses visible precision first toward small k, while the reordered constraint residuals remain controlled.",
+    "sample_reordered_constraint_residuals": {
+      "k_0p01_momentum_abs": 1.466538e-13,
+      "k_0p1_momentum_abs": 7.176444e-16,
+      "k_0p5_momentum_abs": 1.09911e-17,
+      "k_1_hamiltonian_abs": 2.775558e-17,
+      "k_100_hamiltonian_abs": 2.220446e-16
+    }
+  },
+  "small_k_finding": {
+    "regularity_combination": "R_reg=R_H+2 H R_M",
+    "finite_phi_requirement": "R_reg=O(k^2) as k->0 because phi=R_reg/[r E_th L]",
+    "synthetic_arbitrary_source_behavior": "With the frozen deterministic smoke-test sources held k-independent, R_reg approaches a nonzero constant and therefore phi scales as k^-2. Example: phi(k=0.1)=30.046524, phi(k=0.01)=3018.987043, phi(k=0.001)=301914.434783.",
+    "classification_guard": "This synthetic divergence is not a physical no-go and is not a new gravity pole. The synthetic sources were not constructed to satisfy physical super-horizon Einstein/Boltzmann regularity. It identifies an acceptance condition that must be tested on actual physical source histories.",
+    "required_physical_test": "For real CLASS Newtonian source histories, verify R_reg/k^2 remains finite and convergent as k is reduced at fixed epoch, together with finite Phi_N/Psi_N and constraint residuals."
+  },
+  "decision": "Do not start completed-U1 spectra yet. First build a read-only/source-export bridge for real production CLASS histories and test the R_reg/k^2 regularity condition without changing production dynamics.",
+  "next_gate": "Freeze a physical-source-history export/replay target: extract ordinary deltaH0_N and total delta_mu_N,q_N,delta_p_N,Pi_N plus required background derivatives from existing CLASS runs, replay them through shadow-v2, and test small-k regularity and finite metric histories before any feedback into Boltzmann evolution.",
+  "non_claims": [
+    "no physical super-horizon regularity proof yet",
+    "no feedback of completed-U1 potentials into CLASS",
+    "no completed-U1 spectra",
+    "no completed-action likelihood or refit",
+    "no nonlinear perturbation closure"
+  ]
+}
