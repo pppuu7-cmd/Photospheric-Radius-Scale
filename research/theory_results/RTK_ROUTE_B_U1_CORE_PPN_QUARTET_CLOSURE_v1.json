@@ -1,0 +1,63 @@
+{
+  "schema": "RTK_ROUTE_B_U1_CORE_PPN_QUARTET_CLOSURE_v1",
+  "classification": "RTK_ROUTE_B_U1_CORE_PPN_QUARTET_SCOPED_CLOSED",
+  "status": "WEAK_FIELD_STANDARD_PPN_BRANCH_CORE_QUARTET_GREEN",
+  "fixed_action": {
+    "ir_representative": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+    "scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "gravity_and_matter_frame": {
+      "a1": 1,
+      "a2": 0,
+      "kappa": 1,
+      "gamma1": -1,
+      "sigma1": 0,
+      "sigma2": 0,
+      "lambda_HL": 1,
+      "beta0_bare": 0
+    }
+  },
+  "authoritative_prerequisites": [
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_BETA_PPN_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_PREFERRED_FRAME_RESULT_v1.json"
+  ],
+  "core_ppn_quartet": {
+    "gamma_PPN": 1,
+    "beta_PPN": 1,
+    "alpha1_PPN": 0,
+    "alpha2_PPN": 0
+  },
+  "newtonian_normalization": "G_N=G on the certified O(2) branch",
+  "scope": {
+    "metric_regime": "weak-field standard PPN expansion",
+    "matter": "slowly moving universally coupled matter",
+    "scalar_branch": "rolling Sigma=q t with D_i Sigma=0 and no independent incoming/homogeneous RTK scalar excitation in the PPN solution",
+    "static_domain": "regular asymptotically-flat zero-invariant-shift real-DBI interior for the exact nonlinear N=1 theorem",
+    "vector_order": "O(v^3) for alpha1,alpha2",
+    "static_order": "through O(v^4) for beta"
+  },
+  "why_same_action_inheritance_is_allowed": [
+    "The exact static scalar EOM and variation bridge retain the explicit C(X_U)=M_Pl^2/(2X_U) operator rather than replacing it by a different bare gravity action.",
+    "The nonlinear static theorem gives N=1, hence a_i=0, P=0 and P_N=0 on the certified static branch.",
+    "The O(v^3) theorem shows P=P_X=0 and D_iTheta_U=0 through the vector order, so the fixed RTK scalar adds no O(v^3) shift/vector source on the standard PPN branch.",
+    "Only after those same-action reductions are proved are the corresponding pure-U1 family-I PPN algebraic cancellations imported."
+  ],
+  "non_claims": [
+    "does not certify alpha3, xi or the zeta_i parameters for the full RTK action unless separately derived",
+    "does not cover an independent incoming/homogeneous RTK scalar wave",
+    "does not cover stationary strong-field rotation or generic nonzero invariant shift beyond weak-field PPN",
+    "does not cover compact-object DBI-boundary or X_U->0 configurations",
+    "does not establish radiative stability of sigma1=sigma2=0",
+    "does not establish strong-coupling scale, EFT cutoff or higher-spatial UV completion"
+  ],
+  "next_open_theory_gates": [
+    "C9 radiative protection/counterterm stability of sigma1=sigma2=0",
+    "C8 physical strong-coupling scale/EFT cutoff",
+    "higher-spatial tensor/UV completion",
+    "compact-object/nonlinear X_U->0 and rotating sectors"
+  ]
+}
