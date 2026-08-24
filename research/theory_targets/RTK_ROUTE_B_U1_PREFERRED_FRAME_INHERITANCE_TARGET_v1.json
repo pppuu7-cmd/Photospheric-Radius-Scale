@@ -1,0 +1,35 @@
+{
+  "schema": "RTK_ROUTE_B_U1_PREFERRED_FRAME_INHERITANCE_TARGET_v1",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_O3_SCALAR_SILENCE_RESULT",
+  "classification": "RTK_ROUTE_B_U1_PREFERRED_FRAME_INHERITANCE_TARGET_V1_FROZEN",
+  "scope": "PPN preferred-frame alpha1 and alpha2 through the standard O(v^3) vector sector on the identical fixed action",
+  "prerequisite": {
+    "result": "research/theory_results/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_RESULT_v1.json",
+    "required_classification": "RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_EXACT_PASS"
+  },
+  "fixed_parameters": {
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "gamma1": -1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "lambda_HL": 1
+  },
+  "external_source": {
+    "paper": "Lin-Mukohyama-Wang-Zhu arXiv:1310.6666v4",
+    "equations": ["5.42", "5.50", "5.51"],
+    "guard": "Use the sigma1=sigma2=0 expressions and simplify at a1=kappa=1,a2=0 before taking gamma1=-1 or lambda_HL=1 limits; do not substitute directly into apparent 0/0 forms."
+  },
+  "target_cancellations": {
+    "alpha1": "at a1=kappa=1,a2=0 the first rational term simplifies to -4 and the second term to +4, so alpha1=0 before gamma1->-1",
+    "alpha2": "at a1=kappa=1 the numerator of Eq.(5.42) is identically zero as a polynomial in lambda_HL, so alpha2=0 for lambda_HL!=1 and has continuous value 0 at lambda_HL=1"
+  },
+  "pass_classification": "RTK_ROUTE_B_U1_PREFERRED_FRAME_ALPHA1_ALPHA2_EXACT_PASS",
+  "non_claims": [
+    "does not cover an independent incoming/homogeneous RTK scalar excitation excluded by the PPN branch",
+    "does not establish strong-field preferred-frame behavior, rotating compact objects or X_U->0 configurations",
+    "does not certify radiative stability, strong coupling, UV completion or cutoff"
+  ],
+  "next_gate_if_pass": "update the fixed-action PPN checkpoint: beta=gamma=1 and alpha1=alpha2=0 on the certified weak-field PPN branch, while retaining compact-object/radiative/UV gates as open"
+}
