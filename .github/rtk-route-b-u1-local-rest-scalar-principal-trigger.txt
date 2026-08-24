@@ -1,0 +1,3 @@
+triggered_utc=2026-08-24T18:41:00Z
+frozen_target=research/theory_targets/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_TARGET_v1.json
+purpose=execute_exact_local_rest_scalar_sector_principal_symbol_gate
