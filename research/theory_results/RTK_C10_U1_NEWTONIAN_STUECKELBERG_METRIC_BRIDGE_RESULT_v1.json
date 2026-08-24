@@ -1,0 +1,37 @@
+{
+  "Bprime_cancellation": "exact after substituting the already-certified traceless deltaA solve on the frozen Ahat=0 branch",
+  "classification": "C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_PASS_SCOPED",
+  "frozen_quasilongitudinal_branch": {
+    "Ahat": 0,
+    "Phi_matter": "phi-deltaA/a",
+    "Psi_matter": "psi",
+    "sigma_phys": "B"
+  },
+  "general_newtonian_metric_map": {
+    "Phi_N": "Phi_matter+H sigma_phys+sigma_phys_prime",
+    "Psi_N": "Psi_matter-H sigma_phys",
+    "sigma_phys": "B_phys-E_prime"
+  },
+  "interpretation": "A standard Newtonian-coordinate matter metric can be constructed without discarding preferred-foliation information: the latter is carried by chi_N=B internally. The physical Newtonian potentials require no B-prime variable after the exact traceless constraint is used. This is a constructive route to a CLASS interface, not a direct unitary-gauge identification.",
+  "next_gate": "transform total density/momentum/pressure sources between preferred/quasilongitudinal and Newtonian coordinates and audit the transformed algebraic constraints for poles over the certified finite-k rank domain",
+  "non_claims": [
+    "not a completed transformed gravity solver",
+    "not a proof that chi vanishes",
+    "not a new degree-of-freedom theorem",
+    "not a CLASS implementation",
+    "not a likelihood result",
+    "not an identification of chi with RTK/DBI Sigma"
+  ],
+  "preferred_foliation_stueckelberg": {
+    "after_T_minus_sigma_coordinate_change": "chi_N=sigma_phys",
+    "non_identification": "chi is neither RTK/DBI Sigma nor U1 Newtonian prepotential varphi",
+    "unitary_preferred_coordinates": "chi=0"
+  },
+  "reduced_newtonian_potentials": {
+    "Phi_N": "(1-Pcal)phi+psi+alpha1 L psi-H B-8 pi G a^2 Pi_total",
+    "Phi_N_minus_Psi_N": "(1-Pcal)phi+alpha1 L psi-8 pi G a^2 Pi_total",
+    "Psi_N": "psi-H B"
+  },
+  "status_scope": "GREEN_KINEMATIC_NEWTONIAN_COORDINATE_REPRESENTATION_SOURCE_TRANSFORM_AND_POLE_AUDIT_NEXT",
+  "target": "research/theory_targets/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_TARGET_v1.json"
+}
