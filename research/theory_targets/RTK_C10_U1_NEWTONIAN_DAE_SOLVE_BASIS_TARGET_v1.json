@@ -1,0 +1,57 @@
+{
+  "schema": "RTK_C10_U1_NEWTONIAN_DAE_SOLVE_BASIS_TARGET_v1",
+  "created_utc": "2026-08-24T23:06:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "After the exact Newtonian source transform, what is the determinant of the minimal two-derivative IR algebraic solve for (psi_prime,phi,B) obtained from differentiated ordinary A constraint + ordinary physical-metric continuity + total momentum + total Hamiltonian, and is any zero a physical rank loss or only a singularity of this chosen solve basis?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_SMIX_LINEAR_METRIC_SUPPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_TRACE_MOMENTUM_CONSERVATION_CLOSURE_RESULT_v1.json"
+  ],
+  "scope": {
+    "geometry": "flat FLRW, k>0",
+    "lambda_HL": ">1",
+    "Eth_IR_full": 2,
+    "explicit_Lambda": 0,
+    "Mc_squared": ">0",
+    "background_total_pressure": ">=0",
+    "ordinary_filtered_enthalpy": ">0",
+    "ordinary_adiabatic_sound_speed_squared": ">=0",
+    "higher_spatial_gravity_terms": "excluded from this IR solve-basis theorem; they remain in the separate all-q physical-rank completion"
+  },
+  "definitions": {
+    "x": "k^2=-L>0",
+    "C": "4 pi G a^2",
+    "D": "3 lambda_HL-1",
+    "r": "lambda_HL-1",
+    "Rtot": "rho_total+p_total",
+    "Ro": "rho_ordinary+p_ordinary",
+    "cao2": "p_ordinary_prime/rho_ordinary_prime",
+    "KA": "x+a^2 M_c^2",
+    "A1": "KA+3 C Ro",
+    "B1": "-3 C H^2 Ro(1+3 cao2)",
+    "KB_partial": "-r x+2 C Rtot"
+  },
+  "acceptance": [
+    "derive differentiated A constraint after inserting ordinary Newtonian continuity and prove B_prime cancels exactly",
+    "derive its coefficient of psi_prime as A1=KA+3 C Ro and coefficient of B as B1=-3 C H^2 Ro(1+3 cao2)",
+    "rewrite the total Hamiltonian using Newtonian total sources and prove all background source-transformation B terms cancel, leaving Eth L phi+2H L B=2Pcal L psi-3H Mq_N-8 pi G a^2 delta_mu_N",
+    "combine with transformed total momentum into the 3x3 coefficient matrix for (psi_prime,phi,B)",
+    "derive determinant det = 2 L [A1(D H^2-KB_partial)+D B1] for Eth=2",
+    "using flat no-explicit-Lambda Friedmann D H^2=(4/3)C rho_total, write the determinant bracket as a quadratic Delta(x)=r x^2 + b x + c",
+    "prove c<0 for p_total>=0, Ro>0 and cao2>=0, while r>0, hence Delta(x) has exactly one positive real root and one negative real root",
+    "classify the positive root only as an algebraic Newtonian-source solve-basis crossing in this two-derivative IR representation",
+    "explicitly forbid promotion to physical rank loss/no-go because the original preferred-foliation physical constraint-rank theorem and higher-spatial completion use a different determinant and remain separately certified/scoped",
+    "route software architecture away from global inversion of this 3x3 matrix: use a DAE/preferred-coordinate solve with Newtonian potentials constructed as outputs, or derive a crossing-regular variable basis"
+  ],
+  "pass_classification": "C10_U1_NEWTONIAN_3X3_ALGEBRAIC_SOLVE_BASIS_HAS_ONE_POSITIVE_CROSSING_SCOPED",
+  "non_claims": [
+    "not a physical extra mode or physical constraint-rank loss",
+    "not a ghost/gradient instability theorem",
+    "not a contradiction of the finite-k/all-q physical rank-safe completion",
+    "not a completed higher-spatial transformed determinant",
+    "not a CLASS failure",
+    "not a likelihood result"
+  ]
+}
