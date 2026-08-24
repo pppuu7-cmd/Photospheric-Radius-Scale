@@ -1,0 +1,4 @@
+triggered_utc=2026-08-24T17:29:00Z
+prerequisite=research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json
+frozen_target=research/theory_targets/RTK_ROUTE_B_U1_STATIC_BETA_PPN_INHERITANCE_TARGET_v1.json
+purpose=certify_static_O4_beta_PPN_on_identical_fixed_action
