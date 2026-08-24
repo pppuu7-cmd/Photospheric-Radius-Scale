@@ -1,0 +1,85 @@
+{
+  "schema": "B4_NEUTRINO_RTK_RECENTER_V4_HALF_RECOVERED_RESULT_v1",
+  "status": "RECOVERED_FROM_ORIGINAL_FROZEN_WORKFLOW_ARTIFACT_AND_JOB_LOG",
+  "classification": "B4_NEUTRINO_RTK_RECENTER_V4_HALF_RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "stencil_scale": 0.5,
+  "recenter_tolerance_S": 0.005,
+  "center": {
+    "As": 2.0953040609439933e-09,
+    "Ob": 0.0472430928395221,
+    "Om": 0.25308763984439225,
+    "h": 0.6883522889542522,
+    "lam": 3009377.414812341,
+    "ns": 0.9657964452888419,
+    "zre": 7.583793661013263
+  },
+  "eff": {
+    "S_center": 1050.5511025943172,
+    "best_exact_S": 1050.5510527797987,
+    "best_improvement": 0.000049814518433777266,
+    "best_label": "axis_0_+1",
+    "positive_definite": false,
+    "min_eigenvalue_y": -0.000047214683209037513,
+    "eigenvalues_y": [
+      -0.000047214683209037513,
+      0.0024157749217496045,
+      0.01320686793898381,
+      0.03152438918928856,
+      0.06299052058614314,
+      0.7793501971163568,
+      1.832065052998345
+    ],
+    "negative_eigenvector_y": [
+      0.9999953582586031,
+      -0.0025488873208522342,
+      0.0003584228647396151,
+      0.0012727736263511051,
+      -0.0006153664651952012,
+      -0.0003626504376856756,
+      -0.0007266524570760564
+    ]
+  },
+  "axes": ["loglam", "h", "Ob", "Om", "As", "ns", "zre"],
+  "scaled_steps": {
+    "loglam": 0.025,
+    "h": 0.000175,
+    "Ob": 0.000035,
+    "Om": 0.00035,
+    "As": 2e-12,
+    "ns": 0.000175,
+    "zre": 0.035
+  },
+  "prerequisite_chain": {
+    "v4_base_run_id": 32565150038,
+    "v4_base_artifact_id": 9475903472,
+    "v4_base_best_improvement": 0.0000720729706245038,
+    "v4_base_positive_definite": false,
+    "v4_base_min_eigenvalue_y": -0.00006643686349509472,
+    "v4_base_ray_run_id": 32578063680,
+    "v4_base_ray_artifact_id": 9477266391,
+    "v4_base_ray_max_exact_improvement": 0.00020957288847966993,
+    "v4_base_ray_classification": "B4_RECENTER_V4_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005"
+  },
+  "original_half_run": {
+    "run_id": 32587822698,
+    "job_id": 97066790347,
+    "conclusion": "success",
+    "artifact_id": 9481647704,
+    "artifact_name": "rtk-b4-recenter-v4-half-resolution",
+    "artifact_digest": "sha256:7598fc71ec7c4c9b459d0eb4e213329227c7ebe4857add18f4c64245caca7505",
+    "research_source_commit": "5675204a78e0c84b0e926871adf03f999265f567",
+    "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+    "planck_sha256": "0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6",
+    "python_version": "3.12.3",
+    "numpy_version": "2.5.2",
+    "scipy_version": "1.18.0",
+    "clipy_like_version": "0.15"
+  },
+  "recovery_basis": "The original workflow completed the frozen 101-point scale-0.5 Hessian and uploaded the artifact successfully. This durable file records the exact summary emitted in the original job log; it is not a newly recomputed score set.",
+  "decision": "RECENTER_CLEAR_NONPD_EXACT_HALF_EIGENMODE_RAYS_REQUIRED",
+  "next_gate": "Freeze and evaluate exact rays along the recovered negative half-scale eigenmode before any quarter-scale fallback or local certification.",
+  "guard": "B4 is a separate minimal-neutrino objective. This is local stationarity evidence only and must not be compared numerically with massless A5 scores or interpreted as global evidence."
+}
