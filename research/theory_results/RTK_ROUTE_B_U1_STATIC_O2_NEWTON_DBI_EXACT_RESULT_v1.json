@@ -1,0 +1,45 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_PASS",
+  "consequences": {
+    "A2": "U",
+    "DBI_O2_effect": "does not shift the regular asymptotically-flat Newtonian solution; it gives a positive homogeneous mass term for the unphysical/bare lapse difference n=A2-U",
+    "f": "1",
+    "gamma_PPN_O2": 1,
+    "newton_normalization": "kappa=G/G_N=1, hence G_N=G on the frozen static O(2) branch",
+    "tildeN": "1-U+O(4)"
+  },
+  "dbi_quadratic_action": "S_P^(2)=M_Pl^2 mu_K^2 integral n^2",
+  "full_O2_bare_lapse_equation": "4 [Laplacian(n)-mu_K^2 n]=0",
+  "literature_source": "Lin-Mukohyama-Wang-Zhu arXiv:1310.6666 Eqs.(4.2),(4.3),(5.22)-(5.26)",
+  "next_gate": "derive the complete static O(v^4) equations on the identical action, retaining the DBI n^3,n^4 terms and exact S_mix functional, and solve beta_PPN",
+  "non_claims": [
+    "does not certify beta_PPN at O(v^4)",
+    "does not certify moving-source alpha1 or alpha2",
+    "does not cover nonzero invariant shift or rotating solutions",
+    "does not cover compact-object X_U->0 behavior",
+    "does not establish radiative stability or the EFT cutoff"
+  ],
+  "physical_lapse": {
+    "PPN_O2": "tildeN=1-U+O(4)",
+    "a1": 1,
+    "bare_lapse_relation": "n=N-1=A2-U at O(2)",
+    "gauge": "varphi=0",
+    "identity": "tildeN=N-A"
+  },
+  "pure_O2_hamiltonian": {
+    "equation": "4 Laplacian(A2-U)=0",
+    "lhs_coefficient": 4,
+    "rhs_coefficient": 4
+  },
+  "status": "STATIC_NEWTON_O2_EXACT_ON_REGULAR_ASYMPTOTICALLY_FLAT_CLOCK_BRANCH",
+  "uniqueness": {
+    "conditions": [
+      "mu_K^2>0",
+      "n regular",
+      "n->0 at spatial infinity",
+      "IBP boundary term vanishes"
+    ],
+    "integral_identity": "integral(|grad n|^2 + mu_K^2 n^2)=0",
+    "solution": "n=0"
+  }
+}
