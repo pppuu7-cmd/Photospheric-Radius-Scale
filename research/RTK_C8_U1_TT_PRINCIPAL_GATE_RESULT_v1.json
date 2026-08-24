@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "classification": "RTK_C8_U1_FIXED_ACTION_TT_PRINCIPAL_PASS",
+  "target": "research/RTK_C8_U1_TT_PRINCIPAL_GATE_TARGET_v1.json",
+  "scope": "principal two-derivative pure-TT quadratic sector only; algebraic background mass terms, scalar/vector mixing away from pure TT, higher-spatial-derivative UV operators, radiative stability and compact-object sectors are excluded",
+  "checks": {
+    "tt_trace_zero": true,
+    "tt_time_trace_zero": true,
+    "adm_lambda1_kinetic_standard": true,
+    "ricci_tt_gradient_standard": true,
+    "Di_Theta_U_zero_pure_TT": true,
+    "P_of_X_no_principal_metric_derivative": true,
+    "S_mix_no_principal_TT": true,
+    "c_T_squared_one": true
+  },
+  "exact_algebra": {
+    "Tr_h2": "2*hp**2 + 2*hx**2",
+    "Tr_doth2": "2*dhp**2 + 2*dhx**2",
+    "ADM_kinetic_inside_quadratic": "eps**2*(dhp**2 + dhx**2)/2",
+    "Ricci_gradient_inside_quadratic": "-eps**2*k**2*(hp**2 + hx**2)/2",
+    "kinetic_coefficient_per_polarization": "M_Pl**2*eps**2/4",
+    "gradient_coefficient_abs_per_polarization": "M_Pl**2*eps**2/4",
+    "c_T_squared": "1",
+    "Theta_U": "q/N",
+    "X_U": "q**2/(2*N**2)",
+    "C_of_X_on_background": "M_Pl**2*N**2/q**2",
+    "D_i_Theta_U": "0",
+    "S_mix_principal_TT": "0"
+  },
+  "derivation": {
+    "polarization_matrix": "h_ij=[[hp,hx,0],[hx,-hp,0],[0,0,0]] for a Fourier mode along z",
+    "kinetic": "For N=1 and zero shift, K_ij=(eps/2) dot(h_ij). TT tracelessness makes K start at O(eps^2), hence K^2 has no quadratic principal term and (K_ij K^ij-K^2)_(2)=eps^2 Tr(dot h^2)/4.",
+    "gradient": "After the standard TT spatial integration by parts, [sqrt(g) R]_(2)=-eps^2 (partial_k h_ij)^2/4. For the z-Fourier mode this is -eps^2 k^2 Tr(h^2)/4.",
+    "scalar_PX": "P(X_U) contains no derivatives of the spatial metric, so it cannot alter the principal TT kinetic or gradient coefficients; algebraic background terms are outside this principal-symbol gate.",
+    "mixed_operator": "For homogeneous Sigma(t), D_i Sigma=0 and Theta_U=dot(Sigma)/N. In pure TT the lapse and invariant shift are unperturbed at principal quadratic order, so D_i Theta_U=0 and C(X_U) D_i Theta_U D^i Theta_U vanishes identically in this sector."
+  },
+  "interpretation": "On the fixed IR representative, the explicit rolling-scalar mixed operator does not modify the principal pure-TT kinetic or gradient term. The two-derivative TT cone is the GR cone, c_T^2=1, within the frozen scope.",
+  "verification": {
+    "method": "exact symbolic algebra with SymPy using rtk/route_b_u1_fixed_ir_tt_principal_gate.py",
+    "independent_numeric_approximation_used": false,
+    "result_frozen_after_target": true
+  },
+  "non_claims": [
+    "no scalar/vector principal-sector certification",
+    "no higher-spatial-derivative UV certification",
+    "no radiative/naturalness certification",
+    "no compact-object or X_U->0 regularity certification",
+    "no statement about algebraic background TT mass terms off shell"
+  ],
+  "next_gate": "derive the static/Newton/PPN equations from the same fixed action, retaining explicit S_mix rather than importing pure-U1 PPN values"
+}
