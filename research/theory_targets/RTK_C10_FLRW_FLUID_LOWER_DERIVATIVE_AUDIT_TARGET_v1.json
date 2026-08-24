@@ -1,0 +1,36 @@
+{
+  "schema": "RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_TARGET_v1",
+  "created_utc": "2026-08-24T22:28:00Z",
+  "status": "FROZEN_AFTER_ANALYTIC_DERIVATION_BEFORE_CI_REPLAY",
+  "scope": "linear scalar perturbations of the fixed shift-symmetric P(X_U)+C(X_U)(D Theta_U)^2 action on homogeneous flat FLRW, Newtonian-gauge source conventions, k>0; compare lower-derivative continuity/Euler terms with rtk/khronon_perturbations.c",
+  "frozen_action_relations": {
+    "A": "P_X+2X P_XX",
+    "c_a_squared": "P_X/A",
+    "F": "1+k^2/(a^2 M_K^2)",
+    "c_s_squared": "c_a^2/F",
+    "delta_mu_eff": "F A Sigma_prime (deltaSigma_prime-Sigma_prime psi)/a^2",
+    "rho_plus_p": "P_X Sigma_prime^2/a^2",
+    "theta": "k^2 deltaSigma/Sigma_prime",
+    "background_current": "(a^2 P_X Sigma_prime)'=0, hence Sigma_double_prime/Sigma_prime=H(1-3 c_a^2)"
+  },
+  "expected_action_equations": {
+    "delta": "delta'=-(1+w)(theta-3 phi')-3H(c_a^2-w)delta",
+    "theta": "theta'=-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+psi]"
+  },
+  "production_code_comparison": "Current code instead uses c_s^2 in Euler friction and the standard GDM entropy term proportional to (c_s^2-c_a^2) in the density equation.",
+  "acceptance": [
+    "derive the action equations symbolically from the frozen current and density definitions",
+    "parse/guard the relevant current production-code terms",
+    "derive exact production-minus-action residuals",
+    "do not call this a likelihood error or model rejection",
+    "state the possible escape explicitly: an additional completed-gravity/Ward contribution could restore the GDM form, but must be derived rather than assumed"
+  ],
+  "non_claims": [
+    "not a full CLASS rerun",
+    "not an observable-error estimate",
+    "not a proof that no additional U1 gravity contribution restores the production GDM terms",
+    "not a nonlinear perturbation theorem",
+    "not a B4 massive-neutrino extension"
+  ],
+  "pass_classification": "C10_FLRW_FIXED_ACTION_VS_PRODUCTION_GDM_LOWER_DERIVATIVE_MISMATCH_IDENTIFIED_SCOPED"
+}
