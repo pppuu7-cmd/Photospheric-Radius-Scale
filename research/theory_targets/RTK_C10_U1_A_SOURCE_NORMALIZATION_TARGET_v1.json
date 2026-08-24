@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_U1_A_SOURCE_NORMALIZATION_TARGET_v1",
+  "created_utc": "2026-08-24T21:03:00Z",
+  "status": "FROZEN_BEFORE_SYMBOLIC_RESULT",
+  "question": "Translate the elliptic-compensator internal Hamiltonian A coefficient into the J_A normalization used by the primary nonprojectable U1 field equations, including sign and factor-of-two, before any CLASS metric mapping.",
+  "frozen_family_I_slice": {
+    "a1": 1,
+    "a2": 0,
+    "Omega_sigma": 1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "flat_FLRW": true
+  },
+  "primary_definitions": {
+    "1110.5106": "J_A = 2 delta(N L_M)/delta A; R-2 Lambda_g = 8 pi G J_A",
+    "1310.6666_family_I": "in phi=0 gauge, a1=1,a2=0,Omega=1 gives J_A=2 rho_H"
+  },
+  "internal_hamiltonian_terms": {
+    "H_m": "-(A-Acal) H0",
+    "H_aux": "+(A-Acal) Q + Lambda[(1-D^2/M_c^2)Q-H0]",
+    "internal_A_coefficient": "d(H_m+H_aux)/dA = Q-H0"
+  },
+  "acceptance": [
+    "use L=p qdot-H to translate Hamiltonian coefficient to action/Lagrangian variation",
+    "recover J_A=2H0 for the old matter term when Q is absent and H0=rho_H",
+    "derive J_A_total after the compensator with no sign ambiguity",
+    "linearize on homogeneous FLRW using the already-certified deltaQ=L0^-1 deltaH0 theorem",
+    "combine with the primary A constraint only after normalization is fixed",
+    "state k>0 versus exact homogeneous k=0 scope explicitly"
+  ],
+  "non_claims": [
+    "does not normalize J_varphi/Newtonian-prepotential source",
+    "does not close the momentum/Hamiltonian/dynamical equations",
+    "does not constitute a CLASS or likelihood implementation"
+  ],
+  "pass_classification": "C10_U1_A_SOURCE_NORMALIZATION_AND_HELMHOLTZ_CONSTRAINT_PASS_SCOPED"
+}
