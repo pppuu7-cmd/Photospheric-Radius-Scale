@@ -1,0 +1,25 @@
+{
+  "classification": "RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_SPATIAL_EXACT_PASS",
+  "fourier_composite_kernel": "mu_K^2 K^2/(mu_K^2+K^2) * |J_K|^2",
+  "interpretation": "The enhanced local-rest branch has no quadratic finite-k scalar propagator, while its first nonzero constrained scalar self-action is a positive quartic spatial functional. This sharpens the constraint-bifurcation/strong-coupling warning but does not by itself decide whether the scalar is removed nonlinearly or becomes strongly coupled once the first time-dependent interaction is included.",
+  "limits": {
+    "K_much_greater_mu": "kernel -> mu_K^2 |J_K|^2",
+    "K_much_less_mu": "kernel -> K^2 |J_K|^2"
+  },
+  "next_gate": "derive the first time-dependent constrained nonlinear term (at least quintic by this counting) and separately test a minimal higher-spatial operator that restores a quadratic local mode without altering the already-certified cosmological and PPN sectors",
+  "non_claims": [
+    "does not prove the scalar is absent nonlinearly",
+    "does not yet prove a finite or zero strong-coupling energy scale",
+    "does not include higher-spatial gravity operators",
+    "does not apply to the rolling cosmological branch",
+    "does not cover nonzero background invariant shift, k=0, compact-object X_U->0 or DBI-boundary configurations"
+  ],
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_FULL_SCALAR_CONSTRAINT_RESULT_v1.json",
+  "quartic_auxiliary_equation": "(-Delta+mu_K^2)y=mu_K^2 J",
+  "quartic_before_auxiliary_elimination": "S4/M_Pl^2 = integral [|grad y|^2 + mu_K^2 (y-J)^2], J=|grad phi|^2/2",
+  "quartic_effective_operator": "S4/M_Pl^2 = integral J [mu_K^2(-Delta)/(mu_K^2-Delta)] J",
+  "sign": "nonnegative for mu_K^2>0 and K^2>=0",
+  "status": "FIRST_NONZERO_CONSTRAINED_LOCAL_REST_SCALAR_ACTION_IS_QUARTIC_AND_PURELY_SPATIAL",
+  "target": "research/theory_targets/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_TARGET_v1.json",
+  "time_derivative_at_quartic": "absent; the F=1+dot(phi)-B.grad(phi) prefactor first multiplies a bracket that is already O(phi^4), so it contributes only at O(phi^5) or higher"
+}
