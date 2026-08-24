@@ -1,0 +1,46 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "fixed_representative": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+  "fixed_scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "prerequisites": [
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_RESULT_v1.json"
+  ],
+  "literature_inputs": {
+    "source": "Lin, Mukohyama, Wang, Zhu, arXiv:1310.6666",
+    "universal_coupling": "Eqs.(4.2),(4.3): tildeN=F(sigma)N, F=1-a1 sigma; in gauge varphi=0, sigma=A/N so at a1=1 tildeN=N-A",
+    "physical_PPN_metric": "Eqs.(5.22),(5.23): gamma00=-1+2U+O(4)",
+    "A_expansion": "Eq.(5.26): A=A2+A4",
+    "pure_O2_hamiltonian": "Eqs.(5.24),(5.25), combined with the exact static S_mix beta0-like contribution 2"
+  },
+  "frozen_parameters": {
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "gamma1": -1,
+    "beta0_bare": 0,
+    "explicit_Smix_static_beta0_like": 2
+  },
+  "claims_to_test": [
+    "physical-lapse matching gives n=N-1=A2-U at O(2)",
+    "the pure static Hamiltonian equation reduces to 4 Laplacian(n)=0",
+    "the frozen DBI action has quadratic lapse density +M_Pl^2 mu_K^2 n^2",
+    "using the same action normalization, the full O(2) lapse equation becomes 4[Laplacian(n)-mu_K^2 n]=0",
+    "for mu_K^2>0, regularity and asymptotic flatness imply n=0 by the positive-energy integral identity",
+    "therefore A2=U, physical tildeN=1-U+O(4), gamma_PPN=1, and kappa=G/G_N=1 remains the Newton normalization on this static O(2) branch"
+  ],
+  "boundary_conditions": "n regular on the spatial domain, n->0 at spatial infinity, boundary term from integration by parts vanishes",
+  "failure": "wrong sign quadratic DBI term, non-homogeneous residual source for n, or failure of the positive-energy uniqueness identity blocks Newton O(2) closure",
+  "non_claims": [
+    "does not certify beta_PPN at O(v^4)",
+    "does not certify moving-source alpha1 or alpha2",
+    "does not cover nonzero invariant shift or rotating solutions",
+    "does not cover compact-object X_U->0 behavior",
+    "does not establish radiative stability or EFT cutoff"
+  ],
+  "next_gate_if_pass": "derive the static O(v^4) equations on the same action, retaining DBI P(X_U) through n^4 and the exact S_mix acceleration functional, and solve beta_PPN"
+}
