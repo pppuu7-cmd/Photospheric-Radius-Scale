@@ -1,7 +1,7 @@
 {
   "schema": "RTK_C10_CURRENT_STATE_v2",
-  "updated_utc": "2026-08-24T23:36:00Z",
-  "status": "C10_STRUCTURAL_LINEAR_BRIDGE_GREEN_ACTION_FLUID_LIKELIHOOD_ROBUSTNESS_GREEN_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_GREEN_SHADOW_METRIC_API_NEXT",
+  "updated_utc": "2026-08-24T23:50:00Z",
+  "status": "C10_STRUCTURAL_LINEAR_BRIDGE_GREEN_ACTION_FLUID_LIKELIHOOD_ROBUSTNESS_GREEN_NEWTONIAN_SOURCE_POLES_GREEN_SHADOW_METRIC_REFERENCE_GREEN_HISTORY_CONDITIONING_NEXT",
   "scope": "same-full-action production cosmology completion bridge; historical phenomenological likelihood certificates are retained as provenance and are not silently transferred to the elliptic-completed U1 action",
   "closed_subgates": {
     "elliptic_auxiliary_projection_and_k0_bridge": "PASS",
@@ -91,6 +91,14 @@
       "source_map": "delta_mu_pref=delta_mu_N-rho' chi; delta_p_pref=delta_p_N-p' chi; q_pref=q_N-a(rho+p)chi; Pi invariant; deltaH0_pref=deltaH0_N-H0' chi",
       "determinant": "det=4 pi G a^2 (3lambda-1)(lambda-1) E_th H0' a1_eff",
       "finite_k_guard": "for lambda>1,E_th>0,H>0,W0_ordinary>0,M_c^2>0 and k>0 the determinant has fixed nonzero sign; exact k=0 remains on the separate homogeneous bridge"
+    },
+    "completed_gravity_shadow_metric_api_reference": {
+      "classification": "C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_PASS_SCOPED",
+      "target": "research/theory_targets/RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_TARGET_v1.json",
+      "result": "research/theory_results/RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_RESULT_v1.json",
+      "implementation": "research/shadow/rtk_c10_completed_metric_shadow_v1.py",
+      "production_modified": false,
+      "smoke_test": "det factorization abs error 1.11e-16; momentum residual 7.23e-17; Hamiltonian residual 0; source roundtrip error 0"
     }
   },
   "yellow_findings": {
@@ -124,16 +132,16 @@
     }
   },
   "active_gates": {
-    "completed_gravity_shadow_metric_api_contract": {
+    "prescribed_history_and_conditioning_controls": {
       "status": "NEXT_TO_FREEZE",
-      "question": "define a standalone completed-gravity shadow solver/API that evolves or reconstructs chi internally, consumes Newtonian ordinary plus total stress sources, and outputs Phi_N/Psi_N without touching the historical production path"
+      "question": "run deterministic source/background histories through the standalone completed metric solver across k/(a M_c), verify residuals and determinant signs continuously, quantify k->0 conditioning, and freeze a safe numerical routing rule before any Boltzmann integration"
     }
   },
   "strict_next_decision_tree": [
-    "Freeze the standalone completed-gravity shadow metric API contract and its zero/near-deformation controls before implementation.",
-    "Implement the completed-gravity shadow solver out of the production path; keep chi/B internal and expose only the physical Newtonian metric plus diagnostics.",
-    "Run exact zero/near-deformation controls, source-map inverse checks, determinant/conditioning checks and fixed-parameter metric histories before a Boltzmann integration.",
-    "Only after metric-source controls pass may an opt-in completed-U1 CLASS Boltzmann shadow be built; do not modify the production path in place.",
+    "Freeze prescribed-history and near-k0 conditioning controls before evaluating them.",
+    "Run the standalone completed-gravity metric solver on deterministic self-consistent background/source histories across both sides of k/(a M_c)=1; verify source round trips, determinant factorization and preferred constraints at every sample.",
+    "Quantify the small-k scaling and define a numerical routing/conditioning guard without interpreting k->0 ill-conditioning as a physical pole.",
+    "Only after these controls pass may an opt-in completed-U1 CLASS Boltzmann shadow be built; do not modify the production path in place.",
     "Then run a fixed-parameter completed-metric spectra test before any completed-action likelihood or refit.",
     "Do not transfer historical phenomenological A5 score to the completed action."
   ],
