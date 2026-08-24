@@ -1,0 +1,69 @@
+name: RTK C10 U1 Newtonian DAE solve-basis determinant
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-u1-newtonian-dae-solve-basis-trigger.txt'
+      - '.github/workflows/rtk-c10-u1-newtonian-dae-solve-basis.yml'
+      - 'rtk/route_b_u1_newtonian_dae_solve_basis_gate.py'
+      - 'research/theory_targets/RTK_C10_U1_NEWTONIAN_DAE_SOLVE_BASIS_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and run determinant theorem
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_U1_NEWTONIAN_DAE_SOLVE_BASIS_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTABLE_RESULT'
+          for p in t['parents']:
+              assert open(p).read()
+          print('C10_NEWTONIAN_DAE_SOLVE_BASIS_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_newtonian_dae_solve_basis_provenance.txt
+          python3 -m py_compile rtk/route_b_u1_newtonian_dae_solve_basis_gate.py
+          python3 rtk/route_b_u1_newtonian_dae_solve_basis_gate.py | tee c10_newtonian_dae_solve_basis.log
+          grep -q '^C10_U1_NEWTONIAN_3X3_ALGEBRAIC_SOLVE_BASIS_HAS_ONE_POSITIVE_CROSSING_SCOPED ' c10_newtonian_dae_solve_basis.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-u1-newtonian-dae-solve-basis
+          path: |
+            c10_newtonian_dae_solve_basis.log
+            c10_newtonian_dae_solve_basis_provenance.txt
+            u1_newtonian_dae_solve_basis_result.json
+          if-no-files-found: error
+      - name: Persist result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_newtonian_dae_solve_basis_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_U1_NEWTONIAN_DAE_SOLVE_BASIS_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_U1_NEWTONIAN_DAE_SOLVE_BASIS_RESULT_v1.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Record C10 Newtonian DAE solve-basis determinant result'
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
