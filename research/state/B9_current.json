@@ -1,11 +1,12 @@
 {
   "schema": "RTK_B9_CURRENT_STATE_v1",
-  "updated_utc": "2026-08-24T08:19:00Z",
+  "updated_utc": "2026-08-24T08:32:07Z",
   "status": "RTK_FRESH_TREE_MAIN_TRIGGER_COMMITTED_RESULT_ROUTER_ARMED",
   "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
   "production_mapping": "eff",
   "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
   "frozen_protocol": "research/robustness/B9_PAIRED_REOPTIMIZATION_TARGET_v1.json",
+  "methodology_addendum": "research/methodology/RTK_B9_A5_CROSS_BASIN_ADDENDUM_2026-08-24.md",
   "tolerances": {
     "exact_descent_S": 0.005,
     "fresh_tree_replay_abs": 0.000002,
@@ -24,6 +25,8 @@
       "lam": 0.0
     },
     "S_B9": 1058.2173424114785,
+    "S_A5_base_at_B9_center": 1049.400976604194,
+    "lensing_minus2loglike": 8.816365807284551,
     "half_scale_exact_improvement": 0.0,
     "half_scale_positive_definite": true,
     "half_scale_min_eigenvalue": 0.0005663251859819669
@@ -42,6 +45,8 @@
       "zre": 7.329291125785135
     },
     "S_B9": 1059.2719553175134,
+    "S_A5_base_at_B9_center": 1050.2560245726381,
+    "lensing_minus2loglike": 9.015930744875291,
     "base_exact_improvement": 0.0,
     "base_positive_definite": true,
     "base_min_eigenvalue": 0.0005825694006286208,
@@ -52,6 +57,8 @@
   },
   "paired_local_comparison": {
     "provisional_delta_S_RTK_minus_LCDM": 1.0546129060349,
+    "base_component_delta_at_B9_centers": 0.8550479684441,
+    "direct_lensing_component_delta": 0.19956493759074,
     "status": "PROVISIONAL_ONLY_DO_NOT_FREEZE_UNTIL_RTK_FRESH_TREE_AND_FINAL_PAIRED_REPLAY_PASS",
     "warning": "Local frozen-objective score difference only; not significance, AIC/BIC, posterior preference or Bayes factor."
   },
@@ -86,6 +93,22 @@
     "dispatch_precondition": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
     "replay_abs_tolerance_each": 0.000002,
     "delta_replay_abs_tolerance": 0.000004
+  },
+  "baseline_cross_basin_alert": {
+    "status": "INDEPENDENT_REPLAY_LAUNCHED_NOT_YET_CERTIFIED",
+    "reason": "The B9 LCDM-v7 artifact reports the unchanged A5 base score 1049.400976604194, improving on the historical A5 LCDM local score 1049.966118347761 by 0.565141743567. All Planck, Pantheon and BOSS baseline components improve at that point.",
+    "target": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_TARGET_v1.json",
+    "target_commit": "e77c71d594772518611e1c1196d8777dc16fa1b4",
+    "worker": "rtk/a5_b9_cross_basin_replay.py",
+    "worker_commit": "f9788b991a43985a1623828c2b29db96bc665da8",
+    "workflow": "main:.github/workflows/rtk-a5-b9-cross-basin-replay.yml",
+    "trigger_commit": "7fa310f17719827681e44cd2608db056aa64a244",
+    "conditional_stationarity_target": "research/robustness/A5_LCDM_B9_SEED_STATIONARITY_TARGET_v1.json",
+    "conditional_stationarity_worker": "rtk/a5_lcdm_b9_seed_stationarity.py",
+    "conditional_stationarity_workflow": "main:.github/workflows/rtk-a5-lcdm-b9-seed-stationarity.yml",
+    "conditional_stationarity_workflow_fix_commit": "86659b167d2a12039a0384421b381d853957129e",
+    "router_commit": "799f62e02378219f7fa4fb3ccbe88787241c90cf",
+    "guard": "Do not supersede historical A5 until independent fresh-tree cross-basin replay and subsequent baseline LCDM stationarity/replay gates pass."
   },
   "next_if_pass": "The result router dispatches the already-preregistered final paired exact replay. Freeze local B9 Delta S only if that replay passes all tolerances.",
   "next_if_fail": "Do not average or relax tolerances. Diagnose replay mismatch, exact descent direction, non-PD Hessian, or infrastructure failure separately and preserve the negative/indeterminate result."
