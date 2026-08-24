@@ -1,0 +1,72 @@
+name: RTK Route-B U1 static beta PPN inheritance
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-beta-ppn-inheritance-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  beta-static:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Enforce exact nonlinear uniqueness prerequisite
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_STATIC_BETA_PPN_INHERITANCE_TARGET_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_STATIC_BETA_PPN_INHERITANCE_TARGET_V1_FROZEN'
+          u=json.load(open(t['prerequisite']['result']))
+          assert u['classification']==t['prerequisite']['required_classification']
+          assert u['static_scalar_consequence']['N']=='1'
+          print('STATIC_BETA_PREREQUISITE_PASS')
+          PY
+          git rev-parse HEAD | tee u1_static_beta_source.txt
+      - name: Run static beta theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_static_beta_ppn_inheritance.py
+          python3 rtk/route_b_u1_static_beta_ppn_inheritance.py | tee u1_static_beta_ppn.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_BETA_PPN_EXACT_PASS ' u1_static_beta_ppn.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_beta_ppn_inheritance_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_STATIC_BETA_PPN_EXACT_PASS'
+          assert r['static_beta_PPN']==1 and r['static_gamma_PPN']==1
+          print('STATIC_BETA_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-beta-ppn-inheritance
+          path: |
+            u1_static_beta_ppn.log
+            u1_static_beta_ppn_inheritance_result.json
+            u1_static_beta_source.txt
+          if-no-files-found: error
+      - name: Persist static beta result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_static_beta_ppn_inheritance_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_STATIC_BETA_PPN_RESULT_v1.json
+          git config user.name 'rtk-u1-static-beta'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_STATIC_BETA_PPN_RESULT_v1.json
+          git commit -m 'Persist static beta PPN theorem'
+          git push origin HEAD:rtk-class-build
