@@ -1,0 +1,31 @@
+{
+  "K_B_partial": "(lambda-1)L+8 pi G a^2(rho_total+p_total)",
+  "classification": "C10_U1_NEWTONIAN_TOTAL_SOURCE_TRANSFORM_PASS_SCOPED",
+  "critical_guard": "K_B_partial is only a partial-elimination coefficient. Its zero is NOT classified as a physical pole before the transformed A constraint, its time derivative, Hamiltonian constraint and total conservation equations are included in one DAE/determinant audit.",
+  "next_gate": "full transformed DAE/determinant and pole audit over the certified finite-k rank domain",
+  "non_claims": [
+    "no physical-pole classification from K_B_partial alone",
+    "not a completed transformed gravity solver",
+    "not a CLASS implementation",
+    "not a B4 massive-neutrino extension",
+    "not a likelihood result"
+  ],
+  "ordinary_A_source_scope": "delta H0_QL=delta H0_N-H0_ordinary_prime B; neutral Khronon is not inserted into H0_ordinary",
+  "round_trip_source_map": "PASS",
+  "source_map_N_to_QL": {
+    "Pi_QL": "Pi_N",
+    "delta_mu_QL": "delta_mu_N-rho_prime B",
+    "delta_p_QL": "delta_p_N-p_prime B",
+    "q_QL": "q_N-a(rho+p)B"
+  },
+  "source_map_QL_to_N": {
+    "Pi_N": "Pi_QL",
+    "delta_mu_N": "delta_mu_QL+rho_prime B",
+    "delta_p_N": "delta_p_QL+p_prime B",
+    "q_N": "q_QL+a(rho+p)B"
+  },
+  "status_scope": "GREEN_EXACT_SOURCE_COORDINATE_MAP_FULL_DAE_POLE_AUDIT_NEXT",
+  "target": "research/theory_targets/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_TARGET_v1.json",
+  "transformed_A_constraint": "(k^2+a^2 M_c^2)psi=-4 pi G a^2[delta H0_N-H0_ordinary_prime B]",
+  "transformed_momentum_constraint": "K_B_partial B=8 pi G a q_N-(3lambda-1)(psi_prime+H phi)"
+}
