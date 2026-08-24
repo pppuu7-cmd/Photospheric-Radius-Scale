@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_TARGET_v1",
+  "created_utc": "2026-08-24T21:18:00Z",
+  "status": "FROZEN_BEFORE_SYMBOLIC_RESULT",
+  "question": "Normalize the Newtonian-prepotential source J_varphi for the elliptic-compensator architecture from the same nonprojectable local-U1 action conventions used for J_A, and determine the exact Ward relation to J_A and the momentum current before any reduced CLASS insertion.",
+  "primary_source_lock": {
+    "arXiv_1310.6666": [
+      "Eq.(2.1): delta_alpha A = dot(alpha)-N^i nabla_i alpha, delta_alpha varphi=-alpha, delta_alpha N_i=N nabla_i alpha",
+      "Eq.(2.19): J_varphi=-delta L_M/delta varphi, J_A=2 delta(N L_M)/delta A, with J^i=-N delta L_M/delta N_i from Eq.(2.16)",
+      "Eqs.(4.11)-(4.15): universal matter-current reduction; on a1=1,a2=0,Omega=1,varphi=0 one has B=-rho_H, J_A=2 rho_H and J^i=-s^i"
+    ],
+    "arXiv_1110.5106": [
+      "Eq.(7.10): linear prepotential constraint source is 8 pi G a^3 delta J_varphi",
+      "Eq.(7.11): linear A constraint source is 2 pi G a^2 delta J_A"
+    ]
+  },
+  "frozen_internal_overlap": {
+    "family_I_slice": "a1=1,a2=0,Omega=1,varphi=0",
+    "p_nu_matter": "+H0",
+    "p_nu_aux": "-Q",
+    "p_nu_total": "P=H0-Q",
+    "literature_J_A_total": "2(H0-Q)=2P",
+    "elliptic_linear_transfer": "delta P=a1_eff delta H0, a1_eff=k^2/(k^2+a^2 M_c^2)",
+    "homogeneous_filter": "k=0 -> Q=H0 -> P=0",
+    "auxiliary_shift_current_in_varphi_zero_gauge": "must be derived from the frozen (A-Acal)Q term; do not assume a new independent matter momentum source"
+  },
+  "acceptance": [
+    "derive the local-U1 matter-source Ward identity by varying the action under alpha(x,t), using only the frozen source definitions and U1 transformations",
+    "recover the published a1=1,a2=0,Omega=1,varphi=0 form of J_varphi when J_A=2 rho_H and J^i=-s^i",
+    "show that the compensator replaces rho_H by P=H0-Q in the A/prepotential canonical coefficient while leaving the ordinary momentum-current term explicit",
+    "show exact homogeneous background cancellation P_bar=0 => J_varphi_bar=0 when the homogeneous momentum current vanishes",
+    "linearize around flat FLRW with P_bar=0 and N^i_bar=0 without dropping the momentum divergence",
+    "insert delta P=a1_eff delta H0 only after the Ward identity is fixed",
+    "differentiate a1_eff explicitly for constant comoving k and constant positive M_c and retain dot(a1_eff) delta H0",
+    "state that J_varphi is a derivative/divergence source and is not algebraically equal to delta_p_nu"
+  ],
+  "pass_classification": "C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_PASS_SCOPED",
+  "non_claims": [
+    "does not close the gravitational left-hand side of the prepotential equation",
+    "does not prove the prepotential equation is redundant after gauge fixing in the full nonlinear theory",
+    "does not complete Hamiltonian/momentum/trace/traceless reduction",
+    "does not implement CLASS or produce a likelihood result",
+    "does not add massive-neutrino anisotropic-stress/momentum transfer; B4 remains a separate same-action extension"
+  ]
+}
