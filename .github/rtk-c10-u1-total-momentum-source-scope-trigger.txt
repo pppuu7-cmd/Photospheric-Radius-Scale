@@ -1,1 +1,1 @@
-2026-08-24T21:36:00Z launch frozen C10 total-momentum source-scope gate v1
+2026-08-24T21:51:00Z rerun unchanged frozen C10 total-momentum source-scope gate v1
