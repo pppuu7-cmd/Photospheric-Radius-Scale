@@ -1,0 +1,207 @@
+name: RTK C10 action-fluid fixed likelihood replay
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-action-fluid-fixed-likelihood-replay-trigger.txt'
+      - '.github/workflows/rtk-c10-action-fluid-fixed-likelihood-replay.yml'
+      - 'research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json'
+      - 'rtk/apply_rtk_action_fluid_shadow_patch.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-c10-action-fluid-fixed-likelihood-replay
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      CLIPY_NOJAX: '1'
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_TIMEOUT: '300'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      RTK_PANTHEON_SHA: '7eb29dc87ba223b4ec8457cd3cccba1216c36fb7'
+      RTK_PLANCK_SHA256: '0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Verify frozen target and parent spectra result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json'))
+          s=json.load(open('research/state/current.json'))
+          twin=json.load(open('research/theory_results/RTK_C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_FIXED_PARAMETER_LIKELIHOOD_RESULT'
+          assert twin['classification']=='C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_COMPLETE'
+          assert twin['overall_max_normalized_abs_difference']<1e-8
+          fr=s['final_replay_result']
+          assert fr['status']=='PASS'
+          assert fr['objective_fingerprint']==t['reference']['objective_fingerprint']
+          assert fr['rtk']['params']==t['reference']['params']
+          assert abs(fr['rtk']['expected_score_eff']-t['reference']['historical_exact_score_eff'])<1e-12
+          print('C10_FIXED_LIKELIHOOD_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_fixed_likelihood_provenance.txt
+
+      - name: Prepare identical pinned production and action-shadow likelihood trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_prod
+          git -C class_prod reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          git clone https://github.com/dscolnic/Pantheon.git class_prod/pantheon
+          git -C class_prod/pantheon reset --hard "$RTK_PANTHEON_SHA"
+          test "$(git -C class_prod rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_prod/pantheon rev-parse HEAD)" = "$RTK_PANTHEON_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_prod/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_prod/include/
+          python3 rtk/apply_rtk_class_patch.py class_prod
+          python3 rtk/upgrade_rtk_inputs.py class_prod
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_prod
+          python3 rtk/upgrade_rtk_initial_conditions.py class_prod
+          python3 rtk/upgrade_rtk_matter_sources.py class_prod
+          python3 rtk/upgrade_rtk_gamma_root.py class_prod
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_prod
+          cp rtk/joint_profile_runner.py rtk/prepare_inference_core.py rtk/prepare_final_inference_core.py class_prod/
+          cp rtk/data/boss_DR12Consensus_final.dat rtk/data/final_consensus_covtot_dM_Hz_fsig.txt class_prod/
+          cp -a class_prod class_shadow
+          python3 rtk/apply_rtk_action_fluid_shadow_patch.py class_shadow
+          cmp rtk/khronon_perturbations.c class_prod/source/khronon_perturbations.c
+          ! cmp -s class_prod/source/khronon_perturbations.c class_shadow/source/khronon_perturbations.c
+          (cd class_prod && python3 prepare_final_inference_core.py joint_profile_runner.py inference_core_final.py)
+          (cd class_shadow && python3 prepare_final_inference_core.py joint_profile_runner.py inference_core_final.py)
+          grep -q 'z_pk = 0.,0.25,0.30,0.34,0.36,0.37,0.38,0.39,0.40,0.42,0.47,0.49,0.50,0.51,0.52,0.53,0.55,0.57,0.59,0.60,0.61,0.62,0.63,0.65,0.70,0.75,1.0' class_prod/inference_core_final.py
+          grep -q 'l_linstep = 2' class_prod/inference_core_final.py
+
+      - name: Build both trees and install locked likelihood stack
+        run: |
+          set -euo pipefail
+          make -C class_prod -j2 class
+          make -C class_shadow -j2 class
+          test "$(python3 -c 'import platform;print(platform.python_version())')" = '3.12.3'
+          python3 -m pip install --disable-pip-version-check 'clipy-like==0.15' 'numpy==2.5.2' 'scipy==1.18.0'
+          python3 -m pip freeze | sort | tee c10_fixed_likelihood_pip_freeze.txt
+
+      - name: Download and verify official Planck R3 baseline once
+        run: |
+          set -euo pipefail
+          mkdir -p shared_planck
+          curl -L --fail --retry 3 --retry-delay 5 -o shared_planck/planck.tar.gz 'https://pla.esac.esa.int/pla/aio/product-action?COSMOLOGY.FILE_ID=COM_Likelihood_Data-baseline_R3.00.tar.gz'
+          echo "$RTK_PLANCK_SHA256  shared_planck/planck.tar.gz" | sha256sum -c -
+          mkdir shared_planck/planck_data
+          tar -xzf shared_planck/planck.tar.gz -C shared_planck/planck_data
+          test -d shared_planck/planck_data/baseline/plc_3.0/hi_l/plik_lite/plik_lite_v22_TTTEEE.clik
+
+      - name: Evaluate production fixed point
+        run: |
+          set -euo pipefail
+          cd class_prod
+          RTK_PLANCK_DATA=../shared_planck/planck_data python3 - <<'PY' | tee ../c10_fixed_prod.log
+          import json
+          import inference_core_final as M
+          t=json.load(open('../research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json'))
+          r=M.evaluate('RTK',t['reference']['params'])
+          assert r.get('ok'),r
+          open('../c10_fixed_prod.json','w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          print('C10_FIXED_PROD_SCORE',r['score'],r['score_k01'])
+          PY
+
+      - name: Evaluate action-shadow fixed point
+        run: |
+          set -euo pipefail
+          cd class_shadow
+          RTK_PLANCK_DATA=../shared_planck/planck_data python3 - <<'PY' | tee ../c10_fixed_shadow.log
+          import json
+          import inference_core_final as M
+          t=json.load(open('../research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json'))
+          r=M.evaluate('RTK',t['reference']['params'])
+          assert r.get('ok'),r
+          open('../c10_fixed_shadow.json','w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          print('C10_FIXED_SHADOW_SCORE',r['score'],r['score_k01'])
+          PY
+
+      - name: Compare exact objective components and classify
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,math
+          t=json.load(open('research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json'))
+          p=json.load(open('c10_fixed_prod.json')); s=json.load(open('c10_fixed_shadow.json'))
+          assert p['ok'] and s['ok'] and p['model']==s['model']=='RTK'
+          for k,v in t['reference']['params'].items():
+              assert float(p[k])==float(v) and float(s[k])==float(v)
+          prod_err=abs(float(p['score'])-t['reference']['historical_exact_score_eff'])
+          if prod_err>t['acceptance']['production_replay_abs_tolerance']:
+              raise SystemExit(f'production replay error {prod_err} exceeds frozen tolerance')
+          comps=t['acceptance']['component_outputs_required']
+          delta={k:float(s[k])-float(p[k]) for k in comps}
+          ds=float(s['score'])-float(p['score'])
+          dsk=float(s['score_k01'])-float(p['score_k01'])
+          tol=t['acceptance']['fixed_parameter_shadow_minus_production_abs_score_tolerance']
+          cls=('ACTION_SHADOW_FIXED_LIKELIHOOD_INDISTINGUISHABLE_AT_0P005' if abs(ds)<=tol else 'ACTION_SHADOW_FIXED_LIKELIHOOD_MATERIAL_GT_0P005')
+          out={
+            'classification':cls,
+            'status_scope':'FIXED_HISTORICAL_RTK_POINT_EXACT_MATCHED_OBJECTIVE_ACTION_SHADOW_SENSITIVITY',
+            'production_score_eff':p['score'],
+            'shadow_score_eff':s['score'],
+            'shadow_minus_production_score_eff':ds,
+            'abs_shadow_minus_production_score_eff':abs(ds),
+            'shadow_minus_production_score_k01':dsk,
+            'production_replay_abs_error':prod_err,
+            'recenter_tolerance_S':tol,
+            'component_shadow_minus_production':delta,
+            'production':{k:p[k] for k in ['score','score_k01']+comps},
+            'shadow':{k:s[k] for k in ['score','score_k01']+comps},
+            'reference_params':t['reference']['params'],
+            'objective':t['reference']['objective'],
+            'objective_fingerprint':t['reference']['objective_fingerprint'],
+            'non_claims':t['non_claims'],
+            'target':'research/theory_targets/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1.json'
+          }
+          open('c10_action_fluid_fixed_likelihood_result.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('C10_ACTION_FLUID_FIXED_LIKELIHOOD_RESULT',cls,ds,prod_err)
+          PY
+
+      - name: Persist fixed likelihood result
+        run: |
+          set -euo pipefail
+          cp c10_action_fluid_fixed_likelihood_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_RESULT_v1.json
+            if git diff --cached --quiet; then exit 0; fi
+            git commit -m 'Record C10 action-fluid fixed likelihood replay'
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-action-fluid-fixed-likelihood-replay
+          path: |
+            c10_fixed_likelihood_provenance.txt
+            c10_fixed_likelihood_pip_freeze.txt
+            c10_fixed_prod.log
+            c10_fixed_shadow.log
+            c10_fixed_prod.json
+            c10_fixed_shadow.json
+            c10_action_fluid_fixed_likelihood_result.json
+          if-no-files-found: warn
