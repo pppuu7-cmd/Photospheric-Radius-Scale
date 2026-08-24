@@ -1,0 +1,61 @@
+name: RTK C10 S_mix source-ratio impact replay
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/c10_smix_source_ratio_impact_replay.py'
+      - 'research/theory_targets/RTK_C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_TARGET_v1.json'
+      - '.github/rtk-c10-smix-source-ratio-impact-trigger.txt'
+      - '.github/workflows/rtk-c10-smix-source-ratio-impact-replay.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run deterministic replay
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c10_smix_source_ratio_impact_replay.py
+          python3 rtk/c10_smix_source_ratio_impact_replay.py | tee c10_smix_source_ratio_impact.log
+          grep -q '^C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_PASS ' c10_smix_source_ratio_impact.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c10_smix_source_ratio_impact_replay_result.json'))
+          assert r['classification']=='C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_PASS'
+          assert r['boss_max_percent_excess'] < 0.5
+          assert r['technical_max_percent_excess'] > 100.0
+          print('C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_VALIDATED')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_smix_source_ratio_impact_replay_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_RESULT_v1.json
+          git commit -m 'Record C10 S_mix source-ratio impact replay' || true
+          git push origin HEAD:rtk-class-build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-smix-source-ratio-impact-replay
+          path: |
+            c10_smix_source_ratio_impact.log
+            c10_smix_source_ratio_impact_replay_result.json
+          if-no-files-found: error
