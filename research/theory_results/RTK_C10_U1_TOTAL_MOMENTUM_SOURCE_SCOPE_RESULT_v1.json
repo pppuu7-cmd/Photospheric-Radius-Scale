@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_RESULT_v1",
+  "classification": "C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_PASS_SCOPED",
+  "status_scope": "GREEN_EXACT_LINEAR_SOURCE_SCOPE_K_GT_0_NEUTRAL_MOMENTUM_INCLUDED",
+  "target": "research/theory_targets/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_TARGET_v1.json",
+  "source_partition": {
+    "A_source": "P=H0_ordinary-Q; delta J_A=2 deltaP is ordinary-only on the frozen U1-neutral RTK/Khronon completion",
+    "metric_sources": "delta_mu_total, delta_p_total, Pi_total and q_total include every gravitating sector, including the U1-neutral RTK/Khronon sector",
+    "momentum": "q_total=q_ordinary+q_neutral with delta J^i_total=a^-2 partial^i q_total"
+  },
+  "ward_identity": "J_varphi=[Dt(J_A)-div(J_A N^i)]/(2N)-div(N J^i_total)/N",
+  "linear_flat_FLRW": "delta J_varphi=a^-1[(deltaP)'+3H deltaP-a^-1 L q_total]",
+  "A_constraint": "L psi=4 pi G a^2 deltaP",
+  "momentum_constraint": "8 pi G a q_total=(3 lambda_HL-1)(psi'+H phi)+(lambda_HL-1)L B",
+  "prepotential_source_after_A": "L[2(psi'+H psi)-8 pi G a q_total]",
+  "neutral_momentum_test": {
+    "replacement": "q_total -> q_total+q_neutral",
+    "ward_side_shift": "-8 pi G a L q_neutral in the prepotential RHS after multiplying by 8 pi G a^2 and using the A constraint",
+    "momentum_substitution_shift": "-8 pi G a L q_neutral",
+    "exact_redundancy_residual_shift": "0",
+    "conclusion": "An arbitrary neutral-sector scalar momentum changes Ward and momentum sides identically. Setting J_A^neutral=0 does not permit dropping q_neutral from J_varphi or Eq.(7.12)."
+  },
+  "pressure_density_stress_guard": "No filter is transferred from the elliptic ordinary-only A source to delta_mu_total, delta_p_total or Pi_total. Those remain total metric stress sources for Eqs.(7.13)-(7.15).",
+  "implementation_rule": "Future completed-gravity interfaces must carry two distinct source channels: ordinary-only deltaH0 for the elliptic A filter, and total covariant stress/momentum sources for metric plus Ward equations.",
+  "symbolic_residual": "0",
+  "next_gate": "Transform ordinary and total covariant sources from preferred/quasilongitudinal coordinates to the Newtonian-coordinate/Stueckelberg representation with chi=B retained internally, then audit the coupled transformed constraint solve for finite-k poles.",
+  "non_claims": [
+    "not a nonlinear Ward theorem",
+    "not an exact k=0 theorem",
+    "not a derivation of a new RTK action stress tensor",
+    "not a B4 massive-neutrino completion-source implementation",
+    "not a CLASS implementation or likelihood result"
+  ]
+}
