@@ -1,0 +1,48 @@
+{
+  "schema": "RTK_C10_SHADOW_METRIC_HISTORY_CONDITIONING_TARGET_v1",
+  "created_utc": "2026-08-24T23:57:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Can the standalone completed-gravity metric reference be reordered into a numerically safer finite-k solve and pass deterministic prescribed-state histories across the elliptic transition, while identifying the exact small-k regularity condition that must be checked on future physical CLASS source histories?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_RESULT_v1.json"
+  ],
+  "frozen_reordering": {
+    "definitions": [
+      "K=4 pi G a^2 a1_eff/L",
+      "y=K H0_prime chi_prime",
+      "R_M=Q_N-D S_psi-(r L+X)chi",
+      "R_H=the transformed Hamiltonian right-hand side with S_psi but no chi_prime",
+      "D=3 lambda_HL-1; r=lambda_HL-1; L=-k^2"
+    ],
+    "system": [
+      "D H phi-D y=R_M",
+      "Delta_phi phi+2 D H y=R_H",
+      "Delta_phi=r E_th L-2 D H^2"
+    ],
+    "acceptance_identity": "eliminate y exactly and obtain r E_th L phi=R_H+2 H R_M; then y=H phi-R_M/D and chi_prime=y/(K H0_prime)",
+    "interpretation": "the reordered phi solve contains no lapse denominator and no high-k determinant cancellation; exact k=0 remains excluded"
+  },
+  "deterministic_controls": [
+    "compare reordered and direct 2x2 solutions over a moderate condition-number domain",
+    "verify preferred momentum/Hamiltonian residuals and source round trips at every sample",
+    "sweep k/(a M_c) on both sides of unity and verify finite filter/lapse denominators and determinant sign",
+    "record R_reg=R_H+2 H R_M and R_reg/k^2 as the explicit small-k regularity diagnostic",
+    "do not claim a regular physical super-horizon limit from synthetic prescribed sources; future physical CLASS histories must demonstrate R_reg=O(k^2)",
+    "route exact k=0 to the homogeneous bridge",
+    "keep production CLASS untouched"
+  ],
+  "pass_classification": "C10_SHADOW_METRIC_REORDERED_SOLVE_AND_SYNTHETIC_HISTORY_CONTROLS_PASS_SCOPED",
+  "yellow_classification": "C10_SHADOW_METRIC_REORDERED_SOLVE_PASS_PHYSICAL_SMALL_K_REGULARITY_HISTORY_OPEN_SCOPED",
+  "fail_classification": "C10_SHADOW_METRIC_REORDERED_SOLVE_OR_CONSTRAINT_RESIDUAL_FAIL_SCOPED",
+  "decision": {
+    "if_pass_or_yellow": "Use the reordered reference API for the next opt-in physical-source-history bridge; require the R_reg/k^2 diagnostic before Boltzmann spectra.",
+    "if_fail": "Do not connect completed-U1 gravity to a Boltzmann hierarchy; repair and refreeze the source/metric solve."
+  },
+  "non_claims": [
+    "not a physical cosmological-history validation unless real CLASS sources are used",
+    "not a super-horizon regularity proof",
+    "not a production CLASS implementation",
+    "not a completed-action spectra or likelihood result"
+  ]
+}
