@@ -1,0 +1,50 @@
+{
+  "schema": "RTK_C10_PRODUCTION_SOURCE_COMPOSITION_TARGET_v1",
+  "created_utc": "2026-08-24T20:53:00Z",
+  "status": "FROZEN_BEFORE_RESULT",
+  "branch": "rtk-class-build",
+  "question": "Which physical species belong to the ordinary filtered source H0 in the same-full-action elliptic completion, without confusing the production RTK storage parameter Om with physical CDM or total matter?",
+  "production_mapping_to_audit": {
+    "RTK_model": 2,
+    "fit_Ob": "Omega_b",
+    "fit_Om": "Omega_khronon",
+    "fit_lam": "lambda_D",
+    "physical_Omega_cdm": 0,
+    "legacy_Omega0_cdm_slot": "storage alias only for Omega_khronon in model=2; never interpret as dust",
+    "baseline_N_ur": 3.046,
+    "baseline_N_ncdm": 0,
+    "baseline_Omega_Lambda": 0,
+    "baseline_Omega_fld": 0,
+    "baseline_Omega_scf": 0,
+    "baseline_Omega_k": 0
+  },
+  "completion_source_contract": {
+    "filtered_baseline_species": [
+      "baryons",
+      "photons",
+      "massless_relativistic_species"
+    ],
+    "excluded_from_filtered_H0": [
+      "RTK_Khronon_completion_sector",
+      "legacy_cdm_storage_alias"
+    ],
+    "physical_cdm_absent": true,
+    "B4_massive_neutrino_extension": "If N_ncdm>0 in the minimal-neutrino robustness branch, the physical ncdm contribution must be added explicitly to the ordinary filtered source and independently validated before any same-action B4 likelihood claim."
+  },
+  "acceptance_tests": [
+    "production parameter writer maps RTK fit Om to Omega_khronon, not Omega_cdm",
+    "parser forbids simultaneous Omega_khronon and Omega_cdm/omega_cdm input",
+    "model=2 legacy Omega0_cdm slot is documented and used only as a storage alias for Omega_khronon",
+    "matter-source upgrade removes fake-dust bookkeeping and substitutes physical Khronon rho/p perturbation combinations",
+    "completion code and documentation never use fitted Om as total ordinary matter density",
+    "baseline source list is explicit and B4 ncdm extension is fail-closed"
+  ],
+  "non_claims": [
+    "This gate does not prove the completed-action Friedmann normalization.",
+    "This gate does not by itself prove rho_filtered <= rho_eff over an EFT history interval.",
+    "This gate does not change CLASS equations or likelihood scores.",
+    "This gate does not establish massive-neutrino same-action validity."
+  ],
+  "pass_classification": "C10_BASELINE_SOURCE_IDENTITY_CONTRACT_PASS_SCOPED",
+  "mandatory_followup": "Derive and certify the same-action background/Friedmann normalization, then test rho_filtered <= rho_eff on the declared EFT history interval; separately extend the contract to physical ncdm for B4."
+}
