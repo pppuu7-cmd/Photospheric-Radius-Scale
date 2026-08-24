@@ -1,0 +1,61 @@
+name: RTK Route-B U1 local-rest constrained quartic
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-local-rest-constrained-quartic-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify target and run quartic theorem
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_TARGET_v1.json'))
+          p=json.load(open(t['prerequisite']))
+          assert t['classification']=='RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_TARGET_V1_FROZEN'
+          assert p['classification']=='RTK_C8_U1_LOCAL_REST_FULL_SCALAR_QUADRATIC_RANK_ENHANCEMENT_EXACT_PASS'
+          print('LOCAL_REST_CONSTRAINED_QUARTIC_TARGET_PASS')
+          PY
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_local_rest_constrained_quartic.py
+          git rev-parse HEAD | tee u1_local_rest_constrained_quartic_provenance.txt
+          python3 rtk/route_b_u1_local_rest_constrained_quartic.py | tee u1_local_rest_constrained_quartic.log
+          grep -q '^RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_SPATIAL_EXACT_PASS ' u1_local_rest_constrained_quartic.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-local-rest-constrained-quartic
+          path: |
+            u1_local_rest_constrained_quartic.log
+            u1_local_rest_constrained_quartic_provenance.txt
+            u1_local_rest_constrained_quartic_result.json
+          if-no-files-found: error
+      - name: Persist theorem result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_local_rest_constrained_quartic_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_RESULT_v1.json
+          git config user.name 'rtk-u1-local-rest-quartic'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_RESULT_v1.json
+          git commit -m 'Persist constrained local-rest quartic theorem'
+          git push origin HEAD:rtk-class-build
