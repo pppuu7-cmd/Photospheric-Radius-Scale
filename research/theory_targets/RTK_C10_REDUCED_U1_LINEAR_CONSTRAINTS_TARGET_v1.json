@@ -1,0 +1,57 @@
+{
+  "schema": "RTK_C10_REDUCED_U1_LINEAR_CONSTRAINTS_TARGET_v1",
+  "created_utc": "2026-08-24T20:56:00Z",
+  "status": "FROZEN_BEFORE_REDUCTION",
+  "branch": "rtk-class-build",
+  "question": "Can the same-full-action elliptic completion be reduced on flat FLRW to a closed linear scalar metric system suitable for CLASS, after eliminating A, Newtonian prepotential, Q and Lambda without replacing the theory by an effective-fluid sound-speed patch?",
+  "primary_convention_reference": {
+    "paper": "T. Zhu, F.-W. Shu, Q. Wu, A. Wang, General covariant Horava-Lifshitz gravity without projectability condition and its applications to cosmology",
+    "arxiv": "1110.5106v2",
+    "scope": "nonprojectable local-U(1) scalar-constraint and flat-FLRW perturbation conventions only; coefficients of the RTK completion must still be derived from the frozen same-action ansatz",
+    "gauge_reference": "quasilongitudinal E=delta_varphi=0",
+    "reference_equations": ["3.17", "3.18", "3.19", "7.10", "7.11", "7.12", "7.13", "7.14", "7.15"]
+  },
+  "already_certified_completion_inputs": {
+    "elliptic_equation": "(1-D^2/Mc^2) Q = H0",
+    "linear_FLRW_resolvent": "deltaQ = L0^{-1} deltaH0",
+    "a1_eff": "k_phys^2/(Mc^2+k_phys^2)",
+    "source_pair": [
+      "deltaJ_A = -a1_eff deltaH0",
+      "deltaJ_prepotential = +a1_eff deltaH0"
+    ],
+    "source_identity_contract": "research/theory_targets/RTK_C10_PRODUCTION_SOURCE_COMPOSITION_TARGET_v1.json"
+  },
+  "mandatory_derivation": [
+    "derive the A and prepotential source normalizations directly from the frozen completion action and match them to the primary-source J_A and J_varphi definitions before substituting any formula",
+    "write the full scalar auxiliary/metric linear system on flat FLRW in one gauge with an explicit Fourier convention",
+    "eliminate Q and Lambda together with A and the Newtonian prepotential; do not solve one constraint while silently dropping another",
+    "derive the reduced Hamiltonian, momentum, trace and traceless metric equations or an algebraically equivalent closed first-order system",
+    "compute the auxiliary constraint determinant/rank and exclude isolated roots over the declared q and EFT-history domain",
+    "show the k->0 and completion-off/near-deformation limits explicitly",
+    "identify the exact mapping to CLASS perturbation variables and required new state/algebraic variables before editing the production likelihood path"
+  ],
+  "acceptance": {
+    "normalization_matched_from_action": true,
+    "closed_reduced_system": true,
+    "no_uneliminated_auxiliary_unknowns": true,
+    "rank_safe_on_declared_domain": true,
+    "GR_or_frozen_control_limit_recovered": true,
+    "CLASS_mapping_explicit": true,
+    "no_likelihood_score_evaluated": true
+  },
+  "fail_closed_conditions": [
+    "source normalization cannot be matched to action variation",
+    "constraint matrix loses rank inside the declared production domain",
+    "the reduction requires interpreting RTK fitted Om as physical CDM or total matter",
+    "a phenomenological c_s^2 substitution is used instead of solving the U1 constraints",
+    "the reduced system does not recover its frozen control limit"
+  ],
+  "non_claims": [
+    "The cited nonprojectable U1 paper is a convention/reference basis, not proof that its action equals the RTK completion.",
+    "Passing this gate does not establish the completed-action likelihood fit.",
+    "Passing this gate does not establish nonlinear or compact-object viability.",
+    "Massive-neutrino anisotropic-stress extension is a later explicit gate."
+  ],
+  "pass_classification": "C10_REDUCED_U1_LINEAR_CONSTRAINT_SYSTEM_PASS_SCOPED",
+  "next_if_pass": "Implement the reduced system in a shadow CLASS integration with completion-off and near-deformation controls before any production likelihood evaluation."
+}
