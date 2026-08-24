@@ -44,6 +44,43 @@ The Euclidean norm in this normalized coordinate system is
 
 Thus the new seed is not a small perturbation inside the historical one-step local Hessian neighborhood. The dominant coordinate displacement alone is almost six frozen `h` steps, with simultaneous multi-step motion in `Om`, `ns`, and `Ob`.
 
+## Projection onto the historical local quadratic geometry
+
+The live historical state stores a positive-definite six-dimensional LCDM Hessian in the same normalized parameter geometry. Its eigenvalues are
+
+`[0.01076000540446865, 0.05095906682522973, 0.058585744253312616, 0.24761409818154007, 2.9769326338378908, 7.054039686019683]`.
+
+That Hessian was centered one `Ob` base step above the final accepted-score point; the accepted score itself was the exact `axis_1_-1` point. It is therefore used here only as a nearby local quadratic diagnostic, not as an exact Hessian at the final accepted-score coordinates.
+
+Projecting the normalized old-to-new displacement direction onto this eigensystem gives squared mode weights approximately
+
+- softest mode: `0.804312264`;
+- second-softest mode: `0.185425374`;
+- third mode: `0.007287283`;
+- fourth mode: `0.002266682`;
+- fifth mode: `0.000549233`;
+- stiffest mode: `0.000159164`.
+
+Thus about `98.97%` of the direction norm lies in the two softest historical Hessian modes.
+
+The corresponding local Rayleigh curvature is still positive:
+
+`(Delta y)^T H (Delta y) / ||Delta y||^2 = 0.021849479777598664`.
+
+For the full displacement the pure quadratic term would be
+
+`0.5 * (Delta y)^T H (Delta y) = +0.7123676722734782`.
+
+But the exact endpoint difference is instead
+
+`S_new - S_old = -0.5651417435669828`.
+
+Therefore the objective must depart strongly from the historical local quadratic approximation somewhere along the route to the new basin: the local curvature points uphill, while the distant endpoint is substantially downhill. This is precisely why the separately frozen exact old-to-new line-profile diagnostic is useful.
+
+Target for that diagnostic:
+
+`research/robustness/A5_LCDM_OLD_TO_NEW_BASIN_LINE_PROFILE_TARGET_v1.json`.
+
 ## Interpretation
 
 This explains how both facts can be true simultaneously:
