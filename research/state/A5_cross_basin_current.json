@@ -1,105 +1,81 @@
 {
-  "schema": "A5_B9_CROSS_BASIN_CURRENT_v3",
-  "updated_utc": "2026-08-24T12:19:00Z",
-  "status": "NEW_LCDM_BASELINE_BASIN_CONFIRMED_BASE_NONPD_EIGENMODE_RAYS_ACTIVE",
+  "schema": "A5_B9_CROSS_BASIN_CURRENT_v4",
+  "updated_utc": "2026-08-24T13:46:00Z",
+  "status": "LCDM_CROSS_BASIN_T1_SUPERSEDED_T1P1_RECENTER_FORWARD_LINE_ACTIVE",
   "objective": "matched-ultra-linstep2+dense-BOSS",
   "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
   "production_mapping": "eff",
-  "independent_cross_basin_replay": {
-    "status": "PASS",
-    "classification": "A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED",
-    "result": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json",
-    "score_tolerance_abs": 0.000002,
-    "all_four_score_replay_errors": 0.0
-  },
-  "historical_pair": {
+  "recenter_tolerance_S": 0.005,
+  "historical_exact_pair": {
     "S_LCDM": 1049.966118347761,
     "S_RTK": 1050.249912429787,
     "delta_RTK_minus_LCDM": 0.2837940820259064,
-    "status": "VALID_HISTORICAL_LOCAL_PAIR_NOT_CURRENT_BEST_KNOWN_PAIR"
+    "fresh_tree_scores_valid": true,
+    "LCDM_stationarity_semantics": "accepted-score point is not Hessian-certified; the historical positive-definite Hessian belonged to a neighboring point one Ob base step away",
+    "LCDM_audit": "research/robustness/A5_HISTORICAL_LCDM_STATIONARITY_SEMANTICS_AUDIT_2026-08-24.md",
+    "RTK_stationarity_semantics": "accepted score, base Hessian center and half Hessian center coincide exactly; final base and half are recenter-clear and PD",
+    "RTK_audit": "research/robustness/A5_RTK_SCORE_POINT_HESSIAN_CENTER_SYMMETRY_AUDIT_2026-08-24.md"
   },
-  "new_lcdm_seed": {
+  "independent_cross_basin_replay": {
+    "classification": "A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED",
+    "result": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json",
+    "all_four_score_replay_errors": 0.0
+  },
+  "superseded_t1_seed": {
     "S_A5": 1049.400976604194,
     "improvement_vs_historical_LCDM": 0.5651417435669828,
-    "cross_basin_replay_error": 0.0,
-    "base_stationarity_result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
-    "base_stationarity_decision": "RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
     "base_center_replay_abs_error": 0.0,
     "base_best_exact_improvement": 0.0,
     "base_positive_definite": false,
-    "base_min_eigenvalue": -0.002467341536255588
+    "base_min_eigenvalue": -0.002467341536255588,
+    "base_eigenmode_rays_max_exact_improvement": 0.0,
+    "status": "LOCAL_CHAIN_SUPERSEDED_BY_INDEPENDENT_EXACT_LINE_DIRECTION_DESCENT",
+    "old_half_policy": "Any scale-0.5 result already launched at this t=1 center is historical diagnostic only and cannot authorize paired replay."
   },
-  "cross_seed_pair": {
-    "S_LCDM": 1049.400976604194,
-    "S_RTK": 1050.2560245726381,
-    "delta_RTK_minus_LCDM": 0.8550479684440688,
-    "LCDM_improvement_vs_historical": 0.5651417435669828,
-    "RTK_change_vs_historical": 0.006112142851179669,
-    "status": "EXACT_FRESH_TREE_REPLAYED_SEEDS_NOT_YET_STATIONARITY_CERTIFIED_AS_PAIR"
+  "exact_line_profile": {
+    "result": "research/robustness/A5_LCDM_OLD_TO_NEW_BASIN_LINE_PROFILE_RESULT_v1.json",
+    "classification": "A5_LCDM_LINE_PROFILE_HISTORICAL_LOCAL_INTERPRETATION_AUDIT_REQUIRED",
+    "historical_endpoint_replay_error": 0.0,
+    "t1_endpoint_replay_error": 0.0,
+    "historical_near_descent": {"t":0.01,"improvement":0.013049143579337397},
+    "best_existing_sample": {
+      "t": 1.1,
+      "S_A5": 1049.3633203461363,
+      "improvement_vs_t1": 0.03765625805772288,
+      "improvement_vs_historical_LCDM": 0.6027980016247056,
+      "params": {
+        "As": 2.0983938219102527e-09,
+        "Ob": 0.04838888999978602,
+        "Om": 0.2584441959848294,
+        "h": 0.6805163510946404,
+        "lam": 0.0,
+        "ns": 0.96638264917319,
+        "zre": 7.674455444668947
+      }
+    },
+    "decision": "MANDATORY_RECENTER_TO_T1P1_BEFORE_HESSIAN"
   },
-  "provisional_best_known_mixed_pair": {
-    "S_LCDM_new_seed": 1049.400976604194,
+  "navigation_pair_at_best_existing_lcdm_sample": {
+    "S_LCDM": 1049.3633203461363,
     "S_RTK_historical_certified": 1050.249912429787,
-    "delta_RTK_minus_LCDM": 0.8489358255928892,
-    "status": "NAVIGATION_ONLY_DO_NOT_FREEZE_UNTIL_NEW_LCDM_STATIONARITY_AND_FRESH_TREE_REPLAY_PASS",
-    "reason": "The historical RTK A5 center remains lower than the B9 RTK seed by 0.006112142851179669."
+    "delta_RTK_minus_LCDM": 0.886592083650612,
+    "status": "NAVIGATION_ONLY_NOT_A_FROZEN_PAIRED_RESULT"
   },
-  "rtk_symmetric_cross_basin_diagnostic": {
-    "result": "research/robustness/A5_B9_CROSS_BASIN_RTK_STRIP_LENSING_DIAGNOSTIC_2026-08-24.md",
-    "base_B9_stencil_exact_points": 101,
-    "half_B9_stencil_exact_points": 101,
-    "best_baseline_score_in_each_inherited_stencil": 1050.2560245726381,
-    "best_label_in_each_inherited_stencil": "center",
-    "improvement_vs_historical_RTK": -0.006112142851179669,
-    "interpretation": "No inherited B9 RTK base/half point beats the historical certified RTK A5 point. This does not exclude a different, as-yet-unsearched RTK basin."
+  "active_forward_gate": {
+    "target": "research/robustness/A5_LCDM_T1P1_FORWARD_LINE_CONTINUATION_TARGET_v1.json",
+    "worker": "rtk/a5_lcdm_t1p1_forward_line_continuation.py",
+    "workflow": "main:.github/workflows/rtk-a5-lcdm-t1p1-forward-line.yml",
+    "t_grid": [1.0,1.05,1.1,1.15,1.2,1.3,1.5,1.7,1.9],
+    "frozen_before_scores_beyond_t1p1": true,
+    "decision_rule": "If improvement beyond t=1.1 exceeds 0.005, recenter at best sampled point; if best lies on upper boundary, preregister another extension. Only after forward direction is recenter-clear may a full Hessian be built at the exact current center."
   },
-  "artifact_reuse_diagnostic_not_a_certificate": {
-    "purpose": "Strip the standalone lensing contribution from the already-computed B9 LCDM-v7 stationarity stencils to predict the baseline A5 local geometry before the independent baseline stationarity chain finishes.",
-    "base_scale": {
-      "source_B9_run_id": 32601673857,
-      "source_B9_artifact_id": 9483908098,
-      "source_B9_artifact_digest": "sha256:112287b292c315a1d603d66d390e1caf1e63983dd40dae591c7275686305b9f7",
-      "A5_S_center": 1049.4009766041925,
-      "A5_best_exact_improvement_over_existing_B9_stencil_points": 0.0,
-      "A5_hessian_positive_definite": false,
-      "A5_min_eigenvalue_y": -0.0024673415362139557,
-      "A5_gradient_y": [-0.03868037464428653, 0.019149290754967296, -0.02691399037712472, -0.051116057802687465, -0.01316179040577481, 0.0417316825233911],
-      "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
-      "interpretation": "Soft non-PD base curvature with no exact descent; this pattern was independently reproduced by the formal A5 base-scale gate."
-    },
-    "half_scale": {
-      "source_B9_run_id": 32657629806,
-      "source_B9_artifact_id": 9499099343,
-      "source_B9_artifact_digest": "sha256:0b4fd505094e4d0884f9b2ddeea93f1f0efe2cb70baf2901c63d4544bdcaa9e9",
-      "A5_S_center": 1049.400976604194,
-      "A5_best_exact_S_over_existing_B9_stencil_points": 1049.4008066153126,
-      "A5_best_exact_improvement_over_existing_B9_stencil_points": 0.00016998888145280944,
-      "A5_best_exact_label": "axis_4_+1",
-      "A5_hessian_positive_definite": true,
-      "A5_min_eigenvalue_y": 0.00018344795941211117,
-      "A5_eigenvalues_y": [0.00018344795941211117, 0.004874018351865473, 0.01911856410563944, 0.0577979220536735, 0.7608069713161205, 1.7771793363901567],
-      "interpretation": "Inherited B9 half-scale diagnostic predicts a recenter-clear PD A5 half-scale result, but cannot replace the independent A5 half-scale gate."
-    },
-    "guard": "These inherited diagnostics cannot replace the independently preregistered A5 stationarity chain."
+  "rtk_cross_basin_status": {
+    "historical_certified_S": 1050.249912429787,
+    "best_B9_inherited_baseline_score": 1050.2560245726381,
+    "B9_neighborhood_improvement_vs_historical": -0.006112142851179669,
+    "interpretation": "No tested B9 RTK neighborhood point supersedes the historical RTK reference; this does not exclude another RTK basin elsewhere."
   },
-  "active_stationarity_gate": {
-    "stationarity_state": "research/state/A5_LCDM_cross_basin_stationarity_current.json",
-    "base_result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
-    "base_decision": "RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
-    "eigenmode_target": "research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_TARGET_v1.json",
-    "eigenmode_target_commit": "394d4f7e1c30c9b731117f9b69107a93cd6f3537",
-    "eigenmode_worker": "rtk/a5_lcdm_b9_seed_base_eigenmode_rays.py",
-    "eigenmode_worker_commit": "4cb8ee3c7ab8fe14fcd4f6e8f435468c17b6dbe0",
-    "eigenmode_workflow": "main:.github/workflows/rtk-a5-lcdm-b9-seed-base-eigenmode-rays.yml",
-    "eigenmode_workflow_commit": "1a1ef74e7aed7bb9e3c45d4e0ae54f27a4e0ae56",
-    "trigger_commit": "ca5f88aa0885d5f666537a8107f7d007e4f2d614",
-    "ray_amplitudes": [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0],
-    "decision_rule": {
-      "any_exact_ray_improvement_gt_0p005": "mandatory recenter at the best exact ray point",
-      "no_exact_ray_improvement_gt_0p005": "dispatch independent half-scale Hessian at the unchanged center"
-    }
-  },
-  "A5_global_state_policy": "Do not overwrite research/state/current.json accepted pair until the new LCDM basin passes the full baseline stationarity and independent fresh-tree replay chain.",
-  "A6_policy": "Statistics derived from the historical A5 pair remain historically valid only for that pair and must not be presented as current best-known model-selection numbers until A5 is re-frozen.",
-  "guard": "Historical A5 remains a valid local-basin certificate; the new result changes the best-known basin status, not the truth of the old local Hessian theorem. No global minimum claim is authorized."
+  "A5_global_state_policy": "Do not overwrite research/state/current.json accepted pair until the current best-known LCDM point passes exact recenter/stationarity and independent fresh-tree replay, followed by a common paired replay.",
+  "A6_policy": "Do not refresh model-selection statistics until A5 is re-frozen under a new separately declared protocol.",
+  "guard": "No global minimum, sigma/Wilks, posterior, AIC/BIC or Bayes claim follows from this navigation state."
 }
