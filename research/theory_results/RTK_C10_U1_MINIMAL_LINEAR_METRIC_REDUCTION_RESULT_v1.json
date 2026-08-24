@@ -1,0 +1,21 @@
+{
+  "classification": "C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_PASS_K_GT_0_SCOPED",
+  "critical_boundary": "The final compatibility relation is not yet declared redundant: it must be compared with the completed-action matter/Khronon conservation equations. Likewise Eth and total stress sources must be derived with explicit S_mix retained before CLASS implementation.",
+  "definitions": "D=3 lambda-1; r=lambda-1; L=partial^2 Fourier eigenvalue; Mq=8 pi G a q_total",
+  "final_compatibility": "D(Hprime-H^2) phi+Mqprime+2H Mq=8 pi G a^2 delta_p_total+(16 pi G a^2/3)L Pi_total",
+  "hamiltonian_lapse_equation": "[r Eth L-2D H^2] phi=-8 pi G a^2 r delta_mu_total-D H Mq+2D H psi_prime+2r Pcal L psi",
+  "lapse_denominator_fourier": "for L=-k^2: -(r Eth k^2+2D H^2); if the complete effective Eth>0, lambda>1, k>0 then no lapse-solve pole exists",
+  "momentum_shift_solve": "L B=[Mq-D(psi_prime+H phi)]/r",
+  "non_claims": [
+    "not a completed-action stress-source theorem",
+    "not a proof that pure-gravity Eth equals the complete effective lapse kernel",
+    "not a proof that the final compatibility equation follows from completed matter conservation",
+    "not an exact k=0 or lambda=1 theorem",
+    "not a CLASS or likelihood result"
+  ],
+  "propagation_statement": "After the independent A constraint fixes psi, momentum fixes B, Hamiltonian fixes phi and traceless fixes deltaA. The remaining trace relation contains no psi_double_prime, phi_prime or B_prime after momentum differentiation. This is consistent with absence of an extra propagating gravitational scalar in this scoped linear system.",
+  "status_scope": "GREEN_EXACT_ALGEBRAIC_METRIC_REDUCTION_COMPLETED_ACTION_STRESS_MAPPING_OPEN",
+  "target": "research/theory_targets/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_TARGET_v1.json",
+  "trace_after_traceless_special_bracket": "B_prime+2H B+8 pi G a^2 Pi_total; explicit deltaA, alpha1, Pcal and Ahat cancel exactly",
+  "traceless_deltaA_solve": "deltaA=Ahat psi+a[8 pi G a^2 Pi_total+B_prime+2H B-psi+Pcal phi-alpha1 L psi]"
+}
