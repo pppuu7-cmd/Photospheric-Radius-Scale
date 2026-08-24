@@ -1,0 +1,3 @@
+triggered_utc=2026-08-24T13:21:00Z
+purpose=dispatch_already_frozen_A5_LCDM_B9_seed_half_scale_gate
+science_change=none
