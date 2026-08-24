@@ -1,0 +1,65 @@
+name: RTK Route-B U1 static DBI reality domain
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-dbi-reality-domain-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-route-b-u1-static-dbi-reality-domain
+  cancel-in-progress: false
+
+jobs:
+  domain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen prerequisites and execute domain gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          s=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json'))
+          b=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json'))
+          t=json.load(open('research/RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_TARGET_v1.json'))
+          assert s['classification']=='RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_EXACT_PASS'
+          assert b['classification']=='RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_EXACT_PASS'
+          assert t['classification']=='RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_TARGET_V1_FROZEN'
+          print('STATIC_DBI_REALITY_DOMAIN_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/route_b_u1_static_dbi_reality_domain_gate.py
+          python3 rtk/route_b_u1_static_dbi_reality_domain_gate.py | tee u1_static_dbi_reality_domain.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_SCOPED_PASS_WITH_NONUNIFORM_TAIL_BOUND ' u1_static_dbi_reality_domain.log
+      - name: Persist scientific result to rtk-class-build
+        run: |
+          set -euo pipefail
+          mkdir -p research/theory_results
+          cp u1_static_dbi_reality_domain_result.json research/theory_results/RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_RESULT_v1.json
+          if git diff --cached --quiet; then
+            echo 'Result already persisted identically.'
+          else
+            git commit -m 'theory: persist static DBI reality-domain result'
+            git push origin HEAD:rtk-class-build
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-dbi-reality-domain
+          path: |
+            u1_static_dbi_reality_domain.log
+            u1_static_dbi_reality_domain_result.json
+          if-no-files-found: error
