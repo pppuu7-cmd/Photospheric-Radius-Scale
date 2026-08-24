@@ -1,0 +1,53 @@
+name: RTK C10 FLRW mismatch coefficient replay
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/c10_flrw_mismatch_coefficient_replay.py'
+      - 'research/theory_targets/RTK_C10_FLRW_MISMATCH_COEFFICIENT_REPLAY_TARGET_v1.json'
+      - '.github/rtk-c10-flrw-mismatch-coefficient-trigger.txt'
+      - '.github/workflows/rtk-c10-flrw-mismatch-coefficient-replay.yml'
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run replay
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c10_flrw_mismatch_coefficient_replay.py
+          python3 rtk/c10_flrw_mismatch_coefficient_replay.py | tee c10_flrw_mismatch_coefficient.log
+          grep -q '^C10_FLRW_MISMATCH_COEFFICIENT_REPLAY_PASS ' c10_flrw_mismatch_coefficient.log
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_flrw_mismatch_coefficient_replay_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_FLRW_MISMATCH_COEFFICIENT_REPLAY_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_FLRW_MISMATCH_COEFFICIENT_REPLAY_RESULT_v1.json
+            git commit -m 'Record C10 FLRW mismatch coefficient replay' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-flrw-mismatch-coefficient-replay
+          path: |
+            c10_flrw_mismatch_coefficient.log
+            c10_flrw_mismatch_coefficient_replay_result.json
+          if-no-files-found: error
