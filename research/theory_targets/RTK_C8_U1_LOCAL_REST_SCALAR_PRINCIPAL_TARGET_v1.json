@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_TARGET_v1",
+  "status": "FROZEN_BEFORE_LOCAL_REST_PRINCIPAL_RESULT",
+  "classification": "RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_TARGET_V1_FROZEN",
+  "question": "Does the frozen two-derivative U1+RTK scalar action provide a nondegenerate quadratic spatial restoring term for the intended scalar around the exact local PPN rest vacuum X_U=X_star?",
+  "fixed_scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "background": {
+    "metric": "N=1, invariant shift=0, g_ij=delta_ij",
+    "Sigma": "q t",
+    "q_relation": "q^2=2 X_star",
+    "X_U": "X_star>0",
+    "DBI_rest_point": ["P(X_star)=0", "P_X(X_star)=0"]
+  },
+  "perturbation": {
+    "definition": "Sigma=q[t+phi(t,x)]",
+    "D": "X_U/X_star=(1+dot phi)^2-(grad phi)^2",
+    "P_8piG": "2 mu_K^2/lambda_D [1-sqrt(1-lambda_D(sqrt(D)-1)^2)]",
+    "mixed_over_Mpl2": "(grad dot phi)^2/D"
+  },
+  "target_identities": [
+    "P_XX(X_star)=mu_K^2/(2 X_star^2), independent of lambda_D",
+    "c_s^2=P_X/(P_X+2 X P_XX)=0 at X=X_star",
+    "quadratic L_scalar/M_Pl^2 = mu_K^2 (dot phi)^2 + (grad dot phi)^2, up to an overall convention-fixed spatial integral and with no (grad phi)^2 term",
+    "the Fourier quadratic kernel is proportional to (mu_K^2+k^2) omega^2 and has no nonzero restoring omega^2(k) at this truncation",
+    "for time-independent phi the first nonzero DBI spatial term is +mu_K^2/4 [(grad phi)^2]^2, quartic in perturbations"
+  ],
+  "decision_rule": {
+    "if_all_identities_hold": "classify the two-derivative local-rest scalar principal symbol as spatially degenerate and require higher-spatial operators or another explicitly derived completion before a physical local scalar cutoff/dispersion claim",
+    "if_a_quadratic_spatial_term_survives": "do not use the degeneracy classification; derive its coefficient and repeat the cutoff analysis"
+  },
+  "expected_theorem_classification": "RTK_C8_U1_LOCAL_REST_SCALAR_SPATIAL_PRINCIPAL_DEGENERACY_EXACT_PASS",
+  "non_claims": [
+    "does not imply a ghost because the time-kinetic coefficient is positive on the stated branch",
+    "does not by itself prove an instability; zero quadratic spatial restoring force is a degeneracy statement",
+    "does not compute the full gravity-mixed strong-coupling scale",
+    "does not exclude higher-spatial operators from generating k^4 or higher dispersion",
+    "does not apply to the cosmological rolling production branch u=1+r>1 where P_X is nonzero"
+  ],
+  "next_gate_if_degenerate": "freeze the minimal higher-spatial scalar/gravity operator basis compatible with the fixed symmetries and derive which coefficients generate the leading local-rest spatial dispersion without spoiling the cosmological RTK kernel or the PPN/DOF gates"
+}
