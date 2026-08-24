@@ -1,0 +1,68 @@
+name: RTK Route-B U1 preferred frame inheritance
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  preferred-frame:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Require persisted O3 scalar-silence result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_PREFERRED_FRAME_INHERITANCE_TARGET_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_PREFERRED_FRAME_INHERITANCE_TARGET_V1_FROZEN'
+          r=json.load(open(t['prerequisite']['result']))
+          assert r['classification']==t['prerequisite']['required_classification']
+          print('PREFERRED_FRAME_PREREQUISITE_PASS')
+          PY
+          git rev-parse HEAD | tee u1_preferred_frame_source.txt
+      - name: Run preferred-frame theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_preferred_frame_inheritance.py
+          python3 rtk/route_b_u1_preferred_frame_inheritance.py | tee u1_preferred_frame.log
+          grep -q '^RTK_ROUTE_B_U1_PREFERRED_FRAME_ALPHA1_ALPHA2_EXACT_PASS ' u1_preferred_frame.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_preferred_frame_inheritance_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_PREFERRED_FRAME_ALPHA1_ALPHA2_EXACT_PASS'
+          assert r['alpha1_PPN']==0 and r['alpha2_PPN']==0
+          print('PREFERRED_FRAME_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-preferred-frame-inheritance
+          path: |
+            u1_preferred_frame.log
+            u1_preferred_frame_inheritance_result.json
+            u1_preferred_frame_source.txt
+          if-no-files-found: error
+      - name: Persist preferred-frame result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_preferred_frame_inheritance_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_PREFERRED_FRAME_RESULT_v1.json
+          git config user.name 'rtk-u1-preferred-frame'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_PREFERRED_FRAME_RESULT_v1.json
+          git commit -m 'Persist preferred-frame PPN theorem'
+          git push origin HEAD:rtk-class-build
