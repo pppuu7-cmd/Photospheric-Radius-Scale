@@ -1,0 +1,45 @@
+name: RTK C8 U1 static scalar reduction theorem
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c8-u1-static-scalar-reduction-trigger.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Replay static scalar reduction theorem
+        run: |
+          set -euo pipefail
+          python3 rtk/route_b_u1_static_scalar_reduction_gate.py | tee rtk_c8_u1_static_scalar_reduction.log
+          grep -q '^RTK_C8_U1_STATIC_SCALAR_REDUCTION_PASS$' rtk_c8_u1_static_scalar_reduction.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('research/RTK_C8_U1_STATIC_SCALAR_REDUCTION_RESULT_v1.json'))
+          assert r['classification']=='RTK_C8_U1_STATIC_SCALAR_REDUCTION_PASS'
+          assert all(r['checks'].values())
+          assert r['exact_algebra']['beta0_equivalent_contribution']=='2'
+          assert r['exact_algebra']['P_coeff_n1']=='0'
+          print('RTK_C8_U1_STATIC_REDUCTION_CI_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rtk-c8-u1-static-scalar-reduction
+          path: |
+            rtk_c8_u1_static_scalar_reduction.log
+            research/RTK_C8_U1_STATIC_SCALAR_REDUCTION_RESULT_v1.json
