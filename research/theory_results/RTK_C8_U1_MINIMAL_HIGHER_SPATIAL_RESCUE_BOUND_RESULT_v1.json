@@ -1,0 +1,65 @@
+{
+  "R_HS_over_eta4_at_worst": 596274202.6432619,
+  "classification": "RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_COMPATIBILITY_BOUND_REPLAY_PASS",
+  "eta4_upper_bounds_for_fractional_kernel_contamination": {
+    "0p01_percent": 1.677080771844625e-13,
+    "0p1_percent": 1.677080771844625e-12,
+    "0p5_percent": 8.385403859223124e-12,
+    "1_percent": 1.677080771844625e-11
+  },
+  "exact_identities": {
+    "MK2_ca2": "mu_K^2 Q x",
+    "R_HS_over_eta4": "Q k_com^2 a/(mu_K^2 x0)",
+    "d_ln_aQ_d_ln_a": "1-3r/(Q s^2)"
+  },
+  "interpretation": "For this single normalized (D^2 Sigma)^2 rescue, even percent-level preservation of the historical production RTK gradient kernel forces eta4 to be of order 1e-11 or smaller. This is a quantitative tuning signal, not a no-go: multi-operator cancellations, symmetry relations, or a different completion can change the conclusion.",
+  "local_rest_rescue_dispersion": "omega^2=eta4 k^4/(mu_K^2+k^2) for the isolated candidate operator with eta4>0",
+  "next_gate": "compare the required eta4 window with finite-amplitude local-rest canonical dynamics and with radiative generation estimates; then test a minimal multi-operator higher-spatial basis if a single eta4 term is too tuned",
+  "non_claims": [
+    "does not prove this is the unique higher-spatial completion",
+    "does not include higher-spatial metric/U1 operators or cancellations among several operators",
+    "does not establish technical naturalness of a tiny eta4",
+    "does not compute a scattering cutoff",
+    "does not replace a full likelihood replay with eta4 nonzero",
+    "does not use a new best-fit RTK point; it is tied to the historical certified reference until that reference is superseded"
+  ],
+  "reconstructed": {
+    "H0_over_c_Mpc_inv": 0.00023052738703802013,
+    "kmax_comoving_Mpc_inv": 3.4555185998222697,
+    "mu_K_Mpc_inv": 0.0001572550669049847,
+    "x0": 0.8115162588884344,
+    "z0": {
+      "MK": 1.1681315109161157,
+      "Q": 1.002134632964446,
+      "a": 1.0,
+      "ca2": 1.4738358401883842e-08,
+      "dln_aQ": 0.9999999557849248,
+      "identity_rel": 1.6452342657183475e-16,
+      "r": 0.002134632964446059,
+      "s": 380.16664803966626,
+      "x": 0.8115162588884344
+    }
+  },
+  "redshift_audit": {
+    "max_identity_relative_error": 8.024139781104346e-16,
+    "min_d_ln_aQ_d_ln_a": 0.9999999557849248,
+    "points": 1001,
+    "worst_contamination_z": 0.0,
+    "z_max": 1.0,
+    "z_min": 0.0
+  },
+  "reference": {
+    "Omega_K0": 0.2522864064078236,
+    "gamma": 0.05170371280716,
+    "h": 0.691103719964454,
+    "lambda_D": 219457.5727136581,
+    "production_kmax_h_per_Mpc": 5.0,
+    "redshift_interval": [
+      0.0,
+      1.0
+    ],
+    "role": "historical independently replay-certified RTK local reference; refresh if a new RTK production reference supersedes it"
+  },
+  "status": "SINGLE_OPERATOR_RESCUE_REQUIRES_VERY_SMALL_ETA4_TO_PRESERVE_PRODUCTION_KERNEL",
+  "target": "research/theory_targets/RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_TARGET_v1.json"
+}
