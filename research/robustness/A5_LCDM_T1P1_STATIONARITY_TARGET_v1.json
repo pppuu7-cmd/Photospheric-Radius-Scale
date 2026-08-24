@@ -44,5 +44,6 @@
     "if_recenter_clear_and_PD": "require independent fresh-tree replay at this exact center before A5 paired refreeze",
     "otherwise": "follow the same frozen recenter/ray logic; do not average scales"
   },
-  "guard": "This is local stationarity of the best exact LCDM point found on the frozen cross-basin line. It is not a global-minimum, significance, AIC/BIC, posterior or Bayes claim."
+  "guard": "This is local stationarity of the best exact LCDM point found on the frozen cross-basin line. It is not a global-minimum, significance, AIC/BIC, posterior or Bayes claim.",
+  "interpretation_guard": "This is local stationarity of the best exact LCDM point found on the frozen cross-basin line. It is not a global-minimum, significance, AIC/BIC, posterior or Bayes claim."
 }
