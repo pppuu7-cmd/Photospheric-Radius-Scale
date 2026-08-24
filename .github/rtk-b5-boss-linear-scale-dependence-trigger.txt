@@ -1,3 +1,5 @@
-triggered_utc=2026-08-24T13:34:00Z
+triggered_utc=2026-08-24T18:50:00Z
 scientific_target=research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_TARGET_v1.json
 scope=linear_growth_scale_dependence_only
+rerun_reason=no_persisted_result_after_original_90min_timeout_window
+science_change=none
