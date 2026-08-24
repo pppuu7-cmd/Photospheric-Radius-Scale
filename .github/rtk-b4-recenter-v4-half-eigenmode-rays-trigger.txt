@@ -1,3 +1,4 @@
-triggered_utc=2026-08-24T13:25:00Z
+triggered_utc=2026-08-24T18:50:30Z
 scientific_target=research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_TARGET_v1.json
 science_change=none_after_target_freeze
+rerun_reason=no_persisted_result_after_original_240min_timeout_window
