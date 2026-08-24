@@ -1,7 +1,7 @@
 {
-  "schema": "A5_B9_CROSS_BASIN_CURRENT_v2",
-  "updated_utc": "2026-08-24T08:43:00Z",
-  "status": "NEW_LCDM_BASELINE_BASIN_CONFIRMED_STATIONARITY_GATE_ACTIVE",
+  "schema": "A5_B9_CROSS_BASIN_CURRENT_v3",
+  "updated_utc": "2026-08-24T12:19:00Z",
+  "status": "NEW_LCDM_BASELINE_BASIN_CONFIRMED_BASE_NONPD_EIGENMODE_RAYS_ACTIVE",
   "objective": "matched-ultra-linstep2+dense-BOSS",
   "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
   "production_mapping": "eff",
@@ -18,6 +18,17 @@
     "delta_RTK_minus_LCDM": 0.2837940820259064,
     "status": "VALID_HISTORICAL_LOCAL_PAIR_NOT_CURRENT_BEST_KNOWN_PAIR"
   },
+  "new_lcdm_seed": {
+    "S_A5": 1049.400976604194,
+    "improvement_vs_historical_LCDM": 0.5651417435669828,
+    "cross_basin_replay_error": 0.0,
+    "base_stationarity_result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
+    "base_stationarity_decision": "RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
+    "base_center_replay_abs_error": 0.0,
+    "base_best_exact_improvement": 0.0,
+    "base_positive_definite": false,
+    "base_min_eigenvalue": -0.002467341536255588
+  },
   "cross_seed_pair": {
     "S_LCDM": 1049.400976604194,
     "S_RTK": 1050.2560245726381,
@@ -26,8 +37,24 @@
     "RTK_change_vs_historical": 0.006112142851179669,
     "status": "EXACT_FRESH_TREE_REPLAYED_SEEDS_NOT_YET_STATIONARITY_CERTIFIED_AS_PAIR"
   },
+  "provisional_best_known_mixed_pair": {
+    "S_LCDM_new_seed": 1049.400976604194,
+    "S_RTK_historical_certified": 1050.249912429787,
+    "delta_RTK_minus_LCDM": 0.8489358255928892,
+    "status": "NAVIGATION_ONLY_DO_NOT_FREEZE_UNTIL_NEW_LCDM_STATIONARITY_AND_FRESH_TREE_REPLAY_PASS",
+    "reason": "The historical RTK A5 center remains lower than the B9 RTK seed by 0.006112142851179669."
+  },
+  "rtk_symmetric_cross_basin_diagnostic": {
+    "result": "research/robustness/A5_B9_CROSS_BASIN_RTK_STRIP_LENSING_DIAGNOSTIC_2026-08-24.md",
+    "base_B9_stencil_exact_points": 101,
+    "half_B9_stencil_exact_points": 101,
+    "best_baseline_score_in_each_inherited_stencil": 1050.2560245726381,
+    "best_label_in_each_inherited_stencil": "center",
+    "improvement_vs_historical_RTK": -0.006112142851179669,
+    "interpretation": "No inherited B9 RTK base/half point beats the historical certified RTK A5 point. This does not exclude a different, as-yet-unsearched RTK basin."
+  },
   "artifact_reuse_diagnostic_not_a_certificate": {
-    "purpose": "Strip the standalone lensing contribution from the already-computed B9 LCDM-v7 stationarity stencils to predict the baseline A5 local geometry before the independent baseline stationarity run completes.",
+    "purpose": "Strip the standalone lensing contribution from the already-computed B9 LCDM-v7 stationarity stencils to predict the baseline A5 local geometry before the independent baseline stationarity chain finishes.",
     "base_scale": {
       "source_B9_run_id": 32601673857,
       "source_B9_artifact_id": 9483908098,
@@ -38,7 +65,7 @@
       "A5_min_eigenvalue_y": -0.0024673415362139557,
       "A5_gradient_y": [-0.03868037464428653, 0.019149290754967296, -0.02691399037712472, -0.051116057802687465, -0.01316179040577481, 0.0417316825233911],
       "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
-      "interpretation": "Soft non-PD base curvature with no exact descent on the inherited B9 stencil; independent baseline eigenmode-ray logic would be required if reproduced by the formal baseline base-scale gate."
+      "interpretation": "Soft non-PD base curvature with no exact descent; this pattern was independently reproduced by the formal A5 base-scale gate."
     },
     "half_scale": {
       "source_B9_run_id": 32657629806,
@@ -51,22 +78,25 @@
       "A5_hessian_positive_definite": true,
       "A5_min_eigenvalue_y": 0.00018344795941211117,
       "A5_eigenvalues_y": [0.00018344795941211117, 0.004874018351865473, 0.01911856410563944, 0.0577979220536735, 0.7608069713161205, 1.7771793363901567],
-      "interpretation": "Half-scale inherited diagnostic is recenter-clear at the 0.005 threshold and PD. This supports, but cannot replace, the independently preregistered baseline stationarity chain."
+      "interpretation": "Inherited B9 half-scale diagnostic predicts a recenter-clear PD A5 half-scale result, but cannot replace the independent A5 half-scale gate."
     },
-    "guard": "These Hessians were reconstructed from exact S_base_eff values inside B9 artifacts. They are navigation diagnostics only because their point selection/provenance belongs to the B9 computation. Do not promote them to the A5 stationarity certificate."
+    "guard": "These inherited diagnostics cannot replace the independently preregistered A5 stationarity chain."
   },
   "active_stationarity_gate": {
-    "target": "research/robustness/A5_LCDM_B9_SEED_STATIONARITY_TARGET_v1.json",
-    "target_status": "CONDITIONAL_PREREGISTRATION_BEFORE_CROSS_BASIN_REPLAY_RESULT_NOW_PREREQUISITE_SATISFIED",
-    "worker": "rtk/a5_lcdm_b9_seed_stationarity.py",
-    "workflow": "main:.github/workflows/rtk-a5-lcdm-b9-seed-stationarity.yml",
-    "workflow_fix_commit": "86659b167d2a12039a0384421b381d853957129e",
-    "dispatch_router_commit": "799f62e02378219f7fa4fb3ccbe88787241c90cf",
-    "required_first_scale": 1.0,
+    "stationarity_state": "research/state/A5_LCDM_cross_basin_stationarity_current.json",
+    "base_result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
+    "base_decision": "RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
+    "eigenmode_target": "research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_TARGET_v1.json",
+    "eigenmode_target_commit": "394d4f7e1c30c9b731117f9b69107a93cd6f3537",
+    "eigenmode_worker": "rtk/a5_lcdm_b9_seed_base_eigenmode_rays.py",
+    "eigenmode_worker_commit": "4cb8ee3c7ab8fe14fcd4f6e8f435468c17b6dbe0",
+    "eigenmode_workflow": "main:.github/workflows/rtk-a5-lcdm-b9-seed-base-eigenmode-rays.yml",
+    "eigenmode_workflow_commit": "1a1ef74e7aed7bb9e3c45d4e0ae54f27a4e0ae56",
+    "trigger_commit": "ca5f88aa0885d5f666537a8107f7d007e4f2d614",
+    "ray_amplitudes": [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0],
     "decision_rule": {
-      "exact_improvement_gt_0p005": "mandatory recenter",
-      "recenter_clear_and_PD": "independent half-scale at unchanged center",
-      "recenter_clear_and_nonPD": "freeze exact eigenmode rays before scale fallback"
+      "any_exact_ray_improvement_gt_0p005": "mandatory recenter at the best exact ray point",
+      "no_exact_ray_improvement_gt_0p005": "dispatch independent half-scale Hessian at the unchanged center"
     }
   },
   "A5_global_state_policy": "Do not overwrite research/state/current.json accepted pair until the new LCDM basin passes the full baseline stationarity and independent fresh-tree replay chain.",
