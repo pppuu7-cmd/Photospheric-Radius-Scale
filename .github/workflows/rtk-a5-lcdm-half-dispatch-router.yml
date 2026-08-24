@@ -1,0 +1,48 @@
+name: RTK A5 LCDM half-scale dispatch router
+
+on:
+  push:
+    paths:
+      - '.github/rtk-a5-lcdm-half-dispatch-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: rtk-a5-lcdm-half-dispatch-router
+  cancel-in-progress: false
+
+jobs:
+  dispatch-half:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Require persisted frozen-ray clearance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_RESULT_v1.json')
+          if not p.exists():
+              raise SystemExit('persisted A5 base eigenmode-ray result missing')
+          r=json.load(open(p))
+          assert r['classification']=='A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005'
+          assert r['max_exact_improvement_eff'] <= 0.005
+          s=json.load(open('research/state/A5_LCDM_cross_basin_stationarity_current.json'))
+          assert s['decision']=='BASE_NONPD_RAYS_CLEAR_HALF_SCALE_REQUIRED'
+          print('A5_HALF_DISPATCH_PREREQUISITE_PASS')
+          PY
+
+      - name: Dispatch already-frozen independent half Hessian
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run rtk-a5-lcdm-b9-seed-stationarity.yml --ref main -f scale=0.5
+          echo A5_HALF_DISPATCH_SENT
