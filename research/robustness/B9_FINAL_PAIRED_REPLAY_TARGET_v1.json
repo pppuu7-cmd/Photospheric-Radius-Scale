@@ -1,0 +1,60 @@
+{
+  "schema": "B9_FINAL_PAIRED_REPLAY_TARGET_v1",
+  "status": "PREREGISTERED_BEFORE_RTK_FRESH_TREE_RESULT_IS_INSPECTED",
+  "created_utc": "2026-08-24T08:01:00Z",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
+  "dispatch_precondition": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
+  "lcdm": {
+    "source": "research/robustness/B9_LCDM_V7_FINAL_STATIONARITY_RESOLUTION_2026-08-23.md",
+    "expected_S_B9": 1058.2173424114785,
+    "center": {
+      "h": 0.6803133881531521,
+      "Ob": 0.048406958808714234,
+      "Om": 0.25869220161756795,
+      "As": 2.099031119902081e-09,
+      "ns": 0.9662859140870312,
+      "zre": 7.684806125603674,
+      "lam": 0.0
+    }
+  },
+  "rtk": {
+    "source": "research/robustness/B9_RTK_RECENTER_HALF_DECISION_v1.json",
+    "expected_S_B9": 1059.2719553175134,
+    "center": {
+      "As": 2.0874265764520984e-09,
+      "Ob": 0.04679404670223316,
+      "Om": 0.2522369962493503,
+      "h": 0.6911169559022905,
+      "lam": 792605.2167661682,
+      "ns": 0.9645439945136476,
+      "zre": 7.329291125785135
+    }
+  },
+  "replay_abs_tolerance_each": 0.000002,
+  "expected_delta_S_RTK_minus_LCDM": 1.0546129060349,
+  "delta_replay_abs_tolerance": 0.000004,
+  "environment_requirements": {
+    "fresh_CLASS_tree": true,
+    "CLASS_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "Pantheon_sha": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+    "Planck_R3_archive_sha256": "0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6",
+    "Python": "3.12.3",
+    "NumPy": "2.5.2",
+    "SciPy": "1.18.0",
+    "clipy_like": "0.15"
+  },
+  "pass_conditions": [
+    "RTK fresh-tree certification precondition has passed",
+    "both exact centers evaluate successfully under one common fresh environment",
+    "abs(S_LCDM_replay - expected_S_LCDM) <= 2e-6",
+    "abs(S_RTK_replay - expected_S_RTK) <= 2e-6",
+    "abs((S_RTK_replay-S_LCDM_replay) - expected_delta) <= 4e-6",
+    "lensing product and nuisance/default-tail contract are unchanged",
+    "all provenance locks pass"
+  ],
+  "on_pass": "Freeze the replayed local B9 Delta S and mark B9 matched local lensing-robustness comparison closed, while retaining global/model-selection non-claims.",
+  "on_fail": "Do not freeze Delta S; classify the failed replay/provenance condition and preregister any corrective rerun before changing implementation or tolerances.",
+  "interpretation_guard": "Local B9 robustness comparison only; not a global minimum, significance, AIC/BIC, posterior preference or Bayes factor."
+}
