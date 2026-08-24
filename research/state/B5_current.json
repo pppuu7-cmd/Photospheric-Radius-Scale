@@ -1,0 +1,17 @@
+{
+  "classification": "B5_LINEAR_SCALE_DEPENDENCE_STRICT_SUBPERCENT",
+  "guard": "Passing linear scale-dependence cannot by itself close B5.",
+  "lcdm_control_max_abs_relative": 1.1957563648357095e-05,
+  "primary_rtk_max_abs_relative": 0.00017612134061906204,
+  "remaining_B5_scope": [
+    "survey_window",
+    "Alcock_Paczynski_mapping",
+    "nonlinear_RSD_template",
+    "bias_marginalization",
+    "full_shape_or_justified_bound"
+  ],
+  "result": "research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_RESULT_v1.json",
+  "schema": "RTK_B5_CURRENT_STATE_v1",
+  "status": "LINEAR_SCALE_DEPENDENCE_SUBGATE_COMPLETE",
+  "updated_utc": "2026-08-24T22:59:39.371214Z"
+}
