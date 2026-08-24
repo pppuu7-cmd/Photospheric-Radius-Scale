@@ -1,0 +1,24 @@
+{
+  "A_constraint": "4(1-gamma)=0",
+  "allowed_lapse_deformation": "arbitrary Delta_H, including the linearized finite-P(X_U) lapse source",
+  "classification": "RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_EXACT_PASS",
+  "external_equations": "arXiv:1310.6666 Eqs.(5.28),(5.29), same notation as existing repo O2 gate",
+  "gamma_PPN_O2": 1,
+  "next_gate": "derive the finite-mu_K Newton/lapse Green-function correction or a rigorous local bound, then derive the full static O(v^4) beta_PPN equations with explicit P(X_U)",
+  "non_claims": [
+    "does not certify exact Newton radial law or scale-independent G_N with finite P(X_U)",
+    "does not certify beta_PPN at O(v^4)",
+    "does not certify moving-source alpha1 or alpha2",
+    "does not address compact objects, radiative stability or UV cutoff"
+  ],
+  "parameters": {
+    "a1": 1,
+    "a2": 0,
+    "gamma1": -1,
+    "kappa": 1,
+    "sigma2": 0
+  },
+  "spatial_dynamical_equation": "1-gamma=0",
+  "status": "STATIC_GAMMA_O2_ROBUST_TO_ARBITRARY_LAPSE_EQUATION_DEFORMATION",
+  "why_P_does_not_enter_these_two_O2_equations": "P(N=1)=P_N(N=1)=0; P has no A dependence, and its spatial-metric measure source starts quadratic in the weak lapse"
+}
