@@ -1,0 +1,86 @@
+name: RTK Route-B U1 completion shadow interface
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-completion-shadow-interface-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  shadow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target and semantic separation
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_TARGET_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_TARGET_V1_FROZEN'
+          assert t['status']=='FROZEN_BEFORE_SHADOW_INTERFACE_RESULT'
+          print('SHADOW_INTERFACE_TARGET_PASS')
+          PY
+          grep -q 'lambda_D' rtk/khronon_background.h
+          if grep -R -n 'lambda_D' rtk/u1_elliptic_completion_shadow.[ch] rtk/u1_elliptic_completion_shadow_test.c; then
+            echo 'lambda_D must not enter the independent completion shadow interface' >&2
+            exit 1
+          fi
+      - name: Compile and run standalone shadow interface
+        run: |
+          set -euo pipefail
+          cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic \
+            -Irtk rtk/u1_elliptic_completion_shadow.c rtk/u1_elliptic_completion_shadow_test.c \
+            -lm -o /tmp/u1_shadow_test
+          /tmp/u1_shadow_test | tee u1_completion_shadow_interface.log
+          grep -q '^RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_PASS$' u1_completion_shadow_interface.log
+          git rev-parse HEAD | tee u1_completion_shadow_interface_source.txt
+      - name: Create authoritative shadow result
+        run: |
+          python3 - <<'PY'
+          import json
+          out={
+            'classification':'RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_PASS',
+            'status':'GREEN_STANDALONE_SHADOW_INTERFACE_PROJECTED_CONSTRAINT_IMPLEMENTATION_PENDING',
+            'target':'research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_TARGET_v1.json',
+            'files':['rtk/u1_elliptic_completion_shadow.h','rtk/u1_elliptic_completion_shadow.c','rtk/u1_elliptic_completion_shadow_test.c'],
+            'certified':['lambda_HL is an independent strictly-greater-than-one parameter in this shadow module','M_c>0 and eta0>0 validation','k_phys=k_com/a','Q_over_H0=M_c^2/(M_c^2+k_phys^2)','a1_eff=1-Q_over_H0','exact k=0 Q/H0=1 and a1_eff=0','high-k recovery trend','H2_ratio=2/(3 lambda_HL-1)','lambda_HL->1+ near-GR continuity','shadow interface contains no lambda_D symbol while existing Khronon background retains lambda_D'],
+            'critical_boundary':'The projected U1 metric/source constraint equations are not yet encoded; this module must not be connected to likelihood as if a1_eff were merely a fluid sound-speed correction.',
+            'non_claims':['not a CLASS completion implementation','not a cosmological perturbation constraint solver','not a likelihood result','not a same-action PPN transfer certificate','does not select M_c or lambda_HL']
+          }
+          open('u1_completion_shadow_interface_result.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-completion-shadow-interface
+          path: |
+            u1_completion_shadow_interface.log
+            u1_completion_shadow_interface_result.json
+            u1_completion_shadow_interface_source.txt
+            research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_TARGET_v1.json
+            rtk/u1_elliptic_completion_shadow.h
+            rtk/u1_elliptic_completion_shadow.c
+            rtk/u1_elliptic_completion_shadow_test.c
+          if-no-files-found: error
+      - name: Persist result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_completion_shadow_interface_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          mkdir -p research/theory_results
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_RESULT_v1.json
+          git commit -m 'Record U1 completion shadow interface result'
+          git push origin HEAD:rtk-class-build
