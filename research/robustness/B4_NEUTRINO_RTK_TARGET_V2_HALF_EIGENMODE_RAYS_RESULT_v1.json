@@ -1,0 +1,184 @@
+{
+  "S_center_eff": 1050.5880475140204,
+  "best_mode": {
+    "best_alpha": 2.0,
+    "best_exact_S_eff": 1050.5570755438391,
+    "best_improvement_eff": 0.03097197018132647,
+    "best_params": {
+      "As": 2.0942396553760237e-09,
+      "Ob": 0.04722465236778029,
+      "Om": 0.25288350590823344,
+      "h": 0.6885177947925911,
+      "lam": 3042951.5317563037,
+      "ns": 0.9657754309483562,
+      "zre": 7.562798985121613
+    },
+    "mode_index": 0,
+    "parent_eigenvalue_y": -0.007154172940511002,
+    "scores": [
+      {
+        "S_eff": 1050.6595126080706,
+        "S_k01": 1050.6612889886385,
+        "alpha": -2.0
+      },
+      {
+        "S_eff": 1050.5935069210907,
+        "S_k01": 1050.5953004180162,
+        "alpha": -1.0
+      },
+      {
+        "S_eff": 1050.581283008127,
+        "S_k01": 1050.583085066726,
+        "alpha": -0.5
+      },
+      {
+        "S_eff": 1050.5652549894621,
+        "S_k01": 1050.5670741779381,
+        "alpha": 0.5
+      },
+      {
+        "S_eff": 1050.5764592251357,
+        "S_k01": 1050.5782869833579,
+        "alpha": 1.0
+      },
+      {
+        "S_eff": 1050.5570755438391,
+        "S_k01": 1050.5589204468183,
+        "alpha": 2.0
+      }
+    ],
+    "selection_reason": "negative"
+  },
+  "center": {
+    "As": 2.0920212896820786e-09,
+    "Ob": 0.04722200104991654,
+    "Om": 0.2528393318824633,
+    "h": 0.6885660022475836,
+    "lam": 3043326.1774413693,
+    "ns": 0.9657332769496741,
+    "zre": 7.506210209218662
+  },
+  "classification": "B4_TARGET_V2_HALF_EIGENMODE_RECENTER_REQUIRED",
+  "max_exact_improvement_eff": 0.03097197018132647,
+  "mode_results": [
+    {
+      "best_alpha": 2.0,
+      "best_exact_S_eff": 1050.5570755438391,
+      "best_improvement_eff": 0.03097197018132647,
+      "best_params": {
+        "As": 2.0942396553760237e-09,
+        "Ob": 0.04722465236778029,
+        "Om": 0.25288350590823344,
+        "h": 0.6885177947925911,
+        "lam": 3042951.5317563037,
+        "ns": 0.9657754309483562,
+        "zre": 7.562798985121613
+      },
+      "mode_index": 0,
+      "parent_eigenvalue_y": -0.007154172940511002,
+      "scores": [
+        {
+          "S_eff": 1050.6595126080706,
+          "S_k01": 1050.6612889886385,
+          "alpha": -2.0
+        },
+        {
+          "S_eff": 1050.5935069210907,
+          "S_k01": 1050.5953004180162,
+          "alpha": -1.0
+        },
+        {
+          "S_eff": 1050.581283008127,
+          "S_k01": 1050.583085066726,
+          "alpha": -0.5
+        },
+        {
+          "S_eff": 1050.5652549894621,
+          "S_k01": 1050.5670741779381,
+          "alpha": 0.5
+        },
+        {
+          "S_eff": 1050.5764592251357,
+          "S_k01": 1050.5782869833579,
+          "alpha": 1.0
+        },
+        {
+          "S_eff": 1050.5570755438391,
+          "S_k01": 1050.5589204468183,
+          "alpha": 2.0
+        }
+      ],
+      "selection_reason": "negative"
+    },
+    {
+      "best_alpha": 2.0,
+      "best_exact_S_eff": 1050.5851981307649,
+      "best_improvement_eff": 0.002849383255579596,
+      "best_params": {
+        "As": 2.092027173875241e-09,
+        "Ob": 0.04722197699678487,
+        "Om": 0.2528390728437946,
+        "h": 0.6885662500275378,
+        "lam": 3199360.2329859375,
+        "ns": 0.9657334310815153,
+        "zre": 7.506359769309784
+      },
+      "mode_index": 1,
+      "parent_eigenvalue_y": 0.00013489280964015747,
+      "scores": [
+        {
+          "S_eff": 1050.5882444448341,
+          "S_k01": 1050.5900534436355,
+          "alpha": -2.0
+        },
+        {
+          "S_eff": 1050.5881417125477,
+          "S_k01": 1050.5899515377291,
+          "alpha": -1.0
+        },
+        {
+          "S_eff": 1050.5880497276398,
+          "S_k01": 1050.5898599555023,
+          "alpha": -0.5
+        },
+        {
+          "S_eff": 1050.5879841346025,
+          "S_k01": 1050.5897951456202,
+          "alpha": 0.5
+        },
+        {
+          "S_eff": 1050.5879498366933,
+          "S_k01": 1050.5897612292856,
+          "alpha": 1.0
+        },
+        {
+          "S_eff": 1050.5851981307649,
+          "S_k01": 1050.5870102658255,
+          "alpha": 2.0
+        }
+      ],
+      "selection_reason": "soft_positive_resolution_audit"
+    }
+  ],
+  "next_gate": "freeze best exact ray point as next B4 recenter target",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "parent_half_artifact_id": 9463331303,
+  "parent_half_run_id": 32514077002,
+  "production_mapping": "eff",
+  "provenance": {
+    "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "research_source_commit": "58171cc32bbb74b7901ac8418fc74de52879bc6b",
+    "target_file": "../research/robustness/b4_neutrino_rtk_target_v2_half_eigenmode_rays_target_v1.json"
+  },
+  "ray_amplitudes": [
+    -2.0,
+    -1.0,
+    -0.5,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "recenter_tolerance_S": 0.005,
+  "target_sha256": "9c468380f8583072f7039905b616a4b03dea89d80075d6be89743ed07a3b76f2",
+  "warning": "Local B4 neutrino robustness only; not global evidence and not a replacement for massless A1-A5."
+}

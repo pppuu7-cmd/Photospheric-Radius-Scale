@@ -1,0 +1,24 @@
+{
+  "S_center_eff": 1050.5880475140204,
+  "center": {
+    "As": 2.0920212896820786e-09,
+    "Ob": 0.04722200104991654,
+    "Om": 0.2528393318824633,
+    "h": 0.6885660022475836,
+    "lam": 3043326.1774413693,
+    "ns": 0.9657332769496741,
+    "zre": 7.506210209218662
+  },
+  "classification": "B4_TARGET_V2_HALF_EIGENMODE_RECENTER_REQUIRED",
+  "guard": "B4 is a separate minimal-neutrino objective; do not compare its absolute score directly with massless A1-A5.",
+  "max_exact_improvement_eff": 0.03097197018132647,
+  "next_gate": "Freeze best exact ray point as next B4 RTK recenter target before any new Hessian.",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "recenter_tolerance_S": 0.005,
+  "result": "research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json",
+  "schema": "RTK_B4_CURRENT_STATE_v1",
+  "status": "RECENTER_REQUIRED_FROM_HALF_EIGENMODE_RAYS",
+  "updated_utc": "2026-08-24T12:56:05Z",
+  "workflow_head_sha": "57c0349f0be222a46bead296d30c15d3baa261a6",
+  "workflow_run_id": 32727557536
+}
