@@ -1,0 +1,16 @@
+{
+  "classification": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
+  "cross_run_replay_abs_error": 0.0,
+  "expected_center_S_eff": 1059.2719553175134,
+  "fresh_best_exact_S_eff": 1059.2719553175134,
+  "fresh_best_improvement_eff": 0.0,
+  "fresh_center_S_eff": 1059.2719553175134,
+  "fresh_min_eigenvalue_eff": 0.0005825694001738223,
+  "fresh_positive_definite_eff": true,
+  "observed_utc": "2026-08-24T10:51:34Z",
+  "tolerance": 2e-06,
+  "workflow_conclusion": "success",
+  "workflow_head_sha": "f1101bb060e83484e5a1e6cb8c4282a3c2f50009",
+  "workflow_run_id": 32704596153,
+  "workflow_run_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32704596153"
+}

@@ -198,3 +198,19 @@ If fresh-tree **FAIL**:
 ## 12. Interpretation guards
 
 Nothing in B9 by itself establishes global model preference, a Bayes factor, a Wilks/sigma significance, a fully nonlinear lensing prediction, or validity of the later projectable-U(1) completion in CLASS. The phenomenological B9 `lambda_D` coordinate is also not to be silently identified with later `lambda_HL` theory parameters.
+
+
+## 13. RTK independent fresh-tree result — automatic record
+
+<!-- B9_RTK_FRESH_TREE_RESULT:AUTO -->
+
+The preregistered RTK independent fresh-tree certification passed. Canonical result: `research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json`.
+
+- run `32704596153`
+- fresh center `S_B9 = 1059.2719553175134`
+- cross-run replay absolute error `0.0`
+- exact best improvement `0.0`
+- fresh Hessian minimum eigenvalue `0.0005825694001738223`
+- positive definite `True`
+
+The next gate remains the previously preregistered final paired exact replay.
