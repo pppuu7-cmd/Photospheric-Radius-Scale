@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUINTIC_TIME_TARGET_v1",
+  "status": "FROZEN_AFTER_QUARTIC_PASS_BEFORE_QUINTIC_RESULT",
+  "classification": "RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUINTIC_TIME_TARGET_V1_FROZEN",
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_RESULT_v1.json",
+  "question": "At what perturbative order does time dependence first survive after the enhanced local-rest lapse constraint, and what is its leading functional form?",
+  "power_counting": {
+    "phi": "O(epsilon)",
+    "F": "1+dot(phi)-B.grad(phi)",
+    "dot_phi": "O(epsilon)",
+    "B_grad_phi": "O(epsilon^2) for perturbative scalar shift B=O(epsilon)",
+    "y=Y-1": "O(epsilon^2)",
+    "J=|grad phi|^2/2": "O(epsilon^2)",
+    "quartic_bracket": "Q4[y,J]=|grad y|^2+mu_K^2(y-J)^2"
+  },
+  "target_identities": [
+    "the O(epsilon^5) dependence on the O(epsilon^3) auxiliary correction y3 is proportional to the quartic y2 Euler-Lagrange equation and therefore vanishes after y2 is eliminated",
+    "the only surviving explicit quintic time-dependent contribution is dot(phi) times the on-shell quartic spatial density/function(al), while B.grad(phi) enters no earlier than O(epsilon^6)",
+    "in composite Fourier notation, S5_time/M_Pl^2 = integral dot(phi) * [ J mu_K^2(-Delta)/(mu_K^2-Delta) J ] up to spatial integrations by parts defining the same quartic functional",
+    "there is still no quadratic kinetic operator or invertible velocity Hessian about phi=0"
+  ],
+  "decision_rule": {
+    "if_target_identities_hold": "classify local-rest perturbation theory as nonlinear-time-degenerate: first time dependence appears linearly at quintic order on top of a vanishing quadratic propagator; require canonical/Dirac rank analysis before distinguishing nonlinear constraint removal from strong coupling",
+    "if_a_lower_or_quadratic_time_kernel_reappears": "reopen the local-rest rank-enhancement interpretation and derive that kernel explicitly"
+  },
+  "non_claims": [
+    "does not by itself prove infinite strong coupling",
+    "does not compute a scattering amplitude or cutoff scale",
+    "does not establish the nonlinear number of local-rest degrees of freedom",
+    "does not include higher-spatial completion operators",
+    "does not apply to the rolling cosmological branch or strong-field/rotating backgrounds"
+  ],
+  "next_gate_if_pass": "perform a local canonical/Dirac rank analysis through the first nonlinear time-dependent order and in parallel quantify the minimal higher-spatial rescue coefficient allowed by the cosmological RTK kernel"
+}
