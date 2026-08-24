@@ -1,0 +1,44 @@
+{
+  "schema": "B4_NEUTRINO_RTK_RECENTER_V4_QUARTER_STATIONARITY_TARGET_v1",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_V4_HALF_EIGENMODE_RAY_RESULT",
+  "classification": "B4_NEUTRINO_RTK_RECENTER_V4_QUARTER_STATIONARITY_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "stencil_scale": 0.25,
+  "center": {
+    "As": 2.0953040609439933e-09,
+    "Ob": 0.0472430928395221,
+    "Om": 0.25308763984439225,
+    "h": 0.6883522889542522,
+    "lam": 3009377.414812341,
+    "ns": 0.9657964452888419,
+    "zre": 7.583793661013263
+  },
+  "expected_center_score_eff": 1050.5511025943172,
+  "axes": ["loglam", "h", "Ob", "Om", "As", "ns", "zre"],
+  "steps": {
+    "loglam": 0.0125,
+    "h": 0.0000875,
+    "Ob": 0.0000175,
+    "Om": 0.000175,
+    "As": 1e-12,
+    "ns": 0.0000875,
+    "zre": 0.0175
+  },
+  "score_replay_tolerance_abs": 0.000002,
+  "positive_definite_threshold": 1e-8,
+  "prerequisite": {
+    "required_result": "research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_RESULT_v1.json",
+    "required_classification": "B4_RECENTER_V4_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
+    "required_max_exact_improvement_lte": 0.005,
+    "same_center_required": true
+  },
+  "decision_rule": {
+    "quarter_best_improvement_gt_0p005": "mandatory recenter; freeze new target before any further Hessian",
+    "quarter_recenter_clear_but_nonPD": "freeze exact quarter eigenmode rays before any smaller-scale fallback",
+    "quarter_recenter_clear_and_PD": "require independent fresh-tree quarter-scale replay before B4 RTK local certification"
+  },
+  "frozen_before_prerequisite_ray_scores": true,
+  "guard": "Conditional target only. It must not execute unless the persisted v4 half-ray result satisfies the frozen prerequisite. B4 remains a separate neutrino objective and no global evidence follows."
+}
