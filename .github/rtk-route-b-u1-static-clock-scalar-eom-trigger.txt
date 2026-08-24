@@ -1,0 +1,2 @@
+triggered_utc=2026-08-24T14:37:00Z
+purpose=execute frozen exact static-clock scalar-EOM theorem on rtk-class-build
