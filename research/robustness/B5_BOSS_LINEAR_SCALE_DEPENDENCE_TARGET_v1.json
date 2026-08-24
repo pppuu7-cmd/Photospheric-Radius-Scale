@@ -1,0 +1,63 @@
+{
+  "schema": "B5_BOSS_LINEAR_SCALE_DEPENDENCE_TARGET_v1",
+  "status": "FROZEN_BEFORE_SCALE_DEPENDENCE_SCORES",
+  "classification": "B5_BOSS_LINEAR_SCALE_DEPENDENCE_TARGET_V1_FROZEN",
+  "question": "Is the RTK linear growth prediction sufficiently scale-independent across the actual BOSS DR12 RSD fitting window that the production compressed single-fsigma8 mapping is internally defensible at the theory-output level?",
+  "scope": "linear-theory scale-dependence diagnostic only; does not close survey-window, AP, bias, nonlinear-template or full-shape robustness",
+  "objective_context": "matched-ultra-linstep2+dense-BOSS",
+  "production_mapping": "eff",
+  "production_mapping_definition": "fsigma8_eff(z)=d sigma8(z)/d ln a using the same dense-z quadratic derivative used by the production BOSS likelihood",
+  "comparison_mapping_definition": "fsigma8(k,z)=0.5*d ln P(k,z)/d ln a * sigma8(z)",
+  "redshifts": [0.38, 0.51, 0.61],
+  "k_h_Mpc": [0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.16, 0.2, 0.24],
+  "boss_window_provenance": {
+    "reference": "Gil-Marin et al., MNRAS 460 (2016) 4188, BOSS DR12 monopole/quadrupole RSD analysis",
+    "monopole_kmin_h_Mpc": 0.02,
+    "quadrupole_kmin_h_Mpc": 0.04,
+    "kmax_h_Mpc": 0.24,
+    "note": "The cited analysis jointly constrains fsigma8 and AP geometry; these cuts define a conservative physical k-window for this scale-dependence audit, not a new likelihood."
+  },
+  "rtk_point": {
+    "semantics": "historical A5 RTK accepted point; still lower than the tested B9-derived RTK neighborhood and retained as current RTK reference while A5 LCDM is being re-frozen",
+    "As": 2.0877827951474356e-09,
+    "Ob": 0.046800730927437424,
+    "Om": 0.2522864064078236,
+    "h": 0.691103719964454,
+    "lam": 219457.5727136581,
+    "ns": 0.9645577770978523,
+    "zre": 7.328459220286924
+  },
+  "lcdm_control_point": {
+    "semantics": "independently replayed new A5 LCDM seed used only as a scale-independence control, not as a paired-score certificate",
+    "As": 2.099031119902081e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.684806125603674
+  },
+  "metrics": {
+    "primary": "max over z,k of abs(fs8_k/fs8_eff - 1) for RTK",
+    "secondary": [
+      "per-redshift max and RMS relative deviation",
+      "peak-to-peak fs8(k,z) spread divided by abs(fs8_eff(z))",
+      "same metrics for LCDM as numerical/control baseline",
+      "difference between production eff and existing k=0.1 mapping"
+    ]
+  },
+  "interpretation_bands_preregistered": {
+    "STRICT_SUBPERCENT": "primary <= 0.01; supports theory-output scale-independence of compressed fsigma8, but B5 survey/nonlinear closure remains open",
+    "PERCENT_LEVEL": "0.01 < primary <= 0.03; scale dependence is non-negligible and requires explicit propagation through survey/full-shape modeling before adequacy can be claimed",
+    "MATERIAL_GT_3_PERCENT": "primary > 0.03; compressed single-fsigma8 mapping is not adequate as a stand-alone representation of RTK growth over the BOSS fitting window"
+  },
+  "three_percent_reference_scope": "3 percent is used only as a modeling-accuracy reference because the cited BOSS mock validation reported fsigma8 recovery below about 3 percent for LOWZ and 2 percent for CMASS at kmax<=0.24 h/Mpc; it is not a statistical confidence threshold.",
+  "locked_environment": {
+    "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "production_objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+    "massless_neutrino_block": true,
+    "dense_z_and_ultra_settings_from": "research/state/current.json"
+  },
+  "frozen_before_scores": true,
+  "guard": "This gate can close only B5 sub-question (1): linear growth scale-dependence over the BOSS k-window. It cannot by itself validate survey windows, Alcock-Paczynski remapping, nonlinear RSD templates, bias marginalization or full-shape likelihood use."
+}
