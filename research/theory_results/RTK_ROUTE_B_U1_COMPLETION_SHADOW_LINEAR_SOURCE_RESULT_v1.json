@@ -1,0 +1,21 @@
+{
+  "api": "rtk_u1_shadow_linear_source_eval",
+  "certified": [
+    "delta_Q=Q_over_H0*delta_H0",
+    "delta_J_A=-a1_eff*delta_H0",
+    "delta_p_nu=+a1_eff*delta_H0",
+    "delta_J_A+delta_p_nu=0 by construction",
+    "k=0 gives delta_Q=delta_H0 and zero gauge-pair source",
+    "higher physical k increases the filtered gauge-pair fraction for fixed delta_H0"
+  ],
+  "classification": "RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_PASS",
+  "hard_guard": "This executable source boundary is not connected to current khronon effective-fluid cs2/w equations. Final CLASS insertion requires the separately frozen reduced U1 metric-constraint mapping.",
+  "non_claims": [
+    "not a CLASS metric solver",
+    "not a likelihood result",
+    "not nonlinear resolvent dynamics",
+    "not a same-action PPN transfer certificate"
+  ],
+  "status": "GREEN_EXECUTABLE_LINEAR_SOURCE_BOUNDARY_REDUCED_METRIC_MAPPING_PENDING",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_TARGET_v1.json"
+}
