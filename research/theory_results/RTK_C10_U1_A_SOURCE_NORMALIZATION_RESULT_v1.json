@@ -1,0 +1,22 @@
+{
+  "A_constraint_fourier_k_gt_0": "psi = -4 pi G a^2 delta H0/(k^2+a^2 M_c^2)",
+  "GR_transfer_ratio_k_gt_0": "psi/psi_GR = a1_eff",
+  "a1_eff": "k^2/(k^2+a^2 M_c^2) = k_phys^2/(k_phys^2+M_c^2)",
+  "classification": "C10_U1_A_SOURCE_NORMALIZATION_AND_HELMHOLTZ_CONSTRAINT_PASS_SCOPED",
+  "critical_correction": "Prior internal files that write delta_J_A_total=-a1_eff delta H0 use the Hamiltonian/projected A-coefficient convention. They must not be inserted as the primary-literature J_A without the sign and factor-of-two translation certified here.",
+  "equivalent_helmholtz_form": "(k^2+a^2 M_c^2) psi = -4 pi G a^2 delta H0",
+  "high_k_limit": "psi/psi_GR -> 1",
+  "internal_hamiltonian_A_coefficient": "Q-H0 = -a1_eff H0 after the elliptic constraint",
+  "linear_literature_delta_J_A": "2 a1_eff delta H0",
+  "literature_J_A": "2(H0-Q) = +2 a1_eff H0 on the frozen family-I normalization",
+  "low_k_limit_k_to_0_plus": "psi/psi_GR -> 0; exact k=0 remains the separately certified homogeneous constraint and is not obtained by dividing by k^2",
+  "non_claims": [
+    "does not close the prepotential constraint normalization",
+    "does not close Hamiltonian/momentum/trace/traceless equations",
+    "does not implement CLASS or produce a likelihood score",
+    "does not assert the exact homogeneous k=0 mode is fixed by the divided Helmholtz equation"
+  ],
+  "prepotential_boundary": "The canonical p_nu/projected-prepotential source is not yet identified with the primary-literature J_varphi. That normalization/derivative map remains mandatory before the full scalar reduction.",
+  "status_scope": "GREEN_EXACT_A_SECTOR_NORMALIZATION_FOR_K_GT_0_FULL_REDUCED_SCALAR_SYSTEM_STILL_OPEN",
+  "target": "research/theory_targets/RTK_C10_U1_A_SOURCE_NORMALIZATION_TARGET_v1.json"
+}
