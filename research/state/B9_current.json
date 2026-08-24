@@ -1,21 +1,27 @@
 {
-  "schema": "RTK_B9_CURRENT_STATE_v3",
-  "updated_utc": "2026-08-24T12:19:00Z",
-  "status": "B9_LOCAL_PLANCK_LENSING_ROBUSTNESS_CLOSED_FINAL_PAIRED_REPLAY_PASS",
-  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
-  "production_mapping": "eff",
-  "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
-  "frozen_protocol": "research/robustness/B9_PAIRED_REOPTIMIZATION_TARGET_v1.json",
-  "closure_note": "research/robustness/B9_FINAL_LOCAL_ROBUSTNESS_CLOSURE_2026-08-24.md",
-  "methodology": "research/methodology/B9_LIVE_RECOVERY_METHOD.md",
-  "methodology_addendum": "research/methodology/RTK_B9_A5_CROSS_BASIN_ADDENDUM_2026-08-24.md",
-  "tolerances": {
-    "exact_descent_S": 0.005,
-    "fresh_tree_replay_abs": 0.000002,
-    "final_delta_replay_abs": 0.000004
+  "active_gate": {
+    "cross_run_replay_abs_error": 0.0,
+    "fresh_best_exact_S_eff": 1059.2719553175134,
+    "fresh_best_improvement_eff": 0.0,
+    "fresh_center_S_eff": 1059.2719553175134,
+    "fresh_min_eigenvalue_eff": 0.0005825694001738223,
+    "name": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION",
+    "result": "research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json",
+    "status": "PASS",
+    "workflow_run_id": 32705909941,
+    "workflow_run_url": "https://github.com/pppuu7-cmd/Photospheric-Radius-Scale/actions/runs/32705909941"
   },
+  "closure_note": "research/robustness/B9_FINAL_LOCAL_ROBUSTNESS_CLOSURE_2026-08-24.md",
+  "decomposition": {
+    "baseline_component_delta_at_B9_centers": 0.8550479684440688,
+    "direct_lensing_component_delta": 0.1995649375908215,
+    "interpretation": "Most of the final local B9 gap comes from the different A5 baseline scores at the B9-reoptimized centers rather than the standalone lensing term alone."
+  },
+  "frozen_protocol": "research/robustness/B9_PAIRED_REOPTIMIZATION_TARGET_v1.json",
+  "guard": "No global-minimum, significance, AIC/BIC, posterior, Bayes-factor, nonlinear-lensing-completeness or fixed-action claim is authorized by B9 closure.",
   "lcdm": {
-    "status": "LOCAL_STATIONARITY_CERTIFIED_UNDER_FROZEN_B9_V7_PROTOCOL",
+    "S_A5_base_at_B9_center": 1049.400976604194,
+    "S_B9": 1058.2173424114785,
     "center": {
       "As": 2.099031119902081e-09,
       "Ob": 0.048406958808714234,
@@ -25,16 +31,42 @@
       "ns": 0.9662859140870312,
       "zre": 7.684806125603674
     },
-    "S_B9": 1058.2173424114785,
-    "S_A5_base_at_B9_center": 1049.400976604194,
-    "lensing_minus2loglike": 8.816365807284551,
     "half_scale_exact_improvement": 0.0,
-    "half_scale_positive_definite": true,
     "half_scale_min_eigenvalue": 0.0005663251859819669,
-    "result": "research/robustness/B9_LCDM_V7_FINAL_STATIONARITY_RESOLUTION_2026-08-23.md"
+    "half_scale_positive_definite": true,
+    "lensing_minus2loglike": 8.816365807284551,
+    "result": "research/robustness/B9_LCDM_V7_FINAL_STATIONARITY_RESOLUTION_2026-08-23.md",
+    "status": "LOCAL_STATIONARITY_CERTIFIED_UNDER_FROZEN_B9_V7_PROTOCOL"
   },
+  "linked_A5_cross_basin": {
+    "guard": "Do not retroactively change B9 closure using the separate A5 cross-basin chain.",
+    "state": "research/state/A5_cross_basin_current.json",
+    "stationarity_state": "research/state/A5_LCDM_cross_basin_stationarity_current.json",
+    "status": "NEW_LCDM_BASELINE_BASIN_CONFIRMED_SEPARATE_STATIONARITY_CHAIN_ACTIVE"
+  },
+  "methodology": "research/methodology/B9_LIVE_RECOVERY_METHOD.md",
+  "methodology_addendum": "research/methodology/RTK_B9_A5_CROSS_BASIN_ADDENDUM_2026-08-24.md",
+  "next": "B9 itself requires no further local robustness calculation under protocol v1. Continue the separate A5 cross-basin stationarity chain and other open robustness/theory gates.",
+  "next_if_pass": "Dispatch the already-preregistered B9 final paired exact replay; do not reoptimize or change the frozen centers.",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "paired_local_comparison": {
+    "S_LCDM": 1058.2173424114785,
+    "S_RTK": 1059.2719553175134,
+    "delta_S_RTK_minus_LCDM": 1.0546129060348903,
+    "delta_replay_abs_error": 9.769962616701378e-15,
+    "lcdm_replay_abs_error": 0.0,
+    "result": "research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json",
+    "rtk_replay_abs_error": 0.0,
+    "status": "FINAL_LOCAL_B9_PAIRED_REPLAY_PASS",
+    "warning": "Local frozen B9 robustness comparison only; not global optimality, significance, AIC/BIC, posterior preference or Bayes factor."
+  },
+  "production_mapping": "eff",
   "rtk": {
-    "status": "LOCAL_STATIONARITY_AND_INDEPENDENT_FRESH_TREE_CERTIFIED",
+    "S_A5_base_at_B9_center": 1050.2560245726381,
+    "S_B9": 1059.2719553175134,
+    "base_exact_improvement": 0.0,
+    "base_min_eigenvalue": 0.0005825694006286208,
+    "base_positive_definite": true,
     "center": {
       "As": 2.0874265764520984e-09,
       "Ob": 0.04679404670223316,
@@ -44,47 +76,28 @@
       "ns": 0.9645439945136476,
       "zre": 7.329291125785135
     },
-    "S_B9": 1059.2719553175134,
-    "S_A5_base_at_B9_center": 1050.2560245726381,
-    "lensing_minus2loglike": 9.015930744875291,
-    "base_exact_improvement": 0.0,
-    "base_positive_definite": true,
-    "base_min_eigenvalue": 0.0005825694006286208,
-    "half_exact_improvement": 0.0,
-    "half_positive_definite": true,
-    "half_min_eigenvalue": 0.00035275631994283977,
     "fresh_tree": {
-      "classification": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
-      "result": "research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json",
-      "workflow_run_id": 32704596153,
-      "replay_abs_error": 0.0,
       "best_exact_improvement": 0.0,
+      "classification": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS",
+      "min_eigenvalue": 0.0005825694001738223,
       "positive_definite": true,
-      "min_eigenvalue": 0.0005825694001738223
-    }
+      "replay_abs_error": 0.0,
+      "result": "research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json",
+      "workflow_run_id": 32704596153
+    },
+    "half_exact_improvement": 0.0,
+    "half_min_eigenvalue": 0.00035275631994283977,
+    "half_positive_definite": true,
+    "lensing_minus2loglike": 9.015930744875291,
+    "status": "LOCAL_STATIONARITY_AND_INDEPENDENT_FRESH_TREE_CERTIFIED"
   },
-  "paired_local_comparison": {
-    "status": "FINAL_LOCAL_B9_PAIRED_REPLAY_PASS",
-    "S_LCDM": 1058.2173424114785,
-    "S_RTK": 1059.2719553175134,
-    "delta_S_RTK_minus_LCDM": 1.0546129060348903,
-    "lcdm_replay_abs_error": 0.0,
-    "rtk_replay_abs_error": 0.0,
-    "delta_replay_abs_error": 9.769962616701378e-15,
-    "result": "research/robustness/B9_FINAL_PAIRED_REPLAY_RESULT_v1.json",
-    "warning": "Local frozen B9 robustness comparison only; not global optimality, significance, AIC/BIC, posterior preference or Bayes factor."
+  "schema": "RTK_B9_CURRENT_STATE_v3",
+  "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
+  "status": "RTK_FRESH_TREE_CERTIFICATION_PASS_FINAL_PAIRED_DISPATCH_READY",
+  "tolerances": {
+    "exact_descent_S": 0.005,
+    "final_delta_replay_abs": 4e-06,
+    "fresh_tree_replay_abs": 2e-06
   },
-  "decomposition": {
-    "baseline_component_delta_at_B9_centers": 0.8550479684440688,
-    "direct_lensing_component_delta": 0.1995649375908215,
-    "interpretation": "Most of the final local B9 gap comes from the different A5 baseline scores at the B9-reoptimized centers rather than the standalone lensing term alone."
-  },
-  "linked_A5_cross_basin": {
-    "status": "NEW_LCDM_BASELINE_BASIN_CONFIRMED_SEPARATE_STATIONARITY_CHAIN_ACTIVE",
-    "state": "research/state/A5_cross_basin_current.json",
-    "stationarity_state": "research/state/A5_LCDM_cross_basin_stationarity_current.json",
-    "guard": "Do not retroactively change B9 closure using the separate A5 cross-basin chain."
-  },
-  "next": "B9 itself requires no further local robustness calculation under protocol v1. Continue the separate A5 cross-basin stationarity chain and other open robustness/theory gates.",
-  "guard": "No global-minimum, significance, AIC/BIC, posterior, Bayes-factor, nonlinear-lensing-completeness or fixed-action claim is authorized by B9 closure."
+  "updated_utc": "2026-08-24T13:34:08Z"
 }
