@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CONSOLIDATION_TARGET_v1",
+  "classification": "RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CONSOLIDATION_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_CURRENT_LINEAGE_CONSOLIDATION_REPLAY",
+  "purpose": "Replay and consolidate the surviving elliptic matter-compensator theorems on the current rtk-class-build tree, including the newly frozen k=0 neutral-RTK lapse-rank theorem, without promoting unresolved finite-k rank or production-observable claims.",
+  "required_workers": [
+    "rtk/route_b_u1_elliptic_compensator_dirac_projection_gate.py",
+    "rtk/route_b_u1_elliptic_compensator_reduced_chain_support_gate.py",
+    "rtk/route_b_u1_elliptic_compensator_reduced_constraint_chain_gate.py",
+    "rtk/route_b_u1_elliptic_compensator_resolvent_metric_variation_gate.py",
+    "rtk/route_b_u1_elliptic_compensator_k0_matter_rank_inheritance_gate.py",
+    "rtk/route_b_u1_elliptic_compensator_flrw_a_source_resolution_gate.py",
+    "rtk/route_b_u1_elliptic_k0_rtk_lapse_rank_gate.py"
+  ],
+  "required_classifications": [
+    "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_DIRAC_PROJECTION_PASS",
+    "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_REDUCED_CHAIN_SUPPORT_PASS",
+    "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_REDUCED_CONSTRAINT_CHAIN_PASS",
+    "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_RESOLVENT_METRIC_VARIATION_PASS",
+    "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_K0_MATTER_RANK_INHERITANCE_PASS",
+    "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_FLRW_A_SOURCE_RESOLUTION_PASS",
+    "RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_EXACT_PASS"
+  ],
+  "acceptance": {
+    "auxiliary_physical_dof": 0,
+    "homogeneous_A_source": "exactly cancelled for arbitrary H0(a)",
+    "k0_RTK_delta_a": 0,
+    "filter": "positive elliptic, no pole, a1_eff=k_phys^2/(M_c^2+k_phys^2)",
+    "reduced_constraint_basis": ["pi_N","Jhat","Hperp_hat","phi_hat"],
+    "finite_k_rank": "must remain explicitly OPEN",
+    "production_CLASS_bridge": "must remain explicitly OPEN until filtered source/constraint dynamics are implemented and replayed on the matched likelihood"
+  },
+  "expected_classification": "RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CURRENT_LINEAGE_REPLAY_PASS",
+  "non_claims": [
+    "does not prove the reduced finite-k Pfaffian is nonzero",
+    "does not choose M_c",
+    "does not show the production CLASS likelihood already corresponds to the elliptic-compensated full action",
+    "does not transfer current local PPN certificates through the finite-k transition without a dedicated same-action audit",
+    "does not solve C9 radiative protection, strong coupling, or compact objects"
+  ],
+  "next_gate_if_pass": "derive a finite-k reduced-Pfaffian sufficient bound with the L^{-1} metric variation retained; then freeze the production-observable implementation boundary for a1_eff(a,k)"
+}
