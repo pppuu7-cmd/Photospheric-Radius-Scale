@@ -1,0 +1,13 @@
+{
+  "classification": "C10_ACTION_FLUID_SHADOW_INTERFACE_PASS",
+  "status_scope": "GREEN_STANDALONE_ACTION_DERIVED_FLUID_API_NOT_CONNECTED_TO_PRODUCTION_CLASS",
+  "production_modified": false,
+  "equations": {
+    "delta_prime": "-(1+w)(theta-3phi_prime)-3H(c_a^2-w)delta",
+    "theta_prime": "-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+psi]",
+    "delta_p_over_rho": "c_s^2 delta"
+  },
+  "controls": ["exact production equality when c_s^2=c_a^2", "symbolic residual-equivalent numerical checks when c_s^2!=c_a^2", "finite/unphysical guards"],
+  "next_gate": "Build an opt-in shadow CLASS patch and compare spectra/objective at fixed RTK parameters before any production replacement.",
+  "non_claims": ["not a CLASS observable result", "not the completed U1 metric solver", "not a likelihood rerun"]
+}
