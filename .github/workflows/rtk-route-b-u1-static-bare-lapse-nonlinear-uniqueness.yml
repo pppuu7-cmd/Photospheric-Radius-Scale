@@ -1,0 +1,75 @@
+name: RTK Route-B U1 static bare-lapse nonlinear uniqueness
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-bare-lapse-nonlinear-uniqueness-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen same-action target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_TARGET_v1.json'))
+          ir=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
+          sc=json.load(open('research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_TARGET_V1_FROZEN'
+          g=ir['gravity_and_matter_frame']
+          assert g['a1']==1 and g['a2']==0 and g['kappa']==1
+          assert g['gamma1']==-1 and g['sigma1']==0 and g['sigma2']==0
+          assert sc['mixed_operator']['C']=='M_Pl^2/(2 X_U)'
+          print('STATIC_NONLINEAR_UNIQUENESS_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee u1_static_nonlinear_uniqueness_source.txt
+      - name: Run symbolic theorem
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_static_bare_lapse_nonlinear_uniqueness.py
+          python3 rtk/route_b_u1_static_bare_lapse_nonlinear_uniqueness.py | tee u1_static_bare_lapse_nonlinear_uniqueness.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_EXACT_PASS ' u1_static_bare_lapse_nonlinear_uniqueness.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_static_bare_lapse_nonlinear_uniqueness_result.json'))
+          assert r['classification']=='RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_EXACT_PASS'
+          assert r['static_scalar_consequence']['N']=='1'
+          print('STATIC_NONLINEAR_UNIQUENESS_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-bare-lapse-nonlinear-uniqueness
+          path: |
+            u1_static_bare_lapse_nonlinear_uniqueness.log
+            u1_static_bare_lapse_nonlinear_uniqueness_result.json
+            u1_static_nonlinear_uniqueness_source.txt
+          if-no-files-found: error
+      - name: Persist theorem result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_static_bare_lapse_nonlinear_uniqueness_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json
+          git config user.name 'rtk-u1-static-theorem'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json
+          git commit -m 'Persist exact static bare-lapse uniqueness theorem'
+          git push origin HEAD:rtk-class-build
