@@ -1,0 +1,24 @@
+{
+  "Delta": "r x^2 + b x + c",
+  "b": "-(-9*C*Ro*r + 6*C*p + 2*C*rho - 3*m*r)/3",
+  "c": "-2*C*(18*C*Ro*cao2*rho + 9*C*Ro*p + 9*C*Ro*rho + 3*m*p + m*rho)/3",
+  "classification": "C10_U1_NEWTONIAN_3X3_ALGEBRAIC_SOLVE_BASIS_HAS_ONE_POSITIVE_CROSSING_SCOPED",
+  "determinant": "det=2 L Delta(x), L=-x",
+  "discriminant": "(81*C**2*Ro**2*r**2 + 432*C**2*Ro*cao2*r*rho + 108*C**2*Ro*p*r + 180*C**2*Ro*r*rho + 36*C**2*p**2 + 24*C**2*p*rho + 4*C**2*rho**2 + 54*C*Ro*m*r**2 + 36*C*m*p*r + 12*C*m*r*rho + 9*m**2*r**2)/9",
+  "interpretation": "The positive root is a singularity of this chosen Newtonian 3x3 algebraic inversion. It is not promoted to physical rank loss because the original preferred-foliation/all-q constraint-rank determinant is a different object and remains separately certified.",
+  "minus_c_positive_form": "2*C*(18*C*Ro*cao2*rho + 9*C*Ro*p + 9*C*Ro*rho + 3*m*p + m*rho)/3",
+  "negative_root_symbolic": "(-9*C*Ro*r + 6*C*p + 2*C*rho - 3*m*r - sqrt(81*C**2*Ro**2*r**2 + 432*C**2*Ro*cao2*r*rho + 108*C**2*Ro*p*r + 180*C**2*Ro*r*rho + 36*C**2*p**2 + 24*C**2*p*rho + 4*C**2*rho**2 + 54*C*Ro*m*r**2 + 36*C*m*p*r + 12*C*m*r*rho + 9*m**2*r**2))/(6*r)",
+  "non_claims": [
+    "not a physical extra mode",
+    "not a ghost or gradient instability theorem",
+    "not a contradiction of the finite-k/all-q physical rank-safe completion",
+    "not a higher-spatial transformed determinant",
+    "not a CLASS failure or likelihood result"
+  ],
+  "positive_root_symbolic": "(-9*C*Ro*r + 6*C*p + 2*C*rho - 3*m*r + sqrt(81*C**2*Ro**2*r**2 + 432*C**2*Ro*cao2*r*rho + 108*C**2*Ro*p*r + 180*C**2*Ro*r*rho + 36*C**2*p**2 + 24*C**2*p*rho + 4*C**2*rho**2 + 54*C*Ro*m*r**2 + 36*C*m*p*r + 12*C*m*r*rho + 9*m**2*r**2))/(6*r)",
+  "root_sign_theorem": "r>0 and c<0 imply product of the two real roots c/r<0; hence exactly one positive real root and one negative real root",
+  "scope": "flat FLRW; k>0; lambda_HL>1; Eth_IR_full=2; explicit Lambda=0; two-derivative IR solve basis",
+  "software_route": "Do not globally invert this 3x3 Newtonian matrix. Use a preferred-coordinate/DAE solve and construct Newtonian potentials as outputs, or derive a crossing-regular variable basis.",
+  "status_scope": "YELLOW_SOLVE_BASIS_CROSSING_NOT_PHYSICAL_RANK_LOSS",
+  "target": "research/theory_targets/RTK_C10_U1_NEWTONIAN_DAE_SOLVE_BASIS_TARGET_v1.json"
+}
