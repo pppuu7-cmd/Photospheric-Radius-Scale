@@ -20,16 +20,19 @@ assert r2['classification']=='RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_PASS'
 assert r2['uniqueness']['solution']=='n=0'
 assert ru['classification']=='RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_EXACT_PASS'
 
-# Exact background identities.  B is one representative component of the
-# invariant shift and sgrad one representative D_i Sigma jet.
-q,N,B,sgrad,Xstar=sp.symbols('q N B sgrad Xstar', nonzero=True, finite=True, real=True)
+# Exact background identities. B is one representative component of the
+# invariant shift and sgrad one representative D_i Sigma jet. The production
+# scalar action is frozen on X_star>0, so encode that physical-domain assumption
+# explicitly rather than asking SymPy to infer sqrt(X_star)*sqrt(1/X_star)=1.
+q,N,B,sgrad=sp.symbols('q N B sgrad', nonzero=True, finite=True, real=True)
+Xstar=sp.symbols('Xstar', positive=True, finite=True)
 Theta=(q-B*sgrad)/N
 X=sp.Rational(1,2)*(Theta**2-sgrad**2)
 assert sp.simplify(Theta.subs({sgrad:0,N:1})-q)==0
 assert sp.simplify(sp.diff(Theta,B).subs(sgrad,0))==0
 assert sp.simplify(X.subs({sgrad:0,N:1})-q**2/sp.Integer(2))==0
 
-# DBI production rest point u=sqrt(X/Xstar)=1.  Work with an abstract positive
+# DBI production rest point u=sqrt(X/Xstar)=1. Work with an abstract positive
 # lambda and mu and explicitly verify P=P_X=0 at X=Xstar.
 Xv,lam,mu=sp.symbols('Xv lam mu', positive=True, finite=True)
 u=sp.sqrt(Xv/Xstar)
@@ -47,7 +50,7 @@ dLm=sp.expand(sp.diff(Lm,C)*dC+sp.diff(Lm,g)*dg+sp.diff(Lm,G)*dG)
 assert sp.simplify(dLm.subs(G,0))==0
 
 # PN order bookkeeping: n2=0; shift B3 and time derivatives begin at O3.
-# With D_i Sigma=0 the B3 contribution to Theta vanishes identically.  Thus
+# With D_i Sigma=0 the B3 contribution to Theta vanishes identically. Thus
 # N=1+O4 => Theta=q+O4, X=Xstar+O4, P=P_X=O4-or-higher and DiTheta=O4.
 # Consequently no scalar-action first variation can source an O3 vector eq.
 
@@ -66,6 +69,7 @@ out={
     'dTheta_dB_on_background':'0',
     'Theta_through_O3':'q',
     'X_through_O3':'X_star=q^2/2',
+    'X_star_domain':'positive',
     'P_at_Xstar':'0',
     'P_X_at_Xstar':'0',
     'D_iTheta_through_O3':'0'
