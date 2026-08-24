@@ -1,0 +1,72 @@
+{
+  "certified_overlap": {
+    "a1_eff": "k_phys^2/(M_c^2+k_phys^2)",
+    "auxiliary_physical_dof": "0 after exact (p_Q,C_Lambda) Dirac projection plus trivial p_Lambda multiplier pair removal",
+    "filter_domain": "M_c>0; L=1-D^2/M_c^2 has no pole for nonnegative self-adjoint -D^2",
+    "homogeneous_FLRW": "k=0 gives Q=H0, cancelling the old evolving ordinary-matter A-source exactly for arbitrary H0(a)",
+    "homogeneous_neutral_RTK_rank": "delta_a_RTK={pi_N,H_perp}_RTK=0 on the rolling k=0 support",
+    "homogeneous_ordinary_matter_rank": "no direct correction to the special-U1 cross block on the stated k=0 support",
+    "projected_source": "Jhat=J_A^(g)-a1_eff H0",
+    "reduced_constraint_basis": [
+      "pi_N",
+      "Jhat",
+      "Hperp_hat",
+      "phi_hat"
+    ],
+    "resolvent_variation": "delta a_eff=-(1/M_c^2)L^{-1}[delta(D^2)]L^{-1}, with ||L^{-1}||<=1"
+  },
+  "classification": "RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CURRENT_LINEAGE_REPLAY_PASS",
+  "critical_current_boundary": {
+    "finite_k_reduced_pfaffian": "OPEN: metric dependence of L^{-1} must be retained in the four surviving Poisson operators",
+    "production_CLASS_observables": "OPEN: current matched CLASS likelihood does not yet implement the elliptic filtered A-source/constraint dynamics",
+    "same_full_action_cosmology_plus_PPN": "NOT YET CERTIFIED until the finite-k bridge is implemented and replayed; local PPN and phenomenological production cosmology remain separately valid scoped results"
+  },
+  "interpretation": "The old homogeneous family-I FLRW A-source BLACK result is superseded by the elliptic-compensator architecture at k=0, and the auxiliary canonical sector itself is under control. The remaining completion problem is localized to finite-k reduced rank and then to an explicit production-observable implementation; this consolidation does not silently transfer the existing CLASS fit to the new full action.",
+  "next_gate": "derive a finite-k reduced-Pfaffian sufficient bound with the L^{-1} metric variation retained; then freeze the production-observable implementation boundary for a1_eff(a,k)",
+  "non_claims": [
+    "does not prove the reduced finite-k Pfaffian is nonzero",
+    "does not choose M_c",
+    "does not show the production CLASS likelihood already corresponds to the elliptic-compensated full action",
+    "does not transfer current local PPN certificates through the finite-k transition without a dedicated same-action audit",
+    "does not solve C9 radiative protection, strong coupling, or compact objects"
+  ],
+  "replayed_workers": [
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_DIRAC_PROJECTION_PASS",
+      "result": "u1_elliptic_compensator_dirac_projection_result.json",
+      "script": "rtk/route_b_u1_elliptic_compensator_dirac_projection_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_REDUCED_CHAIN_SUPPORT_PASS",
+      "result": "u1_elliptic_compensator_reduced_chain_support_result.json",
+      "script": "rtk/route_b_u1_elliptic_compensator_reduced_chain_support_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_REDUCED_CONSTRAINT_CHAIN_PASS",
+      "result": "u1_elliptic_compensator_reduced_constraint_chain_result.json",
+      "script": "rtk/route_b_u1_elliptic_compensator_reduced_constraint_chain_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_RESOLVENT_METRIC_VARIATION_PASS",
+      "result": "u1_elliptic_compensator_resolvent_metric_variation_result.json",
+      "script": "rtk/route_b_u1_elliptic_compensator_resolvent_metric_variation_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_K0_MATTER_RANK_INHERITANCE_PASS",
+      "result": "u1_elliptic_compensator_k0_matter_rank_inheritance_result.json",
+      "script": "rtk/route_b_u1_elliptic_compensator_k0_matter_rank_inheritance_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_COMPENSATOR_FLRW_A_SOURCE_RESOLUTION_PASS",
+      "result": "u1_elliptic_compensator_flrw_a_source_resolution_result.json",
+      "script": "rtk/route_b_u1_elliptic_compensator_flrw_a_source_resolution_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_EXACT_PASS",
+      "result": "u1_elliptic_k0_rtk_lapse_rank_result.json",
+      "script": "rtk/route_b_u1_elliptic_k0_rtk_lapse_rank_gate.py"
+    }
+  ],
+  "status": "HOMOGENEOUS_BRIDGE_AND_AUXILIARY_PROJECTION_GREEN_FINITE_K_PFAFFIAN_AND_PRODUCTION_OBSERVABLE_BRIDGE_OPEN",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CONSOLIDATION_TARGET_v1.json"
+}
