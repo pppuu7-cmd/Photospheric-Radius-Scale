@@ -1,0 +1,24 @@
+{
+  "S_center": 1049.400976604194,
+  "best_exact_S": 1049.400976604194,
+  "best_improvement": 0.0,
+  "best_label": "center",
+  "best_params": {
+    "As": 2.099031119902081e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.684806125603674
+  },
+  "decision": "RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
+  "min_eigenvalue": -0.002467341536255588,
+  "positive_definite": false,
+  "recenter_tolerance_S": 0.005,
+  "result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
+  "scale": 1.0,
+  "schema": "A5_LCDM_B9_SEED_STATIONARITY_CURRENT_v1",
+  "updated_utc": "2026-08-24T10:09:30Z",
+  "warning": "This is a search for a better known LCDM basin of the unchanged baseline objective. It neither invalidates the historical local Hessian theorem nor proves global optimality."
+}
