@@ -1,0 +1,2 @@
+triggered_utc=2026-08-24T14:40:00Z
+purpose=prove gamma_PPN O2 is robust to arbitrary finite-P lapse-equation deformation
