@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_TARGET_v1",
+  "created_utc": "2026-08-24T23:02:00Z",
+  "status": "FROZEN_BEFORE_TWIN_CLASS_SPECTRA_RESULT",
+  "question": "At the historical replay-certified RTK point, how much do CLASS linear spectra change if only the Khronon lower-derivative perturbation equations are switched from the current production GDM form to the action-derived shadow form, with the same background, rational c_s^2(k), pinned CLASS and precision settings?",
+  "reference": {
+    "state": "research/state/current.json",
+    "required_score": 1050.249912429787,
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317"
+  },
+  "spectra": {
+    "output": "tCl,pCl,lCl,mPk",
+    "lensing": true,
+    "l_max_scalars": 2600,
+    "P_k_max_h_Mpc": 5.0,
+    "z_pk": [0.0,0.38,0.51,0.61,1.0]
+  },
+  "precision": {
+    "k_max_tau0_over_l_max": 4.0,
+    "k_per_decade_for_bao": 180,
+    "k_per_decade_for_pk": 40,
+    "l_linstep": 2,
+    "l_logstep": 1.02,
+    "perturb_sampling_stepsize": 0.0125,
+    "tol_background_integration": 0.0003,
+    "tol_perturb_integration": 3e-7,
+    "tol_thermo_integration": 0.0003
+  },
+  "hard_guards": [
+    "production tree uses the current khronon_perturbations.c unchanged",
+    "shadow tree differs only by the frozen action-fluid lower-derivative replacements",
+    "same input parameters and precision in both trees",
+    "no optimization and no likelihood interpretation",
+    "persist raw normalized spectral differences and file-level provenance"
+  ],
+  "non_claims": [
+    "not the completed U1 metric solver",
+    "not a likelihood score",
+    "not a refit",
+    "not evidence of global model preference"
+  ]
+}
