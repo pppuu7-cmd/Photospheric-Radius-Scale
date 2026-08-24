@@ -1,0 +1,36 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_DBI_REALITY_DOMAIN_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_NUMERICAL_EVALUATION",
+  "parent_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "prerequisites": [
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json"
+  ],
+  "domain_condition": "1-lambda_D (sqrt(X_U/X_star)-1)^2 >= 0",
+  "static_clock_specialization": "sqrt(X_U/X_star)=1/N, hence R_DBI=1-lambda_D(1/N-1)^2",
+  "solar_reference": {
+    "interpretation": "GR-like exterior lapse at the nominal solar photospheric radius; a necessary local benchmark for the weak-field branch, not a theorem that the full modified solution is exactly Schwarzschild",
+    "GM_sun_nominal_m3_s2": 1.3271244e20,
+    "R_sun_nominal_m": 6.957e8,
+    "c_m_s": 299792458.0,
+    "source": "IAU 2015 Resolution B3 nominal conversion constants; c is exact SI"
+  },
+  "lambda_anchors": {
+    "finite_certified": 219457.5727136581,
+    "B10_factor64": 14045284.653674118,
+    "B10_factor16384": 3595592871.3405743
+  },
+  "acceptance": [
+    "compute the exact reference lapse N=sqrt(1-2GM/(Rc^2))",
+    "compute lambda_max=1/(1/N-1)^2",
+    "classify each frozen lambda anchor by the sign of R_DBI",
+    "prove analytically that at fixed N != 1 the formal lambda_D->infinity limit leaves the real static-clock DBI domain"
+  ],
+  "interpretation_guard": "B10 cosmological tail identifiability and this local reality-domain gate answer different questions; neither overwrites the other",
+  "non_claims": [
+    "does not exclude alternative local branches with D_iSigma != 0 or nonzero invariant shift",
+    "does not solve the full solar metric",
+    "does not apply the weak-field photospheric estimate to neutron stars or black holes",
+    "does not establish compact-object regularity near X_U=0"
+  ]
+}
