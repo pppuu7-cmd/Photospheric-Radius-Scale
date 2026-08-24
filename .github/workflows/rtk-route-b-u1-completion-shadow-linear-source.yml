@@ -1,0 +1,83 @@
+name: RTK Route-B U1 completion shadow linear source
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-completion-shadow-linear-source-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  shadow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen parent/target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('research/theory_results/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_RESULT_v1.json'))
+          t=json.load(open('research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_TARGET_v1.json'))
+          assert p['classification']=='RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_PASS'
+          assert t['classification']=='RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_TARGET_V1_FROZEN'
+          assert t['status']=='FROZEN_BEFORE_SHADOW_LINEAR_SOURCE_RESULT'
+          print('SHADOW_LINEAR_SOURCE_TARGET_PASS')
+          PY
+      - name: Compile and run linear-source shadow controls
+        run: |
+          set -euo pipefail
+          cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic \
+            -Irtk rtk/u1_elliptic_completion_shadow.c rtk/u1_elliptic_completion_shadow_test.c \
+            -lm -o /tmp/u1_shadow_test
+          /tmp/u1_shadow_test | tee u1_completion_shadow_linear_source.log
+          grep -q '^RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_PASS$' u1_completion_shadow_linear_source.log
+          git rev-parse HEAD | tee u1_completion_shadow_linear_source_source.txt
+      - name: Create result
+        run: |
+          python3 - <<'PY'
+          import json
+          out={
+            'classification':'RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_PASS',
+            'status':'GREEN_EXECUTABLE_LINEAR_SOURCE_BOUNDARY_REDUCED_METRIC_MAPPING_PENDING',
+            'target':'research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_TARGET_v1.json',
+            'api':'rtk_u1_shadow_linear_source_eval',
+            'certified':['delta_Q=Q_over_H0*delta_H0','delta_J_A=-a1_eff*delta_H0','delta_p_nu=+a1_eff*delta_H0','delta_J_A+delta_p_nu=0 by construction','k=0 gives delta_Q=delta_H0 and zero gauge-pair source','higher physical k increases the filtered gauge-pair fraction for fixed delta_H0'],
+            'hard_guard':'This executable source boundary is not connected to current khronon effective-fluid cs2/w equations. Final CLASS insertion requires the separately frozen reduced U1 metric-constraint mapping.',
+            'non_claims':['not a CLASS metric solver','not a likelihood result','not nonlinear resolvent dynamics','not a same-action PPN transfer certificate']
+          }
+          open('u1_completion_shadow_linear_source_result.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-completion-shadow-linear-source
+          path: |
+            u1_completion_shadow_linear_source.log
+            u1_completion_shadow_linear_source_result.json
+            u1_completion_shadow_linear_source_source.txt
+            research/theory_targets/RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_TARGET_v1.json
+            rtk/u1_elliptic_completion_shadow.h
+            rtk/u1_elliptic_completion_shadow.c
+            rtk/u1_elliptic_completion_shadow_test.c
+          if-no-files-found: error
+      - name: Persist result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_completion_shadow_linear_source_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          mkdir -p research/theory_results
+          cp /tmp/result.json research/theory_results/RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_RESULT_v1.json
+          git commit -m 'Record U1 completion shadow linear source result'
+          git push origin HEAD:rtk-class-build
