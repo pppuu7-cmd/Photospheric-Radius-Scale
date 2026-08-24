@@ -1,0 +1,53 @@
+{
+  "schema": "RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_TARGET_v1",
+  "status": "FROZEN_BEFORE_O3_MOVING_SOURCE_RESULT",
+  "classification": "RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_TARGET_V1_FROZEN",
+  "scope": "standard weak-field PPN counting through O(v^3) for slowly moving matter, on the identical frozen U1+RTK action",
+  "fixed_action": {
+    "ir_representative": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+    "scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "gamma1": -1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "lambda_HL": 1,
+    "beta0_bare": 0
+  },
+  "prerequisites": [
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json"
+  ],
+  "ppn_ordering": {
+    "U_and_spatial_metric_scalar": "O(2)",
+    "matter_velocity": "O(1)",
+    "shift_vector_and_g0i": "O(3)",
+    "one_time_derivative": "raises PN order by one relative to one spatial derivative",
+    "K_ij": "O(3), hence quadratic K terms begin at O(6)",
+    "bare_lapse": "N=1+n2+O(4); the O(2) Hamiltonian/A scalar subsystem is unchanged by O(3) shift terms and requires n2=0 under the same regular asymptotic boundary condition"
+  },
+  "scalar_background": {
+    "Sigma": "q t",
+    "D_i_Sigma": 0,
+    "homogeneous_scalar_perturbation": "set to zero by the standard no-extra-homogeneous-mode / no-incoming-scalar PPN boundary condition",
+    "Theta_U_through_O3": "q + O(4)",
+    "X_U_through_O3": "X_star + O(4)",
+    "production_rest_point": ["P(X_star)=0", "P_X(X_star)=0"],
+    "mixed_background": "D_i Theta_U=O(4)"
+  },
+  "target_statements": [
+    "the moving-matter O(2) scalar constraint still gives n2=0 because shift/time-derivative gravitational terms enter beyond O(2)",
+    "at D_i Sigma=0 the invariant shift B^i=N^i-N D^i nu drops out of Theta_U exactly on the background, so the scalar action has no direct O(3) shift/vector source",
+    "P=P_X=0 through O(3) and D_iTheta_U=0 through O(3), so first variations of both P(X_U) and C(X_U)(DTheta_U)^2 with respect to N^i, nu, g_ij and Sigma carry no O(3) source on the chosen PPN branch",
+    "therefore the full O(3) vector/shift equations coincide with the corresponding pure-U1 family-I equations through O(3), subject to the stated no-homogeneous-scalar boundary condition"
+  ],
+  "pass_classification": "RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_EXACT_PASS",
+  "non_claims": [
+    "does not prove absence of freely specified RTK scalar waves; the PPN branch excludes an independent incoming/homogeneous scalar excitation",
+    "does not cover strong-field rotation, compact objects, DBI-boundary configurations or X_U->0",
+    "does not yet set alpha1 or alpha2 until the separate preferred-frame inheritance gate checks the U1 formulas and limiting cancellations",
+    "does not establish radiative stability, UV completion, strong-coupling scale or EFT cutoff"
+  ],
+  "next_gate_if_pass": "evaluate/factor the sigma1=sigma2=0 U1 alpha1,alpha2 expressions at a1=kappa=1,a2=0 before taking gamma1=-1 and lambda_HL=1 limits, and certify preferred-frame values only if the cancellations are regular"
+}
