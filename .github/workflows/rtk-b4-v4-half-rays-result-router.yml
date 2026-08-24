@@ -1,0 +1,48 @@
+name: RTK B4 v4 half-rays result router
+
+on:
+  workflow_run:
+    workflows: ['RTK B4 recenter-v4 half eigenmode rays']
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  route:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - name: Classify persisted ray result
+        id: classify
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, pathlib
+          p=pathlib.Path('research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_RESULT_v1.json')
+          if not p.exists():
+              raise SystemExit('persisted v4 half-ray result missing')
+          r=json.load(open(p))
+          allowed=('B4_RECENTER_V4_HALF_EIGENMODE_RECENTER_REQUIRED','B4_RECENTER_V4_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005')
+          assert r['classification'] in allowed
+          assert r['center_replay_abs_error']<=2e-6
+          assert r['recenter_tolerance_S']==0.005
+          clear=(r['classification']=='B4_RECENTER_V4_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005' and r['max_exact_improvement_eff']<=0.005)
+          print('dispatch_quarter=' + ('true' if clear else 'false'))
+          print('B4_V4_HALF_RAYS_ROUTER_CLASSIFICATION',r['classification'],r['max_exact_improvement_eff'])
+          PY
+
+      - name: Dispatch preregistered quarter Hessian only on no-descent
+        if: steps.classify.outputs.dispatch_quarter == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run rtk-b4-recenter-v4-quarter-stationarity.yml --ref main
+          echo B4_V4_QUARTER_DISPATCH_SENT
