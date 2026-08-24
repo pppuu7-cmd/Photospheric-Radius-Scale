@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C8_U1_LOCAL_REST_FULL_SCALAR_CONSTRAINT_TARGET_v1",
+  "status": "FROZEN_AFTER_SCALAR_PRINCIPAL_PASS_BEFORE_FULL_CONSTRAINT_RESULT",
+  "classification": "RTK_C8_U1_LOCAL_REST_FULL_SCALAR_CONSTRAINT_TARGET_V1_FROZEN",
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_RESULT_v1.json",
+  "question": "After including and eliminating the complete finite-k scalar lapse/shift/spatial-curvature/U1 multiplier constraints of the frozen IR representative on the exact local rest vacuum, does the intended RTK scalar retain a nonzero quadratic propagator?",
+  "fixed_action": {
+    "ir": "research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json",
+    "scalar": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "lambda_HL": 1,
+    "gamma1": -1,
+    "beta0_bare": 0,
+    "sigma1": 0,
+    "sigma2": 0
+  },
+  "background_and_gauge": {
+    "background": "flat local rest vacuum N=1, invariant shift=0, g_ij=delta_ij, Sigma=q t, X_U=X_star>0, Lambda_g=0 for the flat branch",
+    "U1_gauge": "nu=0",
+    "finite_k": "k>0; homogeneous k=0 background/gauge sector excluded"
+  },
+  "scalar_variables": ["zeta", "B_shift", "n_lapse", "A_U1", "phi_RTK"],
+  "target_algebra": [
+    "the A_U1 constraint has no direct RTK source and imposes delta R^(3)=0, hence zeta=0 for k>0",
+    "at lambda_HL=1, with zeta=0, the pure scalar-shift contribution K_ij K^ij-K^2 vanishes mode-by-mode for N_i=partial_i B",
+    "the frozen RTK quadratic scalar action including lapse is L2/M_Pl^2=(mu_K^2+k^2)(dot(phi)-n)^2",
+    "the lapse equation therefore imposes dot(phi)-n=0 for mu_K^2>0 and k>0",
+    "after all nondynamical constraints are imposed, the finite-k quadratic action for phi vanishes"
+  ],
+  "decision_rule": {
+    "if_all_target_algebra_holds": "classify the exact local-rest point as a quadratic constraint-rank enhancement / no finite-k RTK scalar propagator at the two-derivative level; require nonlinear/cubic rank and strong-coupling analysis before any local EFT health claim",
+    "if_any_gravity_or_U1_term_leaves_a_nonzero_phi_quadratic_kernel": "do not use the rank-enhancement classification; derive and diagonalize the surviving kernel"
+  },
+  "non_claims": [
+    "does not say the cosmological rolling branch loses its scalar mode",
+    "does not by itself prove a ghost or exponential instability",
+    "does not yet assign a numerical strong-coupling scale",
+    "does not establish that the local scalar is absent nonlinearly rather than strongly coupled",
+    "does not cover k=0, rotating/nonzero-shift backgrounds, X_U->0, or DBI-boundary configurations"
+  ],
+  "next_gate_if_rank_enhanced": "expand the fully constrained local-rest action to the first nonvanishing nonlinear order and test whether interactions survive without a quadratic propagator; separately test whether a minimal higher-spatial completion restores a controlled quadratic mode while preserving cosmological RTK, PPN, TT and DOF gates"
+}
