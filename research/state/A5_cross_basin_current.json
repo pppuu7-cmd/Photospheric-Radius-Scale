@@ -1,0 +1,15 @@
+{
+  "LCDM_improvement_historical_minus_B9seed": 0.5651417435669828,
+  "RTK_change_B9seed_minus_historical": 0.006112142851179669,
+  "cross_seed_delta_RTK_minus_LCDM": 0.8550479684440688,
+  "delta_change": 0.5712538864181624,
+  "guard": "Historical A5 remains a valid local-basin certificate; do not silently rewrite it or claim a global minimum.",
+  "historical_delta_RTK_minus_LCDM": 0.2837940820259064,
+  "next_if_confirmed": "Freeze and execute a baseline-objective LCDM stationarity/reoptimization chain around the B9-v7 LCDM seed before superseding the historical A5 best-known pair.",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "result": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json",
+  "schema": "A5_B9_CROSS_BASIN_CURRENT_v1",
+  "status": "A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED",
+  "updated_utc": "2026-08-24T08:36:17Z"
+}
