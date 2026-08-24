@@ -1,0 +1,28 @@
+{
+  "schema": "RTK_C8_U1_LOCAL_REST_CANONICAL_RANK_SCALING_TARGET_v1",
+  "status": "FROZEN_AFTER_QUINTIC_PASS_BEFORE_CANONICAL_SCALING_RESULT",
+  "classification": "RTK_C8_U1_LOCAL_REST_CANONICAL_RANK_SCALING_TARGET_V1_FROZEN",
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUINTIC_TIME_RESULT_v1.json",
+  "question": "What does the vanished quadratic velocity Hessian plus the quintic linear-in-velocity interaction imply for the canonical/symplectic rank as the perturbation amplitude tends to zero?",
+  "effective_structure_through_quintic": "L_eff = V4[phi] + dot(phi) Q4[phi] + O(phi^6), with V4,Q4 homogeneous quartic spatial functionals and no quadratic kinetic term",
+  "target_identities": [
+    "pi_phi = delta L/dot(phi) = Q4[phi] + O(phi^5)",
+    "the velocity Hessian delta pi_phi/dot(phi) vanishes through quintic order",
+    "the primary relation C=pi_phi-Q4[phi]=0 is present at this order",
+    "under phi -> epsilon phi, Q4 -> epsilon^4 Q4 and its functional derivative scales as epsilon^3",
+    "therefore the induced symplectic/constraint kernel Omega(x,y)=delta Q4(y)/delta phi(x)-delta Q4(x)/delta phi(y) scales as epsilon^3 and vanishes exactly at phi=0",
+    "the canonical rank on the exact local rest vacuum is lower than on any finite-amplitude branch where Omega may become nonzero"
+  ],
+  "decision_rule": {
+    "if_all_scaling_identities_hold": "classify the exact local rest vacuum as a perturbative canonical-rank-collapse surface; standard Gaussian canonical normalization/scattering cannot be defined from the two-derivative action there without resolving the nonlinear constraint or adding a controlled quadratic completion",
+    "if_a_nonzero_amplitude-independent_symplectic_kernel_survives": "reopen the rank-collapse interpretation and derive its source"
+  },
+  "non_claims": [
+    "does not determine whether the finite-amplitude primary constraint is first class or second class",
+    "does not count nonlinear local-rest degrees of freedom",
+    "does not by itself prove infinite strong coupling or a numerical cutoff",
+    "does not include higher-spatial completion operators",
+    "does not apply to the rolling cosmological branch"
+  ],
+  "next_gate_if_pass": "quantify a minimal quadratic higher-spatial rescue and its allowed coefficient from the cosmological RTK kernel; separately perform the finite-amplitude Dirac bracket/constraint-preservation analysis"
+}
