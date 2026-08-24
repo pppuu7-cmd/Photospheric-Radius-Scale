@@ -1,0 +1,49 @@
+name: RTK C10 U1 A-source normalization
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/route_b_u1_A_source_normalization_gate.py'
+      - 'research/theory_targets/RTK_C10_U1_A_SOURCE_NORMALIZATION_TARGET_v1.json'
+      - '.github/workflows/rtk-c10-u1-a-source-normalization.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Run normalization theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/route_b_u1_A_source_normalization_gate.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee c10_u1_A_source_normalization_provenance.txt
+          python3 rtk/route_b_u1_A_source_normalization_gate.py | tee c10_u1_A_source_normalization.log
+          grep -q '^C10_U1_A_SOURCE_NORMALIZATION_AND_HELMHOLTZ_CONSTRAINT_PASS_SCOPED ' c10_u1_A_source_normalization.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_A_source_normalization_result.json'))
+          assert r['classification']=='C10_U1_A_SOURCE_NORMALIZATION_AND_HELMHOLTZ_CONSTRAINT_PASS_SCOPED'
+          assert '2(H0-Q)' in r['literature_J_A']
+          assert r['high_k_limit']=='psi/psi_GR -> 1'
+          print('C10_U1_A_SOURCE_NORMALIZATION_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-u1-a-source-normalization
+          path: |
+            c10_u1_A_source_normalization.log
+            u1_A_source_normalization_result.json
+            c10_u1_A_source_normalization_provenance.txt
+          if-no-files-found: error
