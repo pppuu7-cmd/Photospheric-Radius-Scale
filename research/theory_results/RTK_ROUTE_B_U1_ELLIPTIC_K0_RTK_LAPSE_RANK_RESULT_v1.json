@@ -1,0 +1,34 @@
+{
+  "canonical_derivation": {
+    "H_perp_RTK": "p_Sigma Theta-sqrt(g)P(Theta^2/2)",
+    "d_Hperp_dN_at_fixed_canonical_variables": "0",
+    "delta_a_RTK": "{pi_N,H_perp}_RTK=0",
+    "hamiltonian": "H_Sigma=N[p_Sigma Theta-sqrt(g)P(Theta^2/2)]",
+    "momentum_relation": "p_Sigma=sqrt(g) P_X(Theta^2/2) Theta; after inversion Theta=Theta(p_Sigma,g) is N-independent"
+  },
+  "classification": "RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_EXACT_PASS",
+  "combination_with_prior_k0_gate": "The prior elliptic k0 ordinary-matter theorem leaves only delta_a_RTK as an independent source correction; this result sets that correction to zero on the stated homogeneous rolling support.",
+  "domain": {
+    "elliptic_filter": "ell(k=0)=1, hence a1_eff=0",
+    "gravity_surface": "sigma1=sigma2=0 special U1 branch",
+    "invariant_shift": "zero homogeneous support",
+    "mode": "spatial homogeneous k=0",
+    "scalar": "rolling Sigma(t), X_U>0, no spatial Sigma gradient"
+  },
+  "interpretation": "The elliptic homogeneous A-source rescue does not acquire a new lapse-stability rank deformation from the neutral rolling RTK scalar at k=0. The remaining homogeneous rank is inherited from the special pure-gravity U1 block, subject to its own global zero-mode boundary assumptions.",
+  "mixed_operator": {
+    "homogeneous_lapse_rank_contribution": "0",
+    "k0_value": "0",
+    "operator": "C(X_U) D_iTheta_U D^iTheta_U"
+  },
+  "next_gate": "freeze a current-lineage homogeneous bridge closure record and then attack the finite-k reduced Pfaffian with resolvent metric variation retained",
+  "non_claims": [
+    "does not prove the pure-gravity homogeneous cross-block is nonzero under every global zero-mode boundary condition",
+    "does not prove finite-k rank where D_iTheta and metric dependence of L^{-1} are active",
+    "does not choose M_c",
+    "does not certify production cosmological perturbations of the elliptic completion",
+    "does not address radiative stability"
+  ],
+  "status": "HOMOGENEOUS_NEUTRAL_RTK_LAPSE_STABILITY_CORRECTION_ZERO_ON_ROLLING_K0_SUPPORT",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_K0_RTK_LAPSE_RANK_TARGET_v1.json"
+}
