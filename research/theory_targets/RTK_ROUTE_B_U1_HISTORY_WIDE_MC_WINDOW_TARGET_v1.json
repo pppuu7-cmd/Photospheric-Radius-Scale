@@ -1,0 +1,41 @@
+{
+  "classification": "RTK_ROUTE_B_U1_HISTORY_WIDE_MC_WINDOW_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_HISTORY_WIDE_WINDOW_RESULT",
+  "frozen_at_utc": "2026-08-24T20:23:00Z",
+  "parents": [
+    "research/theory_results/RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CONSOLIDATION_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CONSOLIDATION_RESULT_v1.json"
+  ],
+  "scope": {
+    "geometry": "d=3 flat homogeneous isotropic branch after the exact elliptic auxiliary Dirac projection",
+    "matter": "ordinary filtered source in the nonnegative-pressure barotropic all-q theorem; massive-neutrino anisotropic stress excluded from this v1 gate",
+    "gravity": "lambda_HL>1, eta0>0, beta0_bare=0, beta24<=0 and beta8<0 in the already certified convention",
+    "history": "a declared EFT onset a_EFT exists and H(a)<=H_EFT for the audited interval a>=a_EFT",
+    "source_dominance_assumption": "rho_filtered(a)<=rho_eff(a) on the audited history interval; this must be separately audited before using the bound as a full production certificate"
+  },
+  "frozen_inputs": {
+    "radiation_conservative_all_q_bound": "M_c^2 >= rho_filtered/(32 eta0 M_Pl^2)",
+    "same_action_flat_friedmann_normalization": "rho_eff=(3/2)(3 lambda_HL-1) M_Pl^2 H^2",
+    "one_percent_cosmology_filter_requirement": "M_c^2 >= 99 k_cos_phys^2",
+    "one_percent_local_recovery_requirement": "M_c^2 <= k_local_phys^2/99"
+  },
+  "required_exact_derivation": [
+    "using rho_filtered<=rho_eff, derive L_history=3(3 lambda_HL-1) H_EFT^2/(64 eta0)",
+    "derive the joint pre-root-exclusion interval max(99 k_cos_phys^2,L_history) <= M_c^2 <= k_local_phys^2/99",
+    "derive necessary-and-sufficient nonempty conditions for the two lower bounds separately against the upper bound",
+    "derive k_local_phys/k_cos_phys >= 99",
+    "derive H_EFT <= 8 sqrt[eta0/(297(3 lambda_HL-1))] k_local_phys",
+    "retain the previously known isolated leading rank-loss root as a separate exclusion/buffer condition rather than silently converting it into a one-sided bound"
+  ],
+  "pass_rule": "PASS if all symbolic identities and equivalences hold under the frozen positive-domain assumptions and the result explicitly states that no numerical M_c, lambda_HL, a_EFT or scale is selected.",
+  "failure_rule": "Any algebraic inconsistency is a scientific gate failure only if produced by the exact theorem worker; CI/infrastructure failure alone is not scientific FAIL.",
+  "non_claims": [
+    "not a source-composition audit",
+    "not a massive-neutrino anisotropic-stress theorem",
+    "not a production CLASS implementation",
+    "not a likelihood result",
+    "not a global inhomogeneous rank theorem",
+    "not a cure of the local-rest C8 rank collapse or C9 naturalness problem"
+  ],
+  "next_if_pass": "freeze the production-completion implementation protocol with lambda_HL distinct from lambda_D, M_c explicit, k_phys=k_com/a filtering, and source-history validation before any new likelihood score"
+}
