@@ -1,0 +1,57 @@
+name: RTK C10 FLRW fluid lower-derivative audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/c10_flrw_fluid_lower_derivative_audit.py'
+      - 'research/theory_targets/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_TARGET_v1.json'
+      - '.github/rtk-c10-flrw-fluid-lower-derivative-audit-trigger.txt'
+      - '.github/workflows/rtk-c10-flrw-fluid-lower-derivative-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run audit
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/c10_flrw_fluid_lower_derivative_audit.py
+          python3 rtk/c10_flrw_fluid_lower_derivative_audit.py | tee c10_flrw_fluid_lower_derivative_audit.log
+          grep -q '^C10_FLRW_FIXED_ACTION_VS_PRODUCTION_GDM_LOWER_DERIVATIVE_MISMATCH_IDENTIFIED_SCOPED ' c10_flrw_fluid_lower_derivative_audit.log
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_flrw_fluid_lower_derivative_audit_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_RESULT_v1.json
+            git commit -m 'Record C10 FLRW lower-derivative fluid audit' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-flrw-fluid-lower-derivative-audit
+          path: |
+            c10_flrw_fluid_lower_derivative_audit.log
+            c10_flrw_fluid_lower_derivative_audit_result.json
+          if-no-files-found: error
