@@ -1,0 +1,70 @@
+name: RTK C9 U1 existing symmetry protection
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c9-u1-existing-symmetry-protection-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  protection-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen C9 target and fixed action
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_TARGET_v1.json'))
+          assert t['classification']=='RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_TARGET_V1_FROZEN'
+          ir=json.load(open('research/RTK_C8_U1_FIXED_IR_REPRESENTATIVE_v3.json'))
+          g=ir['gravity_and_matter_frame']
+          assert g['sigma1']==0 and g['sigma2']==0
+          print('C9_EXISTING_SYMMETRY_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c9_existing_symmetry_source.txt
+      - name: Run scoped negative gate
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/c9_u1_existing_symmetry_protection_gate.py
+          python3 rtk/c9_u1_existing_symmetry_protection_gate.py | tee c9_existing_symmetry.log
+          grep -q '^RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_NEGATIVE_CLOSED ' c9_existing_symmetry.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('c9_u1_existing_symmetry_protection_result.json'))
+          assert r['classification']=='RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_NEGATIVE_CLOSED'
+          print('C9_EXISTING_SYMMETRY_RESULT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c9-u1-existing-symmetry-protection
+          path: |
+            c9_existing_symmetry.log
+            c9_u1_existing_symmetry_protection_result.json
+            c9_existing_symmetry_source.txt
+          if-no-files-found: error
+      - name: Persist C9 scoped result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp c9_u1_existing_symmetry_protection_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_RESULT_v1.json
+          git config user.name 'rtk-c9-symmetry-audit'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_RESULT_v1.json
+          git commit -m 'Persist C9 existing-symmetry negative closure'
+          git push origin HEAD:rtk-class-build
