@@ -1,0 +1,134 @@
+name: RTK B9 fresh-tree result router
+
+on:
+  workflow_run:
+    workflows: ['RTK B9 RTK recenter fresh-tree certification']
+    types: [completed]
+
+permissions:
+  actions: write
+  contents: write
+
+concurrency:
+  group: rtk-b9-fresh-tree-result-router
+  cancel-in-progress: false
+
+jobs:
+  route-result:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Download completed fresh-tree artifact
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: rtk-b9-rtk-recenter-fresh-tree-certification
+          path: /tmp/b9fresh
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Persist run outcome without changing frozen criteria
+        env:
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          run_id=int(os.environ['RUN_ID'])
+          meta={
+            'workflow_run_id':run_id,
+            'workflow_run_url':os.environ['RUN_URL'],
+            'workflow_conclusion':os.environ['RUN_CONCLUSION'],
+            'workflow_head_sha':os.environ['RUN_HEAD_SHA'],
+            'observed_utc':datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z'),
+          }
+          sp=Path('research/state/B9_current.json')
+          mp=Path('research/methodology/B9_LIVE_RECOVERY_METHOD.md')
+          s=json.loads(sp.read_text())
+          certp=Path('/tmp/b9fresh/b9_rtk_fresh_tree_certification.json')
+
+          if meta['workflow_conclusion']=='success':
+            if not certp.is_file():
+              raise RuntimeError('workflow reported success but certification JSON is missing')
+            r=json.loads(certp.read_text())
+            assert r['classification']=='B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS'
+            assert abs(float(r['expected_center_S_eff'])-1059.2719553175134)<=1e-12
+            assert float(r['cross_run_replay_abs_error'])<=2e-6
+            assert float(r['fresh_best_improvement_eff'])<=0.005
+            assert bool(r['fresh_positive_definite_eff'])
+            r.update(meta)
+            out=Path('research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json')
+            out.write_text(json.dumps(r,indent=2,sort_keys=True,allow_nan=False)+'\n')
+            s['updated_utc']=meta['observed_utc']
+            s['status']='RTK_FRESH_TREE_CERTIFICATION_PASS_FINAL_PAIRED_DISPATCH_READY'
+            s['active_gate']={
+              'name':'B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION',
+              'status':'PASS',
+              'result':str(out),
+              'workflow_run_id':run_id,
+              'workflow_run_url':meta['workflow_run_url'],
+              'fresh_center_S_eff':r['fresh_center_S_eff'],
+              'fresh_best_exact_S_eff':r['fresh_best_exact_S_eff'],
+              'fresh_best_improvement_eff':r['fresh_best_improvement_eff'],
+              'fresh_min_eigenvalue_eff':r['fresh_min_eigenvalue_eff'],
+              'cross_run_replay_abs_error':r['cross_run_replay_abs_error'],
+            }
+            s['next_if_pass']='Dispatch the already-preregistered B9 final paired exact replay; do not reoptimize or change the frozen centers.'
+            marker='<!-- B9_RTK_FRESH_TREE_RESULT:AUTO -->'
+            text=mp.read_text()
+            if marker not in text:
+              text += f'''\n\n## 13. RTK independent fresh-tree result — automatic record\n\n{marker}\n\nThe preregistered RTK independent fresh-tree certification passed. Canonical result: `research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json`.\n\n- run `{run_id}`\n- fresh center `S_B9 = {r['fresh_center_S_eff']}`\n- cross-run replay absolute error `{r['cross_run_replay_abs_error']}`\n- exact best improvement `{r['fresh_best_improvement_eff']}`\n- fresh Hessian minimum eigenvalue `{r['fresh_min_eigenvalue_eff']}`\n- positive definite `{r['fresh_positive_definite_eff']}`\n\nThe next gate remains the previously preregistered final paired exact replay.\n'''
+              mp.write_text(text)
+          else:
+            status={
+              'classification':'B9_RTK_FRESH_TREE_WORKFLOW_NON_SUCCESS_REQUIRES_DIAGNOSIS',
+              **meta,
+              'scientific_interpretation':'No PASS/FAIL scientific conclusion is authorized from workflow conclusion alone; inspect uploaded partial artifact/log before retry or new gate.'
+            }
+            out=Path('research/robustness/B9_RTK_FRESH_TREE_RUN_STATUS_v1.json')
+            out.write_text(json.dumps(status,indent=2,sort_keys=True)+'\n')
+            s['updated_utc']=meta['observed_utc']
+            s['status']='RTK_FRESH_TREE_WORKFLOW_NON_SUCCESS_REQUIRES_DIAGNOSIS'
+            s['active_gate']={
+              'name':'B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION',
+              'status':'WORKFLOW_NON_SUCCESS_NOT_SCIENTIFIC_CLASSIFICATION',
+              'run_status':str(out),
+              'workflow_run_id':run_id,
+              'workflow_run_url':meta['workflow_run_url']
+            }
+          sp.write_text(json.dumps(s,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'rtk-b9-result-router'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/state/B9_current.json research/methodology/B9_LIVE_RECOVERY_METHOD.md research/robustness/B9_RTK_FRESH_TREE_* || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Record B9 RTK fresh-tree workflow result ${RUN_ID}"
+            git push origin HEAD:rtk-class-build
+          fi
+
+      - name: Dispatch preregistered final paired replay after certified PASS
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -s research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json || git pull --ff-only origin rtk-class-build
+          python3 - <<'PY'
+          import json
+          r=json.load(open('research/robustness/B9_RTK_FRESH_TREE_CERTIFICATION_RESULT_v1.json'))
+          assert r['classification']=='B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION_PASS'
+          PY
+          gh workflow run rtk-b9-final-paired-replay.yml --ref main
