@@ -1,0 +1,3 @@
+triggered_utc=2026-08-24T13:25:00Z
+scientific_target=research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_TARGET_v1.json
+science_change=none_after_target_freeze
