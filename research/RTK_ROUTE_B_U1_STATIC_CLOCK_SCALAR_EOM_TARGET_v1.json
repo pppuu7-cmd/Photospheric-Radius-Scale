@@ -1,0 +1,34 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "parent_fixed_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "action": "S_Sigma = integral N sqrt(g) [P(X_U) + C(X_U) D_i Theta_U D^i Theta_U]",
+  "definitions": {
+    "X_U": "1/2 [Theta_U^2-D_iSigma D^iSigma]",
+    "Theta_U": "[dotSigma-(N^i-N D^i nu)D_iSigma]/N",
+    "C_fixed": "M_Pl^2/(2X_U)"
+  },
+  "sector": {
+    "invariant_shift": "B^i=N^i-ND^i nu=0",
+    "clock": "Sigma=q t",
+    "spatial_clock_gradient": "D_iSigma=0",
+    "static_geometry": "partial_t N=partial_t g_ij=0",
+    "domain": "X_U>0 rolling branch"
+  },
+  "acceptance": [
+    "first variation of the full scalar action is evaluated before imposing eta=0",
+    "on the stated background deltaTheta=dot(eta)/N and deltaX=q dot(eta)/N^2",
+    "the first variation contains neither undifferentiated eta nor D_i eta",
+    "after spatial integration by parts the remaining coefficient of dot(eta) is time independent, implying E_Sigma=0 exactly",
+    "the fixed-C static identity C(X_U)(DTheta_U)^2=M_Pl^2(D ln N)^2 is independently reproduced"
+  ],
+  "failure": "any surviving term proportional to eta or D_i eta, or any time-dependent coefficient forced by the frozen static assumptions, invalidates the theorem",
+  "non_claims": [
+    "no lapse/spatial-metric/shift/U1 constraint certification",
+    "no PPN certification",
+    "no rotating/stationary nonzero-shift certification",
+    "no compact-object X_U->0 certification",
+    "no radiative or cutoff certification"
+  ],
+  "next_gate_if_pass": "variation-level static metric/U1 constraint equivalence with explicit S_mix and first nonvanishing P(X_U) stress"
+}
