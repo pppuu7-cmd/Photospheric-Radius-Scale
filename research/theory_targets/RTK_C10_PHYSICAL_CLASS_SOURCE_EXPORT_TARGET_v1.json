@@ -1,0 +1,47 @@
+{
+  "schema": "RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_TARGET_v1",
+  "created_utc": "2026-08-25T00:29:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Can the exact historical RTK production point export the ordinary-only and total Newtonian source histories needed by the completed-U1 shadow bridge, without selecting any unfrozen completion parameter and without changing CLASS dynamics?",
+  "production_reference": {
+    "state": "research/state/current.json",
+    "required_score_eff": 1050.249912429787,
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "gauge": "newtonian",
+    "ordinary_species": ["baryons", "photons", "massless relativistic species"],
+    "neutral_sector": "RTK/Khronon included in total stress/momentum but excluded from ordinary H0"
+  },
+  "k_output_values_Mpc_inv": [1e-5,3e-5,1e-4,3e-4,1e-3,3e-3,1e-2,3e-2,1e-1],
+  "required_columns": [
+    "tau", "a", "psi_CLASS", "phi_CLASS",
+    "c10_k_Mpc_inv", "c10_Hc", "c10_Hc_prime",
+    "c10_H0_ord", "c10_H0_ord_prime", "c10_H0_ord_double_prime",
+    "c10_deltaH0_ord", "c10_delta_mu_total", "c10_rpp_theta_total",
+    "c10_delta_p_total", "c10_rpp_shear_total", "c10_W_total",
+    "c10_rho_total_prime", "c10_p_total_prime", "c10_khr_w", "c10_khr_ca2"
+  ],
+  "convention_map": {
+    "q_N": "a*c10_rpp_theta_total/k^2",
+    "Pi_N": "(3/2)*c10_rpp_shear_total/k^2",
+    "result": "research/theory_results/RTK_C10_CLASS_SOURCE_CONVENTION_MAP_RESULT_v1.json"
+  },
+  "acceptance": [
+    "build a disposable pinned RT-CLASS tree using the existing production RTK patch chain",
+    "apply rtk/apply_rtk_c10_source_export_patch.py only after the production patch chain",
+    "run the exact historical RTK point with the frozen k ladder and save scalar perturbation tables",
+    "verify every requested diagnostic column is finite for every stored row and every actual k is positive",
+    "verify H0 ordinary contains no Khronon contribution and total source aggregates retain the production Khronon source",
+    "verify q_N and Pi_N can be reconstructed for every finite-k row with the frozen convention map",
+    "record actual k values selected by CLASS and full production/build provenance",
+    "do not select M_c, lambda_HL, Pcal or alpha1 and do not run the completed metric solver at this subgate"
+  ],
+  "pass_classification": "C10_PHYSICAL_CLASS_SOURCE_EXPORT_PASS",
+  "fail_classification": "C10_PHYSICAL_CLASS_SOURCE_EXPORT_FAIL",
+  "next_if_pass": "Freeze a completion-parameter diagnostic scan or a parameter-independent regularity theorem, then replay these immutable exported histories through shadow-v2.",
+  "non_claims": [
+    "not a completed-U1 source-history regularity pass",
+    "not a completion-parameter choice",
+    "not a completed-U1 Boltzmann integration",
+    "not a spectra or likelihood result"
+  ]
+}
