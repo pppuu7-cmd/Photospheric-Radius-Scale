@@ -1,0 +1,82 @@
+{
+  "classification": "C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_COMPLETE",
+  "difference_class": "TWIN_SPECTRA_NEGLIGIBLE_LT_1E8",
+  "files": [
+    {
+      "coord_max_abs": 0.0,
+      "file": "twin_cl.dat",
+      "max_abs_diff": 1.0003715533063178e-22,
+      "max_norm_abs_diff": 1.185923904744919e-14,
+      "reference_max_abs": 8.435377255689e-09,
+      "shape": [
+        3099,
+        8
+      ]
+    },
+    {
+      "coord_max_abs": 0.0,
+      "file": "twin_z1_pk.dat",
+      "max_abs_diff": 5.882000095880358e-07,
+      "max_norm_abs_diff": 2.2089504201665163e-11,
+      "reference_max_abs": 26628.03131379,
+      "shape": [
+        793,
+        2
+      ]
+    },
+    {
+      "coord_max_abs": 0.0,
+      "file": "twin_z2_pk.dat",
+      "max_abs_diff": 5.818000090584974e-07,
+      "max_norm_abs_diff": 3.2455777567291924e-11,
+      "reference_max_abs": 17925.93037872,
+      "shape": [
+        793,
+        2
+      ]
+    },
+    {
+      "coord_max_abs": 0.0,
+      "file": "twin_z3_pk.dat",
+      "max_abs_diff": 5.358999715099344e-07,
+      "max_norm_abs_diff": 3.41401931914434e-11,
+      "reference_max_abs": 15697.03980598,
+      "shape": [
+        793,
+        2
+      ]
+    },
+    {
+      "coord_max_abs": 0.0,
+      "file": "twin_z4_pk.dat",
+      "max_abs_diff": 5.027000042900909e-07,
+      "max_norm_abs_diff": 3.538390324840441e-11,
+      "reference_max_abs": 14207.02517642,
+      "shape": [
+        793,
+        2
+      ]
+    },
+    {
+      "coord_max_abs": 0.0,
+      "file": "twin_z5_pk.dat",
+      "max_abs_diff": 7.829999759678685e-09,
+      "max_norm_abs_diff": 7.931215061695826e-13,
+      "reference_max_abs": 9872.383611805,
+      "shape": [
+        793,
+        2
+      ]
+    }
+  ],
+  "gamma_prod": 0.05170371280716,
+  "gamma_shadow": 0.05170371280716,
+  "non_claims": [
+    "not a likelihood difference",
+    "not a completed U1 metric solver",
+    "not a refit",
+    "normalized file difference is not an experimental sigma"
+  ],
+  "overall_max_normalized_abs_difference": 3.538390324840441e-11,
+  "scope": "fixed historical RTK parameters; same pinned CLASS/background/precision; only lower-derivative Khronon perturbation formulas differ"
+}
