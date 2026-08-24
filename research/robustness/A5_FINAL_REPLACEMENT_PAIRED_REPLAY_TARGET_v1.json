@@ -1,0 +1,60 @@
+{
+  "classification": "A5_FINAL_REPLACEMENT_PAIRED_REPLAY_TARGET_V1_FROZEN",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_NEW_LCDM_HALF_SCALE_RESULT",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "prerequisites": {
+    "cross_basin_result": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json",
+    "cross_basin_classification": "A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED",
+    "base_result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
+    "base_required_best_improvement_le": 0.005,
+    "base_rays_result": "research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_RESULT_v1.json",
+    "base_rays_classification": "A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
+    "half_result": "research/robustness/A5_LCDM_B9_SEED_HALF_RESULT_v1.json",
+    "half_required_scale": 0.5,
+    "half_required_best_improvement_le": 0.005,
+    "half_required_positive_definite": true
+  },
+  "lcdm": {
+    "role": "new independently reproduced cross-basin replacement candidate",
+    "params": {
+      "As": 2.099031119902081e-09,
+      "Ob": 0.048406958808714234,
+      "Om": 0.25869220161756795,
+      "h": 0.6803133881531521,
+      "lam": 0.0,
+      "ns": 0.9662859140870312,
+      "zre": 7.684806125603674
+    },
+    "expected_S_eff": 1049.400976604194
+  },
+  "rtk": {
+    "role": "historical A5 RTK point whose local certificate remains current",
+    "params": {
+      "As": 2.0877827951474356e-09,
+      "Ob": 0.046800730927437424,
+      "Om": 0.2522864064078236,
+      "h": 0.691103719964454,
+      "lam": 219457.5727136581,
+      "ns": 0.9645577770978523,
+      "zre": 7.328459220286924
+    },
+    "expected_S_eff": 1050.249912429787
+  },
+  "expected_delta_S_RTK_minus_LCDM": 0.8489358255928892,
+  "score_replay_abs_tolerance_each": 0.000002,
+  "delta_replay_abs_tolerance": 0.000004,
+  "environment": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "pantheon_sha": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+    "planck_archive_sha256": "0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6",
+    "python_version": "3.12.3",
+    "numpy_version": "2.5.2",
+    "scipy_version": "1.18.0",
+    "clipy_like_version": "0.15"
+  },
+  "pass_effect": "Freeze the new best-known local A5 pair and Delta S only after both exact scores and their difference replay within tolerance in one common fresh environment. The historical LCDM local certificate remains historically valid but is superseded as the best-known reference.",
+  "fail_effect": "Do not replace research/state/current.json. Diagnose reproducibility/provenance mismatch separately from stationarity; never relax tolerances or average scores.",
+  "guard": "Best-known local matched pair only. No global minimum, significance, Wilks/sigma, AIC/BIC, posterior or Bayes-evidence claim is authorized by this replay."
+}
