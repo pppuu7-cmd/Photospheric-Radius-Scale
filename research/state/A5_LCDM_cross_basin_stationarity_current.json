@@ -1,24 +1,45 @@
 {
-  "S_center": 1049.400976604194,
-  "best_exact_S": 1049.400976604194,
-  "best_improvement": 0.0,
-  "best_label": "center",
-  "best_params": {
-    "As": 2.099031119902081e-09,
-    "Ob": 0.048406958808714234,
-    "Om": 0.25869220161756795,
-    "h": 0.6803133881531521,
-    "lam": 0.0,
-    "ns": 0.9662859140870312,
-    "zre": 7.684806125603674
-  },
-  "decision": "BASE_NONPD_RAYS_CLEAR_HALF_SCALE_REQUIRED",
-  "min_eigenvalue": -0.002467341536255588,
-  "positive_definite": false,
+  "schema": "A5_LCDM_CROSS_BASIN_STATIONARITY_CURRENT_v2",
+  "updated_utc": "2026-08-24T13:38:00Z",
+  "status": "T1_CENTER_SUPERSEDED_BY_EXACT_T1P1_LINE_DESCENT_RECENTER_REQUIRED",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "production_mapping": "eff",
   "recenter_tolerance_S": 0.005,
-  "result": "research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_RESULT_v1.json",
-  "scale": 1.0,
-  "schema": "A5_LCDM_B9_SEED_STATIONARITY_CURRENT_v1",
-  "updated_utc": "2026-08-24T12:34:10Z",
-  "warning": "Exact A5 local eigenmode-ray diagnostic only; not a global-minimum or model-selection claim."
+  "superseded_t1_center": {
+    "S_center": 1049.400976604194,
+    "params": {
+      "As": 2.099031119902081e-09,
+      "Ob": 0.048406958808714234,
+      "Om": 0.25869220161756795,
+      "h": 0.6803133881531521,
+      "lam": 0.0,
+      "ns": 0.9662859140870312,
+      "zre": 7.684806125603674
+    },
+    "base_result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
+    "base_min_eigenvalue": -0.002467341536255588,
+    "base_eigenmode_rays_max_improvement": 0.0,
+    "prior_decision": "BASE_NONPD_RAYS_CLEAR_HALF_SCALE_REQUIRED"
+  },
+  "superseding_exact_line_profile": {
+    "result": "research/robustness/A5_LCDM_OLD_TO_NEW_BASIN_LINE_PROFILE_RESULT_v1.json",
+    "classification": "A5_LCDM_LINE_PROFILE_HISTORICAL_LOCAL_INTERPRETATION_AUDIT_REQUIRED",
+    "best_sample_t": 1.1,
+    "best_sample_S": 1049.3633203461363,
+    "improvement_vs_t1_center": 0.03765625805769734,
+    "exceeds_recenter_tolerance": true,
+    "best_sample_params": {
+      "As": 2.0983938219102527e-09,
+      "Ob": 0.04838888999978602,
+      "Om": 0.2584441959848294,
+      "h": 0.6805163510946404,
+      "lam": 0.0,
+      "ns": 0.96638264917319,
+      "zre": 7.674455444668947
+    }
+  },
+  "decision": "MANDATORY_RECENTER_TO_BEST_KNOWN_EXACT_T1P1_POINT_BEFORE_ANY_HALF_SCALE_CERTIFICATION",
+  "old_t1_half_result_policy": "If the already-dispatched t=1.0 half-scale workflow completes, retain it only as a historical diagnostic. It cannot authorize final paired replay or A5 re-freeze because an independent exact point improves the same objective by more than 0.005.",
+  "next_gate": "Freeze and execute a recentered continuation/stationarity protocol at the exact t=1.1 point before any new A5 paired replay.",
+  "warning": "No global-minimum or model-selection claim. The superseding fact is an exact same-objective descent larger than the frozen recenter tolerance."
 }
