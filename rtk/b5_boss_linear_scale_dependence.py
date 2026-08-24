@@ -48,7 +48,9 @@ def make_ini(model, p, tag):
         "recombination = RECFAST", "reio_parametrization = reio_camb", f"z_reio = {p['zre']}",
         "output = mPk", "gauge = newtonian", f"A_s = {p['As']}", f"n_s = {p['ns']}",
         "P_k_max_h/Mpc = 5.0", f"z_pk = {DENSE}", "z_max_pk = 1.0",
-        f"root = output/b5_boss_linear_scale_dependence/{tag}_", "background_verbose = 0",
+        # The worker runs from class_public while OUT intentionally lives in the
+        # repository parent. Keep CLASS root and parser OUT on the same path.
+        f"root = ../output/b5_boss_linear_scale_dependence/{tag}_", "background_verbose = 0",
         "thermodynamics_verbose = 0", "perturbations_verbose = 0"
     ]
     lines += [f"{k} = {v}" for k, v in ULTRA.items()]
