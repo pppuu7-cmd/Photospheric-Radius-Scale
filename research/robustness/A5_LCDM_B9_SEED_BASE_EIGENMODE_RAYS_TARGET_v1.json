@@ -11,6 +11,7 @@
   "parent_positive_definite_eff": false,
   "parent_min_eigenvalue_eff": -0.002467341536255588,
   "recenter_tolerance_S": 0.005,
+  "center_replay_abs_tolerance": 0.000002,
   "center": {
     "As": 2.099031119902081e-09,
     "Ob": 0.048406958808714234,
