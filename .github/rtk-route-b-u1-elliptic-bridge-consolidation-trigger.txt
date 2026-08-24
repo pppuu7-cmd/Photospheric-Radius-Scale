@@ -1,0 +1,4 @@
+triggered_utc=2026-08-24T19:58:00Z
+scientific_target=research/theory_targets/RTK_ROUTE_B_U1_ELLIPTIC_BRIDGE_CONSOLIDATION_TARGET_v1.json
+purpose=current_lineage_replay_of_elliptic_auxiliary_bridge
+science_change=none_after_target_freeze
