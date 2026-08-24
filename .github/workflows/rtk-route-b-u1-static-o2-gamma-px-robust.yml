@@ -1,0 +1,64 @@
+name: RTK Route-B U1 static O2 gamma P(X) robust
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-o2-gamma-px-robust-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-route-b-u1-static-o2-gamma-px-robust
+  cancel-in-progress: false
+
+jobs:
+  gamma:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Execute frozen gamma robustness theorem
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_TARGET_v1.json'))
+          b=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_TARGET_V1_FROZEN'
+          assert b['classification']=='RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_EXACT_PASS'
+          print('STATIC_O2_GAMMA_PX_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/route_b_u1_static_o2_gamma_px_robust_gate.py
+          python3 rtk/route_b_u1_static_o2_gamma_px_robust_gate.py | tee u1_static_o2_gamma_px_robust.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_EXACT_PASS ' u1_static_o2_gamma_px_robust.log
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          mkdir -p research/theory_results
+          cp u1_static_o2_gamma_px_robust_result.json research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_RESULT_v1.json
+          if git diff --cached --quiet; then
+            echo 'Result already persisted identically.'
+          else
+            git commit -m 'theory: persist O2 gamma P(X)-robust result'
+            git push origin HEAD:rtk-class-build
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-o2-gamma-px-robust
+          path: |
+            u1_static_o2_gamma_px_robust.log
+            u1_static_o2_gamma_px_robust_result.json
+          if-no-files-found: error
