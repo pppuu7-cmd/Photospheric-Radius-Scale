@@ -1,0 +1,42 @@
+{
+  "boundary_condition": "set to zero by the standard no-extra-homogeneous-mode / no-incoming-scalar PPN boundary condition",
+  "classification": "RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_EXACT_PASS",
+  "consequence": "Through O(v^3), the full fixed-action shift/vector equations coincide with the corresponding sigma1=sigma2=0 pure-U1 family-I equations for a1=1,a2=0,kappa=1.",
+  "exact_background_algebra": {
+    "D_iSigma": "0",
+    "D_iTheta_through_O3": "0",
+    "P_X_at_Xstar": "0",
+    "P_at_Xstar": "0",
+    "Theta": "(q-B^i D_iSigma)/N",
+    "Theta_through_O3": "q",
+    "X_star_domain": "positive",
+    "X_through_O3": "X_star=q^2/2",
+    "dTheta_dB_on_background": "0"
+  },
+  "first_variation": {
+    "P_sector": "P=P_X=0 through O3, so no lapse/shift/spatial-metric/scalar source from P(X) at this order",
+    "mixed_sector": "the first variation of C(X) g^{ij}D_iTheta D_jTheta vanishes when D_iTheta=0; no O3 vector/shift source",
+    "scalar_equation": "Sigma=q t remains unsourced through O3 on the no-extra-homogeneous-mode PPN branch because both P_X and D_iTheta vanish at the background to this order"
+  },
+  "next_gate": "preferred-frame alpha1/alpha2 inheritance with regular algebraic cancellation before gamma1=-1 and lambda_HL=1 limits",
+  "non_claims": [
+    "does not prove absence of freely specified RTK scalar waves; the PPN branch excludes an independent incoming/homogeneous scalar excitation",
+    "does not cover strong-field rotation, compact objects, DBI-boundary configurations or X_U->0",
+    "does not yet set alpha1 or alpha2 until the separate preferred-frame inheritance gate checks the U1 formulas and limiting cancellations",
+    "does not establish radiative stability, UV completion, strong-coupling scale or EFT cutoff"
+  ],
+  "o2_bridge": {
+    "certified_source": "research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json",
+    "statement": "The O(2) scalar constraints are unchanged by O(3) shift/time-derivative terms; the certified regular solution is n2=0."
+  },
+  "ppn_ordering": {
+    "K_ij": "O(3), hence quadratic K terms begin at O(6)",
+    "U_and_spatial_metric_scalar": "O(2)",
+    "bare_lapse": "N=1+n2+O(4); the O(2) Hamiltonian/A scalar subsystem is unchanged by O(3) shift terms and requires n2=0 under the same regular asymptotic boundary condition",
+    "matter_velocity": "O(1)",
+    "one_time_derivative": "raises PN order by one relative to one spatial derivative",
+    "shift_vector_and_g0i": "O(3)"
+  },
+  "status": "O3_MOVING_SOURCE_VECTOR_SECTOR_MATCHES_PURE_U1_ON_STANDARD_PPN_BRANCH",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_TARGET_v1.json"
+}
