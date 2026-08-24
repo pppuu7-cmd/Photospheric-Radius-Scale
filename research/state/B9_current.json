@@ -1,0 +1,72 @@
+{
+  "schema": "RTK_B9_CURRENT_STATE_v1",
+  "updated_utc": "2026-08-24T08:01:00Z",
+  "status": "RTK_FRESH_TREE_CERTIFICATION_LAUNCHED",
+  "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
+  "production_mapping": "eff",
+  "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
+  "frozen_protocol": "research/robustness/B9_PAIRED_REOPTIMIZATION_TARGET_v1.json",
+  "tolerances": {
+    "exact_descent_S": 0.005,
+    "fresh_tree_replay_abs": 0.000002,
+    "hessian_requirement": "positive_definite"
+  },
+  "lcdm": {
+    "status": "LOCAL_STATIONARITY_GREEN_UNDER_FROZEN_B9_V7_PROTOCOL",
+    "result": "research/robustness/B9_LCDM_V7_FINAL_STATIONARITY_RESOLUTION_2026-08-23.md",
+    "center": {
+      "h": 0.6803133881531521,
+      "Ob": 0.048406958808714234,
+      "Om": 0.25869220161756795,
+      "As": 2.099031119902081e-09,
+      "ns": 0.9662859140870312,
+      "zre": 7.684806125603674,
+      "lam": 0.0
+    },
+    "S_B9": 1058.2173424114785,
+    "half_scale_exact_improvement": 0.0,
+    "half_scale_positive_definite": true,
+    "half_scale_min_eigenvalue": 0.0005663251859819669
+  },
+  "rtk": {
+    "status": "BASE_AND_HALF_SCALE_PASS_AWAITING_INDEPENDENT_FRESH_TREE_RESULT",
+    "base_decision": "research/robustness/B9_RTK_RECENTER_BASE_DECISION_v1.json",
+    "half_decision": "research/robustness/B9_RTK_RECENTER_HALF_DECISION_v1.json",
+    "center": {
+      "As": 2.0874265764520984e-09,
+      "Ob": 0.04679404670223316,
+      "Om": 0.2522369962493503,
+      "h": 0.6911169559022905,
+      "lam": 792605.2167661682,
+      "ns": 0.9645439945136476,
+      "zre": 7.329291125785135
+    },
+    "S_B9": 1059.2719553175134,
+    "base_exact_improvement": 0.0,
+    "base_positive_definite": true,
+    "base_min_eigenvalue": 0.0005825694006286208,
+    "half_exact_improvement": 0.0,
+    "half_positive_definite": true,
+    "half_min_eigenvalue": 0.00035275631994283977,
+    "half_center_replay_abs_error": 0.0
+  },
+  "paired_local_comparison": {
+    "provisional_delta_S_RTK_minus_LCDM": 1.0546129060349,
+    "status": "PROVISIONAL_ONLY_DO_NOT_FREEZE_UNTIL_RTK_FRESH_TREE_AND_FINAL_PAIRED_REPLAY_PASS",
+    "warning": "Local frozen-objective score difference only; not significance, AIC/BIC, posterior preference or Bayes factor."
+  },
+  "active_gate": {
+    "name": "B9_RTK_INDEPENDENT_FRESH_TREE_CERTIFICATION",
+    "workflow": ".github/workflows/rtk-b9-rtk-recenter-fresh-tree.yml",
+    "workflow_restore_commit": "7369e6703f7448bd7c32c85d67be47dd969ff003",
+    "trigger": ".github/rtk-b9-rtk-recenter-fresh-tree-trigger.txt",
+    "trigger_commit": "f1101bb060e83484e5a1e6cb8c4282a3c2f50009",
+    "pass_conditions": [
+      "fresh center score reproduces expected RTK center within 2e-6",
+      "fresh exact best improvement <= 0.005",
+      "fresh base Hessian is positive definite"
+    ]
+  },
+  "next_if_pass": "Persist fresh-tree artifact/result, then run an independent paired exact replay of the certified LCDM-v7 and RTK centers and freeze final local B9 Delta S only if both replay tolerances pass.",
+  "next_if_fail": "Do not average or relax tolerances. Diagnose replay mismatch, exact descent direction, or non-PD Hessian as separate reproducibility/stationarity failures and preserve the negative result."
+}
