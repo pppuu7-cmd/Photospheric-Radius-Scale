@@ -1,0 +1,26 @@
+{
+  "classification": "RTK_ROUTE_B_U1_COMPLETION_SHADOW_LINEAR_SOURCE_TARGET_V1_FROZEN",
+  "status": "FROZEN_BEFORE_SHADOW_LINEAR_SOURCE_RESULT",
+  "frozen_at_utc": "2026-08-24T20:45:00Z",
+  "parents": [
+    "research/theory_results/RTK_ROUTE_B_U1_COMPLETION_SHADOW_INTERFACE_RESULT_v1.json",
+    "research/theory_results/RTK_ROUTE_B_U1_ELLIPTIC_LINEAR_FLRW_SOURCE_RESULT_v1.json"
+  ],
+  "scope": "extend only the standalone completion shadow API with the already certified first-order projected source transfer; no CLASS metric equation modification",
+  "required_api": [
+    "given a validated shadow state and finite delta_H0, return delta_Q=Q_over_H0*delta_H0",
+    "return delta_J_A=-a1_eff*delta_H0",
+    "return delta_p_nu=+a1_eff*delta_H0",
+    "enforce delta_J_A+delta_p_nu=0 by construction",
+    "k=0 gives delta_Q=delta_H0 and zero gauge-pair source",
+    "larger k_phys increases the absolute filtered gauge-pair fraction for fixed delta_H0"
+  ],
+  "hard_guard": "do not route these source values into current khronon effective-fluid cs2/w equations; reduced U1 metric constraints are a later gate",
+  "pass_rule": "compile with warnings-as-errors, run frozen unit controls and persist PASS only if all exact/numerical identities hold.",
+  "non_claims": [
+    "not a CLASS metric/source integration",
+    "not a likelihood result",
+    "not a nonlinear/inhomegeneous resolvent implementation",
+    "not a PPN transfer certificate"
+  ]
+}
