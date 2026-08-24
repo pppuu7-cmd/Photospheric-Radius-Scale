@@ -1,0 +1,22 @@
+{
+  "F": "1+k_phys^2/M_K^2",
+  "c_s_squared": "c_a^2/F",
+  "classification": "C10_LOCAL_FULL_ACTION_EFFECTIVE_FLUID_EQUIVALENCE_PASS_SCOPED",
+  "continuity_principal": "dot(delta_mu_eff)+k_phys^2 q_momentum=0",
+  "delta_mu_eff": "F K_pi pi_dot",
+  "delta_p": "c_a^2 K_pi pi_dot = c_s^2 delta_mu_eff",
+  "dispersion": "omega^2=c_s^2 k_phys^2",
+  "euler_principal": "dot(q_momentum)=delta_p",
+  "interpretation": "Once the perturbation density is defined by the lapse variation of the full P(X)+S_mix action, the same rational inertia factor that enhances the lapse source converts the bare DBI pressure response into the production scale-dependent sound speed. On a locally frozen background, the full-action scalar exactly admits the standard perfect-fluid principal continuity/Euler form. The earlier source-ratio warning therefore does not by itself imply a production-source mismatch.",
+  "next_gate": "derive the expanding-FLRW lower-derivative terms, including time derivatives of F, K_pi, q and metric forcing, and compare them term-by-term with rtk/khronon_perturbations.c",
+  "non_claims": [
+    "not a proof of the exact Hubble/friction/entropy terms in khronon_perturbations.c",
+    "not a CLASS likelihood validation",
+    "not a nonlinear stress tensor theorem",
+    "not a B4 massive-neutrino extension"
+  ],
+  "q_momentum": "(rho+p) pi",
+  "rho_plus_p": "c_a^2 K_pi",
+  "status_scope": "GREEN_LOCALLY_FROZEN_PRINCIPAL_FLUID_EQUIVALENCE_FULL_FLRW_LOWER_DERIVATIVE_TERMS_OPEN",
+  "target": "research/theory_targets/RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_TARGET_v1.json"
+}
