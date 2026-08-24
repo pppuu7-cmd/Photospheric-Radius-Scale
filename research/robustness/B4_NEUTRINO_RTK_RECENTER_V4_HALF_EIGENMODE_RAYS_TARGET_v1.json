@@ -1,0 +1,61 @@
+{
+  "schema": "B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_TARGET_v1",
+  "status": "FROZEN_BEFORE_HALF_EIGENMODE_RAY_SCORES",
+  "classification": "B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "recenter_tolerance_S": 0.005,
+  "parent_stencil_scale": 0.5,
+  "parent_run_id": 32587822698,
+  "parent_artifact_id": 9481647704,
+  "parent_artifact_digest": "sha256:7598fc71ec7c4c9b459d0eb4e213329227c7ebe4857add18f4c64245caca7505",
+  "parent_recovered_result": "research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_RECOVERED_RESULT_v1.json",
+  "center": {
+    "As": 2.0953040609439933e-09,
+    "Ob": 0.0472430928395221,
+    "Om": 0.25308763984439225,
+    "h": 0.6883522889542522,
+    "lam": 3009377.414812341,
+    "ns": 0.9657964452888419,
+    "zre": 7.583793661013263
+  },
+  "S_center_eff": 1050.5511025943172,
+  "parent_best_exact_S_eff": 1050.5510527797987,
+  "parent_best_improvement_eff": 0.000049814518433777266,
+  "parent_positive_definite_eff": false,
+  "axes": ["loglam", "h", "Ob", "Om", "As", "ns", "zre"],
+  "steps": {
+    "loglam": 0.025,
+    "h": 0.000175,
+    "Ob": 0.000035,
+    "Om": 0.00035,
+    "As": 2e-12,
+    "ns": 0.000175,
+    "zre": 0.035
+  },
+  "eigenmodes": [
+    {
+      "mode_index": 0,
+      "reason": "only negative eigenmode of the independently computed v4 half-scale Hessian",
+      "eigenvalue_y": -0.000047214683209037513,
+      "eigenvector_y": [
+        0.9999953582586031,
+        -0.0025488873208522342,
+        0.0003584228647396151,
+        0.0012727736263511051,
+        -0.0006153664651952012,
+        -0.0003626504376856756,
+        -0.0007266524570760564
+      ]
+    }
+  ],
+  "ray_amplitudes": [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0],
+  "score_replay_tolerance_abs": 0.000002,
+  "decision_rule": {
+    "no_clipping": true,
+    "any_exact_ray_improvement_gt_0p005": "mandatory recenter at the best exact ray point; freeze a new B4 target before another Hessian",
+    "no_exact_ray_improvement_gt_0p005": "freeze independent quarter-scale Hessian at the unchanged v4 center; if quarter is recenter-clear and PD, require an independent fresh-tree replay before B4 RTK local certification"
+  },
+  "frozen_before_scores": true,
+  "guard": "Do not use workflow success alone as a scientific classification. B4 is a separate neutrino objective and no global/model-selection claim follows from this local ray gate."
+}
