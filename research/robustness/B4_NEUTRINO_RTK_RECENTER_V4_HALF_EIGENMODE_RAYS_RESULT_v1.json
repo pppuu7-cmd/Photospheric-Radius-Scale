@@ -1,0 +1,79 @@
+{
+  "S_center_eff": 1050.5511025943172,
+  "best_mode": {
+    "best_alpha": -2.0,
+    "best_exact_S_eff": 1050.5511062280727,
+    "best_improvement_eff": -3.6337555684440304e-06,
+    "best_params": {
+      "As": 2.095306522409854e-09,
+      "Ob": 0.04724306774992157,
+      "Om": 0.2530867489028538,
+      "h": 0.6883531810648145,
+      "lam": 2862609.0107718497,
+      "ns": 0.9657965722164951,
+      "zre": 7.583844526685258
+    },
+    "mode_index": 0,
+    "parent_eigenvalue_y": -4.7214683209037513e-05,
+    "selection_reason": "only negative eigenmode of the independently computed v4 half-scale Hessian"
+  },
+  "center": {
+    "As": 2.0953040609439933e-09,
+    "Ob": 0.0472430928395221,
+    "Om": 0.25308763984439225,
+    "h": 0.6883522889542522,
+    "lam": 3009377.414812341,
+    "ns": 0.9657964452888419,
+    "zre": 7.583793661013263
+  },
+  "center_replay_abs_error": 0.0,
+  "classification": "B4_RECENTER_V4_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
+  "max_exact_improvement_eff": -3.6337555684440304e-06,
+  "mode_results": [
+    {
+      "best_alpha": -2.0,
+      "best_exact_S_eff": 1050.5511062280727,
+      "best_improvement_eff": -3.6337555684440304e-06,
+      "best_params": {
+        "As": 2.095306522409854e-09,
+        "Ob": 0.04724306774992157,
+        "Om": 0.2530867489028538,
+        "h": 0.6883531810648145,
+        "lam": 2862609.0107718497,
+        "ns": 0.9657965722164951,
+        "zre": 7.583844526685258
+      },
+      "mode_index": 0,
+      "parent_eigenvalue_y": -4.7214683209037513e-05,
+      "scores": [
+        {"S_eff": 1050.5512217546566, "S_k01": 1050.5530833128075, "alpha": -4.0},
+        {"S_eff": 1050.5511062280727, "S_k01": 1050.5529693635958, "alpha": -2.0},
+        {"S_eff": 1050.551155888983, "S_k01": 1050.5530197688738, "alpha": -1.0},
+        {"S_eff": 1050.5511270998006, "S_k01": 1050.5529913412217, "alpha": -0.5},
+        {"S_eff": 1050.5512290333604, "S_k01": 1050.5530939782702, "alpha": 0.5},
+        {"S_eff": 1050.5511837312558, "S_k01": 1050.5530490178048, "alpha": 1.0},
+        {"S_eff": 1050.551190216721, "S_k01": 1050.5530561679257, "alpha": 2.0},
+        {"S_eff": 1050.5512811989147, "S_k01": 1050.553148404883, "alpha": 4.0}
+      ],
+      "selection_reason": "only negative eigenmode of the independently computed v4 half-scale Hessian"
+    }
+  ],
+  "next_gate": "freeze independent quarter-scale Hessian at unchanged v4 center; require fresh-tree replay if quarter is recenter-clear and PD",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "parent_artifact_id": 9481647704,
+  "parent_run_id": 32587822698,
+  "parent_stencil_scale": 0.5,
+  "production_mapping": "eff",
+  "provenance": {
+    "class_upstream_commit": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "research_source_commit": "26ffe5236c97f17a1d67418b5bbf6047fbf072f1",
+    "recovered_from_run_id": 32765132546,
+    "recovered_from_artifact_id": 9534706258,
+    "artifact_digest": "sha256:08aefaa5a42001c4daf799a11f3b16f39dcc029a466d901eba7682a2a2239da0",
+    "target_file": "research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_TARGET_v1.json"
+  },
+  "ray_amplitudes": [-4.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 4.0],
+  "recenter_tolerance_S": 0.005,
+  "target_sha256": "ab65f7de62106a5b3ac30dd0ede383f436c53450ddacc56553cb38331bd4598f",
+  "warning": "Local B4 minimal-neutrino robustness only; not global evidence and not comparable in absolute score to massless A5. Workflow run failed only during persistence; exact-ray science step succeeded."
+}
