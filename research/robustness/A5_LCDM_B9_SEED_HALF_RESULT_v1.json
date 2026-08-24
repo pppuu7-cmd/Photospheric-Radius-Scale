@@ -334,7 +334,7 @@
     "model": "LCDM",
     "numpy_version": "2.5.2",
     "pantheon_commit": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
-    "research_source_commit": "474c5704953b00ff87f65ad58a4b127d659f6153",
+    "research_source_commit": "0f6cb4a6532cc490f4b5b6e75fc626a93d8ef803",
     "stencil_scale": 0.5,
     "target_fingerprint": "4858cb1a80395d10a097de81a047370b80ec7604c6156d75879be0899e007e21"
   },

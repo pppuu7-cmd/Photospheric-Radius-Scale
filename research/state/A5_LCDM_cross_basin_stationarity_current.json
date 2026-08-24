@@ -19,6 +19,6 @@
   "result": "research/robustness/A5_LCDM_B9_SEED_HALF_RESULT_v1.json",
   "scale": 0.5,
   "schema": "A5_LCDM_B9_SEED_STATIONARITY_CURRENT_v1",
-  "updated_utc": "2026-08-24T14:06:06Z",
+  "updated_utc": "2026-08-24T15:36:38Z",
   "warning": "This is a search for a better known LCDM basin of the unchanged baseline objective. It neither invalidates the historical local Hessian theorem nor proves global optimality."
 }
