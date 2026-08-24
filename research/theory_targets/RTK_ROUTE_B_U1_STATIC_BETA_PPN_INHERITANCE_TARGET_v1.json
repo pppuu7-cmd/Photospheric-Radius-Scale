@@ -1,0 +1,43 @@
+{
+  "schema": "RTK_ROUTE_B_U1_STATIC_BETA_PPN_INHERITANCE_TARGET_v1",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_NONLINEAR_BARE_LAPSE_RESULT",
+  "classification": "RTK_ROUTE_B_U1_STATIC_BETA_PPN_INHERITANCE_TARGET_V1_FROZEN",
+  "scope": "static zero-invariant-shift O(v^4) / Eddington beta sector of the identical frozen action",
+  "fixed_parameters": {
+    "a1": 1,
+    "a2": 0,
+    "kappa": 1,
+    "gamma1": -1,
+    "sigma1": 0,
+    "sigma2": 0,
+    "lambda_HL": 1,
+    "beta0_bare": 0,
+    "explicit_static_Smix_beta0_equivalent": 2
+  },
+  "prerequisite": {
+    "result": "research/theory_results/RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_RESULT_v1.json",
+    "required_classification": "RTK_ROUTE_B_U1_STATIC_BARE_LAPSE_NONLINEAR_UNIQUENESS_EXACT_PASS",
+    "required_unique_solution": "N=1"
+  },
+  "external_source": {
+    "paper": "Lin-Mukohyama-Wang-Zhu arXiv:1310.6666v4",
+    "equations": ["4.15", "5.5", "5.14", "5.32", "5.42", "5.43", "5.50", "5.51", "Appendix E"],
+    "family_statement": "for sigma1=sigma2=0 and a1=kappa=1, Eq.(5.51) gives beta=gamma=1; Eq.(5.43) is identically satisfied on gamma1=-1 for any static beta0 coefficient"
+  },
+  "target_logic": [
+    "use the exact static variation bridge, not a fixed-C cubic approximation",
+    "after the nonlinear uniqueness theorem, N=1 implies a_i=0, P=0 and P_N=0 on the certified static branch",
+    "therefore the RTK scalar supplies no residual static O(v^4) source on that solution and the remaining static field equations coincide with the corresponding U1 family-I equations",
+    "the explicit S_mix may be represented by beta0_eff=2 inside the static equations; Eq.(5.43) remains 0=0 at a1=kappa=1,gamma1=-1",
+    "factor the sigma1=sigma2=0 beta expression at a1=kappa=1 before taking gamma1=-1; it reduces identically to beta=1, consistent with Eq.(5.51)"
+  ],
+  "pass_classification": "RTK_ROUTE_B_U1_STATIC_BETA_PPN_EXACT_PASS",
+  "non_claims": [
+    "does not certify moving-source alpha1 or alpha2 for the full RTK action",
+    "does not certify stationary rotating solutions with nonzero invariant shift",
+    "does not cover spatial Sigma gradients, DBI-boundary configurations or X_U->0 compact objects",
+    "does not establish radiative stability, strong-coupling scale, higher-spatial UV completion or EFT cutoff",
+    "does not turn a static PPN result into a global theorem for all nonlinear solutions"
+  ],
+  "next_gate_if_pass": "derive the O(v^3) moving-source/vector equations with explicit S_mix and fixed P(X_U) before alpha1/alpha2 claims"
+}
