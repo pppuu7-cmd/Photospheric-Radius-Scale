@@ -1,0 +1,68 @@
+name: RTK Route-B U1 static O2 Newton DBI exact
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-static-o2-newton-dbi-exact-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-route-b-u1-static-o2-newton-dbi-exact
+  cancel-in-progress: false
+
+jobs:
+  newton:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen prerequisites and execute theorem
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_TARGET_v1.json'))
+          s=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json'))
+          b=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_RESULT_v1.json'))
+          g=json.load(open('research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_RESULT_v1.json'))
+          assert t['classification']=='RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_TARGET_V1_FROZEN'
+          assert s['classification']=='RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_EXACT_PASS'
+          assert b['classification']=='RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_EXACT_PASS'
+          assert g['classification']=='RTK_ROUTE_B_U1_STATIC_O2_GAMMA_PX_ROBUST_EXACT_PASS'
+          print('STATIC_O2_NEWTON_DBI_PREREQUISITES_PASS')
+          PY
+          python3 -m py_compile rtk/route_b_u1_static_o2_newton_dbi_exact_gate.py
+          python3 rtk/route_b_u1_static_o2_newton_dbi_exact_gate.py | tee u1_static_o2_newton_dbi_exact.log
+          grep -q '^RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_PASS ' u1_static_o2_newton_dbi_exact.log
+      - name: Persist scientific result
+        run: |
+          set -euo pipefail
+          mkdir -p research/theory_results
+          cp u1_static_o2_newton_dbi_exact_result.json research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_ROUTE_B_U1_STATIC_O2_NEWTON_DBI_EXACT_RESULT_v1.json
+          if git diff --cached --quiet; then
+            echo 'Result already persisted identically.'
+          else
+            git commit -m 'theory: persist exact O2 Newton DBI result'
+            git push origin HEAD:rtk-class-build
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-static-o2-newton-dbi-exact
+          path: |
+            u1_static_o2_newton_dbi_exact.log
+            u1_static_o2_newton_dbi_exact_result.json
+          if-no-files-found: error
