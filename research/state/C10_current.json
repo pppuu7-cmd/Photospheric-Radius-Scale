@@ -1,0 +1,107 @@
+{
+  "schema": "RTK_C10_CURRENT_STATE_v1",
+  "updated_utc": "2026-08-24T21:56:00Z",
+  "status": "C10_STRUCTURAL_LINEAR_BRIDGE_GREEN_ACTION_FLRW_IMPLEMENTATION_YELLOW_TWIN_CLASS_RUNNING",
+  "scope": "same-full-action production cosmology completion bridge; does not replace historical phenomenological likelihood certificates",
+  "closed_subgates": {
+    "elliptic_auxiliary_projection_and_k0_bridge": "PASS",
+    "finite_k_all_q_rank_domain": "PASS scoped",
+    "history_wide_Mc_window": "PASS scoped with explicit EFT onset",
+    "production_source_identity": "PASS scoped: baseline ordinary H0=baryons+photons+massless relativistic species; Khronon is not fake CDM",
+    "A_source_normalization": {
+      "classification": "C10_U1_A_SOURCE_NORMALIZATION_AND_HELMHOLTZ_CONSTRAINT_PASS_SCOPED",
+      "result": "research/theory_results/RTK_C10_U1_A_SOURCE_NORMALIZATION_RESULT_v1.json",
+      "identity": "J_A^lit=2(H0-Q)=2 a_eff H0; (k^2+a^2 M_c^2) psi=-4 pi G a^2 delta H0 for k>0"
+    },
+    "prepotential_Ward_normalization": {
+      "classification": "C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_PASS_SCOPED",
+      "result": "research/theory_results/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_RESULT_v1.json"
+    },
+    "linear_prepotential_redundancy": {
+      "classification": "C10_U1_LINEAR_PREPOTENTIAL_REDUNDANCY_PASS_K_GT_0_SCOPED",
+      "result": "research/theory_results/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_RESULT_v1.json"
+    },
+    "minimal_metric_reduction": {
+      "classification": "C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_PASS_K_GT_0_SCOPED",
+      "result": "research/theory_results/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_RESULT_v1.json",
+      "structure": "A constraint fixes psi; momentum fixes B; Hamiltonian fixes phi; traceless fixes deltaA; trace reduces to source compatibility with no metric second-time derivative"
+    },
+    "Smix_IR_lapse_kernel": {
+      "classification": "C10_SMIX_LINEAR_METRIC_SUPPORT_AND_IR_LAPSE_KERNEL_PASS_SCOPED",
+      "result": "research/theory_results/RTK_C10_SMIX_LINEAR_METRIC_SUPPORT_RESULT_v1.json",
+      "identity": "beta0_bare=0 plus explicit S_mix gives Eth_IR_full=2; no lapse pole for lambda_HL>1,k>0"
+    },
+    "Smix_lapse_source_ratio": {
+      "classification": "C10_SMIX_LAPSE_SOURCE_RATIO_AND_RATIONAL_INERTIA_PASS_SCOPED",
+      "result": "research/theory_results/RTK_C10_SMIX_LAPSE_SOURCE_RATIO_RESULT_v1.json",
+      "identity": "full scalar lapse functional derivative / pure-DBI density = 1+k_phys^2/M_K^2"
+    },
+    "local_action_fluid_equivalence": {
+      "classification": "C10_LOCAL_FULL_ACTION_EFFECTIVE_FLUID_EQUIVALENCE_PASS_SCOPED",
+      "result": "research/theory_results/RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_RESULT_v1.json",
+      "identity": "delta_mu_eff=F K_pi pi_dot, delta_p=(c_a^2/F) delta_mu_eff and principal continuity/Euler equations take standard perfect-fluid form"
+    },
+    "action_fluid_shadow_interface": {
+      "classification": "C10_ACTION_FLUID_SHADOW_INTERFACE_PASS",
+      "result": "research/theory_results/RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_RESULT_v1.json",
+      "production_modified": false
+    }
+  },
+  "yellow_findings": {
+    "FLRW_lower_derivative_gap": {
+      "classification": "C10_FLRW_FIXED_ACTION_VS_PRODUCTION_GDM_LOWER_DERIVATIVE_MISMATCH_IDENTIFIED_SCOPED",
+      "result": "research/theory_results/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_RESULT_v1.json",
+      "production_minus_action_delta": "-3H(c_s^2-c_a^2)[delta+3H(1+w)theta/k^2]",
+      "production_minus_action_theta": "3H(c_s^2-c_a^2)theta",
+      "interpretation": "formal same-action implementation gap; not an observational failure"
+    }
+  },
+  "quantitative_replays": {
+    "Smix_source_ratio_BOSS": {
+      "result": "research/theory_results/RTK_C10_SMIX_SOURCE_RATIO_IMPACT_REPLAY_RESULT_v1.json",
+      "max_percent_excess": 0.21153182213413096,
+      "where": "z=0.38, k=0.24 h/Mpc",
+      "guard": "not a likelihood error"
+    },
+    "FLRW_Euler_friction_mismatch": {
+      "result": "research/theory_results/RTK_C10_FLRW_MISMATCH_COEFFICIENT_REPLAY_RESULT_v1.json",
+      "boss_max_3abs_ca2_minus_cs2": 1.3513184655924205e-11,
+      "technical_dense_endpoint_max": 3.96805230911911e-08,
+      "guard": "coefficient replay only; density residual remains state dependent"
+    }
+  },
+  "active_gates": {
+    "total_momentum_source_scope": {
+      "target": "research/theory_targets/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_TARGET_v1.json",
+      "result": "research/theory_results/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_RESULT_v1.json",
+      "status": "rerun_triggered_result_not_yet_persisted"
+    },
+    "twin_CLASS_action_fluid_spectra": {
+      "target": "research/theory_targets/RTK_C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_TARGET_v1.json",
+      "workflow": ".github/workflows/rtk-c10-action-fluid-twin-class-spectra.yml",
+      "result": "research/theory_results/RTK_C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_RESULT_v1.json",
+      "status": "launched_pending",
+      "guard": "fixed parameters; no optimization; spectra sensitivity only; not completed U1 metric solver"
+    }
+  },
+  "strict_next_decision_tree": [
+    "Read twin CLASS spectra result when persisted. If normalized differences are negligible/tiny, freeze a fixed-parameter likelihood replay before any production replacement; if material, localize by observable and redshift before any refit.",
+    "Independently complete the total-momentum source-scope gate; q in Ward and momentum equations must be q_total including neutral Khronon momentum.",
+    "Derive/implement the completed U1 metric solver using the already-certified A/momentum/Hamiltonian/traceless reduction; do not represent the completion by changing only c_s^2 or the fluid equations.",
+    "Only after shadow metric controls pass may a completed-action likelihood target be frozen.",
+    "Do not transfer historical phenomenological A5 score to the completed action."
+  ],
+  "numerical_parallel_frontier": {
+    "A5_recenter1": "PENDING result; do not duplicate",
+    "B4_v4_half_eigenmode_rays": "PENDING result; do not classify FAIL",
+    "B5_linear_scale_dependence": "PENDING result; do not classify FAIL"
+  },
+  "non_claims": [
+    "no completed-action likelihood score yet",
+    "no claim that historical phenomenological RTK fit is invalid",
+    "no full nonlinear perturbation closure",
+    "no B4 massive-neutrino completion-source extension yet",
+    "no C9 radiative protection",
+    "no compact-object closure"
+  ]
+}
