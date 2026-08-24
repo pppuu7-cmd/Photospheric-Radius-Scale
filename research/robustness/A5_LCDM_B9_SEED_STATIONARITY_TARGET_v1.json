@@ -1,0 +1,45 @@
+{
+  "schema": "A5_LCDM_B9_SEED_STATIONARITY_TARGET_v1",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_CROSS_BASIN_REPLAY_RESULT",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "prerequisite": {
+    "result": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json",
+    "required_classification": "A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED"
+  },
+  "center_source": "B9 LCDM-v7 center stripped of the standalone lensing term and independently replayed on A5 before this gate may execute",
+  "center": {
+    "As": 2.099031119902081e-09,
+    "Ob": 0.048406958808714234,
+    "Om": 0.25869220161756795,
+    "h": 0.6803133881531521,
+    "lam": 0.0,
+    "ns": 0.9662859140870312,
+    "zre": 7.684806125603674
+  },
+  "expected_center_S_eff": 1049.400976604194,
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "required_scales": [1.0, 0.5],
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "center_replay_abs_tolerance": 0.000002,
+  "base_decision": {
+    "if_exact_improvement_gt_0p005": "freeze the exact best point as a new recenter target before any further stencil",
+    "if_recenter_clear_and_PD": "run an independent half-scale Hessian at exactly the same center",
+    "if_recenter_clear_and_nonPD": "freeze exact negative/soft eigenmode rays before any scale fallback"
+  },
+  "half_decision": {
+    "if_recenter_clear_and_PD": "certify this point as a best-known A5 LCDM local minimum candidate and require a fresh-tree replay before superseding historical A5",
+    "otherwise": "follow the same frozen recenter/ray logic; do not average scales"
+  },
+  "interpretation_guard": "This is a search for a better known LCDM basin of the unchanged baseline objective. It neither invalidates the historical local Hessian theorem nor proves global optimality."
+}
