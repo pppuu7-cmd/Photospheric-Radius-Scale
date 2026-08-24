@@ -25,6 +25,7 @@ jobs:
           set -euo pipefail
           git pull --ff-only origin rtk-class-build
           test -s research/robustness/A5_LCDM_T1P1_BASE_RESULT_v1.json || { echo 'No persisted t1p1 base result; no dispatch.'; exit 0; }
+          set +e
           python3 - <<'PY'
           import json,sys
           b=json.load(open('research/robustness/A5_LCDM_T1P1_BASE_RESULT_v1.json'))
@@ -40,6 +41,10 @@ jobs:
           print('A5_T1P1_BASE_PD_HALF_ALLOWED',imp,min(b['eff']['eigenvalues_y']))
           PY
           rc=$?
-          if [ "$rc" -eq 10 ] || [ "$rc" -eq 11 ]; then exit 0; fi
+          set -e
+          if [ "$rc" -eq 10 ] || [ "$rc" -eq 11 ]; then
+            echo 'Scientific decision forbids half-scale dispatch.'
+            exit 0
+          fi
           if [ "$rc" -ne 0 ]; then exit "$rc"; fi
           gh workflow run rtk-a5-lcdm-t1p1-stationarity-half.yml --repo "$GITHUB_REPOSITORY" --ref main
