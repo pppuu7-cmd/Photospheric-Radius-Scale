@@ -1,0 +1,2 @@
+triggered_utc=2026-08-24T14:39:00Z
+purpose=evaluate frozen finite and B10 lambda anchors on exact static-clock DBI reality domain
