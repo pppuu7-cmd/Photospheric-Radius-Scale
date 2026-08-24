@@ -1,0 +1,2 @@
+launch_utc: 2026-08-24T20:37:00Z
+reason: execute frozen first-order projected-source theorem before any CLASS metric/source modification.
