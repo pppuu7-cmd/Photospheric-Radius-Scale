@@ -1,0 +1,19 @@
+{
+  "classification": "RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUINTIC_TIME_DEGENERACY_EXACT_PASS",
+  "interpretation": "The exact local-rest branch remains temporally degenerate beyond the vanished quadratic action: the first time-dependent constrained interaction appears only at quintic order and is linear in the perturbation velocity. This makes a canonical/Dirac rank analysis mandatory before deciding whether the local scalar is nonlinearly removed or represents a strongly-coupled background.",
+  "next_gate": "perform a local canonical/Dirac rank analysis through the first nonlinear time-dependent order and in parallel quantify the minimal higher-spatial rescue coefficient allowed by the cosmological RTK kernel",
+  "non_claims": [
+    "does not by itself prove infinite strong coupling",
+    "does not compute a scattering amplitude or cutoff scale",
+    "does not establish the nonlinear number of local-rest degrees of freedom",
+    "does not include higher-spatial completion operators",
+    "does not apply to the rolling cosmological branch or strong-field/rotating backgrounds"
+  ],
+  "off_shell_quintic_identity": "L5 = y3*(delta L4/delta y2) + dot(phi)*L4; second-order shift-advection pieces enter only at O6",
+  "on_shell_quartic": "L4 = J [mu_K^2(-Delta)/(mu_K^2-Delta)] J",
+  "on_shell_quintic_time": "L5_time = dot(phi) * { J [mu_K^2(-Delta)/(mu_K^2-Delta)] J } up to the spatial representation/integrations by parts used for the quartic functional",
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUARTIC_RESULT_v1.json",
+  "status": "FIRST_TIME_DEPENDENCE_APPEARS_LINEarly_AT_QUINTIC_ORDER_WITH_ZERO_VELOCITY_HESSIAN",
+  "target": "research/theory_targets/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUINTIC_TIME_TARGET_v1.json",
+  "velocity_hessian_through_quintic": "zero about phi=0; the first time-dependent term is linear in dot(phi)"
+}
