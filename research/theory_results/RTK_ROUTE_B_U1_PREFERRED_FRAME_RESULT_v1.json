@@ -1,0 +1,26 @@
+{
+  "alpha1_PPN": 0,
+  "alpha2_PPN": 0,
+  "classification": "RTK_ROUTE_B_U1_PREFERRED_FRAME_ALPHA1_ALPHA2_EXACT_PASS",
+  "combined_weak_field_static_and_vector_result": {
+    "alpha1_PPN": 0,
+    "alpha2_PPN": 0,
+    "beta_PPN": 1,
+    "gamma_PPN": 1
+  },
+  "external_source": "Lin-Mukohyama-Wang-Zhu arXiv:1310.6666v4 Eq.(5.42), with Eq.(5.51) as consistency check",
+  "interpretation": "Because the separately certified O3 RTK scalar-silence theorem shows no extra vector/shift source on the standard PPN branch, the pure-U1 family-I preferred-frame cancellations apply to the identical fixed action through O(v^3).",
+  "next_gate": "retain radiative protection, strong coupling/EFT cutoff, higher-spatial UV/tensor dispersion and compact-object/nonlinear X_U->0 behavior as independent open gates",
+  "non_claims": [
+    "does not cover an independent incoming/homogeneous RTK scalar excitation excluded by the PPN branch",
+    "does not establish strong-field preferred-frame behavior, rotating compact objects or X_U->0 configurations",
+    "does not certify radiative stability, strong coupling, UV completion or cutoff"
+  ],
+  "prerequisite": "research/theory_results/RTK_ROUTE_B_U1_PPN_O3_SCALAR_SILENCE_VECTOR_RESULT_v1.json",
+  "regular_cancellations": {
+    "alpha1": "At a1=kappa=1,a2=0 the two terms cancel exactly before gamma1=-1: -4 + 4 = 0.",
+    "alpha2": "At a1=kappa=1 the Eq.(5.42) numerator is the zero polynomial in lambda_HL; the continuous lambda_HL=1 value is therefore 0."
+  },
+  "status": "WEAK_FIELD_PPN_PREFERRED_FRAME_GREEN_ON_CERTIFIED_STANDARD_BRANCH",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_PREFERRED_FRAME_INHERITANCE_TARGET_v1.json"
+}
