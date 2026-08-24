@@ -1,0 +1,22 @@
+{
+  "IR_lapse_denominator": "for lambda_HL>1 and k>0: -[2(lambda-1)k^2+2(3lambda-1)H^2] < 0, hence no lapse-solve pole in this scoped IR principal truncation",
+  "classification": "C10_SMIX_LINEAR_METRIC_SUPPORT_AND_IR_LAPSE_KERNEL_PASS_SCOPED",
+  "corrected_bare_plus_mixed": "beta0_bare=0 plus explicit S_mix gives Eth_IR_full=2 in the two-derivative local-rest principal truncation",
+  "exact_RTK_match": "C q^2=M_Pl^2",
+  "gravity_comparison": "zeta^2 beta0_eff k_phys^2 phi^2 with zeta^2=M_Pl^2/2 gives beta0_eff_from_Smix=2",
+  "lapse_phi2_coefficient_after_matching": "M_Pl^2 k_phys^2",
+  "lapse_phi2_coefficient_before_matching": "C q^2 k_phys^2",
+  "metric_support": "At this quadratic principal order the homogeneous-background S_mix has direct lapse support through phi, while direct B, psi, A and nu dependence is absent.",
+  "non_claims": [
+    "not a full FLRW lower-derivative expansion when q varies with time",
+    "not a theorem for higher-spatial-derivative Eth(k)",
+    "not a completed-action delta_mu/source dictionary",
+    "not a CLASS or likelihood result",
+    "not nonlinear perturbation closure"
+  ],
+  "principal_delta_Theta": "u-q phi on D_i Sigma_bar=0; lower-derivative qdot*pi pieces are outside this principal gate",
+  "principal_quadratic_kernel": "C k_phys^2 (u-q phi)^2",
+  "status_scope": "GREEN_LOCAL_REST_TWO_DERIVATIVE_PRINCIPAL_SMIX_SUPPORT_FULL_FLRW_SOURCE_MAP_OPEN",
+  "target": "research/theory_targets/RTK_C10_SMIX_LINEAR_METRIC_SUPPORT_TARGET_v1.json",
+  "unresolved_cross_source": "The cross term is -2 C q k_phys^2 u phi; its mapping to the completed-action scalar/lapse source variables is mandatory before a CLASS implementation."
+}
