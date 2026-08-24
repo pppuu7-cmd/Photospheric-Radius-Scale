@@ -1,0 +1,29 @@
+{
+  "schema": "RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_TARGET_v1",
+  "created_utc": "2026-08-24T22:16:00Z",
+  "status": "FROZEN_AFTER_LAPSE_RATIO_THEOREM_BEFORE_SYMBOLIC_EQUIVALENCE_RESULT",
+  "scope": "locally frozen homogeneous rolling background; constant K_pi, c_a^2, M_K and physical k; metric-free principal scalar dynamics after the full lapse-source density definition is made",
+  "definitions": {
+    "F": "1+k_phys^2/M_K^2",
+    "delta_mu_eff": "F K_pi pi_dot",
+    "rho_plus_p": "c_a^2 K_pi",
+    "q_momentum": "(rho+p) pi = c_a^2 K_pi pi",
+    "delta_p": "c_a^2 K_pi pi_dot = (c_a^2/F) delta_mu_eff",
+    "c_s_squared": "c_a^2/F",
+    "scalar_eom": "F K_pi pi_double_dot + c_a^2 K_pi k_phys^2 pi = 0"
+  },
+  "acceptance": [
+    "prove delta_p=c_s^2 delta_mu_eff with c_s^2=c_a^2/F",
+    "prove the scalar EOM implies dot(delta_mu_eff)+k_phys^2 q_momentum=0",
+    "prove dot(q_momentum)=delta_p",
+    "recover omega^2=c_s^2 k_phys^2",
+    "state explicitly that this is not yet the full expanding-FLRW equivalence because time dependence of K_pi, F, background q and metric forcing remains"
+  ],
+  "non_claims": [
+    "not a proof of the exact Hubble/friction/entropy terms in khronon_perturbations.c",
+    "not a CLASS likelihood validation",
+    "not a nonlinear stress tensor theorem",
+    "not a B4 massive-neutrino extension"
+  ],
+  "pass_classification": "C10_LOCAL_FULL_ACTION_EFFECTIVE_FLUID_EQUIVALENCE_PASS_SCOPED"
+}
