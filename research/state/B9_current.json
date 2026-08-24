@@ -1,12 +1,14 @@
 {
-  "schema": "RTK_B9_CURRENT_STATE_v1",
-  "updated_utc": "2026-08-24T08:32:07Z",
-  "status": "RTK_FRESH_TREE_MAIN_TRIGGER_COMMITTED_RESULT_ROUTER_ARMED",
+  "schema": "RTK_B9_CURRENT_STATE_v2",
+  "updated_utc": "2026-08-24T08:45:00Z",
+  "status": "RTK_FRESH_TREE_ACTIVE_A5_CROSS_BASIN_CONFIRMED",
   "objective": "matched-ultra-linstep2+dense-BOSS+PlanckR3-lensing-v1",
   "production_mapping": "eff",
   "score_definition": "S_B9 = S_A5_base - 2*logL_lensing",
   "frozen_protocol": "research/robustness/B9_PAIRED_REOPTIMIZATION_TARGET_v1.json",
+  "methodology": "research/methodology/B9_LIVE_RECOVERY_METHOD.md",
   "methodology_addendum": "research/methodology/RTK_B9_A5_CROSS_BASIN_ADDENDUM_2026-08-24.md",
+  "linked_A5_methodology": "research/methodology/A5_CROSS_BASIN_LIVE_RECOVERY_METHOD.md",
   "tolerances": {
     "exact_descent_S": 0.005,
     "fresh_tree_replay_abs": 0.000002,
@@ -59,6 +61,8 @@
     "provisional_delta_S_RTK_minus_LCDM": 1.0546129060349,
     "base_component_delta_at_B9_centers": 0.8550479684441,
     "direct_lensing_component_delta": 0.19956493759074,
+    "base_component_fraction_of_total": 0.8107694904463876,
+    "direct_lensing_fraction_of_total": 0.1892305095535554,
     "status": "PROVISIONAL_ONLY_DO_NOT_FREEZE_UNTIL_RTK_FRESH_TREE_AND_FINAL_PAIRED_REPLAY_PASS",
     "warning": "Local frozen-objective score difference only; not significance, AIC/BIC, posterior preference or Bayes factor."
   },
@@ -69,7 +73,7 @@
     "main_trigger": ".github/rtk-b9-rtk-recenter-fresh-tree-trigger.txt",
     "main_trigger_commit": "58d6e9943bc753eda2ebbcc58fe7a5bbe88aa482",
     "run_id": null,
-    "run_observation": "The proven historical trigger route on main has been used. No run ID is yet exposed by the available connector view; absence of an observed ID is infrastructure/observability state, not a scientific result.",
+    "run_observation": "No persisted PASS or non-success status file is visible yet in rtk-class-build. Absence of a result is observability/execution state, not a scientific conclusion.",
     "pass_conditions": [
       "fresh center score reproduces expected RTK center within 2e-6",
       "fresh exact best improvement <= 0.005",
@@ -95,20 +99,27 @@
     "delta_replay_abs_tolerance": 0.000004
   },
   "baseline_cross_basin_alert": {
-    "status": "INDEPENDENT_REPLAY_LAUNCHED_NOT_YET_CERTIFIED",
-    "reason": "The B9 LCDM-v7 artifact reports the unchanged A5 base score 1049.400976604194, improving on the historical A5 LCDM local score 1049.966118347761 by 0.565141743567. All Planck, Pantheon and BOSS baseline components improve at that point.",
-    "target": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_TARGET_v1.json",
-    "target_commit": "e77c71d594772518611e1c1196d8777dc16fa1b4",
-    "worker": "rtk/a5_b9_cross_basin_replay.py",
-    "worker_commit": "f9788b991a43985a1623828c2b29db96bc665da8",
-    "workflow": "main:.github/workflows/rtk-a5-b9-cross-basin-replay.yml",
-    "trigger_commit": "7fa310f17719827681e44cd2608db056aa64a244",
-    "conditional_stationarity_target": "research/robustness/A5_LCDM_B9_SEED_STATIONARITY_TARGET_v1.json",
-    "conditional_stationarity_worker": "rtk/a5_lcdm_b9_seed_stationarity.py",
-    "conditional_stationarity_workflow": "main:.github/workflows/rtk-a5-lcdm-b9-seed-stationarity.yml",
-    "conditional_stationarity_workflow_fix_commit": "86659b167d2a12039a0384421b381d853957129e",
-    "router_commit": "799f62e02378219f7fa4fb3ccbe88787241c90cf",
-    "guard": "Do not supersede historical A5 until independent fresh-tree cross-basin replay and subsequent baseline LCDM stationarity/replay gates pass."
+    "status": "INDEPENDENT_FRESH_TREE_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED",
+    "classification": "A5_B9_CROSS_BASIN_REPLAY_PASS_NEW_LCDM_SEED_CONFIRMED",
+    "result": "research/robustness/A5_B9_CROSS_BASIN_REPLAY_RESULT_v1.json",
+    "all_four_replay_errors": 0.0,
+    "historical_LCDM_S_A5": 1049.966118347761,
+    "new_LCDM_seed_S_A5": 1049.400976604194,
+    "LCDM_improvement": 0.5651417435669828,
+    "historical_RTK_S_A5": 1050.249912429787,
+    "B9_RTK_seed_S_A5": 1050.2560245726381,
+    "RTK_change": 0.006112142851179669,
+    "historical_A5_delta": 0.2837940820259064,
+    "cross_seed_A5_delta": 0.8550479684440688,
+    "delta_change": 0.5712538864181624,
+    "component_origin_LCDM_improvement_fraction": {
+      "Planck": 0.10804226984842698,
+      "Pantheon": 0.2476484754057088,
+      "BOSS": 0.6443092547458643
+    },
+    "active_A5_state": "research/state/A5_cross_basin_current.json",
+    "active_A5_stationarity_target": "research/robustness/A5_LCDM_B9_SEED_STATIONARITY_TARGET_v1.json",
+    "guard": "This confirms a deeper known LCDM basin of the unchanged A5 objective but does not yet certify that seed as a local minimum. Historical A5 remains valid at its old center; do not supersede it until the new baseline stationarity and independent replay chain passes."
   },
   "next_if_pass": "The result router dispatches the already-preregistered final paired exact replay. Freeze local B9 Delta S only if that replay passes all tolerances.",
   "next_if_fail": "Do not average or relax tolerances. Diagnose replay mismatch, exact descent direction, non-PD Hessian, or infrastructure failure separately and preserve the negative/indeterminate result."
