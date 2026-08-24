@@ -1,0 +1,49 @@
+{
+  "schema": "A5_LCDM_T1P1_RECENTER1_STATIONARITY_TARGET_v1",
+  "status": "FROZEN_AFTER_T1P1_HALF_RECENTER_BEFORE_RECENTER1_SCORES",
+  "classification": "A5_LCDM_T1P1_RECENTER1_STATIONARITY_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "prerequisite": {
+    "result": "research/robustness/A5_LCDM_T1P1_HALF_RESULT_v1.json",
+    "required_scale": 0.5,
+    "required_classification": "A5_LCDM_B9_SEED_STATIONARITY_HESSIAN_COMPLETE",
+    "required_best_improvement_gt": 0.005,
+    "required_best_label": "newton_trust_eff",
+    "required_best_exact_S_eff": 1049.3550570964142
+  },
+  "center": {
+    "As": 2.098490857524975e-09,
+    "Ob": 0.048382880062392684,
+    "Om": 0.25847022980776346,
+    "h": 0.6804976358942407,
+    "lam": 0.0,
+    "ns": 0.9664964612260075,
+    "zre": 7.67518361771309
+  },
+  "expected_center_S_eff": 1049.3550570964142,
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "required_scales": [1.0, 0.5],
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "center_replay_abs_tolerance": 0.000002,
+  "base_decision": {
+    "if_exact_improvement_gt_0p005": "freeze the exact best point as a new recenter target before any further stencil",
+    "if_recenter_clear_and_PD": "run the independently preregistered half-scale Hessian at exactly the same center",
+    "if_recenter_clear_and_nonPD": "freeze exact negative/soft eigenmode rays before any smaller-scale fallback"
+  },
+  "half_decision": {
+    "if_recenter_clear_and_PD": "require independent fresh-tree replay at this exact center before A5 paired refreeze",
+    "otherwise": "follow the same frozen recenter/ray logic; do not average scales"
+  },
+  "guard": "Local stationarity around the exact half-stencil recenter point only. No global minimum, sigma/Wilks, posterior, AIC/BIC or Bayes claim."
+}
