@@ -1,0 +1,2 @@
+launch_utc: 2026-08-24T12:19:00Z
+reason: Execute the preregistered exact A5 baseline LCDM negative-eigenmode rays after the cross-basin seed base Hessian was recenter-clear but non-PD. Preserve the 0.005 recenter threshold; if no exact ray descent exceeds it, dispatch the unchanged-center half-scale Hessian.
