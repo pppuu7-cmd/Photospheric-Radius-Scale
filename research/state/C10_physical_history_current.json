@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_PHYSICAL_HISTORY_CURRENT_v1",
+  "updated_utc": "2026-08-25T00:10:00Z",
+  "precedence": "For the latest C10 frontier, this file supersedes the active-gate paragraph of C10_current.json when newer; it does not replace C10_current.json historical closed-subgate detail.",
+  "status": "C10_REORDERED_SHADOW_SOLVE_GREEN_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_NEXT",
+  "just_closed": {
+    "newtonian_source_transform_pole_audit": "PASS scoped; no new finite-k pole",
+    "standalone_shadow_metric_reference_v1": "PASS scoped; production untouched",
+    "reordered_shadow_metric_v2": "PASS finite-k algebra",
+    "synthetic_small_k_control": "YELLOW by design: arbitrary k-independent synthetic sources give phi~k^-2, exposing the physical regularity condition rather than a gravity pole"
+  },
+  "key_identity": "r E_th L phi=R_reg, with R_reg=R_H+2 H R_M and L=-k^2",
+  "physical_regular_superhorizon_requirement": "R_reg=O(k^2) so that phi and the physical Newtonian potentials remain finite as k->0",
+  "active_target": "research/theory_targets/RTK_C10_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_TARGET_v1.json",
+  "required_real_CLASS_channels": {
+    "ordinary": "deltaH0_N, deltaH0_N_prime, H0_prime, H0_double_prime for baryons+photons+massless relativistic species only",
+    "total": "delta_mu_N, q_N, delta_p_N, Pi_N plus rho_total_prime,p_total_prime,rho_total+p_total including neutral RTK/Khronon",
+    "metric_background": "a,H,k and time coordinate"
+  },
+  "implementation_clue": "RT-CLASS perturbation workspace already assembles delta_rho, rho_plus_p_theta, rho_plus_p_shear and delta_p for standard species; RTK khronon_perturbations.c separately exposes delta_rho_class, delta_p_class, momentum_class and shear_class. The replay gate should combine/export these read-only under the frozen source conventions.",
+  "architecture_guard": "Do not feed shadow-v2 Phi_N/Psi_N back into CLASS at this gate. First export/replay and classify small-k regularity.",
+  "parallel_numerical_frontier": {
+    "A5_recenter1": "pending; do not duplicate",
+    "B4_v4_half_eigenmode_rays": "pending",
+    "B5_linear_scale_dependence": "pending"
+  },
+  "non_claims": [
+    "no completed-U1 physical source-history PASS yet",
+    "no completed-U1 spectra",
+    "no completed-action likelihood/refit",
+    "no C9 radiative protection",
+    "no compact-object closure"
+  ]
+}
