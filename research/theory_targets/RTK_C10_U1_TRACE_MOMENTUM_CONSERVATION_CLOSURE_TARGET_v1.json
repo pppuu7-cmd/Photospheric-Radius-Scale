@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_U1_TRACE_MOMENTUM_CONSERVATION_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-24T22:34:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "Does the final compatibility relation left after exact C10 U1 scalar metric reduction coincide identically with the total linear momentum-conservation law once the flat-FLRW background equations and homogeneous compensated-source conditions are imposed?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_PREPOTENTIAL_WARD_NORMALIZATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_LINEAR_WARD_CONSTRAINT_REDUCTION_RESULT_v1.json"
+  ],
+  "primary_source": {
+    "paper": "T. Zhu, F.-W. Shu, Q. Wu, A. Wang, arXiv:1110.5106v2",
+    "equations": ["6.7", "6.10", "6.11", "7.12", "7.14", "7.15", "7.18"],
+    "scope": "flat FLRW, quasilongitudinal gauge, nonprojectable local-U1 theory"
+  },
+  "frozen_relations": {
+    "reduced_trace_compatibility": "D(Hprime-H^2) phi + Mqprime + 2H Mq = 8 pi G a^2 delta_p_total + (16 pi G a^2/3) L Pi_total; D=3lambda-1; Mq=8 pi G a q_total",
+    "flat_background_acceleration_identity": "D(Hprime-H^2) = -8 pi G a^2 (rho_total+p_total)",
+    "target_momentum_conservation": "q_total_prime+3H q_total = a[(rho_total+p_total)phi+delta_p_total+(2/3)L Pi_total]",
+    "homogeneous_compensated_sources": "J_A_hat=0 and J_varphi_hat=0 on the flat homogeneous elliptic-compensated branch"
+  },
+  "acceptance": [
+    "derive the background acceleration identity algebraically from flat-k Friedmann Eq.(6.7) plus dynamical Eq.(6.10)",
+    "substitute Mq=8 pi G a q into the reduced trace compatibility relation",
+    "prove exact equality to the target total momentum-conservation equation",
+    "independently transform primary Eq.(7.18), using q=-a(rho+p)(v+B), background rho_prime+3H(rho+p)=0 and c_a^2=p_prime/rho_prime, to the same q-form when J_A_hat=J_varphi_hat=0",
+    "require zero symbolic residual in both derivations"
+  ],
+  "pass_classification": "C10_U1_TRACE_COMPATIBILITY_IS_TOTAL_MOMENTUM_CONSERVATION_PASS_SCOPED",
+  "non_claims": [
+    "does not provide the numerical CLASS source dictionary for auxiliary fields",
+    "does not include B4 massive-neutrino anisotropic-stress implementation",
+    "does not prove nonlinear conservation beyond the symmetry-defined action",
+    "does not close exact k=0 perturbation dynamics",
+    "does not produce a likelihood score"
+  ]
+}
