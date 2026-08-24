@@ -1,0 +1,105 @@
+{
+  "all_q_constructive_domain": {
+    "UV_lapse_signs": [
+      "beta24=beta2+beta4<=0",
+      "beta8<0 in the stated Zhu convention"
+    ],
+    "anisotropy": "a finite perturbative anisotropic rank neighborhood exists for every lambda_HL>1 but its conservative margin shrinks as lambda_HL->1+",
+    "background": "d=3 flat homogeneous isotropic barotropic ordinary source with rho>=0 and 0<=w<=4/3",
+    "beta0_bare": 0,
+    "lambda_HL": "strictly >1",
+    "near_GR": "H^2(lambda_HL)/H^2(1)=2/(3 lambda_HL-1), so the lambda_HL>1 domain has a nonempty arbitrarily-near-GR homogeneous interval",
+    "rank": "det B(q)=F(q)^2+a(q)d(q)>0 for every q>0 in the sufficient domain",
+    "source_bound": "M_c^2 >= (9 w^2/32) rho/(eta0 M_Pl^2); for w=1/3 this is rho/(32 eta0 M_Pl^2); dust satisfies the displayed trace condition automatically in that theorem",
+    "tensor": "flat TT stability is independent of lambda_HL and lapse-UV beta24/beta8 in this channel; gamma5>0 and gamma3>-2 sqrt(gamma5) preserve positive all-q TT dispersion with IR c_T^2=1"
+  },
+  "classification": "RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CURRENT_LINEAGE_REPLAY_PASS",
+  "critical_remaining_boundaries": {
+    "C9": "OPEN: radiative protection of sigma1=sigma2=0 remains unresolved",
+    "generic_background_rank": "OPEN beyond the stated FLRW/all-q and perturbative anisotropic neighborhoods",
+    "history_wide_Mc": "OPEN: convert epochwise rho,p source bounds into a declared EFT-history domain, including radiation and massive-neutrino/aniso-stress treatment",
+    "local_rest_C8": "OPEN: the exact local-rest rank-collapse/strong-coupling problem is not cured by this matter-filter rank certificate",
+    "production_CLASS": "OPEN: expose lambda_HL separately from lambda_D and implement the elliptic filtered A-source/constraint dynamics before any same-full-action likelihood claim"
+  },
+  "interpretation": "The elliptic completion is no longer blocked by an unidentified finite-k rank failure on the controlled flat-FLRW barotropic branch: the repository contains a constructive all-q sufficient domain and a near-GR lambda_HL>1 intersection. The dominant next task is to implement that completion in the production cosmology code under a predeclared parameter/domain protocol; this replay does not transfer the old RTK likelihood score to the completed action.",
+  "low_k_summary": {
+    "current_action_root": "M_c^2=-x/b2 when positive is the isolated leading rank-loss root; away from it a nonzero leading margin exists",
+    "filtered_matter": "leading rank loss is controlled by an explicit M_c-dependent matrix/root rather than an unavoidable half-line failure",
+    "neutral_RTK": "the only direct leading RTK E11 correction cannot change the leading |k|^4 determinant; it can change conditioning",
+    "perfect_fluid_scale": "a conservative lower bound is set by rho,p over M_Pl^2, not by the background canonical momentum or lambda_HL",
+    "pure_gravity": "det B = b2^2 |k|^4 + O(|k|^6) on the regular expanding special-U1 branch"
+  },
+  "next_gate": "freeze the production completion implementation protocol with explicit lambda_HL and a1_eff(a,k), plus a source-history/M_c domain audit before any new likelihood score",
+  "nonclaims": [
+    "does not implement the elliptic filtered source in production CLASS",
+    "does not prove the all-q sufficient domain for massive-neutrino anisotropic stress or arbitrary nonbarotropic matter",
+    "does not certify anisotropic/inhomogeneous backgrounds globally",
+    "does not freeze an EFT starting epoch or history-wide M_c lower bound",
+    "does not solve C9 radiative naturalness or the local-rest strong-coupling/rank-collapse problem"
+  ],
+  "parameter_freeze": "No numerical M_c, lambda_HL or UV Wilson coefficient is selected by this replay.",
+  "replayed_workers": [
+    {
+      "classification": "RTK_ROUTE_B_U1_FLAT_FLRW_LOWK_PURE_GRAVITY_RANK_PASS",
+      "result": "u1_flat_flrw_lowk_pure_gravity_rank_result.json",
+      "script": "rtk/route_b_u1_flat_flrw_lowk_pure_gravity_rank_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_LOWK_RANK_PERTURBATION_BOUND_PASS",
+      "result": "u1_lowk_rank_perturbation_bound_result.json",
+      "script": "rtk/route_b_u1_lowk_rank_perturbation_bound_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_RTK_LOWK_E11_RANK_IMMUNITY_PASS",
+      "result": "u1_rtk_lowk_e11_rank_immunity_result.json",
+      "script": "rtk/route_b_u1_rtk_lowk_e11_rank_immunity_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_FILTERED_MATTER_RANK_DENSITY_CANCELLATION_PASS",
+      "result": "u1_filtered_matter_rank_density_cancellation_result.json",
+      "script": "rtk/route_b_u1_filtered_matter_rank_density_cancellation_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_FILTERED_MATTER_PERFECT_FLUID_RANK_BOUND_PASS",
+      "result": "u1_filtered_matter_perfect_fluid_rank_bound_result.json",
+      "script": "rtk/route_b_u1_filtered_matter_perfect_fluid_rank_bound_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_FILTERED_MATTER_RANK_WINDOW_PASS",
+      "result": "u1_filtered_matter_rank_window_result.json",
+      "script": "rtk/route_b_u1_filtered_matter_rank_window_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_CURRENT_FULL_ACTION_LEADING_RANK_MARGIN_PASS",
+      "result": "u1_current_full_action_leading_rank_margin_result.json",
+      "script": "rtk/route_b_u1_current_full_action_leading_rank_margin_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_FLAT_FLRW_BAROTROPIC_LAMBDA_GT1_NO_ROOT_PASS",
+      "result": "u1_flat_flrw_barotropic_lambda_gt1_no_root_result.json",
+      "script": "rtk/route_b_u1_flat_flrw_barotropic_lambda_gt1_no_root_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_FLAT_FLRW_LAMBDA_GT1_NEAR_GR_BACKGROUND_PASS",
+      "result": "u1_flat_flrw_lambda_gt1_near_gr_background_result.json",
+      "script": "rtk/route_b_u1_flat_flrw_lambda_gt1_near_gr_background_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_LAMBDA_GT1_ANISOTROPIC_RANK_MARGIN_PASS",
+      "result": "u1_lambda_gt1_anisotropic_rank_margin_result.json",
+      "script": "rtk/route_b_u1_lambda_gt1_anisotropic_rank_margin_gate.py"
+    },
+    {
+      "classification": "RTK_U1_LAMBDA_GT1_COSMOLOGY_ANISOTROPY_WINDOW_PASS",
+      "result": "u1_lambda_gt1_cosmology_anisotropy_window_result.json",
+      "script": "rtk/u1_lambda_gt1_cosmology_anisotropy_window_gate.py"
+    },
+    {
+      "classification": "RTK_ROUTE_B_U1_FLAT_TT_ALLQ_STABILITY_PASS",
+      "result": "u1_flat_tt_allq_stability_result.json",
+      "script": "rtk/route_b_u1_flat_tt_allq_stability_gate.py"
+    }
+  ],
+  "status": "CONSTRUCTIVE_FLAT_FLRW_FINITE_K_AND_ALL_Q_RANK_SAFE_DOMAIN_REPLAYED_PRODUCTION_IMPLEMENTATION_OPEN",
+  "target": "research/theory_targets/RTK_ROUTE_B_U1_FINITE_K_RANK_DOMAIN_CONSOLIDATION_TARGET_v1.json"
+}
