@@ -1,16 +1,16 @@
 {
   "S_center": 1049.3633203461363,
-  "best_exact_S": 1049.3633203461363,
-  "best_improvement": 0.0,
-  "best_label": "center",
+  "best_exact_S": 1049.3550570964142,
+  "best_improvement": 0.008263249722176624,
+  "best_label": "newton_trust_eff",
   "best_params": {
-    "As": 2.0983938219102527e-09,
-    "Ob": 0.04838888999978602,
-    "Om": 0.2584441959848294,
-    "h": 0.6805163510946404,
+    "As": 2.098490857524975e-09,
+    "Ob": 0.048382880062392684,
+    "Om": 0.25847022980776346,
+    "h": 0.6804976358942407,
     "lam": 0.0,
-    "ns": 0.96638264917319,
-    "zre": 7.674455444668947
+    "ns": 0.9664964612260075,
+    "zre": 7.67518361771309
   },
   "center": {
     "As": 2.0983938219102527e-09,
@@ -22,11 +22,12 @@
     "zre": 7.674455444668947
   },
   "guard": "Local stationarity only; no global or model-selection claim.",
-  "min_eigenvalue": 0.032005948740345666,
+  "min_eigenvalue": 0.019510024973060546,
   "positive_definite": true,
   "recenter_tolerance_S": 0.005,
-  "result": "research/robustness/A5_LCDM_T1P1_BASE_RESULT_v1.json",
-  "schema": "A5_LCDM_T1P1_STATIONARITY_CURRENT_v1",
-  "status": "RECENTER_CLEAR_PD_HALF_REQUIRED",
-  "updated_utc": "2026-08-24T15:45:58Z"
+  "result": "research/robustness/A5_LCDM_T1P1_HALF_RESULT_v1.json",
+  "scale": 0.5,
+  "schema": "A5_LCDM_T1P1_STATIONARITY_CURRENT_v2",
+  "status": "HALF_RECENTER_REQUIRED",
+  "updated_utc": "2026-08-24T17:20:08Z"
 }
