@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_TARGET_v1",
+  "status": "ANALYTIC_FORMULA_DERIVED_BEFORE_CI_REPLAY_NOT_A_BLIND_SCORE_PROTOCOL",
+  "classification": "RTK_C8_U1_MINIMAL_HIGHER_SPATIAL_RESCUE_BOUND_TARGET_V1",
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_CANONICAL_RANK_SCALING_RESULT_v1.json",
+  "candidate_operator": "Delta L = - M_Pl^2 eta4/(2 X_star) (D^2 Sigma)^2",
+  "normalization_scope": "eta4 is dimensionless in the stated normalization; this target concerns only this minimal scalar higher-spatial operator",
+  "local_rest_effect": {
+    "quadratic_term": "-M_Pl^2 eta4 (Delta phi)^2",
+    "dispersion_if_eta4_positive": "omega^2 = eta4 k^4/(mu_K^2+k^2) before any additional higher-spatial gravity operators"
+  },
+  "rolling_branch_contamination": {
+    "exact_ratio": "R_HS = eta4 u^2 p^2/(M_K^2 c_a^2) = eta4 Q k_com^2 a/(mu_K^2 x0)",
+    "definitions": ["u=Q=1+r", "p=k_com/a", "x=x0/a^3", "M_K^2 c_a^2=mu_K^2 Q x"]
+  },
+  "reference": {
+    "role": "historical independently replay-certified RTK local reference; refresh if a new RTK production reference supersedes it",
+    "h": 0.691103719964454,
+    "Omega_K0": 0.2522864064078236,
+    "lambda_D": 219457.5727136581,
+    "gamma": 0.05170371280716,
+    "production_kmax_h_per_Mpc": 5.0,
+    "redshift_interval": [0.0, 1.0]
+  },
+  "requested_outputs": [
+    "reconstruct H0/c, mu_K and x0 from the frozen production closure",
+    "verify the exact identity M_K^2 c_a^2=mu_K^2 Q x",
+    "verify d ln(aQ)/d ln a = 1-3r/(Q s^2)>0 throughout 0<=z<=1 for this reference, so z=0 is the worst contamination point at fixed comoving k",
+    "report R_HS/eta4 at k_com=5h/Mpc and z=0",
+    "invert the ratio for contamination tolerances 1%, 0.5%, 0.1%, and 0.01%"
+  ],
+  "interpretation_rule": "The output is a tuning/compatibility bound for this operator, not an acceptance threshold for UV completion. A small allowed eta4 does not by itself falsify the model, and a value satisfying the bound does not establish radiative naturalness or a healthy cutoff.",
+  "non_claims": [
+    "does not prove this is the unique higher-spatial completion",
+    "does not include higher-spatial metric/U1 operators or cancellations among several operators",
+    "does not establish technical naturalness of a tiny eta4",
+    "does not compute a scattering cutoff",
+    "does not replace a full likelihood replay with eta4 nonzero",
+    "does not use a new best-fit RTK point; it is tied to the historical certified reference until that reference is superseded"
+  ],
+  "next_gate": "compare the required eta4 window with finite-amplitude local-rest canonical dynamics and with radiative generation estimates; then test a minimal multi-operator higher-spatial basis if a single eta4 term is too tuned"
+}
