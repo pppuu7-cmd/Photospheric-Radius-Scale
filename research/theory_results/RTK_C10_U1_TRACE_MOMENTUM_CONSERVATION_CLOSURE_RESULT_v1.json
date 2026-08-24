@@ -1,0 +1,19 @@
+{
+  "background_acceleration_identity": "(3lambda-1)(Hprime-H^2)=-8 pi G a^2 (rho_total+p_total)",
+  "classification": "C10_U1_TRACE_COMPATIBILITY_IS_TOTAL_MOMENTUM_CONSERVATION_PASS_SCOPED",
+  "interpretation": "The final relation left after A/momentum/Hamiltonian/traceless elimination is not an independent propagating scalar-gravity equation in this scoped flat-FLRW k>0 system; it is exactly total momentum conservation once the background equations hold.",
+  "momentum_conservation_q_form": "q_total_prime+3H q_total=a[(rho_total+p_total)phi+delta_p_total+(2/3)L Pi_total]",
+  "non_claims": [
+    "not a numerical CLASS auxiliary-source implementation",
+    "not a B4 massive-neutrino anisotropic-stress implementation",
+    "not nonlinear conservation closure",
+    "not an exact k=0 perturbation theorem",
+    "not a likelihood result"
+  ],
+  "primary_eq_7p18_check": "PASS after q=-a(rho+p)(v+B), rho_prime+3H(rho+p)=0 and c_a^2=p_prime/rho_prime, with J_A_hat=J_varphi_hat=0",
+  "reduced_trace_compatibility": "D(Hprime-H^2)phi+Mqprime+2H Mq=8 pi G a^2 delta_p_total+(16 pi G a^2/3)L Pi_total",
+  "status_scope": "GREEN_EXACT_LINEAR_TRACE_CLOSURE_BY_TOTAL_MOMENTUM_CONSERVATION",
+  "symbolic_residual_primary_7p18_to_q_form": "0",
+  "symbolic_residual_reduced_to_conservation": "0",
+  "target": "research/theory_targets/RTK_C10_U1_TRACE_MOMENTUM_CONSERVATION_CLOSURE_TARGET_v1.json"
+}
