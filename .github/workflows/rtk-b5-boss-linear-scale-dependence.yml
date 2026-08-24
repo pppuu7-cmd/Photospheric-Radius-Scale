@@ -1,0 +1,122 @@
+name: RTK B5 BOSS linear scale dependence
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-b5-boss-linear-scale-dependence-trigger.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rtk-b5-boss-linear-scale-dependence
+  cancel-in-progress: false
+
+jobs:
+  scale-dependence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      OMP_NUM_THREADS: '2'
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Require frozen B5 target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_TARGET_v1.json'))
+          assert t['classification']=='B5_BOSS_LINEAR_SCALE_DEPENDENCE_TARGET_V1_FROZEN'
+          assert t['frozen_before_scores'] is True
+          assert t['redshifts']==[0.38,0.51,0.61]
+          assert min(t['k_h_Mpc'])==0.02 and max(t['k_h_Mpc'])==0.24
+          assert t['production_mapping']=='eff'
+          print('B5_BOSS_SCALE_TARGET_PASS')
+          PY
+          python3 -m py_compile rtk/b5_boss_linear_scale_dependence.py
+          echo "research_source_commit=$(git rev-parse HEAD)" | tee b5_boss_scale_provenance.txt
+
+      - name: Prepare pinned patched CLASS
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_public
+          git -C class_public reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_public rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_public/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_public/include/
+          python3 rtk/apply_rtk_class_patch.py class_public
+          python3 rtk/upgrade_rtk_inputs.py class_public
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_initial_conditions.py class_public
+          python3 rtk/upgrade_rtk_matter_sources.py class_public
+          python3 rtk/upgrade_rtk_gamma_root.py class_public
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_public
+          cp rtk/b5_boss_linear_scale_dependence.py class_public/
+
+      - name: Build CLASS
+        run: make -C class_public -j2 class
+
+      - name: Evaluate frozen scale-dependence gate
+        working-directory: class_public
+        run: |
+          set -euo pipefail
+          python3 b5_boss_linear_scale_dependence.py | tee ../b5_boss_linear_scale_dependence.log
+          grep -q B5_BOSS_LINEAR_SCALE_DEPENDENCE_COMPLETE ../b5_boss_linear_scale_dependence.log
+          python3 - <<'PY'
+          import json
+          s=json.load(open('../output/b5_boss_linear_scale_dependence/summary.json'))
+          assert s['classification'] in (
+            'B5_LINEAR_SCALE_DEPENDENCE_CONTROL_REVIEW_REQUIRED',
+            'B5_LINEAR_SCALE_DEPENDENCE_STRICT_SUBPERCENT',
+            'B5_LINEAR_SCALE_DEPENDENCE_PERCENT_LEVEL_REQUIRES_SURVEY_PROPAGATION',
+            'B5_LINEAR_SCALE_DEPENDENCE_MATERIAL_GT_3_PERCENT')
+          assert len(s['rtk']['by_z'])==3
+          print('B5_BOSS_SCALE_ARTIFACT_PASS',s['classification'],s['primary_rtk_max_abs_relative'],s['lcdm_control_max_abs_relative'])
+          PY
+
+      - name: Persist result and B5 state
+        if: success()
+        run: |
+          set -euo pipefail
+          cp output/b5_boss_linear_scale_dependence/summary.json research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_RESULT_v1.json
+          python3 - <<'PY'
+          import json, datetime
+          r=json.load(open('research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_RESULT_v1.json'))
+          s={
+            'schema':'RTK_B5_CURRENT_STATE_v1',
+            'updated_utc':datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z'),
+            'status':'LINEAR_SCALE_DEPENDENCE_SUBGATE_COMPLETE',
+            'classification':r['classification'],
+            'primary_rtk_max_abs_relative':r['primary_rtk_max_abs_relative'],
+            'lcdm_control_max_abs_relative':r['lcdm_control_max_abs_relative'],
+            'result':'research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_RESULT_v1.json',
+            'remaining_B5_scope':['survey_window','Alcock_Paczynski_mapping','nonlinear_RSD_template','bias_marginalization','full_shape_or_justified_bound'],
+            'guard':'Passing linear scale-dependence cannot by itself close B5.'
+          }
+          open('research/state/B5_current.json','w').write(json.dumps(s,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/robustness/B5_BOSS_LINEAR_SCALE_DEPENDENCE_RESULT_v1.json research/state/B5_current.json
+          git commit -m 'Persist B5 BOSS linear scale-dependence result'
+          git push origin HEAD:rtk-class-build
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-b5-boss-linear-scale-dependence
+          path: |
+            b5_boss_linear_scale_dependence.log
+            b5_boss_scale_provenance.txt
+            output/b5_boss_linear_scale_dependence/
+          if-no-files-found: warn
