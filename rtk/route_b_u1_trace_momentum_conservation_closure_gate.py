@@ -26,11 +26,15 @@ DHp=sp.solve(sp.Eq(dyn_expr,0), D*Hp)[0]
 accel=sp.simplify(DHp-DH2)
 assert sp.simplify(accel + 8*sp.pi*G*a**2*(rho+p))==0
 
-# C10 reduced trace compatibility.
+# C10 reduced trace compatibility.  Keep the acceleration combination grouped
+# until the background identity is inserted.  A prior executable revision
+# expanded this expression first and then tried to substitute the grouped
+# D*(Hprime-H^2) pattern; SymPy correctly could not match that already-expanded
+# tree.  The frozen physics target/formulas are unchanged by this implementation fix.
 Mq=8*sp.pi*G*a*q
 Mqp=8*sp.pi*G*a*(qp+H*q)  # derivative of a*q in conformal time
-compat=sp.expand(D*(Hp-H**2)*phi + Mqp + 2*H*Mq - 8*sp.pi*G*a**2*dp - sp.Rational(16,3)*sp.pi*G*a**2*L*Pi)
-compat_accel=sp.expand(compat.subs(D*(Hp-H**2),accel))
+compat_grouped=D*(Hp-H**2)*phi + Mqp + 2*H*Mq - 8*sp.pi*G*a**2*dp - sp.Rational(16,3)*sp.pi*G*a**2*L*Pi
+compat_accel=sp.expand(compat_grouped.subs(D*(Hp-H**2),accel))
 target=8*sp.pi*G*a*(qp+3*H*q-a*((rho+p)*phi+dp+sp.Rational(2,3)*L*Pi))
 assert sp.simplify(compat_accel-target)==0
 
