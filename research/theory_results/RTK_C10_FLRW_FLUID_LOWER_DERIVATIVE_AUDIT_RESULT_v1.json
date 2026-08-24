@@ -1,0 +1,21 @@
+{
+  "classification": "C10_FLRW_FIXED_ACTION_VS_PRODUCTION_GDM_LOWER_DERIVATIVE_MISMATCH_IDENTIFIED_SCOPED",
+  "common_limit": "Both residuals vanish identically when c_s^2=c_a^2 (F=1).",
+  "fixed_action_delta_equation": "delta'=-(1+w)(theta-3phi')-3H(c_a^2-w)delta",
+  "fixed_action_theta_equation": "theta'=-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+psi]",
+  "interpretation": "The fixed action and current production effective-fluid implementation agree on the rational principal pressure/dispersion relation but differ in expanding-FLRW lower-derivative entropy/friction terms. This is a same-action implementation gap, not by itself an observational failure. An additional U1-gravity/Ward contribution may in principle restore the GDM form, but must be derived explicitly.",
+  "next_gate": "Quantify the coefficient size on the replay-certified RTK background and test whether the completed U1 metric/Ward system supplies the missing residual; if not, implement a shadow corrected-fluid solver and compare observables before changing the production likelihood path.",
+  "non_claims": [
+    "not a full CLASS rerun",
+    "not an observable-error estimate",
+    "not a proof that no additional U1 gravity/Ward term restores the GDM equations",
+    "not nonlinear perturbation closure",
+    "not a B4 massive-neutrino extension"
+  ],
+  "production_delta_equation": "delta'=-(1+w)(theta-3phi')-3H(c_s^2-w)delta-9H^2(1+w)(c_s^2-c_a^2)theta/k^2",
+  "production_minus_action_delta": "-3H(c_s^2-c_a^2)[delta+3H(1+w)theta/k^2]",
+  "production_minus_action_theta": "3H(c_s^2-c_a^2)theta",
+  "production_theta_equation": "theta'=-H(1-3c_s^2)theta+k^2[c_s^2 delta/(1+w)+psi]",
+  "status_scope": "YELLOW_EXACT_LOWER_DERIVATIVE_DIFFERENCE_PRINCIPAL_RATIONAL_KERNEL_STILL_MATCHES",
+  "target": "research/theory_targets/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_TARGET_v1.json"
+}
