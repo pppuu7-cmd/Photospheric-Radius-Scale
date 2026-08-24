@@ -1,0 +1,72 @@
+{
+  "schema": "RTK_C10_ACTION_FLUID_FIXED_LIKELIHOOD_REPLAY_TARGET_v1",
+  "created_utc": "2026-08-24T22:28:00Z",
+  "status": "FROZEN_BEFORE_FIXED_PARAMETER_LIKELIHOOD_RESULT",
+  "question": "At the historical replay-certified RTK point, how much does the exact matched Planck+Pantheon+BOSS raw objective change when only the lower-derivative Khronon perturbation equations are switched from the production GDM form to the separately CI-certified action-derived shadow form?",
+  "parents": [
+    "research/theory_results/RTK_C10_ACTION_FLUID_TWIN_CLASS_SPECTRA_RESULT_v1.json",
+    "research/theory_results/RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_RESULT_v1.json",
+    "research/state/current.json"
+  ],
+  "reference": {
+    "model": "RTK",
+    "params": {
+      "lam": 219457.5727136581,
+      "h": 0.691103719964454,
+      "Ob": 0.046800730927437424,
+      "Om": 0.2522864064078236,
+      "As": 2.0877827951474356e-09,
+      "ns": 0.9645577770978523,
+      "zre": 7.328459220286924
+    },
+    "historical_exact_score_eff": 1050.249912429787,
+    "objective": "matched-ultra-linstep2+dense-BOSS",
+    "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666"
+  },
+  "environment": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "pantheon_sha": "7eb29dc87ba223b4ec8457cd3cccba1216c36fb7",
+    "planck_sha256": "0b73171e3acc671c28184466a45485a2d1c1d93676b832abdfe688c7b04024e6",
+    "python": "3.12.3",
+    "numpy": "2.5.2",
+    "scipy": "1.18.0",
+    "clipy_like": "0.15"
+  },
+  "branches": {
+    "production": "pinned production Khronon implementation with no action-shadow patch",
+    "shadow": "identical pinned tree plus only rtk/apply_rtk_action_fluid_shadow_patch.py"
+  },
+  "acceptance": {
+    "production_replay_abs_tolerance": 2e-6,
+    "fixed_parameter_shadow_minus_production_abs_score_tolerance": 0.005,
+    "component_outputs_required": [
+      "logL_planck",
+      "logL_lowT",
+      "logL_lowE",
+      "logL_high",
+      "chi2_SN",
+      "chi2_BOSS_eff",
+      "chi2_BOSS_k01",
+      "rd"
+    ],
+    "require_both_ok": true,
+    "require_identical_params": true,
+    "require_exact_final_dense_precision_core": true
+  },
+  "classification_bins": {
+    "ACTION_SHADOW_FIXED_LIKELIHOOD_INDISTINGUISHABLE_AT_0P005": "abs(delta_score_eff) <= 0.005",
+    "ACTION_SHADOW_FIXED_LIKELIHOOD_MATERIAL_GT_0P005": "abs(delta_score_eff) > 0.005"
+  },
+  "decision": {
+    "if_indistinguishable": "Record fixed-parameter likelihood robustness only. Do not transfer the historical fit certificate to the completed U1 action; continue the reduced U1 metric-solver bridge before any completed-action refit.",
+    "if_material": "Freeze a separate shadow-fluid reoptimization protocol before any new optimizer scores. Do not modify the production path in place."
+  },
+  "non_claims": [
+    "not a completed U1 metric-solver likelihood",
+    "not a completed-action refit",
+    "not a new RTK vs LCDM comparison",
+    "not AIC/BIC/Bayes/significance",
+    "not evidence that the elliptic compensator has been implemented in CLASS"
+  ]
+}
