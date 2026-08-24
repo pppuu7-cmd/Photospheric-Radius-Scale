@@ -12,13 +12,13 @@
     "ns": 0.9662859140870312,
     "zre": 7.684806125603674
   },
-  "decision": "RECENTER_CLEAR_NONPD_RAYS_REQUIRED",
+  "decision": "BASE_NONPD_RAYS_CLEAR_HALF_SCALE_REQUIRED",
   "min_eigenvalue": -0.002467341536255588,
   "positive_definite": false,
   "recenter_tolerance_S": 0.005,
-  "result": "research/robustness/A5_LCDM_B9_SEED_BASE_RESULT_v1.json",
+  "result": "research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_RESULT_v1.json",
   "scale": 1.0,
   "schema": "A5_LCDM_B9_SEED_STATIONARITY_CURRENT_v1",
-  "updated_utc": "2026-08-24T10:09:30Z",
-  "warning": "This is a search for a better known LCDM basin of the unchanged baseline objective. It neither invalidates the historical local Hessian theorem nor proves global optimality."
+  "updated_utc": "2026-08-24T12:34:10Z",
+  "warning": "Exact A5 local eigenmode-ray diagnostic only; not a global-minimum or model-selection claim."
 }
