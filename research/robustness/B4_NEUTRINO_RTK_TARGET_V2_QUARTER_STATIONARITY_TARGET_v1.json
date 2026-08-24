@@ -1,0 +1,51 @@
+{
+  "classification": "B4_NEUTRINO_RTK_TARGET_V2_QUARTER_STATIONARITY_TARGET_V1_FROZEN",
+  "status": "CONDITIONAL_PREREGISTRATION_BEFORE_HALF_EIGENMODE_RAY_RESULT",
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "production_mapping": "eff",
+  "parent_center_target": "research/robustness/b4_neutrino_rtk_ray_recenter_target_v2.json",
+  "half_eigenmode_target": "research/robustness/b4_neutrino_rtk_target_v2_half_eigenmode_rays_target_v1.json",
+  "dispatch_precondition": {
+    "result": "research/robustness/B4_NEUTRINO_RTK_TARGET_V2_HALF_EIGENMODE_RAYS_RESULT_v1.json",
+    "required_classification": "B4_TARGET_V2_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
+    "required_max_exact_improvement_le": 0.005
+  },
+  "center": {
+    "As": 2.0920212896820786e-09,
+    "Ob": 0.04722200104991654,
+    "Om": 0.2528393318824633,
+    "h": 0.6885660022475836,
+    "lam": 3043326.1774413693,
+    "ns": 0.9657332769496741,
+    "zre": 7.506210209218662
+  },
+  "expected_center_S_eff": 1050.5880475140204,
+  "stencil_scale": 0.25,
+  "base_steps": {
+    "loglam": 0.05,
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "scaled_steps": {
+    "loglam": 0.0125,
+    "h": 0.0000875,
+    "Ob": 0.0000175,
+    "Om": 0.000175,
+    "As": 1e-12,
+    "ns": 0.0000875,
+    "zre": 0.0175
+  },
+  "center_replay_abs_tolerance": 0.000002,
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "decision_rule": {
+    "if_exact_improvement_gt_0p005": "mandatory recenter at the best exact quarter-scale point",
+    "if_recenter_clear_and_PD": "classify the half-scale non-PD mode as a stencil-scale instability only after preserving the no-descent half-ray result; then require an independent fresh-tree quarter-scale replay before local B4 RTK certification",
+    "if_recenter_clear_and_nonPD": "freeze exact quarter-scale negative/soft eigenmode rays before any smaller-scale fallback"
+  },
+  "guard": "Frozen conditionally before the half-scale eigenmode-ray result. B4 is a separate minimal-neutrino objective; no massless A1-A5 or global/model-selection claim is authorized."
+}
