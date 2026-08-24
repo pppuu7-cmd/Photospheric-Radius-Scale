@@ -1,0 +1,35 @@
+{
+  "classification": "RTK_C8_U1_LOCAL_REST_FULL_SCALAR_QUADRATIC_RANK_ENHANCEMENT_EXACT_PASS",
+  "constraint_chain": {
+    "A_equation": "delta R^(3)=4 k^2 zeta=0 -> zeta=0 for k>0",
+    "RTK_quadratic_with_lapse": "L2/M_Pl^2=(mu_K^2+k^2)[dot(phi)-n]^2",
+    "lapse_equation": "dot(phi)-n=0 since mu_K^2+k^2>0",
+    "reduced_quadratic_action": "0 for the finite-k RTK scalar perturbation",
+    "scalar_shift_gravity": "KijKij-K^2 = k^4 B^2-k^4 B^2=0 at lambda_HL=1 after zeta=0"
+  },
+  "external_structure": "standard nonprojectable U(1) flat-branch A multiplier equation R^(3)-2 Lambda_g=0 in vacuum; same action family used in the frozen PPN/DOF gates",
+  "frozen_conditions": {
+    "Lambda_g": 0,
+    "RTK_A_source": "zero by explicit fixed scalar action",
+    "U1_gauge": "nu=0",
+    "X_U": "X_star>0 local rest point",
+    "beta0_bare": 0,
+    "k": "k>0",
+    "lambda_HL": 1,
+    "sigma1_sigma2": "0,0"
+  },
+  "interpretation": "The exact local rest point is a quadratic constraint-rank-enhanced surface relative to the rolling cosmological branch: after the U1 and lapse constraints are imposed, the intended finite-k RTK scalar has no quadratic propagator at the two-derivative level. This is a strong-coupling/constraint-bifurcation warning, not yet a numerical cutoff or a proof of pathology.",
+  "next_gate": "derive the first nonvanishing fully constrained nonlinear local-rest scalar action (cubic/quartic) and its constraint rank; in parallel freeze a minimal higher-spatial completion basis and test whether it restores a controlled local quadratic mode without spoiling the cosmological RTK kernel, TT c_T=1, PPN quartet or classical rolling-branch DOF.",
+  "non_claims": [
+    "does not say the cosmological rolling branch lacks the intended scalar mode",
+    "does not prove a ghost or exponential instability",
+    "does not assign a physical strong-coupling energy scale",
+    "does not decide whether nonlinear interactions make the local mode strongly coupled or whether an additional constraint removes it nonlinearly",
+    "does not include higher-spatial UV operators",
+    "does not cover k=0, rotation/nonzero invariant shift, X_U->0 or the DBI boundary"
+  ],
+  "prerequisite": "research/theory_results/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_RESULT_v1.json",
+  "relation_to_prior_DOF": "The prior 3-DOF classical certification was explicitly on a regular phase-space slice with X_U>0 and nonzero canonical scalar momentum/rolling branch. The exact local rest point has P_X=0 and is therefore a special rank surface; the two statements are not contradictory.",
+  "status": "NO_FINITE_K_INTENDED_RTK_SCALAR_QUADRATIC_PROPAGATOR_ON_EXACT_LOCAL_REST_BRANCH_AT_TWO_DERIVATIVE_LEVEL",
+  "target": "research/theory_targets/RTK_C8_U1_LOCAL_REST_FULL_SCALAR_CONSTRAINT_TARGET_v1.json"
+}
