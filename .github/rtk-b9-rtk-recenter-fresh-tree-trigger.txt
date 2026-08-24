@@ -1,1 +1,2 @@
-launch 2026-08-22T09:22Z
+launch 2026-08-24T08:19:00Z
+reason: continue frozen B9 RTK independent fresh-tree certification using the preregistered workflow; compute tree remains rtk-class-build; criteria unchanged.
