@@ -20,6 +20,13 @@ typedef struct {
   double h2_ratio;
 } rtk_u1_shadow_state;
 
+typedef struct {
+  double delta_h0;
+  double delta_q;
+  double delta_j_a;
+  double delta_p_nu;
+} rtk_u1_shadow_linear_source;
+
 enum {
   RTK_U1_SHADOW_OK = 0,
   RTK_U1_SHADOW_BAD_INPUT = 1,
@@ -33,6 +40,9 @@ int rtk_u1_shadow_eval(const rtk_u1_shadow_params *p,
                        double a,
                        double k_com,
                        rtk_u1_shadow_state *out);
+int rtk_u1_shadow_linear_source_eval(const rtk_u1_shadow_state *state,
+                                     double delta_h0,
+                                     rtk_u1_shadow_linear_source *out);
 const char *rtk_u1_shadow_status_string(int status);
 
 #ifdef __cplusplus
