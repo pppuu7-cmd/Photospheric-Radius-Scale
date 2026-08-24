@@ -1,0 +1,30 @@
+{
+  "classification": "RTK_ROUTE_B_U1_STATIC_VARIATION_BRIDGE_TARGET_V1_FROZEN",
+  "status": "FROZEN_AFTER_STATIC_SCALAR_EOM_PASS_BEFORE_BRIDGE_EXECUTION",
+  "prerequisite_result": "research/theory_results/RTK_ROUTE_B_U1_STATIC_CLOCK_SCALAR_EOM_RESULT_v1.json",
+  "fixed_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+  "sector": {
+    "invariant_shift": "B^i=N^i-ND^i nu=0",
+    "clock": "Sigma=q t",
+    "D_iSigma": 0,
+    "static_geometry": true,
+    "rolling_domain": "X_U>0"
+  },
+  "claims_to_test": [
+    "S_mix reduces exactly to N sqrt(g) M_Pl^2 a_i a^i as a functional of static N and g_ij",
+    "therefore its first variations with respect to N and g_ij coincide exactly with an acceleration operator having beta0-like coefficient 2 in the M_Pl^2/2 gravity convention",
+    "the first variation of S_mix with respect to the invariant shift B^i vanishes at D_iSigma=0",
+    "S_mix has no direct A-field source",
+    "the DBI P(X_U) sector remains a separate lapse potential and is not absorbed into beta0_eff"
+  ],
+  "dbi_expansion_required": "for N=1+n on the u=1 asymptotic clock branch, reproduce P/M_Pl^2 = mu_K^2[n^2-2n^3+(3+lambda_D/4)n^4+O(n^5)]",
+  "acceptance": "all symbolic identities and first-variation statements pass exactly",
+  "failure": "any nonzero linear invariant-shift source or mismatch of N/g first variations blocks use of pure-U1 static equations",
+  "non_claims": [
+    "does not neglect P(X_U)",
+    "does not yet certify beta_PPN or gamma_PPN including finite-M_K corrections",
+    "does not address moving-source O(v^3) preferred-frame equations",
+    "does not address rotating compact objects, X_U->0, radiative stability or cutoff"
+  ],
+  "next_gate_if_pass": "derive a finite-M_K static PPN adequacy bound: pure-U1 beta0_eff=2 static equations plus explicit P(X_U) source, with quantitative Solar-System suppression from the locked local-clock hierarchy"
+}
