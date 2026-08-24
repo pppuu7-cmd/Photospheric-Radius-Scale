@@ -15,28 +15,25 @@ source_audit=Path('research/theory_results/RTK_C10_PRODUCTION_SOURCE_COMPOSITION
 assert 'RTK/Khronon completion sector is neutral/unfiltered' in source_audit
 assert 'baryons' in source_audit and 'photons' in source_audit and 'massless relativistic species' in source_audit
 
-# Algebraic total-current audit.  P is ordinary-only projected A coefficient.
+# Algebraic total-current audit. P is ordinary-only projected A coefficient.
 H,lam,G,a=sp.symbols('H lambda G a', nonzero=True, finite=True, real=True)
 psi,phi,psip,lapB=sp.symbols('psi phi psi_prime lapB', finite=True, real=True)
-q_ord,q_neutral=sp.symbols('q_ord q_neutral', finite=True, real=True)
-qtot=sp.expand(q_ord+q_neutral)
-lap=sp.symbols('lap', nonzero=True, finite=True, real=True)
+qT,q_ord,q_neutral=sp.symbols('q_total q_ord q_neutral', finite=True, real=True)
 
 # From A+Ward, before momentum substitution, the prepotential bracket is
-# 2(psi'+H psi)-8 pi G a q_total.  The A-density part remains ordinary-only.
-ward_bracket=sp.expand(2*(psip+H*psi)-8*sp.pi*G*a*qtot)
+# 2(psi'+H psi)-8 pi G a q_total. The A-density part remains ordinary-only.
+ward_bracket=2*(psip+H*psi)-8*sp.pi*G*a*qT
 # Momentum equation sees exactly the same q_total.
-momentum_total=sp.expand((3*lam-1)*(psip+H*phi)+(lam-1)*lapB)
-reduced=sp.expand(ward_bracket.subs(8*sp.pi*G*a*qtot,momentum_total))
+momentum_total=(3*lam-1)*(psip+H*phi)+(lam-1)*lapB
+reduced=sp.expand(ward_bracket.subs(8*sp.pi*G*a*qT,momentum_total))
 target=sp.expand(2*H*(psi-phi)+(1-lam)*(lapB+3*psip+3*H*phi))
 assert sp.simplify(reduced-target)==0
 
 # Neutral momentum cannot be dropped unless it is actually zero: doing so leaves
 # a nonzero residual proportional to q_neutral.
-wrong_bracket=sp.expand(2*(psip+H*psi)-8*sp.pi*G*a*q_ord)
-# Replace q_ord using qtot-qneutral and then the total momentum equation.
-wrong_rewritten=sp.expand(wrong_bracket.subs(q_ord,qtot-q_neutral))
-wrong_after=sp.expand(wrong_rewritten.subs(8*sp.pi*G*a*qtot,momentum_total))
+wrong_bracket=2*(psip+H*psi)-8*sp.pi*G*a*q_ord
+wrong_rewritten=wrong_bracket.subs(q_ord,qT-q_neutral)
+wrong_after=sp.expand(wrong_rewritten.subs(8*sp.pi*G*a*qT,momentum_total))
 wrong_residual=sp.factor(wrong_after-target)
 assert sp.simplify(wrong_residual-8*sp.pi*G*a*q_neutral)==0
 
