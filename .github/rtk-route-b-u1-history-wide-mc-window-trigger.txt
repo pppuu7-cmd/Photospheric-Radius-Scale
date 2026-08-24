@@ -1,0 +1,2 @@
+launch_utc: 2026-08-24T20:25:00Z
+reason: frozen exact history-wide M_c compatibility theorem after current-lineage finite-k/all-q rank consolidation; no parameter selection or likelihood score.
