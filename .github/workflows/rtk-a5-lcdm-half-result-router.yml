@@ -20,7 +20,7 @@ jobs:
         with:
           ref: rtk-class-build
           fetch-depth: 1
-      - name: Route only a persisted passing half-scale result
+      - name: Route only a persisted scientifically current passing half-scale result
         run: |
           set -euo pipefail
           git pull --ff-only origin rtk-class-build
@@ -33,12 +33,29 @@ jobs:
           h=json.load(open('research/robustness/A5_LCDM_B9_SEED_HALF_RESULT_v1.json'))
           r=json.load(open('research/robustness/A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_RESULT_v1.json'))
           t=json.load(open('research/robustness/A5_FINAL_REPLACEMENT_PAIRED_REPLAY_TARGET_v1.json'))
+          s=json.load(open('research/state/A5_LCDM_cross_basin_stationarity_current.json'))
+          line=json.load(open('research/robustness/A5_LCDM_OLD_TO_NEW_BASIN_LINE_PROFILE_RESULT_v1.json'))
           assert r['classification']=='A5_LCDM_B9_SEED_BASE_EIGENMODE_RAYS_NO_DESCENT_GT_0P005'
           assert h['stencil_scale']==0.5
           assert h['center']==t['lcdm']['params']
           assert h['center_replay_abs_error']<=2e-6
+          # Fail closed if any later exact same-objective result supersedes this t=1 center.
+          if s.get('decision')!='BASE_NONPD_RAYS_CLEAR_HALF_SCALE_REQUIRED':
+              print('A5_HALF_STALE_NO_FINAL_DISPATCH',s.get('decision'))
+              raise SystemExit(0)
+          if line.get('best_sample_t',1.0)>1.0 and (float(h['eff']['S_center'])-float(line['best_sample_score']))>0.005:
+              print('A5_HALF_SUPERSEDED_BY_LINE_PROFILE_NO_FINAL_DISPATCH',line['best_sample_t'],line['best_sample_score'])
+              raise SystemExit(0)
           if h['eff']['best_improvement']>0.005 or not h['eff']['positive_definite']:
               raise SystemExit('A5_HALF_NOT_PASSING_REPLACEMENT_GATE')
           print('A5_LCDM_HALF_PASS_FINAL_REPLACEMENT_REPLAY_ALLOWED',h['eff']['best_improvement'],min(h['eff']['eigenvalues_y']))
+          PY
+          # Re-check state in shell before dispatch: current state must still authorize the old t=1 half chain.
+          python3 - <<'PY'
+          import json,sys
+          s=json.load(open('research/state/A5_LCDM_cross_basin_stationarity_current.json'))
+          if s.get('decision')!='BASE_NONPD_RAYS_CLEAR_HALF_SCALE_REQUIRED':
+              print('A5_FINAL_REPLAY_DISPATCH_BLOCKED_BY_CURRENT_STATE')
+              sys.exit(42)
           PY
           gh workflow run rtk-a5-final-replacement-paired-replay.yml --repo "$GITHUB_REPOSITORY" --ref main
