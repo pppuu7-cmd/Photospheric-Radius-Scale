@@ -1,0 +1,45 @@
+name: RTK A5 LCDM t1p1 base result router
+
+on:
+  workflow_run:
+    workflows: ['RTK A5 LCDM t1p1 stationarity base']
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  route:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - name: Route only persisted recenter-clear PD base
+        run: |
+          set -euo pipefail
+          git pull --ff-only origin rtk-class-build
+          test -s research/robustness/A5_LCDM_T1P1_BASE_RESULT_v1.json || { echo 'No persisted t1p1 base result; no dispatch.'; exit 0; }
+          python3 - <<'PY'
+          import json,sys
+          b=json.load(open('research/robustness/A5_LCDM_T1P1_BASE_RESULT_v1.json'))
+          t=json.load(open('research/robustness/A5_LCDM_T1P1_HALF_STATIONARITY_TARGET_v1.json'))
+          assert float(b['stencil_scale'])==1.0
+          assert b['center']==t['center']
+          assert abs(float(b['eff']['S_center'])-t['expected_center_S_eff'])<=t['center_replay_abs_tolerance']
+          imp=float(b['eff']['best_improvement']); pd=bool(b['eff']['positive_definite'])
+          if imp>t['recenter_tolerance_S']:
+              print('A5_T1P1_BASE_RECENTER_REQUIRED_NO_HALF',imp); sys.exit(10)
+          if not pd:
+              print('A5_T1P1_BASE_NONPD_RAYS_REQUIRED_NO_HALF',min(b['eff']['eigenvalues_y'])); sys.exit(11)
+          print('A5_T1P1_BASE_PD_HALF_ALLOWED',imp,min(b['eff']['eigenvalues_y']))
+          PY
+          rc=$?
+          if [ "$rc" -eq 10 ] || [ "$rc" -eq 11 ]; then exit 0; fi
+          if [ "$rc" -ne 0 ]; then exit "$rc"; fi
+          gh workflow run rtk-a5-lcdm-t1p1-stationarity-half.yml --repo "$GITHUB_REPOSITORY" --ref main
