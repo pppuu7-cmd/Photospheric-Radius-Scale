@@ -1,0 +1,48 @@
+{
+  "schema": "A5_LCDM_T1P1_STATIONARITY_TARGET_v1",
+  "status": "FROZEN_AFTER_FORWARD_LINE_RESULT_BEFORE_STATIONARITY_SCORES",
+  "classification": "A5_LCDM_T1P1_STATIONARITY_TARGET_V1_FROZEN",
+  "objective": "matched-ultra-linstep2+dense-BOSS",
+  "objective_fingerprint": "754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666",
+  "production_mapping": "eff",
+  "prerequisite": {
+    "result": "research/robustness/A5_LCDM_T1P1_FORWARD_LINE_CONTINUATION_RESULT_v1.json",
+    "required_classification": "A5_LCDM_T1P1_FORWARD_LINE_CONTINUATION_COMPLETE",
+    "required_decision": "T1P1_FORWARD_CLEAR_STATIONARITY_REQUIRED",
+    "required_best_sample_t": 1.1,
+    "required_best_sample_score": 1049.3633203461366
+  },
+  "center": {
+    "As": 2.0983938219102527e-09,
+    "Ob": 0.04838888999978602,
+    "Om": 0.2584441959848294,
+    "h": 0.6805163510946404,
+    "lam": 0.0,
+    "ns": 0.96638264917319,
+    "zre": 7.674455444668947
+  },
+  "expected_center_S_eff": 1049.3633203461366,
+  "axes": ["h", "Ob", "Om", "As", "ns", "zre"],
+  "base_steps": {
+    "h": 0.00035,
+    "Ob": 0.00007,
+    "Om": 0.0007,
+    "As": 4e-12,
+    "ns": 0.00035,
+    "zre": 0.07
+  },
+  "required_scales": [1.0, 0.5],
+  "recenter_tolerance_S": 0.005,
+  "positive_definite_threshold": 1e-08,
+  "center_replay_abs_tolerance": 0.000002,
+  "base_decision": {
+    "if_exact_improvement_gt_0p005": "freeze the exact best point as a new recenter target before any further stencil",
+    "if_recenter_clear_and_PD": "run an independent half-scale Hessian at exactly the same center",
+    "if_recenter_clear_and_nonPD": "freeze exact negative/soft eigenmode rays before any smaller-scale fallback"
+  },
+  "half_decision": {
+    "if_recenter_clear_and_PD": "require independent fresh-tree replay at this exact center before A5 paired refreeze",
+    "otherwise": "follow the same frozen recenter/ray logic; do not average scales"
+  },
+  "guard": "This is local stationarity of the best exact LCDM point found on the frozen cross-basin line. It is not a global-minimum, significance, AIC/BIC, posterior or Bayes claim."
+}
