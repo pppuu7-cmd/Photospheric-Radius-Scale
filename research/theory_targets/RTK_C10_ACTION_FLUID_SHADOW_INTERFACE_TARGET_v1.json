@@ -1,0 +1,24 @@
+{
+  "schema": "RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_TARGET_v1",
+  "created_utc": "2026-08-24T22:47:00Z",
+  "status": "FROZEN_BEFORE_SHADOW_IMPLEMENTATION_RESULT",
+  "scope": "standalone C shadow implementation of the action-derived linear RTK fluid equations; production khronon_perturbations.c must remain byte-for-byte unmodified by this gate",
+  "required_equations": {
+    "delta_prime": "-(1+w)(theta-3phi_prime)-3H(c_a^2-w)delta",
+    "theta_prime": "-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+psi]",
+    "delta_p_over_rho": "c_s^2 delta",
+    "momentum_over_rho": "(1+w)theta"
+  },
+  "controls": [
+    "when c_s^2=c_a^2, action-shadow derivatives equal current production derivatives and pressure source exactly",
+    "for c_s^2!=c_a^2, derivative differences equal the frozen symbolic residuals",
+    "no direct modification/import hook into current CLASS production path",
+    "finite/unphysical input guards"
+  ],
+  "non_claims": [
+    "not a CLASS observable comparison",
+    "not the completed U1 metric solver",
+    "not a likelihood rerun",
+    "not a B4 massive-neutrino extension"
+  ]
+}
