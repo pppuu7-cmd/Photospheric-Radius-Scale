@@ -1,0 +1,3 @@
+triggered_utc=2026-08-24T18:48:00Z
+frozen_target=research/theory_targets/RTK_C8_U1_LOCAL_REST_CONSTRAINED_QUINTIC_TIME_TARGET_v1.json
+purpose=execute_first_time_dependent_constrained_local_rest_scalar_gate
