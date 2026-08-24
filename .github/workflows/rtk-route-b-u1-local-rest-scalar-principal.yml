@@ -1,0 +1,68 @@
+name: RTK Route-B U1 local-rest scalar principal symbol
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-route-b-u1-local-rest-scalar-principal-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and run exact theorem
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_TARGET_v1.json'))
+          assert t['classification']=='RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_TARGET_V1_FROZEN'
+          assert t['status']=='FROZEN_BEFORE_LOCAL_REST_PRINCIPAL_RESULT'
+          print('LOCAL_REST_SCALAR_PRINCIPAL_TARGET_PASS')
+          PY
+          python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile rtk/route_b_u1_local_rest_scalar_principal.py
+          git rev-parse HEAD | tee u1_local_rest_scalar_principal_provenance.txt
+          python3 rtk/route_b_u1_local_rest_scalar_principal.py | tee u1_local_rest_scalar_principal.log
+          grep -q '^RTK_C8_U1_LOCAL_REST_SCALAR_SPATIAL_PRINCIPAL_DEGENERACY_EXACT_PASS ' u1_local_rest_scalar_principal.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('u1_local_rest_scalar_principal_result.json'))
+          assert r['classification']=='RTK_C8_U1_LOCAL_REST_SCALAR_SPATIAL_PRINCIPAL_DEGENERACY_EXACT_PASS'
+          assert r['exact_identities']['quadratic_grad_phi2_coefficient']=='0'
+          assert r['exact_identities']['c_s2_at_Xstar']=='0'
+          print('LOCAL_REST_SCALAR_PRINCIPAL_ARTIFACT_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-route-b-u1-local-rest-scalar-principal
+          path: |
+            u1_local_rest_scalar_principal.log
+            u1_local_rest_scalar_principal_provenance.txt
+            u1_local_rest_scalar_principal_result.json
+          if-no-files-found: error
+      - name: Persist theorem result
+        if: success()
+        run: |
+          set -euo pipefail
+          cp u1_local_rest_scalar_principal_result.json /tmp/result.json
+          git fetch origin rtk-class-build
+          git reset --hard origin/rtk-class-build
+          cp /tmp/result.json research/theory_results/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_RESULT_v1.json
+          git config user.name 'rtk-u1-local-rest-principal'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C8_U1_LOCAL_REST_SCALAR_PRINCIPAL_RESULT_v1.json
+          git commit -m 'Persist local-rest scalar principal-symbol theorem'
+          git push origin HEAD:rtk-class-build
