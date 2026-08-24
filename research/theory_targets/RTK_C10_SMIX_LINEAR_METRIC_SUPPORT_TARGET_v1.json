@@ -1,0 +1,36 @@
+{
+  "schema": "RTK_C10_SMIX_LINEAR_METRIC_SUPPORT_TARGET_v1",
+  "created_utc": "2026-08-24T21:47:00Z",
+  "status": "FROZEN_BEFORE_EXECUTABLE_RESULT",
+  "question": "For the frozen U1-invariant rolling RTK mixed operator S_mix=int N sqrt(g) C D_i Theta_U D^i Theta_U, determine its quadratic principal metric support about a homogeneous rolling background and its exact two-derivative IR contribution to the lapse kernel, without assuming a completed CLASS source map.",
+  "parents": [
+    "research/RTK_C8_U1_FAMILY1_FIXED_IR_SLICE_v2.json",
+    "research/RTK_C8_U1_BETA0_ACCOUNTING_ERRATUM_2026-08-22.md",
+    "research/RTK_C8_U1_GAUGE_COMPLETION_PROTOCOL_2026-08-21.md"
+  ],
+  "frozen_facts": {
+    "Theta_U": "[dot Sigma-Ntilde^i D_i Sigma]/N with Ntilde^i=N^i-N D^i nu",
+    "background": "D_i Sigma_bar=0, Theta_bar=q, D_i Theta_bar=0",
+    "exact_RTK_match": "C q^2=M_Pl^2",
+    "bare_gravity": "beta0_bare=0 on corrected full-action slice v2",
+    "gravity_normalization": "zeta^2=M_Pl^2/2"
+  },
+  "acceptance": [
+    "derive the first-order principal perturbation delta Theta=u-q phi, where u denotes the scalar normal-velocity perturbation and phi=delta N/Nbar; retain lower-derivative qdot*pi terms outside this principal gate",
+    "derive S_mix^(2),principal proportional to C k_phys^2 (u-q phi)^2 up to the positive homogeneous measure",
+    "show direct quadratic dependence on shift B, spatial curvature potential psi, A and nu is absent at this principal order on a homogeneous scalar background",
+    "show the lapse quadratic coefficient is C q^2 k_phys^2=M_Pl^2 k_phys^2",
+    "compare with zeta^2 beta0_eff k_phys^2 phi^2 and derive beta0_eff_from_Smix=2",
+    "combine with beta0_bare=0 to obtain Eth_IR_full=2 in the two-derivative local-rest principal truncation",
+    "insert Eth_IR_full=2 into the C10 minimal-metric lapse denominator for lambda_HL>1 and prove -(2(lambda-1)k^2+2(3lambda-1)H^2)<0 for k>0",
+    "retain the cross term -2 C q u phi as an unresolved scalar/lapse source bridge that must be mapped to the completed-action perturbation variables before CLASS implementation"
+  ],
+  "pass_classification": "C10_SMIX_LINEAR_METRIC_SUPPORT_AND_IR_LAPSE_KERNEL_PASS_SCOPED",
+  "non_claims": [
+    "not a full FLRW lower-derivative expansion when q varies in time",
+    "not a high-spatial-derivative Eth(k) theorem",
+    "not a completed-action delta_mu or scalar-variable dictionary",
+    "not a CLASS or likelihood implementation",
+    "not a nonlinear perturbation theorem"
+  ]
+}
