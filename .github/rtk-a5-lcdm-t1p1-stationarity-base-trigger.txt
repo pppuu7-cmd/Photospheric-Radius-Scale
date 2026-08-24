@@ -1,0 +1,2 @@
+triggered_utc=2026-08-24T14:08:00Z
+reason=frozen_t1p1_forward_clear_stationarity_required
