@@ -4,3 +4,5 @@ research_source_commit=55c993894e9b2c8595e8fffb1a21ecf41ac68dd5
 parent_half_run_id=32514077002
 parent_half_artifact_id=9463331303
 purpose=exact rays along frozen negative and soft half-scale B4 eigenmodes
+rerun_sequence=2
+rerun_reason=identical frozen scientific gate; post-processing router added so the artifact result is persisted into rtk-class-build for chat-independent recovery
