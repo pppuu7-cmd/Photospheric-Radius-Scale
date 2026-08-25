@@ -1,0 +1,54 @@
+{
+  "classification": "C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_PASS_PROJECTOR_SOURCE_REWIRE_REQUIRED_SCOPED",
+  "completed_projector_contract": {
+    "Ward_momentum": "total q = q_ordinary + q_neutral",
+    "neutral_metric_stress": "action-derived Khronon effective stress, not production-GDM stress",
+    "ordinary_A_filter": "ordinary-only deltaH0 through a_eff",
+    "ordinary_metric_stress": "physical ordinary species stress transformed to the preferred source representation",
+    "projector": "retain C10.52 A->Hamiltonian->momentum algebra; rewire source/evolution provider before feedback"
+  },
+  "historical_production_difference": {
+    "common_limit_cs2_equals_ca2": "all three residuals vanish exactly",
+    "delta_prime_prod_minus_action": "3*H*(ca2 - cs2)*(3*H*theta*w + 3*H*theta + delta*k**2)/k**2",
+    "interpretation": "production-GDM source histories are excellent historical diagnostics but are not the final same-action neutral source provider",
+    "pressure_prod_minus_action_over_rho": "-3*H*theta*(ca2 - cs2)*(w + 1)/k**2",
+    "theta_prime_prod_minus_action": "-3*H*theta*(ca2 - cs2)"
+  },
+  "machine_residuals": {
+    "JA_plus_a_eff_H0": "0",
+    "JA_plus_pnu": "0",
+    "delta_evolution_difference_formula": "0",
+    "pnu_minus_a_eff_H0": "0",
+    "pressure_difference_formula": "0",
+    "regular_Hperp_minus_H0": "0",
+    "theta_evolution_difference_formula": "0"
+  },
+  "neutral_khronon_action_channel": {
+    "Pi": "0 at the certified linear effective-fluid boundary",
+    "U1_A_source": "zero direct A-source; its momentum still belongs to total q/Ward channel",
+    "delta_mu": "rho_khr * delta_action",
+    "delta_p": "rho_khr * c_s^2 * delta_action",
+    "evolution_delta_prime": "-(1+w)(theta-3 phi_prime)-3 H(c_a^2-w)delta",
+    "evolution_theta_prime": "-H(1-3 c_a^2)theta+k^2[c_s^2 delta/(1+w)+psi]",
+    "metric_scope_guard": "the preferred-coordinate forcing/shift convention still requires a dedicated derivation before coupled feedback",
+    "momentum": "(rho_khr+p_khr) theta_action"
+  },
+  "next_gate": "derive neutral P(X_U)+S_mix perturbation evolution directly in preferred quasilongitudinal variables, including the shift/momentum definition, and prove the B=0 reduction equals the certified action-fluid shadow",
+  "non_claims": [
+    "not a preferred-coordinate neutral evolution theorem",
+    "not a completed-U1 CLASS implementation",
+    "not nonlinear S_mix stress",
+    "not a massive-neutrino extension",
+    "not spectra or likelihood evidence"
+  ],
+  "ordinary_elliptic_channel": {
+    "J_A": "-a_eff H0",
+    "a_eff": "1-1/ell = k_phys^2/(M_c^2+k_phys^2)",
+    "gauge_pair_residual": "0",
+    "metric_stress_rule": "do not multiply ordinary delta_mu, q, delta_p or Pi by a_eff; the elliptic filter belongs to the A/prepotential gauge-pair channel",
+    "p_nu": "+a_eff H0",
+    "reduced_Hamiltonian": "[N-a_eff(A-Acal)] H0 + (N^i+N D^i nu) H_i",
+    "regular_slice_Hperp": "H0"
+  },
+  "schema": "RTK_C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_RESULT_v1"
+}
