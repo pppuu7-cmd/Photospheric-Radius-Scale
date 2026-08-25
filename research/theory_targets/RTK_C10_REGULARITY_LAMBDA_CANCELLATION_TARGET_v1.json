@@ -1,0 +1,31 @@
+{
+  "schema": "RTK_C10_REGULARITY_LAMBDA_CANCELLATION_TARGET_v1",
+  "created_utc": "2026-08-25T00:45:00Z",
+  "status": "FROZEN_BEFORE_RESULT",
+  "question": "Does the reordered Newtonian/Stueckelberg regularity numerator R_reg=R_H+2H R_M retain any dependence on lambda_HL after total-background conservation and D=3lambda_HL-1 are used?",
+  "parents": [
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_SHADOW_METRIC_HISTORY_CONDITIONING_RESULT_v1.json"
+  ],
+  "definitions": [
+    "D=3 lambda_HL-1=3r+2, r=lambda_HL-1",
+    "A=8 pi G a^2, Q_N=8 pi G a q_N, X=A(rho+p), L=-k^2",
+    "R_M=Q_N-D S_psi-(r L+X)chi",
+    "R_H=-A r(delta_mu_N-rho_prime chi)-D H(Q_N-X chi)+2D H S_psi+2r Pcal L psi",
+    "rho_prime=-3H(rho+p)=-3H X/A"
+  ],
+  "acceptance": [
+    "expand R_H+2H R_M exactly",
+    "prove all S_psi terms cancel",
+    "prove all X*chi terms cancel after total background conservation",
+    "factor the result as r times a bracket independent of lambda_HL",
+    "state the consequence for the physical small-k replay without selecting epsilon=lambda_HL-1"
+  ],
+  "pass_classification": "C10_REGULARITY_NUMERATOR_LAMBDA_HL_CANCELS_EXACTLY_PASS_SCOPED",
+  "non_claims": [
+    "not a full physical small-k regularity pass",
+    "does not select M_c or Pcal",
+    "does not fix the remaining source-unit normalization audit",
+    "not a completed-U1 Boltzmann result"
+  ]
+}
