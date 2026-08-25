@@ -1,0 +1,29 @@
+{
+  "schema": "RTK_C10_CLASS_SOURCE_UNIT_NORMALIZATION_TARGET_v1",
+  "created_utc": "2026-08-25T00:56:00Z",
+  "status": "FROZEN_BEFORE_RESULT",
+  "question": "What normalization converts RT-CLASS aggregate density/momentum/shear variables into the physical stress variables used in the C10 equations that display explicit 8 pi G factors?",
+  "parents": [
+    "research/theory_results/RTK_C10_CLASS_SOURCE_CONVENTION_MAP_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_A_SOURCE_NORMALIZATION_RESULT_v1.json"
+  ],
+  "anchors": [
+    "RT-CLASS Newtonian Einstein momentum equation uses phi_prime+H psi=(3/2)a^2 rho_plus_p_theta_CLASS/k^2",
+    "physical Einstein momentum equation uses phi_prime+H psi=4 pi G a^2 (rho+p)theta_phys/k^2",
+    "RTK khronon source adapter explicitly sets rho_class=rho8piG/3 and p_class=p8piG/3"
+  ],
+  "acceptance": [
+    "derive rho_hat=(8 pi G/3) rho_phys and the same constant scaling for p, delta_mu and rho+p",
+    "derive q_hat=(8 pi G/3)q_phys=a*rho_plus_p_theta_CLASS/k^2",
+    "derive Pi_hat=(8 pi G/3)Pi_phys=(3/2)rho_plus_p_shear_CLASS/k^2",
+    "rewrite every explicit 8 pi G source combination used by shadow-v2 in CLASS-normalized variables",
+    "do not alter the already exported production histories; correct only the replay interface/interpretation"
+  ],
+  "pass_classification": "C10_CLASS_SOURCE_UNIT_NORMALIZATION_PASS_SCOPED",
+  "non_claims": [
+    "not a physical small-k regularity pass",
+    "not a completion-parameter choice",
+    "not a production CLASS modification"
+  ]
+}
