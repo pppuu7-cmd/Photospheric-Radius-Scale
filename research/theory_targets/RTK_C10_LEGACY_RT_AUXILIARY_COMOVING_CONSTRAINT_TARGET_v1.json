@@ -1,0 +1,56 @@
+{
+  "schema": "RTK_C10_LEGACY_RT_AUXILIARY_COMOVING_CONSTRAINT_TARGET_v1",
+  "created_utc": "2026-08-25T00:33:00Z",
+  "status": "FROZEN_BEFORE_AUXILIARY_ROUNDTRIP_EXECUTION",
+  "question": "Does the precision-stable late-time k->0 residual in the imported legacy model-2 C_com equal the auxiliary RT-gravity contribution required by the independent RT 00 equation plus the actual CLASS model-2 0i equation?",
+  "parents": [
+    "research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_RESULT_v1.json",
+    "research/theory_results/RTK_C10_SMALL_K_PRECISION_CONVERGENCE_RESULT_v1.json"
+  ],
+  "literature_equations": {
+    "source": "RT nonlocal-gravity scalar equations corresponding to equations 2.1.26 and 2.1.27 in the recovered reference derivation",
+    "metric_convention_map": "Phi_RT=-phi_CLASS, Psi_RT=psi_CLASS",
+    "code_auxiliary_map": "U_RT=U_code; V_RT=H0*V_code/a because V_code is the conformal-time covector component a*S0; Z_RT=H0^2*Z_code",
+    "B00_code": "dU - dVprime/a^2 + Hc*dV/a^2 + 2*psi*Vbgprime/a^2 - 2*Hc*psi*Vbg/a^2 + psiprime*Vbg/a^2",
+    "A0i_code": "(3/2)*gamma*H0^2*(Hc*dZ - dZprime/2 + Vbg*psi/2 - dV/2), exactly the already exported model-2 phi-prime auxiliary correction",
+    "roundtrip_identity": "R_RT=C_com + 2*k^2*phi_CLASS/(3*a^2) + gamma*H0^2*B00_code + 2*Hc*A0i_code/a^2 = 0"
+  },
+  "independence_guard": "C_com and A0i_code are evaluated directly in the CLASS workspace. B00_code uses the independently recovered RT 00 equation and additional U,V background/perturbation fields. The 00 equation is not the Newtonian-gauge evolution equation used by CLASS, so this is a constraint round-trip rather than an algebraic rewrite of the exported C_com definition.",
+  "k_ladder_Mpc_inv": [2e-6,4e-6,6e-6,8e-6,1.2e-5,1.6e-5,2e-5,4e-5,6e-5,8e-5,1.2e-4,2e-4],
+  "binding_late_scale_factors": [0.1,0.5],
+  "diagnostic_early_scale_factors": [0.001,0.01],
+  "binding_smallest_four_Mpc_inv": [2e-6,4e-6,6e-6,8e-6],
+  "precision": {
+    "k_max_tau0_over_l_max": 4.0,
+    "k_per_decade_for_bao": 180,
+    "k_per_decade_for_pk": 40,
+    "l_linstep": 2,
+    "l_logstep": 1.02,
+    "perturb_sampling_stepsize": 0.003125,
+    "tol_background_integration": 0.000075,
+    "tol_perturb_integration": 7.5e-8,
+    "tol_thermo_integration": 0.000075
+  },
+  "psi_prime_estimators": [
+    "centered local cubic polynomial derivative using six nearest tau samples",
+    "centered local quartic polynomial derivative using ten nearest tau samples"
+  ],
+  "frozen_acceptance_per_binding_epoch": {
+    "median_roundtrip_abs_over_median_observed_aux_abs_max": 0.05,
+    "predicted_aux_median_abs_over_observed_aux_median_abs_min": 0.8,
+    "predicted_aux_median_abs_over_observed_aux_median_abs_max": 1.2,
+    "psi_prime_estimator_induced_roundtrip_difference_over_observed_aux_median_abs_max": 0.05
+  },
+  "decision_rule": {
+    "both_binding_epochs_pass": "C10_LEGACY_RT_AUXILIARY_EXPLAINS_LATE_CCOM_RESIDUAL_PASS_SCOPED",
+    "otherwise": "C10_LEGACY_RT_AUXILIARY_ROUNDTRIP_NOT_CLOSED"
+  },
+  "interpretation_if_pass": "The parent C10 small-k source-compatibility FAIL remains historically valid for the raw imported matter source, but its precision-stable late-time non-k^2 part is identified as a legacy RT-gravity auxiliary-constraint contribution. A new completed-U1 compatibility test must therefore freeze the source-transfer prescription explicitly instead of treating raw legacy C_com as a gravity-independent source identity.",
+  "non_claims": [
+    "does not retroactively change the parent confirmatory FAIL",
+    "does not prove the completed-U1 physical history is regular",
+    "does not authorize subtracting a legacy gravity contribution in production without a separately frozen source-transfer derivation",
+    "no completion parameters are selected",
+    "production dynamics remain untouched"
+  ]
+}
