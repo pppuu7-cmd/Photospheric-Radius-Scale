@@ -1,0 +1,49 @@
+{
+  "schema": "RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_TARGET_v1",
+  "created_utc": "2026-08-25T01:24:00Z",
+  "status": "FROZEN_CONFIRMATORY_BEFORE_NEW_K_EXECUTION",
+  "question": "Using new previously unevaluated ultra-small k values and C_com computed directly inside CLASS before interpolation/cancellation, do the historical RTK production stress histories satisfy the parameter-free necessary scaling C_com=O(k^2) required for a finite-Mc, finite-chi completed-U1 replay over the core tested epochs?",
+  "parents": [
+    "research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CLASS_SOURCE_UNIT_NORMALIZATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_REGULARITY_LAMBDA_CANCELLATION_RESULT_v1.json"
+  ],
+  "independence": "The confirmatory k ladder is new and was not present in the exploratory result. The acceptance tolerances are frozen before these new k values are executed.",
+  "k_ladder_Mpc_inv": [2e-6,4e-6,6e-6,8e-6,1.2e-5,1.6e-5,2e-5,4e-5,6e-5,8e-5,1.2e-4,2e-4],
+  "confirmatory_smallest_four_Mpc_inv": [2e-6,4e-6,6e-6,8e-6],
+  "core_scale_factors": [0.001,0.01,0.1,0.5],
+  "nonbinding_early_diagnostic_scale_factor": 0.0005,
+  "direct_quantity": "c10_Ccom_direct=ppw->delta_rho+3 Hc ppw->rho_plus_p_theta/k^2, evaluated inside CLASS at one workspace state before table interpolation",
+  "completed_u1_necessity": [
+    "In native CLASS units the lambda-independent completed-U1 regularity bracket is B_reg=3a^2 C_com+2Hc L chi-3a^2 Pcal a1_eff(deltaH0-H0_prime chi).",
+    "For fixed finite M_c>0, a1_eff=O(k^2) as k->0.",
+    "For finite chi, the two remaining completion terms are O(k^2).",
+    "Therefore C_com=O(k^2) is necessary for finite completed-U1 phi on this branch. This is a compatibility test of imported stress histories, not an identity assumed from the legacy model-2 gravity equations."
+  ],
+  "per_epoch_acceptance_smallest_four": {
+    "no_sign_change_in_C_com": true,
+    "effective_exponent_each_adjacent_pair_min": 1.6,
+    "effective_exponent_each_adjacent_pair_max": 2.4,
+    "Y_equals_C_over_k2_signed_spread_over_median_abs_max": 0.25,
+    "zero_intercept_fit_C_equals_c2k2_plus_c4k4_normalized_rms_max": 0.02,
+    "free_intercept_fit_abs_c0_over_max_abs_C_max": 0.02
+  },
+  "decision_rule": {
+    "all_four_core_epochs_pass": "C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_PASS_CORE_EPOCHS_SCOPED",
+    "any_core_epoch_fails": "C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_FAIL_CORE_EPOCHS_SCOPED",
+    "early_a_0p0005": "record but do not bind the classification because the completion EFT onset a_EFT remains a separately unfrozen boundary"
+  },
+  "controls": [
+    "record direct C_com and postprocessed C_com from separately interpolated components to quantify the cancellation artifact found in the exploratory ladder",
+    "record model-2 auxiliary dZ,dZ_prime,dV,V_bg and the production 0i auxiliary correction as provenance only",
+    "require actual CLASS k values to equal the new requested ladder within output precision",
+    "do not select M_c, lambda_HL, Pcal or alpha1",
+    "do not feed completed-U1 metric potentials back into CLASS"
+  ],
+  "non_claims": [
+    "a PASS would clear only a necessary source-regularity screen, not the full completed-U1 history replay",
+    "does not choose an EFT onset",
+    "does not choose completion parameters",
+    "not a completed-U1 Boltzmann, spectra or likelihood result"
+  ]
+}
