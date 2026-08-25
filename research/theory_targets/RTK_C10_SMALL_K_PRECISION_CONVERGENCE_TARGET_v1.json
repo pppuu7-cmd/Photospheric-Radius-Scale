@@ -1,0 +1,65 @@
+{
+  "schema": "RTK_C10_SMALL_K_PRECISION_CONVERGENCE_TARGET_v1",
+  "created_utc": "2026-08-25T00:21:00Z",
+  "status": "FROZEN_BEFORE_ULTRA_AND_TIGHT_EXECUTION",
+  "question": "Is the previously frozen ultra-small-k compatibility FAIL dominated by numerical time-sampling/interpolation floor, or does a precision-stable non-O(k^2) source residual remain?",
+  "parent_confirmatory_result": "research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_RESULT_v1.json",
+  "parent_required_classification": "C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_FAIL_CORE_EPOCHS_SCOPED",
+  "guard": "This convergence target does not alter, erase, or retroactively relabel the parent confirmatory FAIL. It diagnoses its origin only.",
+  "k_ladder_Mpc_inv": [2e-6,4e-6,6e-6,8e-6,1.2e-5,1.6e-5,2e-5,4e-5,6e-5,8e-5,1.2e-4,2e-4],
+  "smallest_four_Mpc_inv": [2e-6,4e-6,6e-6,8e-6],
+  "plateau_k_Mpc_inv": [4e-5,6e-5,8e-5,1.2e-4,2e-4],
+  "core_scale_factors": [0.001,0.01,0.1,0.5],
+  "nonbinding_early_scale_factor": 0.0005,
+  "precision_tiers": {
+    "baseline": {
+      "source": "persisted parent confirmatory result",
+      "precision": "CLASS defaults used by the parent confirmatory workflow"
+    },
+    "historical_ultra": {
+      "k_max_tau0_over_l_max": 4.0,
+      "k_per_decade_for_bao": 180,
+      "k_per_decade_for_pk": 40,
+      "l_linstep": 2,
+      "l_logstep": 1.02,
+      "perturb_sampling_stepsize": 0.0125,
+      "tol_background_integration": 0.0003,
+      "tol_perturb_integration": 3e-7,
+      "tol_thermo_integration": 0.0003
+    },
+    "tight_diagnostic": {
+      "k_max_tau0_over_l_max": 4.0,
+      "k_per_decade_for_bao": 180,
+      "k_per_decade_for_pk": 40,
+      "l_linstep": 2,
+      "l_logstep": 1.02,
+      "perturb_sampling_stepsize": 0.003125,
+      "tol_background_integration": 0.000075,
+      "tol_perturb_integration": 7.5e-8,
+      "tol_thermo_integration": 0.000075
+    }
+  },
+  "analysis": {
+    "direct_quantity": "c10_Ccom_direct computed inside CLASS before table interpolation",
+    "interpolators": ["linear", "local_cubic_four_point"],
+    "plateau_model": "C_com=c2*k^2+c4*k^4 fitted only on plateau_k_Mpc_inv",
+    "small_k_floor_metric": "median absolute residual of the smallest four C_com values relative to the plateau-model extrapolation",
+    "interpolation_metric": "median absolute linear-minus-local-cubic C_com difference on the smallest four"
+  },
+  "frozen_decision_rule": {
+    "numerical_floor_supported": "at least 3 of 4 core epochs satisfy: tight linear floor <= 0.5*baseline linear floor; tight plateau c2 agrees with historical-ultra plateau c2 within 5%; and either tight cubic floor <= 0.5*tight linear floor or tight interpolation metric >= 0.25*tight linear floor",
+    "precision_stable_physical_residual_supported": "at least 3 of 4 core epochs satisfy: historical-ultra linear floor >= 0.8*baseline floor and tight linear floor >= 0.8*historical-ultra floor; the smallest-eight free intercept has the same sign in historical-ultra and tight, changes by <=20% in magnitude, and its magnitude exceeds 5 times the tight interpolation metric",
+    "otherwise": "C10_SMALL_K_PRECISION_CONVERGENCE_INCONCLUSIVE"
+  },
+  "classifications": {
+    "numerical_floor_supported": "C10_SMALL_K_NUMERICAL_FLOOR_SUPPORTED_SCOPED",
+    "precision_stable_physical_residual_supported": "C10_SMALL_K_PRECISION_STABLE_NONK2_RESIDUAL_SUPPORTED_SCOPED",
+    "inconclusive": "C10_SMALL_K_PRECISION_CONVERGENCE_INCONCLUSIVE"
+  },
+  "non_claims": [
+    "no completion parameter choice",
+    "no completed-U1 metric feedback into CLASS",
+    "no completed-action spectra or likelihood result",
+    "even numerical-floor support would not by itself convert the parent FAIL into a PASS; a separately frozen compatibility rerun would still be required"
+  ]
+}
