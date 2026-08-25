@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_REGULARITY_LAMBDA_CANCELLATION_RESULT_v1",
+  "classification": "C10_REGULARITY_NUMERATOR_LAMBDA_HL_CANCELS_EXACTLY_PASS_SCOPED",
+  "status_scope": "GREEN_EXACT_LINEAR_ALGEBRA_SMALL_K_REGULARITY_NUMERATOR_INDEPENDENT_OF_LAMBDA_HL",
+  "target": "research/theory_targets/RTK_C10_REGULARITY_LAMBDA_CANCELLATION_TARGET_v1.json",
+  "exact_reduction": {
+    "starting": "R_reg=R_H+2 H R_M",
+    "factorized": "R_reg=-r[A delta_mu_N+2 H L chi+3 H Q_N-2 Pcal L psi]",
+    "definitions": "r=lambda_HL-1; A=8 pi G a^2; Q_N=8 pi G a q_N; L=-k^2",
+    "symbolic_residual": "0"
+  },
+  "cancellations": [
+    "The +2 D H S_psi term in R_H cancels the -2 H D S_psi term from 2H R_M exactly.",
+    "Using D=3r+2, the Q_N coefficient is (2-D)H=-3rH.",
+    "Using rho_prime=-3H(rho+p) and X=A(rho+p), all X chi terms cancel exactly against the source-coordinate density transformation term A r rho_prime chi.",
+    "Every surviving term carries one common factor r=lambda_HL-1."
+  ],
+  "reordered_phi": "phi=-[A delta_mu_N+2 H L chi+3 H Q_N-2 Pcal L psi]/(E_th L)",
+  "after_A_constraint": {
+    "constraint": "L psi=(A/2) a1_eff[deltaH0_N-H0_prime chi]",
+    "phi": "phi=-{A delta_mu_N+3H Q_N+2H L chi-A Pcal a1_eff[deltaH0_N-H0_prime chi]}/(E_th L)",
+    "regularity_numerator": "N_reg=A delta_mu_N+3H Q_N+2H L chi-A Pcal a1_eff[deltaH0_N-H0_prime chi]"
+  },
+  "consequence": "For lambda_HL>1 the physical finite-k regularity test N_reg=O(k^2) is exactly independent of the numerical value of epsilon=lambda_HL-1. lambda_HL is still needed by other completed-gravity equations and rank domains, but it need not be selected to audit this specific small-k numerator.",
+  "remaining_parameter_dependence": "N_reg still contains a1_eff=k^2/(k^2+a^2 M_c^2), Pcal and the internal chi. Source-unit normalization between CLASS aggregate densities and the C10 physical stress convention must also be frozen before numerical replay.",
+  "next_gate": "Audit CLASS stress-energy units against the C10 8 pi G normalization, then seek a parameter-independent small-k scaling theorem or a frozen diagnostic scan for M_c/Pcal plus a chi boundary prescription.",
+  "non_claims": [
+    "not a physical small-k regularity PASS",
+    "not a choice of M_c, Pcal or lambda_HL",
+    "not a proof that arbitrary chi histories are regular",
+    "not a completed-U1 Boltzmann or likelihood result"
+  ]
+}
