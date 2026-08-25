@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_TARGET_v1",
+  "created_utc": "2026-08-25T01:08:00Z",
+  "status": "FROZEN_DIAGNOSTIC_BEFORE_EXECUTION",
+  "question": "Before choosing any completion parameter, how does the production RTK total-source combination C_com=delta_mu_CLASS+3 Hc rho_plus_p_theta_CLASS/k^2 scale toward small k at common epochs, when viewed as a necessary compatibility screen for a finite-Mc, finite-chi completed-U1 replay?",
+  "parents": [
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CLASS_SOURCE_UNIT_NORMALIZATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_REGULARITY_LAMBDA_CANCELLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CLASS_NORMALIZED_SHADOW_V3_RESULT_v1.json"
+  ],
+  "completed_u1_logic": [
+    "In CLASS units the lambda-independent regularity bracket is B_reg=3a^2 delta_mu+9Hc a q_hat+2Hc L chi-3a^2 Pcal a1_eff(deltaH0-H0_prime chi).",
+    "Using q_hat=a*rho_plus_p_theta/k^2, the first two terms are 3a^2 C_com with C_com=delta_mu+3Hc rho_plus_p_theta/k^2.",
+    "For any fixed finite M_c>0 at fixed a>0, a1_eff=k^2/(k^2+a^2 M_c^2)=O(k^2).",
+    "For finite chi, both 2Hc L chi and the filtered ordinary-source term are O(k^2).",
+    "Therefore C_com=O(k^2) is a necessary small-k compatibility condition for importing the production stress histories into this completed-U1 solve. It is not asserted to be an identity of the legacy production model-2 gravity equations."
+  ],
+  "data": {
+    "production_point": "historical RTK S_eff=1050.249912429787",
+    "k_ladder_Mpc_inv": [1e-5,3e-5,1e-4,3e-4,1e-3,3e-3,1e-2,3e-2,1e-1],
+    "common_scale_factors": [0.0005,0.001,0.01,0.1,0.5]
+  },
+  "diagnostics_to_record": [
+    "C_com(k,a) at every requested common scale factor",
+    "Y=C_com/k^2",
+    "adjacent effective exponents p_ij=log|C_j/C_i|/log(k_j/k_i)",
+    "for the smallest four k values, least-squares fits C=c0+c2 k^2 and C=c2 k^2+c4 k^4, with normalized residuals",
+    "for the smallest three k values, spread and trend of Y=C/k^2",
+    "the signs of C and whether zero crossings make log-slope diagnostics ambiguous"
+  ],
+  "classification": "DIAGNOSTIC_ONLY_NO_PASS_FAIL_THRESHOLD_PRECOMMITTED",
+  "decision_rule": "Do not declare the physical small-k gate PASS or FAIL from this exploratory ladder alone. Use the observed scaling only to design a separately frozen confirmatory k-ladder/tolerance gate, preferably with new smaller k values.",
+  "architecture_guard": "The workflow may regenerate the same read-only RT-CLASS source tables but may not choose M_c, lambda_HL, Pcal or alpha1 and may not feed completed-U1 potentials back into CLASS.",
+  "non_claims": [
+    "not a preregistered physical small-k PASS/FAIL test",
+    "not a completion-parameter choice",
+    "not a production model-2 Einstein-constraint identity",
+    "not a completed-U1 Boltzmann or likelihood result"
+  ]
+}
