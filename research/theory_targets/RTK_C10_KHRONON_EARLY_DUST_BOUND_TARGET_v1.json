@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_KHRONON_EARLY_DUST_BOUND_TARGET_v1",
+  "created_utc": "2026-08-25T21:49:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Does the exact production DBI/Khronon background admit rigorous finite-X bounds showing that the neutral Khronon approaches pressureless adiabatic matter rapidly enough to organize the baseline completed-U1 early-time gradient expansion?",
+  "parents": [
+    "rtk/khronon_background.c",
+    "rtk/khronon_perturbations.c",
+    "rtk/upgrade_rtk_initial_conditions.py",
+    "research/theory_results/RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_RESULT_v1.json"
+  ],
+  "scope": {
+    "DBI_parameter": "lambda_D>0; keep distinct from completion lambda_HL",
+    "background_variable": "X=x0/a^3>0, ell=sqrt(lambda_D), s=sqrt(1+ell^2 X^2)",
+    "production_definitions": "r=X/s, t=X/(s+1), rho=2mu_K^2 X(1+t), p=2mu_K^2 r t, w=p/rho, ca2=r/[s(s+X)], cs2=ca2/[1+(k/k_star)^2]"
+  },
+  "acceptance": [
+    "simplify w exactly to X/[s(s+1+X)] and ca2 exactly to X/[s^2(s+X)]",
+    "using s>=ell X prove 0<=w<=1/[ell(ell+1)X] and 0<=ca2<=1/[ell^2(ell+1)X^2] for every X>0",
+    "use the exact production definition to prove 0<=cs2<=ca2",
+    "translate the bounds with X=x0/a^3 to w<=a^3/[ell(ell+1)x0] and ca2<=a^6/[ell^2(ell+1)x0^2]",
+    "verify exact asymptotic coefficients lim_{X->infinity} X w=1/[ell(ell+1)] and lim X^2 ca2=1/[ell^2(ell+1)]",
+    "verify rho/X ->2mu_K^2(ell+1)/ell, p->2mu_K^2/ell^2, so rho is dust-like a^-3 while pressure tends to a constant and w->0",
+    "verify M_K/X^(3/2)->mu_K(ell+1)sqrt(ell), hence k_star=a M_K is proportional to a^-7/2 and fixed-k cs2/ca2->1 toward the early branch",
+    "connect to the production adiabatic relation delta_khr=(3/4)(1+w)delta_gamma: its fractional deviation from the dust relation is exactly w and therefore obeys the displayed bound",
+    "do not assert that an unspecified EFT onset is numerically deep enough in this regime; retain onset evaluation as a separate physical parameter/domain check"
+  ],
+  "pass_classification": "C10_KHRONON_EARLY_DUST_FINITE_X_BOUND_PASS_SCOPED",
+  "failure_classification": "C10_KHRONON_EARLY_DUST_BOUND_FAIL",
+  "next_if_pass": "derive the baseline O(k^2) adiabatic C2 coefficient treating Khronon as a controlled dust-like component plus explicitly bounded w,ca2 corrections; evaluate the correction at the eventual frozen EFT onset rather than silently setting it to zero.",
+  "non_claims": [
+    "does not select a_EFT or completion parameters",
+    "does not claim the finite-onset Khronon correction is numerically negligible before evaluation",
+    "does not derive the photon/ur anisotropic O(k^2) coefficients",
+    "does not implement completed-U1 CLASS feedback",
+    "does not cover massive neutrinos"
+  ]
+}
