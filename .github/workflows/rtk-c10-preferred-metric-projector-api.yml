@@ -1,0 +1,100 @@
+name: RTK C10 preferred metric projector API
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-preferred-metric-projector-api.yml'
+      - '.github/rtk-c10-preferred-metric-projector-api-trigger.txt'
+      - 'research/shadow/rtk_c10_preferred_metric_projector_v1.py'
+      - 'research/shadow/rtk_c10_completed_metric_shadow_v3_class_units.py'
+      - 'research/theory_targets/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  projector:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          d=json.load(open('research/theory_targets/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_TARGET_v1.json'))
+          assert d['status']=='FROZEN_BEFORE_EXECUTION'
+          assert d['pass_classification']=='C10_PREFERRED_METRIC_PROJECTOR_API_PASS_SCOPED'
+          print('C10_52_TARGET_FROZEN_PASS')
+          PY
+          git rev-parse HEAD | tee c10_52_repo_head.txt
+      - name: Execute projector self-test
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_preferred_metric_projector_v1.py > c10_52_selftest.json
+          cat c10_52_selftest.json
+          python - <<'PY'
+          import json
+          d=json.load(open('c10_52_selftest.json'))
+          assert d['classification']=='C10_PREFERRED_METRIC_PROJECTOR_API_SELFTEST_PASS'
+          assert d['shadow_roundtrip_max_abs_error'] < 2e-13
+          assert d['preferred_constraint_max_abs_residual'] < 1e-13
+          assert d['shadow_source_roundtrip_max_abs_error'] < 1e-14
+          assert d['k0_routed_to_homogeneous_bridge'] is True
+          PY
+      - name: Build result certificate
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          s=json.load(open('c10_52_selftest.json'))
+          d={
+            'schema':'RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1',
+            'classification':'C10_PREFERRED_METRIC_PROJECTOR_API_PASS_SCOPED',
+            'target':'research/theory_targets/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_TARGET_v1.json',
+            'implementation':'research/shadow/rtk_c10_preferred_metric_projector_v1.py',
+            'production_modified':False,
+            'selftest':s,
+            'interpretation':'Executable finite-k preferred-source A->Hamiltonian->momentum projector reproduces shadow-v3 exactly after consistent source-coordinate transformation; chi/B is not an independently integrated state in this architecture.',
+            'next_gate':'derive and freeze the physical early-time preferred-source adiabatic seed/series, then use the projector in an opt-in DAE Boltzmann bridge',
+            'non_claims':['not exact k=0','not a physical adiabatic seed derivation','not completed-U1 CLASS feedback','not a completion parameter selection','not spectra or likelihood evidence'],
+            'provenance':{
+              'repo_head_at_job_start':open('c10_52_repo_head.txt').read().strip(),
+              'workflow':'rtk-c10-preferred-metric-projector-api.yml'
+            }
+          }
+          open('c10_52_result.json','w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist immutable certificate
+        run: |
+          set -euo pipefail
+          cp c10_52_result.json /tmp/c10_52_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_52_result.json research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json
+            git commit -m 'Record C10.52 preferred metric projector API result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-preferred-metric-projector-api
+          path: |
+            c10_52_selftest.json
+            c10_52_result.json
+            c10_52_repo_head.txt
+          if-no-files-found: warn
