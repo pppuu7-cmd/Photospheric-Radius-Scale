@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_TARGET_v1",
+  "created_utc": "2026-08-25T21:20:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "If a finite-k preferred-coordinate source state is first projected onto the completed-U1 algebraic constraint manifold, does the Newtonian/Stueckelberg shadow formulation reproduce an arbitrarily but consistently transformed B_prime identically, proving that chi should be constraint-projected rather than evolved as an independent Boltzmann state?",
+  "parents": [
+    "research/theory_targets/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_TARGET_v1.json",
+    "research/theory_results/RTK_C10_U1_MINIMAL_LINEAR_METRIC_REDUCTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_RESULT_v1.json",
+    "research/shadow/rtk_c10_completed_metric_shadow_v3_class_units.py"
+  ],
+  "scope": {
+    "modes": "finite k>0 only",
+    "domain": "lambda_HL>1, E_th>0, finite M_c>0, H0_prime nonzero",
+    "background": "flat FLRW with total background conservation for the regularity cross-check",
+    "source_units": "native CLASS hatted stresses"
+  },
+  "acceptance": [
+    "start from preferred fundamental sources deltaH0_pref, deltaH0_pref_prime, delta_mu_pref and q_pref",
+    "solve psi and psi_prime from the preferred A constraint, solve phi algebraically from Hamiltonian, and solve B algebraically from momentum",
+    "introduce an arbitrary symbolic B_prime and transform the same preferred state to Newtonian sources: deltaH0_N=deltaH0_pref+H0_prime B, deltaH0_N_prime=deltaH0_pref_prime+H0_double_prime B+H0_prime B_prime, delta_mu_N=delta_mu_pref+rho_prime B, q_N=q_pref+a W B",
+    "substitute those transformed sources and chi=B into the exact shadow-v3 reordered equations",
+    "prove symbolically that R_M=D H phi-D K H0_prime B_prime",
+    "prove y=K H0_prime B_prime and therefore chi_prime_shadow=B_prime with exact zero residual",
+    "prove the shadow phi equals the preferred algebraic phi and the preferred momentum/Hamiltonian residuals remain zero",
+    "interpret this only as a finite-k representation theorem: the first-order chi equation carries the derivative of the coordinate/source transform once the preferred constraint manifold is imposed; it is not an independent evolution law",
+    "if all identities pass, prescribe the coupled implementation architecture as per-step preferred constraint projection plus Newtonian physical-potential output, not an independently integrated chi state"
+  ],
+  "pass_classification": "C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_PASS_CHI_NOT_INDEPENDENT_EVOLUTION_SCOPED",
+  "failure_classification": "C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_FAIL",
+  "next_if_pass": "Implement a detached trajectory projector that consumes a self-consistent preferred source history, solves B algebraically at every sample, differentiates only as a diagnostic, and constructs Phi_N/Psi_N; then build the opt-in Boltzmann bridge around that DAE architecture.",
+  "non_claims": [
+    "not an exact k=0 theorem",
+    "not yet a physical early-time preferred source-history generator",
+    "not a completed-U1 CLASS feedback implementation",
+    "not a numerical completion-parameter selection",
+    "not spectra or likelihood evidence"
+  ]
+}
