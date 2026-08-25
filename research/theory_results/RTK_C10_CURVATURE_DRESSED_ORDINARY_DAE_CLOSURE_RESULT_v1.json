@@ -1,0 +1,64 @@
+{
+  "architecture": {
+    "gravity": "algebraically project psi_pref,phi_pref,B each sample; construct Phi_N,Psi_N outputs for ordinary species",
+    "neutral_khronon": "evolve preferred action-fluid variables from C10.59",
+    "ordinary_species": "evolve curvature-dressed physical-metric density variables; velocities/higher multipoles remain physical-interface variables",
+    "temporal_chi_state": "not required"
+  },
+  "classification": "C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_PASS_POLE_FREE_SCOPED",
+  "differentiated_A_constraint": {
+    "B_prime_present": false,
+    "D_A_prime": "-3(K_prime W0+K W0_prime)",
+    "Psi_N_prime_present": false,
+    "equivalent": "[K_prime(h_hat+3W0 psi)+K(h_hat_prime+3W0_prime psi)]/D_A",
+    "psi_prime": "[K_prime h_hat+K h_hat_prime-D_A_prime psi]/D_A"
+  },
+  "dressed_A_constraint": {
+    "D_A": "1-3 K W0",
+    "K": "-(3/2) a^2/(k^2+a^2 M_c^2)",
+    "K_prime": "2 H a1_eff K",
+    "K_prime_direct_check": "PASS",
+    "equation": "D_A psi_pref=K h_hat",
+    "pole_theorem": "for k>0, a>0, M_c>0, W0>0: K<0 and D_A=1+9 a^2 W0/[2(k^2+a^2 M_c^2)]>1"
+  },
+  "dressed_definitions": {
+    "h_hat": "deltaH0_N-3 W0 Psi_N",
+    "mu_hat": "delta_mu_N-3 W Psi_N",
+    "p0_hat": "delta_p0_N-3 C0 Psi_N",
+    "p_hat": "delta_p_N-3 C Psi_N, C=-p_prime/(3H)"
+  },
+  "dressed_ordinary_continuity": {
+    "Psi_N_prime_coefficient": "0",
+    "generic_constant_w_species": "D_i=delta_i-3(1+w_i)Psi_N removes the explicit +3(1+w_i)Psi_N_prime term from the physical Newtonian continuity equation",
+    "h_hat_prime": "-3H(h_hat+p0_hat)-(k^2/a) q0_N"
+  },
+  "machine_residuals": {
+    "A_equation": "0",
+    "H0_source_transform": "0",
+    "K_prime": "0",
+    "constant_w_PsiNprime_coefficient": "0",
+    "constant_w_dressed_density": "0",
+    "h_hat_PsiNprime_coefficient": "0",
+    "h_hat_continuity": "0",
+    "mu_source_transform": "0",
+    "p_source_transform": "0",
+    "psi_prime_forms": "0"
+  },
+  "next_gate": "implement a detached dual-interface ODE/DAE prototype and freeze a finite-onset memory-loss/attractor test before introducing any UV matching parameter",
+  "non_claims": [
+    "not exact k=0",
+    "not massive-neutrino completion",
+    "not a full photon hierarchy implementation",
+    "not completed-U1 CLASS feedback",
+    "not an attractor theorem",
+    "not spectra or likelihood evidence"
+  ],
+  "preferred_source_identities": {
+    "Bprime_required": false,
+    "deltaH0_pref": "h_hat+3 W0 psi_pref",
+    "delta_mu_pref": "mu_hat+3 W psi_pref",
+    "delta_p_pref": "p_hat+3 C psi_pref",
+    "q_pref": "q_N-a W B"
+  },
+  "schema": "RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1"
+}
