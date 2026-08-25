@@ -28,10 +28,11 @@ newrows=[
 '| C10.37 | Legacy RT auxiliary external 00/0i roundtrip | 🟥 diagnostic not closed | Literature-derived auxiliary reconstruction does not close on production RTK histories; this is retained as a translation/constraint diagnostic, not a completed-U1 no-go. |',
 '| C10.38 | Untouched upstream native RT external-roundtrip control | 🟥 diagnostic FAIL | The same mismatch exists in pinned upstream model=2 before any DBI-Khronon patch; Khronon source replacement is excluded as the cause of this mismatch. |',
 '| C10.39 | Fixed-source replay scope theorem | ✅ | Raw legacy RT stress histories are metric-history dependent; detached C10.27 FAIL does not exclude a self-consistent coupled completed-U1 solution after reintegration with U1 metric feedback. |',
-'| C10.40 | Legacy RT convention / Hamiltonian-00 translation origin | 🟨 | Determine why the literature-derived RT 00 expression does not round-trip against this old CLASS fork; diagnostic only, not a blocker proving or disproving coupled U1 existence. |',
+'| C10.40 | Legacy RT convention / Hamiltonian-00 translation origin | 🟨 | The simple convention map is now audited; remaining question is why the separately translated literature 00 first-integral is not numerically closed by this fork. |',
 '| C10.41 | Direct native model2 psi/0i metric identities | 🔵 | Frozen executable test compares the literal model=2 algebraic psi and phi-prime/0i code equations in untouched upstream and production RTK. |',
-'| C10.42 | RT literature ↔ CLASS fork 00 translation audit | 🟨 | After direct-native identities, isolate variable normalization, sign, definition or derived-constraint differences in the old fork rather than fitting arbitrary coefficients. |',
-'| C10.43 | Coupled replay architecture correction | ✅ | Physically decisive completion test is an opt-in self-consistent U1+matter/Khronon Boltzmann evolution; historical RT histories remain controls/initial guesses, not immutable completion sources. |'
+'| C10.42 | RT literature ↔ CLASS fork 00 translation audit | ✅ scoped | Exact Phi/Psi, x/eta, V/Z, H0, a and CLASS-density conversion reproduces the already used external 00 residual; a simple unit/coordinate/sign normalization error is excluded. Independent numerical 00 closure remains separate. |',
+'| C10.43 | Coupled replay architecture correction | ✅ | Physically decisive completion test is an opt-in self-consistent U1+matter/Khronon Boltzmann evolution; historical RT histories remain controls/initial guesses, not immutable completion sources. |',
+'| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🟨 | The audited IC block uses the standard GR Newtonian gauge transform and then zeroes all nonlocal auxiliary perturbations; no explicit literature-00 projection is visible there. Earliest-state and start-time convergence test is required before calling the old fork inconsistent. |'
 ]
 if anchor not in s:
     raise SystemExit('C10.36 anchor missing; refuse non-monotonic checklist edit')
@@ -40,6 +41,12 @@ for row in newrows:
     if f'| {ident} |' not in s:
         s=s.replace(anchor,anchor+'\n'+row,1)
         anchor=row
+
+# Upgrade stale C10.42 wording if a previous sync inserted it before the analytic audit closed.
+old42='| C10.42 | RT literature ↔ CLASS fork 00 translation audit | 🟨 | After direct-native identities, isolate variable normalization, sign, definition or derived-constraint differences in the old fork rather than fitting arbitrary coefficients. |'
+new42='| C10.42 | RT literature ↔ CLASS fork 00 translation audit | ✅ scoped | Exact Phi/Psi, x/eta, V/Z, H0, a and CLASS-density conversion reproduces the already used external 00 residual; a simple unit/coordinate/sign normalization error is excluded. Independent numerical 00 closure remains separate. |'
+if old42 in s:
+    s=s.replace(old42,new42,1)
 
 # If the new direct-native result has appeared, upgrade C10.41 deterministically.
 r=Path('research/theory_results/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_RESULT_v1.json')
