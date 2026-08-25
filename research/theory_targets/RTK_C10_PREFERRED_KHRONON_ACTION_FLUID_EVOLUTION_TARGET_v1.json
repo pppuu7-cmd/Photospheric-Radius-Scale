@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_TARGET_v1",
+  "created_utc": "2026-08-25T22:35:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "For the fixed shift-symmetric P(X_U)+C(X_U)(D_i Theta_U)^2 neutral-Khronon action on flat FLRW, what are the linear action-derived delta/theta equations in preferred quasilongitudinal variables with nonzero physical shift B?",
+  "parents": [
+    "research/theory_targets/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_TARGET_v1.json",
+    "research/theory_results/RTK_C10_SMIX_LINEAR_METRIC_SUPPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_RESULT_v1.json"
+  ],
+  "definitions": {
+    "U": "deltaSigma_prime-Sigma_prime phi_pref",
+    "A": "P_X+2X P_XX",
+    "F": "1+k^2/(a^2 M_K^2)",
+    "c_a_squared": "P_X/A",
+    "c_s_squared": "P_X/(F A)=c_a^2/F",
+    "delta_mu": "F A Sigma_prime U/a^2",
+    "rho_plus_p": "P_X Sigma_prime^2/a^2",
+    "theta": "k^2 deltaSigma/Sigma_prime"
+  },
+  "acceptance": [
+    "use the local shift-current charge perturbation deltaQcharge=a^2 F A U-3 a^2 P_X Sigma_prime psi_pref and background charge (a^2 P_X Sigma_prime)'=0",
+    "include the P(X) spatial-current divergence a^2 P_X k^2(deltaSigma+Sigma_prime B); use the parent S_mix result that S_mix has no direct linear B support around homogeneous D_i Sigma_bar=0",
+    "derive exactly delta'=-(1+w)(theta+k^2 B-3 psi_pref')-3 H(c_a^2-w)delta",
+    "derive theta' directly from theta=k^2 deltaSigma/Sigma_prime, delta_mu definition, and Sigma_double_prime/Sigma_prime=H(1-3c_a^2), obtaining theta'=-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+phi_pref]",
+    "show B=0 reduces exactly to the already-certified action-fluid shadow equations after the notation map spatial phi_CLASS <-> psi_pref and lapse psi_CLASS <-> phi_pref",
+    "state that q_pref=a(rho+p)theta/k^2 and Pi_khr=0 at this linear boundary",
+    "do not use a forbidden spatially dependent time-diffeomorphism as the proof"
+  ],
+  "pass_classification": "C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_PASS_SCOPED",
+  "non_claims": [
+    "not nonlinear perturbation closure",
+    "not an exact k=0 theorem",
+    "not a massive-neutrino extension",
+    "not completed-U1 CLASS feedback",
+    "not an attractor or initial-condition theorem",
+    "not spectra or likelihood evidence"
+  ],
+  "next_if_pass": "build the source-rewired preferred-DAE detached evolution and run a finite-onset memory-loss/attractor test before choosing UV matching data"
+}
