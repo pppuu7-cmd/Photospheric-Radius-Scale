@@ -1,0 +1,93 @@
+name: RTK C10 chi initial-data structure
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-chi-initial-data-structure.yml'
+      - '.github/rtk-c10-chi-initial-data-structure-trigger.txt'
+      - 'research/shadow/rtk_c10_chi_initial_data_structure.py'
+      - 'research/theory_targets/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic dependency
+        run: python -m pip install --disable-pip-version-check 'sympy==1.13.3'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          p='research/theory_targets/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_TARGET_v1.json'
+          d=json.load(open(p))
+          assert d['status']=='FROZEN_BEFORE_EXECUTION'
+          assert d['pass_classification']=='C10_CHI_INITIAL_DATA_STRUCTURE_PASS_SCOPED_REGULARITY_NONUNIQUE_PREFERRED_DAE_ALGEBRAIC'
+          print('C10_50_TARGET_FROZEN_PASS')
+          PY
+          git rev-parse HEAD | tee c10_50_repo_head.txt
+      - name: Execute symbolic proof
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_chi_initial_data_structure.py > c10_50_result.json
+          python - <<'PY'
+          import json
+          d=json.load(open('c10_50_result.json'))
+          assert d['classification']=='C10_CHI_INITIAL_DATA_STRUCTURE_PASS_SCOPED_REGULARITY_NONUNIQUE_PREFERRED_DAE_ALGEBRAIC'
+          assert d['exact_identities']['machine_regularity_residual']=='0'
+          assert d['exact_identities']['machine_phi_limit_residual']=='0'
+          assert d['exact_identities']['machine_newtonian_derivative_split_residual']=='0'
+          assert d['superhorizon']['leading_Creg_chi_coefficient']=='0'
+          print(json.dumps(d,indent=2,sort_keys=True))
+          PY
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          p='c10_50_result.json'
+          d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_50_repo_head.txt').read().strip(),
+            'workflow':'rtk-c10-chi-initial-data-structure.yml',
+            'proof_script':'research/shadow/rtk_c10_chi_initial_data_structure.py',
+            'sympy':'1.13.3'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist immutable certificate
+        run: |
+          set -euo pipefail
+          cp c10_50_result.json /tmp/c10_50_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_50_result.json research/theory_results/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_RESULT_v1.json
+            git commit -m 'Record C10.50 chi initial-data structure result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-chi-initial-data-structure
+          path: |
+            c10_50_result.json
+            c10_50_repo_head.txt
+          if-no-files-found: warn
