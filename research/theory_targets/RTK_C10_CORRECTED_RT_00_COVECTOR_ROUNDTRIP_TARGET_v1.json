@@ -1,0 +1,47 @@
+{
+  "schema": "RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_TARGET_v1",
+  "created_utc": "2026-08-25T19:58:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Does the refined temporal-covector perturbation dictionary from C10.48 remove the legacy translated RT Hamiltonian/00 mismatch on the pinned upstream model=2 and historical production RTK histories, without changing either solver or fitting any equation coefficient?",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "parents": [
+    "research/theory_results/RTK_C10_LEGACY_MODEL2_IDENTITY_AND_EQUATION_PROVENANCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_RT_LITERATURE_TO_FORK_00_TRANSLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json"
+  ],
+  "trees": ["untouched_upstream_model2", "historical_production_RTK_model2"],
+  "k_ladder_Mpc_inv": [2e-6, 4e-6, 8e-6, 2e-5, 8e-5, 2e-4],
+  "diagnostic_scale_factors": [0.01],
+  "binding_scale_factors": [0.1, 0.5],
+  "precision": {
+    "perturb_sampling_stepsize": 0.003125,
+    "tol_background_integration": 0.000075,
+    "tol_perturb_integration": 7.5e-8,
+    "tol_thermo_integration": 0.000075
+  },
+  "old_incomplete_B00": "deltaU-deltaVprime/a^2+Hc*deltaV/a^2+2*Psi*Vbarprime/a^2-2*Hc*Psi*Vbar/a^2+Psi_prime*Vbar/a^2",
+  "corrected_B00": "deltaU-deltaVprime/a^2+Hc*deltaV/a^2+Psi*Vbarprime/a^2-Hc*Psi*Vbar/a^2",
+  "corrected_combined_constraint": "R00_corr=Ccom+2*k^2*phi/(3*a^2)+gamma*H0^2*B00_corr+2*Hc*A0i_code/a^2",
+  "old_combined_constraint": "R00_old=Ccom+2*k^2*phi/(3*a^2)+gamma*H0^2*B00_old+2*Hc*A0i_code/a^2",
+  "important_property": "R00_corr uses only directly exported algebraic fields and contains no reconstructed Psi derivative.",
+  "decision_rules": {
+    "closure": "Classify corrected closure if, in both trees and at both binding epochs, median |R00_corr|/median |R00_old| <= 0.10 and median |R00_corr| <= 5e-11.",
+    "no_closure": "Classify no closure if, in both trees and at both binding epochs, median |R00_corr|/median |R00_old| >= 0.50.",
+    "mixed": "Otherwise classify mixed/inconclusive and preserve every epoch/k diagnostic.",
+    "nonfinite": "Any non-finite required value blocks physical interpretation and receives the dedicated numerical-invalid classification."
+  },
+  "classifications": {
+    "closure": "C10_CORRECTED_RT_00_COVECTOR_TRANSLATION_CLOSES_LEGACY_ROUNDTRIP_SCOPED",
+    "no_closure": "C10_CORRECTED_RT_00_COVECTOR_TRANSLATION_DOES_NOT_CLOSE_LEGACY_ROUNDTRIP_SCOPED",
+    "mixed": "C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_INCONCLUSIVE",
+    "nonfinite": "C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_NUMERICALLY_INVALID"
+  },
+  "guards": [
+    "No physical or translation coefficient may be fitted after seeing the result.",
+    "Do not modify historical production dynamics or upstream model=2 equations.",
+    "Do not delete or relabel the old C10.37/C10.38/C10.42/C10.44/C10.46 results; this is a new translation gate.",
+    "A closure is a historical RT-fork convention/constraint result, not a completed-U1 cosmology certificate.",
+    "A no-closure result does not by itself prove published RT inconsistent."
+  ]
+}
