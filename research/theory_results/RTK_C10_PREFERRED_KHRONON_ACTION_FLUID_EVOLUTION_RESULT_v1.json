@@ -1,0 +1,50 @@
+{
+  "B0_shadow_roundtrip": {
+    "delta_residual": "0",
+    "metric_notation": "psi_pref is the spatial-curvature potential corresponding to CLASS phi; phi_pref is the preferred lapse corresponding to CLASS psi when B=0 and before the ordinary-matter deltaA physical-lapse map",
+    "theta_residual": "0"
+  },
+  "action_derivation": {
+    "Sigma_double_prime_over_Sigma_prime": "H(1-3c_a^2)",
+    "U": "deltaSigma_prime-Sigma_prime phi_pref",
+    "U_over_Sigma_prime": "c_s^2 delta/(1+w)",
+    "background_charge": "(a^2 P_X Sigma_prime)'=0",
+    "charge_perturbation": "a^2 F A U-3 a^2 P_X Sigma_prime psi_pref",
+    "reduced_charge_equation": "delta_mu_prime+(4H-Sigma_double_prime/Sigma_prime)delta_mu+(rho+p)(theta+k^2 B-3 psi_pref_prime)=0",
+    "spatial_current_divergence": "a^2 P_X k^2(deltaSigma+Sigma_prime B)"
+  },
+  "classification": "C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_PASS_SCOPED",
+  "interpretation": {
+    "architecture": "do not feed the ordinary physical lapse phi-deltaA/a into the neutral Khronon Euler force; its fixed action is U1-neutral and uses the preferred lapse phi_pref",
+    "core": "the neutral Khronon can be evolved directly in the preferred foliation using the action-derived variables; ordinary species may remain on the physical-metric Newtonian interface while the preferred DAE projector couples both through total stress/momentum"
+  },
+  "machine_residuals": {
+    "B0_delta_shadow": "0",
+    "B0_theta_shadow": "0",
+    "B_coefficient": "0",
+    "Euler_B_coefficient": "0",
+    "continuity": "0",
+    "euler": "0"
+  },
+  "next_gate": "construct a detached dual-interface DAE evolution (ordinary physical-metric species + preferred neutral action fluid + algebraic completed-U1 metric projector) and test finite-onset memory loss before any UV matching parameter is introduced",
+  "non_claims": [
+    "not nonlinear closure",
+    "not exact k=0",
+    "not massive-neutrino completion",
+    "not coupled CLASS feedback yet",
+    "not an attractor theorem",
+    "not spectra or likelihood evidence"
+  ],
+  "preferred_equations": {
+    "Pi_khr": "0 at the certified linear effective-fluid boundary",
+    "delta_prime": "-(1+w)(theta+k^2 B-3 psi_pref_prime)-3 H(c_a^2-w)delta",
+    "q_pref": "a(rho+p)theta/k^2",
+    "theta_prime": "-H(1-3c_a^2)theta+k^2[c_s^2 delta/(1+w)+phi_pref]"
+  },
+  "schema": "RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1",
+  "shift_structure": {
+    "Euler_direct_B_coefficient": "0",
+    "continuity_B_coefficient": "-(1+w)k^2",
+    "interpretation": "B enters the local conserved shift-current through coordinate spatial flux; the canonical preferred momentum theta=k^2 deltaSigma/Sigma_prime itself is not replaced by a Newtonian-frame velocity."
+  }
+}
