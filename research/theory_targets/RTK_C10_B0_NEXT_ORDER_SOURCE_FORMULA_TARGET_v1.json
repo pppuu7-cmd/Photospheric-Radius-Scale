@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_TARGET_v1",
+  "created_utc": "2026-08-25T21:36:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "After imposing the leading regular finite-B/comoving condition, can the O(k^2) preferred Hamiltonian and momentum constraints be combined to give B0 directly in terms of the O(k^2) total comoving-source coefficient and leading metric/A-source quantities, with all psi_prime,2 dependence cancelling?",
+  "parents": [
+    "research/theory_results/RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json"
+  ],
+  "scope": {
+    "expansion_variable": "x=k^2",
+    "limit": "x->0 at fixed a>0, finite M_c>0",
+    "domain": "r=lambda_HL-1>0, D=2+3r, E_th>0, H>0",
+    "regular_series": "delta_mu=dm0+x dm2+..., Q=Q0+x Q2+..., psi=psi0+x psi2+..., psi_prime=psip0+x psip2+..., phi=phi0+x phi2+..., B=B0+...",
+    "leading_condition": "Q0=D(psip0+H phi0) and a^2 dm0+H Q0=0"
+  },
+  "acceptance": [
+    "expand the preferred Hamiltonian constraint to O(x): -2 D H^2 phi2-r E_th phi0=-3a^2 r dm2-D H Q2+2D H psip2-2r Pcal psi0",
+    "solve this equation for phi2 and insert it into N2=Q2-D(psip2+H phi2)",
+    "prove exactly, using D=2+3r, that all psip2 dependence cancels and N2=-(r/(2H))[-E_th phi0+3H Q2+2Pcal psi0+3a^2 dm2]",
+    "combine with B0=-N2/r from C10.53 to obtain B0=[3a^2 dm2+3H Q2+2Pcal psi0-E_th phi0]/(2H)",
+    "with Q2=3a q2 define C2_pref=3a^2 dm2+9Ha q2 and rewrite B0=[C2_pref+2Pcal psi0-E_th phi0]/(2H)",
+    "prove the total comoving combination C=3a^2 delta_mu+9Ha q is exactly invariant under the already-certified Newtonian/preferred source time-shift when rho_prime=-3H W, so C2_pref=C2_N for regular B",
+    "using psi0=-(3/(2M_c^2)) deltaH0_pref,0, show the formula is identical to the C10.50 finite-phi small-k regularity limit",
+    "machine-check every symbolic residual as exactly zero and emit an immutable certificate"
+  ],
+  "pass_classification": "C10_B0_NEXT_ORDER_SOURCE_FORMULA_PASS_SCOPED",
+  "failure_classification": "C10_B0_NEXT_ORDER_SOURCE_FORMULA_FAIL",
+  "next_if_pass": "The physical early-time calculation only needs the baseline-species O(k^2) coefficient C2 together with the leading ordinary A-source/psi0 and phi0 normalization; derive those from the completed-U1 adiabatic matter hierarchy and evaluate B0 without integrating chi independently.",
+  "non_claims": [
+    "does not yet derive the baseline-species C2 coefficient",
+    "does not fix the primordial normalization phi0",
+    "does not calculate B0 numerically",
+    "does not cover exact k=0",
+    "does not include massive-neutrino anisotropic stress",
+    "does not implement completed-U1 CLASS feedback",
+    "does not select completion parameters"
+  ]
+}
