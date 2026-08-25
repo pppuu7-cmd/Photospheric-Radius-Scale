@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_PREFERRED_METRIC_PROJECTOR_API_TARGET_v1",
+  "created_utc": "2026-08-25T21:24:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Can the finite-k completed-U1 scalar constraints be packaged as an executable preferred-source algebraic projector that returns B, phi, psi and physical Newtonian potentials without integrating chi as an independent state, and round-trip exactly through shadow-v3 after a consistent source-coordinate transformation?",
+  "parents": [
+    "research/theory_results/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1.json",
+    "research/shadow/rtk_c10_completed_metric_shadow_v3_class_units.py"
+  ],
+  "scope": {
+    "modes": "finite k>0; exact k=0 routed separately",
+    "domain": "lambda_HL>1, E_th>0, M_c>0",
+    "inputs": "preferred-coordinate fundamental source snapshot deltaH0, deltaH0_prime, delta_mu, q, delta_p, Pi plus background derivatives",
+    "outputs": "psi, psi_prime, phi, B, Phi_N, Psi_N and constraint/denominator diagnostics",
+    "production": "detached reference module only"
+  },
+  "acceptance": [
+    "implement the preferred A -> Hamiltonian -> momentum solve ordering directly with no B_prime input",
+    "use native CLASS stress normalization and the same K, a1_eff, Pcal, alpha1 conventions as shadow-v3",
+    "construct Phi_N=(1-Pcal)phi+psi+alpha1 L psi-H B-3a^2 Pi and Psi_N=psi-H B",
+    "return preferred A, Hamiltonian and momentum residuals and reject exact k=0",
+    "in a deterministic conservation-consistent self-test, transform the projected preferred state to Newtonian sources using an arbitrary B_prime and verify shadow-v3 reproduces phi, psi, B_prime, Phi_N and Psi_N with max absolute error <2e-13",
+    "verify all preferred constraint residuals <1e-13 and source roundtrip <1e-14",
+    "do not import, patch or modify production CLASS"
+  ],
+  "pass_classification": "C10_PREFERRED_METRIC_PROJECTOR_API_PASS_SCOPED",
+  "failure_classification": "C10_PREFERRED_METRIC_PROJECTOR_API_FAIL",
+  "next_if_pass": "derive a physical early-time preferred-source adiabatic seed/series and feed it into this projector; only then design the opt-in Boltzmann DAE bridge.",
+  "non_claims": [
+    "not a physical adiabatic initial-condition derivation",
+    "not exact k=0",
+    "not completed-U1 CLASS feedback",
+    "not a completion-parameter choice",
+    "not spectra or likelihood evidence"
+  ]
+}
