@@ -1,0 +1,49 @@
+{
+  "classification": "C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_PASS_CHI_NOT_INDEPENDENT_EVOLUTION_SCOPED",
+  "exact_roundtrip": {
+    "R_M": "D H phi-D K H0_prime B_prime",
+    "chi_prime_shadow": "B_prime",
+    "machine_RM_residual": "0",
+    "machine_chi_prime_residual": "0",
+    "machine_phi_roundtrip_residual": "0",
+    "machine_preferred_hamiltonian_residual": "0",
+    "machine_preferred_momentum_residual": "0",
+    "machine_y_residual": "0",
+    "y": "K H0_prime B_prime"
+  },
+  "interpretation": {
+    "architecture": "do not add chi as an independently integrated Boltzmann state; solve the preferred algebraic constraints per time/sample and transform the physical potentials/sources to the Newtonian interface",
+    "core": "on the finite-k preferred constraint manifold the shadow-v3 first-order chi equation exactly transports the derivative already present in the Newtonian coordinate/source transformation; it supplies no independent temporal dynamics",
+    "why_detached_replay_looked_like_an_ODE": "holding Newtonian source histories externally fixed while varying chi breaks the co-transformation of deltaH0_N_prime and makes the representation identity look like a first-order evolution equation"
+  },
+  "newtonian_transform": {
+    "B_prime_status": "arbitrary derivative of the transformed algebraic B for this identity",
+    "deltaH0_N": "deltaH0_pref+H0_prime B",
+    "deltaH0_N_prime": "deltaH0_pref_prime+H0_double_prime B+H0_prime B_prime",
+    "delta_mu_N": "delta_mu_pref+rho_prime B",
+    "q_N": "q_pref+a W B"
+  },
+  "next_gate": "build a detached preferred-source trajectory projector and then an opt-in DAE Boltzmann bridge; early-time matter ICs must be projected onto the preferred finite-k constraints instead of choosing chi=0",
+  "non_claims": [
+    "not exact k=0",
+    "not yet a physical preferred early-time source-history derivation",
+    "not completed-U1 CLASS feedback",
+    "not a completion-parameter choice",
+    "not spectra or likelihood evidence"
+  ],
+  "preferred_projection": {
+    "B": "[3 a q_pref-D(psi_prime+H phi)]/(r L), L=-k^2",
+    "phi": "Hamiltonian algebraic solve with denominator -(r E_th k^2+2D H^2)",
+    "psi": "K deltaH0_pref",
+    "psi_prime": "K_prime deltaH0_pref+K deltaH0_pref_prime",
+    "temporal_B_initial_condition_required": false
+  },
+  "provenance": {
+    "proof_script": "research/shadow/rtk_c10_preferred_dae_newtonian_roundtrip.py",
+    "repo_head_at_job_start": "42f220076a7d0407c1290ff1ce242c182b2fc0de",
+    "sympy": "1.13.3",
+    "workflow": "rtk-c10-preferred-dae-newtonian-roundtrip.yml"
+  },
+  "schema": "RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_TARGET_v1.json"
+}
