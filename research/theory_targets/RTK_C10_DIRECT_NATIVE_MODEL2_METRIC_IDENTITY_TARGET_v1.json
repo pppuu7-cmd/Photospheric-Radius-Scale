@@ -1,0 +1,43 @@
+{
+  "schema": "RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_TARGET_v1",
+  "created_utc": "2026-08-25T18:20:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Do the two scalar metric identities literally implemented by pinned CLASS model=2 close on the same workspace state, both in untouched upstream RT and in the historical RTK production patch, independently of any literature-to-fork 00-constraint translation?",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "production_branch": "rtk-class-build",
+  "parents": [
+    "research/theory_results/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FIXED_SOURCE_REPLAY_SCOPE_RESULT_v1.json"
+  ],
+  "identities": {
+    "psi": "R_psi = psi - [phi + 3 gamma H0^2 deltaZ - (9/2)(a^2/k^2)(rho+p)sigma]",
+    "phi_prime_0i": "R_0i = phi_prime - [-Hc psi + (3/2)(a^2/k^2)(rho+p)theta + (3/2) gamma H0^2(Hc deltaZ-deltaZ_prime/2+Vbg psi/2-deltaV/2)]"
+  },
+  "important_scope": "These are direct code-equation identities for the algebraic psi equation and the phi-prime/0i equation. They are not an independent Hamiltonian/00 theorem. The old literature-derived RT 00 roundtrip remains a separate translation audit.",
+  "k_ladder_Mpc_inv": [2e-6,4e-6,8e-6,2e-5,8e-5,2e-4],
+  "binding_scale_factors": [0.01,0.1,0.5],
+  "precision": {
+    "perturb_sampling_stepsize": 0.0125,
+    "tol_background_integration": 1e-10,
+    "tol_perturb_integration": 3e-7,
+    "tol_thermo_integration": 1e-5
+  },
+  "acceptance": {
+    "max_abs_R_psi": 1e-14,
+    "max_abs_R_0i": 1e-14,
+    "all_samples_finite": true,
+    "both_untouched_upstream_and_production_rtk_must_pass": true
+  },
+  "pass_classification": "C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITIES_PASS_BOTH_UPSTREAM_AND_RTK",
+  "fail_classification": "C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_FAIL",
+  "decision": {
+    "if_pass": "Close native implemented psi/0i consistency and keep only the literature-to-fork 00 translation audit open; do not interpret the old external 00 mismatch as a Khronon implementation bug.",
+    "if_fail": "Localize the failing identity and tree before any coupled-U1 integration work."
+  },
+  "non_claims": [
+    "not an independent RT Hamiltonian/00 closure proof",
+    "not a completed-U1 coupled solution",
+    "not a spectra or likelihood result",
+    "does not erase the prior native RT external-roundtrip FAIL"
+  ]
+}
