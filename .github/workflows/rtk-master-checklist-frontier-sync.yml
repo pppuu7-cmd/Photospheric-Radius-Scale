@@ -1,0 +1,43 @@
+name: RTK master checklist frontier sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/checkpoints/sync_rtk_master_checklist_current_frontier.py'
+      - 'research/theory_results/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_RESULT_v1.json'
+      - '.github/workflows/rtk-master-checklist-frontier-sync.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Sync monotonic checklist
+        run: |
+          set -euo pipefail
+          python3 research/checkpoints/sync_rtk_master_checklist_current_frontier.py
+          grep -q 'C10.43' research/checkpoints/RTK_MASTER_CHECKLIST.md
+          grep -q 'full.*checklist in chat only on explicit user request' research/checkpoints/RTK_MASTER_CHECKLIST.md
+      - name: Persist checklist
+        run: |
+          set -euo pipefail
+          cp research/checkpoints/RTK_MASTER_CHECKLIST.md /tmp/master.md
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/master.md research/checkpoints/RTK_MASTER_CHECKLIST.md
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/checkpoints/RTK_MASTER_CHECKLIST.md
+            git commit -m 'Sync RTK monotonic master checklist frontier' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
