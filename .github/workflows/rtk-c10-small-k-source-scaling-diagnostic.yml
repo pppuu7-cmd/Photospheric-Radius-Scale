@@ -1,0 +1,158 @@
+name: RTK C10 parameter-free small-k source scaling diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-small-k-source-scaling-diagnostic.yml'
+      - 'research/shadow/rtk_c10_small_k_source_scaling_diagnostic.py'
+      - 'research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen diagnostic target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_TARGET_v1.json'))
+          s=json.load(open('research/state/current.json'))['final_replay_result']
+          assert t['status']=='FROZEN_DIAGNOSTIC_BEFORE_EXECUTION'
+          assert t['classification']=='DIAGNOSTIC_ONLY_NO_PASS_FAIL_THRESHOLD_PRECOMMITTED'
+          assert s['status']=='PASS'
+          assert abs(float(s['rtk']['expected_score_eff'])-1050.249912429787)<1e-12
+          assert s['provenance']['class_upstream_commit']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          print('C10_SMALL_K_DIAGNOSTIC_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_small_k_repo_head.txt
+      - name: Prepare disposable pinned production source-export tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_diag
+          git -C class_diag reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_diag/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_diag/include/
+          python3 rtk/apply_rtk_class_patch.py class_diag
+          python3 rtk/upgrade_rtk_inputs.py class_diag
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_diag
+          python3 rtk/upgrade_rtk_initial_conditions.py class_diag
+          python3 rtk/upgrade_rtk_matter_sources.py class_diag
+          python3 rtk/upgrade_rtk_gamma_root.py class_diag
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_diag
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_diag
+          make -C class_diag -j2 class
+      - name: Write exact historical RTK diagnostic input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in t['data']['k_ladder_Mpc_inv'])
+          body=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_khronon = {p['Om']!r}
+          lambda_D = {p['lam']!r}
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          output = mPk,dTk,vTk
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          P_k_max_h/Mpc = 1.0
+          z_pk = 0
+          k_output_values = {kvals}
+          root = output/c10diag_
+          background_verbose = 1
+          perturbations_verbose = 0
+          spectra_verbose = 0
+          '''
+          pathlib.Path('class_diag/diag.ini').write_text(body)
+          pathlib.Path('class_diag/output').mkdir(exist_ok=True)
+          PY
+      - name: Run read-only production histories
+        run: |
+          set -euo pipefail
+          (cd class_diag && ./class diag.ini) > c10_small_k_class.log 2>&1
+          grep 'RTK_LOG_GAMMA_ROOT' c10_small_k_class.log | tail -1 | tee c10_small_k_gamma.txt
+          find class_diag/output -maxdepth 1 -type f -iname '*perturbations*' -print | sort | tee c10_small_k_files.txt
+          test -s c10_small_k_files.txt
+      - name: Compute frozen exploratory scaling diagnostics
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_small_k_source_scaling_diagnostic.py \
+            --glob 'class_diag/output/*perturbations*' \
+            --epochs '0.0005,0.001,0.01,0.1,0.5' \
+            --output c10_small_k_source_scaling_diagnostic_result.json | tee c10_small_k_analysis.log
+          cat c10_small_k_source_scaling_diagnostic_result.json
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re
+          p='c10_small_k_source_scaling_diagnostic_result.json'
+          d=json.load(open(p))
+          m=re.search(r'gamma=([0-9.eE+\-]+)',open('c10_small_k_gamma.txt').read())
+          d['target']='research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_TARGET_v1.json'
+          d['provenance']={
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'repo_head_at_job_start':open('c10_small_k_repo_head.txt').read().strip(),
+            'production_score_eff':1050.249912429787,
+            'gamma_root':float(m.group(1)) if m else None,
+            'workflow':'rtk-c10-small-k-source-scaling-diagnostic.yml'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist diagnostic result
+        run: |
+          set -euo pipefail
+          cp c10_small_k_source_scaling_diagnostic_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_RESULT_v1.json
+            git commit -m 'Record C10 parameter-free small-k source scaling diagnostic' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-small-k-source-scaling-diagnostic
+          path: |
+            c10_small_k_class.log
+            c10_small_k_gamma.txt
+            c10_small_k_files.txt
+            c10_small_k_analysis.log
+            c10_small_k_source_scaling_diagnostic_result.json
+            class_diag/output/*perturbations*
+          if-no-files-found: warn
