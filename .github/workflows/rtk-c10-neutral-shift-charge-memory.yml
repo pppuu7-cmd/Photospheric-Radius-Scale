@@ -1,0 +1,56 @@
+name: RTK C10 neutral shift-charge memory
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_neutral_shift_charge_memory.py'
+      - '.github/workflows/rtk-c10-neutral-shift-charge-memory.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Run frozen theorem
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+          python3 -m py_compile research/shadow/rtk_c10_neutral_shift_charge_memory.py
+          python3 research/shadow/rtk_c10_neutral_shift_charge_memory.py | tee c10_neutral_shift_charge_memory.log
+          grep -q '^C10_NEUTRAL_SHIFT_CHARGE_MEMORY_INVARIANT_PASS_SCOPED ' c10_neutral_shift_charge_memory.log
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_neutral_shift_charge_memory_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json
+            git commit -m 'Record C10.62c neutral shift-charge memory theorem' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-neutral-shift-charge-memory
+          path: |
+            c10_neutral_shift_charge_memory.log
+            c10_neutral_shift_charge_memory_result.json
+          if-no-files-found: error
