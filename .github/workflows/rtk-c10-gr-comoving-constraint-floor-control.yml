@@ -1,0 +1,108 @@
+name: RTK C10 GR comoving constraint floor control
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-gr-comoving-constraint-floor-control.yml'
+      - 'research/theory_targets/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_TARGET_v1.json'
+      - 'rtk/apply_rtk_c10_gr_comoving_constraint_floor_patch.py'
+      - 'research/shadow/rtk_c10_gr_comoving_constraint_floor_control.py'
+
+permissions:
+  contents: write
+
+jobs:
+  gr-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify target and scripts
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert t['upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          print('GR_FLOOR_TARGET_PASS')
+          PY
+          python3 -m py_compile rtk/apply_rtk_c10_gr_comoving_constraint_floor_patch.py research/shadow/rtk_c10_gr_comoving_constraint_floor_control.py
+          git rev-parse HEAD > repo_head_at_job_start.txt
+      - name: Prepare untouched pinned GR tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_grctl
+          git -C class_grctl reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          python3 rtk/apply_rtk_c10_gr_comoving_constraint_floor_patch.py class_grctl
+          grep -q RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_V1 class_grctl/source/perturbations.c
+          make -C class_grctl -j2 class
+      - name: Write matched numerical-control input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          q=t['precision']; ks=', '.join(format(float(x),'.17g') for x in t['k_ladder_Mpc_inv'])
+          body=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_cdm = {p['Om']!r}\nmodel = 0.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {ks}\nperturb_sampling_stepsize = {q['perturb_sampling_stepsize']}\ntol_background_integration = {q['tol_background_integration']}\ntol_perturb_integration = {q['tol_perturb_integration']}\ntol_thermo_integration = {q['tol_thermo_integration']}\nroot = output/grctl_\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\n'''
+          pathlib.Path('class_grctl/grctl.ini').write_text(body)
+          pathlib.Path('class_grctl/output').mkdir(exist_ok=True)
+          PY
+      - name: Run GR null control
+        run: |
+          set -euo pipefail
+          (cd class_grctl && ./class grctl.ini) > grctl.log 2>&1
+          find class_grctl/output -maxdepth 1 -type f -name 'grctl_*perturbations*' -print | sort > grctl_files.txt
+          test "$(wc -l < grctl_files.txt)" -eq 6
+      - name: Analyze residual floor
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check numpy==2.5.2
+          python3 research/shadow/rtk_c10_gr_comoving_constraint_floor_control.py \
+            --glob 'class_grctl/output/grctl_*perturbations*' \
+            --target research/theory_targets/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_TARGET_v1.json \
+            --output gr_comoving_constraint_floor_result.json | tee grctl_analysis.log
+          cat gr_comoving_constraint_floor_result.json
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='gr_comoving_constraint_floor_result.json'; d=json.load(open(p))
+          d['provenance']={'upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','repo_head_at_job_start':open('repo_head_at_job_start.txt').read().strip(),'workflow':'rtk-c10-gr-comoving-constraint-floor-control.yml','patch':'rtk/apply_rtk_c10_gr_comoving_constraint_floor_patch.py'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          cp gr_comoving_constraint_floor_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json
+            git commit -m 'Record C10 GR comoving constraint floor control' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-gr-comoving-constraint-floor-control
+          path: |
+            grctl.log
+            grctl_analysis.log
+            gr_comoving_constraint_floor_result.json
+            class_grctl/output/grctl_*perturbations*
+          if-no-files-found: warn
