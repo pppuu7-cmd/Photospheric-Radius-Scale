@@ -1,0 +1,66 @@
+{
+  "schema": "RTK_C10_LEGACY_RT_00_AUXILIARY_COVECTOR_PROPAGATION_TARGET_v1",
+  "created_utc": "2026-08-25T19:22:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "On the full six-dimensional local auxiliary perturbation IC tangent space of pinned model=2, is the translated literature RT 00 covector propagated proportionally by the implemented evolution, as required for the R00=0 hyperplane to be invariant on that tangent space?",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "parents": [
+    "research/theory_results/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_RT_LITERATURE_TO_FORK_00_TRANSLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json"
+  ],
+  "trees": ["untouched_upstream_model2", "historical_production_RTK_model2"],
+  "k_ladder_Mpc_inv": [2e-6, 4e-6, 8e-6, 2e-5, 8e-5, 2e-4],
+  "diagnostic_scale_factors": [0.01],
+  "binding_scale_factors": [0.1, 0.5],
+  "precision": {
+    "perturb_sampling_stepsize": 0.003125,
+    "tol_background_integration": 0.000075,
+    "tol_perturb_integration": 7.5e-8,
+    "tol_thermo_integration": 0.000075,
+    "start_small_k_at_tau_c_over_tau_h": 0.0015,
+    "start_large_k_at_tau_h_over_tau_k": 0.07
+  },
+  "auxiliary_seed_basis": [
+    {"label":"dU", "variable":"deltaU_nlde", "initial_value":1.0},
+    {"label":"dUp", "variable":"deltaU_prime_nlde", "initial_value":1.0},
+    {"label":"dV", "variable":"deltaV_nlde", "initial_value":1.0},
+    {"label":"dVp", "variable":"deltaV_prime_nlde", "initial_value":1.0},
+    {"label":"dZ", "variable":"deltaZ_nlde", "initial_value":1.0},
+    {"label":"dZp", "variable":"deltaZ_prime_nlde", "initial_value":1.0}
+  ],
+  "response_definition": "For each seed j, DeltaR_j(t)=R00(seed_j,t)-R00(baseline,t), using identical physical/background/matter inputs. The baseline has the historical explicit zero auxiliary perturbation ICs. Seeds are disposable tangent-basis calculations only.",
+  "invariance_theorem": "Let r0_j=DeltaR_j(t0) and rt_j=DeltaR_j(t). If the initial R00=0 hyperplane is invariant under the linear implemented flow on the sampled auxiliary IC tangent space, then rt must be proportional to r0. Equivalently every pairwise minor W_ij=rt_i*r0_j-rt_j*r0_i must vanish. This condition is invariant under arbitrary independent rescalings of the six seed coordinates.",
+  "normalized_minor": "w_ij=abs(rt_i*r0_j-rt_j*r0_i)/(abs(rt_i*r0_j)+abs(rt_j*r0_i)+tiny).",
+  "pair_activity": {
+    "relative_denominator_floor": 1e-6,
+    "min_active_pairs_per_mode_epoch": 3,
+    "definition": "A pair is active when its normalized-minor denominator is at least relative_denominator_floor times the largest pair denominator for that mode and epoch."
+  },
+  "estimators": {
+    "primary": "10-row quartic one-sided/local psi-prime estimator",
+    "cross": "6-row cubic one-sided/local psi-prime estimator",
+    "max_allowed_tree_epoch_median_minor_difference": 0.10
+  },
+  "decision_rules": {
+    "ill_conditioned": "If any binding mode/epoch has fewer than 3 active seed pairs in either tree, classify ill-conditioned.",
+    "derivative_limited": "Otherwise, if the absolute difference between primary and cross tree-level median normalized-minor statistics exceeds 0.10 at any binding epoch, classify derivative-limited.",
+    "invariant": "Otherwise, if the primary tree-level median normalized minor is <=0.05 at both a=0.1 and a=0.5 in both trees, classify auxiliary hyperplane invariant within the frozen test.",
+    "noninvariant": "Otherwise, if in each tree at least one binding epoch has primary tree-level median normalized minor >=0.25, classify auxiliary hyperplane non-invariant within the frozen test.",
+    "mixed": "Otherwise classify inconclusive/mixed."
+  },
+  "classifications": {
+    "ill_conditioned": "C10_LEGACY_RT_00_AUXILIARY_COVECTOR_TEST_ILL_CONDITIONED",
+    "derivative_limited": "C10_LEGACY_RT_00_AUXILIARY_COVECTOR_TEST_DERIVATIVE_LIMITED",
+    "invariant": "C10_LEGACY_RT_00_AUXILIARY_CONSTRAINT_HYPERPLANE_INVARIANT_SCOPED",
+    "noninvariant": "C10_LEGACY_RT_00_AUXILIARY_CONSTRAINT_HYPERPLANE_NONINVARIANT_SCOPED",
+    "mixed": "C10_LEGACY_RT_00_AUXILIARY_COVECTOR_PROPAGATION_INCONCLUSIVE"
+  },
+  "guards": [
+    "This tests the local six-dimensional auxiliary homogeneous tangent space, not the retarded-boundary-condition theory space globally.",
+    "A non-invariant result is an implementation/first-integral diagnostic, not a completed-U1 no-go.",
+    "Unit seed choices do not enter the binding proportionality claim because normalized pairwise minors are invariant under independent seed rescaling.",
+    "No physical action, translation or likelihood coefficient is fitted.",
+    "Historical production runs remain unchanged."
+  ]
+}
