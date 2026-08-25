@@ -7,11 +7,25 @@ on:
     paths:
       - 'research/checkpoints/sync_rtk_master_checklist_current_frontier.py'
       - 'research/checkpoints/sync_rtk_master_checklist_c10_46_47.py'
+      - 'research/checkpoints/sync_rtk_master_checklist_c10_48_60.py'
       - 'research/theory_results/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_RESULT_v1.json'
       - 'research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json'
       - 'research/theory_results/RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_RESULT_v1.json'
       - 'research/theory_results/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_RESULT_v1.json'
       - 'research/theory_results/RTK_C10_LEGACY_RT_00_AUXILIARY_COVECTOR_PROPAGATION_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_LEGACY_MODEL2_IDENTITY_AND_EQUATION_PROVENANCE_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_KHRONON_EARLY_DUST_BOUND_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_FINITE_ONSET_ADIABATIC_INVARIANCE_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json'
       - '.github/workflows/rtk-master-checklist-frontier-sync.yml'
 
 permissions:
@@ -30,8 +44,10 @@ jobs:
           set -euo pipefail
           python3 research/checkpoints/sync_rtk_master_checklist_current_frontier.py
           python3 research/checkpoints/sync_rtk_master_checklist_c10_46_47.py
+          python3 research/checkpoints/sync_rtk_master_checklist_c10_48_60.py
           grep -q 'C10.46' research/checkpoints/RTK_MASTER_CHECKLIST.md
           grep -q 'C10.47' research/checkpoints/RTK_MASTER_CHECKLIST.md
+          grep -q 'C10.60' research/checkpoints/RTK_MASTER_CHECKLIST.md
           grep -q 'full.*checklist in chat only on explicit user request' research/checkpoints/RTK_MASTER_CHECKLIST.md
       - name: Persist checklist
         run: |
