@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_FINITE_ONSET_ADIABATIC_INVARIANCE_TARGET_v1",
+  "created_utc": "2026-08-25T21:56:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "At a finite EFT onset, can the usual instantaneous adiabatic relative-density and common-velocity conditions determine the preferred-foliation shear B0, or are they exactly invariant under the certified Newtonian/preferred source time-shift and therefore unable to supply the missing O(k^2) comoving coefficient/UV boundary data by themselves?",
+  "parents": [
+    "research/theory_results/RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json",
+    "research/theory_results/RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_RESULT_v1.json",
+    "research/theory_results/RTK_C10_KHRONON_EARLY_DUST_BOUND_RESULT_v1.json"
+  ],
+  "scope": {
+    "onset": "finite a_EFT>0 inside the declared EFT domain",
+    "source_transform_per_species": "delta_rho_pref,i=delta_rho_N,i-rho_i_prime B; q_pref,i=q_N,i-a(rho_i+p_i)B",
+    "background": "rho_i_prime=-3H(rho_i+p_i) for separately conserved baseline species at the onset",
+    "modes": "finite k>0; exact k=0 separate"
+  },
+  "acceptance": [
+    "prove delta_rho_pref,i/rho_i_prime=delta_rho_N,i/rho_i_prime-B, so every relative entropy difference delta_rho_i/rho_i_prime-delta_rho_j/rho_j_prime is exactly invariant",
+    "for barotropic notation prove delta_i,pref/(1+w_i)=delta_i,N/(1+w_i)+3H B, so equality of delta_i/(1+w_i) across species is unchanged for arbitrary finite B",
+    "prove v_i:=q_i/[a(rho_i+p_i)] transforms as v_pref,i=v_N,i-B, so relative velocities v_i-v_j and a common-velocity adiabatic condition are exactly invariant",
+    "combine with C10.53: leading finite-B constraints reduce to total comoving regularity and do not contain B0 independently",
+    "combine with C10.54: B0 is fixed only after the gauge-invariant O(k^2) total comoving coefficient C2 is specified",
+    "conclude that instantaneous finite-onset adiabaticity plus leading k-regularity cannot manufacture C2 or B0; a temporal growing-mode/attractor condition or matching to a pre-EFT/UV initial state is required",
+    "do not call this a new propagating scalar or an isocurvature detection; it is a boundary-data statement for the finite-onset low-energy DAE"
+  ],
+  "pass_classification": "C10_FINITE_ONSET_ADIABATIC_INVARIANCE_PASS_UV_OR_GROWING_MODE_MATCH_REQUIRED_SCOPED",
+  "failure_classification": "C10_FINITE_ONSET_ADIABATIC_INVARIANCE_DERIVATION_FAIL",
+  "next_if_pass": "Freeze two non-equivalent physical initialization routes: (A) a UV/pre-EFT matching datum for the gauge-invariant C2 (or equivalent curvature-gradient datum), and (B) an in-EFT attractor/growing-mode test showing whether C2/B0 loses sensitivity to admissible onset data. Test route B before introducing arbitrary UV parameters.",
+  "non_claims": [
+    "does not prove B0 is a new degree of freedom",
+    "does not prove a physical isocurvature mode exists",
+    "does not select a UV completion or boundary value",
+    "does not calculate C2 or B0",
+    "does not implement completed-U1 CLASS feedback",
+    "does not change historical likelihood results"
+  ]
+}
