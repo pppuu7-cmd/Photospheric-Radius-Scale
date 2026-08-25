@@ -1,0 +1,53 @@
+{
+  "schema": "RTK_C10_LEGACY_MODEL2_IDENTITY_AND_EQUATION_PROVENANCE_TARGET_v1",
+  "created_utc": "2026-08-25T19:40:00Z",
+  "status": "FROZEN_BEFORE_LITERATURE_COEFFICIENT_AUDIT",
+  "question": "What published nonlocal-gravity model is the pinned fork's numeric model=2, do its background/linear scalar auxiliary equations match that published model under an explicit convention dictionary, and does the published retarded prescription restrict the homogeneous auxiliary tangent space tested in C10.47?",
+  "upstream_repo": "dirian/class_public",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "parents": [
+    "research/theory_results/RTK_C10_RT_LITERATURE_TO_FORK_00_TRANSLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_LEGACY_RT_00_AUXILIARY_COVECTOR_PROPAGATION_RESULT_v1.json"
+  ],
+  "subgates": {
+    "model_identity": "Identify model=2 from primary-source equations/definitions, not variable-name resemblance alone. model=1/model=2 labels must be mapped explicitly to RR/RT/other or left ambiguous.",
+    "background_signature": "Compare the fork's H, Hprime, rho_nlde, p_nlde and auxiliary background equations against the candidate published model after the frozen variable/time normalization map.",
+    "linear_auxiliary_signature": "Compare coefficient-by-coefficient the model=2 equations for deltaU, deltaV, deltaZ and their first derivatives, including metric source terms, against primary published scalar perturbation equations.",
+    "retarded_subspace": "Determine from the primary formulation whether homogeneous solutions of the localized auxiliary equations are physical initial-data freedoms or are removed/fixed by the retarded Green-function prescription; state the resulting dimension/constraints only when explicitly supported."
+  },
+  "comparison_policy": {
+    "primary_sources_required": true,
+    "secondary_review_allowed_for_navigation_only": true,
+    "no_equation_coefficient_fitting": true,
+    "no_posthoc_sign_flip_unless_derived_from_metric_or_variable_definition": true,
+    "symbolic_equivalence_allowed_after_explicit_dictionary": true,
+    "ambiguous_source_identity_is_a_valid_outcome": true
+  },
+  "fork_signature_to_freeze": {
+    "metric": "Newtonian CLASS convention with model=2 psi algebraic equation and phi_prime/0i equation already audited in C10.41 target.",
+    "auxiliary_variables": ["U", "Uprime", "V", "Vprime", "deltaU", "deltaUprime", "deltaV", "deltaVprime", "deltaZ", "deltaZprime"],
+    "background_model2_marker": "rho_nlde = gamma*H0^2*(H*V/a + U - Vprime/a^2); p_nlde = gamma*H0^2*(H*V/a - U)",
+    "linear_model2_marker": "deltaZ is present only for model=2 and enters psi as +3*gamma*H0^2*deltaZ."
+  },
+  "decision_rules": {
+    "identity_ambiguous": "If no primary source uniquely matches the fork's model=2 background plus auxiliary definitions, classify identity ambiguous and stop before calling any coefficient mismatch.",
+    "exact_match_retarded_restriction": "If model identity is unique, all audited background and linear auxiliary equations are symbolically equivalent after the frozen dictionary, and the primary formulation explicitly removes/fixes the homogeneous auxiliary modes probed in C10.47, classify exact published-equation match with C10.47 outside the retarded physical subspace.",
+    "exact_match_homogeneous_physical": "If equations match but the primary formulation allows the homogeneous auxiliary modes as physical independent data, classify exact match with a genuine local first-integral tension requiring a separate constraint derivation.",
+    "coefficient_mismatch": "If model identity is unique but at least one coefficient/sign/derivative structure remains inequivalent after the explicit dictionary, classify legacy fork equation mismatch scoped and list every mismatch without repairing the production tree.",
+    "mixed": "Otherwise classify provenance inconclusive/mixed."
+  },
+  "classifications": {
+    "identity_ambiguous": "C10_LEGACY_MODEL2_PUBLISHED_IDENTITY_AMBIGUOUS",
+    "exact_match_retarded_restriction": "C10_LEGACY_MODEL2_PUBLISHED_EQUATIONS_MATCH_RETARDED_SUBSPACE_EXCLUDES_C10_47_HOMOGENEOUS_MODES_SCOPED",
+    "exact_match_homogeneous_physical": "C10_LEGACY_MODEL2_PUBLISHED_EQUATIONS_MATCH_HOMOGENEOUS_MODES_PHYSICAL_FIRST_INTEGRAL_TENSION_SCOPED",
+    "coefficient_mismatch": "C10_LEGACY_MODEL2_PUBLISHED_EQUATION_MISMATCH_SCOPED",
+    "mixed": "C10_LEGACY_MODEL2_PUBLISHED_PROVENANCE_INCONCLUSIVE"
+  },
+  "guards": [
+    "This gate audits the historical pinned nonlocal fork, not the completed-U1 theory.",
+    "Do not infer that the published RT or RR theory is inconsistent from C10.47 alone.",
+    "Do not use a review's notation as a substitute for the primary perturbation equations when coefficient-level comparison is required.",
+    "Do not alter historical production code while auditing provenance.",
+    "C10.39 fixed-source scope theorem remains in force regardless of outcome."
+  ]
+}
