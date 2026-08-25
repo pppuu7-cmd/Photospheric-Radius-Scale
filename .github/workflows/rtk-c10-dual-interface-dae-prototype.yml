@@ -1,0 +1,61 @@
+name: RTK C10 dual interface DAE prototype
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-dual-interface-dae-prototype.yml'
+      - 'research/shadow/rtk_c10_dual_interface_dae_prototype.py'
+      - 'research/theory_targets/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and run prototype
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          print('TARGET_FROZEN_PASS')
+          PY
+          python3 research/shadow/rtk_c10_dual_interface_dae_prototype.py > /tmp/result.json
+          cat /tmp/result.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/result.json'))
+          assert d['classification']=='C10_DUAL_INTERFACE_DAE_PROTOTYPE_PASS_SCOPED'
+          assert d['integrated_B_or_chi'] is False
+          assert d['diagnostics']['max_abs_A_H_M_constraint_residual'] < 1e-11
+          assert d['diagnostics']['max_abs_dressed_source_identity_residual'] < 1e-11
+          assert d['diagnostics']['min_abs_coupled_phi_B_determinant'] > 1e-5
+          print('C10_61_PASS')
+          PY
+      - name: Persist certificate
+        run: |
+          set -euo pipefail
+          cp /tmp/result.json /tmp/c10_61.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_61.json research/theory_results/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1.json
+            git commit -m 'Record C10.61 dual-interface DAE prototype' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
