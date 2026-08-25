@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_TARGET_v1",
+  "created_utc": "2026-08-25T22:20:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Given the already-certified elliptic Q compensator and action-derived P(X_U)+S_mix neutral-Khronon fluid, what is the minimal linear source-channel contract that may feed the completed-U1 preferred metric projector without silently reusing the phenomenological production-GDM stress?",
+  "parents": [
+    "research/theory_results/RTK_ROUTE_B_U1_ELLIPTIC_LINEAR_FLRW_SOURCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_SMIX_LAPSE_SOURCE_RATIO_RESULT_v1.json",
+    "research/theory_results/RTK_C10_LOCAL_EFFECTIVE_FLUID_EQUIVALENCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FLRW_FLUID_LOWER_DERIVATIVE_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_ACTION_FLUID_SHADOW_INTERFACE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json"
+  ],
+  "acceptance": [
+    "rederive in the reduced Fourier-symbol patch that H_m=[N-a_eff(A-Acal)]H0+(N^i+N D^i nu)H_i gives Hperp_m=H0 on D_i nu=0, J_A=-a_eff H0 and p_nu=+a_eff H0, hence Q filtering must not be copied onto ordinary metric stress",
+    "retain the ordinary-only A-source delta J_A proportional to a_eff deltaH0 while total metric momentum/Ward q includes the neutral Khronon",
+    "encode the already-certified action-derived neutral stress boundary delta_mu_khr=rho_khr delta, delta_p_khr=rho_khr c_s^2 delta, momentum=(rho+p)theta and Pi_khr=0",
+    "show explicitly that the production GDM pressure source differs from the action-derived source by 3 H (1+w)(c_s^2-c_a^2) theta/k^2 times rho, and retain the already-certified lower-derivative evolution residuals",
+    "conclude that historical production source exports are valid provenance/diagnostics but are not the final same-action neutral source provider for completed-U1 feedback",
+    "preserve the C10.52 algebraic preferred metric projector; require only its source provider/evolution channels to be rewired before coupled feedback",
+    "do not claim the preferred-coordinate neutral-Khronon evolution equations are closed by this consolidation; freeze that as the next analytic gate"
+  ],
+  "pass_classification": "C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_PASS_PROJECTOR_SOURCE_REWIRE_REQUIRED_SCOPED",
+  "failure_classification": "C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_INCONSISTENT",
+  "next_if_pass": "derive the action-derived neutral-Khronon linear evolution directly in the preferred quasilongitudinal variables (including the shift/momentum convention) and prove its B=0 reduction reproduces the existing action-fluid shadow before any attractor or Boltzmann-feedback test",
+  "non_claims": [
+    "not a completed-U1 CLASS implementation",
+    "not a derivation of nonlinear S_mix stress",
+    "not a massive-neutrino source extension",
+    "not a completion-parameter selection",
+    "not spectra or likelihood evidence"
+  ]
+}
