@@ -1,0 +1,55 @@
+{
+  "schema": "RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_TARGET_v1",
+  "created_utc": "2026-08-25T18:38:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Is the nonzero translated literature-RT 00 residual already seeded by the pinned fork's initial-condition prescription, and does starting the same physical model earlier reduce or otherwise systematically change that residual without fitting any translation coefficient?",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "parents": [
+    "research/theory_results/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_RT_LITERATURE_TO_FORK_00_TRANSLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NATIVE_RT_INITIAL_CONSTRAINT_PRESCRIPTION_AUDIT_RESULT_v1.json"
+  ],
+  "trees": ["untouched_upstream_model2","historical_production_RTK_model2"],
+  "k_ladder_Mpc_inv": [2e-6,4e-6,8e-6,2e-5,8e-5,2e-4],
+  "late_binding_scale_factors": [0.01,0.1,0.5],
+  "precision": {
+    "perturb_sampling_stepsize": 0.003125,
+    "tol_background_integration": 0.000075,
+    "tol_perturb_integration": 7.5e-8,
+    "tol_thermo_integration": 0.000075
+  },
+  "start_variants": {
+    "default": {"start_small_k_at_tau_c_over_tau_h":0.0015,"start_large_k_at_tau_h_over_tau_k":0.07},
+    "earlier_x2": {"start_small_k_at_tau_c_over_tau_h":0.00075,"start_large_k_at_tau_h_over_tau_k":0.035},
+    "earlier_x4": {"start_small_k_at_tau_c_over_tau_h":0.000375,"start_large_k_at_tau_h_over_tau_k":0.0175}
+  },
+  "translated_residual": "R00=Ccom+2 k^2 phi/(3 a^2)+gamma H0^2 B00+2 Hc A0i/a^2, using the already-certified exact literature-to-fork convention map; no coefficient may be fitted or rescaled.",
+  "earliest_state_definition": "For each perturbation output file, use the earliest output row for the direct algebraic fields and estimate psi_prime with one-sided local polynomial fits using the first 6 and first 10 rows independently. Record both residuals and their difference; do not average them into a pass if they disagree materially.",
+  "diagnostics": [
+    "absolute R00 at the earliest output row for every k, tree and start variant",
+    "relative difference between 6-row cubic and 10-row quartic psi-prime estimators",
+    "R00 at a=0.01,0.1,0.5 for the same start variants",
+    "ratios earlier_x2/default and earlier_x4/default for median absolute earliest and late residuals",
+    "the actual earliest scale factor and conformal time reached by each mode",
+    "whether auxiliary perturbations at the earliest exported row remain close to their explicit zero initialization"
+  ],
+  "classifications": {
+    "start_sensitive": "C10_LEGACY_RT_00_RESIDUAL_START_TIME_SENSITIVE_SCOPED",
+    "start_stable": "C10_LEGACY_RT_00_RESIDUAL_START_TIME_STABLE_SCOPED",
+    "derivative_limited": "C10_LEGACY_RT_00_INITIAL_AUDIT_DERIVATIVE_LIMITED",
+    "mixed": "C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_INCONCLUSIVE"
+  },
+  "decision_rules": {
+    "derivative_limited": "If the two earliest psi-prime estimators change median |R00| by more than 20% in either tree/variant, classify derivative-limited and do not interpret start sensitivity.",
+    "start_sensitive": "Otherwise, if earlier_x4 reduces median |R00| by at least a factor 3 relative to default at the earliest state and at both a=0.1 and a=0.5 in at least one tree, classify start-sensitive.",
+    "start_stable": "Otherwise, if earlier_x4/default median |R00| stays between 0.5 and 2.0 at the earliest state and at both a=0.1 and a=0.5 in both trees, classify start-stable.",
+    "mixed": "Otherwise classify inconclusive."
+  },
+  "guards": [
+    "not a test of completed-U1 coupled cosmology",
+    "not a license to tune initial conditions post hoc",
+    "not a claim that the published RT theory is inconsistent",
+    "not a likelihood or spectra comparison",
+    "does not erase the external 00 roundtrip FAIL or the direct native psi/0i test"
+  ]
+}
