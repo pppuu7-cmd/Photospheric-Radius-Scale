@@ -1,0 +1,179 @@
+name: RTK C10 legacy RT 00 constraint projection propagation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-legacy-rt-00-constraint-projection-propagation.yml'
+      - 'research/theory_targets/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_legacy_rt_00_constraint_projection_propagation.py'
+      - 'rtk/apply_rtk_c10_legacy_rt_du_projection_seed_patch.py'
+      - 'rtk/apply_rtk_c10_native_rt_control_export_patch.py'
+
+permissions:
+  contents: write
+
+jobs:
+  projection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Verify frozen target and parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_TARGET_v1.json'))
+          p=json.load(open('research/theory_results/RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_RESULT_v1.json'))
+          g=json.load(open('research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert t['upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert t['seed_direction']['variable']=='deltaU_nlde'
+          assert float(t['seed_direction']['seeded_run_initial_value'])==1.0
+          assert p['classification']=='C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_INCONCLUSIVE'
+          assert g['classification']=='C10_LATE_SMALL_K_COMOVING_RESIDUAL_RT_SPECIFIC_AGAINST_GR_CONTROL_SCOPED'
+          print('C10_CONSTRAINT_PROJECTION_TARGET_PASS')
+          PY
+          python3 -m py_compile \
+            rtk/apply_rtk_c10_legacy_rt_du_projection_seed_patch.py \
+            rtk/apply_rtk_c10_native_rt_control_export_patch.py \
+            research/shadow/rtk_c10_legacy_rt_00_constraint_projection_propagation.py
+          git rev-parse HEAD > repo_head_at_job_start.txt
+
+      - name: Prepare untouched upstream model2 baseline tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_native_proj
+          git -C class_native_proj reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_native_proj rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          python3 rtk/apply_rtk_c10_native_rt_control_export_patch.py class_native_proj
+          grep -q RTK_C10_NATIVE_RT_CONTROL_EXPORT_V1 class_native_proj/source/perturbations.c
+          ! grep -q RTK_C10_LEGACY_RT_DU_PROJECTION_SEED_V1 class_native_proj/source/perturbations.c
+          make -C class_native_proj -j2 class
+
+      - name: Prepare historical RTK production baseline tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_rtk_proj
+          git -C class_rtk_proj reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_rtk_proj/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_rtk_proj/include/
+          python3 rtk/apply_rtk_class_patch.py class_rtk_proj
+          python3 rtk/upgrade_rtk_inputs.py class_rtk_proj
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_rtk_proj
+          python3 rtk/upgrade_rtk_initial_conditions.py class_rtk_proj
+          python3 rtk/upgrade_rtk_matter_sources.py class_rtk_proj
+          python3 rtk/upgrade_rtk_gamma_root.py class_rtk_proj
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_rtk_proj
+          python3 rtk/apply_rtk_c10_native_rt_control_export_patch.py class_rtk_proj
+          grep -q RTK_C10_NATIVE_RT_CONTROL_EXPORT_V1 class_rtk_proj/source/perturbations.c
+          ! grep -q RTK_C10_LEGACY_RT_DU_PROJECTION_SEED_V1 class_rtk_proj/source/perturbations.c
+          make -C class_rtk_proj -j2 class
+
+      - name: Write matched baseline and seed inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          q=t['precision']; ks=', '.join(format(float(x),'.17g') for x in t['k_ladder_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {ks}\nperturb_sampling_stepsize = {q['perturb_sampling_stepsize']}\ntol_background_integration = {q['tol_background_integration']}\ntol_perturb_integration = {q['tol_perturb_integration']}\ntol_thermo_integration = {q['tol_thermo_integration']}\nstart_small_k_at_tau_c_over_tau_h = {q['start_small_k_at_tau_c_over_tau_h']}\nstart_large_k_at_tau_h_over_tau_k = {q['start_large_k_at_tau_h_over_tau_k']}\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\n'''
+          pathlib.Path('class_native_proj/output').mkdir(exist_ok=True)
+          pathlib.Path('class_rtk_proj/output').mkdir(exist_ok=True)
+          for label in ('base','seed'):
+              native=common+f'Omega_cdm = {p["Om"]!r}\nroot = output/proj_{label}_\n'
+              rtk=common+f'Omega_khronon = {p["Om"]!r}\nlambda_D = {p["lam"]!r}\nOmega_Lambda = 0.\nroot = output/proj_{label}_\n'
+              pathlib.Path(f'class_native_proj/proj_{label}.ini').write_text(native)
+              pathlib.Path(f'class_rtk_proj/proj_{label}.ini').write_text(rtk)
+          PY
+
+      - name: Run unchanged baseline trees
+        run: |
+          set -euo pipefail
+          (cd class_native_proj && ./class proj_base.ini) > native_projection_base.log 2>&1
+          (cd class_rtk_proj && ./class proj_base.ini) > rtk_projection_base.log 2>&1
+          test "$(find class_native_proj/output -maxdepth 1 -type f -name 'proj_base_*perturbations*' | wc -l)" -eq 6
+          test "$(find class_rtk_proj/output -maxdepth 1 -type f -name 'proj_base_*perturbations*' | wc -l)" -eq 6
+
+      - name: Inject diagnostic homogeneous deltaU seed and rebuild
+        run: |
+          set -euo pipefail
+          python3 rtk/apply_rtk_c10_legacy_rt_du_projection_seed_patch.py class_native_proj
+          python3 rtk/apply_rtk_c10_legacy_rt_du_projection_seed_patch.py class_rtk_proj
+          grep -q RTK_C10_LEGACY_RT_DU_PROJECTION_SEED_V1 class_native_proj/source/perturbations.c
+          grep -q RTK_C10_LEGACY_RT_DU_PROJECTION_SEED_V1 class_rtk_proj/source/perturbations.c
+          make -C class_native_proj -j2 class
+          make -C class_rtk_proj -j2 class
+
+      - name: Run seeded basis trees
+        run: |
+          set -euo pipefail
+          (cd class_native_proj && ./class proj_seed.ini) > native_projection_seed.log 2>&1
+          (cd class_rtk_proj && ./class proj_seed.ini) > rtk_projection_seed.log 2>&1
+          test "$(find class_native_proj/output -maxdepth 1 -type f -name 'proj_seed_*perturbations*' | wc -l)" -eq 6
+          test "$(find class_rtk_proj/output -maxdepth 1 -type f -name 'proj_seed_*perturbations*' | wc -l)" -eq 6
+
+      - name: Project initial 00 and test propagation
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check numpy==2.5.2
+          python3 research/shadow/rtk_c10_legacy_rt_00_constraint_projection_propagation.py \
+            --upstream-dir class_native_proj/output \
+            --rtk-dir class_rtk_proj/output \
+            --target research/theory_targets/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_TARGET_v1.json \
+            --output legacy_rt_00_constraint_projection_result.json | tee projection_analysis.log
+          cat legacy_rt_00_constraint_projection_result.json
+
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='legacy_rt_00_constraint_projection_result.json'; d=json.load(open(p))
+          d['provenance']={
+            'upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'repo_head_at_job_start':open('repo_head_at_job_start.txt').read().strip(),
+            'workflow':'rtk-c10-legacy-rt-00-constraint-projection-propagation.yml',
+            'export_patch':'rtk/apply_rtk_c10_native_rt_control_export_patch.py',
+            'seed_patch':'rtk/apply_rtk_c10_legacy_rt_du_projection_seed_patch.py',
+            'seed_direction':'deltaU_nlde_ini=1 only in disposable seeded runs'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          cp legacy_rt_00_constraint_projection_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_RESULT_v1.json
+            git commit -m 'Record C10 legacy RT 00 constraint-projection propagation' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-legacy-rt-00-constraint-projection-propagation
+          path: |
+            *_projection_*.log
+            projection_analysis.log
+            legacy_rt_00_constraint_projection_result.json
+            class_native_proj/output/proj_*perturbations*
+            class_rtk_proj/output/proj_*perturbations*
+          if-no-files-found: warn
