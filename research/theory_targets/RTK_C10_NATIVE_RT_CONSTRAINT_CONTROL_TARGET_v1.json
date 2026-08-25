@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_TARGET_v1",
+  "created_utc": "2026-08-25T00:41:00Z",
+  "status": "FROZEN_BEFORE_NATIVE_UPSTREAM_CONTROL_EXECUTION",
+  "question": "Does the recovered RT 00 plus the native CLASS model-2 0i equation close the comoving-density constraint in the untouched pinned upstream model=2 with ordinary CDM, before any DBI-Khronon production patch is applied?",
+  "parent_failed_roundtrip": "research/theory_results/RTK_C10_LEGACY_RT_AUXILIARY_COMOVING_CONSTRAINT_RESULT_v1.json",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "control_cosmology": {
+    "source": "historical RTK best-fit numerical h, Omega_b, and historical Om reused only as an ordinary-CDM control density",
+    "model": 2,
+    "Omega_Lambda": "omitted so the upstream pure nonlocal branch determines its nonlocal component by its native flatness/shooting logic",
+    "N_ur": 3.046,
+    "N_ncdm": 0,
+    "warning": "This is a code-equation control, not a physical comparison or fit, and historical RTK Om has a different physical meaning in production."
+  },
+  "k_ladder_Mpc_inv": [2e-6,4e-6,8e-6,2e-5,8e-5,2e-4],
+  "binding_scale_factors": [0.01,0.1,0.5],
+  "precision": {
+    "perturb_sampling_stepsize": 0.003125,
+    "tol_background_integration": 0.000075,
+    "tol_perturb_integration": 7.5e-8,
+    "tol_thermo_integration": 0.000075
+  },
+  "roundtrip_identity": "R_RT=C_com + 2*k^2*phi_CLASS/(3*a^2) + gamma*H0^2*B00_code + 2*Hc*A0i_code/a^2",
+  "B00_code": "dU-dVprime/a^2+Hc*dV/a^2+2*psi*Vbgprime/a^2-2*Hc*psi*Vbg/a^2+psiprime*Vbg/a^2",
+  "acceptance_per_epoch": {
+    "median_abs_roundtrip_over_median_abs_observed_aux_max": 0.05,
+    "median_abs_predicted_aux_over_median_abs_observed_aux_min": 0.8,
+    "median_abs_predicted_aux_over_median_abs_observed_aux_max": 1.2
+  },
+  "decision_rule": {
+    "all_binding_epochs_pass": "C10_NATIVE_RT_CONSTRAINT_CONTROL_PASS",
+    "otherwise": "C10_NATIVE_RT_CONSTRAINT_CONTROL_FAIL"
+  },
+  "interpretation": {
+    "if_pass": "The recovered RT normalization works on native upstream; the production hybrid source/gravity construction is the locus of the failed parent roundtrip.",
+    "if_fail": "Do not attribute the parent failure to the Khronon replacement yet; first reconcile the exact legacy CLASS conventions or implementation equations with the recovered literature equation."
+  },
+  "non_claims": [
+    "not a cosmological fit",
+    "not a comparison of native RT and RTK likelihoods",
+    "not a completed-U1 result",
+    "does not alter the historical parent failures"
+  ]
+}
