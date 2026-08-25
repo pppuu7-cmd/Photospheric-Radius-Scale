@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_TARGET_v1",
+  "created_utc": "2026-08-25T23:10:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Does a detached finite-k dual-interface ODE/DAE prototype close without an independently integrated B/chi state when ordinary matter is evolved in curvature-dressed physical variables, the neutral action fluid in preferred variables, and the completed-U1 metric is algebraically projected on every RHS call?",
+  "parents": [
+    "research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json"
+  ],
+  "scope": "deterministic synthetic barotropic architecture smoke-test only; not a physical cosmological parameter point",
+  "state": ["D_o=delta_o-3(1+w_o)Psi_N", "theta_o", "delta_khr_pref", "theta_khr_pref"],
+  "algebraic_variables": ["psi_pref", "psi_pref_prime", "phi_pref", "B", "Phi_N", "Psi_N"],
+  "acceptance": [
+    "use a positive expanding background with separately conserved constant-w ordinary and neutral densities and k>0, lambda_HL>1, E_th>0, M_c>0",
+    "solve the dressed A constraint and its differentiated form with no B_prime/Psi_N_prime",
+    "solve the remaining Hamiltonian+momentum equations as one 2x2 algebraic system because ordinary q_pref=q_N-a W_o B; do not divide by the partial momentum coefficient alone",
+    "evolve the ordinary dressed density with D_o_prime=-(1+w_o)theta_o for the barotropic constant-w smoke-test and Euler with the physical Newtonian lapse/curvature outputs",
+    "evolve the neutral action fluid with the C10.59 preferred equations including the k^2 B continuity term",
+    "RK4 integrate a frozen finite interval and require every state/algebraic output finite",
+    "require max absolute A/Hamiltonian/momentum algebraic residual <1e-11",
+    "require max dressed/preferred source identity residual <1e-11",
+    "require the 2x2 determinant stay finite and its minimum absolute value exceed 1e-5 on this synthetic path",
+    "explicitly confirm no B or chi variable is present in the integrated state vector",
+    "do not interpret the synthetic determinant margin as a physical all-history theorem"
+  ],
+  "pass_classification": "C10_DUAL_INTERFACE_DAE_PROTOTYPE_PASS_SCOPED",
+  "failure_classification": "C10_DUAL_INTERFACE_DAE_PROTOTYPE_FAIL",
+  "next_if_pass": "freeze a physical finite-onset memory-loss/growing-mode test using a declared completion-parameter diagnostic point only after the parameter protocol is frozen; do not infer attractor behavior from this synthetic smoke-test",
+  "non_claims": [
+    "not a physical adiabatic IC theorem",
+    "not a completion-parameter selection",
+    "not a CLASS implementation",
+    "not a photon/UR hierarchy",
+    "not exact k=0",
+    "not spectra or likelihood evidence"
+  ]
+}
