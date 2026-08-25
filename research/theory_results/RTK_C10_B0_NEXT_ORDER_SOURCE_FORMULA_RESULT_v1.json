@@ -1,0 +1,61 @@
+{
+  "A_constraint_match": {
+    "B0": "[C2-3Pcal deltaH0_pref,0/M_c^2-E_th phi0]/(2H)",
+    "interpretation": "the O(k^2) preferred constraint formula is exactly the rearranged C10.50 finite-phi regularity limit",
+    "machine_C10_50_regularity_match_residual": "0",
+    "psi0": "-(3/(2 M_c^2)) deltaH0_pref,0"
+  },
+  "B0": {
+    "C2": "3a^2 dm2+9Ha q2",
+    "closed_form": "[3a^2 dm2+3H Q2+2Pcal psi0-E_th phi0]/(2H)",
+    "from_C10_53": "B0=-N2/r",
+    "machine_C2_formula_residual": "0",
+    "machine_residual": "0",
+    "with_Q2_3a_q2": "[C2+2Pcal psi0-E_th phi0]/(2H)"
+  },
+  "N2": {
+    "closed_form": "-(r/(2H))[-E_th phi0+3H Q2+2Pcal psi0+3a^2 dm2]",
+    "definition": "N2=Q2-D(psi_prime2+H phi2)",
+    "machine_residual": "0",
+    "psi_prime2_coefficient": "0"
+  },
+  "classification": "C10_B0_NEXT_ORDER_SOURCE_FORMULA_PASS_SCOPED",
+  "comoving_source_coordinate_invariance": {
+    "background": "rho_prime=-3H W",
+    "consequence": "for regular B, the O(k^2) coefficient C2 is the same in preferred and Newtonian representations",
+    "identity": "3a^2 delta_mu_N+9Ha q_N = 3a^2 delta_mu_pref+9Ha q_pref",
+    "machine_residual": "0",
+    "source_map": "delta_mu_N=delta_mu_pref+rho_prime B; q_N=q_pref+a W B"
+  },
+  "interpretation": {
+    "architecture": "derive the physical matter adiabatic gradient coefficients, algebraically project B0, and transform the projected state to the Newtonian Boltzmann interface",
+    "core": "psi_prime2 and the detailed next-order differentiated A-source cancel from B0; the physical IC problem is smaller than a full arbitrary chi ODE initialization problem"
+  },
+  "minimum_next_physical_data": [
+    "the physical baseline-species O(k^2) total comoving coefficient C2",
+    "the leading ordinary projected A-source deltaH0_pref,0 (equivalently psi0)",
+    "the leading preferred lapse phi0/primordial normalization"
+  ],
+  "next_gate": "derive C2 and the leading A-source/metric amplitudes from the baseline completed-U1 adiabatic matter hierarchy; do not integrate chi independently",
+  "non_claims": [
+    "does not yet derive C2 from individual species",
+    "does not fix primordial normalization",
+    "does not calculate B0 numerically",
+    "does not cover exact k=0",
+    "does not include massive-neutrino anisotropic stress",
+    "does not implement completed-U1 CLASS feedback",
+    "does not select completion parameters"
+  ],
+  "o_k2_hamiltonian": {
+    "equation": "-2 D H^2 phi2-r E_th phi0=-3a^2 r dm2-D H Q2+2D H psi_prime2-2r Pcal psi0",
+    "phi2_solution": "(-E_th*phi0*r + 3*H*Q2*r + 2*H*Q2 - 6*H*psi_prime2*r - 4*H*psi_prime2 + 2*Pcal*psi0*r + 3*a**2*dm2*r)/(2*H**2*(3*r + 2))"
+  },
+  "provenance": {
+    "proof_script": "research/shadow/rtk_c10_b0_next_order_source_formula.py",
+    "repo_head_at_job_start": "e31ed24b611f16bce82642ee3ca5ed07854b33e6",
+    "sympy": "1.13.3",
+    "workflow": "rtk-c10-b0-next-order-source-formula.yml"
+  },
+  "schema": "RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_TARGET_v1.json"
+}
