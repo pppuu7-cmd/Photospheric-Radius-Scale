@@ -1,0 +1,34 @@
+{
+  "classification": "C10_FINITE_ONSET_ADIABATIC_INVARIANCE_PASS_UV_OR_GROWING_MODE_MATCH_REQUIRED_SCOPED",
+  "combined_with_prior": {
+    "C10_53": "leading finite-B constraint is total comoving regularity and does not determine B0",
+    "C10_54": "B0=[C2+2 Pcal psi0-Eth phi0]/(2H); C2 is source-coordinate invariant"
+  },
+  "identities": {
+    "barotropic": "delta_pref/(1+w)=delta_N/(1+w)+3 H B",
+    "density_time_shift": "delta_rho_pref/rho_prime=delta_rho_N/rho_prime-B",
+    "velocity": "v_pref=v_N-B, v=q/[a(rho+p)]"
+  },
+  "interpretation": {
+    "boundary_data": "adiabaticity plus leading regularity cannot manufacture C2 or B0; one needs temporal growing-mode/attractor selection or pre-EFT/UV matching",
+    "core": "instantaneous finite-onset adiabatic relative-density and common-velocity conditions are exactly blind to the common preferred-foliation time shift B",
+    "dof_guard": "this is a finite-onset boundary-data statement, not evidence for an extra propagating scalar or physical isocurvature mode"
+  },
+  "machine_residuals": {
+    "barotropic_i": "0",
+    "barotropic_j": "0",
+    "relative_entropy": "0",
+    "relative_velocity": "0",
+    "velocity_shift_i": "0",
+    "velocity_shift_j": "0"
+  },
+  "next_gate": "test in-EFT attractor/memory loss before introducing any arbitrary UV matching parameter",
+  "non_claims": [
+    "no numerical C2 or B0",
+    "no UV completion selected",
+    "no completed-U1 CLASS feedback",
+    "not exact k=0",
+    "no spectra or likelihood result"
+  ],
+  "schema": "RTK_C10_FINITE_ONSET_ADIABATIC_INVARIANCE_RESULT_v1"
+}
