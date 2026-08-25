@@ -1,0 +1,30 @@
+{
+  "schema": "RTK_C10_RT_LITERATURE_TO_FORK_00_TRANSLATION_RESULT_v1",
+  "classification": "C10_RT_00_TRANSLATION_ALGEBRA_REPRODUCES_EXISTING_ROUNDTRIP_RESIDUAL",
+  "status_scope": "GREEN_ANALYTIC_TRANSLATION_SIMPLE_UNIT_COORDINATE_MISMATCH_EXCLUDED_EXTERNAL_00_CLOSURE_STILL_OPEN",
+  "kind": "analytic convention audit; not a preregistered numerical pass/fail gate",
+  "literature_anchor": "RT scalar perturbation equations (2.1.26)-(2.1.28) in the detailed nonlocal-gravity treatment; same equations originate in the Dirian/Foffa/Kunz/Maggiore/Pettorino RT cosmology literature.",
+  "metric_map": {
+    "literature": "ds^2=-(1+2 Psi_lit)dt^2+a^2(1+2 Phi_lit)dx^2",
+    "CLASS_Newtonian": "ds^2=a^2[-(1+2 psi_CLASS)deta^2+(1-2 phi_CLASS)dx^2]",
+    "map": "Psi_lit=psi_CLASS; Phi_lit=-phi_CLASS; d/dx=(1/Hc)d/deta with x=ln a"
+  },
+  "auxiliary_map": {
+    "literature_definition": "V_lit=H0 S_t=H0 S_eta/a and Z_lit=H0^2 S",
+    "fork_storage_map_used_by_code": "V_lit=H0 V_code/a; Z_lit=H0^2 Z_code",
+    "V_derivative_identity": "h dV_lit/dx = V_code_prime/a^2 - Hc V_code/a^2, where h=H/H0 and Hc=aH"
+  },
+  "density_map": "rho_CLASS=(8 pi G/3) rho_phys, so H0^2 delta_rho_phys/rho0=delta_rho_CLASS for rho0=3H0^2/(8 pi G)",
+  "translated_00_auxiliary_bracket": "B00_code=deltaU-deltaV_prime/a^2+Hc deltaV/a^2+2 psi Vbg_prime/a^2-2 Hc psi Vbg/a^2+psi_prime Vbg/a^2",
+  "translated_combined_constraint": "Ccom + 2 k^2 phi_CLASS/(3 a^2) + gamma H0^2 B00_code + 2 Hc A0i_code/a^2 = 0, with Ccom=delta_rho_CLASS+3 Hc (rho+p)theta_CLASS/k^2",
+  "key_result": "This is algebraically the same residual used by the existing legacy-RT auxiliary roundtrip and untouched-native-RT control. Therefore their factor-of-few-to-ten mismatch is not explained by the simple cosmic/conformal-time, V/Z, H0, scale-factor, metric-sign or CLASS-density normalization conversions audited here.",
+  "new_localized_hypothesis": "The pinned fork explicitly evolves model=2 through the algebraic psi equation and phi-prime/0i equation, while its Newtonian initial-condition construction is inherited from the standard GR gauge transform and then sets all nonlocal auxiliary perturbations deltaU,deltaUprime,deltaV,deltaVprime,deltaZ,deltaZprime to zero. Test whether the separate literature 00 first-integral is initially projected and propagated, rather than changing translation coefficients post hoc.",
+  "next_gate": "First close the literal direct-native psi/0i identities in both untouched upstream and RTK. Then freeze an initial-condition/00-first-integral propagation audit using the already translated residual, with no fitted coefficients.",
+  "guards": [
+    "does not close the independent literature RT 00 constraint numerically",
+    "does not identify the old fork as physically incorrect",
+    "does not implicate the DBI-Khronon replacement",
+    "does not alter the C10 fixed-source-replay scope theorem",
+    "does not constitute a completed-U1 coupled cosmology result"
+  ]
+}
