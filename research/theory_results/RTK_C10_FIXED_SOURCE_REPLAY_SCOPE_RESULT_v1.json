@@ -1,0 +1,36 @@
+{
+  "schema": "RTK_C10_FIXED_SOURCE_REPLAY_SCOPE_RESULT_v1",
+  "classification": "C10_FIXED_SOURCE_REPLAY_FAIL_IS_NOT_COUPLED_U1_NOGO",
+  "target": "research/theory_targets/RTK_C10_FIXED_SOURCE_REPLAY_SCOPE_TARGET_v1.json",
+  "production_code_evidence": {
+    "source": "pinned dirian/class_public source/perturbations.c plus the RTK Khronon production patch",
+    "newtonian_metric_continuity": "metric_continuity=-3*phi_prime",
+    "newtonian_metric_euler": "metric_euler=k^2*psi",
+    "class_contract": "Each species continuity equation contains theta+metric_continuity and each Euler equation contains metric_euler; the DBI-Khronon derivative patch likewise passes phi_prime and psi into khr_perturb_derivs_newtonian."
+  },
+  "derivation": [
+    "Let y denote the collection of matter/radiation/Khronon perturbation variables and M=(phi_prime,psi,...) the scalar metric forcing. The production perturbation system has the schematic form y'=F[y,M].",
+    "The legacy RT production histories therefore solve y_RT'=F[y_RT,M_RT]. Their stress histories s_RT=S[y_RT] are functionals of the legacy RT metric history, not gravity-independent external data.",
+    "A self-consistent completed-U1 solution instead solves y_U1'=F[y_U1,M_U1] together with M_U1=G_U1[y_U1] (plus the completion auxiliary/boundary equations). In general M_U1 != M_RT implies y_U1 != y_RT and hence s_U1 != s_RT.",
+    "C10.27 froze s=s_RT and tested the one-way map M=G_U1[s_RT]. Under its finite-M_c and finite-chi assumptions, C_com=O(k^2) is necessary for regularity of that imported-forcing replay.",
+    "Failure of G_U1[s_RT] does not imply absence of a fixed point of the coupled map y'=F[y,G_U1[y]]. The imported legacy history s_RT is not required to be a fixed point of the completed-U1 coupled system.",
+    "Conversely, a detached fixed-source PASS would only show compatibility of that forcing history and would not establish dynamical stability, initial-condition consistency, or a completed-action likelihood."
+  ],
+  "formal_scope_of_C10_27": {
+    "does_exclude": "A regular detached completed-U1 solution on the frozen raw legacy RT source histories at the preregistered smallest-k/core-epoch criteria and finite-M_c, finite-chi assumptions.",
+    "does_not_exclude": [
+      "a regular self-consistent completed-U1 matter+metric solution after reintegrating the Boltzmann/fluid/Khronon perturbations with completed-U1 metric feedback",
+      "a different completed-U1 initial/boundary prescription consistent with the coupled constraints",
+      "a numerically justified resolved-k domain after an independently frozen convergence protocol"
+    ]
+  },
+  "consequence_for_architecture": "Do not promote raw legacy RT stress histories to immutable physical sources for the final completion. They remain useful controls and initial guesses. After completing the source/constraint audit, the physically decisive cosmological gate must be an opt-in coupled shadow that reintegrates perturbations with completed-U1 metric feedback, leaving the historical production solver untouched.",
+  "parent_fail_retained": "C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_FAIL_CORE_EPOCHS_SCOPED",
+  "non_claims": [
+    "does not prove that the coupled completed-U1 system is regular",
+    "does not remove the need for a finite-k conditioning/initial-condition audit",
+    "does not select M_c, lambda_HL, Pcal or alpha1",
+    "does not alter any historical likelihood result"
+  ],
+  "status_scope": "GREEN_SCOPE_THEOREM_PARENT_FAIL_RETAINED_COUPLED_SOLVER_REQUIRED"
+}
