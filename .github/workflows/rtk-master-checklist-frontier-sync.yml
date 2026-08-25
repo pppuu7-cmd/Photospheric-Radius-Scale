@@ -6,9 +6,12 @@ on:
     branches: [rtk-class-build]
     paths:
       - 'research/checkpoints/sync_rtk_master_checklist_current_frontier.py'
+      - 'research/checkpoints/sync_rtk_master_checklist_c10_46_47.py'
       - 'research/theory_results/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_RESULT_v1.json'
       - 'research/theory_results/RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_RESULT_v1.json'
       - 'research/theory_results/RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_LEGACY_RT_00_CONSTRAINT_PROJECTION_PROPAGATION_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_LEGACY_RT_00_AUXILIARY_COVECTOR_PROPAGATION_RESULT_v1.json'
       - '.github/workflows/rtk-master-checklist-frontier-sync.yml'
 
 permissions:
@@ -26,7 +29,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 research/checkpoints/sync_rtk_master_checklist_current_frontier.py
-          grep -q 'C10.45' research/checkpoints/RTK_MASTER_CHECKLIST.md
+          python3 research/checkpoints/sync_rtk_master_checklist_c10_46_47.py
+          grep -q 'C10.46' research/checkpoints/RTK_MASTER_CHECKLIST.md
+          grep -q 'C10.47' research/checkpoints/RTK_MASTER_CHECKLIST.md
           grep -q 'full.*checklist in chat only on explicit user request' research/checkpoints/RTK_MASTER_CHECKLIST.md
       - name: Persist checklist
         run: |
