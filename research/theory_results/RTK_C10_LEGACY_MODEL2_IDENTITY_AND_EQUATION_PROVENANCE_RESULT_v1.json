@@ -1,0 +1,68 @@
+{
+  "schema": "RTK_C10_LEGACY_MODEL2_IDENTITY_AND_EQUATION_PROVENANCE_RESULT_v1",
+  "classification": "C10_LEGACY_MODEL2_PUBLISHED_EQUATIONS_MATCH_RETARDED_SUBSPACE_EXCLUDES_C10_47_HOMOGENEOUS_MODES_SCOPED",
+  "target": "research/theory_targets/RTK_C10_LEGACY_MODEL2_IDENTITY_AND_EQUATION_PROVENANCE_TARGET_v1.json",
+  "status_scope": "HISTORICAL_PINNED_NONLOCAL_FORK_ONLY_NOT_COMPLETED_U1",
+  "model_identity": {
+    "status": "UNIQUE",
+    "fork_original_commit": "ebd2fd6838efd578ffacc34b8f8db092a2934a4e",
+    "fork_original_comment": "0=LCDM, 1=R Box^-2 R, 2=(g_munu R)^T",
+    "model_2": "g_munu Box^-1 R transverse model, later called RT",
+    "model_1": "R Box^-2 R, later called RR",
+    "primary_equation_anchor": "Dirian et al. arXiv:1403.6068 Appendix A, equations (A.1)-(A.12)"
+  },
+  "background_signature": {
+    "status": "MATCH",
+    "primary_anchor": "Maggiore arXiv:1307.3898 equations (2), (23)-(25), (35)-(41)",
+    "comment": "The pinned model=2 H/Hprime and effective rho/p structures are the conformal-time implementation of the g_munu Box^-1 R background system under the already audited H0/a normalization."
+  },
+  "metric_dictionary": {
+    "Psi_lit": "psi_CLASS",
+    "Phi_lit": "-phi_CLASS",
+    "time": "d/dx = (1/Hc) d/deta",
+    "background_V": "V_lit = H0 * Vbar_code / a",
+    "Z": "Z_lit = H0^2 * Z_code"
+  },
+  "refined_perturbative_covector_dictionary": {
+    "status": "REQUIRED_AND_CROSS_VALIDATED",
+    "map": "deltaV_lit = (H0/a) * (deltaV_code + Psi * Vbar_code)",
+    "equivalent_code_normalized_form": "deltaV_pub_code_normalized = deltaV_code + Psi*Vbar_code",
+    "geometric_interpretation": "The code variable is the lapse-normalized temporal-covector perturbation: delta(S_t/N)=delta S_t-Psi*Sbar_t at linear order.",
+    "not_a_fitted_coefficient": true,
+    "independent_checks": [
+      "Published A.12 maps directly to the code deltaZ equation only with the same coefficient-one shift.",
+      "Published A.11 maps to the code deltaV equation with the same shift after only the published background V identity Vbar''+(3+zeta)Vbar'-3Vbar=h^-1 Ubar'.",
+      "Published metric A.7 maps its Psi*Vbar-deltaV/2 structure exactly to the fork's Psi*Vbar/2-deltaV_code/2 structure with the same shift."
+    ]
+  },
+  "linear_auxiliary_signature": {
+    "A10_deltaU": "MATCH",
+    "A11_deltaV": "MATCH_AFTER_REFINED_COVECTOR_DICTIONARY_AND_PUBLISHED_BACKGROUND_IDENTITY",
+    "A12_deltaZ": "MATCH_AFTER_REFINED_COVECTOR_DICTIONARY",
+    "A7_0i_metric_source": "MATCH_AFTER_REFINED_COVECTOR_DICTIONARY",
+    "verification_script": "research/shadow/rtk_c10_legacy_model2_published_equation_audit.py",
+    "coefficients_fitted": false
+  },
+  "retarded_subspace": {
+    "status": "HOMOGENEOUS_AUXILIARY_DATA_FIXED_BY_NONLOCAL_OPERATOR_DEFINITION",
+    "primary_anchor": "Dirian et al. arXiv:1403.6068 discussion around equations (2.8)-(2.9); Maggiore arXiv:1307.3898 discussion around equations (20)-(25)",
+    "result": "The localized differential system admits arbitrary homogeneous solutions, but the original nonlocal theory does not promote them to independent propagating data. A definition of Box^-1 with the retarded prescription fixes the homogeneous solution/boundary conditions. Therefore the arbitrary six-direction homogeneous seeds used by C10.47 probe the enlarged localized ODE solution space rather than six physical free initial conditions of one fixed minimal retarded RT theory.",
+    "dimension_claim": "No independent physical homogeneous-IC dimension is assigned beyond the explicit statement that these modes are fixed by the chosen nonlocal operator/boundary prescription."
+  },
+  "correction_to_prior_translation_scope": {
+    "parent": "research/theory_results/RTK_C10_RT_LITERATURE_TO_FORK_00_TRANSLATION_RESULT_v1.json",
+    "status": "PRESERVE_PARENT_BUT_REFINE_PERTURBATIVE_V_MAP",
+    "old_incomplete_map": "deltaV_lit=(H0/a)*deltaV_code",
+    "new_complete_map": "deltaV_lit=(H0/a)*(deltaV_code+Psi*Vbar_code)",
+    "consequence": "The old translated A.6/00 residual must be recomputed; C10.37/C10.38/C10.44/C10.46 are retained as diagnostics of the old incomplete translation and are not deleted."
+  },
+  "corrected_A6_auxiliary_bracket": "B00_corr = deltaU - deltaVprime/a^2 + Hc*deltaV/a^2 + Psi*Vbarprime/a^2 - Hc*Psi*Vbar/a^2",
+  "next_gate": "C10.49 corrected RT 00 roundtrip on untouched upstream model2 and historical production RTK using B00_corr and the already literal code 0i source, without modifying either production dynamics or physical coefficients.",
+  "production_modified": false,
+  "guards": [
+    "This does not prove the completed-U1 cosmology.",
+    "This does not erase C10.47; it narrows its interpretation to the enlarged localized homogeneous solution space.",
+    "This does not alter historical production trajectories.",
+    "The old C10.42 translation result remains in history and is superseded only in the perturbative temporal-covector map."
+  ]
+}
