@@ -1,33 +1,47 @@
 {
-  "schema": "RTK_C10_PHYSICAL_HISTORY_CURRENT_v1",
-  "updated_utc": "2026-08-25T00:10:00Z",
-  "precedence": "For the latest C10 frontier, this file supersedes the active-gate paragraph of C10_current.json when newer; it does not replace C10_current.json historical closed-subgate detail.",
-  "status": "C10_REORDERED_SHADOW_SOLVE_GREEN_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_NEXT",
+  "schema": "RTK_C10_PHYSICAL_HISTORY_CURRENT_v2",
+  "updated_utc": "2026-08-25T21:28:00Z",
+  "precedence": "For the latest C10 frontier, this file supersedes the active-gate paragraph of C10_current.json when newer; it does not replace historical closed-subgate detail in C10_current.json or immutable target/result certificates.",
+  "status": "C10_CHI_LEADING_REGULARITY_NONUNIQUE_GREEN_PREFERRED_DAE_ROUNDTRIP_GREEN_PROJECTOR_API_ACTIVE",
   "just_closed": {
-    "newtonian_source_transform_pole_audit": "PASS scoped; no new finite-k pole",
-    "standalone_shadow_metric_reference_v1": "PASS scoped; production untouched",
-    "reordered_shadow_metric_v2": "PASS finite-k algebra",
-    "synthetic_small_k_control": "YELLOW by design: arbitrary k-independent synthetic sources give phi~k^-2, exposing the physical regularity condition rather than a gravity pole"
+    "C10_49_corrected_legacy_RT_00_covector_roundtrip": "PASS scoped; incomplete temporal auxiliary-covector translation, not a physical RTK/RT failure, explains the prior legacy 00 mismatch on binding epochs",
+    "C10_50_chi_initial_data_structure": "PASS scoped; leading super-horizon regularity does not select finite chi, while preferred finite-k constraints make B algebraic once preferred sources are specified",
+    "C10_51_preferred_DAE_Newtonian_roundtrip": "PASS scoped; after consistent source co-transformation shadow-v3 returns arbitrary transformed B_prime exactly, so its chi_prime equation is a representation identity on the preferred constraint manifold rather than an independent gravitational evolution law"
   },
-  "key_identity": "r E_th L phi=R_reg, with R_reg=R_H+2 H R_M and L=-k^2",
-  "physical_regular_superhorizon_requirement": "R_reg=O(k^2) so that phi and the physical Newtonian potentials remain finite as k->0",
-  "active_target": "research/theory_targets/RTK_C10_PHYSICAL_CLASS_SOURCE_HISTORY_REPLAY_TARGET_v1.json",
-  "required_real_CLASS_channels": {
-    "ordinary": "deltaH0_N, deltaH0_N_prime, H0_prime, H0_double_prime for baryons+photons+massless relativistic species only",
-    "total": "delta_mu_N, q_N, delta_p_N, Pi_N plus rho_total_prime,p_total_prime,rho_total+p_total including neutral RTK/Khronon",
-    "metric_background": "a,H,k and time coordinate"
+  "key_identities": {
+    "regularity": "R_reg=-r C_reg, C_reg=3a^2 delta_mu_N+9Ha q_N+2HL chi-3a^2 Pcal a1_eff(deltaH0_N-H0_prime chi)",
+    "small_k": "for finite M_c, a1_eff=O(k^2) and L=-k^2, hence every explicit chi term in C_reg is O(k^2); C_com=O(k^2) gives finite phi for every finite chi",
+    "preferred_A": "psi=K deltaH0_pref; psi_prime=K_prime deltaH0_pref+K deltaH0_pref_prime",
+    "preferred_Hamiltonian": "phi is algebraic with denominator -(lambda_HL-1)E_th k^2-2(3lambda_HL-1)H^2",
+    "preferred_momentum": "B=[3a q_pref-(3lambda_HL-1)(psi_prime+H phi)]/[(lambda_HL-1)L]",
+    "roundtrip": "after deltaH0_N_prime=deltaH0_pref_prime+H0_double_prime B+H0_prime B_prime, shadow-v3 gives y=K H0_prime B_prime and chi_prime=B_prime exactly"
   },
-  "implementation_clue": "RT-CLASS perturbation workspace already assembles delta_rho, rho_plus_p_theta, rho_plus_p_shear and delta_p for standard species; RTK khronon_perturbations.c separately exposes delta_rho_class, delta_p_class, momentum_class and shear_class. The replay gate should combine/export these read-only under the frozen source conventions.",
-  "architecture_guard": "Do not feed shadow-v2 Phi_N/Psi_N back into CLASS at this gate. First export/replay and classify small-k regularity.",
-  "parallel_numerical_frontier": {
-    "A5_recenter1": "pending; do not duplicate",
-    "B4_v4_half_eigenmode_rays": "pending",
-    "B5_linear_scale_dependence": "pending"
+  "architecture_decision": {
+    "rejected": "Do not treat chi as an additional independently integrated gravitational/Boltzmann state and do not choose chi_initial=0 by convenience.",
+    "preferred": "Use a finite-k preferred-coordinate DAE constraint projection and transform the resulting physical potentials/sources to the Newtonian Boltzmann interface. If Newtonian matter variables are evolved, their initial state must be the transform of a preferred constraint-projected adiabatic seed.",
+    "exact_k0": "Continue routing exact k=0 to the separately certified homogeneous bridge."
+  },
+  "active_target": "research/theory_targets/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_TARGET_v1.json",
+  "active_implementation": "research/shadow/rtk_c10_preferred_metric_projector_v1.py",
+  "next_after_active": [
+    "derive/freeze the physical early-time preferred-source adiabatic seed or gradient series",
+    "construct a detached preferred-source trajectory projection with finite-k and near-k0 conditioning diagnostics",
+    "only then build an opt-in completed-U1 Boltzmann DAE bridge; production historical RTK remains untouched",
+    "fixed-parameter completed-metric spectra must precede any completed-action likelihood or refit"
+  ],
+  "completion_parameter_guard": "No numerical M_c, lambda_HL, eta0 or EFT onset is selected by C10.50-C10.52; retain the previously certified parameteric history-wide window and postpone numerical freeze until parameter-independent initialization/conditioning structure is exhausted.",
+  "parallel_frontier": {
+    "A16_LCDM_recenter_chain": "retain current independent status; do not infer completion from C10 work",
+    "B04_neutrino_robustness": "retain current independent status",
+    "C09_radiative_naturalness": "still open and not cured by the C10 DAE architecture",
+    "compact_objects": "still open"
   },
   "non_claims": [
-    "no completed-U1 physical source-history PASS yet",
+    "no physical completed-U1 adiabatic seed yet",
+    "no completed-U1 metric feedback in CLASS yet",
     "no completed-U1 spectra",
     "no completed-action likelihood/refit",
+    "no numerical completion-parameter selection",
     "no C9 radiative protection",
     "no compact-object closure"
   ]
