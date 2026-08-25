@@ -1,0 +1,65 @@
+{
+  "adiabatic_IC_consequence": {
+    "dust_relation": "delta_dust=(3/4)delta_gamma",
+    "fractional_factor_deviation": "w_khr",
+    "production_relation": "delta_khr=(3/4)(1+w_khr) delta_gamma",
+    "rigorous_bound": "<=a^3/[sqrt(lambda_D)(1+sqrt(lambda_D))x0]",
+    "velocity_note": "production Newtonian transform gives theta->theta+k^2 alpha at leading growing-mode order"
+  },
+  "asymptotic_coefficients": {
+    "kstar": "~mu_K(ell+1)sqrt(ell) x0^(3/2) a^(-7/2)",
+    "lim_MK_over_X_3_2": "sqrt(ell)*mu_K*(ell + 1)",
+    "lim_X2_ca2": "1/(ell**2*(ell + 1))",
+    "lim_X_w": "1/(ell*(ell + 1))",
+    "lim_p": "2*mu_K**2/ell**2",
+    "lim_rho_over_X": "2*mu_K**2*(ell + 1)/ell",
+    "machine_residuals": {
+      "MK_over_X_3_2": "0",
+      "X2ca2": "0",
+      "Xw": "0",
+      "p": "0",
+      "rho_over_X": "0"
+    }
+  },
+  "classification": "C10_KHRONON_EARLY_DUST_FINITE_X_BOUND_PASS_SCOPED",
+  "definitions": {
+    "X": "x0/a^3",
+    "ell": "sqrt(lambda_D)",
+    "lambda_guard": "lambda_D is DBI, not completion lambda_HL",
+    "s": "sqrt(1+ell^2 X^2)"
+  },
+  "exact_simplifications": {
+    "ca2": "X/[s^2(s+X)]",
+    "machine_ca2_residual": "0",
+    "machine_w_residual": "0",
+    "w": "X/[s(s+1+X)]"
+  },
+  "finite_X_bounds": {
+    "ca2": "0<=ca2<=1/[ell^2(ell+1)X^2]=a^6/[ell^2(ell+1)x0^2]",
+    "ca2_bound_a": "a**6/(ell**2*x0**2*(ell + 1))",
+    "cs2": "0<=cs2=ca2/[1+(k/k_star)^2]<=ca2",
+    "proof_step": "s>=ell X, so s(s+1+X)>=ell(ell+1)X^2 and s^2(s+X)>=ell^2(ell+1)X^3",
+    "w": "0<=w<=1/[ell(ell+1)X]=a^3/[ell(ell+1)x0]",
+    "w_bound_a": "a**3/(ell*x0*(ell + 1))"
+  },
+  "interpretation": {
+    "core": "production neutral Khronon has a rigorously controlled early dust limit: rho~a^-3, w=O(a^3), ca2=O(a^6), cs2<=ca2 and k_star~a^-7/2",
+    "use_in_C10": "organize Khronon as dust plus explicit bounded corrections, evaluated at the eventual finite EFT onset"
+  },
+  "next_gate": "derive the radiation+baryon+massless-ur O(k^2) adiabatic C2 coefficient and add the neutral-Khronon dust term plus finite-onset bounded corrections",
+  "non_claims": [
+    "no numerical a_EFT or parameter selection",
+    "no claim finite-onset corrections are negligible before evaluation",
+    "no photon/ur anisotropic O(k^2) coefficient yet",
+    "no completed-U1 CLASS feedback or spectra",
+    "no massive-neutrino extension"
+  ],
+  "provenance": {
+    "proof_script": "research/shadow/rtk_c10_khronon_early_dust_bound.py",
+    "repo_head_at_job_start": "aaf70e220b641818685a22db76a86d4fa65073b3",
+    "sympy": "1.13.3",
+    "workflow": "rtk-c10-khronon-early-dust-bound.yml"
+  },
+  "schema": "RTK_C10_KHRONON_EARLY_DUST_BOUND_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_KHRONON_EARLY_DUST_BOUND_TARGET_v1.json"
+}
