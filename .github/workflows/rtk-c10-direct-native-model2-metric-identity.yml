@@ -1,4 +1,5 @@
 name: RTK C10 direct native model2 metric identities
+# retriggered 2026-08-25 during C10.46 continuation; scientific target unchanged
 
 on:
   workflow_dispatch:
