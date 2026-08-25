@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-25T22:55:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Can the ordinary physical-metric matter sector be rewritten in curvature-dressed density variables so that the preferred-source projection and differentiated elliptic A constraint contain neither B_prime nor physical Newtonian curvature derivative Psi_N_prime, while retaining a pole-free finite-k A solve?",
+  "parents": [
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FULL_ACTION_SOURCE_CHANNEL_DECOMPOSITION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json"
+  ],
+  "definitions": {
+    "Psi_N": "psi_pref-H B",
+    "W": "rho+p",
+    "C": "-p_prime/(3H)",
+    "mu_hat": "delta_mu_N-3 W Psi_N",
+    "p_hat": "delta_p_N-3 C Psi_N",
+    "h_hat": "deltaH0_N-3 W0 Psi_N",
+    "K": "(3/2) a^2 a1_eff/L = -(3/2) a^2/(k^2+a^2 M_c^2), L=-k^2"
+  },
+  "acceptance": [
+    "using rho_prime=-3H W and q_pref=q_N-a W B, prove delta_mu_pref=mu_hat+3 W psi_pref exactly",
+    "using p_prime=-3H C, prove delta_p_pref=p_hat+3 C psi_pref exactly",
+    "prove the same ordinary-only identity deltaH0_pref=h_hat+3 W0 psi_pref",
+    "insert deltaH0_pref into psi_pref=K deltaH0_pref and derive D_A psi_pref=K h_hat with D_A=1-3 K W0",
+    "prove K<0 and therefore D_A>1 for k>0, M_c>0, a>0 and W0>0; no finite-k dressed-A denominator pole exists in this domain",
+    "derive the ordinary aggregate dressed A-source continuity h_hat_prime=-3H(h_hat+p0_hat)-(k^2/a) q0_N from physical-metric local conservation, with all Psi_N_prime terms cancelling",
+    "differentiate D_A psi=K h_hat and express psi_prime using only K,K_prime,W0,W0_prime,h_hat,h_hat_prime,psi; no B_prime or Psi_N_prime may occur",
+    "verify the exact derivative K_prime/K=2H a1_eff for constant comoving k and M_c, confirming the existing C10.52 projector K_prime formula",
+    "for a constant-w species prove D_i=delta_i-3(1+w)Psi_N has D_i_prime free of Psi_N_prime when the physical Newtonian continuity equation is used",
+    "retain q_pref=q_N-a W B as an algebraic transform after B is solved; no temporal B initial datum is introduced",
+    "do not call this a full Boltzmann implementation or an attractor theorem"
+  ],
+  "pass_classification": "C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_PASS_POLE_FREE_SCOPED",
+  "failure_classification": "C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_FAIL",
+  "next_if_pass": "implement a detached dual-interface ODE/DAE prototype: ordinary species in curvature-dressed physical-metric variables, neutral Khronon in preferred action variables, and algebraic completed-U1 metric projection at each step; then freeze a finite-onset memory-loss/attractor test",
+  "non_claims": [
+    "not exact k=0",
+    "not a massive-neutrino completion",
+    "not a photon hierarchy implementation",
+    "not completed-U1 CLASS feedback",
+    "not a completion-parameter selection",
+    "not spectra or likelihood evidence"
+  ]
+}
