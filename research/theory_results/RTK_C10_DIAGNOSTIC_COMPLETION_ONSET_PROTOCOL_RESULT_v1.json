@@ -1,0 +1,257 @@
+{
+  "classification": "C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_PASS_SCOPED",
+  "grid_definition": {
+    "M_c_formula": "(k_ref/a_on)*sqrt((1-u)/u)",
+    "delta_H_cap": 0.01,
+    "delta_H_fractions": [
+      0.25,
+      0.5,
+      1.0
+    ],
+    "lambda_formula": "(1+2/(1-delta_H))/3",
+    "point_count": 9,
+    "u_cap": 0.01,
+    "u_fractions": [
+      0.25,
+      0.5,
+      1.0
+    ]
+  },
+  "interpretation": "This is a deterministic non-fitted diagnostic grid derived from already persisted history support and dimensionless 1-percent design caps. It is suitable for attractor sensitivity tests but is not a physical parameter fit or a globally certified completion window.",
+  "ir_gravity_truncation": {
+    "E_th": 2.0,
+    "Pcal": 1.0,
+    "alpha1": 0.0,
+    "guard": "two-spatial-derivative IR truncation only; higher-spatial UV coefficients remain unfrozen"
+  },
+  "machine_guards": {
+    "later_time_monotonicity": "for fixed positive M_c,k, a1_eff=k^2/(k^2+a^2 M_c^2) decreases with a>0",
+    "max_a1_eff_over_exported_k_at_common_onset": 0.010000000000000002,
+    "max_u_roundtrip_abs_error": 1.734723475976807e-18,
+    "strong_filter_cap_satisfied": true
+  },
+  "next_gate": "C10.62b reduced finite-onset memory-loss test on a regenerated pinned production RTK background across all nine diagnostic points, followed by the full photon+baryon+UR hierarchy.",
+  "non_claims": [
+    "not parameter selection",
+    "not fundamental EFT onset",
+    "not local-window certification",
+    "not UV completion",
+    "not attractor theorem",
+    "not spectra or likelihood evidence"
+  ],
+  "points": [
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 2.506265657879034e-09,
+        "0.00029999999999999997": 2.2556390468652847e-08,
+        "0.001": 2.5062650360238006e-07,
+        "0.0030000000000000001": 2.2556340098480986e-06,
+        "0.01": 2.506202852058846e-05,
+        "0.029999999999999999": 0.0002255130421709389,
+        "0.10000000000000001": 0.002500000000000001,
+        "1.0000000000000001e-05": 2.5062656640975882e-11,
+        "3.0000000000000001e-05": 2.2556390972355706e-10
+      },
+      "delta_H": 0.0025,
+      "delta_H_fraction": 0.25,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0016708437761068,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 0.25,
+      "u_onset_kref": 0.0025
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 2.506265657879034e-09,
+        "0.00029999999999999997": 2.2556390468652847e-08,
+        "0.001": 2.5062650360238006e-07,
+        "0.0030000000000000001": 2.2556340098480986e-06,
+        "0.01": 2.506202852058846e-05,
+        "0.029999999999999999": 0.0002255130421709389,
+        "0.10000000000000001": 0.002500000000000001,
+        "1.0000000000000001e-05": 2.5062656640975882e-11,
+        "3.0000000000000001e-05": 2.2556390972355706e-10
+      },
+      "delta_H": 0.005,
+      "delta_H_fraction": 0.5,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0033500837520937,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 0.25,
+      "u_onset_kref": 0.0025
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 2.506265657879034e-09,
+        "0.00029999999999999997": 2.2556390468652847e-08,
+        "0.001": 2.5062650360238006e-07,
+        "0.0030000000000000001": 2.2556340098480986e-06,
+        "0.01": 2.506202852058846e-05,
+        "0.029999999999999999": 0.0002255130421709389,
+        "0.10000000000000001": 0.002500000000000001,
+        "1.0000000000000001e-05": 2.5062656640975882e-11,
+        "3.0000000000000001e-05": 2.2556390972355706e-10
+      },
+      "delta_H": 0.01,
+      "delta_H_fraction": 1.0,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0067340067340067,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 0.25,
+      "u_onset_kref": 0.0025
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 5.025125602888816e-09,
+        "0.00029999999999999997": 4.522612860786352e-08,
+        "0.001": 5.025123102953214e-07,
+        "0.0030000000000000001": 4.522592611390199e-06,
+        "0.01": 5.024873121953671e-05,
+        "0.029999999999999999": 0.00045205685870711734,
+        "0.10000000000000001": 0.005000000000000001,
+        "1.0000000000000001e-05": 5.025125627888185e-11,
+        "3.0000000000000001e-05": 4.5226130632812297e-10
+      },
+      "delta_H": 0.0025,
+      "delta_H_fraction": 0.25,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0016708437761068,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 0.5,
+      "u_onset_kref": 0.005
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 5.025125602888816e-09,
+        "0.00029999999999999997": 4.522612860786352e-08,
+        "0.001": 5.025123102953214e-07,
+        "0.0030000000000000001": 4.522592611390199e-06,
+        "0.01": 5.024873121953671e-05,
+        "0.029999999999999999": 0.00045205685870711734,
+        "0.10000000000000001": 0.005000000000000001,
+        "1.0000000000000001e-05": 5.025125627888185e-11,
+        "3.0000000000000001e-05": 4.5226130632812297e-10
+      },
+      "delta_H": 0.005,
+      "delta_H_fraction": 0.5,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0033500837520937,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 0.5,
+      "u_onset_kref": 0.005
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 5.025125602888816e-09,
+        "0.00029999999999999997": 4.522612860786352e-08,
+        "0.001": 5.025123102953214e-07,
+        "0.0030000000000000001": 4.522592611390199e-06,
+        "0.01": 5.024873121953671e-05,
+        "0.029999999999999999": 0.00045205685870711734,
+        "0.10000000000000001": 0.005000000000000001,
+        "1.0000000000000001e-05": 5.025125627888185e-11,
+        "3.0000000000000001e-05": 4.5226130632812297e-10
+      },
+      "delta_H": 0.01,
+      "delta_H_fraction": 1.0,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0067340067340067,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 0.5,
+      "u_onset_kref": 0.005
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 1.0101009998979696e-08,
+        "0.00029999999999999997": 9.090908264462883e-08,
+        "0.001": 1.0100999897979899e-06,
+        "0.0030000000000000001": 9.0908264470323e-06,
+        "0.01": 0.00010099989900010099,
+        "0.029999999999999999": 0.000908265213442325,
+        "0.10000000000000001": 0.010000000000000002,
+        "1.0000000000000001e-05": 1.0101010099989798e-10,
+        "3.0000000000000001e-05": 9.090909082644627e-10
+      },
+      "delta_H": 0.0025,
+      "delta_H_fraction": 0.25,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0016708437761068,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 1.0,
+      "u_onset_kref": 0.01
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 1.0101009998979696e-08,
+        "0.00029999999999999997": 9.090908264462883e-08,
+        "0.001": 1.0100999897979899e-06,
+        "0.0030000000000000001": 9.0908264470323e-06,
+        "0.01": 0.00010099989900010099,
+        "0.029999999999999999": 0.000908265213442325,
+        "0.10000000000000001": 0.010000000000000002,
+        "1.0000000000000001e-05": 1.0101010099989798e-10,
+        "3.0000000000000001e-05": 9.090909082644627e-10
+      },
+      "delta_H": 0.005,
+      "delta_H_fraction": 0.5,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0033500837520937,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 1.0,
+      "u_onset_kref": 0.01
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "a1_eff_at_common_onset_by_k": {
+        "0.0001": 1.0101009998979696e-08,
+        "0.00029999999999999997": 9.090908264462883e-08,
+        "0.001": 1.0100999897979899e-06,
+        "0.0030000000000000001": 9.0908264470323e-06,
+        "0.01": 0.00010099989900010099,
+        "0.029999999999999999": 0.000908265213442325,
+        "0.10000000000000001": 0.010000000000000002,
+        "1.0000000000000001e-05": 1.0101010099989798e-10,
+        "3.0000000000000001e-05": 9.090909082644627e-10
+      },
+      "delta_H": 0.01,
+      "delta_H_fraction": 1.0,
+      "eta0_min_formula": "3*(3*lambda_HL-1)*H_EFT^2/(64*M_c^2)",
+      "lambda_HL": 1.0067340067340067,
+      "local_upper_guard": "M_c^2 <= k_local_phys^2/99 plus isolated rank-root buffer remains to be checked",
+      "u_fraction": 1.0,
+      "u_onset_kref": 0.01
+    }
+  ],
+  "production_history_reference": {
+    "a_on_common_support": 0.0002203229136467,
+    "classification": "C10_PHYSICAL_CLASS_SOURCE_EXPORT_PASS",
+    "k_ref_Mpc_inv": 0.1,
+    "k_values_Mpc_inv": [
+      1e-05,
+      3e-05,
+      0.0001,
+      0.0003,
+      0.001,
+      0.003,
+      0.01,
+      0.03,
+      0.1
+    ],
+    "onset_semantics": "max of persisted per-file a_min; common exported-history support only, not a fundamental EFT cutoff"
+  },
+  "schema": "RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1",
+  "unselected_guards": {
+    "eta0": "not selected; evaluate eta0_min on the actual replay background",
+    "higher_spatial_UV": "not selected; later UV-sensitivity gate",
+    "isolated_rank_root": "must remain separately buffered if positive",
+    "k_local": "not selected; global local/cosmology upper-window certification remains open"
+  }
+}
