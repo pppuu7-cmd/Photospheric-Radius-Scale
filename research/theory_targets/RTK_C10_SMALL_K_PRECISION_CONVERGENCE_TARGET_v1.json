@@ -43,6 +43,7 @@
     "direct_quantity": "c10_Ccom_direct computed inside CLASS before table interpolation",
     "interpolators": ["linear", "local_cubic_four_point"],
     "plateau_model": "C_com=c2*k^2+c4*k^4 fitted only on plateau_k_Mpc_inv",
+    "smallest_eight_free_intercept_model": "C_com=c0+c2*k^2+c4*k^4 fitted on the eight smallest k values",
     "small_k_floor_metric": "median absolute residual of the smallest four C_com values relative to the plateau-model extrapolation",
     "interpolation_metric": "median absolute linear-minus-local-cubic C_com difference on the smallest four"
   },
