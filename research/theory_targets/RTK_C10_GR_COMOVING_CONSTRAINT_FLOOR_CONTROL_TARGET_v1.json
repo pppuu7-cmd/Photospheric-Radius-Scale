@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_GR_COMOVING_CONSTRAINT_FLOOR_CONTROL_TARGET_v1",
+  "created_utc": "2026-08-25T18:31:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Is the precision-stable late-time ~1e-10 comoving-density residual seen in the legacy RT diagnostics specific to RT, or is a comparable residual already present in pinned upstream GR model=0 under the same CLASS source/metric conventions and numerical precision?",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "control": "untouched upstream CLASS model=0 with ordinary CDM; historical RTK h,Omega_b,Om are reused only to match numerical density scales, not as a model comparison",
+  "identity": "R_GR=delta_rho_CLASS+3 Hc (rho+p)theta_CLASS/k^2 + 2 k^2 phi_CLASS/(3 a^2)",
+  "k_ladder_Mpc_inv": [2e-6,4e-6,8e-6,2e-5,8e-5,2e-4],
+  "binding_scale_factors": [0.01,0.1,0.5],
+  "precision": {
+    "perturb_sampling_stepsize": 0.003125,
+    "tol_background_integration": 0.000075,
+    "tol_perturb_integration": 7.5e-8,
+    "tol_thermo_integration": 0.000075
+  },
+  "reference_RT_native_observed_aux_median_abs": {
+    "0.01": 5.11670067224021e-10,
+    "0.1": 2.970639971523458e-10,
+    "0.5": 2.774630373672167e-10
+  },
+  "diagnostic_classification": {
+    "comparable": "At both a=0.1 and a=0.5, GR median |R_GR| is within a factor 3 of the frozen untouched-RT observed-aux reference.",
+    "much_smaller": "At both a=0.1 and a=0.5, GR median |R_GR| is at least a factor 10 below the frozen untouched-RT observed-aux reference.",
+    "otherwise": "mixed/inconclusive"
+  },
+  "classifications": {
+    "comparable": "C10_LATE_SMALL_K_COMOVING_RESIDUAL_GR_FLOOR_COMPARABLE_SCOPED",
+    "much_smaller": "C10_LATE_SMALL_K_COMOVING_RESIDUAL_RT_SPECIFIC_AGAINST_GR_CONTROL_SCOPED",
+    "otherwise": "C10_LATE_SMALL_K_COMOVING_RESIDUAL_GR_CONTROL_INCONCLUSIVE"
+  },
+  "guards": [
+    "not a likelihood or physical RT-vs-GR comparison",
+    "does not alter C10.27 frozen FAIL",
+    "does not test completed-U1 feedback",
+    "the diagnostic compares numerical residual scales under matched code conventions only"
+  ]
+}
