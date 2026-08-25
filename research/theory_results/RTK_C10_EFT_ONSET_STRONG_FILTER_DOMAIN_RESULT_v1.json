@@ -1,0 +1,48 @@
+{
+  "classification": "C10_EFT_ONSET_STRONG_FILTER_GRADIENT_DOMAIN_PASS_SCOPED",
+  "gradient_control": {
+    "K_O_z": "K0(1-z)",
+    "K_exact": "K0/(1+z), K0=-3/(2 M_c^2)",
+    "K_relative_truncation_error_abs_max": "1/9801",
+    "K_relative_truncation_error_abs_max_float": 0.00010203040506070809,
+    "K_relative_truncation_error_exact": "-z**2",
+    "a1_leading": "z",
+    "a1_relative_error_exact": "z",
+    "a1_relative_error_max": "1/99",
+    "a1_relative_error_max_float": 0.010101010101010102,
+    "guard": "production/projector calculations use exact a1_eff; these bounds certify the analytic expansion hierarchy only"
+  },
+  "history_window_implication": {
+    "a1_eff_max": "1/100",
+    "parent_bound": "M_c^2>=99 k_cos_phys^2 and k_phys^2<=k_cos_phys^2",
+    "proof": "z<=1/99 => z/(1+z)<=1/100",
+    "z": "k_phys^2/M_c^2",
+    "z_max": "1/99"
+  },
+  "interpretation": {
+    "EFT_boundary": "a finite a_EFT/onset remains mandatory; no theorem here extends the same IR completion into the formal a->0 fixed-k regime",
+    "core": "the previously certified history-wide M_c lower window uniformly places the declared cosmological EFT domain in the strongly-filtered branch used by C10.50-C10.54"
+  },
+  "next_gate": "derive the physical baseline-species O(k^2) adiabatic C2 coefficient on this finite-onset strong-filter branch, then project B0 with C10.54",
+  "non_claims": [
+    "no numerical M_c or a_EFT selection",
+    "no UV extrapolation before EFT onset",
+    "no baseline-species C2 derivation",
+    "not exact k=0",
+    "no completed-U1 CLASS feedback, spectra or likelihood"
+  ],
+  "noncommuting_limits": {
+    "a_to_0_fixed_k": "1",
+    "conclusion": "the IR fixed-a gradient branch cannot be extrapolated to an arbitrarily early a->0 limit at fixed k",
+    "filter": "a1_eff=k^2/(k^2+a^2 M_c^2)",
+    "k_to_0_fixed_a": "0"
+  },
+  "provenance": {
+    "proof_script": "research/shadow/rtk_c10_eft_onset_strong_filter_domain.py",
+    "repo_head_at_job_start": "5f385f679cd93f7a27559e28dd483947ac69e935",
+    "sympy": "1.13.3",
+    "workflow": "rtk-c10-eft-onset-strong-filter-domain.yml"
+  },
+  "schema": "RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_TARGET_v1.json"
+}
