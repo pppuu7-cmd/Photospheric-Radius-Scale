@@ -1,0 +1,48 @@
+name: RTK master checklist C10.61 sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/checkpoints/sync_rtk_master_checklist_c10_48_60.py'
+      - 'research/checkpoints/sync_rtk_master_checklist_c10_61.py'
+      - 'research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json'
+      - 'research/theory_results/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1.json'
+      - '.github/workflows/rtk-master-checklist-c10-61-sync.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Sync current C10 frontier monotonically
+        run: |
+          set -euo pipefail
+          python3 research/checkpoints/sync_rtk_master_checklist_current_frontier.py
+          python3 research/checkpoints/sync_rtk_master_checklist_c10_46_47.py
+          python3 research/checkpoints/sync_rtk_master_checklist_c10_48_60.py
+          python3 research/checkpoints/sync_rtk_master_checklist_c10_61.py
+          grep -q 'C10.61' research/checkpoints/RTK_MASTER_CHECKLIST.md
+          grep -q 'C10.60' research/checkpoints/RTK_MASTER_CHECKLIST.md
+      - name: Persist checklist
+        run: |
+          set -euo pipefail
+          cp research/checkpoints/RTK_MASTER_CHECKLIST.md /tmp/master.md
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/master.md research/checkpoints/RTK_MASTER_CHECKLIST.md
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/checkpoints/RTK_MASTER_CHECKLIST.md
+            git commit -m 'Sync master checklist through C10.61' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
