@@ -183,7 +183,7 @@ def solve_metric_mode(
     det=(D*H)*(2.0*D*H*K_hat*H0p)-(-D*K_hat*H0p)*Delta_phi
     det_factor=1.5*a*a*D*r*Eth*H0p*a1_eff
 
-    # Exact lambda-independent bracket: R_reg=-r*regularity_bracket.
+    # Exact lambda-independent bracket when rho_total'=-3 H W_total.
     regularity_bracket=(
         3.0*a*a*sources.delta_mu_N
         +9.0*H*a*sources.q_N
@@ -213,11 +213,12 @@ def solve_metric_mode(
 
 
 def _self_test() -> Dict[str, Any]:
-    # Convert the v2 physical-unit deterministic sample with G=1 by the exact
-    # CLASS factor f=8*pi/3.  Metric solutions must be unchanged.
+    # Unit-regression sample: convert the historical v2 synthetic sample with
+    # G=1 by f=8*pi/3.  This sample was never intended to obey total background
+    # conservation, so it is used only for v2<->v3 unit regression.
     f=8.0*math.pi/3.0
     p=ShadowParameters(1.2,2.0,0.4,0.1,0.01)
-    b=ShadowBackground(
+    b_regression=ShadowBackground(
         a=0.8,H=0.2,H0_prime=-0.1*f,H0_double_prime=0.03*f,
         rho_total_prime=-0.2*f,p_total_prime=-0.02*f,W_total=0.3*f,
     )
@@ -225,7 +226,7 @@ def _self_test() -> Dict[str, Any]:
         deltaH0_N=0.02*f,deltaH0_N_prime=-0.005*f,
         delta_mu_N=0.03*f,q_N=0.01*f,delta_p_N=0.004*f,Pi_N=0.001*f,
     )
-    sol=solve_metric_mode(k=0.5,chi=0.002,params=p,background=b,sources=s)
+    sol=solve_metric_mode(k=0.5,chi=0.002,params=p,background=b_regression,sources=s)
 
     expected={
         "phi_pref":1.1611579101470877,
@@ -237,21 +238,53 @@ def _self_test() -> Dict[str, Any]:
     errors={name:abs(getattr(sol,name)-value) for name,value in expected.items()}
     assert max(errors.values()) < 2e-14
     assert abs(sol.determinant-sol.determinant_factorized) < 3e-15
-    assert abs(sol.R_reg + (p.lambda_hl-1.0)*sol.regularity_bracket) < 3e-15
     assert abs(sol.momentum_residual) < 1e-12
     assert abs(sol.hamiltonian_residual) < 1e-12
     assert sol.source_roundtrip_max_abs_error < 1e-14
+
+    regression_conservation_expected=-3.0*b_regression.H*b_regression.W_total
+    regression_conservation_residual=abs(
+        b_regression.rho_total_prime-regression_conservation_expected
+    )
+    assert regression_conservation_residual > 0.0
+
+    # Separate conservation-consistent sample for the exact lambda cancellation.
+    b_cons=ShadowBackground(
+        a=b_regression.a,H=b_regression.H,
+        H0_prime=b_regression.H0_prime,
+        H0_double_prime=b_regression.H0_double_prime,
+        rho_total_prime=regression_conservation_expected,
+        p_total_prime=b_regression.p_total_prime,
+        W_total=b_regression.W_total,
+    )
+    sol_cons=solve_metric_mode(k=0.5,chi=0.002,params=p,background=b_cons,sources=s)
+    lambda_cancel_error=abs(
+        sol_cons.R_reg+(p.lambda_hl-1.0)*sol_cons.regularity_bracket
+    )
+    assert lambda_cancel_error < 3e-15
+    assert abs(sol_cons.momentum_residual) < 1e-12
+    assert abs(sol_cons.hamiltonian_residual) < 1e-12
+
+    k0_routed=False
+    try:
+        solve_metric_mode(k=0.0,chi=0.0,params=p,background=b_cons,sources=s)
+    except HomogeneousModeRequired:
+        k0_routed=True
+    assert k0_routed
 
     return {
         "classification":"C10_CLASS_NORMALIZED_SHADOW_V3_SELFTEST_PASS",
         "physical_v2_regression_max_abs_error":max(errors.values()),
         "individual_regression_errors":errors,
         "determinant_factorization_abs_error":abs(sol.determinant-sol.determinant_factorized),
-        "lambda_cancellation_abs_error":abs(sol.R_reg+(p.lambda_hl-1.0)*sol.regularity_bracket),
-        "momentum_residual":sol.momentum_residual,
-        "hamiltonian_residual":sol.hamiltonian_residual,
+        "background_inconsistent_regression_sample_conservation_residual":regression_conservation_residual,
+        "lambda_cancellation_conservation_consistent_abs_error":lambda_cancel_error,
+        "conservation_consistent_momentum_residual":sol_cons.momentum_residual,
+        "conservation_consistent_hamiltonian_residual":sol_cons.hamiltonian_residual,
         "source_roundtrip_max_abs_error":sol.source_roundtrip_max_abs_error,
-        "sample_solution":sol.to_dict(),
+        "k0_routed_to_homogeneous_bridge":k0_routed,
+        "sample_solution_unit_regression":sol.to_dict(),
+        "sample_solution_conservation_consistent":sol_cons.to_dict(),
     }
 
 
