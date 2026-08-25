@@ -1,0 +1,28 @@
+{
+  "schema": "RTK_C10_LEGACY_RT_CONSTRAINT_CURRENT_v1",
+  "updated_utc": "2026-08-25T18:27:00Z",
+  "status": "DIRECT_NATIVE_PSI_0I_IDENTITY_EXECUTION_ACTIVE_RT00_IC_FIRST_INTEGRAL_AUDIT_NEXT",
+  "closed_or_retained": {
+    "external_literature_00_roundtrip_production": "NOT_CLOSED retained; factor-of-few-to-ten mismatch",
+    "external_literature_00_roundtrip_untouched_upstream": "NOT_CLOSED retained; essentially same mismatch before DBI-Khronon patch",
+    "DBI_Khronon_as_mismatch_cause": "EXCLUDED by untouched upstream control",
+    "fixed_source_replay_as_U1_nogo": "EXCLUDED by scope theorem; old source histories depend on old metric history",
+    "simple_literature_to_fork_unit_coordinate_translation_error": "EXCLUDED for audited Phi/Psi, x/eta, V, Z, H0, a and CLASS-density maps; the exact translation reproduces the existing external 00 residual",
+    "visible_initial_00_projection": "NOT_FOUND in audited IC block; standard GR Newtonian gauge transform is followed by zero nonlocal auxiliary perturbations"
+  },
+  "active_gate": {
+    "target": "research/theory_targets/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_TARGET_v1.json",
+    "workflow": ".github/workflows/rtk-c10-direct-native-model2-metric-identity.yml",
+    "question": "Do the literal implemented model2 psi and phi-prime/0i identities close in both untouched upstream and historical RTK production trees?",
+    "result_expected": "research/theory_results/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_RESULT_v1.json"
+  },
+  "next_gate_if_direct_native_passes": {
+    "name": "legacy RT 00 earliest-state / first-integral propagation audit",
+    "question": "Is the translated literature 00 residual already nonzero at the earliest exported state under the fork's standard-GR Newtonian IC transform plus zero auxiliary perturbations, and how does it propagate with time/start-time choice?",
+    "no_tuning": true
+  },
+  "literature_equation_choice_guard": "RT scalar Einstein equations are covariantly redundant after matter conservation; the literature commonly takes 00 plus anisotropy as an independent pair, whereas the inspected fork visibly assigns anisotropy psi and momentum/0i phi_prime. A nonclosed derived 00 residual therefore requires an initial-first-integral audit before being called a code inconsistency.",
+  "completed_U1_guard": "This legacy-RT diagnostic branch is provenance/control work. It is not the decisive completed-U1 cosmology test; that remains a self-consistent coupled U1+matter/Khronon evolution after its own frozen gate.",
+  "master_checklist": "research/checkpoints/RTK_MASTER_CHECKLIST.md",
+  "master_checklist_sync": "research/checkpoints/sync_rtk_master_checklist_current_frontier.py"
+}
