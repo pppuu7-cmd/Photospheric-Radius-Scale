@@ -1,0 +1,52 @@
+{
+  "classification": "C10_CHI_LEADING_CONSTRAINT_DEGENERACY_PASS_B_FIXED_AT_O_K2_SCOPED",
+  "interpretation": {
+    "core": "the leading finite-B condition is exactly the already-required comoving-source regularity condition and supplies no independent equation for B0",
+    "first_determining_order": "O(k^2) in the preferred adiabatic gradient expansion",
+    "forbidden_shortcut": "do not set B0 or chi_initial to zero by convenience",
+    "required_physical_input": "compute N2 from the self-consistent O(k^2) preferred source/metric series for the baseline species and then set B0=-N2/r"
+  },
+  "leading_hamiltonian": {
+    "after_N0": "3*a*r*(3*H*q0 + a*delta_mu0)",
+    "comoving_equivalent": "3 a^2 delta_mu_pref,0+9 H a q_pref,0=0",
+    "equation": "-2 D H^2 phi0=-3 a^2 r delta_mu0-D H Q0+2 D H psi_prime0",
+    "identity": "N0=0 plus Hamiltonian0 iff a^2 delta_mu_pref,0+H Q0=0 for r>0",
+    "machine_comoving_equivalence_residual": "0",
+    "machine_leading_equivalence_residual": "0"
+  },
+  "leading_momentum": {
+    "B0_appears": false,
+    "N0": "-3*H*phi0*r - 2*H*phi0 + 3*a*q0 - 3*psi_prime0*r - 2*psi_prime0",
+    "equation": "-r x B=N(x), N=Q-D(psi_prime+H phi), Q=3 a q_pref",
+    "finite_B_requirement": "N0=0"
+  },
+  "limit": {
+    "a1_eff": "O(x)",
+    "regular_B": "B=B0+O(x)",
+    "x": "k^2 -> 0 at fixed a>0 and finite M_c>0"
+  },
+  "next_gate": "derive the baseline preferred-coordinate O(k^2) adiabatic gradient series for baryons, photons, massless relativistic species and neutral RTK/Khronon; massive-neutrino anisotropic stress remains separate",
+  "next_order": {
+    "B0": "-N2/r",
+    "coefficient_equation": "-r B0=N2",
+    "expansion": "N(x)=x N2+O(x^2), B=B0+O(x)",
+    "machine_B0_residual": "0"
+  },
+  "non_claims": [
+    "does not calculate N2 or B0 numerically",
+    "does not prove uniqueness of the complete adiabatic series",
+    "does not cover exact k=0",
+    "does not include massive-neutrino anisotropic stress",
+    "does not implement completed-U1 CLASS feedback",
+    "does not select completion parameters",
+    "does not provide spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "proof_script": "research/shadow/rtk_c10_chi_next_order_adiabatic_requirement.py",
+    "repo_head_at_job_start": "3aafe203115ad5c4a63c48b1e94f8c2e44aaf2e6",
+    "sympy": "1.13.3",
+    "workflow": "rtk-c10-chi-next-order-adiabatic-requirement.yml"
+  },
+  "schema": "RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_TARGET_v1.json"
+}
