@@ -32,7 +32,8 @@ newrows=[
 '| C10.41 | Direct native model2 psi/0i metric identities | 🔵 | Frozen executable test compares the literal model=2 algebraic psi and phi-prime/0i code equations in untouched upstream and production RTK. |',
 '| C10.42 | RT literature ↔ CLASS fork 00 translation audit | ✅ scoped | Exact Phi/Psi, x/eta, V/Z, H0, a and CLASS-density conversion reproduces the already used external 00 residual; a simple unit/coordinate/sign normalization error is excluded. Independent numerical 00 closure remains separate. |',
 '| C10.43 | Coupled replay architecture correction | ✅ | Physically decisive completion test is an opt-in self-consistent U1+matter/Khronon Boltzmann evolution; historical RT histories remain controls/initial guesses, not immutable completion sources. |',
-'| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🟨 | The audited IC block uses the standard GR Newtonian gauge transform and then zeroes all nonlocal auxiliary perturbations; no explicit literature-00 projection is visible there. Earliest-state and start-time convergence test is required before calling the old fork inconsistent. |'
+'| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🔵 | Frozen start-time audit uses the exact translated residual with default, ×2-earlier and ×4-earlier perturbation starts in both untouched upstream model2 and production RTK; no coefficients are fitted. |',
+'| C10.45 | GR comoving-constraint residual floor control | ✅ scoped | Pinned GR model=0 gives late residuals far below RT: GR/RT ≈ 6.72e-3 at a=0.1 and 8.47e-5 at a=0.5. Thus the late ~1e-10 RT residual is not a generic CLASS cancellation floor under the matched diagnostic. |'
 ]
 if anchor not in s:
     raise SystemExit('C10.36 anchor missing; refuse non-monotonic checklist edit')
@@ -42,13 +43,17 @@ for row in newrows:
         s=s.replace(anchor,anchor+'\n'+row,1)
         anchor=row
 
-# Upgrade stale C10.42 wording if a previous sync inserted it before the analytic audit closed.
-old42='| C10.42 | RT literature ↔ CLASS fork 00 translation audit | 🟨 | After direct-native identities, isolate variable normalization, sign, definition or derived-constraint differences in the old fork rather than fitting arbitrary coefficients. |'
-new42='| C10.42 | RT literature ↔ CLASS fork 00 translation audit | ✅ scoped | Exact Phi/Psi, x/eta, V/Z, H0, a and CLASS-density conversion reproduces the already used external 00 residual; a simple unit/coordinate/sign normalization error is excluded. Independent numerical 00 closure remains separate. |'
-if old42 in s:
-    s=s.replace(old42,new42,1)
+# Upgrade stale wording inserted by earlier sync versions.
+replacements={
+'| C10.42 | RT literature ↔ CLASS fork 00 translation audit | 🟨 | After direct-native identities, isolate variable normalization, sign, definition or derived-constraint differences in the old fork rather than fitting arbitrary coefficients. |':
+'| C10.42 | RT literature ↔ CLASS fork 00 translation audit | ✅ scoped | Exact Phi/Psi, x/eta, V/Z, H0, a and CLASS-density conversion reproduces the already used external 00 residual; a simple unit/coordinate/sign normalization error is excluded. Independent numerical 00 closure remains separate. |',
+'| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🟨 | The audited IC block uses the standard GR Newtonian gauge transform and then zeroes all nonlocal auxiliary perturbations; no explicit literature-00 projection is visible there. Earliest-state and start-time convergence test is required before calling the old fork inconsistent. |':
+'| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🔵 | Frozen start-time audit uses the exact translated residual with default, ×2-earlier and ×4-earlier perturbation starts in both untouched upstream model2 and production RTK; no coefficients are fitted. |'
+}
+for a,b in replacements.items():
+    if a in s: s=s.replace(a,b,1)
 
-# If the new direct-native result has appeared, upgrade C10.41 deterministically.
+# Direct-native model2 identities.
 r=Path('research/theory_results/RTK_C10_DIRECT_NATIVE_MODEL2_METRIC_IDENTITY_RESULT_v1.json')
 if r.exists():
     d=json.loads(r.read_text())
@@ -57,8 +62,22 @@ if r.exists():
         repl='| C10.41 | Direct native model2 psi/0i metric identities | ✅ scoped | Literal implemented psi and phi-prime/0i identities close within the frozen tolerance in both untouched upstream and production RTK; this is an implementation-consistency certificate, not an independent Hamiltonian/00 theorem. |'
     else:
         repl='| C10.41 | Direct native model2 psi/0i metric identities | 🟥 diagnostic FAIL | At least one literal implemented metric identity failed the frozen direct-native residual criterion; localize tree/equation before advancing coupled completion integration. |'
-    if current in s:
-        s=s.replace(current,repl,1)
+    if current in s: s=s.replace(current,repl,1)
+
+# First-integral start-time result.
+r=Path('research/theory_results/RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_RESULT_v1.json')
+if r.exists():
+    d=json.loads(r.read_text()); cls=d.get('classification','')
+    current='| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🔵 | Frozen start-time audit uses the exact translated residual with default, ×2-earlier and ×4-earlier perturbation starts in both untouched upstream model2 and production RTK; no coefficients are fitted. |'
+    if cls=='C10_LEGACY_RT_00_RESIDUAL_START_TIME_SENSITIVE_SCOPED':
+        repl='| C10.44 | Legacy RT initial 00 first-integral projection/propagation | ✅ diagnostic start-sensitive | Earlier perturbation starts reduce the translated RT 00 residual by the frozen factor criterion, supporting an initial-first-integral seeding interpretation under this fork. |'
+    elif cls=='C10_LEGACY_RT_00_RESIDUAL_START_TIME_STABLE_SCOPED':
+        repl='| C10.44 | Legacy RT initial 00 first-integral projection/propagation | ✅ diagnostic start-stable | The translated RT 00 residual remains within the frozen factor-two band under ×4 earlier starts; simple perturbation-start seeding is disfavored. |'
+    elif cls=='C10_LEGACY_RT_00_INITIAL_AUDIT_DERIVATIVE_LIMITED':
+        repl='| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🟨 derivative-limited | Earliest residual interpretation is blocked by the frozen disagreement between independent psi-prime estimators; improve direct derivative diagnostics without retuning physics. |'
+    else:
+        repl='| C10.44 | Legacy RT initial 00 first-integral projection/propagation | 🟨 inconclusive | Frozen start-time patterns are mixed; retain the diagnostic without choosing a post-hoc coefficient or threshold. |'
+    if current in s: s=s.replace(current,repl,1)
 
 p.write_text(s)
 print('RTK_MASTER_CHECKLIST_FRONTIER_SYNCED')
