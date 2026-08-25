@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_NATIVE_RT_INITIAL_CONSTRAINT_PRESCRIPTION_AUDIT_RESULT_v1",
+  "classification": "C10_NATIVE_RT_IC_DOES_NOT_EXPLICITLY_PROJECT_LITERATURE_00_CONSTRAINT_SCOPED",
+  "status_scope": "YELLOW_CODE_AUDIT_INITIAL_00_PROJECTION_NOT_VISIBLE_EXECUTABLE_PROPAGATION_TEST_REQUIRED",
+  "kind": "source-code and analytic prescription audit; not a numerical failure certificate",
+  "upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "code_findings": [
+    "The pinned fork constructs standard adiabatic perturbation initial conditions in synchronous gauge and transforms them to Newtonian gauge using the standard GR alpha expression built from eta, total density and total velocity.",
+    "Immediately after that Newtonian gauge transformation, when has_nlde is true, the fork explicitly sets deltaU, deltaU_prime, deltaV and deltaV_prime to zero; for model=2 it also sets deltaZ and deltaZ_prime to zero.",
+    "In the inspected model=2 metric branch, psi is assigned by the algebraic anisotropy relation and phi_prime by the model=2 momentum/0i relation. The visible initial-condition block does not separately solve the literature RT 00 equation for a corrected initial metric/source datum."
+  ],
+  "literature_structure": "The RT scalar equations contain four linearized Einstein equations but, by covariance plus matter conservation, only two are independent. A standard literature choice is the 00 equation together with the anisotropy equation; the fork instead visibly advances using anisotropy plus 0i for its metric branch.",
+  "analytic_consequence": "After the exact CLASS/literature convention map, setting auxiliary perturbations to zero does not generically remove all RT terms in the literature 00 equation because background V and V_prime multiply metric perturbations. Therefore the standard-GR Newtonian IC transform plus zero auxiliary perturbations does not by itself prove exact satisfaction of the literature 00 first-integral at the perturbation start time when the nonlocal background has already evolved away from exactly V=V_prime=0.",
+  "what_is_not_yet_proved": "This audit does not prove that the fork actually starts off the physical RT constraint. The independent equations plus Bianchi identities may enforce the same first integral once the full initialization is evaluated. An executable earliest-state residual and start-time convergence test is required.",
+  "next_test": {
+    "name": "C10 legacy RT 00 initial-state/propagation audit",
+    "requirements": [
+      "evaluate the already translated literature-00 residual at the earliest exported states for each k using both derivative estimators",
+      "compare residual magnitude with derivative-estimator uncertainty",
+      "track the same residual to a=0.01,0.1,0.5",
+      "repeat with an earlier background/perturbation start if CLASS precision controls permit, without changing physical parameters",
+      "run both untouched upstream model=2 and production RTK",
+      "do not fit or tune any translation coefficient"
+    ]
+  },
+  "guards": [
+    "not a claim that the published RT theory is inconsistent",
+    "not a claim that the pinned CLASS fork is wrong",
+    "not a DBI-Khronon failure",
+    "not a completed-U1 no-go",
+    "does not erase the external 00 roundtrip FAIL or the fixed-source replay scope theorem"
+  ]
+}
