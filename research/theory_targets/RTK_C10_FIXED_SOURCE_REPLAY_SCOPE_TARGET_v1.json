@@ -1,0 +1,18 @@
+{
+  "schema": "RTK_C10_FIXED_SOURCE_REPLAY_SCOPE_TARGET_v1",
+  "created_utc": "2026-08-25T00:47:00Z",
+  "status": "FROZEN_ANALYTIC_SCOPE_AUDIT",
+  "question": "Does failure of the detached completed-U1 replay on stress histories imported from the legacy RT gravity imply non-existence of a regular self-consistent completed-U1 matter+metric solution?",
+  "assumptions": [
+    "linear scalar perturbations in Newtonian gauge",
+    "ordinary Boltzmann/fluid species obey their usual local conservation equations",
+    "the completed-U1 gravity equations change the metric potentials relative to the legacy RT model in general",
+    "the C10.27 test holds imported delta_rho and momentum histories fixed rather than reintegrating species with completed-U1 metric feedback"
+  ],
+  "required_evidence": [
+    "identify explicit metric dependence of the production CLASS continuity and Euler equations",
+    "distinguish the one-way fixed-source map from the self-consistent coupled fixed-point problem",
+    "state exactly what C10.27 can and cannot exclude"
+  ],
+  "no_numerical_threshold": true
+}
