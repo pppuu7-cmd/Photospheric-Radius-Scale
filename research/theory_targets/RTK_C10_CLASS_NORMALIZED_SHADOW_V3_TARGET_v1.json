@@ -1,0 +1,29 @@
+{
+  "schema": "RTK_C10_CLASS_NORMALIZED_SHADOW_V3_TARGET_v1",
+  "created_utc": "2026-08-25T00:59:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Does the detached completed-U1 metric reference written directly in native CLASS (8 pi G/3)-normalized stress units reproduce shadow-v2 exactly under unit conversion, retain the reordered finite-k constraints, and satisfy the lambda-cancellation identity on a conservation-consistent control sample?",
+  "implementation": "research/shadow/rtk_c10_completed_metric_shadow_v3_class_units.py",
+  "parents": [
+    "research/theory_results/RTK_C10_CLASS_SOURCE_UNIT_NORMALIZATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_REGULARITY_LAMBDA_CANCELLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_COMPLETED_GRAVITY_SHADOW_METRIC_API_REFERENCE_RESULT_v1.json"
+  ],
+  "acceptance": [
+    "execute the committed v3 self-test in clean GitHub Actions",
+    "reproduce the historical v2 deterministic metric sample after exact source conversion by f=8 pi/3 with max absolute metric/state disagreement <2e-14",
+    "verify determinant factorization <3e-15 absolute error",
+    "verify preferred momentum and Hamiltonian residuals <1e-12",
+    "use a separate total-background-conservation-consistent sample to verify R_reg+r*regularity_bracket=0 to <3e-15",
+    "explicitly confirm the old v2 regression sample itself is not used as evidence for lambda cancellation because its synthetic rho_total_prime was not -3H W_total",
+    "route exact k=0 to the homogeneous bridge",
+    "do not import or modify production CLASS"
+  ],
+  "pass_classification": "C10_CLASS_NORMALIZED_SHADOW_V3_REFERENCE_PASS_SCOPED",
+  "non_claims": [
+    "not a physical CLASS-history replay",
+    "not a completion-parameter choice",
+    "not a completed-U1 Boltzmann integration",
+    "not a spectra or likelihood result"
+  ]
+}
