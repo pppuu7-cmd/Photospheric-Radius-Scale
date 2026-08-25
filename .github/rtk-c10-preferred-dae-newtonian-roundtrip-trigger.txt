@@ -1,0 +1,2 @@
+Launch C10.51 exact preferred-DAE -> Newtonian/Stueckelberg roundtrip proof.
+UTC: 2026-08-25T21:22Z
