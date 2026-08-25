@@ -53,8 +53,7 @@ def earliest(tab):
     p10=edge_derivative(tab['tau'],tab['c']['rtctl_psi'],10,4)
     return {'k':k,'a':a,'tau':float(tab['tau'][0]),
             'R6':residual(v,a,k,p6),'R10':residual(v,a,k,p10),
-            'psi_prime_6':p6,'psi_prime_10':p10,'dU':v['rtctl_dU'],
-            'dUprime':v['rtctl_dVprime']*0.0+float(tab['c']['rtctl_dU'][0]*0.0)}
+            'psi_prime_6':p6,'psi_prime_10':p10,'dU':v['rtctl_dU']}
 
 def at_epoch(tab,a0):
     tau0=float(np.interp(a0,tab['a'],tab['tau']))
