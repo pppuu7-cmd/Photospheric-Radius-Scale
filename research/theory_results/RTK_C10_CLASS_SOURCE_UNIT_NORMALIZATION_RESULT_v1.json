@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_CLASS_SOURCE_UNIT_NORMALIZATION_RESULT_v1",
+  "classification": "C10_CLASS_SOURCE_UNIT_NORMALIZATION_PASS_SCOPED",
+  "status_scope": "GREEN_EXACT_CLASS_NORMALIZATION_FOR_EXPLICIT_8PI_G_C10_SOURCES",
+  "target": "research/theory_targets/RTK_C10_CLASS_SOURCE_UNIT_NORMALIZATION_TARGET_v1.json",
+  "normalization": {
+    "rho_hat": "rho_CLASS=(8 pi G/3) rho_phys",
+    "p_hat": "p_CLASS=(8 pi G/3) p_phys",
+    "delta_mu_hat": "delta_mu_CLASS=(8 pi G/3) delta_mu_phys",
+    "W_hat": "W_CLASS=(8 pi G/3)(rho+p)_phys",
+    "q_hat": "q_CLASS=(8 pi G/3) q_phys=a*rho_plus_p_theta_CLASS/k^2",
+    "Pi_hat": "Pi_CLASS=(8 pi G/3) Pi_phys=(3/2)rho_plus_p_shear_CLASS/k^2"
+  },
+  "derivation": {
+    "CLASS_momentum_equation": "phi_prime+H psi=(3/2)a^2 rho_plus_p_theta_CLASS/k^2",
+    "physical_momentum_equation": "phi_prime+H psi=4 pi G a^2 (rho+p)theta_phys/k^2",
+    "comparison": "rho_plus_p_theta_CLASS=(8 pi G/3)(rho+p)theta_phys",
+    "khronon_adapter_crosscheck": "khr_class_sources_newtonian sets rho_class=rho8piG/3 and p_class=p8piG/3"
+  },
+  "C10_explicit_source_replacements": {
+    "8piG_a2_delta_mu_phys": "3 a^2 delta_mu_CLASS",
+    "8piG_a_q_phys": "3 a q_CLASS=3 a^2 rho_plus_p_theta_CLASS/k^2",
+    "8piG_a2_W_phys": "3 a^2 W_CLASS",
+    "8piG_a2_Pi_phys": "3 a^2 Pi_CLASS=(9/2)a^2 rho_plus_p_shear_CLASS/k^2",
+    "4piG_a2_deltaH0_phys": "(3/2)a^2 deltaH0_CLASS"
+  },
+  "A_constraint_CLASS_units": "(k^2+a^2 M_c^2) psi=-(3/2)a^2 deltaH0_CLASS",
+  "source_coordinate_map_CLASS_units": {
+    "delta_mu_pref": "delta_mu_N-rho_CLASS_prime chi",
+    "delta_p_pref": "delta_p_N-p_CLASS_prime chi",
+    "q_pref": "q_N-a W_CLASS chi",
+    "Pi_pref": "Pi_N",
+    "deltaH0_pref": "deltaH0_N-H0_CLASS_prime chi"
+  },
+  "regularity_numerator_CLASS_units": "N_reg=3a^2 delta_mu_N+9H a q_N+2H L chi-3a^2 Pcal a1_eff(deltaH0_N-H0_prime chi)",
+  "critical_correction": "The earlier convention-map file correctly fixed signs and k^-2 factors but its labels delta_mu_N=ppw->delta_rho and q_N=a*rpp_theta/k^2 must be interpreted as CLASS-normalized hatted sources, not physical stress variables to be multiplied by an additional explicit 8 pi G. The production export remains valid and requires no rerun.",
+  "implementation_rule": "A physical-history replay should consume CLASS-normalized source variables directly with the replacements above (preferred), or explicitly divide by 8 pi G/3 before using a solver written in physical units. Never mix the two conventions.",
+  "next_gate": "Implement a CLASS-normalized shadow-v3/replay algebra, then audit the parameter-independent small-k matter combination before choosing any completion benchmark.",
+  "non_claims": [
+    "not a completed-U1 regularity pass",
+    "not a choice of M_c, Pcal or lambda_HL",
+    "not a change to production CLASS dynamics or exported histories"
+  ]
+}
