@@ -1,0 +1,62 @@
+{
+  "schema": "RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_TARGET_v1",
+  "created_utc": "2026-08-25T22:30:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Can a non-fitted finite-onset diagnostic grid for the completed-U1 DAE be defined entirely from already-certified dimensionless margins and the common support of the parameter-free production source histories?",
+  "parents": [
+    "research/theory_results/RTK_ROUTE_B_U1_HISTORY_WIDE_MC_WINDOW_RESULT_v1.json",
+    "research/theory_results/RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1.json"
+  ],
+  "ir_gravity_truncation": {
+    "Pcal": 1,
+    "alpha1": 0,
+    "E_th": 2,
+    "meaning": "strict two-spatial-derivative IR truncation; gamma2,gamma3,beta7 and other higher-spatial UV coefficients remain unfrozen rather than being physically set to zero"
+  },
+  "history_onset_rule": {
+    "a_on": "max over the nine C10.24 exported-history a_min values",
+    "meaning": "earliest scale factor shared by every exported k history; diagnostic common-support onset, not a proof of the fundamental EFT cutoff",
+    "k_ref": "maximum exported k in Mpc^-1"
+  },
+  "filter_grid": {
+    "u": "a1_eff(a_on,k_ref)=k_ref^2/(k_ref^2+a_on^2 M_c^2)",
+    "u_cap": 0.01,
+    "fractions_of_cap": [0.25, 0.5, 1.0],
+    "M_c_formula": "M_c=(k_ref/a_on)*sqrt((1-u)/u)",
+    "guard": "all exported k<=k_ref then obey a1_eff(a_on,k)<=u and become more strongly filtered for later a"
+  },
+  "lambda_grid": {
+    "delta_H": "1-2/(3 lambda_HL-1)",
+    "delta_H_cap": 0.01,
+    "fractions_of_cap": [0.25, 0.5, 1.0],
+    "lambda_formula": "lambda_HL=(1+2/(1-delta_H))/3",
+    "meaning": "diagnostic near-GR grid tied to the existing 1-percent completion-design scale, not an observational bound or fit"
+  },
+  "unselected_guards": {
+    "eta0": "not numerically selected; each physical-history replay must report eta0_min=3(3 lambda_HL-1)H_EFT^2/(64 M_c^2) required by the conservative history bound",
+    "local_upper_window": "k_local is not numerically frozen here; do not call a grid point a globally certified completion point until M_c^2<=k_local^2/99 and the isolated rank-root buffer are checked",
+    "UV_coefficients": "higher-spatial coefficients remain a later sensitivity gate"
+  },
+  "acceptance": [
+    "derive a_on and k_ref from the persisted C10.24 result rather than hard-coding a preferred epoch or dimensional M_c",
+    "generate exactly 3x3 diagnostic (u,delta_H) points from the frozen cap fractions",
+    "verify every lambda_HL>1 and every M_c>0",
+    "verify a1_eff(a_on,k_ref) round-trips to u and is <=1/100",
+    "verify the full exported k set is no less strongly filtered at a_on and later times",
+    "record all unresolved eta0/local/UV guards explicitly",
+    "do not score spectra, likelihoods, or call any grid point a selected physical parameter point"
+  ],
+  "pass_classification": "C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_PASS_SCOPED",
+  "next_if_pass": "run a preregistered finite-onset memory-loss test on production RTK background histories across all nine grid points, first in the reduced dual-interface system and then in the full photon+baryon+UR hierarchy",
+  "non_claims": [
+    "not a physical parameter selection",
+    "not a fundamental EFT-onset determination",
+    "not a local-gravity window certification",
+    "not a UV completion",
+    "not an attractor theorem",
+    "not spectra or likelihood evidence"
+  ]
+}
