@@ -1,9 +1,7 @@
 {
-  "schema": "RTK_B4_CURRENT_STATE_v3",
-  "updated_utc": "2026-08-24T22:58:00Z",
-  "status": "RECENTER_V4_HALF_EIGENMODE_RAYS_CLEAR_QUARTER_SCALE_REQUIRED",
-  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
-  "production_mapping": "eff",
+  "S_center_eff": 1050.5511025943172,
+  "best_exact_S_eff": 1050.54996229627,
+  "best_improvement_eff": 0.0011402980471757473,
   "current_center": {
     "As": 2.0953040609439933e-09,
     "Ob": 0.0472430928395221,
@@ -13,24 +11,14 @@
     "ns": 0.9657964452888419,
     "zre": 7.583793661013263
   },
-  "S_center_eff": 1050.5511025943172,
-  "v4_half": {
-    "recovered_result": "research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_RECOVERED_RESULT_v1.json",
-    "best_exact_S_eff": 1050.5510527797987,
-    "best_improvement_eff": 0.000049814518433777266,
-    "positive_definite": false,
-    "min_eigenvalue_y": -0.000047214683209037513
-  },
-  "v4_half_eigenmode_rays": {
-    "result": "research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_HALF_EIGENMODE_RAYS_RESULT_v1.json",
-    "classification": "B4_RECENTER_V4_HALF_EIGENMODE_RAYS_NO_DESCENT_GT_0P005",
-    "max_exact_improvement_eff": -3.6337555684440304e-06,
-    "center_replay_abs_error": 0.0,
-    "source_run_id": 32765132546,
-    "source_artifact_id": 9534706258,
-    "workflow_failure_scope": "persistence-only; exact-ray science step succeeded"
-  },
-  "decision": "V4_HALF_RAYS_CLEAR_QUARTER_SCALE_REQUIRED",
-  "next_gate": "Run the independently preregistered quarter-scale Hessian at the unchanged v4 center. If quarter is recenter-clear and PD, require independent fresh-tree replay before B4 local closure; if non-PD, freeze exact eigenmode rays before any smaller scale; if improvement >0.005, recenter first.",
-  "guard": "B4 is a separate minimal-neutrino objective; do not compare its absolute score directly with massless A5. Workflow failure is not a scientific FAIL when the science step succeeded and the result is recovered from the artifact."
+  "decision": "RECENTER_CLEAR_NONPD_QUARTER_EIGENMODE_RAYS_REQUIRED",
+  "guard": "B4 minimal-neutrino objective only; no absolute comparison to massless A5 and no global evidence.",
+  "min_eigenvalue_y": -0.0021461058882690704,
+  "objective": "matched-ultra-linstep2+dense-BOSS+nu0p06-additive-v1",
+  "positive_definite": false,
+  "schema": "RTK_B4_CURRENT_STATE_v3",
+  "source_result": "research/robustness/B4_NEUTRINO_RTK_RECENTER_V4_QUARTER_RESULT_v1.json",
+  "status": "RECENTER_V4_QUARTER_STATIONARITY_COMPLETE",
+  "stencil_scale": 0.25,
+  "updated_utc": "2026-08-25T05:05:22.329154Z"
 }
