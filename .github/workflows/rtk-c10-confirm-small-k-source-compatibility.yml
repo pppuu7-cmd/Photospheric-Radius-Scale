@@ -1,0 +1,162 @@
+name: RTK C10 confirm direct small-k source compatibility
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-confirm-small-k-source-compatibility.yml'
+      - 'rtk/apply_rtk_c10_direct_regularity_export_patch.py'
+      - 'research/shadow/rtk_c10_confirm_small_k_source_compatibility.py'
+      - 'research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  confirm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen confirmatory target and new k independence
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_TARGET_v1.json'))
+          e=json.load(open('research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_SCALING_DIAGNOSTIC_RESULT_v1.json'))
+          s=json.load(open('research/state/current.json'))['final_replay_result']
+          assert t['status']=='FROZEN_CONFIRMATORY_BEFORE_NEW_K_EXECUTION'
+          assert s['status']=='PASS'
+          old=set(float(x) for x in e['actual_k_values_Mpc_inv'])
+          new=set(float(x) for x in t['k_ladder_Mpc_inv'])
+          assert old.isdisjoint(new), (old & new)
+          assert abs(float(s['rtk']['expected_score_eff'])-1050.249912429787)<1e-12
+          print('C10_CONFIRM_SMALL_K_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_confirm_small_k_repo_head.txt
+      - name: Prepare disposable pinned production tree with direct diagnostics
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_confirm
+          git -C class_confirm reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_confirm/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_confirm/include/
+          python3 rtk/apply_rtk_class_patch.py class_confirm
+          python3 rtk/upgrade_rtk_inputs.py class_confirm
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_confirm
+          python3 rtk/upgrade_rtk_initial_conditions.py class_confirm
+          python3 rtk/upgrade_rtk_matter_sources.py class_confirm
+          python3 rtk/upgrade_rtk_gamma_root.py class_confirm
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_confirm
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_confirm
+          python3 rtk/apply_rtk_c10_direct_regularity_export_patch.py class_confirm
+          grep -q 'RTK_C10_DIRECT_REGULARITY_EXPORT_V1' class_confirm/source/perturbations.c
+          make -C class_confirm -j2 class
+      - name: Write exact historical RTK confirmatory input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in t['k_ladder_Mpc_inv'])
+          body=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_khronon = {p['Om']!r}
+          lambda_D = {p['lam']!r}
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          output = mPk,dTk,vTk
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          P_k_max_h/Mpc = 1.0
+          z_pk = 0
+          k_output_values = {kvals}
+          root = output/c10confirm_
+          background_verbose = 1
+          perturbations_verbose = 0
+          spectra_verbose = 0
+          '''
+          pathlib.Path('class_confirm/confirm.ini').write_text(body)
+          pathlib.Path('class_confirm/output').mkdir(exist_ok=True)
+          PY
+      - name: Run new-k read-only production histories
+        run: |
+          set -euo pipefail
+          (cd class_confirm && ./class confirm.ini) > c10_confirm_small_k_class.log 2>&1
+          grep 'RTK_LOG_GAMMA_ROOT' c10_confirm_small_k_class.log | tail -1 | tee c10_confirm_small_k_gamma.txt
+          find class_confirm/output -maxdepth 1 -type f -iname '*perturbations*' -print | sort | tee c10_confirm_small_k_files.txt
+          test -s c10_confirm_small_k_files.txt
+      - name: Evaluate frozen confirmatory compatibility thresholds
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_confirm_small_k_source_compatibility.py \
+            --glob 'class_confirm/output/*perturbations*' \
+            --target research/theory_targets/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_TARGET_v1.json \
+            --output c10_confirm_small_k_result.json | tee c10_confirm_small_k_analysis.log
+          cat c10_confirm_small_k_result.json
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re
+          p='c10_confirm_small_k_result.json'; d=json.load(open(p))
+          m=re.search(r'gamma=([0-9.eE+\-]+)',open('c10_confirm_small_k_gamma.txt').read())
+          d['provenance']={
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'repo_head_at_job_start':open('c10_confirm_small_k_repo_head.txt').read().strip(),
+            'production_score_eff':1050.249912429787,
+            'gamma_root':float(m.group(1)) if m else None,
+            'workflow':'rtk-c10-confirm-small-k-source-compatibility.yml',
+            'direct_export_patch':'rtk/apply_rtk_c10_direct_regularity_export_patch.py'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist confirmatory result
+        run: |
+          set -euo pipefail
+          cp c10_confirm_small_k_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_PARAMETER_FREE_SMALL_K_SOURCE_COMPATIBILITY_CONFIRM_RESULT_v1.json
+            git commit -m 'Record C10 confirmatory small-k source compatibility' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-confirm-small-k-source-compatibility
+          path: |
+            c10_confirm_small_k_class.log
+            c10_confirm_small_k_gamma.txt
+            c10_confirm_small_k_files.txt
+            c10_confirm_small_k_analysis.log
+            c10_confirm_small_k_result.json
+            class_confirm/output/*perturbations*
+          if-no-files-found: warn
