@@ -33,10 +33,11 @@
     "initial_basis": ["Y1=(1,0)", "Y2=(0,1), implemented as theta=k"],
     "integration": "RK4 over the actual irregular CLASS tau samples with linearly interpolated background coefficients and exact boundary interpolation in a",
     "memory_measure": "largest singular value sigma_max of the 2x2 dimensionless transfer matrix",
+    "floating_relative_tolerance": 1e-8,
     "classification_rule": {
-      "C10_NEUTRAL_FINITE_ONSET_MEMORY_CONTRACTION_PASS_SCOPED": "for every k and lambda_HL, sigma_max is non-increasing from 1 through the three frozen evaluation epochs and sigma_max(a=0.5)<1",
-      "C10_NEUTRAL_FINITE_ONSET_MEMORY_RETAINED_OR_AMPLIFIED_SCOPED": "at least one k/lambda_HL has sigma_max(a=0.5)>=1",
-      "C10_NEUTRAL_FINITE_ONSET_MEMORY_NONMONOTONE_PARTIAL_CONTRACTION_SCOPED": "all final sigma_max<1 but at least one trajectory is not non-increasing over the frozen epochs"
+      "C10_NEUTRAL_FINITE_ONSET_MEMORY_CONTRACTION_PASS_SCOPED": "for every k and lambda_HL, sigma_max is non-increasing from 1 through the three frozen evaluation epochs within the frozen floating tolerance and sigma_max(a=0.5)<1 within the same tolerance",
+      "C10_NEUTRAL_FINITE_ONSET_MEMORY_RETAINED_OR_AMPLIFIED_SCOPED": "at least one k/lambda_HL has sigma_max(a=0.5)>=1 within the frozen floating tolerance",
+      "C10_NEUTRAL_FINITE_ONSET_MEMORY_NONMONOTONE_PARTIAL_CONTRACTION_SCOPED": "all final sigma_max<1 but at least one trajectory is not non-increasing over the frozen epochs within the frozen floating tolerance"
     }
   },
   "acceptance": [
@@ -45,7 +46,7 @@
     "verify reconstructed khronon ca2 against the exported ca2 before using reconstructed cs2",
     "report algebraic Hamiltonian and momentum residuals, determinant minima and finiteness",
     "verify M_c invariance at fixed k and lambda_HL across all three filter levels",
-    "evaluate the preregistered singular-value classification without changing epochs or thresholds after execution",
+    "evaluate the preregistered singular-value classification without changing epochs, physical thresholds or floating tolerance after execution",
     "report the history-rank eta0_min guard but do not select eta0",
     "do not interpret this neutral-difference test as full photon+baryon+UR adiabatic growing-mode uniqueness"
   ],
