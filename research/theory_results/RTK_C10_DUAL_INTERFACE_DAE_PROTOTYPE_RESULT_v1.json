@@ -1,0 +1,140 @@
+{
+  "architecture": {
+    "gravity": "dressed A solve + differentiated A + coupled Hamiltonian/momentum 2x2 solve on every RHS call",
+    "neutral": "preferred action-fluid delta/theta with k^2 B continuity advection",
+    "ordinary": "curvature-dressed physical density + physical velocity; physical Phi_N/Psi_N from algebraic projection",
+    "partial_momentum_division": "forbidden/not used",
+    "temporal_chi_state": "absent"
+  },
+  "classification": "C10_DUAL_INTERFACE_DAE_PROTOTYPE_PASS_SCOPED",
+  "diagnostics": {
+    "all_finite": true,
+    "max_abs_A_H_M_constraint_residual": 1.0164395367051604e-20,
+    "max_abs_algebraic_metric_state": 0.00047297695593608003,
+    "max_abs_dressed_source_identity_residual": 2.541098841762901e-21,
+    "max_abs_integrated_state": 9.994675347133622e-05,
+    "min_D_A": 1.214818618212282,
+    "min_abs_coupled_phi_B_determinant": 0.0009856862547137713
+  },
+  "integrated_B_or_chi": false,
+  "integrated_state": [
+    "D_o",
+    "theta_o",
+    "delta_khr_pref",
+    "theta_khr_pref"
+  ],
+  "next_gate": "physical finite-onset memory-loss/growing-mode test after freezing a diagnostic completion-parameter protocol; do not infer attractor behavior from this synthetic run",
+  "non_claims": [
+    "not a physical adiabatic IC result",
+    "not a parameter selection",
+    "not CLASS",
+    "not full photon/UR hierarchy",
+    "not exact k=0",
+    "not spectra or likelihood evidence"
+  ],
+  "samples": [
+    {
+      "B": 0.00047297695593608003,
+      "D_A": 1.3579224808543149,
+      "Phi_N": -0.00010099815487477614,
+      "Psi_N": -5.388371034411297e-05,
+      "det": -0.0009856862547137713,
+      "phi_pref": -5.236767729726604e-05,
+      "psi_pref": -6.586014750504966e-06,
+      "state": [
+        9.994675347133622e-05,
+        1.9934935505232863e-05,
+        7.974895148503933e-05,
+        9.973212002401746e-06
+      ],
+      "t": 0.002
+    },
+    {
+      "B": 0.0002588775936897279,
+      "D_A": 1.3159270071379092,
+      "Phi_N": -5.50693623374996e-05,
+      "Psi_N": -3.1342001889615233e-05,
+      "det": -0.001615121428635452,
+      "phi_pref": -2.637888450465109e-05,
+      "psi_pref": -5.45424252064244e-06,
+      "state": [
+        9.087396612800805e-05,
+        8.620233761179535e-06,
+        3.40192579679292e-05,
+        5.264200392643821e-06
+      ],
+      "t": 0.5020000000000003
+    },
+    {
+      "B": 0.00017586212627643247,
+      "D_A": 1.2783263868398798,
+      "Phi_N": -3.797012370856069e-05,
+      "Psi_N": -2.234144913897999e-05,
+      "det": -0.002184657926227758,
+      "phi_pref": -1.7378402956510053e-05,
+      "psi_pref": -4.755236511336741e-06,
+      "state": [
+        8.736137995573162e-05,
+        2.4355497633384862e-06,
+        6.392651900155194e-06,
+        2.5175250839404375e-06
+      ],
+      "t": 1.0020000000000007
+    },
+    {
+      "B": 0.00013398365585868234,
+      "D_A": 1.2447103456715802,
+      "Phi_N": -2.956042634766785e-05,
+      "Psi_N": -1.7681030133860944e-05,
+      "det": -0.0026999958601864253,
+      "phi_pref": -1.3211225416863211e-05,
+      "psi_pref": -4.282664547992708e-06,
+      "state": [
+        8.713447492868318e-05,
+        -1.485898258220913e-06,
+        -1.2964735582744096e-05,
+        5.572995108485921e-07
+      ],
+      "t": 1.5020000000000011
+    },
+    {
+      "B": 0.00010963837444771942,
+      "D_A": 1.214818618212282,
+      "Phi_N": -2.4701539091317488e-05,
+      "Psi_N": -1.4900580943526186e-05,
+      "det": -0.003164519068184014,
+      "phi_pref": -1.0900888896153541e-05,
+      "psi_pref": -3.936743498754243e-06,
+      "state": [
+        8.90505550629109e-05,
+        -4.117787626520947e-06,
+        -2.754495903393834e-05,
+        -9.945282765631685e-07
+      ],
+      "t": 2.0000000000000013
+    }
+  ],
+  "schema": "RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1",
+  "synthetic_controls": {
+    "E_th": 2.0,
+    "H": 0.1,
+    "M_c": 0.4,
+    "Pcal": 0.1,
+    "a0": 0.7,
+    "alpha1": 0.01,
+    "ca2_khr": 0.05,
+    "cs2_khr": 0.03,
+    "guard": "architecture smoke-test only; these are not selected physical completion parameters",
+    "interval": [
+      0.0,
+      2.0
+    ],
+    "k": 0.5,
+    "lambda_hl": 1.2,
+    "rho_khr0": 0.02,
+    "rho_o0": 0.04,
+    "rk4_steps": 1000,
+    "w_khr": 0.05,
+    "w_o": 0.3333333333333333
+  }
+}
