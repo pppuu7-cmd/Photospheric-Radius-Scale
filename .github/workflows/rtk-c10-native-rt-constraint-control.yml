@@ -1,0 +1,141 @@
+name: RTK C10 untouched native RT constraint control
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-native-rt-constraint-control.yml'
+      - 'research/theory_targets/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_native_rt_constraint_control.py'
+      - 'rtk/apply_rtk_c10_native_rt_control_export_patch.py'
+
+permissions:
+  contents: write
+
+jobs:
+  control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen native control target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_TARGET_v1.json'))
+          p=json.load(open(t['parent_failed_roundtrip']))
+          assert t['status']=='FROZEN_BEFORE_NATIVE_UPSTREAM_CONTROL_EXECUTION'
+          assert t['upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert p['classification']=='C10_LEGACY_RT_AUXILIARY_ROUNDTRIP_NOT_CLOSED'
+          print('C10_NATIVE_RT_CONTROL_TARGET_PASS')
+          PY
+          python3 -m py_compile rtk/apply_rtk_c10_native_rt_control_export_patch.py research/shadow/rtk_c10_native_rt_constraint_control.py
+          git rev-parse HEAD | tee native_rt_control_repo_head.txt
+      - name: Clone untouched pinned native nonlocal CLASS and add output-only columns
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_native_rt
+          git -C class_native_rt reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_native_rt rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          python3 rtk/apply_rtk_c10_native_rt_control_export_patch.py class_native_rt
+          grep -q RTK_C10_NATIVE_RT_CONTROL_EXPORT_V1 class_native_rt/source/perturbations.c
+          make -C class_native_rt -j2 class
+      - name: Write frozen ordinary-CDM native model2 control
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          q=t['precision']; ks=', '.join(format(float(x),'.17g') for x in t['k_ladder_Mpc_inv'])
+          body=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_cdm = {p['Om']!r}
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          output = mPk,dTk,vTk
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          P_k_max_h/Mpc = 1.0
+          z_pk = 0
+          k_output_values = {ks}
+          perturb_sampling_stepsize = {q['perturb_sampling_stepsize']}
+          tol_background_integration = {q['tol_background_integration']}
+          tol_perturb_integration = {q['tol_perturb_integration']}
+          tol_thermo_integration = {q['tol_thermo_integration']}
+          root = output/native_rtctl_
+          background_verbose = 1
+          perturbations_verbose = 0
+          spectra_verbose = 0
+          '''
+          pathlib.Path('class_native_rt/native_rtctl.ini').write_text(body)
+          pathlib.Path('class_native_rt/output').mkdir(exist_ok=True)
+          PY
+      - name: Run untouched native model2 control
+        run: |
+          set -euo pipefail
+          (cd class_native_rt && ./class native_rtctl.ini) > native_rt_control.log 2>&1
+          grep -E 'gamma nonlocal|final H' native_rt_control.log | tail -5 | tee native_rt_control_gamma.txt || true
+          find class_native_rt/output -maxdepth 1 -type f -name 'native_rtctl_*perturbations*' -print | sort | tee native_rt_control_files.txt
+          test "$(wc -l < native_rt_control_files.txt)" -eq 6
+      - name: Evaluate frozen native RT control
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check numpy==2.5.2
+          python3 research/shadow/rtk_c10_native_rt_constraint_control.py \
+            --glob 'class_native_rt/output/native_rtctl_*perturbations*' \
+            --target research/theory_targets/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_TARGET_v1.json \
+            --output native_rt_constraint_control_result.json | tee native_rt_control_analysis.log
+          cat native_rt_constraint_control_result.json
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='native_rt_constraint_control_result.json'; d=json.load(open(p))
+          d['provenance']={'upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','repo_head_at_job_start':open('native_rt_control_repo_head.txt').read().strip(),'workflow':'rtk-c10-native-rt-constraint-control.yml','export_patch':'rtk/apply_rtk_c10_native_rt_control_export_patch.py','native_log_gamma_lines':open('native_rt_control_gamma.txt').read().strip().splitlines()}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          cp native_rt_constraint_control_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_NATIVE_RT_CONSTRAINT_CONTROL_RESULT_v1.json
+            git commit -m 'Record C10 untouched native RT constraint control' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-native-rt-constraint-control
+          path: |
+            native_rt_control.log
+            native_rt_control_gamma.txt
+            native_rt_control_analysis.log
+            native_rt_constraint_control_result.json
+            class_native_rt/output/native_rtctl_*perturbations*
+          if-no-files-found: warn
