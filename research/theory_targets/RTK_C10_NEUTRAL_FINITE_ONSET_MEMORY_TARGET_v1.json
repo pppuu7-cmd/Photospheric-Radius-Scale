@@ -1,0 +1,63 @@
+{
+  "schema": "RTK_C10_NEUTRAL_FINITE_ONSET_MEMORY_TARGET_v1",
+  "created_utc": "2026-08-25T22:44:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "On the regenerated pinned production RTK background, does a difference in neutral-Khronon finite-onset data contract when the ordinary curvature-dressed trajectory is held fixed, across the preregistered C10.62a completion grid?",
+  "parents": [
+    "research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json"
+  ],
+  "difference_subspace": {
+    "fixed_between_trajectories": "ordinary curvature-dressed density/momentum/higher moments and the production background",
+    "varied": "neutral preferred delta_khr and theta_khr onset data",
+    "consequence": "Delta h_hat_ordinary=0 implies Delta psi_pref=Delta psi_pref_prime=0 by the ordinary-only dressed A constraint",
+    "exact_filter_prediction": "M_c drops out of the neutral difference transfer; the three C10.62a M_c levels must agree numerically at fixed k and lambda_HL"
+  },
+  "background_reconstruction": {
+    "ordinary_inertia": "W_ord=-H0_ord_prime/(3 Hc)",
+    "neutral_inertia": "W_khr=W_total-W_ord",
+    "neutral_density": "rho_khr=W_khr/(1+w_khr)",
+    "neutral_cs2": "reconstruct from the exact production khronon_background formulas and cross-check reconstructed ca2 against the exported ca2 column",
+    "production_point": "same pinned historical RTK point and gamma root used by C10.24; no refit"
+  },
+  "onset_and_modes": {
+    "a_on": "C10.62a common exported-history support onset",
+    "k": "all nine C10.24 exported positive modes",
+    "evaluation_a": [0.01, 0.1, 0.5],
+    "state_norm": "dimensionless Y=(delta_khr,theta_khr/k)"
+  },
+  "transfer_test": {
+    "initial_basis": ["Y1=(1,0)", "Y2=(0,1), implemented as theta=k"],
+    "integration": "RK4 over the actual irregular CLASS tau samples with linearly interpolated background coefficients and exact boundary interpolation in a",
+    "memory_measure": "largest singular value sigma_max of the 2x2 dimensionless transfer matrix",
+    "classification_rule": {
+      "C10_NEUTRAL_FINITE_ONSET_MEMORY_CONTRACTION_PASS_SCOPED": "for every k and lambda_HL, sigma_max is non-increasing from 1 through the three frozen evaluation epochs and sigma_max(a=0.5)<1",
+      "C10_NEUTRAL_FINITE_ONSET_MEMORY_RETAINED_OR_AMPLIFIED_SCOPED": "at least one k/lambda_HL has sigma_max(a=0.5)>=1",
+      "C10_NEUTRAL_FINITE_ONSET_MEMORY_NONMONOTONE_PARTIAL_CONTRACTION_SCOPED": "all final sigma_max<1 but at least one trajectory is not non-increasing over the frozen epochs"
+    }
+  },
+  "acceptance": [
+    "regenerate the C10.24 pinned production source histories in a disposable CLASS tree",
+    "use all nine k modes and all nine C10.62a diagnostic points",
+    "verify reconstructed khronon ca2 against the exported ca2 before using reconstructed cs2",
+    "report algebraic Hamiltonian and momentum residuals, determinant minima and finiteness",
+    "verify M_c invariance at fixed k and lambda_HL across all three filter levels",
+    "evaluate the preregistered singular-value classification without changing epochs or thresholds after execution",
+    "report the history-rank eta0_min guard but do not select eta0",
+    "do not interpret this neutral-difference test as full photon+baryon+UR adiabatic growing-mode uniqueness"
+  ],
+  "next_if_contraction": "implement the full photon+baryon+massless-UR dual-interface hierarchy and repeat a full coupled growing/decaying-mode transfer test before spectra",
+  "next_if_not_contraction": "localize the retained neutral eigen-direction and determine whether a pre-EFT boundary datum is physically required before any spectra calculation",
+  "non_claims": [
+    "not full adiabatic-mode uniqueness",
+    "not a full Boltzmann hierarchy",
+    "not massive-neutrino completion",
+    "not exact k=0",
+    "not parameter selection",
+    "not local-window certification",
+    "not spectra or likelihood evidence"
+  ]
+}
