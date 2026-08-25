@@ -1,0 +1,93 @@
+name: RTK C10 B0 next-order source formula
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-b0-next-order-source-formula.yml'
+      - '.github/rtk-c10-b0-next-order-source-formula-trigger.txt'
+      - 'research/shadow/rtk_c10_b0_next_order_source_formula.py'
+      - 'research/theory_targets/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic dependency
+        run: python -m pip install --disable-pip-version-check 'sympy==1.13.3'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          d=json.load(open('research/theory_targets/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_TARGET_v1.json'))
+          assert d['status']=='FROZEN_BEFORE_EXECUTION'
+          assert d['pass_classification']=='C10_B0_NEXT_ORDER_SOURCE_FORMULA_PASS_SCOPED'
+          print('C10_54_TARGET_FROZEN_PASS')
+          PY
+          git rev-parse HEAD | tee c10_54_repo_head.txt
+      - name: Execute exact source-formula proof
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_b0_next_order_source_formula.py > c10_54_result.json
+          python - <<'PY'
+          import json
+          d=json.load(open('c10_54_result.json'))
+          assert d['classification']=='C10_B0_NEXT_ORDER_SOURCE_FORMULA_PASS_SCOPED'
+          assert d['N2']['psi_prime2_coefficient']=='0'
+          assert d['N2']['machine_residual']=='0'
+          assert d['B0']['machine_residual']=='0'
+          assert d['B0']['machine_C2_formula_residual']=='0'
+          assert d['comoving_source_coordinate_invariance']['machine_residual']=='0'
+          assert d['A_constraint_match']['machine_C10_50_regularity_match_residual']=='0'
+          print(json.dumps(d,indent=2,sort_keys=True))
+          PY
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          p='c10_54_result.json'; d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_54_repo_head.txt').read().strip(),
+            'workflow':'rtk-c10-b0-next-order-source-formula.yml',
+            'proof_script':'research/shadow/rtk_c10_b0_next_order_source_formula.py',
+            'sympy':'1.13.3'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist immutable certificate
+        run: |
+          set -euo pipefail
+          cp c10_54_result.json /tmp/c10_54_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_54_result.json research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json
+            git commit -m 'Record C10.54 B0 next-order source formula' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-b0-next-order-source-formula
+          path: |
+            c10_54_result.json
+            c10_54_repo_head.txt
+          if-no-files-found: warn
