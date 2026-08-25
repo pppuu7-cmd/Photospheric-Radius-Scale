@@ -1,0 +1,59 @@
+name: RTK C10 preferred Khronon action fluid evolution
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-preferred-khronon-action-fluid-evolution.yml'
+      - 'research/shadow/rtk_c10_preferred_khronon_action_fluid_evolution.py'
+      - 'research/theory_targets/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  prove:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - run: pip install 'sympy==1.13.3'
+      - name: Verify frozen target and run proof
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          print('TARGET_FROZEN_PASS')
+          PY
+          python3 research/shadow/rtk_c10_preferred_khronon_action_fluid_evolution.py > /tmp/result.json
+          cat /tmp/result.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/result.json'))
+          assert d['classification']=='C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_PASS_SCOPED'
+          assert all(v=='0' for v in d['machine_residuals'].values())
+          print('PREFERRED_KHRONON_EVOLUTION_PASS')
+          PY
+      - name: Persist certificate
+        run: |
+          set -euo pipefail
+          cp /tmp/result.json /tmp/c10_pref_khr.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_pref_khr.json research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json
+            git commit -m 'Record C10 preferred Khronon action-fluid evolution' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
