@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_TARGET_v1",
+  "created_utc": "2026-08-25T21:31:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "In the fixed-epoch strongly filtered k->0 limit of the completed-U1 preferred-coordinate constraints, does finite B determine its leading value at O(k^0), or do the leading constraints reduce exactly to the known comoving-source regularity condition so that B first appears at O(k^2)?",
+  "parents": [
+    "research/theory_results/RTK_C10_CHI_INITIAL_DATA_STRUCTURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json"
+  ],
+  "scope": {
+    "limit": "x=k^2->0 at fixed a>0 and finite M_c>0, so a1_eff=O(x)",
+    "domain": "lambda_HL>1 with r=lambda_HL-1>0 and D=3lambda_HL-1=2+3r; E_th>0",
+    "sources": "preferred-coordinate total delta_mu_pref and q_pref plus ordinary A source; all admit regular even-power x expansions",
+    "regular_B": "B=B0+O(x)"
+  },
+  "acceptance": [
+    "write momentum as -r x B=N(x), N=Q-D(psi_prime+H phi), Q=3a q_pref; finite B requires N0=0",
+    "take the O(x^0) Hamiltonian equation, where r E_th L and Pcal L psi vanish, and combine it with N0=0",
+    "using D-2=3r prove exactly that a^2 delta_mu_pref,0+H Q0=0",
+    "show this is equivalent to 3a^2 delta_mu_pref,0+9Ha q_pref,0=0, the leading comoving-source regularity condition already identified in C10.25/C10.50",
+    "therefore prove the leading finite-B condition supplies no independent equation for B0",
+    "expand N(x)=x N2+O(x^2) and prove B0=-N2/r; hence the first finite value of B is determined only by the O(k^2) coefficient of the full adiabatic source/metric gradient expansion",
+    "machine-check the algebraic residuals exactly and emit an immutable certificate",
+    "do not infer B0=0 and do not use an arbitrary detached Newtonian chi seed"
+  ],
+  "pass_classification": "C10_CHI_LEADING_CONSTRAINT_DEGENERACY_PASS_B_FIXED_AT_O_K2_SCOPED",
+  "failure_classification": "C10_CHI_NEXT_ORDER_REQUIREMENT_DERIVATION_FAIL",
+  "next_if_pass": "derive the physical O(k^2) preferred adiabatic gradient expansion for the baseline species set (baryons, photons, massless relativistic species, neutral RTK/Khronon), then evaluate B0=-N2/r and transform the projected seed to the Newtonian Boltzmann variables.",
+  "non_claims": [
+    "does not yet calculate N2 or B0",
+    "does not cover exact k=0",
+    "does not include massive-neutrino anisotropic stress",
+    "does not implement completed-U1 CLASS feedback",
+    "does not select completion parameters",
+    "does not provide spectra or likelihood evidence"
+  ]
+}
