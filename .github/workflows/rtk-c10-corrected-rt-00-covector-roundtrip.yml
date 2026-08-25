@@ -1,0 +1,154 @@
+name: RTK C10 corrected RT 00 covector roundtrip
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-corrected-rt-00-covector-roundtrip.yml'
+      - 'research/theory_targets/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_corrected_rt_00_covector_roundtrip.py'
+      - 'rtk/apply_rtk_c10_native_rt_control_export_patch.py'
+
+permissions:
+  contents: write
+
+jobs:
+  corrected-roundtrip:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Verify frozen gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert 'Psi_prime' not in t['corrected_B00']
+          assert t['upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          print('C10_49_TARGET_PASS')
+          PY
+          python3 -m py_compile research/shadow/rtk_c10_corrected_rt_00_covector_roundtrip.py rtk/apply_rtk_c10_native_rt_control_export_patch.py
+          git rev-parse HEAD > repo_head_at_job_start.txt
+
+      - name: Prepare untouched upstream model2
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_native_corr
+          git -C class_native_corr reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          python3 rtk/apply_rtk_c10_native_rt_control_export_patch.py class_native_corr
+          grep -q RTK_C10_NATIVE_RT_CONTROL_EXPORT_V1 class_native_corr/source/perturbations.c
+          make -C class_native_corr -j2 class
+
+      - name: Prepare historical RTK production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_rtk_corr
+          git -C class_rtk_corr reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_rtk_corr/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_rtk_corr/include/
+          python3 rtk/apply_rtk_class_patch.py class_rtk_corr
+          python3 rtk/upgrade_rtk_inputs.py class_rtk_corr
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_rtk_corr
+          python3 rtk/upgrade_rtk_initial_conditions.py class_rtk_corr
+          python3 rtk/upgrade_rtk_matter_sources.py class_rtk_corr
+          python3 rtk/upgrade_rtk_gamma_root.py class_rtk_corr
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_rtk_corr
+          python3 rtk/apply_rtk_c10_native_rt_control_export_patch.py class_rtk_corr
+          grep -q RTK_C10_NATIVE_RT_CONTROL_EXPORT_V1 class_rtk_corr/source/perturbations.c
+          make -C class_rtk_corr -j2 class
+
+      - name: Write matched frozen inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          ks=', '.join(format(float(x),'.17g') for x in t['k_ladder_Mpc_inv'])
+          q=t['precision']
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {ks}\nperturb_sampling_stepsize = {q['perturb_sampling_stepsize']}\ntol_background_integration = {q['tol_background_integration']}\ntol_perturb_integration = {q['tol_perturb_integration']}\ntol_thermo_integration = {q['tol_thermo_integration']}\nbackground_verbose = 1\nperturbations_verbose = 0\nspectra_verbose = 0\n'''
+          native=common+f'Omega_cdm = {p["Om"]!r}\nroot = output/corr_\n'
+          rtk=common+f'Omega_khronon = {p["Om"]!r}\nlambda_D = {p["lam"]!r}\nOmega_Lambda = 0.\nroot = output/corr_\n'
+          pathlib.Path('class_native_corr/corr.ini').write_text(native)
+          pathlib.Path('class_rtk_corr/corr.ini').write_text(rtk)
+          pathlib.Path('class_native_corr/output').mkdir(exist_ok=True)
+          pathlib.Path('class_rtk_corr/output').mkdir(exist_ok=True)
+          PY
+
+      - name: Run both trees
+        run: |
+          set -euo pipefail
+          (cd class_native_corr && ./class corr.ini) > corr_upstream.log 2>&1
+          (cd class_rtk_corr && ./class corr.ini) > corr_rtk.log 2>&1
+          find class_native_corr/output -maxdepth 1 -type f -name 'corr_*perturbations*' -print | sort > upstream_files.txt
+          find class_rtk_corr/output -maxdepth 1 -type f -name 'corr_*perturbations*' -print | sort > rtk_files.txt
+          test "$(wc -l < upstream_files.txt)" -eq 6
+          test "$(wc -l < rtk_files.txt)" -eq 6
+          grep -E 'gamma nonlocal|RTK_LOG_GAMMA_ROOT' corr_upstream.log corr_rtk.log | tail -10 | tee gamma_lines.txt || true
+
+      - name: Evaluate corrected roundtrip
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check numpy==2.5.2
+          python3 research/shadow/rtk_c10_corrected_rt_00_covector_roundtrip.py \
+            --upstream-dir class_native_corr/output \
+            --rtk-dir class_rtk_corr/output \
+            --target research/theory_targets/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_TARGET_v1.json \
+            --parent-old research/theory_results/RTK_C10_LEGACY_RT_00_INITIAL_FIRST_INTEGRAL_PROPAGATION_RESULT_v1.json \
+            --output corrected_rt_00_covector_roundtrip_result.json | tee corrected_analysis.log
+          cat corrected_rt_00_covector_roundtrip_result.json
+
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='corrected_rt_00_covector_roundtrip_result.json'; d=json.load(open(p))
+          d['provenance']={
+            'upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'repo_head_at_job_start':open('repo_head_at_job_start.txt').read().strip(),
+            'workflow':'rtk-c10-corrected-rt-00-covector-roundtrip.yml',
+            'export_patch':'rtk/apply_rtk_c10_native_rt_control_export_patch.py',
+            'gamma_lines':open('gamma_lines.txt').read().strip().splitlines()
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          cp corrected_rt_00_covector_roundtrip_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_CORRECTED_RT_00_COVECTOR_ROUNDTRIP_RESULT_v1.json
+            git commit -m 'Record C10.49 corrected RT 00 covector roundtrip' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-corrected-rt-00-covector-roundtrip
+          path: |
+            corr_upstream.log
+            corr_rtk.log
+            corrected_analysis.log
+            corrected_rt_00_covector_roundtrip_result.json
+            gamma_lines.txt
+            class_native_corr/output/corr_*perturbations*
+            class_rtk_corr/output/corr_*perturbations*
+          if-no-files-found: warn
