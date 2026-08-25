@@ -1,0 +1,54 @@
+{
+  "classification": "C10_PREFERRED_METRIC_PROJECTOR_API_PASS_SCOPED",
+  "implementation": "research/shadow/rtk_c10_preferred_metric_projector_v1.py",
+  "interpretation": "Executable finite-k preferred-source A->Hamiltonian->momentum projector reproduces shadow-v3 exactly after consistent source-coordinate transformation; chi/B is not an independently integrated state in this architecture.",
+  "next_gate": "derive and freeze the physical early-time preferred-source adiabatic seed/series, then use the projector in an opt-in DAE Boltzmann bridge",
+  "non_claims": [
+    "not exact k=0",
+    "not a physical adiabatic seed derivation",
+    "not completed-U1 CLASS feedback",
+    "not a completion parameter selection",
+    "not spectra or likelihood evidence"
+  ],
+  "production_modified": false,
+  "provenance": {
+    "repo_head_at_job_start": "18e814a259d2d030d01b943a393adde3388904e2",
+    "workflow": "rtk-c10-preferred-metric-projector-api.yml"
+  },
+  "schema": "RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1",
+  "selftest": {
+    "arbitrary_transformed_B_prime": 0.007,
+    "architecture": "preferred finite-k algebraic constraint projection; no independently integrated chi state",
+    "classification": "C10_PREFERRED_METRIC_PROJECTOR_API_SELFTEST_PASS",
+    "k0_routed_to_homogeneous_bridge": true,
+    "preferred_constraint_max_abs_residual": 3.469446951953614e-18,
+    "projected_state": {
+      "A_constraint_residual": 3.469446951953614e-18,
+      "B_pref": 0.2809305988647388,
+      "K_hat": -2.724177071509648,
+      "K_hat_prime": -0.7730354913478003,
+      "Phi_N": -0.03832447887393558,
+      "Psi_N": -0.11066966120314073,
+      "a1_eff": 0.7094211123723041,
+      "filter_denominator": 0.35240000000000005,
+      "hamiltonian_residual": 0.0,
+      "k": 0.5,
+      "lapse_denominator": -0.30799999999999994,
+      "momentum_residual": 1.734723475976807e-18,
+      "phi_pref": 0.08236552608403296,
+      "psi_pref": -0.05448354143019296,
+      "psi_prime_pref": -0.0018398244694077647,
+      "shift_denominator": -0.04999999999999999
+    },
+    "shadow_roundtrip_errors": {
+      "Phi_N": 6.938893903907228e-17,
+      "Psi_N": 0.0,
+      "chi_prime": 1.0928757898653885e-16,
+      "phi_pref": 8.326672684688674e-17,
+      "psi_pref": 0.0
+    },
+    "shadow_roundtrip_max_abs_error": 1.0928757898653885e-16,
+    "shadow_source_roundtrip_max_abs_error": 0.0
+  },
+  "target": "research/theory_targets/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_TARGET_v1.json"
+}
