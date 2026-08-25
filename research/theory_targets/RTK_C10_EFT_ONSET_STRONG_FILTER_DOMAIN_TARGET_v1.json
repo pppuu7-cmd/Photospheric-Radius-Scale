@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_EFT_ONSET_STRONG_FILTER_DOMAIN_TARGET_v1",
+  "created_utc": "2026-08-25T21:42:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "question": "Is the fixed-a strongly-filtered k^2 gradient expansion used in C10.50-C10.54 uniformly compatible with the already-certified history-wide M_c window over the declared cosmological EFT domain, despite the noncommuting formal limits k->0 and a->0?",
+  "parents": [
+    "research/theory_results/RTK_ROUTE_B_U1_HISTORY_WIDE_MC_WINDOW_RESULT_v1.json",
+    "research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json"
+  ],
+  "scope": {
+    "filter": "a1_eff=k^2/(k^2+a^2 M_c^2)=k_phys^2/(k_phys^2+M_c^2)",
+    "history_window": "M_c^2>=99 k_cos_phys^2 on the declared EFT history, with each audited cosmological mode satisfying k_phys^2<=k_cos_phys^2",
+    "EFT_onset": "finite declared a_EFT>0; no extrapolation to an arbitrarily early a->0 UV regime"
+  },
+  "acceptance": [
+    "prove lim_{k->0 at fixed a,M_c} a1_eff=0 and lim_{a->0 at fixed k,M_c} a1_eff=1, so the two formal limits do not commute",
+    "define z=k_phys^2/M_c^2; from M_c^2>=99 k_cos_phys^2 and k_phys^2<=k_cos_phys^2 prove 0<=z<=1/99",
+    "prove a1_eff=z/(1+z)<=1/100 over the audited cosmological EFT domain",
+    "rewrite K_hat=-(3/(2M_c^2))/(1+z) and show its O(z) expansion K0(1-z) has exact relative truncation error z^2<=1/9801",
+    "show the leading approximation a1_eff~z has relative error z<=1/99, while all C10 projector calculations continue to use the exact filter rather than this approximation",
+    "classify the C10.50-C10.54 fixed-a k^2 expansion as uniformly controlled on the declared strong-filter EFT window, not as a theorem extending to a->0 before EFT onset",
+    "emit an immutable machine-checked certificate without selecting numerical M_c or a_EFT"
+  ],
+  "pass_classification": "C10_EFT_ONSET_STRONG_FILTER_GRADIENT_DOMAIN_PASS_SCOPED",
+  "failure_classification": "C10_EFT_ONSET_STRONG_FILTER_GRADIENT_DOMAIN_FAIL",
+  "next_if_pass": "derive the physical baseline-species O(k^2) adiabatic coefficient C2 on the finite EFT-onset strongly-filtered branch and project B0 with the C10.54 formula.",
+  "non_claims": [
+    "does not select numerical M_c, lambda_HL, eta0 or a_EFT",
+    "does not extend the IR completion arbitrarily to a->0",
+    "does not derive the species adiabatic coefficient C2",
+    "does not cover exact k=0",
+    "does not implement completed-U1 CLASS feedback or spectra"
+  ]
+}
