@@ -56,7 +56,7 @@
   ],
   "provenance": {
     "proof_script": "research/shadow/rtk_c10_khronon_early_dust_bound.py",
-    "repo_head_at_job_start": "aaf70e220b641818685a22db76a86d4fa65073b3",
+    "repo_head_at_job_start": "dfd33187822e78874a04a1505bdf1ef5e25caacc",
     "sympy": "1.13.3",
     "workflow": "rtk-c10-khronon-early-dust-bound.yml"
   },
