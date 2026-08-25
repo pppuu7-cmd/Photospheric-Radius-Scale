@@ -1,0 +1,177 @@
+name: RTK C10 physical CLASS source export
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-physical-class-source-export.yml'
+      - 'rtk/apply_rtk_c10_source_export_patch.py'
+      - 'research/shadow/rtk_c10_validate_source_export.py'
+      - 'research/theory_targets/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+
+      - name: Verify frozen export target and historical production point
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_TARGET_v1.json'))
+          s=json.load(open('research/state/current.json')); fr=s['final_replay_result']
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert fr['status']=='PASS'
+          assert abs(float(fr['rtk']['expected_score_eff'])-float(t['production_reference']['required_score_eff']))<1e-12
+          assert fr['provenance']['class_upstream_commit']==t['production_reference']['class_upstream_sha']
+          assert t['production_reference']['ordinary_species']==['baryons','photons','massless relativistic species']
+          print('C10_PHYSICAL_SOURCE_EXPORT_TARGET_PASS')
+          PY
+          git rev-parse HEAD | tee c10_source_export_repo_head.txt
+
+      - name: Prepare disposable pinned production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_export
+          git -C class_export reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_export rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_export/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_export/include/
+          python3 rtk/apply_rtk_class_patch.py class_export
+          python3 rtk/upgrade_rtk_inputs.py class_export
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_export
+          python3 rtk/upgrade_rtk_initial_conditions.py class_export
+          python3 rtk/upgrade_rtk_matter_sources.py class_export
+          python3 rtk/upgrade_rtk_gamma_root.py class_export
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_export
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_export
+          grep -q 'RTK_C10_READONLY_SOURCE_EXPORT_V1' class_export/source/perturbations.c
+
+      - name: Build diagnostic production tree
+        run: |
+          set -euo pipefail
+          make -C class_export -j2 class
+
+      - name: Write exact historical RTK source-export input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          t=json.load(open('research/theory_targets/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_TARGET_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in t['k_output_values_Mpc_inv'])
+          body=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_khronon = {p['Om']!r}
+          lambda_D = {p['lam']!r}
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          output = mPk,dTk,vTk
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          P_k_max_h/Mpc = 1.0
+          z_pk = 0
+          k_output_values = {kvals}
+          root = output/c10src_
+          write parameters = yeap
+          background_verbose = 1
+          perturbations_verbose = 0
+          spectra_verbose = 0
+          '''
+          pathlib.Path('class_export/source_export.ini').write_text(body)
+          pathlib.Path('class_export/output').mkdir(exist_ok=True)
+          print(body)
+          PY
+
+      - name: Run read-only physical source export
+        run: |
+          set -euo pipefail
+          (cd class_export && ./class source_export.ini) > c10_source_export.log 2>&1
+          grep 'RTK_LOG_GAMMA_ROOT' c10_source_export.log | tail -1 | tee c10_source_export_gamma.txt
+          echo '--- perturbation files ---'
+          find class_export/output -maxdepth 1 -type f -iname '*perturbations*' -print | sort | tee c10_source_export_files.txt
+          test -s c10_source_export_files.txt
+
+      - name: Validate parameter-free source histories
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_validate_source_export.py \
+            --glob 'class_export/output/*perturbations*' \
+            --output c10_physical_class_source_export_result.json
+          cat c10_physical_class_source_export_result.json
+
+      - name: Add immutable provenance to result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re,subprocess
+          p='c10_physical_class_source_export_result.json'
+          d=json.load(open(p))
+          log=open('c10_source_export_gamma.txt').read()
+          m=re.search(r'gamma=([0-9.eE+\-]+)',log)
+          d['provenance']={
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'repo_head_at_job_start':open('c10_source_export_repo_head.txt').read().strip(),
+            'production_score_eff':1050.249912429787,
+            'gamma_root':float(m.group(1)) if m else None,
+            'workflow':'rtk-c10-physical-class-source-export.yml',
+            'source_export_patch':'rtk/apply_rtk_c10_source_export_patch.py',
+            'validator':'research/shadow/rtk_c10_validate_source_export.py',
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Persist source-export certificate
+        run: |
+          set -euo pipefail
+          cp c10_physical_class_source_export_result.json /tmp/c10_source_export_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_source_export_result.json research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json
+            git commit -m 'Record C10 physical CLASS source export' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-physical-class-source-export
+          path: |
+            c10_source_export.log
+            c10_source_export_gamma.txt
+            c10_source_export_files.txt
+            c10_physical_class_source_export_result.json
+            class_export/source_export.ini
+            class_export/output/*perturbations*
+          if-no-files-found: warn
