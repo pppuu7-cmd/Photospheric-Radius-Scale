@@ -1,0 +1,60 @@
+{
+  "architecture_decision": "Carry C2 symbolically into the next coupled coefficient-nullity audit; derive B0 from it and never promote chi/B0 to an independently integrated or independently matched scalar.",
+  "classification": "C10_65H_C2_GAUGE_INVARIANT_MINIMAL_SHIFT_MATCH_COORDINATE_PASS_SCOPED",
+  "exact_comoving_source_invariance": {
+    "consequence": "C2 is a source-coordinate/gauge-invariant regular-branch matching coordinate; no choice B0=0 is used.",
+    "machine_C2_residual": "0",
+    "machine_full_C_residual": "0",
+    "newtonian": "C_N=3 a^2 delta_mu_N+3 H Q_N, Q_N=3 a q_N",
+    "preferred": "C_pref=3 a^2 delta_mu_pref+3 H Q_pref, Q_pref=3 a q_pref",
+    "regular_B_required": true,
+    "source_map": "delta_mu_N=delta_mu_pref-3 H W B; q_N=q_pref+a W B"
+  },
+  "gate": "C10.65h",
+  "leading_regularity": {
+    "C0_expression": "9*H*a*q0 + 3*a**2*dm0",
+    "condition": "C0=0",
+    "role": "leading finite-B regularity removes the k^0 comoving source but leaves C2 as the first unresolved comoving coefficient."
+  },
+  "minimality_scope": {
+    "allowed_future_selectors": [
+      "microscopic pre-EFT/UV matching",
+      "justified backward-regularity condition",
+      "explicit temporal eigen/power-law growing-branch condition"
+    ],
+    "guard": "This theorem does not claim C2 is the only remaining temporal amplitude of the full photon+baryon+UR+Khronon hierarchy.",
+    "numerical_value_status": "UNSET_BY_THEORY_AT_THIS_GATE",
+    "positive_claim": "C2 is one sufficient and invariant scalar coordinate for the unresolved foliation/shift boundary freedom represented by B0."
+  },
+  "neutral_adiabatic_independence": {
+    "boundary": "Delta I_iso=I_khr-J_ad=0",
+    "consequence": "The C2 matching coordinate is independent of the neutral relative-entropy coordinate; carrying C2 does not undo the C10.65c adiabatic correction.",
+    "d_DeltaI_dC2": "0",
+    "delta_khr0": "(1+w)(3 psi0+J_ad)",
+    "machine_boundary_residual": "0"
+  },
+  "next_gate": "freeze C10.65i coupled O(k^2) coefficient-nullity audit parameterized by C2: encode the corrected photon+baryon+massless-UR+neutral-Khronon hierarchy and preferred DAE constraints, quotient overall normalization, keep C2 symbolic, and count any remaining temporal amplitudes before selecting a microscopic/growing-branch prescription",
+  "non_claims": [
+    "not a numerical UV value for C2",
+    "not full growing-mode uniqueness",
+    "not a propagating-DOF count",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "a30e05aae6464119ac678554a1e0e0b45a216ce0",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65h_minimal_c2_temporal_matching_coordinate.py",
+    "workflow": "rtk-c10-65h-minimal-c2-temporal-matching-coordinate.yml"
+  },
+  "schema": "RTK_C10_65H_MINIMAL_C2_TEMPORAL_MATCHING_COORDINATE_RESULT_v1",
+  "shift_reconstruction": {
+    "B0": "(C2+2 Pcal psi0-E_th phi0)/(2H)",
+    "dB0_dC2": "1/(2*H)",
+    "finite_onset_guard": "H>0",
+    "independence_statement": "Once C2 and the leading metric amplitudes are specified, B0 is derived uniquely and is not a second matching datum.",
+    "inverse_C2_from_B0": "2*Bstar*H + Eth*phi0 - 2*Pcal*psi0",
+    "machine_inverse_residual": "0"
+  },
+  "target": "research/theory_targets/RTK_C10_65H_MINIMAL_C2_TEMPORAL_MATCHING_COORDINATE_TARGET_v1.json"
+}
