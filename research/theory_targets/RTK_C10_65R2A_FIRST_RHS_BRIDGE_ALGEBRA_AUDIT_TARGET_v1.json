@@ -1,0 +1,31 @@
+{
+  "gate": "C10.65r2a",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Audit the exact algebraic bridge from the already certified C10.65q Bprime records to Psi_N_prime and the pinned CLASS Newtonian metric source conventions before implementing the non-invasive C10.65r2 first-RHS diagnostic block.",
+  "scope": "36 detached onset records = 9 completion points x 4 low-k anchors; diagnostic algebra only; no CLASS state or dy writes.",
+  "parents": {
+    "C10.65q": "C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED",
+    "C10.65r1": "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED",
+    "C10.65r2_source_lock": "PASS_SCOPED but explicitly OPEN_NOT_EXECUTED for r2"
+  },
+  "frozen_equations": {
+    "PsiNprime": "psip_pref - Hprime*B - H*Bprime",
+    "metric_continuity_shadow": "-3*PsiNprime",
+    "metric_euler_shadow": "k^2*PhiN"
+  },
+  "frozen_checks": {
+    "record_count": 36,
+    "max_reconstructed_vs_q_PsiNprime_relative": 5e-11,
+    "max_q_projector_reproduction_relative": 5e-11,
+    "max_q_Bprime_slip_invariance_relative": 5e-9,
+    "max_q_weighted_photon_baryon_cancel_residual": 5e-13
+  },
+  "hard_nonclaims": [
+    "not C10.65r2 numerical first-RHS parity",
+    "not an in-CLASS C implementation",
+    "not a state handoff or production feedback gate",
+    "not radiative naturalness",
+    "not same-full-action primordial/background closure"
+  ],
+  "next_if_pass": "Implement c10_65r2_diag in the conditioned r1 insertion point, carrying the audited bridge into source-locked TCA and first baryon/photon/UR/Khronon RHS while preserving zero dy writes."
+}
