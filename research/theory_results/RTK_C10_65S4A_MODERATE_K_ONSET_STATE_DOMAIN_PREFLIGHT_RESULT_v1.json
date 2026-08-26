@@ -299,14 +299,17 @@
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s4a_moderate_k_onset_state_domain_preflight.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 33008706959,
-    "historical_failed_attempt_run_id": 33008095108,
+    "github_actions_run_id": 33011232823,
+    "historical_failed_attempt_run_ids": [
+      33008095108,
+      33008706959
+    ],
     "observer_patch": "rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py",
-    "repo_head_at_job_start": "176326975abd5349fe44698268009edd9cb39013",
-    "sampling_repair": "rtk/apply_rtk_c10_65s4a1_exact_onset_sampling_patch.py",
-    "sampling_repair_parent_run_id": 33008538013,
+    "repo_head_at_job_start": "04bcd6fdc042595b2d95fa5f0da85d29ed644b9e",
+    "sampling_repair": "rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py",
+    "sampling_repair_parent_run_id": 33011096182,
     "threshold_changed": false,
-    "workflow": "rtk-c10-65s4a-moderate-k-onset-preflight.yml"
+    "workflow": "rtk-c10-65s4a-retry-after-s4a3.yml"
   },
   "regression_max_relative_errors": {
     "0.0001": 2.943811069746208e-06,
