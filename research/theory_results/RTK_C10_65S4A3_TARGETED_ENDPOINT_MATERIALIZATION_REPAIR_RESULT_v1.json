@@ -33,9 +33,9 @@
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s4a3_targeted_endpoint_materialization_repair.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 33010796918,
+    "github_actions_run_id": 33010968444,
     "patch": "rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py",
-    "repo_head_at_job_start": "bb50eaaffa4ef32dd29619828c4af040b9240137",
+    "repo_head_at_job_start": "8de132a323a988725f21befa7bac97f3c49ad198",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s4a3-targeted-endpoint-materialization-repair.yml"
   },
