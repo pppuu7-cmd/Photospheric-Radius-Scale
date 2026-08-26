@@ -42,12 +42,15 @@ jobs:
           python3 rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py class_s4d
           python3 - <<'PY'
           from pathlib import Path
+          import json,re
           s=Path('class_s4d/source/rtk_c10_65s2_class_bridge.c').read_text()
           assert 'static const s2seed S[2]' in s
           assert 'for(i=0;i<2;i++)' in s
-          assert '3.53993611477497e-10' in s or '3.5399361147749699e-10' in s
+          m=re.search(r'static const double DT\s*=\s*([^;]+);',s);assert m
+          got=float(m.group(1));want=float(json.load(open('research/theory_targets/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_TARGET_v1.json'))['execution']['retry_width_Mpc'])
+          assert got==want,(got,want)
           for z in ['1.0000000000000001e-05','3.0000000000000001e-05']: assert z not in s
-          print('C10_65S4D_DOMAIN_ONLY_SOURCE_GUARD_PASS')
+          print('C10_65S4D_DOMAIN_ONLY_SOURCE_GUARD_PASS',got)
           PY
           make -C class_s4d clean
           make -C class_s4d -j2 class
