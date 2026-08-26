@@ -1,0 +1,19 @@
+{
+  "schema":"RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_TARGET_v1",
+  "gate":"C10.65s4f",
+  "created_utc":"2026-08-26T22:40:00Z",
+  "status":"FROZEN_BEFORE_EXECUTION",
+  "parents":{"C10.65s4e":"C10_65S4E_MODERATE_K_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED","C10.65s3c":"C10_65S3C_TIME_WIDENED_TRAJECTORY_PASS_SCOPED","C10.65s4d":"C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_PASS_SCOPED","C10.65s2e_historical":"C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED"},
+  "purpose":"Prospectively widen the certified moderate-k sampled trajectory from 1e-6 Mpc to four logarithmically spaced endpoints through 1e-4 Mpc, exactly mirroring the already-passed low-k C10.65s3c methodology while keeping the s4d production kernel, integrator tolerance, two moderate-k anchors, and 1e-10 constraint threshold unchanged.",
+  "domain":{"a_on":0.0002203229136467,"lambda_HL":1.0016708437761068,"M_c_Mpc_inv":9066.231026460177,"k_Mpc_inv":[0.001,0.003]},
+  "sample_elapsed_tau_Mpc":[3e-6,1e-5,3e-5,0.0001],
+  "sampling_policy":{"independent_restart_from_same_onset_for_each_endpoint":true,"same_completed_U1_production_kernel_as_s4d":true,"same_integrator_tolerance_as_s4d":true,"same_evolver":"rk","no_intra_step_observer_instrumentation":true,"endpoint_width_absolute_tolerance_Mpc":5e-12},
+  "constraint_policy":{"max_abs_normalized_A":1e-10,"max_abs_normalized_Hamiltonian":1e-10,"max_abs_normalized_momentum":1e-10,"max_abs_normalized_change_from_onset":1e-10,"threshold_frozen_before_execution":true},
+  "frozen_checks":{"sample_count":4,"anchor_count":2,"record_count":8,"off_numeric_text_sha256_identical_both":true,"before_rows_exact_s4d_before_all_samples":true,"all_endpoint_widths_within_absolute_tolerance":true,"approximation_state":{"TCA_enum":0,"RSA_enum":0,"UFA_enum":0,"l_max_ur":17},"all_endpoint_states_finite":true,"all_endpoint_constraints_finite":true,"all_endpoint_normalized_constraints_within_1e-10":true,"all_normalized_constraint_changes_within_1e-10":true,"same_kernel_and_tolerance_static_guard":true,"moderate_k_seed_only_static_guard":true,"s2e_failed_parent_preserved":true,"threshold_changed":false},
+  "pass_classification":"C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+  "fail_classification":"C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_FAIL_SCOPED",
+  "interpretation_if_pass":"At four prospectively frozen elapsed times from 3e-6 through 1e-4 Mpc and k=1e-3,3e-3 Mpc^-1, independently restarted production integrations remain finite and constraint-consistent within the unchanged 1e-10 normalized bound. This extends sampled moderate-k evidence by two decades beyond s4e but is not continuous-time or cosmological-time stability.",
+  "next_if_pass":"Freeze a separate decision gate comparing materially longer-time versus k-domain widening; do not jump directly to spectra or likelihood tests.",
+  "non_claims":["not a continuous-time supremum bound","not cosmological-time stability","not validation of k=0.01 or 0.03 Mpc^-1","not broad-k stability","not same-full-action primordial/background closure","not radiative-naturalness closure","not a UV derivation of higher UR/matching control","not massive-neutrino completion","not spectra or likelihood evidence","not a reclassification of C10.65s2e"],
+  "threshold_changed":false
+}
