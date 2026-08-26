@@ -1,0 +1,61 @@
+{
+  "schema": "RTK_C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_TARGET_v1",
+  "gate": "C10.65s3a",
+  "created_utc": "2026-08-26T19:29:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Test numerical endpoint stability of the completed-U1 production path over a prospectively fixed finite short interval after the certified one-step entry gate C10.65s2k. This is a multi-accepted-step endpoint test, not a full-history or cosmological stability theorem.",
+  "parents": {
+    "C10.65s2k": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+    "C10.65s2j": "C10_65S2J_PROSPECTIVE_RETRY_WIDTH_PASS_SCOPED"
+  },
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "prospective_interval": {
+    "delta_tau_Mpc": 1e-6,
+    "ratio_to_s2k_retry_width": 2824.9100000000003,
+    "approx_fraction_of_onset_tau": 1.137777e-8,
+    "minimum_accepted_substeps_required_per_anchor": 4,
+    "integrator_tolerance": "unchanged from C10.65s2/s2k",
+    "evolver": "rk"
+  },
+  "constraint_policy": {
+    "one_step_reference_max_normalized_drift": 5.997606030492666e-16,
+    "linear_interval_scale_reference": 1.694270012e-12,
+    "frozen_max_abs_endpoint_normalized_residual": 1e-10,
+    "frozen_max_abs_normalized_change": 1e-10,
+    "rationale": "The bound is frozen before s3a execution. It is roughly sixty times above a deliberately conservative linear scaling of the s2k one-step roundoff-level momentum drift across the interval/retry-width ratio, while remaining a stringent numerical constraint criterion."
+  },
+  "frozen_checks": {
+    "original_s2_preserved_fail": true,
+    "s2k_preserved_pass": true,
+    "off_numeric_text_sha256_identical_all_four": true,
+    "before_observer_exactly_matches_s2k_before": true,
+    "first_rhs_relative_tolerance_inherited": 5e-9,
+    "interval_width_absolute_tolerance_Mpc": 5e-14,
+    "minimum_accepted_substeps_each_anchor": 4,
+    "all_adaptive_trace_values_finite": true,
+    "post_endpoint_state_all_finite": true,
+    "endpoint_constraints_all_finite": true,
+    "max_abs_endpoint_normalized_residual": 1e-10,
+    "max_abs_normalized_constraint_change": 1e-10,
+    "same_kernel_physics_and_tolerance_static_guard": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED",
+  "fail_classification": "C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_FAIL_SCOPED",
+  "interpretation_if_pass": "On the same one-point x four-anchor low-k domain, the completed-U1 production path remains finite and constraint-consistent at the endpoint of a 1e-6 Mpc multi-step interval under the unchanged pinned adaptive RK tolerance. This is a scoped numerical endpoint-stability certificate only, not a full-trajectory or cosmological stability theorem.",
+  "next_if_pass": "Freeze a path-sampled short-interval gate that observes constraints at accepted intermediate states, or widen the endpoint interval in a separately preregistered sequence before any spectra calculation.",
+  "non_claims": [
+    "not a full-trajectory transient bound",
+    "not cosmological-time stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ]
+}
