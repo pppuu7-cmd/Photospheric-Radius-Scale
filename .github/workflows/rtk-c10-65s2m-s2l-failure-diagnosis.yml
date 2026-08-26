@@ -1,0 +1,33 @@
+name: RTK C10.65s2m s2l failure diagnosis
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['research/triggers/RTK_C10_65S2M_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Execute frozen diagnosis
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s2m_head.txt
+          python3 research/shadow/rtk_c10_65s2m_s2l_failure_diagnosis.py | tee s2m.log
+          grep -q '^C10_65S2M_S2L_FAILURE_DIAGNOSIS_PASS_SCOPED$' s2m.log
+      - name: Persist provenance and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_RESULT_v1.json'; [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s2m_head.txt').read_text().strip(),'workflow':'rtk-c10-65s2m-s2l-failure-diagnosis.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'analyzer':'research/shadow/rtk_c10_65s2m_s2l_failure_diagnosis.py','threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          pathlib.Path('research/checkpoints/RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_2026-08-26T1935Z.md').write_text('# RTK C10.65s2m s2l failure diagnosis\n\nClassification: `'+d['classification']+'`. s2l remains `'+d['s2l_classification_preserved']+'`; s3a remains `'+d['s3a_classification_preserved']+'`.\n\n'+d['diagnosis']+'\n\nNo threshold or classification was changed. The canonical endpoint-stability parent is s3a; next gate is trajectory sampling before further widening.\n')
+          PY
+          cp "$p" /tmp/r.json; cp research/checkpoints/RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_2026-08-26T1935Z.md /tmp/c.md
+          for n in 1 2 3 4 5; do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r.json "$p";cp /tmp/c.md research/checkpoints/RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_2026-08-26T1935Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_2026-08-26T1935Z.md;git commit -m 'Record C10.65s2m s2l failure diagnosis' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
