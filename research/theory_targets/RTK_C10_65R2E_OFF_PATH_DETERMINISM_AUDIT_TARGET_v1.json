@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_TARGET_v1",
+  "gate": "C10.65r2e",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Diagnose the sole remaining frozen C10.65r2 failure: exact numeric-text SHA identity of the dormant r2 OFF path versus the r1 control. Separate runtime repeatability, independent-build repeatability, and dormant-r2 code-generation effects without weakening or redefining C10.65r2.",
+  "parents": [
+    "research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json",
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_FAIL_RUN2_v1.json",
+    "research/theory_results/RTK_C10_65R2_OFF_PATH_DIFF_DIAGNOSTIC_v1.json"
+  ],
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "tests": [
+    "same_binary_repeat: execute the same r1 binary twice with identical physical input and different output roots; compare all four perturbation numeric rows byte-for-byte after removing comment lines",
+    "independent_r1_builds: build the identical r1 patch stack independently in two directories with the same compiler/options and compare the four outputs",
+    "r1_vs_dormant_r2: compare r1 against the current r2 patch stack with c10_65r2_diag=0",
+    "repeat the same three comparisons with OMP_NUM_THREADS=1 to distinguish thread scheduling from code-generation effects"
+  ],
+  "frozen_reporting": {
+    "exact_numeric_text_identity": "required and reported independently for every comparison; do not round before the exact check",
+    "max_relative_difference": "also report as a diagnostic only",
+    "same_row_and_token_shape": true,
+    "do_not_modify_C10_65r2_thresholds": true
+  },
+  "classification_logic": {
+    "same_binary_not_exact": "C10_65R2E_BASELINE_RUNTIME_NONDETERMINISM_SCOPED",
+    "same_binary_exact_but_independent_r1_not_exact": "C10_65R2E_BUILD_LAYOUT_OR_COMPILER_NONREPRODUCIBILITY_SCOPED",
+    "both_r1_controls_exact_but_dormant_r2_not_exact": "C10_65R2E_DORMANT_R2_CODEGEN_PERTURBATION_SCOPED",
+    "all_exact": "C10_65R2E_EXACT_OFF_PATH_REPRODUCIBLE_PASS_SCOPED"
+  },
+  "next": "If dormant-r2 codegen is isolated, redesign r2 instrumentation so production arithmetic is compiled from an unchanged translation unit (e.g. compile-time-separated diagnostic observer/helper) and rerun the original frozen C10.65r2 target unchanged. If baseline runtime/build nondeterminism is isolated, preserve the frozen failure and preregister a scientifically equivalent rollback criterion based on deterministic production-state hashing at a stable serialization point rather than silently weakening the old target.",
+  "non_claims": [
+    "not a pass of C10.65r2",
+    "not permission to weaken C10.65r2",
+    "not completed-U1 production feedback",
+    "not spectra or likelihood evidence"
+  ]
+}
