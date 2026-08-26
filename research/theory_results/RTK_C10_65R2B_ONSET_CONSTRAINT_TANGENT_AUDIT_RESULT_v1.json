@@ -1,0 +1,367 @@
+{
+  "checks": {
+    "max_normalized_abs_constraint_prime": 0.0002406923043462018,
+    "max_onset_constraint_relative": 8.717179345786061e-21,
+    "min_normalized_abs_constraint_prime": 2.6503963655747855e-07
+  },
+  "classification": "C10_65R2B_INCONCLUSIVE_FAIL",
+  "frozen_checks": {
+    "max_onset_constraint_relative": 5e-11,
+    "normalization": "abs(Cprime)/max(abs(H)*(abs(3*H*Q_pref)+abs(3*a^2*delta_mu_pref)+abs(C2*k^2)),1e-80)",
+    "resolved_non_tangent_min_normalized_abs_Cprime": 1e-06,
+    "tangent_max_normalized_abs_Cprime": 5e-09
+  },
+  "gate": "C10.65r2b",
+  "interpretation": {
+    "if_resolved_non_tangent": "C10_65R2B_NON_TANGENT_RESOLVED_SCOPED: do not differentiate the onset-reduced fixed-C2 closure; port/differentiate the general mixed-interface projector used by C10.65q, while retaining the conditioned r1 expression only for the algebraic onset value B.",
+    "if_tangent": "C10_65R2B_TANGENT_PASS_SCOPED: dual propagation of the conditioned onset-reduced r1 closure is admissible for Bprime, subject to the unchanged full r2 numerical parity gate.",
+    "otherwise": "C10_65R2B_INCONCLUSIVE_FAIL: no implementation choice is certified."
+  },
+  "next_gate": "Diagnose tangent audit before any r2 Bprime C port.",
+  "non_claims": [
+    "not C10.65r2 first-RHS parity",
+    "not a production dy write",
+    "not completed-U1 feedback integration",
+    "not microscopic UV matching",
+    "not same-full-action primordial/background closure",
+    "not radiative naturalness"
+  ],
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "generated_at_utc": "2026-08-26T11:34:20.005153+00:00",
+    "repo_head_at_job_start": "c11bdb54ffcdea89b4d6a9885b4b09af2512d891",
+    "threshold_changed": false,
+    "worker": "research/shadow/rtk_c10_65r2b_onset_constraint_tangent_audit.py",
+    "worker_exit_code": 1,
+    "workflow": "rtk-c10-65r2b-onset-constraint-tangent-audit.yml"
+  },
+  "r2_frozen_target_unchanged": true,
+  "r2_gate_status": "OPEN_NOT_EXECUTED",
+  "record_count": 36,
+  "records": [
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.2476259296080528e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.6738713250141787e-07,
+      "onset_constraint_relative": 1.2407508267200543e-23,
+      "q_Bprime_reference": 3.0202975677233868
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.1228630641993289e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.4064828892932e-06,
+      "onset_constraint_relative": 3.816445096238076e-23,
+      "q_Bprime_reference": 3.0202949227054887
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.247622183440697e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.6738534057879884e-05,
+      "onset_constraint_relative": 7.638065973486985e-22,
+      "q_Bprime_reference": 3.02026483576306
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.1228327196342612e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 0.00024063377466366454,
+      "onset_constraint_relative": 4.9811371595714755e-21,
+      "q_Bprime_reference": 3.020000345943615
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.2439747980263932e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.666046338527147e-07,
+      "onset_constraint_relative": 1.0664121645936812e-23,
+      "q_Bprime_reference": 3.009415840112314
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.119577038962094e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.3994403889569455e-06,
+      "onset_constraint_relative": 5.1269307276484286e-23,
+      "q_Bprime_reference": 3.009413182504199
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.24397095816997e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.6660282474547915e-05,
+      "onset_constraint_relative": 8.604834469650685e-22,
+      "q_Bprime_reference": 3.0093829523513436
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.1195459355066252e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 0.00023992938543692798,
+      "onset_constraint_relative": 3.590174682264633e-21,
+      "q_Bprime_reference": 3.009117203799523
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.2366725348732e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.6503963655747855e-07,
+      "onset_constraint_relative": 1.3267946140977976e-23,
+      "q_Bprime_reference": 2.9876523849225483
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.1130049885696449e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.385355388460221e-06,
+      "onset_constraint_relative": 9.2993142196314e-23,
+      "q_Bprime_reference": 2.9876497023930306
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.2366685086411517e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.6503779329586376e-05,
+      "onset_constraint_relative": 8.90517162501573e-22,
+      "q_Bprime_reference": 2.9876191887658448
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "constraint_prime": 1.1129723754559917e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 0.00023852060874178727,
+      "onset_constraint_relative": 3.2910406301138124e-21,
+      "q_Bprime_reference": 2.987350948656411
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.2475295419648e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.674086386875553e-07,
+      "onset_constraint_relative": 1.2275630124386456e-23,
+      "q_Bprime_reference": 3.0204780571523684
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.1227763147941958e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.406676443690348e-06,
+      "onset_constraint_relative": 7.910945762089777e-23,
+      "q_Bprime_reference": 3.0204754137904146
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.2475257885621039e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.6740684500756618e-05,
+      "onset_constraint_relative": 1.1254894676974962e-21,
+      "q_Bprime_reference": 3.020445345684894
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.1227459116216946e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 0.00024065311586883776,
+      "onset_constraint_relative": 8.46017193664136e-21,
+      "q_Bprime_reference": 3.020181021507722
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.2438782713915719e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.6662598684595716e-07,
+      "onset_constraint_relative": 6.896970955140302e-24,
+      "q_Bprime_reference": 3.009598045318065
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.119490164465581e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.39963256461836e-06,
+      "onset_constraint_relative": 5.1566921457321214e-23,
+      "q_Bprime_reference": 3.0095953893658334
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.2438744243139949e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.6662417598179344e-05,
+      "onset_constraint_relative": 8.702416218583786e-22,
+      "q_Bprime_reference": 3.009565178049189
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.1194590025176513e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 0.0002399485887721208,
+      "onset_constraint_relative": 7.545200204708108e-21,
+      "q_Bprime_reference": 3.009299595133351
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.2365757302552435e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.650606831649318e-07,
+      "onset_constraint_relative": 1.0527201361320125e-23,
+      "q_Bprime_reference": 2.987838021681832
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.1129178638903846e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.3855448066502227e-06,
+      "onset_constraint_relative": 1.0043663392848965e-22,
+      "q_Bprime_reference": 2.9878353408080347
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.2365716968305627e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.650588381473384e-05,
+      "onset_constraint_relative": 9.77766559187295e-22,
+      "q_Bprime_reference": 2.9878048460152042
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "constraint_prime": 1.1128851925154171e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 0.0002385395363375567,
+      "onset_constraint_relative": 8.717179345786061e-21,
+      "q_Bprime_reference": 2.987536771525087
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.2473365023235084e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.674522135759265e-07,
+      "onset_constraint_relative": 9.509369738648506e-24,
+      "q_Bprime_reference": 3.0208410058785073
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.1226025780585036e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.4070686151119388e-06,
+      "onset_constraint_relative": 7.246523010767116e-23,
+      "q_Bprime_reference": 3.020838365844893
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.2473327343659902e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 2.674504163570348e-05,
+      "onset_constraint_relative": 8.213979129603223e-22,
+      "q_Bprime_reference": 3.0208083356003166
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.1225720569895737e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0016708437761068,
+      "normalized_abs_constraint_prime": 0.0002406923043462018,
+      "onset_constraint_relative": 6.630136106367242e-21,
+      "q_Bprime_reference": 3.0205443443532896
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.243684952478581e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.6666925317415086e-07,
+      "onset_constraint_relative": 7.781213949959534e-24,
+      "q_Bprime_reference": 3.009964449951114
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.1193161763874312e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.4000219589989887e-06,
+      "onset_constraint_relative": 5.824499348607513e-23,
+      "q_Bprime_reference": 3.009961797327099
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.2436810908746741e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 2.6666743877195893e-05,
+      "onset_constraint_relative": 6.665867140457988e-22,
+      "q_Bprime_reference": 3.009931623870013
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.1192848967739866e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0033500837520937,
+      "normalized_abs_constraint_prime": 0.00023998749955249745,
+      "onset_constraint_relative": 3.229424280858712e-21,
+      "q_Bprime_reference": 3.0096663738717817
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.2363818527988568e-11,
+      "k": 1e-05,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.651033323727717e-07,
+      "onset_constraint_relative": 8.141976107610005e-24,
+      "q_Bprime_reference": 2.98821133812869
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.1127433731273443e-10,
+      "k": 3e-05,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.385928646949035e-06,
+      "onset_constraint_relative": 5.540936258314819e-23,
+      "q_Bprime_reference": 2.9882086605827847
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.2363778049051287e-09,
+      "k": 0.0001,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 2.651014838190311e-05,
+      "onset_constraint_relative": 3.22017455688999e-22,
+      "q_Bprime_reference": 2.988178203645801
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "constraint_prime": 1.1127105845511072e-08,
+      "k": 0.0003,
+      "lambda_HL": 1.0067340067340067,
+      "normalized_abs_constraint_prime": 0.00023857789172504113,
+      "onset_constraint_relative": 8.545003188080022e-21,
+      "q_Bprime_reference": 2.9879104620399897
+    }
+  ]
+}
