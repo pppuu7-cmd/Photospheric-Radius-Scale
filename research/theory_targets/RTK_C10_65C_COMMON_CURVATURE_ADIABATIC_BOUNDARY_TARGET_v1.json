@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_TARGET_v1",
+  "created_utc": "2026-08-26T01:04:00Z",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "gate": "C10.65c",
+  "question": "After C10.65b0 showed that absolute I_khr=0 is not the nonzero-curvature adiabatic branch, does the corrected boundary Delta I_iso=I_khr-J_ad=0 give the unique gauge-invariant neutral charge matching condition required by ordinary inter-species adiabaticity?",
+  "parents": [
+    "research/theory_results/RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FINITE_ONSET_ADIABATIC_INVARIANCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json"
+  ],
+  "definitions": {
+    "I_khr": "delta_khr/(1+w_khr)-3 psi_pref = delta_khr,N/(1+w_khr)-3 Psi_N",
+    "J_ad": "the common leading ordinary invariant J_i=delta_i/(1+w_i)-3 Psi_N on the regular adiabatic branch",
+    "Delta_I_iso": "I_khr-J_ad",
+    "corrected_adiabatic_boundary": "Delta_I_iso(tau_on)=0",
+    "preferred_density_relation": "delta_khr(tau_on)=(1+w_khr)[3 psi_pref(tau_on)+J_ad]",
+    "newtonian_density_relation": "delta_khr,N(tau_on)=(1+w_khr)[3 Psi_N(tau_on)+J_ad]"
+  },
+  "acceptance": [
+    "prove symbolically that I_khr is invariant under the certified preferred-to-Newtonian time shift",
+    "prove Delta_I_iso equals the neutral-minus-ordinary relative-density entropy when the ordinary species share J_ad",
+    "prove Delta_I_iso=0 is equivalent to the preferred and Newtonian density relations stated in the target",
+    "import the frozen C10.65b0 J_ad low-k intercept only after verifying its incompatibility classification and ordinary common-intercept guard",
+    "state that absolute I_khr=0 is the special Delta_I_iso=-J_ad charge-isocurvature slice when J_ad is nonzero",
+    "do not determine theta_khr or B0 here; those remain outputs of the corrected O(k^2) coupled DAE rank solve"
+  ],
+  "pass_classification": "C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_PASS_SCOPED",
+  "architecture": {
+    "supersedes": "the adiabatic labeling of absolute I_khr=0 in C10.64/C10.65b, while retaining their exact charge identities and zero-charge sector theorem",
+    "preserves_independent_sector": "nonzero Delta_I_iso remains the neutral charge-isocurvature degree of initial data",
+    "corrected_rank_gate": "the successor completed-U1 O(k^2) rank solve must impose Delta_I_iso=0, not I_khr=0"
+  },
+  "next_if_pass": "freeze the pinned compromise_CLASS photon-baryon tight-coupling port contract, then implement the corrected completed-U1 O(k^2) photon+baryon+massless-UR+neutral-Khronon rank solve with Delta I_iso=0, solving V_khr0 and B0 rather than prescribing them",
+  "non_claims": [
+    "not a microscopic UV derivation of Delta I_iso=0",
+    "not the full coupled gradient/rank solve",
+    "not a determination of theta_khr or B0",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ]
+}
