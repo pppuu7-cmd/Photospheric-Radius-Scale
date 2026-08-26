@@ -1,0 +1,26 @@
+{
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "classification": "C10_65R2_SOURCE_LOCK_PREFLIGHT_PASS_SCOPED",
+  "gate": "C10.65r2-source-lock-preflight",
+  "non_claims": [
+    "not C10.65r2 PASS",
+    "no c10_65r2_diag implementation yet",
+    "no dy writes",
+    "no production feedback",
+    "no physical closure claim"
+  ],
+  "provenance": {
+    "generated_at_utc": "2026-08-26T08:27:40.208238+00:00",
+    "repo_head_at_job_start": "3a7d1860b3f609b9f65a627b80dcee29e8c56e5b",
+    "workflow": "rtk-c10-65r2-source-lock-preflight.yml"
+  },
+  "r2_gate_status": "OPEN_NOT_EXECUTED",
+  "schema": "RTK_C10_65R2_SOURCE_LOCK_PREFLIGHT_RESULT_v1",
+  "verified": {
+    "certified_parent_classifications": true,
+    "frozen_target_unchanged": true,
+    "metric_continuity_source_locked": true,
+    "metric_euler_source_locked": true,
+    "q_r1_reusable_sources_compile": true
+  }
+}
