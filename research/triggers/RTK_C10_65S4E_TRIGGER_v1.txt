@@ -1,0 +1,1 @@
+Trigger frozen C10.65s4e moderate-k trajectory sampling after target freeze and implementation commit. No target, physics equation, integrator tolerance, sample time, or constraint bound is changed by this trigger.
