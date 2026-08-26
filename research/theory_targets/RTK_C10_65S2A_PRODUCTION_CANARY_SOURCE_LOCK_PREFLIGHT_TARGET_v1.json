@@ -1,0 +1,57 @@
+{
+  "schema": "RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_TARGET_v1",
+  "created_utc": "2026-08-26T17:25:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65s2a",
+  "purpose": "Before any C10.65s2 production-state or production-RHS mutation is implemented, source-lock the pinned CLASS ownership sites required by the frozen s2 contract and verify that the first persisted C10.65s1 completed state and certified C10.65r2 first RHS form a finite, anchor-aligned four-record handoff manifest without importing legacy nlde perturbation auxiliaries. This is a technical implementation preflight only and does not advance the integrator.",
+  "parents": {
+    "C10.65s1": "C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED",
+    "C10.65s0": "C10_65S0_DIRECT_ONSET_INITIALIZATION_ARCHITECTURE_PASS_LEGACY_AUX_EXCLUSION_REQUIRED_SCOPED",
+    "C10.65r2": "C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_PASS_SCOPED"
+  },
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_s2_target_path": "research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json",
+  "frozen_domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "source_lock_requirements": [
+    "perturb_initial_conditions owns ordinary initial scalar state",
+    "perturb_vector_init invokes/owns the initial state vector before generic_evolver",
+    "generic_evolver advances ppw->pv->y through perturb_derivs",
+    "delta_cdm and theta_cdm derivative slots exist and are the certified Khronon carrier",
+    "Newtonian psi and phi_prime metric workspace outputs exist",
+    "legacy model=2 nlde U/V/Z perturbation coordinates are explicitly identifiable and therefore can be guarded out of completed mode",
+    "no s2 production mutation is present during this preflight"
+  ],
+  "frozen_checks": {
+    "parent_classifications_exact": true,
+    "s2_target_still_frozen": true,
+    "completion_point_count": 1,
+    "anchor_count": 4,
+    "exact_k_alignment": true,
+    "exact_completion_parameter_alignment": true,
+    "exact_a_on_alignment": true,
+    "all_completed_state_values_finite": true,
+    "all_certified_first_rhs_values_finite": true,
+    "legacy_nlde_auxiliaries_excluded_in_s1_manifest": true,
+    "max_phiN_from_r2_metric_euler_vs_s1_constraint_relative": 5e-9,
+    "pinned_source_required_anchors_all_present": true,
+    "no_s2_production_patch_present": true,
+    "threshold_changed_from_frozen_s2_or_r2": false
+  },
+  "pass_classification": "C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_FAIL_SCOPED",
+  "interpretation_if_pass": "The frozen one-point x four-anchor s2 handoff has a source-locked implementation map and internally aligned finite s1-state/r2-RHS manifest. No state was mutated and no integrator step was executed; C10.65s2 remains open.",
+  "next_if_pass": "Implement the opt-in C10.65s2 production canary against this source map, preserve exact OFF rollback, initialize ordinary state only through CLASS initialization ownership, exclude legacy nlde completed-state auxiliaries, capture first production RHS parity, and advance exactly one accepted step per anchor under the already frozen s2 target.",
+  "non_claims": [
+    "not C10.65s2 PASS",
+    "not production feedback",
+    "not an accepted integrator step",
+    "not finite-time stability",
+    "not same-full-action primordial/background closure",
+    "not resolution of C9 radiative naturalness"
+  ]
+}
