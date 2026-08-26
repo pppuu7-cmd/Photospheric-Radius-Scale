@@ -1,0 +1,52 @@
+{
+  "schema": "RTK_C10_65E_FAILURE_AUDIT_RESULT_v1",
+  "created_utc": "2026-08-26T00:52:00Z",
+  "gate": "C10.65e-audit",
+  "classification": "C10_65E_PREREGISTERED_ASSUMPTIONS_FALSE_METHOD_REFINEMENT_REQUIRED_SCOPED",
+  "source_target": "research/theory_targets/RTK_C10_65E_FROZEN_ONSET_TCA_COEFFICIENT_PACK_TARGET_v1.json",
+  "workflow_run": 32916188164,
+  "workflow_conclusion": "failure",
+  "artifact_id": 9588250371,
+  "artifact_sha256": "aff1d64187e4df800162dc94089892a75a71ef46037b2ff0afb688414b495b76",
+  "what_succeeded": [
+    "pinned CLASS production tree built successfully",
+    "all nine read-only perturbation histories were generated successfully",
+    "all exported coefficient values were finite and passed elementary physical guards"
+  ],
+  "failed_preregistered_assumptions": {
+    "all_nine_modes_in_tca": {
+      "false": true,
+      "max_tau_c_over_tau_k": 0.011571490133794597,
+      "trigger_tau_c_over_tau_k": 0.01,
+      "offending_mode_k_Mpc_inv": 0.1,
+      "exported_tca_flag_partition": [0.0, 1.0]
+    },
+    "linear_history_interpolation_preserves_background_coefficients_to_1e_8": {
+      "false": true,
+      "max_relative_spread": 0.0006057867614357848,
+      "max_algebraic_relative_residual": 0.0009665960051246211,
+      "interpretation": "The thermodynamic primitives are background quantities, but interpolation of sparse perturbation-output rows to a common a_on introduces mode-dependent numerical interpolation error. The first low-k histories that contain the onset directly agree at near machine precision."
+    }
+  },
+  "stable_low_k_anchor_observation": {
+    "R": 6.695152150217,
+    "cb2": 2.466503150016e-09,
+    "dkappa_Mpc_inv": 8.641953565705,
+    "ddkappa_Mpc_inv2": -0.2240500853069,
+    "tau_c_Mpc": 0.1157145768485,
+    "dtau_c": 0.003000000013544,
+    "F_Mpc": 0.01503733449185,
+    "F_prime": 0.0005594524981605,
+    "Hc_Mpc_inv": 0.0129629303512,
+    "tau_c_over_tau_h": 0.001500000000306,
+    "derived_k_tca_boundary_Mpc_inv": 0.0864195356570552
+  },
+  "scientific_interpretation": "This is not a failure of the completed-U1/RTK model. It falsifies two numerical assumptions in the C10.65e data-extraction contract: all frozen modes are not simultaneously in tight coupling at the chosen onset, and sparse perturbation-history interpolation is not a suitable way to enforce k-independent thermodynamic equality at 1e-8. The corrected superhorizon rank solve only requires the k->0 TCA branch, which remains inside the source-locked TCA domain.",
+  "next_gate": "C10.65f: freeze an interpolation-safe exact-onset coefficient pack from direct onset anchor rows, derive the TCA-domain boundary k_TCA=0.01/tau_c, verify the exported TCA flag partition, and certify the low-k coefficient pack for the corrected O(k^2) rank solver.",
+  "non_claims": [
+    "not a model no-go",
+    "not a completed-U1 rank result",
+    "not a relaxation of C10.65e acceptance after the fact",
+    "not spectra or likelihood evidence"
+  ]
+}
