@@ -1,0 +1,108 @@
+{
+  "architecture_decision": "Use this invariant basis or a proven invertible equivalent for onset matching; never subtract preferred neutral and Newtonian baryon velocities without the B0 bridge.",
+  "boundary_vector": [
+    {
+      "definition": "D_b2",
+      "name": "A2"
+    },
+    {
+      "definition": "D_g2-(4/3)D_b2",
+      "name": "E_gb2"
+    },
+    {
+      "definition": "D_ur2-(4/3)D_b2",
+      "name": "E_urb2"
+    },
+    {
+      "definition": "[I_khr-J_b]_O(k^2)",
+      "name": "E_khr2"
+    },
+    {
+      "definition": "V_g0-V_b0",
+      "name": "R_gb0"
+    },
+    {
+      "definition": "V_ur0-V_b0",
+      "name": "R_urb0"
+    },
+    {
+      "definition": "V_khr,pref0+B0-V_b,N0",
+      "name": "R_khrb0"
+    },
+    {
+      "definition": "lim sigma_ur/k^2",
+      "name": "S_ur0"
+    },
+    {
+      "definition": "[3a^2 delta_mu+3H Q]_O(k^2)",
+      "name": "C2"
+    }
+  ],
+  "bridges": {
+    "C2": "source-coordinate invariant by C10.65h",
+    "density": "J=delta/(1+w)-3Psi_N=delta_pref/(1+w)-3psi_pref",
+    "neutral_relative_velocity": "V_khr,N-V_b,N=V_khr,pref+B0-V_b,N",
+    "velocity": "theta_N=theta_pref+k^2 B"
+  },
+  "classification": "C10_65L_UV_MATCHING_INTERFACE_BASIS_PASS_SCOPED",
+  "density_gradient_basis": {
+    "guard": "1+w_khr>0",
+    "invariant": [
+      "A2",
+      "E_gb2",
+      "E_urb2",
+      "E_khr2"
+    ],
+    "jacobian_determinant": "1/opw",
+    "primitive": [
+      "D_b2",
+      "D_g2",
+      "D_ur2",
+      "delta_khr2"
+    ]
+  },
+  "dimension_accounting": {
+    "C2": 1,
+    "fixed_C2_temporal": 8,
+    "overall_normalization_excluded": true,
+    "total_matching": 9
+  },
+  "gate": "C10.65l",
+  "machine_residuals": {
+    "C_source": "0",
+    "J_gauge": "0",
+    "velocity_bridge": "0"
+  },
+  "next_gate": "freeze C10.65m read-only numerical control extraction: estimate A2 and S_ur0 from the low-k standard CLASS control and regenerate the gauge-invariant total comoving source C(k) to estimate a historical-control C2, while labeling all three as phenomenological pre-EFT control values rather than completed-U1 predictions",
+  "non_claims": [
+    "not a derivation of the UV boundary vector values",
+    "not proof that the phenomenological zero-relative-entropy/zero-relative-velocity subfamily is selected by a microscopic UV completion",
+    "not same-full-action background closure",
+    "not a propagating-DOF count",
+    "not spectra or likelihood evidence"
+  ],
+  "phenomenological_regular_control": {
+    "external": [
+      "A2",
+      "S_ur0",
+      "C2"
+    ],
+    "status": "DEFINED_NOT_NUMERIC",
+    "zero": [
+      "E_gb2",
+      "E_urb2",
+      "E_khr2",
+      "R_gb0",
+      "R_urb0",
+      "R_khrb0"
+    ]
+  },
+  "provenance": {
+    "repo_head_at_job_start": "fa4a5f86ccdf09033e9421bd7e853962f3d30a51",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65l_uv_matching_interface_basis.py",
+    "workflow": "rtk-c10-65l-uv-matching-interface-basis.yml"
+  },
+  "schema": "RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_TARGET_v1.json"
+}
