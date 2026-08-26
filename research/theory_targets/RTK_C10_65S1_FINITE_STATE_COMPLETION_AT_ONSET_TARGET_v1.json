@@ -1,0 +1,57 @@
+{
+  "schema": "RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_TARGET_v1",
+  "created_utc": "2026-08-26T14:52:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s1",
+  "purpose": "Inventory every scalar perturbation coordinate actually integrated by pinned CLASS at the certified low-k onset, determine the active approximation state, and complete the conditional finite-k initial state needed by the first real completed-U1 forward canary without silently importing legacy model=2 auxiliary perturbations or unspecified higher multipoles.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json"
+  ],
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "sample": "four exact low-k anchors at a_on; historical state observer is read-only and completion parameters are irrelevant to the historical higher-multipole control",
+  "observer_contract": {
+    "default_off": true,
+    "separate_noinline_noclone_translation_unit": true,
+    "max_exported_ur_l": 30,
+    "export": [
+      "a and TCA/RSA/UFA flags",
+      "active l_max_ur",
+      "phi_CLASS integrated curvature state",
+      "delta/theta for baryons and photons",
+      "delta/theta/shear for massless UR",
+      "CDM-slot delta/theta (historical RTK Khronon carrier)",
+      "all six legacy dU,dUprime,dV,dVprime,dZ,dZprime coordinates",
+      "F_l/k^l for every active massless-UR multipole 3<=l<=min(l_max_ur,30)"
+    ]
+  },
+  "frozen_checks": [
+    "OFF path numeric rows must be SHA-identical to the C10.65r2/r2g control on all four anchors",
+    "all four observer rows must hit exact a_on within 1e-12 relative",
+    "TCA must be ON on all four anchors, consistent with C10.65f",
+    "record RSA and UFA flags rather than assuming them; for a direct completed onset initializer the observed approximation state becomes part of the source-locked contract",
+    "require l_max_ur to be common across all four anchors and <=30",
+    "for every active l>=3 require F_l/k^l finite on all four anchors; do not require high-l nested fits when values are below output-resolution stability",
+    "for l=3,4,5 require the log-log slope of |F_l| versus k across nonzero resolved anchors to differ from the regular expectation l by <=0.35 when all four values are above 1e-280; otherwise classify that l as resolution-limited rather than inventing a value",
+    "construct the completed finite state on all 9x4 completion records from C10.65n: phi_CLASS=Psi_N; delta_b=Db+3Psi_N; delta_g=Dg+4Psi_N; delta_ur=Dur+4Psi_N; theta_b=theta_g=theta_ur=k^2 VN for the declared zero-relative-velocity control; delta_cdm=(1+w_khr)(J_khr+3Psi_N); theta_cdm=k^2 VN; shear_ur=k^2 S_ur0",
+    "append the observed historical F_l values for active l>=3 only as HIGHER_ORDER_HISTORICAL_CONTROL, explicitly outside the O(k^2) matching prediction",
+    "exclude all six legacy nlde auxiliary perturbation coordinates from the completed state vector even though the historical observer confirms they are allocated",
+    "do not consume historical phi_CLASS, psi_CLASS, or any legacy dU/dV/dZ value when constructing the completed finite state",
+    "all completed state entries and active higher-order controls must be finite",
+    "do not implement forward dy/metric feedback in s1"
+  ],
+  "pass_classification": "C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED",
+  "conditional_classification": "C10_65S1_HIGHER_HIERARCHY_CONTROL_RESOLUTION_LIMITED_SCOPED",
+  "next_if_pass": "freeze C10.65s2 direct-at-a_on opt-in initialization plus first one/short-step completed-U1 production-feedback canary on one completion point x four anchors: suppress legacy nlde perturbation allocation, initialize the complete s1 state through perturb_initial_conditions, replace production Newtonian metric constraint outputs by the completed projector/RHS from the first derivative call, require exact OFF rollback and measure preferred A/H/M constraint drift before any wider integration",
+  "non_claims": [
+    "historical F_l>=3 controls are not a UV prediction",
+    "not production feedback",
+    "not same-full-action background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not resolution of C9, broader C7, or B9"
+  ]
+}
