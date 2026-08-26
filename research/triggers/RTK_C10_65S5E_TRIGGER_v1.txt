@@ -1,1 +1,1 @@
-C10.65s5e retry after preflight-only correction of the persisted s5c parent classification name; branch set, sample times, production kernel, tolerances and 1e-10 A/H/M/T bound unchanged.
+C10.65s5e retry after analyzer-only repair: endpoint AFTER dy is intentionally unmaterialized under inherited s3b/s4e no-extra-RHS observer semantics; exact s5d BEFORE identity carries first-RHS finiteness/parity. Frozen branches, times, production kernel, tolerances and 1e-10 A/H/M/T bound unchanged.
