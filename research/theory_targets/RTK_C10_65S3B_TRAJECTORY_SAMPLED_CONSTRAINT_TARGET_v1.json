@@ -1,0 +1,18 @@
+{
+  "schema":"RTK_C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_TARGET_v1",
+  "gate":"C10.65s3b",
+  "created_utc":"2026-08-26T19:40:00Z",
+  "status":"FROZEN_BEFORE_EXECUTION",
+  "parents":{"C10.65s3a":"C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED","C10.65s2k":"C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED"},
+  "purpose":"Sample the completed-U1 production trajectory at seven prospectively fixed elapsed conformal times without inserting extra RHS/observer calls inside an adaptive RK step. Each sample is an independent integration from the identical certified onset state to a fixed endpoint. Require finite state and preferred A/H/momentum constraints at every one of 28 endpoint records.",
+  "domain":{"lambda_HL":1.0016708437761068,"M_c_Mpc_inv":9066.231026460177,"a_on":0.0002203229136467,"k_Mpc_inv":[1e-05,3e-05,0.0001,0.0003]},
+  "sample_elapsed_tau_Mpc":[1e-09,3e-09,1e-08,3e-08,1e-07,3e-07,1e-06],
+  "sampling_policy":{"independent_restart_from_same_onset_for_each_endpoint":true,"same_production_kernel":true,"same_integrator_tolerance":true,"same_evolver":"rk","no_intra_step_observer_instrumentation":true,"endpoint_width_absolute_tolerance_Mpc":5e-14},
+  "constraint_policy":{"max_abs_normalized_A":1e-10,"max_abs_normalized_Hamiltonian":1e-10,"max_abs_normalized_momentum":1e-10,"max_abs_normalized_change_from_onset":1e-10,"threshold_frozen_before_execution":true},
+  "frozen_checks":{"sample_count":7,"anchor_count":4,"record_count":28,"off_numeric_text_sha256_identical_all_four":true,"before_rows_exact_s2k_before_all_samples":true,"first_rhs_relative_tolerance_inherited":5e-9,"all_endpoint_widths_within_absolute_tolerance":true,"all_endpoint_states_finite":true,"all_endpoint_approximation_states_tca_rsa_ufa_lmax":[0,0,0,17],"all_endpoint_constraints_finite":true,"all_endpoint_normalized_constraints_within_1e-10":true,"all_normalized_constraint_changes_within_1e-10":true,"same_kernel_and_tolerance_static_guard":true,"threshold_changed":false},
+  "pass_classification":"C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+  "fail_classification":"C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_FAIL_SCOPED",
+  "interpretation_if_pass":"Across seven fixed elapsed times spanning 1e-9 to 1e-6 Mpc and all four low-k anchors, independent production integrations from the certified onset state remain finite and on the completed-U1 preferred constraint manifold within the preregistered 1e-10 normalized bound. This samples, but does not continuously bound, the short trajectory.",
+  "next_if_pass":"Freeze a separately widened time interval or k-domain gate; do not proceed directly to likelihood claims. Preserve same-full-action background, UV matching, C9 and massive-neutrino limitations.",
+  "non_claims":["not a continuous-time supremum bound","not long-time cosmological stability","not full-time production evolution","not same-full-action primordial/background closure","not massive-neutrino completion","not spectra or likelihood evidence"]
+}
