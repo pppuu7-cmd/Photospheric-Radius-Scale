@@ -1,0 +1,48 @@
+{
+  "schema": "RTK_C10_NEUTRAL_CHARGE_LONG_WAVE_MEMORY_BOUND_RESULT_v1",
+  "created_utc": "2026-08-26T00:20:00Z",
+  "classification": "C10_NEUTRAL_CHARGE_LONG_WAVE_FINITE_TIME_MEMORY_BOUND_PASS_SCOPED",
+  "parent": "research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json",
+  "target": "research/theory_targets/RTK_C10_NEUTRAL_CHARGE_LONG_WAVE_MEMORY_BOUND_TARGET_v1.json",
+  "exact_starting_identity": "I_khr'=-(theta+k^2 B)",
+  "assumptions": {
+    "regular_long_wave_branch": "|theta(tau,k)| <= C_theta k^2 and |B(tau,k)| <= C_B on the finite interval, with finite k-independent C_theta,C_B",
+    "finite_interval": "Delta_tau=tau_f-tau_i<infinity",
+    "relative_statement_only": "|I_i|>=I_min>0 independent of k"
+  },
+  "proof": [
+    "Integrate the exact identity: I_f-I_i=-integral_{tau_i}^{tau_f}(theta+k^2 B)d tau.",
+    "Triangle inequality gives |I_f-I_i| <= integral(|theta|+k^2|B|)d tau.",
+    "Regularity gives |I_f-I_i| <= (C_theta+C_B) k^2 Delta_tau.",
+    "If |I_i|>=I_min>0, then |I_f/I_i-1| <= ((C_theta+C_B)Delta_tau/I_min) k^2.",
+    "Therefore I_f/I_i -> 1 as k->0 on any fixed finite regular in-EFT interval."
+  ],
+  "theorem": {
+    "absolute_bound": "|I_f-I_i| <= (C_theta+C_B) k^2 Delta_tau",
+    "relative_bound": "|I_f/I_i-1| <= ((C_theta+C_B)Delta_tau/I_min) k^2",
+    "limit": "lim_{k->0} I_f/I_i = 1 for the stated nonzero regular family",
+    "no_uniform_finite_time_attractor": "No regular finite-time in-EFT evolution satisfying the stated bounds can uniformly drive every O(1) nonzero initial neutral charge to zero as k->0."
+  },
+  "relation_to_C10_62b": {
+    "important_distinction": "The frozen C10.62b diagnostic measures the largest singular value of Y=(delta_khr,theta_khr/k), not I_khr directly.",
+    "consequence": "Even if the Y-norm contracts at some finite positive k, that alone does not demonstrate erasure of the conserved/slow neutral charge, because I_khr=delta/(1+w)-3 psi_pref uses a time-dependent map from Y and metric variables.",
+    "required_interpretation": "Compare the retained/decaying C10.62b singular direction with I_khr and add a charge-aware transfer diagnostic before claiming physical memory loss."
+  },
+  "physical_interpretation": "The neutral shift charge is a boundary/charge datum that survives regular superhorizon finite-time evolution up to O(k^2) leakage. Cosmological initial-condition uniqueness therefore requires either a pre-EFT/UV prescription fixing the charge sector, sufficiently long k-dependent evolution, or a violation of the regularity assumptions; this theorem does not choose among them.",
+  "does_not_exclude": [
+    "O(1) damping at fixed observational finite k",
+    "O(1) change over intervals Delta_tau scaling like k^-2 or faster",
+    "singular branches where theta/k^2 or B diverges as k->0",
+    "a UV/pre-EFT rule that fixes I_i, including potentially I_i=0",
+    "time-dependent contraction of the coordinate norm Y=(delta,theta/k)",
+    "additional coupled photon+baryon+UR effects at finite k"
+  ],
+  "non_claims": [
+    "not a propagating degree-of-freedom count",
+    "not a UV boundary mechanism",
+    "not full coupled adiabatic/isocurvature classification",
+    "not a finite-k no-go",
+    "not spectra or likelihood evidence"
+  ],
+  "next_gate": "Read C10.62b together with this theorem: project its transfer matrix onto the neutral-charge covector, identify whether its least-contracted direction is the I_khr direction, then freeze a charge-sector boundary prescription before the full photon+baryon+massless-UR dual-interface growing-mode test."
+}
