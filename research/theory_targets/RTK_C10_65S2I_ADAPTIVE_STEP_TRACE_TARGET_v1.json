@@ -1,0 +1,48 @@
+{
+  "schema": "RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_TARGET_v1",
+  "gate": "C10.65s2i",
+  "created_utc": "2026-08-26T19:17:00Z",
+  "status": "FROZEN_BEFORE_TRACE_EXECUTION",
+  "purpose": "Instrument only the pinned Cash-Karp step-control bookkeeping during the already-defined C10.65s2 completed-U1 short interval. Keep the original delta-tau=1e-4 Mpc, perturbation tolerance, completed-U1 production kernel, state handoff, and all physical equations unchanged. Measure accepted hdid/hnext and rejected RKCK trials so a later retry width can be frozen prospectively rather than guessed.",
+  "parents": {
+    "C10.65s2": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+    "C10.65s2h": "C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED"
+  },
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_execution": {
+    "completion_point_count": 1,
+    "anchor_count": 4,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003],
+    "a_on": 0.0002203229136467,
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "short_step_delta_tau_Mpc": 0.0001,
+    "evolver": "rk",
+    "integrator_tolerance_policy": "unchanged from C10.65s2 production workflow",
+    "trace_only_mutation": "add dormant begin/end hooks and accepted-step/rejection logging to pinned dei_rkck; no y, dy, tolerance, timescale, error estimate, h update, or acceptance decision may be modified"
+  },
+  "frozen_checks": {
+    "four_begin_and_four_end_markers": true,
+    "all_trace_values_finite": true,
+    "accepted_hdid_positive": true,
+    "accepted_steps_per_anchor_greater_than_one": true,
+    "sum_hdid_matches_1e-4_relative_tolerance": 1e-10,
+    "trace_rhs_accounting_matches_observer_exactly": true,
+    "all_rejection_counts_nonnegative": true,
+    "first_production_rhs_relative_bound_inherited": 5e-9,
+    "no_physics_or_tolerance_mutation_static_guard": true,
+    "retry_width_selected": false,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S2I_ADAPTIVE_STEP_TRACE_PASS_SCOPED",
+  "fail_classification": "C10_65S2I_ADAPTIVE_STEP_TRACE_FAIL_SCOPED",
+  "next_if_pass": "Freeze a separate C10.65s2j retry-width selection contract before executing a retry. The width-selection rule must be stated prospectively from the s2i trace (for example a fixed safety fraction of the minimum first accepted hdid across all four anchors), while retaining the original integrator tolerance and exactly-one-accepted-step requirement. C10.65s2 remains FAIL_SCOPED.",
+  "non_claims": [
+    "not a C10.65s2 retry",
+    "not a reclassification of C10.65s2",
+    "not a new integrator or altered tolerance",
+    "not finite-time stability",
+    "not full-time completed-U1 evolution",
+    "not spectra or likelihood evidence"
+  ]
+}
