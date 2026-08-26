@@ -1,0 +1,62 @@
+{
+  "schema": "RTK_C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_TARGET_v1",
+  "created_utc": "2026-08-26T17:47:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s2b",
+  "purpose": "Certify the coordinate transformation required to feed the already-certified preferred-foliation neutral-Khronon action RHS into the Newtonian CLASS CDM-slot carrier used by the frozen C10.65s2 production canary. Prevent direct insertion of preferred delta/theta derivatives into Newtonian state slots.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json",
+    "research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json"
+  ],
+  "frozen_domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "coordinate_map": {
+    "delta_N": "delta_pref - 3(1+w) H B",
+    "theta_N": "theta_pref + k^2 B",
+    "Psi_N": "psi_pref - H B",
+    "charge": "J = delta_N/(1+w)-3 Psi_N = delta_pref/(1+w)-3 psi_pref",
+    "charge_evolution": "J_prime = -theta_N"
+  },
+  "required_newtonian_rhs": {
+    "w_prime": "-3 H (1+w) (c_a^2-w)",
+    "delta_N_prime_from_charge": "-3 H (c_a^2-w) delta_N -(1+w) theta_N +3(1+w) Psi_N_prime",
+    "theta_N_prime": "theta_pref_prime + k^2 B_prime",
+    "delta_N_prime_from_differentiated_map": "delta_pref_prime -3[(1+w)_prime H B +(1+w) H_prime B +(1+w) H B_prime]",
+    "H_prime_reconstruction_for_crosscheck": "(psi_pref_prime-Psi_N_prime-H B_prime)/B for B!=0"
+  },
+  "background_closure_crosscheck": {
+    "khronon_DBI_relations": "s=sqrt(1+lambda_D x^2), w=x/[s(s+1+x)], c_a^2=x/[s^2(s+x)]",
+    "policy": "recover the positive onset x from the persisted w and lambda_D only for an independent numerical cross-check; production s2 must call the native Khronon background closure and must not infer c_a^2 from this inversion"
+  },
+  "frozen_checks": {
+    "max_state_coordinate_map_relative": 5e-10,
+    "max_delta_rhs_two_route_relative": 5e-9,
+    "max_theta_rhs_transform_identity_relative": 5e-13,
+    "all_transformed_rhs_finite": true,
+    "preferred_delta_rhs_direct_write_is_forbidden": true,
+    "preferred_theta_rhs_direct_write_is_forbidden": true,
+    "direct_preferred_delta_rhs_mismatch_must_be_macroscopic": true,
+    "min_direct_preferred_delta_rhs_relative_mismatch": 0.9,
+    "s2_target_remains_frozen_and_unchanged": true,
+    "no_production_patch_in_s2b": true
+  },
+  "pass_classification": "C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_PASS_SCOPED",
+  "fail_classification": "C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_FAIL_SCOPED",
+  "next_if_pass": "Implement C10.65s2 using the transformed Newtonian Khronon derivatives, not the preferred shadow derivatives. Before the first accepted step, use a current-state completed projector kernel rather than freezing the onset RHS across internal integrator stages.",
+  "non_claims": [
+    "not production feedback",
+    "not a finite-time stability result",
+    "not validation of the legacy khr_perturb_derivs_newtonian closure as the completed neutral action dynamics",
+    "not same-full-action background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ]
+}
