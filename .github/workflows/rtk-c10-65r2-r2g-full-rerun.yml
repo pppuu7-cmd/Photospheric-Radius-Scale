@@ -1,0 +1,161 @@
+name: RTK C10.65r2 frozen full rerun via r2g
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json'
+      - 'research/shadow/rtk_c10_65r2g_lossless_layout_adapter.py'
+      - '.github/workflows/rtk-c10-65r2-r2g-full-rerun.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  frozen-r2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify original frozen target and r2g certificate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          L=lambda p: json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json')
+          g=L('research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert t['class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert g['classification']=='C10_65R2G_SEPARATE_NOINLINE_OBSERVER_CODEGEN_ISOLATION_PASS_SCOPED'
+          assert g['threshold_changed'] is False
+          assert g['off_path']['exact_numeric_text_identity_all_four'] is True
+          c=t['frozen_checks']
+          assert c['r2_off_numeric_text_sha256_identical_to_r1_control_all_four'] is True
+          assert c['max_r1_projector_regression_relative']==5e-11
+          assert c['max_C_vs_independent_local_rhs_relative']==5e-9
+          assert c['max_C_vs_detached_parent_rhs_relative']==1e-6
+          assert c['max_Bprime_actual_slip_invariance_relative']==5e-9
+          assert c['max_weighted_photon_baryon_slip_cancel_normalized_residual']==5e-13
+          PY
+          git rev-parse HEAD | tee c10_65r2_r2g_repo_head.txt
+      - name: Prepare pinned r1 control and r2g disposable trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_r1
+          git -C class_r1 reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_r1/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_r1/include/
+          for s in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do
+            python3 "rtk/$s" class_r1
+          done
+          make -C class_r1 -j2 class
+          cp -a class_r1 class_r2
+          cp rtk/rtk_c10_65r2_observer.c class_r2/source/
+          cp rtk/rtk_c10_65r2_observer.h class_r2/include/
+          python3 rtk/apply_rtk_c10_65r2g_separate_observer_patch.py class_r2
+          make -C class_r2 clean
+          make -C class_r2 -j2 class
+      - name: Write matched control OFF and 3x3x4 inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          proto=json.load(open('research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          pts=[]; seen=set()
+          for q in proto['points']:
+              key=(float(q['lambda_HL']),float(q['M_c_Mpc_inv']))
+              if key not in seen: seen.add(key); pts.append(key)
+          assert len(pts)==9
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {pts[0][0]:.17g}\nc10_65r1_Mc = {pts[0][1]:.17g}\n'''
+          for d in ('class_r1/output','class_r2/output'): pathlib.Path(d).mkdir(exist_ok=True)
+          pathlib.Path('class_r1/control.ini').write_text(common+'root = output/control_\n')
+          pathlib.Path('class_r2/off.ini').write_text(common+'c10_65r2_diag = 0\nroot = output/off_\n')
+          man=[]
+          for i,(lam,Mc) in enumerate(pts):
+              pref=f'p{i:02d}_'
+              pathlib.Path(f'class_r2/p{i:02d}.ini').write_text(common+f'c10_65r1_lambda_HL = {lam:.17g}\nc10_65r1_Mc = {Mc:.17g}\nc10_65r2_diag = 1\nroot = output/{pref}\n')
+              man.append({'prefix':pref,'lambda_HL':lam,'M_c_Mpc_inv':Mc})
+          pathlib.Path('c10_65r2_manifest.json').write_text(json.dumps({'points':man},indent=2)+'\n')
+          PY
+      - name: Verify dormant r2g OFF path exactly
+        run: |
+          set -euo pipefail
+          (cd class_r1 && ./class control.ini) > c10_65r2_r1_control.log 2>&1
+          (cd class_r2 && ./class off.ini) > c10_65r2_off.log 2>&1
+          test "$(find class_r1/output -maxdepth 1 -type f -iname 'control_*perturbations*' | wc -l)" -eq 4
+          test "$(find class_r2/output -maxdepth 1 -type f -iname 'off_*perturbations*' | wc -l)" -eq 4
+          if grep -q 'c10_65r2_B_prime' class_r2/output/off_*perturbations*; then echo 'r2 columns leaked into OFF path'; exit 1; fi
+      - name: Run actual r2g 3x3x4 diagnostic grid
+        run: |
+          set -euo pipefail
+          for f in class_r2/p*.ini; do b="$(basename "$f")"; (cd class_r2 && ./class "$b") >> c10_65r2_on.log 2>&1; done
+          test "$(find class_r2/output -maxdepth 1 -type f -iname 'p*_perturbations*' | wc -l)" -eq 36
+      - name: Losslessly adapt r2g diagnostic tail for original frozen analyzer
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65r2g_lossless_layout_adapter.py --glob 'class_r2/output/p*_perturbations*' --output-dir class_r2_adapter
+          test "$(find class_r2_adapter -maxdepth 1 -type f -iname 'p*_perturbations*' | wc -l)" -eq 36
+      - name: Execute original frozen C10.65r2 analyzer unchanged
+        run: |
+          set -euo pipefail
+          set +e
+          python3 research/shadow/rtk_c10_65r2_in_class_first_rhs_diagnostic_parity.py \
+            --r1-control-glob 'class_r1/output/control_*perturbations*' \
+            --r2-off-glob 'class_r2/output/off_*perturbations*' \
+            --r2-dir class_r2_adapter --manifest c10_65r2_manifest.json \
+            --patch rtk/apply_rtk_c10_65r2g_separate_observer_patch.py \
+            --output research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json | tee c10_65r2_r2g.log
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo "$rc" > c10_65r2_analyzer_rc.txt
+          test -f research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json'; d=json.load(open(p))
+          d['provenance']={'repo_head_at_job_start':open('c10_65r2_r2g_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2-r2g-full-rerun.yml','implementation':'C10.65r2g separate noinline/noclone observer','r2_patch':'rtk/apply_rtk_c10_65r2g_separate_observer_patch.py','layout_adapter':'research/shadow/rtk_c10_65r2g_lossless_layout_adapter.py','analyzer':'research/shadow/rtk_c10_65r2_in_class_first_rhs_diagnostic_parity.py','original_frozen_target_unchanged':True,'original_frozen_analyzer_unchanged':True,'threshold_changed':False,'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'analyzer_exit_code':int(open('c10_65r2_analyzer_rc.txt').read())}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result before pass assertion
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json /tmp/r2.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r2.json research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json
+            git commit -m 'Record frozen C10.65r2 full rerun via r2g' || break
+            if git push origin HEAD:rtk-class-build; then break; fi
+          done
+      - name: Assert original frozen C10.65r2 pass
+        run: |
+          set -euo pipefail
+          git fetch origin rtk-class-build
+          git show origin/rtk-class-build:research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json > /tmp/r2-final.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/r2-final.json'))
+          assert d['classification']=='C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_PASS_SCOPED', d['classification']
+          assert d['threshold_changed'] is False
+          assert d['off_path']['numeric_text_sha256_identical_all_four'] is True
+          assert d['grid_point_count']==9 and d['anchor_count_per_point']==4
+          PY
