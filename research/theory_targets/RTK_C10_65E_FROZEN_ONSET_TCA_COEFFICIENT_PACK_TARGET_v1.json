@@ -1,0 +1,53 @@
+{
+  "schema": "RTK_C10_65E_FROZEN_ONSET_TCA_COEFFICIENT_PACK_TARGET_v1",
+  "created_utc": "2026-08-26T00:44:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65e",
+  "question": "On the same pinned production background and common finite-EFT onset used by C10.65a, what exact photon-baryon compromise_CLASS tight-coupling thermodynamic coefficient pack must be supplied to the corrected completed-U1 O(k^2) rank solver?",
+  "parents": [
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json"
+  ],
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "sample": {
+    "a": "exact same a_on as C10.65a/C10.62 production support",
+    "k_Mpc_inv": "the same nine positive modes used by C10.65a"
+  },
+  "read_only_columns": [
+    "R=4 rho_gamma/(3 rho_b)",
+    "cb2",
+    "dkappa",
+    "ddkappa",
+    "tau_c=1/dkappa",
+    "dtau_c=-ddkappa tau_c^2",
+    "F=tau_c/(1+R)",
+    "F_prime=dtau_c/(1+R)+tau_c Hc R/(1+R)^2",
+    "tca_flag=ppw->approx[index_ap_tca]",
+    "tau_c_over_tau_h=tau_c Hc",
+    "tau_c_over_tau_k=tau_c k",
+    "has_perturbed_recombination"
+  ],
+  "acceptance": [
+    "regenerate all nine read-only histories from the pinned CLASS tree with the normal RTK production patch sequence",
+    "append diagnostics only; do not modify background, perturbation, collision or gravity equations",
+    "interpolate all modes to the exact C10.65a a_on",
+    "require finite R,cb2,dkappa,ddkappa,tau_c,dtau_c,F,F_prime and R>0, dkappa>0, tau_c>0, F>0",
+    "require 0<=cb2<1 on every frozen onset sample",
+    "require tau_c/tau_h<0.015 and tau_c/tau_k<0.01 on every frozen mode, matching the source-locked compromise_CLASS TCA switch contract",
+    "require a common numeric tca_flag across all nine modes and report it without assuming the enum integer in the target",
+    "require the background/thermodynamic coefficient spread across k at fixed a_on to be <=1e-8 relative for R,cb2,dkappa,ddkappa,tau_c,dtau_c,F,F_prime",
+    "verify exported algebraic tau_c,dtau_c,F,F_prime and trigger ratios against independent analyzer reconstruction to <=1e-12 relative",
+    "report has_perturbed_recombination; do not import delta_temp as an independent TCA datum because the pinned helper initializes it to zero while TCA is on"
+  ],
+  "pass_classification": "C10_65E_FROZEN_ONSET_TCA_COEFFICIENT_PACK_PASS_SCOPED",
+  "next_if_pass": "implement the corrected detached O(k^2) coefficient/rank solver using Delta I_iso=0, the source-locked compromise_CLASS hierarchy and this frozen onset coefficient pack; solve V_khr0 and B0 and run the frozen lambda_HL/M_c grid",
+  "non_claims": [
+    "not the completed-U1 rank solution",
+    "not a new thermodynamics model",
+    "not same-full-action background closure",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ]
+}
