@@ -1,0 +1,102 @@
+name: RTK C10.65s4a moderate-k onset-state domain preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['research/triggers/RTK_C10_65S4A_MODERATE_K_ONSET_PREFLIGHT_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen target and parents
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s4a_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1.json');d=L('research/theory_results/RTK_C10_65S3D_MATERIALLY_LONGER_TIME_TRAJECTORY_RESULT_v1.json');s=L('research/theory_results/RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_RESULT_v1.json');f=L('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION';assert t['domain']['new_k_Mpc_inv']==[0.001,0.003];assert t['prospective_domain_guards']['max_k_over_Hc']==0.25;assert t['prospective_domain_guards']['max_abs_A2_k2_over_J']==0.005
+          assert d['classification']=='C10_65S3D_MATERIALLY_LONGER_TIME_TRAJECTORY_PASS_SCOPED';assert s['classification']=='C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED';assert f['classification']=='C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED'
+          print('C10_65S4A_TARGET_AND_PARENTS_LOCKED')
+          PY
+      - name: Prepare pinned control and observer trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control
+          git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          for s in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do python3 "rtk/$s" class_control; done
+          make -C class_control -j2 class
+          cp -a class_control class_s4a
+          python3 rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py class_s4a
+          make -C class_s4a clean
+          make -C class_s4a -j2 class
+      - name: Write frozen four-anchor inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1.json');n=L('research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json');p=L('research/state/current.json')['final_replay_result']['rtk']['params'];q=n['points'][0];kvals=', '.join(format(float(x),'.17g') for x in t['domain']['all_k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nl_max_ur = 17\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {float(q['lambda_HL']):.17g}\nc10_65r1_Mc = {float(q['M_c_Mpc_inv']):.17g}\n'''
+          for d in ('class_control/output','class_s4a/output'): pathlib.Path(d).mkdir(exist_ok=True)
+          pathlib.Path('class_control/control.ini').write_text(common+'root = output/control_\n');pathlib.Path('class_s4a/off.ini').write_text(common+'root = output/off_\n');pathlib.Path('class_s4a/on.ini').write_text(common+'root = output/on_\n')
+          PY
+      - name: Verify exact dormant OFF identity
+        run: |
+          set -euo pipefail
+          (cd class_control && ./class control.ini)>s4a_control.log 2>&1
+          (cd class_s4a && env -u RTK_C10_65S1_OBSERVER_FILE ./class off.ini)>s4a_off.log 2>&1
+          python3 - <<'PY'
+          import glob,hashlib,json,pathlib
+          def num(p):return [x.strip() for x in pathlib.Path(p).read_text().splitlines() if x.strip() and not x.lstrip().startswith('#')]
+          def dig(p):return hashlib.sha256(('\n'.join(num(p))+'\n').encode()).hexdigest()
+          A=sorted(glob.glob('class_control/output/control_*perturbations*'));B=sorted(glob.glob('class_s4a/output/off_*perturbations*'));assert len(A)==len(B)==4,(len(A),len(B));rows=[];ok=True
+          for x,y in zip(A,B):
+              a,b=dig(x),dig(y);same=a==b;ok &= same;rows.append({'control':x,'observer_off':y,'control_sha256':a,'observer_off_sha256':b,'identical':same})
+          pathlib.Path('s4a_off_identity.json').write_text(json.dumps({'all_four_numeric_rows_sha256_identical':bool(ok),'records':rows},indent=2)+'\n');assert ok
+          PY
+      - name: Run read-only moderate-k onset observer
+        run: |
+          set -euo pipefail
+          rm -f s4a_observer.csv
+          (cd class_s4a && RTK_C10_65S1_OBSERVER_FILE="$(pwd)/../s4a_observer.csv" ./class on.ini)>s4a_on.log 2>&1
+          test -s s4a_observer.csv
+      - name: Execute frozen s4a analyzer
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s4a_moderate_k_onset_state_domain_preflight.py rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py
+          python3 research/shadow/rtk_c10_65s4a_moderate_k_onset_state_domain_preflight.py --observer s4a_observer.csv --off-identity s4a_off_identity.json --patch rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py --output research/theory_results/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json | tee s4a.log
+          grep -q '^C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED' s4a.log
+      - name: Persist result and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json'; [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s4a_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s4a-moderate-k-onset-preflight.yml','observer_patch':'rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py','analyzer':'research/shadow/rtk_c10_65s4a_moderate_k_onset_state_domain_preflight.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          c=pathlib.Path('research/checkpoints/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_2026-08-26T2000Z.md');c.write_text(f"# RTK C10.65s4a moderate-k onset-state domain preflight\n\nClassification: `{d['classification']}`. New anchors: `1e-3, 3e-3 Mpc^-1`; max k/Hc: `{d['max_k_over_Hc']:.17e}`; max |A2 k^2/J|: `{d['max_abs_A2_k2_over_J']:.17e}`.\n\nThis gate checks state-domain availability only; no completed-U1 seed or production trajectory at the new k values is certified here.\n")
+          PY
+          cp "$p" /tmp/r.json;cp research/checkpoints/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_2026-08-26T2000Z.md /tmp/c.md
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r.json "$p";cp /tmp/c.md research/checkpoints/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_2026-08-26T2000Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_2026-08-26T2000Z.md;git commit -m 'Record C10.65s4a moderate-k onset preflight' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s4a-moderate-k-onset-preflight
+          path: |
+            s4a_observer.csv
+            s4a_off_identity.json
+            s4a_on.log
+            s4a.log
+            research/theory_results/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json
