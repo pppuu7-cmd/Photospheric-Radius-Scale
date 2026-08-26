@@ -1,0 +1,100 @@
+name: RTK C10.65s4a2 exact-onset geometry audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['research/triggers/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  geometry-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen geometry target and historical parents
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s4a2_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_TARGET_v1.json')
+          a=L('research/theory_results/RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json')
+          r=L('research/theory_results/RTK_C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert t['fixed_domain']['k_Mpc_inv']==[0.001,0.003]
+          assert a['classification']=='C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED'
+          assert a['provenance']['github_actions_run_id']==33008706959
+          assert a['provenance']['historical_failed_attempt_run_id']==33008095108
+          assert r['classification']=='C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_PASS_SCOPED'
+          assert r['provenance']['github_actions_run_id']==33008538013
+          print('C10_65S4A2_TARGET_AND_HISTORY_LOCKED')
+          PY
+      - name: Construct pinned current diagnostic tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_s4a2
+          git -C class_s4a2 reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_s4a2/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_s4a2/include/
+          for s in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do python3 "rtk/$s" class_s4a2; done
+          python3 rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py class_s4a2
+          python3 rtk/apply_rtk_c10_65s4a1_exact_onset_sampling_patch.py class_s4a2
+          python3 rtk/apply_rtk_c10_65s4a2_geometry_audit_patch.py class_s4a2
+          make -C class_s4a2 -j2 class
+      - name: Write fixed two-anchor diagnostic input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p:json.load(open(p)); n=L('research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json');p=L('research/state/current.json')['final_replay_result']['rtk']['params'];q=n['points'][0]
+          txt=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = 0.001, 0.003\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nl_max_ur = 17\nc10_65r0_diag = 0\nc10_65r1_diag = 0\nc10_65r1_lambda_HL = {float(q['lambda_HL']):.17g}\nc10_65r1_Mc = {float(q['M_c_Mpc_inv']):.17g}\nroot = output/geo_\n'''
+          pathlib.Path('class_s4a2/output').mkdir(exist_ok=True);pathlib.Path('class_s4a2/geometry.ini').write_text(txt)
+          PY
+      - name: Run read-only geometry observer
+        run: |
+          set -euo pipefail
+          rm -f s4a2_geometry.csv
+          (cd class_s4a2 && env -u RTK_C10_65S1_OBSERVER_FILE -u RTK_C10_65S4A1_EXACT_ONSET RTK_C10_65S4A2_GEOMETRY_FILE="$(pwd)/../s4a2_geometry.csv" ./class geometry.ini) > s4a2_class.log 2>&1
+          test -s s4a2_geometry.csv
+          test "$(wc -l < s4a2_geometry.csv)" -eq 2
+      - name: Execute frozen geometry analyzer
+        run: |
+          set -euo pipefail
+          python3 -m py_compile rtk/apply_rtk_c10_65s4a2_geometry_audit_patch.py research/shadow/rtk_c10_65s4a2_exact_onset_geometry_audit.py
+          python3 research/shadow/rtk_c10_65s4a2_exact_onset_geometry_audit.py --geometry s4a2_geometry.csv --patch rtk/apply_rtk_c10_65s4a2_geometry_audit_patch.py --output research/theory_results/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_RESULT_v1.json | tee s4a2.log
+          grep -q '^C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_PASS_SCOPED' s4a2.log
+      - name: Persist geometry result and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_RESULT_v1.json'; [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_RESULT_v1.json');d=json.loads(p.read_text())
+          d['provenance']={'repo_head_at_job_start':pathlib.Path('s4a2_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s4a2-exact-onset-geometry-audit.yml','patch':'rtk/apply_rtk_c10_65s4a2_geometry_audit_patch.py','analyzer':'research/shadow/rtk_c10_65s4a2_exact_onset_geometry_audit.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          c=pathlib.Path('research/checkpoints/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_2026-08-26T2015Z.md');c.write_text(f"# RTK C10.65s4a2 exact-onset geometry audit\n\nClassification: `{d['classification']}`. Max inverse round-trip relative a error: `{d['max_inverse_roundtrip_relative_a_error']:.17e}`. Max corrected forward relative a error: `{d['max_corrected_forward_relative_a_error']:.17e}`.\n\nBoth historical C10.65s4a failures remain preserved. This audit is read-only and does not certify a new completed-U1 seed or trajectory.\n")
+          PY
+          cp "$p" /tmp/r.json;cp research/checkpoints/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_2026-08-26T2015Z.md /tmp/c.md
+          for n in 1 2 3 4 5; do
+            git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r.json "$p";cp /tmp/c.md research/checkpoints/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_2026-08-26T2015Z.md
+            git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$p" research/checkpoints/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_2026-08-26T2015Z.md;git commit -m 'Record C10.65s4a2 exact-onset geometry audit' || exit 0
+            git push origin HEAD:rtk-class-build && exit 0
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s4a2-exact-onset-geometry-audit
+          path: |
+            s4a2_geometry.csv
+            s4a2_class.log
+            s4a2.log
+            research/theory_results/RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_RESULT_v1.json
