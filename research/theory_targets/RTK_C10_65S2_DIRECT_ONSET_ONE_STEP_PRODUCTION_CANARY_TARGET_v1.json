@@ -3,7 +3,7 @@
   "created_utc": "2026-08-26T16:44:13Z",
   "status": "FROZEN_BEFORE_IMPLEMENTATION",
   "gate": "C10.65s2",
-  "purpose": "Execute the first deliberately narrow completed-U1 production-feedback canary inside pinned CLASS: perform a deterministic opt-in direct handoff at the certified a_on, suppress the historical legacy nlde perturbation carrier allocation from the completed state, initialize the complete C10.65s1 finite state, feed the certified completed-U1 projector/first-RHS quantities into the real Newtonian-gauge production path, and advance exactly one accepted short integrator step on one certified completion point across the four exact low-k anchors. This gate measures preferred A/H/M constraint drift but does not turn that first measurement into a post-hoc long-time stability threshold.",
+  "purpose": "Execute the first deliberately narrow completed-U1 production-feedback canary inside pinned CLASS: perform a deterministic opt-in direct handoff at the certified a_on, suppress the historical legacy nlde perturbation carrier allocation from the completed state, initialize the complete C10.65s1 finite state through the source-locked initialization path, feed the certified completed-U1 projector/first-RHS quantities into the real Newtonian-gauge production path, and advance exactly one accepted short integrator step on one certified completion point across the four exact low-k anchors. This gate measures preferred A/H/M constraint drift but does not turn that first measurement into a post-hoc long-time stability threshold.",
   "parents": {
     "C10.65s1": "C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED",
     "C10.65s0_handoff": "C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_PASS_SCOPED",
@@ -29,17 +29,18 @@
     "deterministic_handoff_site": "perturb_solve interval boundary after perturb_vector_init and before generic_evolver",
     "arbitrary_a_on_policy": "split the containing interval at deterministic tau_on without changing approximation criteria",
     "initial_state_source": "C10.65s1 completed finite state only; active higher UR multipoles may use the observed s1 HIGHER_ORDER_HISTORICAL_CONTROL values solely to complete the historical canary state and are not promoted to a UV prediction",
+    "ordinary_state_initialization_policy": "ordinary photon/baryon/UR/metric scalar coordinates must enter through perturb_initial_conditions / perturb_vector_init ownership, not through ad-hoc mutation inside perturb_derivs; any implementation requiring a new post-vector handoff write beyond the C10.65s0-certified carrier slots is out of scope and must first receive a separate architecture proof",
     "legacy_nlde_auxiliary_policy": "do not import or initialize dU,dUprime,dV,dVprime,dZ,dZprime as completed-U1 physical perturbations; suppress their historical completed-state role in the opt-in canary",
     "allowed_integrated_handoff_writes": [
       "pv->y[index_pt_delta_cdm]",
-      "pv->y[index_pt_theta_cdm]",
-      "the ordinary CLASS scalar state coordinates enumerated and completed by C10.65s1 at vector initialization/handoff only"
+      "pv->y[index_pt_theta_cdm]"
     ],
     "allowed_production_feedback_after_handoff": [
       "completed-U1 Newtonian metric/projector algebraic outputs on the opt-in s2 path",
       "completed-U1 first RHS values certified by C10.65r2 for the corresponding production derivative slots"
     ],
     "forbidden": [
+      "ad-hoc post-vector mutation of photon, baryon, UR, metric or higher-hierarchy integrated coordinates at tau_on",
       "state mutation from inside an adaptive RHS callback except normal dy evaluation by the integrator",
       "changing TCA/RSA/UFA switching criteria or collision coefficients",
       "changing approximation interval boundaries except the explicit deterministic tau_on split",
@@ -77,6 +78,7 @@
     "constraint_before_after_all_finite": true,
     "legacy_nlde_completed_state_exclusion_static_guard": true,
     "handoff_write_site_static_guard": true,
+    "ordinary_state_initialization_ownership_static_guard": true,
     "no_switching_or_collision_mutation_static_guard": true,
     "no_unlisted_state_or_metric_boundary_datum_static_guard": true,
     "threshold_changed_from_frozen_r2_rhs_parity": false
