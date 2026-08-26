@@ -5,6 +5,10 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 R1=['c10_65r1_W_khr','c10_65r1_Db','c10_65r1_Dg','c10_65r1_DA','c10_65r1_delta_mu_pref','c10_65r1_Qpref','c10_65r1_psi_pref','c10_65r1_psi_pref_prime','c10_65r1_phi_pref','c10_65r1_B_pref','c10_65r1_B_den','c10_65r1_V_N','c10_65r1_Psi_N','c10_65r1_Phi_N','c10_65r1_sigma_g_over_k2','c10_65r1_shear_feedback_den']
 R2=['c10_65r2_B_general','c10_65r2_B_prime','c10_65r2_B_prime_actual','c10_65r2_Psi_N_prime','c10_65r2_metric_continuity_shadow','c10_65r2_metric_euler_shadow','c10_65r2_tca_slip_shadow','c10_65r2_theta_b_prime_shadow','c10_65r2_theta_g_prime_shadow','c10_65r2_theta_ur_prime_shadow','c10_65r2_delta_khr_prime_shadow','c10_65r2_theta_khr_prime_shadow','c10_65r2_weighted_slip_cancel']
+# weighted_slip_cancel is a zero-target cancellation residual with its own frozen
+# absolute/normalized bound.  A relative comparison of 0 versus roundoff-sized
+# ~1e-16 is ill-conditioned and is not the target's scientific-parity metric.
+R2_SCI=[x for x in R2 if x!='c10_65r2_weighted_slip_cancel']
 def L(p): return json.loads((ROOT/p).read_text())
 def lines(p): return [s.strip() for s in Path(p).read_text().splitlines() if s.strip() and not s.lstrip().startswith('#')]
 def sha(p): return hashlib.sha256(('\n'.join(lines(p))+'\n').encode()).hexdigest()
@@ -32,11 +36,12 @@ def main():
   tau,av,v=min(rr,key=lambda z:abs(z[1]-aon)); erra=abs(av-aon)/aon; exacton &= erra<=float(t['frozen_checks']['on_path_exact_onset_relative_tolerance'])
   if len(v)<len(tail): raise RuntimeError('ON row shorter than r1+r2 tail')
   z={name:v[-len(tail)+j] for j,name in enumerate(tail)}
-  errs={name:rel(z[name],float(pv['C'][name])) for name in R2}; mp=max(errs.values()); maxprev=max(maxprev,mp)
+  errs={name:rel(z[name],float(pv['C'][name])) for name in R2_SCI}
+  worst=max(errs,key=errs.get); mp=errs[worst]; maxprev=max(maxprev,mp)
   er1=rel(z['c10_65r2_B_general'],z['c10_65r1_B_pref']); maxr1=max(maxr1,er1)
-  maxcancel=max(maxcancel,abs(z['c10_65r2_weighted_slip_cancel']))
+  cancel=abs(z['c10_65r2_weighted_slip_cancel']); maxcancel=max(maxcancel,cancel)
   finite &= all(math.isfinite(z[x]) for x in tail)
-  rec.append({'k':k,'relative_a_error':erra,'max_r2_vs_previous_relative':mp,'r1_B_regression_relative':er1,'weighted_slip_cancel':z['c10_65r2_weighted_slip_cancel']})
+  rec.append({'k':k,'relative_a_error':erra,'max_r2_vs_previous_scientific_relative':mp,'worst_scientific_column':worst,'r1_B_regression_relative':er1,'weighted_slip_cancel':z['c10_65r2_weighted_slip_cancel'],'weighted_slip_cancel_previous':float(pv['C']['c10_65r2_weighted_slip_cancel'])})
  core=Path(a.core_patch).read_text(); oc=Path(a.observer_c).read_text(); oh=Path(a.observer_h).read_text()
  caller_line='rtk_c10_65r2_observe(pba,pth,ppw,k,dataptr,&storeidx);'
  caller_no_r1=(caller_line in core and 'r1_' not in caller_line)
@@ -47,6 +52,6 @@ def main():
  th=t['frozen_checks']
  ok=(exact and exacton and finite and maxr1<=float(th['on_path_r1_projector_regression_relative']) and maxprev<=float(th['on_path_r2_vs_previous_scientific_parity_relative']) and maxcancel<=float(th['on_path_weighted_slip_cancel_normalized']) and caller_no_r1 and no_dy and no_prod and sep and noin)
  cls=t['pass_classification'] if ok else t['fail_classification']
- out={'schema':'RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1','gate':'C10.65r2g','classification':cls,'target':'research/theory_targets/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_TARGET_v1.json','off_path':{'exact_numeric_text_identity_all_four':exact,'max_relative_difference':0.0 if exact else None,'records':off},'on_path':{'exact_onset_all':exacton,'all_finite':finite,'max_r1_projector_regression_relative':maxr1,'max_r2_vs_previous_scientific_parity_relative':maxprev,'max_weighted_slip_cancel_normalized':maxcancel,'records':rec},'static_guards':{'caller_does_not_reference_r1_temporaries':caller_no_r1,'no_dy_write':no_dy,'no_production_metric_or_rhs_write':no_prod,'observer_is_separate_object':sep,'observer_entry_noinline_noclone':noin},'threshold_changed':False,'next':t['next_if_pass'] if ok else t['next_if_fail'],'non_claims':t['non_claims']}
- Path(a.output).write_text(json.dumps(out,indent=2,sort_keys=True)+'\n'); print(cls,json.dumps({'off_exact':exact,'max_r1':maxr1,'max_r2_previous':maxprev,'max_cancel':maxcancel},sort_keys=True))
+ out={'schema':'RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1','gate':'C10.65r2g','classification':cls,'target':'research/theory_targets/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_TARGET_v1.json','analyzer_semantics':{'scientific_relative_parity_columns':R2_SCI,'zero_target_weighted_slip_cancel_checked_only_by_its_dedicated_frozen_bound':True,'frozen_thresholds_changed':False},'off_path':{'exact_numeric_text_identity_all_four':exact,'max_relative_difference':0.0 if exact else None,'records':off},'on_path':{'exact_onset_all':exacton,'all_finite':finite,'max_r1_projector_regression_relative':maxr1,'max_r2_vs_previous_scientific_parity_relative':maxprev,'max_weighted_slip_cancel_normalized':maxcancel,'records':rec},'static_guards':{'caller_does_not_reference_r1_temporaries':caller_no_r1,'no_dy_write':no_dy,'no_production_metric_or_rhs_write':no_prod,'observer_is_separate_object':sep,'observer_entry_noinline_noclone':noin},'threshold_changed':False,'next':t['next_if_pass'] if ok else t['next_if_fail'],'non_claims':t['non_claims']}
+ Path(a.output).write_text(json.dumps(out,indent=2,sort_keys=True)+'\n'); print(cls,json.dumps({'off_exact':exact,'max_r1':maxr1,'max_r2_previous_scientific':maxprev,'max_cancel':maxcancel},sort_keys=True))
 if __name__=='__main__': main()
