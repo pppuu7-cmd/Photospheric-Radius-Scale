@@ -1,0 +1,104 @@
+name: RTK C10.65m historical control matching values
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65m_historical_control_matching_values.py'
+      - '.github/workflows/rtk-c10-65m-historical-control-matching-values.yml'
+permissions:
+  contents: write
+jobs:
+  control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install numeric dependency
+        run: python3 -m pip install --disable-pip-version-check 'numpy==2.3.2'
+      - name: Verify frozen parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_TARGET_v1.json'))
+          l=json.load(open('research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json'))
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert l['classification']=='C10_65L_UV_MATCHING_INTERFACE_BASIS_PASS_SCOPED'
+          assert f['classification']=='C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED'
+          PY
+          git rev-parse HEAD | tee c10_65m_repo_head.txt
+      - name: Prepare disposable pinned production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control
+          git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          python3 rtk/apply_rtk_class_patch.py class_control
+          python3 rtk/upgrade_rtk_inputs.py class_control
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_control
+          python3 rtk/upgrade_rtk_initial_conditions.py class_control
+          python3 rtk/upgrade_rtk_matter_sources.py class_control
+          python3 rtk/upgrade_rtk_gamma_root.py class_control
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_control
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_control
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_control
+          make -C class_control -j2 class
+      - name: Write four-anchor input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          body=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nroot = output/c1065m_\nwrite parameters = yeap\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\n'''
+          pathlib.Path('class_control/c1065m.ini').write_text(body)
+          pathlib.Path('class_control/output').mkdir(exist_ok=True)
+          PY
+      - name: Generate read-only histories
+        run: |
+          set -euo pipefail
+          (cd class_control && ./class c1065m.ini) > c10_65m_class.log 2>&1
+          find class_control/output -maxdepth 1 -type f -iname '*perturbations*' -print | sort > c10_65m_files.txt
+          test "$(wc -l < c10_65m_files.txt)" -eq 4
+      - name: Extract historical control vector
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65m_historical_control_matching_values.py
+          python3 research/shadow/rtk_c10_65m_historical_control_matching_values.py --glob 'class_control/output/*perturbations*' --output c10_65m_result.json | tee c10_65m.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='c10_65m_result.json'; d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65m_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65m-historical-control-matching-values.yml','worker':'research/shadow/rtk_c10_65m_historical_control_matching_values.py','source_export_patch':'rtk/apply_rtk_c10_source_export_patch.py','species_control_patch':'rtk/apply_rtk_c10_65a_species_control_patch.py','numpy':'2.3.2'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_65m_result.json /tmp/c10_65m_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_65m_result.json research/theory_results/RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_RESULT_v1.json
+            git commit -m 'Record C10.65m historical control matching values' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
