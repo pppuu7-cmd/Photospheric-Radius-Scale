@@ -12,8 +12,12 @@ from pathlib import Path
 import subprocess,sys,tempfile
 
 root=Path(sys.argv[1] if len(sys.argv)>1 else 'class_public').resolve()
+repo=Path(__file__).resolve().parents[1]
 v1=Path(__file__).resolve().with_name('apply_rtk_c10_65s2_production_canary_patch.py')
 src=v1.read_text()
+# A temporary generator lives under /tmp, so freeze its repository root to the
+# actual checked-out RTK repository rather than recomputing it from __file__.
+src=src.replace("repo=Path(__file__).resolve().parents[1]",f"repo=Path({str(repo)!r})",1)
 start=src.index('# Khronon production RHS:')
 end=src.index('# One-step canary',start)
 replacement=r"""# Khronon production RHS: branch before the RTK-base model=2 Khronon fallback.
