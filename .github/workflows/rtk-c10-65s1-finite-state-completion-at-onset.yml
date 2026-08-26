@@ -136,3 +136,5 @@ jobs:
             if git push origin HEAD:rtk-class-build; then exit 0; fi
           done
           exit 1
+
+# Non-functional workflow rerun marker 2026-08-26T16:29Z; frozen s1 target unchanged.
