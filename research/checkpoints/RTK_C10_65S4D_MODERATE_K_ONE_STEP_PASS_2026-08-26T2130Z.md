@@ -3,7 +3,7 @@
 UTC checkpoint: 2026-08-26T21:30Z
 Branch: `rtk-class-build`
 Pinned CLASS upstream: `36cf283628c4a3330ec9fd3d84239bf775f77317`
-Scientific workflow run: `33014408144` (successful final rerun job)
+Scientific workflow run: `33015496671` (successful final execution)
 Classification: `C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_PASS_SCOPED`
 
 ## Recovered frontier
@@ -20,11 +20,13 @@ The retry step width is inherited prospectively from s2k; integrator/kernel tole
 
 ## Harness failures before scientific execution
 
-The first attempts of run 33014408144 died before any OFF rollback or canary execution. They are infrastructure/software failures, not scientific s4d failures.
+Earlier attempts failed before any scientific analyzer classification and are infrastructure/software failures, not scientific s4d failures.
 
-1. The domain patch searched for the Python f-string source spelling `S[4]={{...}}` instead of the rendered C initializer `S[4]={...}`. The patch was changed to a structural generated-C regex bounded by the following `DT` declaration.
-2. A whole-file postcondition searched for the bare substring `0.0001` and falsely matched unrelated constants. It was replaced by parsing only the first field of the actual `S[2]` seed rows and checking the domain numerically.
-3. The frozen workflow snapshot accepted two textual serializations of the same binary64 retry width, while `.17g` emitted another equivalent round-tripping representation. The domain adapter now writes the same binary64 `DT` using a canonical `.16g` representation and explicitly asserts that reparsing it gives exactly the frozen target float. No numerical width changed.
+1. The domain patch initially searched for the wrong rendered seed-table spelling and was replaced by structural generated-C selection bounded by the `DT` declaration.
+2. A whole-file bare `0.0001` guard falsely matched unrelated constants; it was replaced by seed-row/domain-aware checking.
+3. The frozen binary64 retry width had several equivalent textual serializations; the adapter now canonicalizes the literal and verifies reparsing equals the exact frozen target float. No numerical width changed.
+
+The first failed workflow was run `33014408144`; it did not produce the final scientific PASS. The final successful workflow was run `33015496671`.
 
 No scientific threshold, equation, mode, completion parameter, tolerance, or pass criterion was relaxed in these fixes.
 
@@ -50,9 +52,13 @@ Numerical worst cases:
 - boundary carrier relative error: `0`;
 - higher-UR boundary relative error: `0`;
 - largest measured post-step normalized momentum-constraint residual/change: `3.0083646253800744e-16` at `k=3e-3 Mpc^-1`;
-- A and Hamiltonian residual changes are zero at the serialized precision for both modes.
+- A and Hamiltonian residual changes are zero at serialized precision for both modes.
 
 Observed accepted widths were `3.539923909556819e-10 Mpc` for both modes, consistent with the frozen retry-width machinery. The target width itself was not changed.
+
+## Provenance repair
+
+The successful scientific result was first committed by workflow run `33015496671` in commit `5964ec4d`. A later checkpoint process accidentally wrote the earlier failed run ID `33014408144` into the persisted provenance while leaving the scientific data and observer SHA unchanged. This checkpoint and the JSON provenance were corrected from the immutable successful result; no scientific field or threshold was changed.
 
 ## Interpretation
 
