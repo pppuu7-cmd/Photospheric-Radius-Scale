@@ -1,5 +1,6 @@
 execute frozen C10.65s4b moderate-k completed onset seed audit
 rerun_after_execution_only_serialization_fix=2026-08-26T2045Z
 rerun_after_execution_only_classification_guard_fix=2026-08-26T2043Z
+rerun_after_pass_aggregation_fix=2026-08-26T2044Z
 science_change=none
 threshold_changed=false
