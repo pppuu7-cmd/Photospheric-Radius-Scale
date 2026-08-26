@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C10_65K_NONLOCAL_TEMPORAL_SELECTOR_FEASIBILITY_TARGET_v1",
+  "created_utc": "2026-08-26T01:24:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65k",
+  "question": "Does the currently certified completed-U1 diagnostic stack contain a nonzero earlier-time low-k interval on which a backward-regularity/asymptotic primordial branch selector can be defined without extrapolating the production background or importing the historical CLASS metric as the completed-U1 solution?",
+  "parents": [
+    "research/theory_results/RTK_C10_65J_FINITE_LOCAL_TEMPORAL_JET_IDENTIFIABILITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65I_COUPLED_COEFFICIENT_NULLITY_WITH_SYMBOLIC_C2_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json",
+    "research/theory_targets/RTK_C10_65B_COMPLETED_U1_ADIABATIC_GRADIENT_SYSTEM_TARGET_v1.json"
+  ],
+  "certification_requirements": [
+    "use the low-k modes that actually anchor the C10.65f O(k^2) seed, not higher-k histories that happen to start earlier",
+    "require a nonzero interval strictly earlier than a_on with simultaneously available production background/source support for those low-k anchors",
+    "do not extrapolate H, ordinary densities, thermodynamics, or production source histories below their persisted support",
+    "the analytic Khronon background may be noted as individually extendable for a>0, but this alone is insufficient to certify the coupled completed-U1 background/metric system",
+    "do not use historical CLASS phi/psi as the completed-U1 metric solution; the preferred A->Hamiltonian->momentum projector remains the only certified completed metric map",
+    "require TCA/hierarchy assumptions appropriate to the low-k gradient seed, but lack of a production support interval is already a decisive feasibility failure",
+    "preserve the independent same-full-action background/gravity-normalization caveat; a diagnostic historical production branch is not a derivation of the completed action's primordial background",
+    "distinguish a later-time boundedness condition from a primordial growing-mode selector: the former would be a new phenomenological boundary condition and is not silently substituted here"
+  ],
+  "classification_rule": {
+    "backward_interval_certified": "a nonzero earlier-time common low-k support interval exists and all required completed-U1 diagnostic ingredients are certified on it",
+    "no_certified_pre_onset_interval": "the common low-k production support begins at a_on, or another required ingredient lacks earlier support; backward/asymptotic selection cannot be claimed from the current evidence",
+    "technical_incomplete": "the persisted support endpoints or parent provenance cannot be reconstructed unambiguously"
+  },
+  "pass_if_negative_classification": "C10_65K_NO_CERTIFIED_PRE_ONSET_BACKWARD_INTERVAL_UV_MATCH_REQUIRED_SCOPED",
+  "next_if_no_interval": "freeze C10.65l explicit pre-EFT/UV matching-interface contract for the eight fixed-C2 C10.65i amplitudes plus C2: define the minimal gauge-invariant boundary data and a phenomenological control prescription without claiming it is derived by the low-energy completed action; only then build conditional completed-U1 seeds and onset-shift tests",
+  "non_claims": [
+    "not a proof that the UV theory cannot select a unique growing mode",
+    "not a proof that the analytic Khronon background fails before a_on",
+    "not a choice of C2 or of the eight temporal amplitudes",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
