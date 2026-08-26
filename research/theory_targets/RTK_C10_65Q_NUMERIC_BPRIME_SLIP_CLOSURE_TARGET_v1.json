@@ -1,0 +1,62 @@
+{
+  "schema": "RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-26T02:16:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65q",
+  "question": "Can B_prime, Psi_N_prime and the full pinned compromise_CLASS slip be evaluated numerically at the conditional onset on all four exact low-k anchors and all nine completion points using only local RHS/background derivatives, with no new temporal boundary datum?",
+  "parents": [
+    "research/theory_results/RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json"
+  ],
+  "background_derivative_pack": [
+    "regenerate the disposable pinned production tree and read Hc_prime at the exact a_on rows for the four exact low-k anchors",
+    "require Hc and Hc_prime to be common across the four anchors within 1e-10 relative",
+    "use a_prime=a H, rho_b_prime=-3H rho_b, rho_gamma_prime=rho_ur_prime=-4H rho_r",
+    "use the certified analytic Khronon background for rho_khr_prime=-3H W_khr and p_khr_prime=ca2 rho_khr_prime",
+    "do not extrapolate a background trajectory beyond the local directional derivative at a_on"
+  ],
+  "mixed_interface_projector": [
+    "state coordinates: D_b,D_g,D_ur,theta_b_N,theta_g_N,theta_ur_N,delta_khr_pref,theta_khr_pref",
+    "h_hat=rho_b D_b+rho_g D_g+rho_ur D_ur and p_hat=(rho_g D_g+rho_ur D_ur)/3",
+    "q0_N=a[W_b theta_b+W_g theta_g+W_ur theta_ur]/k^2",
+    "solve the dressed A constraint and differentiated A equation from h_hat and q0_N",
+    "delta_mu_pref=h_hat+3W0 psi_pref+rho_khr delta_khr_pref",
+    "q_pref=q0_N-a W0 B+a W_khr theta_khr_pref/k^2",
+    "solve Hamiltonian and momentum algebraically for phi_pref and B",
+    "require this general state projector to reproduce the C10.65n conditional psi_pref,psi_pref_prime,phi_pref,B,Psi_N at the onset state"
+  ],
+  "local_rhs": [
+    "D_b_prime=-theta_b, D_g_prime=-(4/3)theta_g, D_ur_prime=-(4/3)theta_ur",
+    "use pinned TCA baryon and photon Euler equations; for the B_prime directional derivative set slip=0, justified by the exact C10.65p aggregate cancellation",
+    "theta_ur_prime=k^2(delta_ur/4-sigma_ur)+k^2 Phi_N",
+    "use the certified preferred Khronon action-fluid delta/theta equations with current ca2 and cs2",
+    "differentiate B=G(background,state) along this local direction using high-precision directional differentiation",
+    "compute Psi_N_prime=psi_pref_prime-Hc_prime B-H B_prime",
+    "evaluate pinned compromise_CLASS slip with metric_continuity=-3 Psi_N_prime, a_primeprime_over_a=Hc_prime+H^2, first-order photon shear and its source-locked derivative",
+    "recompute the B directional derivative with the actual slip inserted and require invariance, directly testing the C10.65p triangular theorem numerically"
+  ],
+  "acceptance": [
+    "all regenerated onset rows are exact in a within 1e-12 relative and all four anchors remain TCA-on",
+    "general mixed-interface projector reproduces each C10.65n finite seed metric quantity at <=1e-9 relative",
+    "B_prime from slip=0 and from actual pinned slip agree at <=1e-30 relative in high precision",
+    "directional derivative convergence between 70 and 100 decimal digit evaluations is <=1e-20 relative",
+    "B_prime, Psi_N_prime, slip and slip/k^2 are finite for all 36 records",
+    "smallest-three vs all-four affine k^2 intercept disagreement is <=1e-3 for B_prime, Psi_N_prime and slip/k^2 at every grid point",
+    "individual baryon/photon Euler slip pieces cancel in the weighted photon+baryon momentum derivative to <=1e-30 normalized residual",
+    "do not set B_prime, Psi_N_prime or slip to zero and do not consume historical CLASS metric potentials",
+    "preserve CONDITIONAL and HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY labels"
+  ],
+  "pass_classification": "C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED",
+  "fail_classification": "C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_FAIL_SCOPED",
+  "next_if_pass": "freeze C10.65r opt-in in-CLASS completed-U1 metric/TCA bridge implementation on the four low-k anchors first; compare the first integration steps against the detached C10.65n/o/q seed and only then expand to the full k grid and spectra",
+  "non_claims": [
+    "not a microscopic UV matching derivation",
+    "not proof of a unique primordial growing mode",
+    "not same-full-action primordial background closure",
+    "not massive-neutrino completion",
+    "not full spectra or likelihood evidence"
+  ]
+}
