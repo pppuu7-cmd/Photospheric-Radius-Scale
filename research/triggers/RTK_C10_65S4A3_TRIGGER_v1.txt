@@ -1,1 +1,1 @@
-trigger corrected frozen C10.65s4a3 targeted endpoint materialization repair
+retry frozen C10.65s4a3 after implementation-only marker guard correction; scientific target unchanged
