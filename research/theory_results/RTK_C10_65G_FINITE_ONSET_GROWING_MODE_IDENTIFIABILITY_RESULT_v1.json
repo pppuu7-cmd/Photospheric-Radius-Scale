@@ -1,0 +1,141 @@
+{
+  "B0_temporal_datum": {
+    "dB0_dC2": "1/(2*H)",
+    "finite_onset_guard": "H>0",
+    "formula": "B0=(C2+2 Pcal psi0-E_th phi0)/(2H)",
+    "interpretation": "C2 remains a genuine next-order boundary/history datum until a temporal branch condition is supplied; changing C2 changes B0 with nonzero coefficient."
+  },
+  "architecture_decision": {
+    "forbidden": "Do not claim unique growing-mode initial conditions by stacking instantaneous ODE RHS equations into a snapshot rank matrix.",
+    "model_status": "This is a boundary-identifiability limitation, not a model no-go and not a propagating-DOF theorem.",
+    "required": "Add an explicit temporal condition: a pre-EFT/UV matching functional, a justified backward-regularity prescription, or a frozen temporal eigen/power-law branch condition. Only then solve the corrected coupled O(k^2) coefficient system."
+  },
+  "classification": "C10_65G_FINITE_ONSET_SNAPSHOT_RANK_INSUFFICIENT_TEMPORAL_MATCH_REQUIRED_SCOPED",
+  "corrected_adiabatic_boundary": {
+    "Delta_I_iso": "I_khr-J_ad=0",
+    "d_delta_khr0_dC2": "0",
+    "delta_khr0": "(1+w)(3 psi0+J_ad)",
+    "interpretation": "The corrected common-curvature boundary removes the neutral relative-entropy amplitude but is independent of C2 and therefore does not select the global temporal growing/decaying branch.",
+    "machine_Delta_I_iso_residual": "0"
+  },
+  "exact_block_rank_theorem": {
+    "consequence": "rank(M)=rank(A)+n and nullity(M)=nullity(A); local first-order evolution fixes derivatives for admissible initial states but does not select a growing initial-state direction at one time.",
+    "det_P": "1",
+    "identity": "M P = diag(A,I_n)",
+    "invertible_column_transform": "P=[[I_n,0],[F,I_n]]",
+    "machine_symbolic_block_residual": "0",
+    "snapshot_matrix": "M=[[A,0],[-F,I_n]]"
+  },
+  "exact_rational_rank_checks": [
+    {
+      "A_case": 0,
+      "F_case": 0,
+      "det_P": "1",
+      "m": 2,
+      "n": 3,
+      "nullity_A": 1,
+      "nullity_augmented": 1,
+      "rank_A": 2,
+      "rank_augmented": 5
+    },
+    {
+      "A_case": 0,
+      "F_case": 1,
+      "det_P": "1",
+      "m": 2,
+      "n": 3,
+      "nullity_A": 1,
+      "nullity_augmented": 1,
+      "rank_A": 2,
+      "rank_augmented": 5
+    },
+    {
+      "A_case": 1,
+      "F_case": 0,
+      "det_P": "1",
+      "m": 2,
+      "n": 3,
+      "nullity_A": 2,
+      "nullity_augmented": 2,
+      "rank_A": 1,
+      "rank_augmented": 4
+    },
+    {
+      "A_case": 1,
+      "F_case": 1,
+      "det_P": "1",
+      "m": 2,
+      "n": 3,
+      "nullity_A": 2,
+      "nullity_augmented": 2,
+      "rank_A": 1,
+      "rank_augmented": 4
+    },
+    {
+      "A_case": 2,
+      "F_case": 0,
+      "det_P": "1",
+      "m": 4,
+      "n": 3,
+      "nullity_A": 0,
+      "nullity_augmented": 0,
+      "rank_A": 3,
+      "rank_augmented": 6
+    },
+    {
+      "A_case": 2,
+      "F_case": 1,
+      "det_P": "1",
+      "m": 4,
+      "n": 3,
+      "nullity_A": 0,
+      "nullity_augmented": 0,
+      "rank_A": 3,
+      "rank_augmented": 6
+    },
+    {
+      "A_case": 3,
+      "F_case": 0,
+      "det_P": "1",
+      "m": 0,
+      "n": 3,
+      "nullity_A": 3,
+      "nullity_augmented": 3,
+      "rank_A": 0,
+      "rank_augmented": 3
+    },
+    {
+      "A_case": 3,
+      "F_case": 1,
+      "det_P": "1",
+      "m": 0,
+      "n": 3,
+      "nullity_A": 3,
+      "nullity_augmented": 3,
+      "rank_A": 0,
+      "rank_augmented": 3
+    }
+  ],
+  "gate": "C10.65g",
+  "next_gate": "freeze C10.65h minimal temporal matching contract: define the smallest gauge-invariant pre-EFT/growing-branch boundary functional needed to determine C2 (and therefore B0) without reintroducing the obsolete absolute I_khr=0 condition; then solve the corrected coupled O(k^2) coefficients under that explicit boundary prescription",
+  "non_claims": [
+    "not a model no-go",
+    "not a propagating-DOF count",
+    "not a UV derivation of the temporal boundary",
+    "not completed-U1 spectra or likelihood evidence",
+    "not massive-neutrino coverage"
+  ],
+  "parent_consistency": {
+    "finite_onset_adiabaticity": "C10.54 already requires UV/growing-mode matching for C2/B0",
+    "metric_projector": "preferred algebraic A->H->M projection removes chi as an independent integrated state but does not provide a temporal boundary functional",
+    "neutral_memory": "C10.62/C10.63 exclude relying on generic finite-time EFT memory loss as the missing branch selector"
+  },
+  "provenance": {
+    "repo_head_at_job_start": "eb7f5bf6c377baaed068a42850f4c4eced695026",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65g_finite_onset_growing_mode_identifiability.py",
+    "workflow": "rtk-c10-65g-finite-onset-growing-mode-identifiability.yml"
+  },
+  "schema": "RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_TARGET_v1.json"
+}
