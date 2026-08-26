@@ -1,6 +1,6 @@
 {
   "checks": {
-    "compile_passes": false,
+    "compile_passes": true,
     "historical_failures_preserved": true,
     "s4a2_geometry_parent_preserved": true,
     "source_calls_existing_s1_observer_after_first_segment": true,
@@ -15,14 +15,14 @@
     "source_splits_only_containing_interval": true,
     "threshold_changed": false
   },
-  "classification": "C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_FAIL_SCOPED",
+  "classification": "C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_PASS_SCOPED",
   "gate": "C10.65s4a3",
   "historical_s4a_failures": [
     33008095108,
     33008706959
   ],
-  "interpretation": "At least one frozen s4a3 source/ownership/compile guard failed; do not retry s4a.",
-  "next_gate": "Repair s4a3 without modifying the frozen s4a scientific contract.",
+  "interpretation": "The repair is restricted to the two new k anchors: it finds the forward-spline-consistent onset time, splits only their containing interval, explicitly materializes the returned endpoint with the already-certified read-only s1 observer, and leaves regression k and dormant execution unsplit.",
+  "next_gate": "Retry the unchanged frozen C10.65s4a scientific analyzer with s4a3 enabled only on k=1e-3 and 3e-3 Mpc^-1; preserve runs 33008095108 and 33008706959 as failed attempts.",
   "non_claims": [
     "not a reclassification of either failed s4a run",
     "not a completed-U1 seed at the new k values",
@@ -33,9 +33,9 @@
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s4a3_targeted_endpoint_materialization_repair.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 33010968444,
+    "github_actions_run_id": 33011096182,
     "patch": "rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py",
-    "repo_head_at_job_start": "8de132a323a988725f21befa7bac97f3c49ad198",
+    "repo_head_at_job_start": "8d834cff865b662599c8e4b33a59740e12f1f635",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s4a3-targeted-endpoint-materialization-repair.yml"
   },
