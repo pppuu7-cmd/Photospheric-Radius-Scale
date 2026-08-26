@@ -1,0 +1,49 @@
+{
+  "schema": "RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_TARGET_v1",
+  "gate": "C10.65s4a2",
+  "created_utc": "2026-08-26T20:15:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "s4a_first_attempt": {"classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED", "run_id": 33008095108},
+    "s4a1": {"classification": "C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_PASS_SCOPED", "run_id": 33008538013},
+    "s4a_retry": {"classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED", "run_id": 33008706959}
+  },
+  "purpose": "Read-only localization of the remaining exact-onset acquisition failure: measure the tau(z_on)->a(tau) spline round-trip, compute without applying a monotonic forward-spline root tau_* satisfying a(tau_*)=a_on, and export the uniform-approximation interval bounds containing both tau values for the two new moderate-k anchors.",
+  "fixed_domain": {
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [0.001, 0.003],
+    "scientific_s4a_domain_changed": false
+  },
+  "diagnostic_algorithm": {
+    "tau_inverse_guess": "background_tau_of_z(pba,1/a_on-1,&tau_z)",
+    "roundtrip": "background_at_tau(pba,tau_z,short_info,inter_normal)->a_z",
+    "corrected_tau": "bisection on the same background_at_tau forward spline over the precomputed tau table until |a(tau)-a_on|/a_on <= 1e-13 or 96 iterations",
+    "corrected_tau_is_not_applied_to_integrator": true,
+    "interval_export": "read interval_limit[] after the ordinary perturb_find_approximation_switches construction and report the containing interval for tau_z and tau_*",
+    "no_state_or_rhs_mutation": true
+  },
+  "frozen_checks": {
+    "record_count": 2,
+    "all_values_finite": true,
+    "inverse_roundtrip_error_measured": true,
+    "corrected_forward_relative_a_error_max": 1e-13,
+    "corrected_tau_inside_existing_integration_domain_both": true,
+    "containing_interval_exported_both": true,
+    "same_approximation_interval_membership_reported": true,
+    "diagnostic_patch_contains_no_dy_assignment": true,
+    "diagnostic_patch_contains_no_pvecmetric_assignment": true,
+    "diagnostic_patch_contains_no_index_pt_state_assignment": true,
+    "diagnostic_patch_contains_no_tolerance_or_approximation_criterion_mutation": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_PASS_SCOPED",
+  "fail_classification": "C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_FAIL_SCOPED",
+  "next_if_pass": "Freeze a sampling-only s4a3 repair using the forward-spline-consistent tau_* and the measured interval geometry; do not alter the original s4a k-domain or scientific guards.",
+  "non_claims": [
+    "not a reclassification of either failed C10.65s4a execution",
+    "not a new completed-U1 seed",
+    "not production feedback at new k",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ]
+}
