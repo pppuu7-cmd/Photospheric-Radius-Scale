@@ -1,0 +1,115 @@
+name: RTK C10.65r2f tail observer codegen isolation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65r2f_tail_observer_isolation.py'
+      - 'rtk/isolate_rtk_c10_65r2_tail_observer.py'
+      - '.github/workflows/rtk-c10-65r2f-tail-observer-codegen-isolation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  isolate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen gate
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_TARGET_v1.json'))
+          e=json.load(open('research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert e['classification']=='C10_65R2E_DORMANT_R2_CODEGEN_PERTURBATION_SCOPED'
+          PY
+          git rev-parse HEAD | tee c10_65r2f_repo_head.txt
+      - name: Build pinned r1 and tail-isolated r2
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_r1
+          git -C class_r1 reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_r1/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_r1/include/
+          for s in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do python3 "rtk/$s" class_r1; done
+          make -C class_r1 -j2 class
+          cp -a class_r1 class_r2
+          python3 rtk/apply_rtk_c10_65r2_in_class_first_rhs_diagnostic_patch.py class_r2
+          python3 rtk/isolate_rtk_c10_65r2_tail_observer.py class_r2
+          python3 rtk/fix_rtk_c10_65r2_shear_units.py class_r2
+          make -C class_r2 clean
+          make -C class_r2 -j2 class
+      - name: Write first-point matched inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          proto=json.load(open('research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          q=proto['points'][0]; lam=float(q['lambda_HL']); Mc=float(q['M_c_Mpc_inv'])
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {lam:.17g}\nc10_65r1_Mc = {Mc:.17g}\n'''
+          pathlib.Path('class_r1/output').mkdir(exist_ok=True); pathlib.Path('class_r2/output').mkdir(exist_ok=True)
+          pathlib.Path('class_r1/control.ini').write_text(common+'root = output/control_\n')
+          pathlib.Path('class_r2/off.ini').write_text(common+'c10_65r2_diag = 0\nroot = output/off_\n')
+          pathlib.Path('class_r2/on.ini').write_text(common+'c10_65r2_diag = 1\nroot = output/on_\n')
+          PY
+      - name: Run OFF and ON paths
+        run: |
+          set -euo pipefail
+          (cd class_r1 && ./class control.ini) > c10_65r2f_control.log 2>&1
+          (cd class_r2 && ./class off.ini) > c10_65r2f_off.log 2>&1
+          (cd class_r2 && ./class on.ini) > c10_65r2f_on.log 2>&1
+          test "$(find class_r1/output -maxdepth 1 -type f -iname 'control_*perturbations*' | wc -l)" -eq 4
+          test "$(find class_r2/output -maxdepth 1 -type f -iname 'off_*perturbations*' | wc -l)" -eq 4
+          test "$(find class_r2/output -maxdepth 1 -type f -iname 'on_*perturbations*' | wc -l)" -eq 4
+      - name: Execute frozen r2f analyzer
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65r2f_tail_observer_isolation.py \
+            --control-glob 'class_r1/output/control_*perturbations*' \
+            --off-glob 'class_r2/output/off_*perturbations*' \
+            --on-glob 'class_r2/output/on_*perturbations*' \
+            --base-patch rtk/apply_rtk_c10_65r2_in_class_first_rhs_diagnostic_patch.py \
+            --isolation-patch rtk/isolate_rtk_c10_65r2_tail_observer.py \
+            --output research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json | tee c10_65r2f.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65r2f_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2f-tail-observer-codegen-isolation.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json /tmp/r2f.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r2f.json research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json
+            git commit -m 'Record C10.65r2f tail observer isolation' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
