@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Frozen C10.65s2a execution trigger; scientific criteria unchanged.
 import argparse,json,math,pathlib,re,sys
 
 P=pathlib.Path
