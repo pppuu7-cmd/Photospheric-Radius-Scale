@@ -1,0 +1,55 @@
+{
+  "schema": "RTK_C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_TARGET_v1",
+  "created_utc": "2026-08-26T18:22:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s2g",
+  "purpose": "Final detached preflight before the already-frozen C10.65s2 one-step production canary. Verify that the complete s2b+s2c+s2d+s2e current-state stack exposes the exact Newtonian carrier derivatives required by CLASS, retains the r2 first-RHS parity, and consumes all background/TCA/shear coefficients as runtime stage inputs rather than frozen onset constants.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json",
+    "research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json"
+  ],
+  "frozen_domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "runtime_stage_inputs_required": [
+    "a","H","Hprime","rb","rg","ru","rk","pk","cb2","tau","dtau",
+    "PsiN","db","tb","dg","tg","du","tu","sigma_ur","dkN","thetaN",
+    "w","ca2","cs2","lambda_HL","M_c"
+  ],
+  "frozen_checks": {
+    "anchor_count": 4,
+    "max_delta_khr_N_prime_relative_vs_s2b": 5e-9,
+    "max_theta_khr_N_prime_relative_vs_s2b": 5e-9,
+    "max_existing_s2e_nonconditioning_parity_relative": 5e-9,
+    "max_scalar_implicit_amplification": 2.0,
+    "min_abs_implicit_denominator": 0.5,
+    "all_runtime_stage_inputs_are_function_arguments": true,
+    "dynamic_kernel_contains_no_onset_numeric_literals": true,
+    "dynamic_kernel_contains_no_file_or_history_reads": true,
+    "s2c_s2d_dynamic_kernels_contain_no_matching_seed_constants": true,
+    "s2e_failed_parent_classification_preserved": true,
+    "s2f_must_pass": true,
+    "s2_target_status_remains_FROZEN_BEFORE_IMPLEMENTATION": true,
+    "s2_target_rhs_parity_threshold_remains_5e-9": true,
+    "all_outputs_finite": true,
+    "no_production_patch_in_s2g": true
+  },
+  "pass_classification": "C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_FAIL_SCOPED",
+  "next_if_pass": "Implement and execute the already-frozen C10.65s2 direct-onset one-accepted-step production canary in disposable pinned CLASS. Preserve exact OFF rollback, use only delta_cdm/theta_cdm handoff writes, source all current-state coefficients from the production stage, capture the first production RHS and exactly one accepted step, and measure A/H/M drift without adding a post-hoc drift tolerance.",
+  "non_claims": [
+    "does not convert C10.65s2e FAIL into PASS",
+    "not production feedback",
+    "not one accepted integration step",
+    "not finite-time stability",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
