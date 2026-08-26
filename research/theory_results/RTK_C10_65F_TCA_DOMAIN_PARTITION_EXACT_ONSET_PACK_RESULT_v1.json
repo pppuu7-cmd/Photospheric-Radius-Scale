@@ -1,0 +1,160 @@
+{
+  "classification": "C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED",
+  "coefficient_pack": {
+    "F_Mpc": 0.015037334491853818,
+    "F_prime": 0.0005594524981605395,
+    "Hc_Mpc_inv": 0.0129629303512,
+    "R": 6.6951521502165,
+    "cb2": 2.46650315001575e-09,
+    "ddkappa_Mpc_inv2": -0.22405008530687498,
+    "dkappa_Mpc_inv": 8.641953565704501,
+    "dtau_c": 0.0030000000135438033,
+    "tau_c_Mpc": 0.11571457684851365,
+    "tau_c_over_tau_h": 0.0015000000003058626
+  },
+  "exact_anchor": {
+    "a_on": 0.0002203229136467,
+    "count": 4,
+    "k_Mpc_inv": [
+      1e-05,
+      3e-05,
+      0.0001,
+      0.0003
+    ],
+    "max_algebraic_relative_residual": 2.915527419242724e-13,
+    "max_relative_pack_spread": 4.988214044306935e-13,
+    "relative_a_tolerance": 1e-12,
+    "relative_spreads": {
+      "c10_65e_F": 4.988214044306935e-13,
+      "c10_65e_F_prime": 2.680212546153905e-13,
+      "c10_65e_R": 7.468754093586407e-14,
+      "c10_65e_cb2": 3.0400902803406327e-13,
+      "c10_65e_ddkappa": 3.346029064667575e-13,
+      "c10_65e_dkappa": 1.7369007110266277e-13,
+      "c10_65e_dtau_c": 0.0,
+      "c10_65e_tau_c": 0.0,
+      "c10_Hc": 0.0
+    }
+  },
+  "gate": "C10.65f",
+  "interpretation": "C10.65e failed because it mixed sparse-history interpolation with a false all-k TCA assumption. C10.65f certifies an interpolation-safe exact-onset low-k coefficient pack and an explicit finite-k TCA regime boundary without weakening the failed C10.65e target after execution.",
+  "next_gate": "freeze and implement C10.65g corrected completed-U1 O(k^2) superhorizon coefficient/rank solver using Delta I_iso=0, the exact-onset low-k TCA pack, the source-locked hierarchy and the preferred DAE metric projector; solve V_khr0 and B0 rather than prescribing them",
+  "non_claims": [
+    "not the completed-U1 rank solution",
+    "not a claim that TCA applies to the full finite-k grid",
+    "not same-full-action background closure",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer_exit_code": 0,
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "repo_head_at_job_start": "ea3b5fb8f404603094e000a1e2f90e4573373fcb",
+    "source_export_patch": "rtk/apply_rtk_c10_source_export_patch.py",
+    "species_control_patch": "rtk/apply_rtk_c10_65a_species_control_patch.py",
+    "tca_coefficient_patch": "rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py",
+    "worker": "research/shadow/rtk_c10_65f_tca_domain_partition_exact_onset_pack.py",
+    "workflow": "rtk-c10-65f-tca-domain-partition-exact-onset-pack.yml"
+  },
+  "rank_seed_domain": {
+    "interpretation": "The O(k^2) superhorizon rank system is a k->0 expansion and is certified to use the source-locked TCA branch. Finite-k evolution must retain the upstream TCA switch rather than extrapolate TCA beyond k_TCA.",
+    "low_k_seed_ok": true
+  },
+  "schema": "RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_TARGET_v1.json",
+  "tca_domain": {
+    "derived_k_TCA_Mpc_inv": 0.08641953565704501,
+    "exported_flag_partition_match": true,
+    "first_frozen_off_mode_Mpc_inv": 0.1,
+    "numeric_tca_on_flag": 0.0,
+    "off_modes_Mpc_inv": [
+      0.1
+    ],
+    "on_modes_Mpc_inv": [
+      1e-05,
+      3e-05,
+      0.0001,
+      0.0003,
+      0.001,
+      0.003,
+      0.01,
+      0.03
+    ],
+    "records": [
+      {
+        "exact_onset_anchor": true,
+        "k_Mpc_inv": 1e-05,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.0,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": true,
+        "k_Mpc_inv": 3e-05,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.0,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": true,
+        "k_Mpc_inv": 0.0001,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.0,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": true,
+        "k_Mpc_inv": 0.0003,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.0,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": false,
+        "k_Mpc_inv": 0.001,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.004358592067913047,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": false,
+        "k_Mpc_inv": 0.003,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.008915701342575345,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": false,
+        "k_Mpc_inv": 0.01,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.004166107853729088,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": false,
+        "k_Mpc_inv": 0.03,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 0.0,
+        "nearest_rel_a_error": 0.0039032642586554326,
+        "predicted_tca_on": true
+      },
+      {
+        "exact_onset_anchor": false,
+        "k_Mpc_inv": 0.1,
+        "matches_partition": true,
+        "nearest_exported_tca_flag": 1.0,
+        "nearest_rel_a_error": 0.0007038577455846342,
+        "predicted_tca_on": false
+      }
+    ],
+    "trigger_tau_c_over_tau_h": 0.015,
+    "trigger_tau_c_over_tau_k": 0.01
+  }
+}
