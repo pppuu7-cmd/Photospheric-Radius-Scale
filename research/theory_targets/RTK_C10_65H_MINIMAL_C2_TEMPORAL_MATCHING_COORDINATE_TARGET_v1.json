@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_65H_MINIMAL_C2_TEMPORAL_MATCHING_COORDINATE_TARGET_v1",
+  "created_utc": "2026-08-26T01:10:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65h",
+  "question": "Can the unresolved finite-onset foliation/shift boundary freedom be represented by one source-coordinate-invariant scalar C2, with B0 derived algebraically and without reintroducing an independent chi/B datum or the obsolete absolute I_khr=0 condition?",
+  "parents": [
+    "research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json"
+  ],
+  "definitions": {
+    "comoving_source": "C(k)=3 a^2 delta_mu(k)+3 H Q(k), with Q=3 a q",
+    "regular_expansion": "C(k)=C0+k^2 C2+O(k^4), and leading regularity imposes C0=0",
+    "matching_coordinate": "C2 is the k^2 coefficient of the total comoving source on the regular branch",
+    "shift_reconstruction": "B0=[C2+2 Pcal psi0-E_th phi0]/(2H)",
+    "corrected_neutral_adiabaticity": "Delta I_iso=I_khr-J_ad=0"
+  },
+  "acceptance": [
+    "prove exactly that C(k) is invariant under every regular preferred<->Newtonian time shift B using rho'=-3 H W, delta_mu_N=delta_mu_pref+rho' B, and q_N=q_pref+a W B",
+    "deduce exact invariance of C2 coefficient without assuming B0=0",
+    "verify symbolically that dB0/dC2=1/(2H) and therefore one specified C2 value fixes B0 uniquely for finite H>0 once the leading metric amplitudes are fixed",
+    "verify that introducing C2 as a matching coordinate does not change Delta I_iso=0 and does not create a second neutral-charge amplitude",
+    "verify that B0 is not an additional independent matching parameter after C2 is specified",
+    "state explicitly that the theorem is only a minimal foliation/shift-boundary parameterization and does not prove that no other temporal growing/decaying amplitudes remain in the full coupled hierarchy",
+    "do not assign a numerical C2 without an explicit UV/backward-regularity/temporal-branch prescription"
+  ],
+  "pass_classification": "C10_65H_C2_GAUGE_INVARIANT_MINIMAL_SHIFT_MATCH_COORDINATE_PASS_SCOPED",
+  "next_if_pass": "freeze C10.65i coupled O(k^2) coefficient-nullity audit parameterized by C2: encode the corrected photon+baryon+massless-UR+neutral-Khronon hierarchy and preferred DAE constraints, quotient overall normalization, keep C2 symbolic, and count any remaining temporal amplitudes before selecting a microscopic/growing-branch prescription",
+  "non_claims": [
+    "not a numerical UV value for C2",
+    "not full growing-mode uniqueness",
+    "not a propagating-DOF count",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
