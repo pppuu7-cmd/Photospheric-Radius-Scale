@@ -1,0 +1,37 @@
+{
+  "gate": "C10.65r2b",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Determine whether the C10.65n/r1 finite-onset matching relation used to algebraically condition B is tangent to the actual C10.65q first-RHS direction. This decides whether B' may be obtained by dual-propagating the onset-reduced r1 closure, or must instead differentiate the general mixed-interface projector.",
+  "parent_requirements": {
+    "C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE": "PASS_SCOPED",
+    "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY": "PASS_SCOPED",
+    "C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT": "PASS_SCOPED"
+  },
+  "constraint": "C = 3 H Q_pref + 3 a^2 delta_mu_pref - C2 k^2, with C2=-1.314425482950032 and Q_pref equal to the completed-U1 preferred momentum source returned by the general mixed-interface projector",
+  "direction": "The local aggregate zero-slip first RHS used by C10.65q before actual TCA slip insertion; C10.65q already certifies Bprime invariance under subsequent actual-slip insertion.",
+  "grid": {
+    "completion_points": 9,
+    "low_k_anchors": 4,
+    "record_count": 36
+  },
+  "frozen_checks": {
+    "max_onset_constraint_relative": 5e-11,
+    "tangent_max_normalized_abs_Cprime": 5e-9,
+    "resolved_non_tangent_min_normalized_abs_Cprime": 1e-6,
+    "normalization": "abs(Cprime)/max(abs(H)*(abs(3*H*Q_pref)+abs(3*a^2*delta_mu_pref)+abs(C2*k^2)),1e-80)"
+  },
+  "pre_registered_interpretation": {
+    "if_tangent": "C10_65R2B_TANGENT_PASS_SCOPED: dual propagation of the conditioned onset-reduced r1 closure is admissible for Bprime, subject to the unchanged full r2 numerical parity gate.",
+    "if_resolved_non_tangent": "C10_65R2B_NON_TANGENT_RESOLVED_SCOPED: do not differentiate the onset-reduced fixed-C2 closure; port/differentiate the general mixed-interface projector used by C10.65q, while retaining the conditioned r1 expression only for the algebraic onset value B.",
+    "otherwise": "C10_65R2B_INCONCLUSIVE_FAIL: no implementation choice is certified."
+  },
+  "hard_nonclaims": [
+    "not C10.65r2 first-RHS parity",
+    "not a production dy write",
+    "not completed-U1 feedback integration",
+    "not microscopic UV matching",
+    "not same-full-action primordial/background closure",
+    "not radiative naturalness"
+  ],
+  "r2_frozen_target_unchanged": true
+}
