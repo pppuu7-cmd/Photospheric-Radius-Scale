@@ -1,0 +1,47 @@
+{
+  "schema": "RTK_C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_RESULT_v1",
+  "created_utc": "2026-08-26T00:29:00Z",
+  "classification": "C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_CONSISTENT_PASS_SCOPED",
+  "target": "research/theory_targets/RTK_C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_TARGET_v1.json",
+  "parents": [
+    "research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_CHARGE_LONG_WAVE_MEMORY_BOUND_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_CHARGE_PROJECTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_DUAL_INTERFACE_DAE_PROTOTYPE_RESULT_v1.json"
+  ],
+  "declared_boundary": "I_khr(tau_on)=0",
+  "algebraic_translation": {
+    "exact_identity": "I_khr=delta_khr/(1+w_khr)-3 psi_pref",
+    "boundary_relation": "delta_khr(tau_on)=3[1+w_khr(tau_on)] psi_pref(tau_on)",
+    "scope": "preferred-sector/dual-interface convention used by the frozen C10 lineage"
+  },
+  "finite_time_consistency": {
+    "exact_evolution": "I_khr'=-(theta_khr+k^2 B)",
+    "regularity": "theta_khr=O(k^2), B=O(1)",
+    "integrated_statement": "Starting from I_khr(tau_on)=0, |I_khr(tau)-0| <= (C_theta+C_B) k^2 Delta_tau on every fixed finite regular in-EFT interval.",
+    "consequence": "The selected zero-charge branch remains I_khr=O(k^2) in the regular superhorizon limit; exact zero at finite k is neither required nor implied."
+  },
+  "initial_data_geometry": {
+    "effect": "The declared boundary removes one independent neutral-charge amplitude from the adiabatic initial-condition subspace, i.e. selects a codimension-one surface in the neutral charge direction.",
+    "does_not_remove_theory_mode": "Solutions with nonzero I_khr remain allowed and constitute a distinct charge/isocurvature initial-condition sector of the theory.",
+    "theta_status": "theta_khr is not fixed by I_khr=0 and must be determined together with ordinary radiation/matter variables and completed-U1 algebraic metric constraints by the next coupled growing/decaying-mode solve."
+  },
+  "consistency_with_C10_63": {
+    "numerical_fact": "The frozen pure-charge transfer approaches unity with low-k p_Q>2.07 while regular velocity-to-charge leakage scales with p_U about 2.",
+    "interpretation": "This supports treating I_khr as a genuine independent boundary datum rather than assuming finite-time EFT evolution automatically selects I_khr=0."
+  },
+  "architecture_decision": {
+    "adiabatic_branch": "Use I_khr(tau_on)=0 as an explicit declared pre-EFT boundary condition when constructing the minimal adiabatic growing mode.",
+    "charge_isocurvature_branch": "Retain nonzero-I_khr initial data as a separate sector for later phenomenological constraints; do not silently project it out of the theory.",
+    "label": "BOUNDARY_PRESCRIPTION_NOT_DYNAMICAL_MECHANISM"
+  },
+  "next_gate": "C10.65: freeze and implement the completed-U1 photon+baryon+massless-UR dual-interface superhorizon growing/decaying-mode system using I_khr(tau_on)=0 only for the adiabatic branch, solve theta_khr rather than prescribing it, and verify algebraic constraint regularity plus recovery of a unique growing adiabatic direction modulo overall normalization.",
+  "non_claims": [
+    "not a derivation of I_khr=0 from the microscopic UV theory",
+    "not a proof of naturalness or radiative stability",
+    "not a proof that charge is absent from the full theory",
+    "not a determination of theta_khr or the full adiabatic growing eigenvector",
+    "not a completed photon+baryon+UR Boltzmann integration",
+    "not spectra or likelihood evidence"
+  ]
+}
