@@ -1,0 +1,46 @@
+{
+  "schema": "RTK_C10_NEUTRAL_CHARGE_PROJECTION_TARGET_v1",
+  "created_utc": "2026-08-26T00:24:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.63",
+  "question": "When the frozen C10.62b transfer is expressed in the exact neutral-charge variable rather than the Y=(delta,theta/k) norm, does the regular long-wave charge direction approach unit transfer as k->0, and does a regular theta=O(k^2) velocity seed leak into charge only at O(k^2)?",
+  "parents": [
+    "research/theory_results/RTK_C10_NEUTRAL_FINITE_ONSET_MEMORY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_CHARGE_LONG_WAVE_MEMORY_BOUND_RESULT_v1.json"
+  ],
+  "fixed_subspace": "C10.62b ordinary trajectory fixed, so Delta psi_pref=0 and I_khr=delta/(1+w)",
+  "coordinate_map": {
+    "Y": "(delta, V) with V=theta/k",
+    "charge": "I=delta/(1+w)",
+    "regular_velocity": "U=H_EFT*theta/k^2, so V=(k/H_EFT)U"
+  },
+  "frozen_reconstruction": {
+    "w_of_a": "r*t/[x*(1+t)] with x=x0/a^3, s=hypot(1,sqrt(lambda_D)*x), r=x/s, t=x/(s+1)",
+    "T_Y_from_C10_62b": "If final_transfer_columns_physical=[d1,t1,d2,t2], then T_Y=[[d1,d2],[t1/k,t2/k]]",
+    "pure_charge_ratio": "R_Q=T11*(1+w_i)/(1+w_f)",
+    "Y_velocity_to_charge": "L_QV=T12/(1+w_f)",
+    "regular_velocity_to_charge": "L_QU=(k/H_EFT)*L_QV"
+  },
+  "low_k_set_Mpc_inv": [1e-05, 3e-05, 0.0001],
+  "preregistered_diagnostics": [
+    "For each unique lambda_HL, verify the three M_c duplicates give identical T_Y within 1e-12 absolute difference.",
+    "For each unique lambda_HL, compute R_Q on the three lowest k values and test whether |R_Q-1| decreases strictly as k decreases.",
+    "Fit a log-log slope p_Q of |R_Q-1| versus k on the three lowest k values when all deviations are nonzero.",
+    "For each unique lambda_HL, compute |L_QU| on the same three k values and test whether it decreases strictly as k decreases.",
+    "Fit a log-log slope p_U of |L_QU| versus k on the three lowest k values when all values are nonzero.",
+    "Record the dominant singular-vector alignment in Y only as a coordinate diagnostic; do not use it as the charge-retention criterion."
+  ],
+  "classification_rule": {
+    "pass_scoped": "All values finite, M_c duplication invariance <=1e-12, and for every lambda_HL both |R_Q-1| and |L_QU| approach zero monotonically over the frozen three-point low-k set, with p_Q>1.5 and p_U>1.5.",
+    "inconclusive_scoped": "Finite and M_c-invariant, but one or more asymptotic trend/slope conditions fail.",
+    "technical_fail": "Nonfinite values, malformed parent transfer, or M_c duplication mismatch >1e-12."
+  },
+  "non_claims": [
+    "not a full photon+baryon+UR adiabatic/isocurvature classification",
+    "not a proof that finite observational k modes are stable",
+    "not a UV/pre-EFT charge boundary prescription",
+    "not a propagating-rank theorem",
+    "not spectra or likelihood evidence"
+  ]
+}
