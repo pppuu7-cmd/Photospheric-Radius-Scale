@@ -1,0 +1,42 @@
+name: RTK C10.65s2j prospective retry width
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/triggers/RTK_C10_65S2J_TRIGGER_v1.txt'
+permissions:
+  contents: write
+jobs:
+  select:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Execute frozen selection audit
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > c10_65s2j_head.txt
+          python3 research/shadow/rtk_c10_65s2j_retry_width_selection.py | tee c10_65s2j.log
+          grep -q '^C10_65S2J_PROSPECTIVE_RETRY_WIDTH_PASS_SCOPED$' c10_65s2j.log
+      - name: Add provenance and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_RESULT_v1.json'; [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_RESULT_v1.json'); d=json.loads(p.read_text())
+          d['provenance']={'repo_head_at_job_start':pathlib.Path('c10_65s2j_head.txt').read_text().strip(),'workflow':'rtk-c10-65s2j-prospective-retry-width.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'selector':'research/shadow/rtk_c10_65s2j_retry_width_selection.py','threshold_changed':False}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          pathlib.Path('research/checkpoints/RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_2026-08-26T1922Z.md').write_text(f'''# RTK C10.65s2j prospective retry width checkpoint\n\nClassification: `{d['classification']}`.\n\nC10.65s2 remains `C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED`. From the completed s2i trace, the minimum first accepted Cash-Karp step across the four anchors is `{d['source_minimum_first_accepted_hdid_Mpc']:.17e}` Mpc. The retry rule was frozen before execution as a fixed safety factor 0.5, giving `{d['retry_width_Mpc']:.17e}` Mpc.\n\nNo perturbation tolerance, physical equation, boundary state, first-RHS threshold, or one-accepted-step criterion is changed. Next gate: C10.65s2k production retry at exactly this width, requiring seven RHS evaluations (one accepted, zero rejected Cash-Karp trial) on every anchor.\n''')
+          PY
+      - name: Persist result and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_RESULT_v1.json'; ck='research/checkpoints/RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_2026-08-26T1922Z.md'; [ -f "$p" ] || exit 0
+          cp "$p" /tmp/r.json; cp "$ck" /tmp/c.md
+          for n in 1 2 3 4 5; do git fetch origin rtk-class-build; git reset --hard origin/rtk-class-build; cp /tmp/r.json "$p"; cp /tmp/c.md "$ck"; git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'; git add "$p" "$ck"; git commit -m 'Record C10.65s2j prospective retry width' || exit 0; git push origin HEAD:rtk-class-build && exit 0; done; exit 1
