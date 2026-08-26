@@ -1,0 +1,17 @@
+{
+  "schema": "RTK_C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_TARGET_v1",
+  "gate": "C10.65s5c",
+  "created_utc": "2026-08-26T22:56:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {"C10.65s5b": "C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED"},
+  "purpose": "Before any k=0.01 production feedback, map sensitivity to uncomputed higher-order pre-EFT matching content. At the tested anchor only, introduce three independent dimensionless pointwise envelope coordinates eta_D, eta_C, eta_S in {-1,0,+1}. They add an unknown contribution whose magnitude is up to the retained correction in the density matching polynomial, the retained C2*k^2 invariant target, and the retained leading UR-shear coefficient respectively. This is a stress-test envelope, not a prior or a derived UV error bar.",
+  "domain": {"k_Mpc_inv": 0.01,"eta_values": [-1.0,0.0,1.0],"cartesian_point_count": 27,"pointwise_parameterization": {"A2_effective": "A2*(1+eta_D)","C2_effective": "C2*(1+eta_C)","S_ur_effective": "S_ur0*(1+eta_S)"}},
+  "prospective_checks": {"baseline_reproduces_s5b_relative_max": 1e-12,"all_27_points_finite": true,"projector_constraint_normalized_residual_max": 1e-20,"physical_traceless_normalized_residual_max": 1e-20,"all_four_algebraic_denominators_nonzero": true,"no_algebraic_denominator_sign_flip_relative_to_baseline": true,"legacy_nlde_auxiliaries_excluded": true,"historical_CLASS_metric_not_consumed": true,"threshold_changed": false},
+  "measurement_only": {"max_relative_response": ["psi_pref","phi_pref","B_pref","Psi_N","Phi_N","V_N","delta_b","delta_g","theta_b","shear_ur"],"extremal_points": "record which envelope coordinates maximize each response; no response-size pass threshold is introduced in this gate"},
+  "pass_classification": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
+  "fail_classification": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_FAIL_SCOPED",
+  "interpretation_if_pass": "Across the preregistered 27-point order-unity pointwise omitted-order stress envelope at k=0.01, the completed onset algebraic system remains finite and does not cross an algebraic denominator sign change. The measured response magnitudes quantify sensitivity but are not themselves a validation threshold or UV uncertainty distribution.",
+  "next_if_pass": "Use the preregistered s5c response map to decide the architecture of the next gate without post-hoc declaring smallness: if responses are modest, freeze a multi-branch k=0.01 production canary carrying baseline plus extremal sensitivity branches; if responses are order-unity or larger in key metric/carrier quantities, stop k-domain production widening and require a stronger UV/pre-EFT matching input before k=0.01 can be promoted.",
+  "non_claims": ["not a probability distribution for omitted terms","not a UV-derived error bar","not proof that true O(k^4) terms lie in this envelope","not production feedback","not finite-time stability","not same-full-action primordial/background closure","not radiative-naturalness closure","not massive-neutrino completion","not spectra or likelihood evidence"],
+  "threshold_changed": false
+}
