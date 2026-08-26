@@ -112,30 +112,39 @@ jobs:
             fi
           done
           test "$(find class_r2/output -maxdepth 1 -type f -iname 'p*_perturbations*' | wc -l)" -eq 36
-      - name: Execute unchanged frozen analyzer
+      - name: Execute unchanged frozen analyzer and capture outcome
         run: |
           set -euo pipefail
           python3 -m py_compile research/shadow/rtk_c10_65r2_in_class_first_rhs_diagnostic_parity.py
+          set +e
           python3 research/shadow/rtk_c10_65r2_in_class_first_rhs_diagnostic_parity.py --r1-control-glob 'class_r1/output/control_*perturbations*' --r2-off-glob 'class_r2/output/off_*perturbations*' --r2-dir class_r2/output --manifest c10_65r2_manifest.json --patch rtk/apply_rtk_c10_65r2_in_class_first_rhs_diagnostic_patch.py --output research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json | tee c10_65r2.log
-          grep -q '^C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_PASS_SCOPED ' c10_65r2.log
-      - name: Persist PASS result with provenance
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo "$rc" > c10_65r2_analyzer_rc.txt
+          cat research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json
+      - name: Persist diagnostic outcome with provenance
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json
-          p='research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json'; d=json.load(open(p))
-          d['provenance']={'repo_head_at_job_start':open('c10_65r2_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2-in-class-first-rhs-diagnostic-parity-v2.yml','directional_parent':'C10.65r2d','threshold_changed':False}
-          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          import json,os,shutil
+          p='research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json'
+          d=json.load(open(p))
+          d['provenance']={'repo_head_at_job_start':open('c10_65r2_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2-in-class-first-rhs-diagnostic-parity-v2.yml','directional_parent':'C10.65r2d','threshold_changed':False,'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'analyzer_exit_code':int(open('c10_65r2_analyzer_rc.txt').read().strip())}
+          out=p if d['classification']=='C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_PASS_SCOPED' else 'research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_FAIL_RUN2_v1.json'
+          open(out,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          open('c10_65r2_persist_path.txt','w').write(out+'\n')
           PY
-          cp research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json /tmp/r2.json
+          out="$(cat c10_65r2_persist_path.txt)"
+          cp "$out" /tmp/r2-out.json
           for attempt in 1 2 3 4 5; do
             git fetch origin rtk-class-build
             git reset --hard origin/rtk-class-build
-            cp /tmp/r2.json research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json
+            mkdir -p "$(dirname "$out")"
+            cp /tmp/r2-out.json "$out"
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json
-            git commit -m 'Record actual C10.65r2 in-CLASS first-RHS parity' || exit 0
-            if git push origin HEAD:rtk-class-build; then exit 0; fi
+            git add "$out"
+            git commit -m 'Record C10.65r2 frozen rerun outcome' || break
+            if git push origin HEAD:rtk-class-build; then break; fi
           done
-          exit 1
+          test "$(cat c10_65r2_analyzer_rc.txt)" -eq 0
