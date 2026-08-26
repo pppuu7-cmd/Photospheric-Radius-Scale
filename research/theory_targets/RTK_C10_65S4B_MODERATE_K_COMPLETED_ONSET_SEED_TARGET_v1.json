@@ -1,0 +1,56 @@
+{
+  "schema": "RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_TARGET_v1",
+  "gate": "C10.65s4b",
+  "created_utc": "2026-08-26T20:40:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s4a": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED",
+    "C10.65n": "C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED",
+    "C10.65o": "C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED",
+    "C10.65s1": "C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED"
+  },
+  "purpose": "Extend only the already-certified conditional completed-U1 onset projector/carrier construction from the low-k anchors to k=1e-3 and 3e-3 Mpc^-1 at the first frozen completion point, before any production feedback at those new modes.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "new_k_Mpc_inv": [0.001, 0.003],
+    "completion_point_count": 1,
+    "completion_point_selection": "first persisted C10.65n completion point",
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "historical_matching_control_status": "PRE_EFT_PHENOMENOLOGICAL_CONTROL_ONLY"
+  },
+  "carrier_contract": {
+    "completed_integrated_coordinates": ["phi_CLASS_equals_Psi_N", "delta_b", "theta_b", "delta_g", "theta_g", "delta_ur", "theta_ur", "shear_ur", "delta_cdm_khr", "theta_cdm_khr"],
+    "legacy_nlde_auxiliaries_excluded": true,
+    "ur_l_ge_3_policy": "copy only the exact-onset values materialized by C10.65s4a and label each HIGHER_ORDER_HISTORICAL_CONTROL; they are not part of the completed-U1 prediction",
+    "historical_CLASS_metric_consumed": false
+  },
+  "frozen_checks": {
+    "new_anchor_count": 2,
+    "all_projector_and_carrier_values_finite": true,
+    "preferred_A_Hamiltonian_momentum_normalized_residual_max": 1e-20,
+    "physical_traceless_normalized_residual_max": 1e-20,
+    "all_projector_denominators_nonzero": true,
+    "low_k_parent_regression_relative_max": 1e-12,
+    "s4a_domain_guards_inherited_unchanged": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "historical_metric_not_consumed": true,
+    "higher_ur_controls_explicitly_labeled": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED",
+  "fail_classification": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_FAIL_SCOPED",
+  "interpretation_if_pass": "At the first frozen completion point, the same conditional completed-U1 onset algebra and carrier map remain finite and constraint-consistent at k=1e-3 and 3e-3 Mpc^-1. This extends the conditional onset seed only; higher UR multipoles remain historical controls and no production trajectory at the new modes is certified.",
+  "next_if_pass": "Freeze C10.65s4c first-RHS/current-state-kernel parity at k=1e-3 and 3e-3 Mpc^-1 before any production integration at those modes.",
+  "non_claims": [
+    "not a UV derivation of the matching control",
+    "not a UV derivation of UR l>=3",
+    "not production feedback at the new k anchors",
+    "not finite-time stability at the new k anchors",
+    "not validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ]
+}
