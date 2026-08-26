@@ -1,0 +1,99 @@
+{
+  "classification": "C10_65R2G_SEPARATE_NOINLINE_OBSERVER_CODEGEN_ISOLATION_FAIL_SCOPED",
+  "gate": "C10.65r2g",
+  "next": "move the single observer hook outside perturbations.c entirely, into a post-row observer in output serialization, while keeping the original C10.65r2 target unchanged",
+  "non_claims": [
+    "not a pass of C10.65r2 by itself",
+    "not production completed-U1 feedback",
+    "not a change to any frozen scientific tolerance",
+    "not spectra or likelihood evidence"
+  ],
+  "off_path": {
+    "exact_numeric_text_identity_all_four": true,
+    "max_relative_difference": 0.0,
+    "records": [
+      {
+        "control_sha256": "c30c00ae580adff3b9abd27c69f648e9d80ebc359bfa2d2fb1522278458709d5",
+        "identical": true,
+        "k": 1e-05,
+        "off_sha256": "c30c00ae580adff3b9abd27c69f648e9d80ebc359bfa2d2fb1522278458709d5",
+        "same_numeric_row_count": true
+      },
+      {
+        "control_sha256": "385fd61d1b5f17a3d168e3c6c55405323e23ee419a83da3b7448f8ba1027b814",
+        "identical": true,
+        "k": 3e-05,
+        "off_sha256": "385fd61d1b5f17a3d168e3c6c55405323e23ee419a83da3b7448f8ba1027b814",
+        "same_numeric_row_count": true
+      },
+      {
+        "control_sha256": "254e540e6639a2ae561d7605edc84375305e3687d433f4290e9224862042de3e",
+        "identical": true,
+        "k": 0.0001,
+        "off_sha256": "254e540e6639a2ae561d7605edc84375305e3687d433f4290e9224862042de3e",
+        "same_numeric_row_count": true
+      },
+      {
+        "control_sha256": "d04ddfc69a11cad2ed00c4794441ef8d0edf8333015fcc9e3f86f3c71c8d22f2",
+        "identical": true,
+        "k": 0.0003,
+        "off_sha256": "d04ddfc69a11cad2ed00c4794441ef8d0edf8333015fcc9e3f86f3c71c8d22f2",
+        "same_numeric_row_count": true
+      }
+    ]
+  },
+  "on_path": {
+    "all_finite": true,
+    "exact_onset_all": true,
+    "max_r1_projector_regression_relative": 0.0,
+    "max_r2_vs_previous_scientific_parity_relative": 1.0,
+    "max_weighted_slip_cancel_normalized": 1.819290643156e-16,
+    "records": [
+      {
+        "k": 1e-05,
+        "max_r2_vs_previous_relative": 1.0,
+        "r1_B_regression_relative": 0.0,
+        "relative_a_error": 0.0,
+        "weighted_slip_cancel": 0.0
+      },
+      {
+        "k": 3e-05,
+        "max_r2_vs_previous_relative": 1.0,
+        "r1_B_regression_relative": 0.0,
+        "relative_a_error": 0.0,
+        "weighted_slip_cancel": 1.819290643156e-16
+      },
+      {
+        "k": 0.0001,
+        "max_r2_vs_previous_relative": 7.778988822089814e-13,
+        "r1_B_regression_relative": 0.0,
+        "relative_a_error": 0.0,
+        "weighted_slip_cancel": 1.285678305077e-16
+      },
+      {
+        "k": 0.0003,
+        "max_r2_vs_previous_relative": 0.0,
+        "r1_B_regression_relative": 0.0,
+        "relative_a_error": 0.0,
+        "weighted_slip_cancel": 0.0
+      }
+    ]
+  },
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 32980560380,
+    "repo_head_at_job_start": "82efd3693be928cd34880c252c03754dd099aaaf",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65r2g-separate-noinline-observer.yml"
+  },
+  "schema": "RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1",
+  "static_guards": {
+    "caller_does_not_reference_r1_temporaries": true,
+    "no_dy_write": true,
+    "no_production_metric_or_rhs_write": true,
+    "observer_entry_noinline_noclone": true,
+    "observer_is_separate_object": true
+  },
+  "target": "research/theory_targets/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_TARGET_v1.json",
+  "threshold_changed": false
+}
