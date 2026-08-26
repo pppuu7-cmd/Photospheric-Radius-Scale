@@ -1,0 +1,66 @@
+{
+  "schema": "RTK_C10_65I_COUPLED_COEFFICIENT_NULLITY_WITH_SYMBOLIC_C2_TARGET_v1",
+  "created_utc": "2026-08-26T01:16:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65i",
+  "question": "After quotienting one overall adiabatic normalization and carrying C2 as an external gauge-invariant matching coordinate, how many independent finite-onset amplitudes remain in the corrected photon+baryon+massless-UR+neutral-Khronon completed-U1 O(k^2) coefficient system?",
+  "parents": [
+    "research/theory_results/RTK_C10_65H_MINIMAL_C2_TEMPORAL_MATCHING_COORDINATE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json"
+  ],
+  "mandatory_separation": {
+    "initial_amplitudes_z": "regular O(k^0)+O(k^2) matter/multipole coefficients after eliminating algebraic preferred metric variables through A->Hamiltonian->momentum projection",
+    "derivatives_d": "local conformal-time derivatives produced by the first-order hierarchy for each admissible z",
+    "rank_rule": "only genuinely algebraic constraints/constitutive TCA closures may reduce nullity(z); equations d=Fz must not be counted as independent initial-amplitude constraints, per C10.65g",
+    "matching_coordinate": "C2 is external/fixed during each nullity calculation and B0 is reconstructed from C2 rather than counted as an independent unknown",
+    "normalization": "quotient exactly one common nonzero adiabatic normalization; do not set J_ad=0"
+  },
+  "physics_content": {
+    "ordinary_species": ["baryons", "photons", "massless UR"],
+    "neutral_species": "RTK/Khronon preferred action fluid",
+    "adiabatic_boundary": "Delta I_iso=I_khr-J_ad=0",
+    "ordinary_entropy": ["D_g0=(4/3)D_b0", "D_ur0=D_g0"],
+    "tca": "use the source-locked compromise_CLASS low-k branch and the exact-onset C10.65f coefficient pack",
+    "ur": "retain massless-UR shear through O(k^2); F3=O(k^3) is outside this order",
+    "metric": "preferred finite-k DAE projector only; Newtonian physical potentials are outputs",
+    "shift": "B0=[C2+2 Pcal psi0-E_th phi0]/(2H); no independent chi/B0 state"
+  },
+  "required_outputs": [
+    "explicit ordered list of initial-amplitude variables retained before and after algebraic elimination",
+    "explicit ordered list of independent algebraic constraints and their provenance",
+    "symbolic or exact-rational rank/nullity where possible, plus numerical SVD/rank cross-check at the frozen onset pack",
+    "nullity after removing one overall normalization with C2 held fixed",
+    "nullity with C2 released, to verify that the matching coordinate adds exactly the expected shift-sector boundary direction and does not masquerade as a propagating mode",
+    "basis vectors for every remaining null direction, classified as normalization, C2 matching, ordinary entropy/velocity, neutral relative entropy, hierarchy/multipole, or unresolved temporal branch",
+    "constraint residuals and preferred-projector denominator guards",
+    "repeat the structural count over the three frozen lambda_HL values; report any rank change rather than fitting it away"
+  ],
+  "classification_rule": {
+    "closed_given_C2": "after normalization and fixed C2, nullity is zero; this means the finite-onset coefficient seed is algebraically determined conditional on the external matching scalar, but it is not by itself a growing-mode derivation",
+    "remaining_temporal_amplitudes": "after normalization and fixed C2, nullity is positive; report its dimension and basis without inventing extra boundary conditions",
+    "rank_change": "nullity/rank changes over the frozen lambda_HL grid or a preferred-projector denominator guard fails",
+    "technical_incomplete": "the full source-locked TCA/UR/neutral algebraic ledger has not been encoded faithfully enough to make the count"
+  },
+  "forbidden_shortcuts": [
+    "do not impose I_khr=0",
+    "do not impose B0=0",
+    "do not count d=Fz as a nullity-reducing snapshot constraint",
+    "do not import historical CLASS phi/psi as completed-U1 metric values",
+    "do not drop UR anisotropic stress at O(k^2)",
+    "do not assign a numerical C2 in this gate"
+  ],
+  "next_if_closed_given_C2": "select/test an explicit temporal or UV prescription for C2, construct the conditional completed-U1 seed, and run onset-shift plus forward finite-k Boltzmann controls",
+  "next_if_remaining_temporal_amplitudes": "freeze the smallest additional gauge-invariant temporal boundary functional(s) indicated by the null basis before any spectra run",
+  "non_claims": [
+    "not a UV value of C2",
+    "not a growing-mode theorem by snapshot rank",
+    "not a propagating-DOF count",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ]
+}
