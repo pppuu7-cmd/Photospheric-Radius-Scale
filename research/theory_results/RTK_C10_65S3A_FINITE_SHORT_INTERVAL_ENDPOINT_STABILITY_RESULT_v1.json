@@ -1,0 +1,200 @@
+{
+  "checks": {
+    "all_adaptive_trace_values_finite": true,
+    "before_observer_exact_s2k": true,
+    "endpoint_constraints_all_finite": true,
+    "first_rhs_bound_inherited": true,
+    "interval_width": true,
+    "max_abs_endpoint_normalized_residual": true,
+    "max_abs_normalized_constraint_change": true,
+    "minimum_accepted_substeps": true,
+    "off_identity": true,
+    "original_s2_preserved_fail": true,
+    "post_endpoint_state_all_finite": true,
+    "record_counts": true,
+    "s2k_preserved_pass": true,
+    "same_kernel_physics_and_tolerance_static_guard": true,
+    "threshold_changed": false,
+    "trace_markers": true,
+    "trace_rhs_accounting": true
+  },
+  "classification": "C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED",
+  "constraint_drift": {
+    "0.0001": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.99871743994312e-16,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 2.99871743994312e-16,
+        "before_raw": 1.3877787807814457e-17
+      }
+    },
+    "0.00029999999999999997": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.9988030484022416e-16,
+        "after_normalized": 2.9988030484022416e-16,
+        "after_raw": 1.3877787807814457e-17,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      }
+    },
+    "1.0000000000000001e-05": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 3.317112331065782e-24,
+        "after_normalized": 2.998706883511519e-16,
+        "after_raw": 1.3877787807814457e-17,
+        "before_normalized": 2.9987068503403955e-16,
+        "before_raw": 1.3877787807814457e-17
+      }
+    },
+    "3.0000000000000001e-05": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.9987077392341824e-16,
+        "after_normalized": 2.9987077392341824e-16,
+        "after_raw": 1.3877787807814457e-17,
+        "before_normalized": 0.0,
+        "before_raw": 0.0
+      }
+    }
+  },
+  "frozen_constraint_bound": 1e-10,
+  "gate": "C10.65s3a",
+  "interpretation": "On the same one-point x four-anchor low-k domain, the completed-U1 production path remains finite and constraint-consistent at the endpoint of a 1e-6 Mpc multi-step interval under the unchanged pinned adaptive RK tolerance. This is a scoped numerical endpoint-stability certificate only, not a full-trajectory or cosmological stability theorem.",
+  "interval_delta_tau_Mpc": 1e-06,
+  "max_abs_endpoint_normalized_residual": 2.9988030484022416e-16,
+  "max_abs_normalized_constraint_change": 2.9988030484022416e-16,
+  "next_gate": "Freeze a path-sampled short-interval gate that observes constraints at accepted intermediate states, or widen the endpoint interval in a separately preregistered sequence before any spectra calculation.",
+  "non_claims": [
+    "not a full-trajectory transient bound",
+    "not cosmological-time stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "observed_widths_Mpc": {
+    "0.0001": 9.999999974752427e-07,
+    "0.00029999999999999997": 9.999999974752427e-07,
+    "1.0000000000000001e-05": 9.999999974752427e-07,
+    "3.0000000000000001e-05": 9.999999974752427e-07
+  },
+  "original_s2_classification_preserved": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s3a_endpoint_stability_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33005290875,
+    "interval_patch": "rtk/apply_rtk_c10_65s3a_interval_patch.py",
+    "observer_sha256": "17ca042c3b41fc8f676566ff6a537a87639eeda0af55d66d61e7aba7e723e37e",
+    "repo_head_at_job_start": "82483b1e2cf9702c7a47c59741fb2cfa93d7ebf2",
+    "source_s2k_run_id": 33004868239,
+    "threshold_changed": false,
+    "trace_patch": "rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py",
+    "trace_sha256": "7f4ca62ea591b8c07884ef1a6fd1fc830c512066cc88bd8941d05cc712880151",
+    "workflow": "rtk-c10-65s3a-endpoint-stability.yml"
+  },
+  "s2k_classification_preserved": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "schema": "RTK_C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_RESULT_v1",
+  "threshold_changed": false,
+  "trace_records": [
+    {
+      "accepted_substeps": 6,
+      "accounting_rhs_calls": 57,
+      "after_rhs_calls": 57,
+      "k": 1e-05,
+      "maximum_hdid": 4.863134677179914e-07,
+      "minimum_hdid": 1.9415461682339693e-09,
+      "rejected_trials": 4,
+      "rkck_trials": 10,
+      "sum_hdid": 9.99999995541788e-07
+    },
+    {
+      "accepted_substeps": 6,
+      "accounting_rhs_calls": 67,
+      "after_rhs_calls": 67,
+      "k": 3e-05,
+      "maximum_hdid": 7.115175293392895e-07,
+      "minimum_hdid": 1.3002690743072032e-09,
+      "rejected_trials": 6,
+      "rkck_trials": 12,
+      "sum_hdid": 9.9999998989683e-07
+    },
+    {
+      "accepted_substeps": 6,
+      "accounting_rhs_calls": 57,
+      "after_rhs_calls": 57,
+      "k": 0.0001,
+      "maximum_hdid": 7.063478477675744e-07,
+      "minimum_hdid": 1.691388172903307e-09,
+      "rejected_trials": 4,
+      "rkck_trials": 10,
+      "sum_hdid": 9.999999973476618e-07
+    },
+    {
+      "accepted_substeps": 7,
+      "accounting_rhs_calls": 68,
+      "after_rhs_calls": 68,
+      "k": 0.0003,
+      "maximum_hdid": 7.962035507650699e-07,
+      "minimum_hdid": 1.1135266552085755e-09,
+      "rejected_trials": 5,
+      "rkck_trials": 12,
+      "sum_hdid": 9.999999876152284e-07
+    }
+  ]
+}
