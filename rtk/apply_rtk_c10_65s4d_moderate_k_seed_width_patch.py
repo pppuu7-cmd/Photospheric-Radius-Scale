@@ -35,13 +35,16 @@ rep='static const s2seed S[2]={\n'+',\n'.join(rows)+'\n};\nstatic const double D
 s=s[:m.start()]+rep+s[m.end():]
 if s.count('for(i=0;i<4;i++)')!=1: raise SystemExit('seed loop anchor missing/nonunique')
 s=s.replace('for(i=0;i<4;i++)','for(i=0;i<2;i++)',1)
-# Audit: new moderate-k domain is present and old low-k seed literals do not
-# survive in the generated bridge.  This is intentionally not a broad textual
-# rewrite of any kernel equation.
-for kval in ks:
-    if f(kval) not in s: raise SystemExit('moderate-k seed literal missing: '+f(kval))
-for z in ['1.0000000000000001e-05','3.0000000000000001e-05','0.0001','0.00029999999999999997']:
-    if z in s: raise SystemExit('low-k seed literal survived: '+z)
+# Audit only the generated seed initializer.  A previous whole-file substring
+# guard incorrectly treated unrelated constants such as 0.0001 as surviving
+# low-k seeds.  Here we parse the first field of each actual S[2] row, which is
+# the quantity that defines the canary k-domain.
+tab=re.search(r'static const s2seed S\[2\]\s*=\s*\{(.*?)\n\};',s,re.S)
+if tab is None: raise SystemExit('moderate-k S[2] initializer missing after replacement')
+row_matches=re.findall(r'^\s*\{\s*([^,]+),',tab.group(1),re.M)
+if len(row_matches)!=2: raise SystemExit(f'moderate-k seed row count mismatch: {len(row_matches)}')
+parsed=[float(x.strip()) for x in row_matches]
+if parsed!=ks: raise SystemExit(f'moderate-k seed-domain mismatch: {parsed} != {ks}')
 if 'static const s2seed S[2]={' not in s or 'for(i=0;i<2;i++)' not in s:
     raise SystemExit('moderate-k seed table postcondition failed')
 p.write_text(s)
