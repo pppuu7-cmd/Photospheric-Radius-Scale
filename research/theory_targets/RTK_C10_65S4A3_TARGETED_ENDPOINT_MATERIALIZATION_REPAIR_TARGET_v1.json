@@ -1,0 +1,72 @@
+{
+  "schema": "RTK_C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_TARGET_v1",
+  "gate": "C10.65s4a3",
+  "created_utc": "2026-08-26T20:21:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "s4a2": {"classification": "C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_PASS_SCOPED", "run_id": 33009457306},
+    "s4a1": {"classification": "C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_PASS_SCOPED", "run_id": 33008538013},
+    "s4a_retry": {"classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED", "run_id": 33008706959},
+    "s4a_first_attempt_run_id": 33008095108
+  },
+  "measured_geometry": {
+    "tau_z": 87.89051579642643,
+    "tau_forward_consistent": 87.89051579644268,
+    "max_tau_z_forward_relative_a_error": 1.3286615619131758e-13,
+    "max_corrected_forward_relative_a_error": 7.787433043435558e-14,
+    "both_new_k_same_interval_for_tau_z_and_corrected_tau": true,
+    "corrected_interval_index_both": 0,
+    "corrected_approximation_state": [0,0,0]
+  },
+  "immutable_s4a_scientific_contract": {
+    "regression_k_Mpc_inv": [0.0001,0.0003],
+    "new_k_Mpc_inv": [0.001,0.003],
+    "a_on": 0.0002203229136467,
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "max_k_over_Hc": 0.25,
+    "max_abs_A2_k2_over_J": 0.005,
+    "scientific_thresholds_changed": false
+  },
+  "allowed_repair": {
+    "runtime_opt_in": "RTK_C10_65S4A3_TARGETED_ONSET",
+    "new_k_only": [0.001,0.003],
+    "regression_k_must_use_original_unsplit_path": true,
+    "tau_method": "runtime bisection on the existing background_at_tau forward spline for a(tau)=a_on, target relative a error 1e-13",
+    "split_only_containing_existing_uniform_approximation_interval": true,
+    "same_generic_evolver_arguments_except_segment_endpoints": true,
+    "after_first_segment_call_existing_s1_read_only_observer_exactly_once": true,
+    "direct_observer_call_occurs_after_generic_evolver_returns_endpoint_state": true,
+    "second_segment_continues_from_same_returned_state": true,
+    "no_manual_integrated_state_write": true,
+    "no_metric_workspace_write": true,
+    "no_physics_rhs_write": true,
+    "no_tolerance_or_approximation_criterion_change": true,
+    "off_path_original_unsplit_execution": true
+  },
+  "frozen_checks": {
+    "historical_failures_preserved": true,
+    "s4a2_geometry_parent_preserved": true,
+    "source_filters_only_new_k": true,
+    "source_computes_forward_spline_root": true,
+    "source_requires_root_relative_a_error_at_most_1e-13": true,
+    "source_splits_only_containing_interval": true,
+    "source_calls_existing_s1_observer_after_first_segment": true,
+    "source_leaves_regression_k_unsplit": true,
+    "source_contains_no_dy_assignment": true,
+    "source_contains_no_pvecmetric_assignment": true,
+    "source_contains_no_manual_index_pt_state_assignment": true,
+    "source_contains_no_tolerance_or_approximation_criterion_mutation": true,
+    "compile_passes": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_PASS_SCOPED",
+  "fail_classification": "C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_FAIL_SCOPED",
+  "next_if_pass": "Retry the unchanged frozen C10.65s4a scientific analyzer with s4a3 enabled only on k=1e-3 and 3e-3 Mpc^-1; preserve runs 33008095108 and 33008706959 as failed attempts.",
+  "non_claims": [
+    "not a reclassification of either failed s4a run",
+    "not a completed-U1 seed at the new k values",
+    "not production feedback at the new k values",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ]
+}
