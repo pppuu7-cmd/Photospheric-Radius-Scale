@@ -1,0 +1,149 @@
+{
+  "checks": {
+    "all_endpoint_approximation_states": true,
+    "all_endpoint_constraints_finite": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_endpoint_states_finite": true,
+    "all_endpoint_widths_within_absolute_tolerance": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "before_rows_exact_s2k_before_all_samples": true,
+    "first_rhs_bound_inherited": true,
+    "off_identity": true,
+    "record_count": false,
+    "same_kernel_and_tolerance_static_guard": true,
+    "sample_manifest_shape": false,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_FAIL_SCOPED",
+  "frozen_bound": 1e-10,
+  "gate": "C10.65s3b",
+  "interpretation": "At least one preregistered trajectory-sample check failed; preserve the result and diagnose without changing the fixed sample times or 1e-10 bound.",
+  "max_abs_normalized_constraint": 2.9987174399762937e-16,
+  "max_abs_normalized_constraint_change": 2.9987068503403955e-16,
+  "next_gate": "Diagnose s3b before widening time or k domain.",
+  "non_claims": [
+    "not a continuous-time supremum bound",
+    "not long-time cosmological stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s3b_trajectory_sample_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33005739177,
+    "repo_head_at_job_start": "a3ef992b94372ccafbdb6e637e8ade6d2c6cd9ab",
+    "sample_interval_patch": "rtk/apply_rtk_c10_65s3b_sample_interval_patch.py",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s3b-trajectory-sampling.yml"
+  },
+  "record_count": 4,
+  "records": [
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987068503403955e-16,
+          "after": 0.0,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 7
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 18
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.31735732168066e-27,
+          "after": 2.9987174399762937e-16,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 7
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 7
+    }
+  ],
+  "s2k_parent_preserved": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "s3a_parent_preserved": "C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED",
+  "sample_elapsed_tau_Mpc": [
+    1e-09,
+    3e-09,
+    1e-08,
+    3e-08,
+    1e-07,
+    3e-07,
+    1e-06
+  ],
+  "schema": "RTK_C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_RESULT_v1",
+  "threshold_changed": false
+}
