@@ -1,0 +1,223 @@
+{
+  "checks": {
+    "approximation": true,
+    "boundary_carrier": true,
+    "boundary_higher_ur": true,
+    "branch_count": true,
+    "constraint_capture_finite": true,
+    "first_rhs": true,
+    "fixed_branch_selection_static_guard": true,
+    "higher_ur_status_remains_historical_control": true,
+    "kernel_metric": true,
+    "no_double_gauge_transform": true,
+    "no_legacy_nlde_physical_role": true,
+    "off_identity": true,
+    "onset": true,
+    "post_step_finite": true,
+    "rhs_calls": true,
+    "s2e_failed_parent_preserved": true,
+    "s5c_envelope_not_interpreted_as_probability": true,
+    "same_kernel_integrator_tolerance_static_guard": true,
+    "step_width": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED",
+  "constraint_drift_measurement_only": {
+    "baseline": {
+      "A": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "H": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "M": {
+        "absolute_change": 3.1096286799641316e-16,
+        "after": 3.1096286799849704e-16,
+        "before": 6.219257359949102e-16
+      },
+      "T": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      }
+    },
+    "joint_extremum": {
+      "A": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "H": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "M": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "T": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      }
+    },
+    "phi_extremum": {
+      "A": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "H": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "M": {
+        "absolute_change": 2.9987067315926926e-16,
+        "after": 2.9987067315926926e-16,
+        "before": 0.0
+      },
+      "T": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      }
+    }
+  },
+  "gate": "C10.65s5d",
+  "interpretation": "At k=0.01 Mpc^-1, all three prospectively fixed s5c branches enter the unchanged completed-U1 production equations, reproduce an independent current-state first RHS, and execute exactly one accepted no-rejection Cash-Karp step at the inherited s2k width with finite constraint diagnostics and exact dormant OFF rollback. This is a multibranch production-entry certificate only.",
+  "max_boundary_carrier_relative": 0.0,
+  "max_boundary_higher_ur_relative": 0.0,
+  "max_first_rhs_relative": 4.441607914714873e-12,
+  "max_kernel_metric_relative": 1.556334652245679e-13,
+  "next_gate": "Freeze C10.65s5e multibranch finite-short-trajectory sampling on the same three fixed branches before any k-domain widening to 0.03 Mpc^-1.",
+  "non_claims": [
+    "not finite-time stability at k=0.01",
+    "not proof that true omitted O(k^4) terms lie in the s5c envelope",
+    "not a UV-derived uncertainty distribution",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s5d_multibranch_one_step_analyzer.py",
+    "base_production_patch": "rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py",
+    "branch_patch": "rtk/apply_rtk_c10_65s5d_branch_seed_patch.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33023782012,
+    "repo_head_at_job_start": "39c7258339d179af1d7386cf5a6239da63f445c7",
+    "s2k_parent_run_id": 33004868239,
+    "s5a_parent_run_id": 33020948421,
+    "s5b_parent_run_id": 33021127591,
+    "s5c_parent_run_id": 33021313553,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s5d-next-k-multibranch-one-step-production-canary.yml"
+  },
+  "records": [
+    {
+      "branch": "baseline",
+      "constraint_drift_measurement_only": {
+        "A": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "absolute_change": 3.1096286799641316e-16,
+          "after": 3.1096286799849704e-16,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "eta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "step_width_Mpc": 3.539923909556819e-10
+    },
+    {
+      "branch": "joint_extremum",
+      "constraint_drift_measurement_only": {
+        "A": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "eta": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "step_width_Mpc": 3.539923909556819e-10
+    },
+    {
+      "branch": "phi_extremum",
+      "constraint_drift_measurement_only": {
+        "A": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "absolute_change": 2.9987067315926926e-16,
+          "after": 2.9987067315926926e-16,
+          "before": 0.0
+        },
+        "T": {
+          "absolute_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "eta": [
+        -1.0,
+        -1.0,
+        1.0
+      ],
+      "step_width_Mpc": 3.539923909556819e-10
+    }
+  ],
+  "schema": "RTK_C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_RESULT_v1",
+  "threshold_changed": false
+}
