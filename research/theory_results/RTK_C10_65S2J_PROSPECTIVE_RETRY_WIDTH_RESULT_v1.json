@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "factor_frozen": true,
+    "one_step_not_weakened": true,
+    "parents": true,
+    "s2_preserved_fail": true,
+    "source_value_exact": true,
+    "target_frozen": true,
+    "tolerance_unchanged": true,
+    "width_exact": true,
+    "width_positive_finite": true
+  },
+  "classification": "C10_65S2J_PROSPECTIVE_RETRY_WIDTH_PASS_SCOPED",
+  "fixed_safety_factor": 0.5,
+  "gate": "C10.65s2j",
+  "integrator_tolerance_changed": false,
+  "interpretation": "Prospective implementation-scale selection only; original s2 remains failed and no retry has been executed.",
+  "next_gate": "Execute C10.65s2k as a separate production retry using exactly retry_width_Mpc, unchanged tolerance and equations, and require one accepted/no-rejection Cash-Karp step on all four anchors. Preserve C10.65s2 as FAIL_SCOPED regardless of s2k outcome.",
+  "non_claims": [
+    "not a reclassification of C10.65s2",
+    "not an integrator tolerance relaxation",
+    "not a stability interval",
+    "not full-time evolution",
+    "not spectra or likelihood evidence"
+  ],
+  "original_s2_classification_preserved": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "provenance": {
+    "github_actions_run_id": 33004636091,
+    "repo_head_at_job_start": "d6cbb803c181a016f25e38e70c9468d8345f7ff7",
+    "selector": "research/shadow/rtk_c10_65s2j_retry_width_selection.py",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s2j-prospective-retry-width.yml"
+  },
+  "retry_width_Mpc": 3.53993611477497e-10,
+  "schema": "RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_RESULT_v1",
+  "source_minimum_first_accepted_hdid_Mpc": 7.07987222954994e-10,
+  "threshold_changed": false
+}
