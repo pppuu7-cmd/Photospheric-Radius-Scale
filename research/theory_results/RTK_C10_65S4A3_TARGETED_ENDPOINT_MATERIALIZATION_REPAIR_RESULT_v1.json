@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "compile_passes": false,
+    "historical_failures_preserved": true,
+    "s4a2_geometry_parent_preserved": true,
+    "source_calls_existing_s1_observer_after_first_segment": true,
+    "source_computes_forward_spline_root": true,
+    "source_contains_no_dy_assignment": true,
+    "source_contains_no_manual_index_pt_state_assignment": true,
+    "source_contains_no_pvecmetric_assignment": true,
+    "source_contains_no_tolerance_or_approximation_criterion_mutation": true,
+    "source_filters_only_new_k": true,
+    "source_leaves_regression_k_unsplit": true,
+    "source_requires_root_relative_a_error_at_most_1e-13": true,
+    "source_splits_only_containing_interval": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_FAIL_SCOPED",
+  "gate": "C10.65s4a3",
+  "historical_s4a_failures": [
+    33008095108,
+    33008706959
+  ],
+  "interpretation": "At least one frozen s4a3 source/ownership/compile guard failed; do not retry s4a.",
+  "next_gate": "Repair s4a3 without modifying the frozen s4a scientific contract.",
+  "non_claims": [
+    "not a reclassification of either failed s4a run",
+    "not a completed-U1 seed at the new k values",
+    "not production feedback at the new k values",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s4a3_targeted_endpoint_materialization_repair.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33010775420,
+    "patch": "rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py",
+    "repo_head_at_job_start": "a1c1c8624316b30bcad8cb79b53d1e4c9fdec7d3",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s4a3-targeted-endpoint-materialization-repair.yml"
+  },
+  "s4a2_geometry": {
+    "max_corrected_forward_relative_a_error": 7.787433043435558e-14,
+    "run_id": 33009457306,
+    "same_interval_both": true,
+    "tau_corrected": 87.89051579644268
+  },
+  "schema": "RTK_C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_RESULT_v1",
+  "threshold_changed": false
+}
