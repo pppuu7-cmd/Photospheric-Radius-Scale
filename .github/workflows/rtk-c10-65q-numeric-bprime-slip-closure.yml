@@ -7,6 +7,7 @@ on:
     paths:
       - 'research/theory_targets/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_TARGET_v1.json'
       - 'research/shadow/rtk_c10_65q_numeric_bprime_slip_closure.py'
+      - 'research/shadow/rtk_c10_65q_numeric_bprime_slip_closure_v2.py'
       - '.github/workflows/rtk-c10-65q-numeric-bprime-slip-closure.yml'
 
 permissions:
@@ -79,8 +80,8 @@ jobs:
       - name: Execute numeric derivative and slip closure
         run: |
           set -euo pipefail
-          python3 -m py_compile research/shadow/rtk_c10_65q_numeric_bprime_slip_closure.py
-          python3 research/shadow/rtk_c10_65q_numeric_bprime_slip_closure.py --glob 'class_q/output/*perturbations*' | tee c10_65q.log
+          python3 -m py_compile research/shadow/rtk_c10_65q_numeric_bprime_slip_closure_v2.py
+          python3 research/shadow/rtk_c10_65q_numeric_bprime_slip_closure_v2.py --glob 'class_q/output/*perturbations*' | tee c10_65q.log
           grep -q '^C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED ' c10_65q.log
       - name: Add immutable provenance
         run: |
@@ -88,7 +89,7 @@ jobs:
           python3 - <<'PY'
           import json
           p='research/theory_results/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json'
-          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65q_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65q-numeric-bprime-slip-closure.yml','worker':'research/shadow/rtk_c10_65q_numeric_bprime_slip_closure.py','source_export_patch':'rtk/apply_rtk_c10_source_export_patch.py','mpmath':'1.3.0'}
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65q_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65q-numeric-bprime-slip-closure.yml','worker':'research/shadow/rtk_c10_65q_numeric_bprime_slip_closure_v2.py','source_export_patch':'rtk/apply_rtk_c10_source_export_patch.py','mpmath':'1.3.0','v1_failure_run':32921303943,'v1_failure_reason':'mixed rounded R representations broke an exact internal-force cancellation at ~4e-24 relative; v2 reconstructs R=W_gamma/W_b from the same state used by the aggregate projector without weakening the frozen 1e-30 criterion'}
           open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
           PY
       - name: Persist result
