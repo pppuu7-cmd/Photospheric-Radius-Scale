@@ -1372,16 +1372,17 @@
     }
   ],
   "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65r2_in_class_first_rhs_diagnostic_parity.py",
     "analyzer_exit_code": 0,
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 32981445507,
+    "github_actions_run_id": 32981619270,
     "implementation": "C10.65r2g separate noinline/noclone observer",
     "layout_adapter": "research/shadow/rtk_c10_65r2g_lossless_layout_adapter.py",
-    "original_frozen_analyzer_unchanged": true,
     "original_frozen_target_unchanged": true,
-    "repo_head_at_job_start": "baa5317115f45e731682965e0bdee4fdc71480ac",
+    "r2_patch": "rtk/apply_rtk_c10_65r2g_separate_observer_patch.py",
+    "repo_head_at_job_start": "62dc8eb932db7c21d805d57f7e2b830df90f45bd",
     "threshold_changed": false,
-    "workflow": "rtk-c10-65r2-r2g-full-rerun-v2.yml"
+    "workflow": "rtk-c10-65r2-r2g-full-rerun.yml"
   },
   "schema": "RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1",
   "target": "research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json",
