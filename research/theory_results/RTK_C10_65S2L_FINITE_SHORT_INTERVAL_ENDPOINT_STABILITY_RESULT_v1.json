@@ -1,0 +1,110 @@
+{
+  "adaptive_trace": {
+    "0.0001": {
+      "accepted_substeps": 4,
+      "maximum_errmax_on_accepted_trial": 0.4740417225769405,
+      "minimum_hdid": 1.102604172766757e-09,
+      "rejected_trials": 3,
+      "sum_hdid": 3.539937469012248e-08
+    },
+    "0.00029999999999999997": {
+      "accepted_substeps": 4,
+      "maximum_errmax_on_accepted_trial": 0.44466818842325656,
+      "minimum_hdid": 2.5074906403787403e-09,
+      "rejected_trials": 2,
+      "sum_hdid": 3.539936687367972e-08
+    },
+    "1.0000000000000001e-05": {
+      "accepted_substeps": 4,
+      "maximum_errmax_on_accepted_trial": 0.6279742585537391,
+      "minimum_hdid": 3.343168236363952e-09,
+      "rejected_trials": 2,
+      "sum_hdid": 3.53993608306142e-08
+    },
+    "3.0000000000000001e-05": {
+      "accepted_substeps": 5,
+      "maximum_errmax_on_accepted_trial": 0.9932579939747752,
+      "minimum_hdid": 9.017227388293345e-10,
+      "rejected_trials": 4,
+      "sum_hdid": 3.539938283877927e-08
+    }
+  },
+  "checks": {
+    "adaptive_trace_minimum_steps": false,
+    "before_exact_s2k": true,
+    "first_rhs_bound_inherited": true,
+    "off_identity": true,
+    "original_s2_remains_fail": true,
+    "record_counts": true,
+    "s2k_remains_pass": true,
+    "same_kernel_state_ownership_tolerance_guard": true,
+    "terminal_approximation_state": true,
+    "terminal_constraints": true,
+    "terminal_finite": true,
+    "terminal_interval": true,
+    "threshold_unchanged": true,
+    "trace_interval_consistency": false
+  },
+  "classification": "C10_65S2L_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_FAIL_SCOPED",
+  "finite_short_interval_Mpc": 3.53993611477497e-08,
+  "gate": "C10.65s2l",
+  "integrator_tolerance_changed": false,
+  "interpretation": "The frozen finite-short-interval endpoint gate failed at least one prospective requirement. Diagnose without weakening the frozen interval or constraint tolerance post hoc.",
+  "next_gate": "Diagnose C10.65s2l before any time/domain widening.",
+  "non_claims": [
+    "not a reclassification of original C10.65s2",
+    "not an intra-step or accepted-step peak constraint bound",
+    "not long-time completed-U1 stability",
+    "not full-time production evolution",
+    "not a UV derivation of higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not spectra or likelihood evidence"
+  ],
+  "observed_terminal_widths_Mpc": {
+    "0.0001": 3.539936699326063e-08,
+    "0.00029999999999999997": 3.539936699326063e-08,
+    "1.0000000000000001e-05": 3.539936699326063e-08,
+    "3.0000000000000001e-05": 3.539936699326063e-08
+  },
+  "original_s2_classification_preserved": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "prospective_terminal_constraint_bound": 1e-08,
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s2l_finite_short_interval_endpoint_stability_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33005267214,
+    "interval_patch": "rtk/apply_rtk_c10_65s2l_finite_interval_patch.py",
+    "observer_sha256": "ad8fdff505a2a958497d9d85a10cf41146392e8a1d2a2c7a357d78d350fd0273",
+    "repo_head_at_job_start": "247202aecd09e6a04956c01eb890a36a33f54334",
+    "source_s2k_run_id": 33004868239,
+    "threshold_changed": false,
+    "trace_patch": "rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py",
+    "trace_sha256": "c9325bcba4496b6ade4f442d1a29b33952463ffbd95a2a42899ef90a9656c892",
+    "workflow": "rtk-c10-65s2l-finite-short-interval-endpoint-stability.yml"
+  },
+  "s2k_classification_preserved": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "schema": "RTK_C10_65S2L_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_RESULT_v1",
+  "terminal_constraints": {
+    "0.0001": {
+      "A_norm": 0.0,
+      "H_norm": 0.0,
+      "M_norm": 0.0
+    },
+    "0.00029999999999999997": {
+      "A_norm": 0.0,
+      "H_norm": 0.0,
+      "M_norm": 2.998803016408705e-16
+    },
+    "1.0000000000000001e-05": {
+      "A_norm": 0.0,
+      "H_norm": 0.0,
+      "M_norm": 0.0
+    },
+    "3.0000000000000001e-05": {
+      "A_norm": 0.0,
+      "H_norm": 0.0,
+      "M_norm": 0.0
+    }
+  },
+  "threshold_changed": false
+}
