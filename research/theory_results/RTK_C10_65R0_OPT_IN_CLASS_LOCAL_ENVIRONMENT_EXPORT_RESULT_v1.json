@@ -1,0 +1,193 @@
+{
+  "classification": "C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_PASS_SCOPED",
+  "frozen_pack_parity": {
+    "components": {
+      "F": {
+        "frozen": 0.015037334491853818,
+        "on_mean": 0.015037334491852499,
+        "relative": 8.767443741153629e-14
+      },
+      "F_prime": {
+        "frozen": 0.0005594524981605395,
+        "on_mean": 0.00055945249816055,
+        "relative": 1.8798309253579068e-14
+      },
+      "Hc": {
+        "frozen": 0.0129629303512,
+        "on_mean": 0.0129629303512,
+        "relative": 0.0
+      },
+      "R": {
+        "frozen": 6.6951521502165,
+        "on_mean": 6.6951521502165,
+        "relative": 0.0
+      },
+      "cb2": {
+        "frozen": 2.46650315001575e-09,
+        "on_mean": 2.46650315001575e-09,
+        "relative": 0.0
+      },
+      "ddkappa": {
+        "frozen": -0.22405008530687498,
+        "on_mean": -0.22405008530687498,
+        "relative": 0.0
+      },
+      "dkappa": {
+        "frozen": 8.641953565704501,
+        "on_mean": 8.641953565704501,
+        "relative": 0.0
+      },
+      "dtau_c": {
+        "frozen": 0.0030000000135438033,
+        "on_mean": 0.003000000013544,
+        "relative": 6.563037121148994e-14
+      },
+      "tau_c": {
+        "frozen": 0.11571457684851365,
+        "on_mean": 0.1157145768485,
+        "relative": 1.1789236746672543e-13
+      }
+    },
+    "max_relative": 1.1789236746672543e-13,
+    "threshold": 1e-10
+  },
+  "gate": "C10.65r0",
+  "interpretation": "The real pinned CLASS perturbation output path exposes a dormant-by-default diagnostic environment interface whose enabled values reproduce the frozen exact-onset TCA/background pack. This is an implementation scaffold only; it does not yet prove C parity of the completed-U1 projector or first RHS.",
+  "metric_provenance_guard": "C10.65r0 exports no metric potential. Historical CLASS psi/phi columns may coexist in the parent diagnostic output but are not consumed by this analyzer or certified as completed-U1 data.",
+  "next_gate": "Freeze C10.65r1: implement the completed-U1 algebraic seed/projector in a diagnostic C helper, evaluate it from the C10.65r0 exported local environment plus the frozen UV matching vector at a_on, and compare psi_pref, phi_pref, B_pref, PsiN and PhiN against detached C10.65n/o before touching integration state.",
+  "non_claims": [
+    "not an in-CLASS completed-U1 metric implementation",
+    "not first-RHS parity",
+    "not a state handoff",
+    "not time integration",
+    "not spectra or likelihood evidence",
+    "not same-full-action primordial background closure",
+    "not a solution of the C9 radiative-naturalness gate"
+  ],
+  "off_path": {
+    "numeric_text_sha256_identical_all_four": true,
+    "records": [
+      {
+        "baseline_numeric_sha256": "07ac6845f6f1c2bf3e2441b3833adc853077e1e2dd7a173d991b590c93a3a08c",
+        "identical": true,
+        "k_Mpc_inv": 1e-05,
+        "patched_off_numeric_sha256": "07ac6845f6f1c2bf3e2441b3833adc853077e1e2dd7a173d991b590c93a3a08c"
+      },
+      {
+        "baseline_numeric_sha256": "b21cb0f2df65c2773dfc023e7f9bcc47d9efa3678bcf09a6d47b41f346761971",
+        "identical": true,
+        "k_Mpc_inv": 3e-05,
+        "patched_off_numeric_sha256": "b21cb0f2df65c2773dfc023e7f9bcc47d9efa3678bcf09a6d47b41f346761971"
+      },
+      {
+        "baseline_numeric_sha256": "c281cc636b993c0efb15975e5c9fb663c79bdedb43630be01d3827a0c104aed1",
+        "identical": true,
+        "k_Mpc_inv": 0.0001,
+        "patched_off_numeric_sha256": "c281cc636b993c0efb15975e5c9fb663c79bdedb43630be01d3827a0c104aed1"
+      },
+      {
+        "baseline_numeric_sha256": "8fdf8d7a86cd794c8e0feeb52845b79e5b5b6b2664076f459e8fcd0d0f15e546",
+        "identical": true,
+        "k_Mpc_inv": 0.0003,
+        "patched_off_numeric_sha256": "8fdf8d7a86cd794c8e0feeb52845b79e5b5b6b2664076f459e8fcd0d0f15e546"
+      }
+    ]
+  },
+  "on_path": {
+    "all_finite": true,
+    "exact_onset_all_four": true,
+    "expected_tca_on_flag": 0.0,
+    "max_duplicate_relative_residual": 0.0,
+    "onset_records": [
+      {
+        "c10_65r0_F": 0.01503733449185,
+        "c10_65r0_F_prime": 0.0005594524981605,
+        "c10_65r0_Hc": 0.0129629303512,
+        "c10_65r0_R": 6.695152150217,
+        "c10_65r0_a": 0.0002203229136467,
+        "c10_65r0_cb2": 2.466503150016e-09,
+        "c10_65r0_ddkappa": -0.2240500853069,
+        "c10_65r0_dkappa": 8.641953565705,
+        "c10_65r0_dtau_c": 0.003000000013544,
+        "c10_65r0_rho_b": 232.5512576401,
+        "c10_65r0_rho_g": 1167.724539468,
+        "c10_65r0_rho_ur": 807.7955080186,
+        "c10_65r0_tau_c": 0.1157145768485,
+        "c10_65r0_tca_flag": 0.0,
+        "k_Mpc_inv": 1e-05,
+        "relative_a_error": 0.0
+      },
+      {
+        "c10_65r0_F": 0.01503733449185,
+        "c10_65r0_F_prime": 0.0005594524981605,
+        "c10_65r0_Hc": 0.0129629303512,
+        "c10_65r0_R": 6.695152150217,
+        "c10_65r0_a": 0.0002203229136467,
+        "c10_65r0_cb2": 2.466503150016e-09,
+        "c10_65r0_ddkappa": -0.2240500853069,
+        "c10_65r0_dkappa": 8.641953565705,
+        "c10_65r0_dtau_c": 0.003000000013544,
+        "c10_65r0_rho_b": 232.5512576401,
+        "c10_65r0_rho_g": 1167.724539468,
+        "c10_65r0_rho_ur": 807.7955080186,
+        "c10_65r0_tau_c": 0.1157145768485,
+        "c10_65r0_tca_flag": 0.0,
+        "k_Mpc_inv": 3e-05,
+        "relative_a_error": 0.0
+      },
+      {
+        "c10_65r0_F": 0.01503733449185,
+        "c10_65r0_F_prime": 0.0005594524981605,
+        "c10_65r0_Hc": 0.0129629303512,
+        "c10_65r0_R": 6.695152150216,
+        "c10_65r0_a": 0.0002203229136467,
+        "c10_65r0_cb2": 2.466503150016e-09,
+        "c10_65r0_ddkappa": -0.2240500853069,
+        "c10_65r0_dkappa": 8.641953565705,
+        "c10_65r0_dtau_c": 0.003000000013544,
+        "c10_65r0_rho_b": 232.55125764,
+        "c10_65r0_rho_g": 1167.724539468,
+        "c10_65r0_rho_ur": 807.7955080185,
+        "c10_65r0_tau_c": 0.1157145768485,
+        "c10_65r0_tca_flag": 0.0,
+        "k_Mpc_inv": 0.0001,
+        "relative_a_error": 0.0
+      },
+      {
+        "c10_65r0_F": 0.01503733449186,
+        "c10_65r0_F_prime": 0.0005594524981607,
+        "c10_65r0_Hc": 0.0129629303512,
+        "c10_65r0_R": 6.695152150216,
+        "c10_65r0_a": 0.0002203229136467,
+        "c10_65r0_cb2": 2.466503150015e-09,
+        "c10_65r0_ddkappa": -0.2240500853068,
+        "c10_65r0_dkappa": 8.641953565703,
+        "c10_65r0_dtau_c": 0.003000000013544,
+        "c10_65r0_rho_b": 232.55125764,
+        "c10_65r0_rho_g": 1167.724539468,
+        "c10_65r0_rho_ur": 807.7955080182,
+        "c10_65r0_tau_c": 0.1157145768485,
+        "c10_65r0_tca_flag": 0.0,
+        "k_Mpc_inv": 0.0003,
+        "relative_a_error": 0.0
+      }
+    ],
+    "positive_guards": true,
+    "tca_flag_match": true
+  },
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "control_tree": "same pinned RTK diagnostic tree through C10.65e, without r0 patch",
+    "patch": "rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py",
+    "repo_head_at_job_start": "22216bfc64e12c030fe6689c95bbfcf89f80698a",
+    "worker": "research/shadow/rtk_c10_65r0_opt_in_class_local_environment_export.py",
+    "workflow": "rtk-c10-65r0-opt-in-class-local-environment-export.yml"
+  },
+  "runtime_flag": {
+    "default": 0.0,
+    "enabled": 1.0,
+    "name": "c10_65r0_diag"
+  },
+  "schema": "RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_TARGET_v1.json"
+}
