@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import importlib.util, json, math, subprocess, sys
+import importlib.util, json, math, re, subprocess, sys
 from pathlib import Path
 import mpmath as mp
 ROOT=Path(__file__).resolve().parents[2]
@@ -60,7 +60,8 @@ def main():
         eb=rel(Bc,Bs); ebp=rel(Bpc,Bps); es=rel(Bpc,Bstored); eB=max(eB,eb); eBp=max(eBp,ebp); eStored=max(eStored,es)
         records.append({'lambda_HL':float(lam),'M_c_Mpc_inv':float(Mc),'k':float(k),'C_B':float(Bc),'C_Bprime':float(Bpc),'C_vs_stable_B_relative':float(eb),'C_vs_stable_Bprime_relative':float(ebp),'C_vs_stored_q_Bprime_relative':float(es)})
     source=(ROOT/'rtk/c10_65r2d_general_projector_dual.c').read_text()
-    fixed_c2_absent=('C2' not in source and 'c2' not in source.lower().replace('c10',''))
+    code_no_comments=re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
+    fixed_c2_absent=(re.search(r'\bC2\b',code_no_comments,re.I) is None)
     c=t['frozen_checks']; passed=(len(records)==c['record_count'] and eB<=M(c['max_C_double_vs_high_precision_stable_B_relative']) and eBp<=M(c['max_C_double_vs_high_precision_stable_Bprime_relative']) and eStored<=M(c['max_C_double_vs_persisted_q_Bprime_relative']) and finite and fixed_c2_absent)
     out={'gate':'C10.65r2d','classification':t['pass_classification'] if passed else t['fail_classification'],'r2_gate_status':'OPEN_NOT_EXECUTED','record_count':len(records),'checks':{'max_C_double_vs_high_precision_stable_B_relative':float(eB),'max_C_double_vs_high_precision_stable_Bprime_relative':float(eBp),'max_C_double_vs_persisted_q_Bprime_relative':float(eStored),'all_outputs_finite':finite,'fixed_C2_absent_from_C_directional_source':fixed_c2_absent},'records':records,'r2_frozen_target_unchanged':True,'next_gate':t['next_if_pass'] if passed else 'Diagnose the C double directional port without weakening frozen criteria.','non_claims':t['non_claims']}
     p=ROOT/'research/theory_results/RTK_C10_65R2D_C_DOUBLE_GENERAL_PROJECTOR_DIRECTIONAL_PORT_RESULT_v1.json'; p.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
