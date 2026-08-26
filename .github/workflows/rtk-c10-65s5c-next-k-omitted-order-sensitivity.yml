@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [rtk-class-build]
-    paths: ['.github/workflows/rtk-c10-65s5c-next-k-omitted-order-sensitivity.yml']
+    paths: ['.github/workflows/rtk-c10-65s5c-next-k-omitted-order-sensitivity.yml','research/triggers/RTK_C10_65S5C_TRIGGER_v1.txt']
 permissions: {contents: write}
 jobs:
   sensitivity:
