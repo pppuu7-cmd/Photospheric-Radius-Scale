@@ -1,0 +1,73 @@
+{
+  "schema": "RTK_C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_TARGET_v1",
+  "gate": "C10.65s5d",
+  "created_utc": "2026-08-26T23:25:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s5a": "C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_PASS_SCOPED",
+    "C10.65s5b": "C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED",
+    "C10.65s5c": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
+    "C10.65s2k": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+    "C10.65s2e_historical": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED"
+  },
+  "purpose": "First production-entry test at k=0.01 Mpc^-1 after s5c showed non-negligible omitted-order sensitivity. Do not test the baseline alone: prospectively carry three fixed branches from the already-executed s5c envelope through the unchanged completed-U1 production kernel and exactly one accepted Cash-Karp step.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "k_Mpc_inv": 0.01,
+    "branches": [
+      {"id": "baseline", "eta_D": 0.0, "eta_C": 0.0, "eta_S": 0.0},
+      {"id": "joint_extremum", "eta_D": -1.0, "eta_C": -1.0, "eta_S": -1.0},
+      {"id": "phi_extremum", "eta_D": -1.0, "eta_C": -1.0, "eta_S": 1.0}
+    ]
+  },
+  "execution": {
+    "evolver": "rk",
+    "retry_width_Mpc": 3.53993611477497e-10,
+    "integrator_tolerance": "unchanged from C10.65s2k",
+    "required_accepted_substeps": 1,
+    "required_rejected_trials": 0,
+    "before_rhs_calls": 1,
+    "after_rhs_calls": 7
+  },
+  "frozen_checks": {
+    "branch_count": 3,
+    "off_numeric_text_sha256_identical_all_branches": true,
+    "boundary_carrier_relative_tolerance_vs_branch_builder": 1e-12,
+    "boundary_higher_ur_relative_tolerance_vs_s5b_control": 1e-12,
+    "first_rhs_relative_tolerance_vs_independent_current_state_kernel": 5e-9,
+    "kernel_metric_relative_tolerance_vs_independent_current_state_kernel": 5e-9,
+    "onset_relative_tolerance": 1e-12,
+    "step_width_absolute_tolerance_Mpc": 5e-14,
+    "approximation_state": {"TCA_enum": 0, "RSA_enum": 0, "UFA_enum": 0, "l_max_ur": 17},
+    "post_step_state_all_finite": true,
+    "constraint_before_after_all_finite": true,
+    "constraint_drift_measurement_only": true,
+    "same_kernel_integrator_tolerance_static_guard": true,
+    "fixed_branch_selection_static_guard": true,
+    "no_legacy_nlde_physical_role": true,
+    "no_double_gauge_transform": true,
+    "higher_ur_status_remains_historical_control": true,
+    "s5c_envelope_not_interpreted_as_probability": true,
+    "s2e_failed_parent_preserved": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED",
+  "fail_classification": "C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "interpretation_if_pass": "At k=0.01 Mpc^-1, all three prospectively fixed s5c branches enter the unchanged completed-U1 production equations, reproduce an independent current-state first RHS, and execute exactly one accepted no-rejection Cash-Karp step at the inherited s2k width with finite constraint diagnostics and exact dormant OFF rollback. This is a multibranch production-entry certificate only.",
+  "next_if_pass": "Freeze C10.65s5e multibranch finite-short-trajectory sampling on the same three fixed branches before any k-domain widening to 0.03 Mpc^-1.",
+  "non_claims": [
+    "not finite-time stability at k=0.01",
+    "not proof that true omitted O(k^4) terms lie in the s5c envelope",
+    "not a UV-derived uncertainty distribution",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "threshold_changed": false
+}
