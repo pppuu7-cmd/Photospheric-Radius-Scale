@@ -1,0 +1,1282 @@
+{
+  "anchor_count_per_point": 4,
+  "classification": "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED",
+  "component_diagnostics": {
+    "C_vs_detached_parent_relative": {
+      "c10_65r1_B_den": 2.748193232101564e-13,
+      "c10_65r1_B_pref": 6.373053864425692e-13,
+      "c10_65r1_DA": 4.4394951637559624e-13,
+      "c10_65r1_Db": 1.2049575539102535e-13,
+      "c10_65r1_Dg": 8.437411260660556e-14,
+      "c10_65r1_Phi_N": 6.159546074424491e-13,
+      "c10_65r1_Psi_N": 6.150469713799663e-13,
+      "c10_65r1_Qpref": 6.973833119402981e-13,
+      "c10_65r1_V_N": 1.1058437899628962e-12,
+      "c10_65r1_W_khr": 0.0,
+      "c10_65r1_delta_mu_pref": 1.333798045888588e-12,
+      "c10_65r1_phi_pref": 8.345288339218199e-13,
+      "c10_65r1_psi_pref": 1.329951171938057e-12,
+      "c10_65r1_psi_pref_prime": 1.707391900847721e-12,
+      "c10_65r1_shear_feedback_den": 4.962711651849499e-14,
+      "c10_65r1_sigma_g_over_k2": 8.554340239386208e-13
+    },
+    "C_vs_local_python_relative": {
+      "c10_65r1_B_den": 2.6300466806837986e-13,
+      "c10_65r1_B_pref": 5.810031336680055e-13,
+      "c10_65r1_DA": 4.4417149113378405e-13,
+      "c10_65r1_Db": 1.2049575539102535e-13,
+      "c10_65r1_Dg": 8.4596149745044e-14,
+      "c10_65r1_Phi_N": 4.742787210026209e-13,
+      "c10_65r1_Psi_N": 5.07149770934757e-13,
+      "c10_65r1_Qpref": 3.618055837881562e-13,
+      "c10_65r1_V_N": 1.0286496139793187e-12,
+      "c10_65r1_W_khr": 0.0,
+      "c10_65r1_delta_mu_pref": 3.8933904143028293e-13,
+      "c10_65r1_phi_pref": 7.029679126173237e-13,
+      "c10_65r1_psi_pref": 3.92122201282483e-13,
+      "c10_65r1_psi_pref_prime": 5.142746689306501e-13,
+      "c10_65r1_shear_feedback_den": 4.962711651849499e-14,
+      "c10_65r1_sigma_g_over_k2": 1.0369199347487041e-12
+    },
+    "local_worst_records": {
+      "c10_65r1_B_den": {
+        "C": -1.50375935637e-10,
+        "k": 0.0003,
+        "prefix": "p00_",
+        "python": -1.5037593563703954e-10
+      },
+      "c10_65r1_B_pref": {
+        "C": -188.091021248,
+        "k": 0.0003,
+        "prefix": "p00_",
+        "python": -188.09102124789072
+      },
+      "c10_65r1_DA": {
+        "C": 1.00031466072,
+        "k": 1e-05,
+        "prefix": "p03_",
+        "python": 1.0003146607195557
+      },
+      "c10_65r1_Db": {
+        "C": -3.000011209066,
+        "k": 0.0001,
+        "prefix": "p00_",
+        "python": -3.0000112090656383
+      },
+      "c10_65r1_Dg": {
+        "C": -4.000134508788,
+        "k": 0.0003,
+        "prefix": "p00_",
+        "python": -4.000134508787662
+      },
+      "c10_65r1_Phi_N": {
+        "C": 2.366147549101,
+        "k": 0.0003,
+        "prefix": "p07_",
+        "python": 2.366147549099878
+      },
+      "c10_65r1_Psi_N": {
+        "C": 2.438704541171,
+        "k": 0.0003,
+        "prefix": "p03_",
+        "python": 2.438704541169763
+      },
+      "c10_65r1_Qpref": {
+        "C": 0.04627775728285,
+        "k": 0.0003,
+        "prefix": "p00_",
+        "python": 0.04627775728283326
+      },
+      "c10_65r1_V_N": {
+        "C": -110.9625508252,
+        "k": 0.0003,
+        "prefix": "p00_",
+        "python": -110.96255082508586
+      },
+      "c10_65r1_delta_mu_pref": {
+        "C": -12352.75035688,
+        "k": 1e-05,
+        "prefix": "p06_",
+        "python": -12352.75035687519
+      },
+      "c10_65r1_phi_pref": {
+        "C": 1.781491799696,
+        "k": 0.0003,
+        "prefix": "p03_",
+        "python": 1.7814917996947477
+      },
+      "c10_65r1_psi_pref": {
+        "C": 0.000156911475778,
+        "k": 3e-05,
+        "prefix": "p00_",
+        "python": 0.00015691147577793848
+      },
+      "c10_65r1_psi_pref_prime": {
+        "C": -1.597632565774e-05,
+        "k": 0.0003,
+        "prefix": "p03_",
+        "python": -1.5976325657748216e-05
+      },
+      "c10_65r1_shear_feedback_den": {
+        "C": 0.9999970315069,
+        "k": 1e-05,
+        "prefix": "p00_",
+        "python": 0.9999970315069496
+      },
+      "c10_65r1_sigma_g_over_k2": {
+        "C": -4.532029775059,
+        "k": 0.0003,
+        "prefix": "p05_",
+        "python": -4.5320297750543
+      }
+    },
+    "parent_worst_records": {
+      "c10_65r1_B_den": {
+        "C": -1.670843776003e-13,
+        "k": 1e-05,
+        "parent": -1.6708437760025408e-13,
+        "prefix": "p03_"
+      },
+      "c10_65r1_B_pref": {
+        "C": -188.1088296563,
+        "k": 0.0001,
+        "parent": -188.10882965641989,
+        "prefix": "p03_"
+      },
+      "c10_65r1_DA": {
+        "C": 1.00031466072,
+        "k": 1e-05,
+        "parent": 1.0003146607195559,
+        "prefix": "p03_"
+      },
+      "c10_65r1_Db": {
+        "C": -3.000011209066,
+        "k": 0.0001,
+        "parent": -3.0000112090656383,
+        "prefix": "p00_"
+      },
+      "c10_65r1_Dg": {
+        "C": -4.000134508788,
+        "k": 0.0003,
+        "parent": -4.000134508787663,
+        "prefix": "p00_"
+      },
+      "c10_65r1_Phi_N": {
+        "C": 2.365526095449,
+        "k": 3e-05,
+        "parent": 2.365526095450457,
+        "prefix": "p04_"
+      },
+      "c10_65r1_Psi_N": {
+        "C": 2.426058194787,
+        "k": 3e-05,
+        "parent": 2.4260581947884923,
+        "prefix": "p08_"
+      },
+      "c10_65r1_Qpref": {
+        "C": 0.04625708302295,
+        "k": 0.0001,
+        "parent": 0.04625708302298226,
+        "prefix": "p06_"
+      },
+      "c10_65r1_V_N": {
+        "C": -111.042804335,
+        "k": 3e-05,
+        "parent": -111.0428043351228,
+        "prefix": "p06_"
+      },
+      "c10_65r1_delta_mu_pref": {
+        "C": -12357.09036785,
+        "k": 0.0003,
+        "parent": -12357.090367866482,
+        "prefix": "p03_"
+      },
+      "c10_65r1_phi_pref": {
+        "C": 1.768845453312,
+        "k": 3e-05,
+        "parent": 1.768845453313476,
+        "prefix": "p08_"
+      },
+      "c10_65r1_psi_pref": {
+        "C": 0.0006321212254124,
+        "k": 0.0003,
+        "parent": 0.0006321212254132407,
+        "prefix": "p06_"
+      },
+      "c10_65r1_psi_pref_prime": {
+        "C": -1.597632565774e-05,
+        "k": 0.0003,
+        "parent": -1.5976325657767277e-05,
+        "prefix": "p03_"
+      },
+      "c10_65r1_shear_feedback_den": {
+        "C": 0.9999970315069,
+        "k": 1e-05,
+        "parent": 0.9999970315069496,
+        "prefix": "p00_"
+      },
+      "c10_65r1_sigma_g_over_k2": {
+        "C": -4.53104566232,
+        "k": 3e-05,
+        "parent": -4.531045662323876,
+        "prefix": "p02_"
+      }
+    }
+  },
+  "gate": "C10.65r1",
+  "global_checks": {
+    "all_outputs_finite": true,
+    "exact_onset_all": true,
+    "max_C_vs_detached_parent_relative": 1.707391900847721e-12,
+    "max_C_vs_local_python_relative": 1.0369199347487041e-12,
+    "max_W_khr_relative_to_detached_background": 6.110529647599404e-13,
+    "min_DA": 1.000156936045,
+    "min_abs_B_linear_denominator": 1.670843775897e-13,
+    "min_abs_radiation_shear_feedback_denominator": 0.9999970315069,
+    "threshold_W_khr": 1e-10,
+    "threshold_detached": 1e-06,
+    "threshold_local": 5e-11
+  },
+  "grid_point_count": 9,
+  "interpretation": "The completed-U1 onset projector plus radiation anisotropic-stress metric closure has an executable double-precision C representation inside real pinned CLASS that agrees with an independent local-environment Python reconstruction and the detached n/o parents, while remaining dormant and numerically inert when disabled. This still does not alter or validate the CLASS time-evolution RHS.",
+  "metric_provenance_guard": "The local Python reconstruction consumes only C10.65r0 environment columns, diagnostic completion inputs, the C-exported Khronon enthalpy and frozen C10.65m matching constants. Standard CLASS psi/phi columns are parsed only as part of the inherited tail layout and are never consumed by the parity calculation.",
+  "next_gate": "Freeze C10.65r2 first-RHS diagnostic parity: use the C projector outputs to construct completed metric_continuity/metric_euler and source-locked TCA/UR/Khronon derivatives in a shadow C RHS, compare to detached n/o/q, still without writing dy. Only after r2 passes may a controlled a_on state handoff/short-step integration be attempted.",
+  "non_claims": [
+    "not first-RHS parity",
+    "not completed-U1 feedback into integration",
+    "not a state handoff",
+    "not short-step or full time integration",
+    "not spectra or likelihood evidence",
+    "not a microscopic derivation of the matching vector",
+    "not same-full-action primordial background closure",
+    "not resolution of C9 radiative naturalness"
+  ],
+  "numerical_conditioning": {
+    "conditioned_C_patch": "rtk/stabilize_rtk_c10_65r1_conditioned_projector.py",
+    "conditioned_python_wrapper": "research/shadow/rtk_c10_65r1_conditioned_parity_wrapper.py",
+    "method": "algebraically equivalent cancellation-free B closure",
+    "threshold_changed": false
+  },
+  "off_path": {
+    "numeric_text_sha256_identical_all_four": true,
+    "records": [
+      {
+        "identical": true,
+        "k_Mpc_inv": 1e-05,
+        "r0_sha256": "1583363da4bf3ead4e41a8cbe1187bbe88dc967d37d6253892694cd717461d76",
+        "r1_off_sha256": "1583363da4bf3ead4e41a8cbe1187bbe88dc967d37d6253892694cd717461d76"
+      },
+      {
+        "identical": true,
+        "k_Mpc_inv": 3e-05,
+        "r0_sha256": "6f378b5a9c388e43e5a5f3ce67999a2b2a2f706b43063f01a2d2524672c445ec",
+        "r1_off_sha256": "6f378b5a9c388e43e5a5f3ce67999a2b2a2f706b43063f01a2d2524672c445ec"
+      },
+      {
+        "identical": true,
+        "k_Mpc_inv": 0.0001,
+        "r0_sha256": "0ef3560ae723bb8134065c18413e6bf4355146b41059f05422bc52eba445ab16",
+        "r1_off_sha256": "0ef3560ae723bb8134065c18413e6bf4355146b41059f05422bc52eba445ab16"
+      },
+      {
+        "identical": true,
+        "k_Mpc_inv": 0.0003,
+        "r0_sha256": "740a789b876f393221bb8ebfdd486e4810e459d699f1f8ca9f7ac249c42ebcdc",
+        "r1_off_sha256": "740a789b876f393221bb8ebfdd486e4810e459d699f1f8ca9f7ac249c42ebcdc"
+      }
+    ]
+  },
+  "points": [
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "lambda_HL": 1.0016708437761068,
+      "max_C_vs_detached_parent_relative": 1.3436641689598322e-12,
+      "max_C_vs_local_python_relative": 1.0286496139793187e-12,
+      "prefix": "p00_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.670843776055e-13,
+            "c10_65r1_B_pref": -188.0955056675,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.36965625903,
+            "c10_65r1_Psi_N": 2.438425850771,
+            "c10_65r1_Qpref": 0.04627924135444,
+            "c10_65r1_V_N": -110.9645618282,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.62395577,
+            "c10_65r1_phi_pref": 1.781213109296,
+            "c10_65r1_psi_pref": 0.0001569114289073,
+            "c10_65r1_psi_pref_prime": -7.969866594075e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.573538572623
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 9.93490741191287e-13,
+          "max_C_vs_local_python_relative": 4.018730066752813e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.503759398075e-12,
+            "c10_65r1_B_pref": -188.0954657617,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.369655741527,
+            "c10_65r1_Psi_N": 2.438425333521,
+            "c10_65r1_Qpref": 0.04627922814802,
+            "c10_65r1_V_N": -110.9645439327,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.62764987,
+            "c10_65r1_phi_pref": 1.781212592046,
+            "c10_65r1_psi_pref": 0.000156911475778,
+            "c10_65r1_psi_pref_prime": -7.969873617017e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.573537829422
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 8.438579988060961e-13,
+          "max_C_vs_local_python_relative": 3.92122201282483e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.670843770906e-11,
+            "c10_65r1_B_pref": -188.0950118325,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.369649854933,
+            "c10_65r1_Psi_N": 2.438419449802,
+            "c10_65r1_Qpref": 0.04627907792498,
+            "c10_65r1_V_N": -110.9643403716,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.66967022,
+            "c10_65r1_phi_pref": 1.781206708327,
+            "c10_65r1_psi_pref": 0.000156912008932,
+            "c10_65r1_psi_pref_prime": -7.969953502869e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.573529375505
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 1.131968305779646e-12,
+          "max_C_vs_local_python_relative": 3.718597360962612e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.50375935637e-10,
+            "c10_65r1_B_pref": -188.091021248,
+            "c10_65r1_DA": 1.000156936045,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.369598104674,
+            "c10_65r1_Psi_N": 2.438367724819,
+            "c10_65r1_Qpref": 0.04627775728285,
+            "c10_65r1_V_N": -110.9625508252,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12359.03907992,
+            "c10_65r1_phi_pref": 1.781154983344,
+            "c10_65r1_psi_pref": 0.0001569166960008,
+            "c10_65r1_psi_pref_prime": -7.970655787718e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.573455055432
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.3436641689598322e-12,
+          "max_C_vs_local_python_relative": 1.0286496139793187e-12,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "lambda_HL": 1.0033500837520937,
+      "max_C_vs_detached_parent_relative": 1.3557791010490203e-12,
+      "max_C_vs_local_python_relative": 8.567584792765981e-13,
+      "prefix": "p01_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.350083751989e-13,
+            "c10_65r1_B_pref": -187.7512429552,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.365188788233,
+            "c10_65r1_Psi_N": 2.433963197208,
+            "c10_65r1_Qpref": 0.04627924135444,
+            "c10_65r1_V_N": -110.6202991158,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.62395577,
+            "c10_65r1_phi_pref": 1.776750455733,
+            "c10_65r1_psi_pref": 0.0001569114289073,
+            "c10_65r1_psi_pref_prime": -7.969866592275e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.559374543348
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 9.93490741191287e-13,
+          "max_C_vs_local_python_relative": 3.7472998919623437e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.01507537604e-12,
+            "c10_65r1_B_pref": -187.751202404,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.365188262355,
+            "c10_65r1_Psi_N": 2.433962671593,
+            "c10_65r1_Qpref": 0.04627922814802,
+            "c10_65r1_V_N": -110.620280575,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.62764987,
+            "c10_65r1_phi_pref": 1.776749930118,
+            "c10_65r1_psi_pref": 0.000156911475778,
+            "c10_65r1_psi_pref_prime": -7.969873600811e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.559373773595
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 8.870074146544503e-13,
+          "max_C_vs_local_python_relative": 3.92122201282483e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.350083741666e-11,
+            "c10_65r1_B_pref": -187.7507411339,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.365182280498,
+            "c10_65r1_Psi_N": 2.433956692713,
+            "c10_65r1_Qpref": 0.04627907792498,
+            "c10_65r1_V_N": -110.620069673,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.66967022,
+            "c10_65r1_phi_pref": 1.776743951238,
+            "c10_65r1_psi_pref": 0.000156912008932,
+            "c10_65r1_psi_pref_prime": -7.969953322802e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.55936501765
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 1.131968305779646e-12,
+          "max_C_vs_local_python_relative": 4.4115028345452883e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.015075292421e-10,
+            "c10_65r1_B_pref": -187.7466860156,
+            "c10_65r1_DA": 1.000156936045,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.36512969279,
+            "c10_65r1_Psi_N": 2.433904131185,
+            "c10_65r1_Qpref": 0.04627775728285,
+            "c10_65r1_V_N": -110.6182155928,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12359.03907992,
+            "c10_65r1_phi_pref": 1.77669138971,
+            "c10_65r1_psi_pref": 0.0001569166960008,
+            "c10_65r1_psi_pref_prime": -7.970654166814e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.559288042459
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.3557791010490203e-12,
+          "max_C_vs_local_python_relative": 8.567584792765981e-13,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "lambda_HL": 1.0067340067340067,
+      "max_C_vs_detached_parent_relative": 1.4229416481069535e-12,
+      "max_C_vs_local_python_relative": 1.0312853782856205e-12,
+      "prefix": "p02_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.734006733797e-13,
+            "c10_65r1_B_pref": -187.0627175316,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.356253846652,
+            "c10_65r1_Psi_N": 2.425037890097,
+            "c10_65r1_Qpref": 0.04627924135444,
+            "c10_65r1_V_N": -109.9317736922,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.62395577,
+            "c10_65r1_phi_pref": 1.767825148622,
+            "c10_65r1_psi_pref": 0.0001569114289073,
+            "c10_65r1_psi_pref_prime": -7.969866588674e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.531046484841
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 9.93490741191287e-13,
+          "max_C_vs_local_python_relative": 3.7472998919623437e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.060606058908e-12,
+            "c10_65r1_B_pref": -187.0626756978,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.356253304131,
+            "c10_65r1_Psi_N": 2.425037347856,
+            "c10_65r1_Qpref": 0.04627922814802,
+            "c10_65r1_V_N": -109.9317538688,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.62764987,
+            "c10_65r1_phi_pref": 1.767824606381,
+            "c10_65r1_psi_pref": 0.000156911475778,
+            "c10_65r1_psi_pref_prime": -7.9698735684e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.53104566232
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 9.374645156443485e-13,
+          "max_C_vs_local_python_relative": 3.92122201282483e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.734006713046e-11,
+            "c10_65r1_B_pref": -187.0621998391,
+            "c10_65r1_DA": 1.000156936048,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.356247132959,
+            "c10_65r1_Psi_N": 2.425031179865,
+            "c10_65r1_Qpref": 0.04627907792498,
+            "c10_65r1_V_N": -109.9315283782,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12358.66967022,
+            "c10_65r1_phi_pref": 1.76781843839,
+            "c10_65r1_psi_pref": 0.000156912008932,
+            "c10_65r1_psi_pref_prime": -7.969952962669e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.531036306155
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 1.131968305779646e-12,
+          "max_C_vs_local_python_relative": 3.2188980947839283e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.060605890827e-10,
+            "c10_65r1_B_pref": -187.058016473,
+            "c10_65r1_DA": 1.000156936045,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.356192880988,
+            "c10_65r1_Psi_N": 2.424976955869,
+            "c10_65r1_Qpref": 0.04627775728285,
+            "c10_65r1_V_N": -109.9295460502,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12359.03907992,
+            "c10_65r1_phi_pref": 1.767764214394,
+            "c10_65r1_psi_pref": 0.0001569166960008,
+            "c10_65r1_psi_pref_prime": -7.97065092501e-06,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.530954054454
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.4229416481069535e-12,
+          "max_C_vs_local_python_relative": 1.0312853782856205e-12,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "lambda_HL": 1.0016708437761068,
+      "max_C_vs_detached_parent_relative": 1.707391900847721e-12,
+      "max_C_vs_local_python_relative": 8.985611741086457e-13,
+      "prefix": "p03_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.670843776003e-13,
+            "c10_65r1_B_pref": -188.1093230975,
+            "c10_65r1_DA": 1.00031466072,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.369993387257,
+            "c10_65r1_Psi_N": 2.438762615476,
+            "c10_65r1_Qpref": 0.04627194427187,
+            "c10_65r1_V_N": -110.990540885,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.67530903,
+            "c10_65r1_phi_pref": 1.781549874001,
+            "c10_65r1_psi_pref": 0.0003145617510855,
+            "c10_65r1_psi_pref_prime": -1.597474393983e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.574607431111
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 1.1034196694506516e-12,
+          "max_C_vs_local_python_relative": 4.4417149113378405e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.503759397652e-12,
+            "c10_65r1_B_pref": -188.1092832235,
+            "c10_65r1_DA": 1.000314660719,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.369992870215,
+            "c10_65r1_Psi_N": 2.438762098685,
+            "c10_65r1_Qpref": 0.04627193106328,
+            "c10_65r1_V_N": -110.990523025,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.67900255,
+            "c10_65r1_phi_pref": 1.78154935721,
+            "c10_65r1_psi_pref": 0.0003145618449843,
+            "c10_65r1_psi_pref_prime": -1.597475801535e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.574606689368
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 8.445297413390872e-13,
+          "max_C_vs_local_python_relative": 4.288552328190707e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.670843765681e-11,
+            "c10_65r1_B_pref": -188.1088296563,
+            "c10_65r1_DA": 1.000314660718,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.369986988854,
+            "c10_65r1_Psi_N": 2.438756220194,
+            "c10_65r1_Qpref": 0.04627178081547,
+            "c10_65r1_V_N": -110.9903198672,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.72101629,
+            "c10_65r1_phi_pref": 1.781543478719,
+            "c10_65r1_psi_pref": 0.0003145629130824,
+            "c10_65r1_psi_pref_prime": -1.59749181242e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.574598252045
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 7.929324229038861e-13,
+          "max_C_vs_local_python_relative": 4.0445699135496307e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.503759314046e-10,
+            "c10_65r1_B_pref": -188.1048422544,
+            "c10_65r1_DA": 1.000314660705,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.369935284603,
+            "c10_65r1_Psi_N": 2.438704541171,
+            "c10_65r1_Qpref": 0.04627045995567,
+            "c10_65r1_V_N": -110.9885338662,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12357.09036785,
+            "c10_65r1_phi_pref": 1.781491799696,
+            "c10_65r1_psi_pref": 0.0003145723029552,
+            "c10_65r1_psi_pref_prime": -1.597632565774e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.57452407784
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.707391900847721e-12,
+          "max_C_vs_local_python_relative": 8.985611741086457e-13,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "lambda_HL": 1.0033500837520937,
+      "max_C_vs_detached_parent_relative": 1.333798045888588e-12,
+      "max_C_vs_local_python_relative": 9.319295829387537e-13,
+      "prefix": "p04_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.350083751885e-13,
+            "c10_65r1_B_pref": -187.7651146668,
+            "c10_65r1_DA": 1.00031466072,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.365526620869,
+            "c10_65r1_Psi_N": 2.434300665562,
+            "c10_65r1_Qpref": 0.04627194427187,
+            "c10_65r1_V_N": -110.6463324543,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.67530903,
+            "c10_65r1_phi_pref": 1.777087924087,
+            "c10_65r1_psi_pref": 0.0003145617510855,
+            "c10_65r1_psi_pref_prime": -1.597474393622e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.560445635149
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 1.0005790264903426e-12,
+          "max_C_vs_local_python_relative": 4.4417149113378405e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.015075375191e-12,
+            "c10_65r1_B_pref": -187.7650741473,
+            "c10_65r1_DA": 1.000314660719,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.365526095449,
+            "c10_65r1_Psi_N": 2.434300140404,
+            "c10_65r1_Qpref": 0.04627193106328,
+            "c10_65r1_V_N": -110.6463139488,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.67900255,
+            "c10_65r1_phi_pref": 1.777087398929,
+            "c10_65r1_psi_pref": 0.0003145618449843,
+            "c10_65r1_psi_pref_prime": -1.597475798287e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.560444866849
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 8.372602098632208e-13,
+          "max_C_vs_local_python_relative": 4.288552328190707e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.350083731189e-11,
+            "c10_65r1_B_pref": -187.7646132378,
+            "c10_65r1_DA": 1.000314660718,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.365520118808,
+            "c10_65r1_Psi_N": 2.434294166735,
+            "c10_65r1_Qpref": 0.04627178081547,
+            "c10_65r1_V_N": -110.6461034487,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.72101629,
+            "c10_65r1_phi_pref": 1.77708142526,
+            "c10_65r1_psi_pref": 0.0003145629130824,
+            "c10_65r1_psi_pref_prime": -1.597491776327e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.560436127439
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 9.985231034711684e-13,
+          "max_C_vs_local_python_relative": 4.600548957736627e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.01507520756e-10,
+            "c10_65r1_B_pref": -187.7605612896,
+            "c10_65r1_DA": 1.000314660705,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.365467576945,
+            "c10_65r1_Psi_N": 2.434241651002,
+            "c10_65r1_Qpref": 0.04627045995567,
+            "c10_65r1_V_N": -110.6442529014,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12357.09036785,
+            "c10_65r1_phi_pref": 1.777028909527,
+            "c10_65r1_psi_pref": 0.0003145723029552,
+            "c10_65r1_psi_pref_prime": -1.597632240882e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.560359297602
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.333798045888588e-12,
+          "max_C_vs_local_python_relative": 9.319295829387537e-13,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 6402.7548229898675,
+      "lambda_HL": 1.0067340067340067,
+      "max_C_vs_detached_parent_relative": 1.333798045888588e-12,
+      "max_C_vs_local_python_relative": 1.0369199347487041e-12,
+      "prefix": "p05_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.734006733587e-13,
+            "c10_65r1_B_pref": -187.0766978064,
+            "c10_65r1_DA": 1.00031466072,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.356593088104,
+            "c10_65r1_Psi_N": 2.425376765748,
+            "c10_65r1_Qpref": 0.04627194427187,
+            "c10_65r1_V_N": -109.9579155939,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.67530903,
+            "c10_65r1_phi_pref": 1.768164024273,
+            "c10_65r1_psi_pref": 0.0003145617510855,
+            "c10_65r1_psi_pref_prime": -1.5974743929e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.532122043268
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 1.0005790264903426e-12,
+          "max_C_vs_local_python_relative": 4.4417149113378405e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.060606057202e-12,
+            "c10_65r1_B_pref": -187.0766560041,
+            "c10_65r1_DA": 1.000314660719,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.356592546039,
+            "c10_65r1_Psi_N": 2.425376223962,
+            "c10_65r1_Qpref": 0.04627193106328,
+            "c10_65r1_V_N": -109.9578958056,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.67900255,
+            "c10_65r1_phi_pref": 1.768163482487,
+            "c10_65r1_psi_pref": 0.0003145618449843,
+            "c10_65r1_psi_pref_prime": -1.59747579179e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.532121222191
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 9.674835774047375e-13,
+          "max_C_vs_local_python_relative": 4.288552328190707e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.734006691987e-11,
+            "c10_65r1_B_pref": -187.0761805031,
+            "c10_65r1_DA": 1.000314660718,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.356586380044,
+            "c10_65r1_Psi_N": 2.425370061144,
+            "c10_65r1_Qpref": 0.04627178081547,
+            "c10_65r1_V_N": -109.957670714,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12356.72101629,
+            "c10_65r1_phi_pref": 1.768157319669,
+            "c10_65r1_psi_pref": 0.0003145629130824,
+            "c10_65r1_psi_pref_prime": -1.597491704142e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.532111882442
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 1.0822989862487073e-12,
+          "max_C_vs_local_python_relative": 3.285164051989564e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.060605720248e-10,
+            "c10_65r1_B_pref": -187.072000282,
+            "c10_65r1_DA": 1.000314660705,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.356532173593,
+            "c10_65r1_Psi_N": 2.425315882618,
+            "c10_65r1_Qpref": 0.04627045995567,
+            "c10_65r1_V_N": -109.9556918937,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12357.09036785,
+            "c10_65r1_phi_pref": 1.768103141143,
+            "c10_65r1_psi_pref": 0.0003145723029552,
+            "c10_65r1_psi_pref_prime": -1.597631591097e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.532029775059
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.333798045888588e-12,
+          "max_C_vs_local_python_relative": 1.0369199347487041e-12,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "lambda_HL": 1.0016708437761068,
+      "max_C_vs_detached_parent_relative": 1.3656564610804216e-12,
+      "max_C_vs_local_python_relative": 9.451028329031611e-13,
+      "prefix": "p06_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.670843775897e-13,
+            "c10_65r1_B_pref": -188.1371084629,
+            "c10_65r1_DA": 1.00063249983,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.370671836879,
+            "c10_65r1_Psi_N": 2.439440333531,
+            "c10_65r1_Qpref": 0.0462572465335,
+            "c10_65r1_V_N": -111.0428221237,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.75035688,
+            "c10_65r1_phi_pref": 1.782227592056,
+            "c10_65r1_psi_pref": 0.0006321000506435,
+            "c10_65r1_psi_pref_prime": -3.209045290393e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.576758442441
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 9.420088362946584e-13,
+          "max_C_vs_local_python_relative": 3.8933904143028293e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.503759396799e-12,
+            "c10_65r1_B_pref": -188.1370686529,
+            "c10_65r1_DA": 1.00063249983,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.370671320763,
+            "c10_65r1_Psi_N": 2.439439817666,
+            "c10_65r1_Qpref": 0.04625723332053,
+            "c10_65r1_V_N": -111.042804335,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.75404922,
+            "c10_65r1_phi_pref": 1.782227076191,
+            "c10_65r1_psi_pref": 0.0006321002390731,
+            "c10_65r1_psi_pref_prime": -3.209048117428e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.576757703635
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 1.1058437899628962e-12,
+          "max_C_vs_local_python_relative": 3.3964927885242165e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.670843755156e-11,
+            "c10_65r1_B_pref": -188.1366158147,
+            "c10_65r1_DA": 1.000632499824,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.370665449938,
+            "c10_65r1_Psi_N": 2.439433949699,
+            "c10_65r1_Qpref": 0.04625708302295,
+            "c10_65r1_V_N": -111.0426019892,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.79604967,
+            "c10_65r1_phi_pref": 1.782221208224,
+            "c10_65r1_psi_pref": 0.0006321023824592,
+            "c10_65r1_psi_pref_prime": -3.209080274905e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.576749299716
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 1.0370021183928655e-12,
+          "max_C_vs_local_python_relative": 5.719274277129653e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -1.503759228797e-10,
+            "c10_65r1_B_pref": -188.1326348212,
+            "c10_65r1_DA": 1.000632499773,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.370613838311,
+            "c10_65r1_Psi_N": 2.4393823632,
+            "c10_65r1_Qpref": 0.0462557617256,
+            "c10_65r1_V_N": -111.0408231257,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12353.16528439,
+            "c10_65r1_phi_pref": 1.782169621725,
+            "c10_65r1_psi_pref": 0.0006321212254124,
+            "c10_65r1_psi_pref_prime": -3.209362974638e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.576675419174
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.3656564610804216e-12,
+          "max_C_vs_local_python_relative": 9.451028329031611e-13,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "lambda_HL": 1.0033500837520937,
+      "max_C_vs_detached_parent_relative": 1.4634147892108028e-12,
+      "max_C_vs_local_python_relative": 9.429746831938797e-13,
+      "prefix": "p07_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.350083751674e-13,
+            "c10_65r1_B_pref": -187.7930093659,
+            "c10_65r1_DA": 1.00063249983,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.366206489305,
+            "c10_65r1_Psi_N": 2.434979800902,
+            "c10_65r1_Qpref": 0.0462572465335,
+            "c10_65r1_V_N": -110.6987230267,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.75035688,
+            "c10_65r1_phi_pref": 1.777767059427,
+            "c10_65r1_psi_pref": 0.0006321000506435,
+            "c10_65r1_psi_pref_prime": -3.209045289668e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.562601144805
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 9.420088362946584e-13,
+          "max_C_vs_local_python_relative": 3.8933904143028293e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.015075373482e-12,
+            "c10_65r1_B_pref": -187.7929689102,
+            "c10_65r1_DA": 1.00063249983,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.366205964809,
+            "c10_65r1_Psi_N": 2.434979276667,
+            "c10_65r1_Qpref": 0.04625723332053,
+            "c10_65r1_V_N": -110.6987045923,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.75404922,
+            "c10_65r1_phi_pref": 1.777766535192,
+            "c10_65r1_psi_pref": 0.0006321002390731,
+            "c10_65r1_psi_pref_prime": -3.209048110902e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.562600379431
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 9.823217688102699e-13,
+          "max_C_vs_local_python_relative": 3.2508972701809716e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.350083710087e-11,
+            "c10_65r1_B_pref": -187.7925087268,
+            "c10_65r1_DA": 1.000632499824,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.366199998666,
+            "c10_65r1_Psi_N": 2.434973313485,
+            "c10_65r1_Qpref": 0.04625708302295,
+            "c10_65r1_V_N": -110.6984949012,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.79604967,
+            "c10_65r1_phi_pref": 1.77776057201,
+            "c10_65r1_psi_pref": 0.0006321023824592,
+            "c10_65r1_psi_pref_prime": -3.209080202402e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.562591673307
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 9.42691454000228e-13,
+          "max_C_vs_local_python_relative": 3.510975517578033e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -3.015075036634e-10,
+            "c10_65r1_B_pref": -187.7884631617,
+            "c10_65r1_DA": 1.000632499773,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.366147549101,
+            "c10_65r1_Psi_N": 2.43492088995,
+            "c10_65r1_Qpref": 0.0462557617256,
+            "c10_65r1_V_N": -110.6966514663,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12353.16528439,
+            "c10_65r1_phi_pref": 1.777708148475,
+            "c10_65r1_psi_pref": 0.0006321212254124,
+            "c10_65r1_psi_pref_prime": -3.209362321985e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.562515136096
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.4634147892108028e-12,
+          "max_C_vs_local_python_relative": 9.429746831938797e-13,
+          "relative_a_error": 0.0
+        }
+      ]
+    },
+    {
+      "M_c_Mpc_inv": 4516.041571155588,
+      "lambda_HL": 1.0067340067340067,
+      "max_C_vs_detached_parent_relative": 1.329951171938057e-12,
+      "max_C_vs_local_python_relative": 9.858866619003682e-13,
+      "prefix": "p08_",
+      "records": [
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.734006733162e-13,
+            "c10_65r1_B_pref": -187.1048111728,
+            "c10_65r1_DA": 1.00063249983,
+            "c10_65r1_Db": -3.000000112091,
+            "c10_65r1_Dg": -4.000000149454,
+            "c10_65r1_Phi_N": 2.357275794171,
+            "c10_65r1_Psi_N": 2.426058735658,
+            "c10_65r1_Qpref": 0.0462572465335,
+            "c10_65r1_V_N": -110.0105248336,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.75035688,
+            "c10_65r1_phi_pref": 1.768845994183,
+            "c10_65r1_psi_pref": 0.0006321000506435,
+            "c10_65r1_psi_pref_prime": -3.209045288218e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.534286549573
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 1e-05,
+          "max_C_vs_detached_parent_relative": 1.0380682090552637e-12,
+          "max_C_vs_local_python_relative": 3.8933904143028293e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.060606053767e-12,
+            "c10_65r1_B_pref": -187.1047694339,
+            "c10_65r1_DA": 1.00063249983,
+            "c10_65r1_Db": -3.000001008816,
+            "c10_65r1_Dg": -4.000001345088,
+            "c10_65r1_Phi_N": 2.357275253021,
+            "c10_65r1_Psi_N": 2.426058194787,
+            "c10_65r1_Qpref": 0.04625723332053,
+            "c10_65r1_V_N": -110.010505116,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.75404922,
+            "c10_65r1_phi_pref": 1.768845453312,
+            "c10_65r1_psi_pref": 0.0006321002390731,
+            "c10_65r1_psi_pref_prime": -3.209048097852e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.534285731402
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 3e-05,
+          "max_C_vs_detached_parent_relative": 8.803309266604656e-13,
+          "max_C_vs_local_python_relative": 3.2508972701809716e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.73400664957e-11,
+            "c10_65r1_B_pref": -187.1042946532,
+            "c10_65r1_DA": 1.000632499824,
+            "c10_65r1_Db": -3.000011209066,
+            "c10_65r1_Dg": -4.000014945421,
+            "c10_65r1_Phi_N": 2.357269097451,
+            "c10_65r1_Psi_N": 2.426052042382,
+            "c10_65r1_Qpref": 0.04625708302295,
+            "c10_65r1_V_N": -110.0102808276,
+            "c10_65r1_W_khr": 1253.609681559,
+            "c10_65r1_delta_mu_pref": -12352.79604967,
+            "c10_65r1_phi_pref": 1.768839300907,
+            "c10_65r1_psi_pref": 0.0006321023824592,
+            "c10_65r1_psi_pref_prime": -3.209080057395e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.534276424702
+          },
+          "W_khr_relative_to_detached": 1.8663505513145188e-13,
+          "k_Mpc_inv": 0.0001,
+          "max_C_vs_detached_parent_relative": 1.0131412138645259e-12,
+          "max_C_vs_local_python_relative": 1.5768417292855953e-13,
+          "relative_a_error": 0.0
+        },
+        {
+          "C_outputs": {
+            "c10_65r1_B_den": -6.060605376669e-10,
+            "c10_65r1_B_pref": -187.1001207645,
+            "c10_65r1_DA": 1.000632499773,
+            "c10_65r1_Db": -3.000100881591,
+            "c10_65r1_Dg": -4.000134508788,
+            "c10_65r1_Phi_N": 2.35721498264,
+            "c10_65r1_Psi_N": 2.425997955397,
+            "c10_65r1_Qpref": 0.0462557617256,
+            "c10_65r1_V_N": -110.0083090691,
+            "c10_65r1_W_khr": 1253.609681558,
+            "c10_65r1_delta_mu_pref": -12353.16528439,
+            "c10_65r1_phi_pref": 1.768785213922,
+            "c10_65r1_psi_pref": 0.0006321212254124,
+            "c10_65r1_psi_pref_prime": -3.209361016682e-05,
+            "c10_65r1_shear_feedback_den": 0.9999970315069,
+            "c10_65r1_sigma_g_over_k2": -4.534194607861
+          },
+          "W_khr_relative_to_detached": 6.110529647599404e-13,
+          "k_Mpc_inv": 0.0003,
+          "max_C_vs_detached_parent_relative": 1.329951171938057e-12,
+          "max_C_vs_local_python_relative": 9.858866619003682e-13,
+          "relative_a_error": 0.0
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "base_patch": "rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "conditioning_patch": "rtk/stabilize_rtk_c10_65r1_conditioned_projector.py",
+    "repo_head_at_job_start": "f742ac77f4d61d52459139568e4eb882a367b7e3",
+    "worker": "research/shadow/rtk_c10_65r1_conditioned_parity_wrapper.py",
+    "workflow": "rtk-c10-65r1-conditioned-projector-parity.yml"
+  },
+  "schema": "RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_TARGET_v1.json"
+}
