@@ -1,0 +1,58 @@
+{
+  "schema": "RTK_C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s4a",
+  "created_utc": "2026-08-26T20:00:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s3d": "C10_65S3D_MATERIALLY_LONGER_TIME_TRAJECTORY_PASS_SCOPED",
+    "C10.65s1": "C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED",
+    "C10.65f": "C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED"
+  },
+  "purpose": "Prospectively test whether the already-pinned CLASS/TCA architecture can materialize a finite exact-onset full scalar state at two moderately larger superhorizon k anchors, before constructing any completed-U1 production seed for those new modes.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "Hc_on_Mpc_inv": 0.0129629303512,
+    "regression_k_Mpc_inv": [0.0001, 0.0003],
+    "new_k_Mpc_inv": [0.001, 0.003],
+    "all_k_Mpc_inv": [0.0001, 0.0003, 0.001, 0.003],
+    "inherited_matching_J": -3.0,
+    "inherited_matching_A2_Mpc2": -1120.906563855608
+  },
+  "prospective_domain_guards": {
+    "max_k_over_Hc": 0.25,
+    "max_abs_A2_k2_over_J": 0.005,
+    "require_TCA_enum": 0,
+    "require_RSA_enum": 0,
+    "require_UFA_enum": 0,
+    "require_l_max_ur": 17,
+    "exact_onset_relative_a_tolerance": 1e-12
+  },
+  "frozen_checks": {
+    "observer_anchor_count": 4,
+    "new_anchor_count": 2,
+    "off_numeric_text_sha256_identical_all_four": true,
+    "regression_onset_rows_match_s1": true,
+    "all_exact_onset_rows_present": true,
+    "all_state_coordinates_finite": true,
+    "all_legacy_auxiliary_observer_coordinates_finite": true,
+    "all_active_UR_higher_coordinates_finite": true,
+    "all_approximation_states_tca_rsa_ufa_lmax": [0, 0, 0, 17],
+    "max_k_over_Hc_within_guard": true,
+    "max_abs_A2_k2_over_J_within_guard": true,
+    "observer_read_only_static_guard": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED",
+  "interpretation_if_pass": "Pinned CLASS can materialize finite exact-onset full scalar states at k=1e-3 and 3e-3 Mpc^-1 in the same TCA/RSA/UFA branch, while the preregistered superhorizon/O(k^2) domain guards remain satisfied. This only certifies the state-domain preflight; it does not yet certify a completed-U1 projector, carrier seed, production RHS or trajectory at the new k values.",
+  "next_if_pass": "Freeze C10.65s4b completed-U1 onset projector/carrier completion for k=1e-3 and 3e-3 Mpc^-1, retaining the historical UR l>=3 values only as explicit higher-order controls.",
+  "non_claims": [
+    "not completed-U1 onset seed certification at the new k anchors",
+    "not production feedback at the new k anchors",
+    "not a validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ]
+}
