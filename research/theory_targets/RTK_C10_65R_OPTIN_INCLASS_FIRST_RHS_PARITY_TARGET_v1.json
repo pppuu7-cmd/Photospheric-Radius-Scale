@@ -1,0 +1,78 @@
+{
+  "gate": "C10.65r",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "title": "Opt-in in-CLASS completed-U1 first-RHS parity on four low-k anchors",
+  "purpose": "Verify that a minimal opt-in diagnostic bridge implemented inside the pinned CLASS perturbation path reproduces the already certified detached completed-U1 onset seed/metric/TCA RHS before any state handoff or finite-time integration is attempted.",
+  "repository_branch": "rtk-class-build",
+  "pinned_upstream": {
+    "repository": "dirian/class_public",
+    "branch": "nonlocal",
+    "sha": "36cf283628c4a3330ec9fd3d84239bf775f77317"
+  },
+  "parents": [
+    "RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json",
+    "RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_RESULT_v1.json",
+    "RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json",
+    "RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json"
+  ],
+  "scope": {
+    "anchor_k_Mpc_inv": [1e-5, 3e-5, 1e-4, 3e-4],
+    "onset_source": "exact a_on inherited from C10.65f/n/q",
+    "diagnostic_only": true,
+    "production_default_must_remain_unchanged": true,
+    "no_finite_time_integration_claim": true
+  },
+  "implementation_contract": {
+    "opt_in_flag": "rtk_completed_u1_first_rhs_diagnostic",
+    "default": false,
+    "ordinary_path_when_false": "must be source-equivalent to the pre-C10.65r pinned production path",
+    "metric_rule_when_true": "construct preferred algebraic projector and physical Psi_N, Phi_N from local state/background only; historical CLASS metric potentials are forbidden as completed-U1 inputs",
+    "derivative_rule_when_true": "construct Bprime by directional differentiation of the same algebraic projector along the aggregate local RHS, then Psi_N_prime = psi_pref_prime - Hc_prime B - Hc Bprime",
+    "tca_rule": "use source-locked compromise_CLASS coefficients and triangular slip closure certified by C10.65d/p/q",
+    "new_initial_data_forbidden": ["chi", "B", "Bprime", "Psi_N_prime", "TCA_slip"],
+    "state_handoff_forbidden_in_this_gate": true
+  },
+  "parity_observables": [
+    "psi_pref",
+    "psi_pref_prime",
+    "phi_pref",
+    "B_pref",
+    "Psi_N",
+    "Phi_N",
+    "Bprime",
+    "Psi_N_prime",
+    "photon_shear",
+    "ur_shear",
+    "tca_slip",
+    "delta_b_prime_or_D_b_prime",
+    "theta_b_prime",
+    "delta_g_prime_or_D_g_prime",
+    "theta_g_prime",
+    "delta_ur_prime_or_D_ur_prime",
+    "theta_ur_prime",
+    "delta_khr_prime",
+    "theta_khr_prime"
+  ],
+  "guards": {
+    "four_anchor_mode_count_exact": 4,
+    "tca_must_be_on_at_onset": true,
+    "finite_all": true,
+    "projector_denominators_nonzero": true,
+    "no_historical_metric_consumption": true,
+    "weighted_photon_baryon_slip_cancel_residual_max": 1e-30,
+    "relative_parity_max": 1e-10,
+    "absolute_zero_floor": 1e-70,
+    "disabled_flag_control": "compile and execute a control proving the flag-off path does not emit/consume completed-U1 diagnostic quantities"
+  },
+  "pass_classification": "C10_65R_OPTIN_INCLASS_FIRST_RHS_PARITY_PASS_SCOPED",
+  "fail_classification": "C10_65R_OPTIN_INCLASS_FIRST_RHS_PARITY_FAIL_SCOPED",
+  "non_claims": [
+    "not a finite-time completed-U1 integration",
+    "not a primordial growing-mode uniqueness theorem",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence",
+    "not radiative-naturalness closure"
+  ],
+  "next_if_pass": "C10.65s controlled onset state handoff and very-short-step in-CLASS completed-U1 integration, with step-by-step detached parity before expanding the k grid"
+}
