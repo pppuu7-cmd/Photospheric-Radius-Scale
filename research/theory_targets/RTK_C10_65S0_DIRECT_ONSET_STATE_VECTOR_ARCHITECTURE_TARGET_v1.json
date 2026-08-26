@@ -1,0 +1,43 @@
+{
+  "schema": "RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_TARGET_v1",
+  "created_utc": "2026-08-26T14:48:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s0",
+  "question": "What is the integration-safe state-vector architecture for the first real completed-U1 CLASS feedback after C10.65r2: historical-to-completed overwrite at a_on, or direct opt-in initialization at the certified a_on, and which legacy model=2 variables must be excluded or separately controlled?",
+  "parents": [
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65K_NONLOCAL_TEMPORAL_SELECTOR_FEASIBILITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_targets/RTK_C10_65B_COMPLETED_U1_ADIABATIC_GRADIENT_SYSTEM_TARGET_v1.json",
+    "research/checkpoints/RESTORE_POINT_2026-08-25_C10_47.md"
+  ],
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_checks": [
+    "confirm C10.65r2 full 3x3x4 first-RHS parity PASS with exact dormant OFF identity and unchanged frozen thresholds",
+    "confirm C10.65k gives zero certified pre-onset common low-k support width",
+    "source-lock that perturb_solve determines tau before approximation interval construction and then calls perturb_vector_init at the first interval with previous_approx=NULL",
+    "source-lock that perturb_vector_init with previous_approx=NULL delegates state filling to perturb_initial_conditions",
+    "source-lock that background_tau_of_z is available, so tau_on can be obtained from z_on=1/a_on-1 without interpolating a perturbation history",
+    "inventory the Newtonian scalar integrated state at the onset: photon/baryon variables, massless-UR hierarchy, the integrated Newtonian curvature potential phi_CLASS, and the CDM slots repurposed by RTK as Khronon delta/theta",
+    "source-lock that psi_CLASS and phi_CLASS_prime are metric-constraint workspace quantities rather than independent integrated state coordinates",
+    "source-lock that model=2 currently forces has_nlde=TRUE and allocates six legacy auxiliary perturbation coordinates dU,dUprime,dV,dVprime,dZ,dZprime",
+    "source-lock that the historical model=2 Newtonian metric constraints depend explicitly on legacy dZ/dZprime/dV",
+    "cross-check against the frozen completed-U1 baseline species contract: ordinary filtered A source is baryons+photons+massless-UR, neutral unfiltered source is Khronon, physical CDM and massive ncdm absent; legacy nlde auxiliary perturbations are not part of that completed perturbation state",
+    "therefore require the opt-in completed perturbation path to exclude legacy nlde perturbation state/RHS/metric contributions while retaining the pinned production background only under the already-declared diagnostic background scope guard",
+    "prefer direct opt-in initialization at a_on over evolving the historical perturbation state and overwriting it at a_on, because the latter would import an uncertified pre-onset trajectory and higher-state memory",
+    "identify any state components not fixed by the O(k^2) matching vector but needed by a finite-k CLASS step, especially massless-UR multipoles F_l for l>=3, and classify them as an explicit higher-order control requirement rather than silently inheriting them",
+    "do not write production dy, do not alter production metric equations, and do not implement actual forward feedback in s0; this is an architecture/source-lock gate only"
+  ],
+  "pass_classification": "C10_65S0_DIRECT_ONSET_INITIALIZATION_ARCHITECTURE_PASS_LEGACY_AUX_EXCLUSION_REQUIRED_SCOPED",
+  "next_if_pass": "freeze C10.65s1 finite-state completion at a_on: export/source-lock all actually integrated scalar coordinates for the four low-k anchors, determine the UFA/RSA/TCA approximation state, provide an explicit regular/historical higher-multipole control for any F_l>=3 not fixed by the O(k^2) boundary vector, and construct a complete opt-in initial state with legacy nlde perturbations absent before the first production-feedback step",
+  "non_claims": [
+    "not production completed-U1 feedback",
+    "not a forward integration pass",
+    "not a microscopic derivation of the matching vector or higher-multipole controls",
+    "not same-full-action background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not resolution of C9 or broader C7/B9 gates"
+  ]
+}
