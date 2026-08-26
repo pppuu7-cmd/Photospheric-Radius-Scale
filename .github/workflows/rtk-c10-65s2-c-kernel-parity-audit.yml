@@ -1,4 +1,5 @@
 name: RTK C10.65s2 C-kernel parity audit
+# Trigger-only edit after parent-schema adapter fix; frozen criteria unchanged.
 on:
   workflow_dispatch:
   push:
