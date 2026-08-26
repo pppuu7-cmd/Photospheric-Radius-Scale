@@ -88,6 +88,6 @@ def main():
       'threshold_changed':False}
     passed=all(checks.values())
     out={'schema':'RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1','gate':'C10.65s4b','classification':t['pass_classification'] if passed else t['fail_classification'],'target':'research/theory_targets/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_TARGET_v1.json','completion_point':{'lambda_HL':F(lam),'M_c_Mpc_inv':F(Mc)},'control_status':'PRE_EFT_PHENOMENOLOGICAL_CONTROL_ONLY','checks':checks,'maxima':{'projector_constraint_normalized':F(max_projector),'traceless_normalized':F(max_trace),'low_k_parent_regression_relative':F(max_reg),'min_abs_denominator':F(min_den)},'records':records,'interpretation':t['interpretation_if_pass'] if passed else 'The frozen moderate-k completed onset seed gate failed; do not proceed to production/current-state RHS at the new modes.','next_gate':t['next_if_pass'] if passed else 'Diagnose C10.65s4b without weakening the frozen criteria.','non_claims':t['non_claims'],'threshold_changed':False}
-    p=ROOT/'research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json';p.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n',allow_nan=False)
+    p=ROOT/'research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json';p.write_text(json.dumps(out,indent=2,sort_keys=True,allow_nan=False)+'\n')
     print(out['classification']);print(json.dumps(out['maxima'],sort_keys=True));raise SystemExit(0 if passed else 2)
 if __name__=='__main__': main()
