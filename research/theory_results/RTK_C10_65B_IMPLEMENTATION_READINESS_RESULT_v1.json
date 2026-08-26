@@ -1,0 +1,48 @@
+{
+  "schema": "RTK_C10_65B_IMPLEMENTATION_READINESS_RESULT_v1",
+  "created_utc": "2026-08-26T00:51:00Z",
+  "classification": "C10_65B_IMPLEMENTATION_READY_ARCHITECTURE_HIERARCHY_PORT_INCOMPLETE_SCOPED",
+  "target": "research/theory_targets/RTK_C10_65B_COMPLETED_U1_ADIABATIC_GRADIENT_SYSTEM_TARGET_v1.json",
+  "closed_inputs": {
+    "species_identity": "baseline ordinary=baryons+photons+massless UR; neutral=RTK/Khronon; no physical CDM; no massive ncdm",
+    "preferred_metric_DAE": "A constraint -> Hamiltonian -> momentum finite-k projector certified; no independently integrated chi/B",
+    "ordinary_source_coordinates": "curvature-dressed D_i variables remove explicit physical-curvature-potential derivative from constant-w continuity",
+    "neutral_action_fluid": "preferred delta/theta equations certified, including k^2 B continuity flux and phi_pref Euler force",
+    "source_partition": "ordinary-only A source and total metric/Ward stress-momentum source channels certified",
+    "physical_metric_bridge": "shear-aware Newtonian/Stueckelberg Phi_N/Psi_N output map certified",
+    "zero_charge_branch": "I_khr(tau_on)=0 is a consistent codimension-one boundary prescription for the adiabatic branch, but not a UV mechanism",
+    "B0_order": "leading regularity does not determine B0; B0 first appears at O(k^2) and must satisfy B0=-N2/r plus the C2 formula",
+    "baseline_regression_control": "C10.65a historical CLASS individual-species control is green and may be used only for regression"
+  },
+  "pinned_CLASS_scalar_interface_extraction": {
+    "metric_continuity_newtonian": "-3*phi_prime",
+    "metric_euler_newtonian": "k^2*psi",
+    "metric_shear_newtonian": "0",
+    "baryon_density_structure": "delta_b'=-(theta_b+metric_continuity), hence D_b'= -theta_b for D_b=delta_b-3*phi",
+    "UR_density_structure": "delta_ur'=-(4/3)(theta_ur+metric_continuity), hence D_ur'=-(4/3)theta_ur for D_ur=delta_ur-4*phi",
+    "UR_velocity_structure": "theta_ur'=k^2(delta_ur/4-shear_ur)+metric_euler on flat scalar modes",
+    "UR_exact_shear_structure": "sigma_ur'=0.5[(8/15)(theta_ur+metric_shear)-(3/5)k F3] on flat scalar modes; metric_shear=0 in Newtonian coordinates",
+    "porting_rule": "Port the actual scalar photon-baryon tight-coupling block from the pinned source verbatim in convention, then replace only its metric inputs by the certified completed Phi_N/Psi_N interface. Do not reconstruct collision coefficients from memory."
+  },
+  "why_not_closed_now": {
+    "missing_executable_piece": "the scalar photon+baryon tight-coupling/hierarchy equations have not yet been encoded in the detached dual-interface completed-U1 solver together with UR and neutral Khronon",
+    "scientific_reason": "without that port, an apparent unique O(k^2) null direction could be an artifact of omitted collision/slip equations rather than the completed theory",
+    "background_guard": "the first numerical realization will still be diagnostic on the pinned production background until same-full-action background normalization is independently closed"
+  },
+  "next_implementation_steps": [
+    "extract and freeze the pinned scalar photon+baryon tight-coupling equations and approximation-switch quantities needed through O(k^2)",
+    "encode curvature-dressed photon/baryon/UR RHS with completed Phi_N/Psi_N supplied only by the preferred DAE projector",
+    "couple certified neutral Khronon preferred RHS and total source assembly",
+    "construct the O(k^0)+O(k^2) coefficient Jacobian/rank system and solve neutral V_khr0 and B0 rather than prescribing them",
+    "run the preregistered three-by-three lambda_HL/M_c diagnostic grid and classify exactly by the frozen C10.65b target"
+  ],
+  "non_claims": [
+    "not a C10.65b scientific pass",
+    "not a no-go",
+    "not completed-U1 Boltzmann feedback",
+    "not a unique growing-mode proof",
+    "not same-full-action background closure",
+    "not C9 radiative protection",
+    "not spectra or likelihood evidence"
+  ]
+}
