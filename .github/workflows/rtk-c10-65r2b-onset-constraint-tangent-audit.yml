@@ -46,21 +46,25 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile research/shadow/rtk_c10_65r2b_onset_constraint_tangent_audit.py
+          set +e
           python3 research/shadow/rtk_c10_65r2b_onset_constraint_tangent_audit.py | tee c10_65r2b.log
-          grep -Eq '^C10_65R2B_(TANGENT_PASS_SCOPED|NON_TANGENT_RESOLVED_SCOPED) ' c10_65r2b.log
+          echo "${PIPESTATUS[0]}" > c10_65r2b_exit_code.txt
+          set -e
+          test -f research/theory_results/RTK_C10_65R2B_ONSET_CONSTRAINT_TANGENT_AUDIT_RESULT_v1.json
       - name: Add immutable provenance
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import json,datetime
           p='research/theory_results/RTK_C10_65R2B_ONSET_CONSTRAINT_TANGENT_AUDIT_RESULT_v1.json'
-          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65r2b_repo_head.txt').read().strip(),'workflow':'rtk-c10-65r2b-onset-constraint-tangent-audit.yml','worker':'research/shadow/rtk_c10_65r2b_onset_constraint_tangent_audit.py','generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'threshold_changed':False,'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317'}
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65r2b_repo_head.txt').read().strip(),'workflow':'rtk-c10-65r2b-onset-constraint-tangent-audit.yml','worker':'research/shadow/rtk_c10_65r2b_onset_constraint_tangent_audit.py','generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'threshold_changed':False,'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','worker_exit_code':int(open('c10_65r2b_exit_code.txt').read())}
           open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
           PY
-      - name: Persist scoped result
+      - name: Persist scoped result including negative outcome
         run: |
           set -euo pipefail
           cp research/theory_results/RTK_C10_65R2B_ONSET_CONSTRAINT_TANGENT_AUDIT_RESULT_v1.json /tmp/r2b.json
+          cp c10_65r2b_exit_code.txt /tmp/r2b_rc.txt
           for attempt in 1 2 3 4 5; do
             git fetch origin rtk-class-build
             git reset --hard origin/rtk-class-build
@@ -68,7 +72,16 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add research/theory_results/RTK_C10_65R2B_ONSET_CONSTRAINT_TANGENT_AUDIT_RESULT_v1.json
-            git commit -m 'Record C10.65r2b tangent audit' || exit 0
-            if git push origin HEAD:rtk-class-build; then exit 0; fi
+            git commit -m 'Record C10.65r2b tangent audit outcome' || break
+            if git push origin HEAD:rtk-class-build; then break; fi
           done
-          exit 1
+          cp /tmp/r2b_rc.txt c10_65r2b_exit_code.txt
+      - name: Enforce pre-registered classification
+        run: |
+          set -euo pipefail
+          rc="$(cat c10_65r2b_exit_code.txt)"
+          if [ "$rc" -ne 0 ]; then
+            echo 'C10.65r2b remained inconclusive under the frozen three-zone discriminator; result has been persisted.'
+            exit "$rc"
+          fi
+          grep -Eq '^C10_65R2B_(TANGENT_PASS_SCOPED|NON_TANGENT_RESOLVED_SCOPED) ' c10_65r2b.log
