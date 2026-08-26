@@ -1,0 +1,1 @@
+C10.65s5e frozen target committed before implementation; execute three fixed s5d branches across seven inherited s3b/s4e endpoint widths with unchanged 1e-10 A/H/M/T bound.
