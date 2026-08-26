@@ -1,0 +1,306 @@
+{
+  "checks": {
+    "all_projector_and_carrier_values_finite": true,
+    "all_projector_denominators_nonzero": true,
+    "higher_ur_controls_explicitly_labeled": true,
+    "historical_metric_not_consumed": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "low_k_parent_regression_relative_max": true,
+    "new_anchor_count": true,
+    "physical_traceless_normalized_residual_max": true,
+    "preferred_A_Hamiltonian_momentum_normalized_residual_max": true,
+    "s4a_domain_guards_inherited_unchanged": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_FAIL_SCOPED",
+  "completion_point": {
+    "M_c_Mpc_inv": 9066.231026460177,
+    "lambda_HL": 1.0016708437761068
+  },
+  "control_status": "PRE_EFT_PHENOMENOLOGICAL_CONTROL_ONLY",
+  "gate": "C10.65s4b",
+  "interpretation": "The frozen moderate-k completed onset seed gate failed; do not proceed to production/current-state RHS at the new modes.",
+  "maxima": {
+    "low_k_parent_regression_relative": 1.0742685748422727e-16,
+    "min_abs_denominator": 1.670843256038343e-09,
+    "projector_constraint_normalized": 1.9713427703194027e-86,
+    "traceless_normalized": 0.0
+  },
+  "next_gate": "Diagnose C10.65s4b without weakening the frozen criteria.",
+  "non_claims": [
+    "not a UV derivation of the matching control",
+    "not a UV derivation of UR l>=3",
+    "not production feedback at the new k anchors",
+    "not finite-time stability at the new k anchors",
+    "not validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s4b_moderate_k_completed_onset_seed.py",
+    "github_actions_run_id": 33011729732,
+    "repo_head_at_job_start": "6515d58a0a5097d733eec1cb15010d3e5237dc76",
+    "s4a_parent_run_id": 33011355363,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s4b-moderate-k-completed-onset-seed.yml"
+  },
+  "records": [
+    {
+      "carrier": {
+        "delta_b": 4.312217161299728,
+        "delta_cdm_khr": 4.312217161299729,
+        "delta_g": 5.749622881732971,
+        "delta_ur": 5.749622881732971,
+        "phi_CLASS_equals_Psi_N": 2.437779355954528,
+        "shear_ur": 0.0002989084158814142,
+        "theta_b": -0.00011094219495115596,
+        "theta_cdm_khr": -0.00011094219495115596,
+        "theta_g": -0.00011094219495115596,
+        "theta_ur": -0.00011094219495115596
+      },
+      "historical_CLASS_metric_consumed": false,
+      "k": 0.001,
+      "legacy_nlde_auxiliaries_excluded": true,
+      "projector": {
+        "A_residual_normalized": 0.0,
+        "B_denominator": -1.670843256038343e-09,
+        "B_pref": -188.0456285655718,
+        "D_A": 1.000156936008775,
+        "Hamiltonian_residual_normalized": 0.0,
+        "Phi_N": 2.3690094482919273,
+        "Psi_N": 2.437779355954528,
+        "V_N": -110.94219495115597,
+        "lapse_denominator": -0.000673838181948453,
+        "momentum_residual_normalized": 1.9713427703194027e-86,
+        "phi_pref": 1.7805666144795118,
+        "psi_pref": 0.00015697001139523,
+        "psi_pref_prime": -7.978643221556515e-06,
+        "shear_feedback_denominator": 0.9999970315069496,
+        "traceless_residual_normalized": 0.0
+      },
+      "ur_l_ge_3": [
+        {
+          "F_l": 1.352400188457055e-26,
+          "F_l_over_k_pow_l": 13524.00188457055,
+          "l": 10,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 7.264895893375514e-30,
+          "F_l_over_k_pow_l": 7264.895893375514,
+          "l": 11,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 3.509173105877781e-33,
+          "F_l_over_k_pow_l": 3509.1731058777814,
+          "l": 12,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 1.545839285500667e-36,
+          "F_l_over_k_pow_l": 1545.8392855006668,
+          "l": 13,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 6.28555231999417e-40,
+          "F_l_over_k_pow_l": 628.555231999417,
+          "l": 14,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 2.383572598166509e-43,
+          "F_l_over_k_pow_l": 238.35725981665087,
+          "l": 15,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 8.504817940415967e-47,
+          "F_l_over_k_pow_l": 85.04817940415967,
+          "l": 16,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 5.198568696393738e-50,
+          "F_l_over_k_pow_l": 51.985686963937376,
+          "l": 17,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 4.902096056142669e-06,
+          "F_l_over_k_pow_l": 4902.096056142669,
+          "l": 3,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 1.528965106212113e-08,
+          "F_l_over_k_pow_l": 15289.651062121131,
+          "l": 4,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 2.84539923790839e-11,
+          "F_l_over_k_pow_l": 28453.9923790839,
+          "l": 5,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 3.7508573157218894e-14,
+          "F_l_over_k_pow_l": 37508.573157218896,
+          "l": 6,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 3.822871133602366e-17,
+          "F_l_over_k_pow_l": 38228.71133602366,
+          "l": 7,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 3.1750348474719303e-20,
+          "F_l_over_k_pow_l": 31750.348474719303,
+          "l": 8,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 2.2261865642592927e-23,
+          "F_l_over_k_pow_l": 22261.865642592926,
+          "l": 9,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        }
+      ]
+    },
+    {
+      "carrier": {
+        "delta_b": 4.287733154511387,
+        "delta_cdm_khr": 4.287733154511387,
+        "delta_g": 5.716977539348515,
+        "delta_ur": 5.716977539348515,
+        "phi_CLASS_equals_Psi_N": 2.432607104528696,
+        "shear_ur": 0.0026901757429327274,
+        "theta_b": -0.0009968693341234618,
+        "theta_cdm_khr": -0.0009968693341234618,
+        "theta_g": -0.0009968693341234618,
+        "theta_ur": -0.0009968693341234618
+      },
+      "historical_CLASS_metric_consumed": false,
+      "k": 0.003,
+      "legacy_nlde_auxiliaries_excluded": true,
+      "projector": {
+        "A_residual_normalized": 0.0,
+        "B_denominator": -1.5037551861171834e-08,
+        "B_pref": -187.64658915153458,
+        "D_A": 1.000156935694117,
+        "Hamiltonian_residual_normalized": 0.0,
+        "Phi_N": 2.363834669481397,
+        "Psi_N": 2.432607104528696,
+        "V_N": -110.7632593470513,
+        "lapse_denominator": -0.0006738649154488706,
+        "momentum_residual_normalized": 1.5723645318753198e-87,
+        "phi_pref": 1.7753943630536797,
+        "psi_pref": 0.00015743871711148012,
+        "psi_pref_prime": -8.048778847598643e-06,
+        "shear_feedback_denominator": 0.9999970315069496,
+        "traceless_residual_normalized": 0.0
+      },
+      "ur_l_ge_3": [
+        {
+          "F_l": 8.126088928994088e-17,
+          "F_l_over_k_pow_l": 1376160295.516281,
+          "l": 10,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 8.160582630891561e-19,
+          "F_l_over_k_pow_l": 4606672780.736654,
+          "l": 11,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 7.460016880796564e-21,
+          "F_l_over_k_pow_l": 14037337880.962446,
+          "l": 12,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 6.254350079745052e-23,
+          "F_l_over_k_pow_l": 39228876957.461266,
+          "l": 13,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 4.840017253054408e-25,
+          "F_l_over_k_pow_l": 101192737252.83205,
+          "l": 14,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 3.4767435754424446e-27,
+          "F_l_over_k_pow_l": 242300237602.9369,
+          "l": 15,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 2.329712674136733e-29,
+          "F_l_over_k_pow_l": 541205606377.483,
+          "l": 16,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 1.6038633600755728e-31,
+          "F_l_over_k_pow_l": 1241955502313.8486,
+          "l": 17,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 0.00020183961559776462,
+          "F_l_over_k_pow_l": 7475.541318435727,
+          "l": 3,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 5.79074341237477e-06,
+          "F_l_over_k_pow_l": 71490.6594120342,
+          "l": 4,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 1.332789059088129e-07,
+          "F_l_over_k_pow_l": 548472.8638222753,
+          "l": 5,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 2.547131266119145e-09,
+          "F_l_over_k_pow_l": 3494007.2237574006,
+          "l": 6,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 4.145558271126584e-11,
+          "F_l_over_k_pow_l": 18955456.20085315,
+          "l": 7,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 5.858705840210534e-13,
+          "F_l_over_k_pow_l": 89295928.06295586,
+          "l": 8,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        },
+        {
+          "F_l": 7.301560587889749e-15,
+          "F_l_over_k_pow_l": 370957709.0834603,
+          "l": 9,
+          "status": "HIGHER_ORDER_HISTORICAL_CONTROL"
+        }
+      ]
+    }
+  ],
+  "schema": "RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_TARGET_v1.json",
+  "threshold_changed": false
+}
