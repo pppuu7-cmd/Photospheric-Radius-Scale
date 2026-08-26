@@ -1,0 +1,395 @@
+{
+  "boundary_state_errors": {
+    "0.0001": {
+      "delta_b": 0.0,
+      "delta_g": 0.0,
+      "delta_khr_N": 0.0,
+      "delta_ur": 0.0,
+      "phi": 0.0,
+      "shear_ur": 0.0,
+      "theta_b": 0.0,
+      "theta_g": 0.0,
+      "theta_khr_N": 0.0,
+      "theta_ur": 0.0
+    },
+    "0.00029999999999999997": {
+      "delta_b": 0.0,
+      "delta_g": 0.0,
+      "delta_khr_N": 0.0,
+      "delta_ur": 0.0,
+      "phi": 0.0,
+      "shear_ur": 0.0,
+      "theta_b": 0.0,
+      "theta_g": 0.0,
+      "theta_khr_N": 0.0,
+      "theta_ur": 0.0
+    },
+    "1.0000000000000001e-05": {
+      "delta_b": 0.0,
+      "delta_g": 0.0,
+      "delta_khr_N": 0.0,
+      "delta_ur": 0.0,
+      "phi": 0.0,
+      "shear_ur": 0.0,
+      "theta_b": 0.0,
+      "theta_g": 0.0,
+      "theta_khr_N": 0.0,
+      "theta_ur": 0.0
+    },
+    "3.0000000000000001e-05": {
+      "delta_b": 0.0,
+      "delta_g": 0.0,
+      "delta_khr_N": 0.0,
+      "delta_ur": 0.0,
+      "phi": 0.0,
+      "shear_ur": 0.0,
+      "theta_b": 0.0,
+      "theta_g": 0.0,
+      "theta_khr_N": 0.0,
+      "theta_ur": 0.0
+    }
+  },
+  "checks": {
+    "approximation": true,
+    "boundary_state": true,
+    "constraint_capture": true,
+    "exactly_one_accepted_step": false,
+    "finite": true,
+    "first_production_rhs": true,
+    "first_rhs_calls": true,
+    "off_identity": true,
+    "onset": true,
+    "record_counts": true,
+    "static_guards": false,
+    "step_width": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "constraint_drift_measurement_only": {
+    "0.0001": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 3.317073622647239e-22,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 2.9987207570167427e-16,
+        "after_raw": 1.3877787807814457e-17,
+        "before_normalized": 2.99871743994312e-16,
+        "before_raw": 1.3877787807814457e-17,
+        "signed_change_normalized": 3.317073622647239e-22,
+        "signed_change_raw": 0.0
+      }
+    },
+    "0.00029999999999999997": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      }
+    },
+    "1.0000000000000001e-05": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.9987068503403955e-16,
+        "absolute_change_raw": 1.3877787807814457e-17,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 2.9987068503403955e-16,
+        "before_raw": 1.3877787807814457e-17,
+        "signed_change_normalized": -2.9987068503403955e-16,
+        "signed_change_raw": -1.3877787807814457e-17
+      }
+    },
+    "3.0000000000000001e-05": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      }
+    }
+  },
+  "expected_rhs_calls_per_accepted_step": 7,
+  "first_production_rhs_errors": {
+    "0.0001": {
+      "Psi_N_prime": 3.605449272470196e-14,
+      "delta_b_prime": 1.081912337497215e-13,
+      "delta_g_prime": 1.442734820500391e-13,
+      "delta_khr_N_prime": 1.081912337497215e-13,
+      "delta_ur_prime": 1.442734820500391e-13,
+      "metric_euler": 1.0412549550817512e-20,
+      "phi_prime": 3.605449272470196e-14,
+      "theta_b_prime": 1.9786160252268422e-20,
+      "theta_g_prime": 2.78395906960847e-20,
+      "theta_khr_N_prime": 6.03510974918689e-21,
+      "theta_ur_prime": 2.227431953482793e-20
+    },
+    "0.00029999999999999997": {
+      "Psi_N_prime": 4.068967385251199e-14,
+      "delta_b_prime": 7.208122987378829e-14,
+      "delta_g_prime": 9.60898027813073e-14,
+      "delta_khr_N_prime": 1.2206902155753596e-13,
+      "delta_ur_prime": 9.60898027813073e-14,
+      "metric_euler": 7.403597354594619e-20,
+      "phi_prime": 4.068967385251199e-14,
+      "theta_b_prime": 2.074701325181002e-19,
+      "theta_g_prime": 2.3251054402130544e-19,
+      "theta_khr_N_prime": 1.0386741515705858e-19,
+      "theta_ur_prime": 2.0964065444543933e-19
+    },
+    "1.0000000000000001e-05": {
+      "Psi_N_prime": 6.275535646693697e-14,
+      "delta_b_prime": 1.6825429938194247e-13,
+      "delta_g_prime": 2.2437607327674414e-13,
+      "delta_khr_N_prime": 1.8826606940081092e-13,
+      "delta_ur_prime": 2.2437607327674414e-13,
+      "metric_euler": 1.3415835559844418e-22,
+      "phi_prime": 6.275535646693697e-14,
+      "theta_b_prime": 2.1279221257926637e-22,
+      "theta_g_prime": 2.669725427014897e-22,
+      "theta_khr_N_prime": 3.6675120409069865e-22,
+      "theta_ur_prime": 1.8347899962191845e-22
+    },
+    "3.0000000000000001e-05": {
+      "Psi_N_prime": 3.159972283839352e-14,
+      "delta_b_prime": 1.4480083798673604e-13,
+      "delta_g_prime": 1.9306778398231472e-13,
+      "delta_khr_N_prime": 9.481304630298837e-14,
+      "delta_ur_prime": 1.9306778398231472e-13,
+      "metric_euler": 6.551270451419979e-22,
+      "phi_prime": 3.159972283839352e-14,
+      "theta_b_prime": 2.0191478752419406e-21,
+      "theta_g_prime": 2.2652341074764663e-21,
+      "theta_khr_N_prime": 1.1903129014638068e-21,
+      "theta_ur_prime": 1.701510520021578e-21
+    }
+  },
+  "gate": "C10.65s2",
+  "higher_ur_errors": {
+    "0.0001": {
+      "10": 0.0,
+      "11": 0.0,
+      "12": 0.0,
+      "13": 0.0,
+      "14": 0.0,
+      "15": 0.0,
+      "16": 0.0,
+      "17": 0.0,
+      "3": 0.0,
+      "4": 0.0,
+      "5": 0.0,
+      "6": 0.0,
+      "7": 0.0,
+      "8": 0.0,
+      "9": 0.0
+    },
+    "0.00029999999999999997": {
+      "10": 0.0,
+      "11": 0.0,
+      "12": 0.0,
+      "13": 0.0,
+      "14": 0.0,
+      "15": 0.0,
+      "16": 0.0,
+      "17": 0.0,
+      "3": 0.0,
+      "4": 0.0,
+      "5": 0.0,
+      "6": 0.0,
+      "7": 0.0,
+      "8": 0.0,
+      "9": 0.0
+    },
+    "1.0000000000000001e-05": {
+      "10": 0.0,
+      "11": 0.0,
+      "12": 0.0,
+      "13": 0.0,
+      "14": 0.0,
+      "15": 0.0,
+      "16": 0.0,
+      "17": 0.0,
+      "3": 0.0,
+      "4": 0.0,
+      "5": 0.0,
+      "6": 0.0,
+      "7": 0.0,
+      "8": 0.0,
+      "9": 0.0
+    },
+    "3.0000000000000001e-05": {
+      "10": 0.0,
+      "11": 0.0,
+      "12": 0.0,
+      "13": 0.0,
+      "14": 0.0,
+      "15": 0.0,
+      "16": 0.0,
+      "17": 0.0,
+      "3": 0.0,
+      "4": 0.0,
+      "5": 0.0,
+      "6": 0.0,
+      "7": 0.0,
+      "8": 0.0,
+      "9": 0.0
+    }
+  },
+  "interpretation": "The frozen one-step production canary did not satisfy every preregistered check. Preserve the failure and diagnose the failing check before any later stability gate.",
+  "max_boundary_state_relative": 0.0,
+  "max_first_production_rhs_relative": 2.2437607327674414e-13,
+  "max_higher_ur_relative": 0.0,
+  "next_gate": "Diagnose C10.65s2 without weakening frozen criteria unless a separately justified scientific correction is frozen first.",
+  "non_claims": [
+    "not finite-time completed-U1 stability",
+    "not full-time production evolution",
+    "not a UV derivation of the historical higher hierarchy",
+    "not proof of a unique primordial growing mode",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not resolution of C9 radiative naturalness, broader C7, or B9"
+  ],
+  "off_path": {
+    "all_four_numeric_rows_sha256_identical": true,
+    "records": [
+      {
+        "control": "class_control/output/control_perturbations_k0_s.dat",
+        "control_sha256": "2f17098ef00241f2288530565427c234f03b7d5bc99a4897be36ccae7b993f35",
+        "identical": true,
+        "s2_off": "class_s2/output/off_perturbations_k0_s.dat",
+        "s2_off_sha256": "2f17098ef00241f2288530565427c234f03b7d5bc99a4897be36ccae7b993f35"
+      },
+      {
+        "control": "class_control/output/control_perturbations_k1_s.dat",
+        "control_sha256": "82abef7163ebcc7cd346b667a6f60c00708325a754dd54ab137f98d4936ef4bc",
+        "identical": true,
+        "s2_off": "class_s2/output/off_perturbations_k1_s.dat",
+        "s2_off_sha256": "82abef7163ebcc7cd346b667a6f60c00708325a754dd54ab137f98d4936ef4bc"
+      },
+      {
+        "control": "class_control/output/control_perturbations_k2_s.dat",
+        "control_sha256": "5f88952f4b884990352f810df93fe3dead19b26d916e03369c63fd2c56858423",
+        "identical": true,
+        "s2_off": "class_s2/output/off_perturbations_k2_s.dat",
+        "s2_off_sha256": "5f88952f4b884990352f810df93fe3dead19b26d916e03369c63fd2c56858423"
+      },
+      {
+        "control": "class_control/output/control_perturbations_k3_s.dat",
+        "control_sha256": "26ea4d7feeb3facdeca97e0561fa1227534ba3f55d0f076858e1e4bbb34376f0",
+        "identical": true,
+        "s2_off": "class_s2/output/off_perturbations_k3_s.dat",
+        "s2_off_sha256": "26ea4d7feeb3facdeca97e0561fa1227534ba3f55d0f076858e1e4bbb34376f0"
+      }
+    ]
+  },
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s2_production_canary_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33003225136,
+    "patch": "rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py",
+    "repo_head_at_job_start": "a899cd3ef3bb98cace43ac68876f030ebe673f5f",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s2-production-canary.yml"
+  },
+  "schema": "RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1",
+  "static_guards": {
+    "default_off_present": true,
+    "direct_tau_before_intervals": true,
+    "dynamic_kernel_current_state": true,
+    "legacy_not_consumed_by_bridge": true,
+    "no_approximation_mutation": true,
+    "one_step_then_exit": true,
+    "ordinary_seed_owned_by_initial_conditions": true,
+    "post_vector_handoff_two_slots_only": true,
+    "thermo_signature_fix_only": false
+  },
+  "step_delta_tau_Mpc": 0.0001,
+  "threshold_changed": false
+}
