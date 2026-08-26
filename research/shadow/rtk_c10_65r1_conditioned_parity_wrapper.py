@@ -3,6 +3,8 @@
 
 This overrides only local_project().  All frozen thresholds, parent comparisons,
 OFF-path SHA checks and classifications remain those of the frozen r1 analyzer.
+The B closure is analytically reduced using the already-frozen Q definition so
+that the common L=-k^2 factor is cancelled before floating-point evaluation.
 """
 from pathlib import Path
 import importlib.util
@@ -23,12 +25,12 @@ def conditioned_local_project(r,lam,Mc):
     hpA=-3.*H*(h+ph)-(x/a)*q0pref; hpB=-x*W0
     psipA=(Kp*h+K*hpA-DAp*psi)/DA; psipB=K*hpB/DA
     lapse=rr*Eth*L-2.*D*H*H
-    # Keep phiA/phiB only as exact split diagnostics; B is solved from the
-    # algebraically reduced, cancellation-free form used by the conditioned C block.
+    # phiA/phiB are retained only as split diagnostics.  For B, use the exact
+    # reduced form obtained after substituting 3H Q = C2*k^2-3a^2 dm and L=-k^2.
     phiA=(-3.*a*a*rr*dm-D*H*Q+2.*D*H*psipA+2.*rr*Pcal*L*psi)/lapse
     phiB=(2.*D*H*psipB)/lapse
-    Bden=rr*L*(1.+D*Eth*psipB/lapse)
-    Brhs=(rr/lapse)*(Eth*L*(Q-D*psipA)+3.*D*H*H*Q+3.*D*H*a*a*dm-2.*D*H*Pcal*L*psi)
+    Bden=lapse+D*Eth*psipB
+    Brhs=Eth*(Q-D*psipA)-D*H*C2-2.*D*H*Pcal*psi
     B=Brhs/Bden
     psip=psipA+psipB*B
     phi=(-3.*a*a*rr*dm-D*H*Q+2.*D*H*psip+2.*rr*Pcal*L*psi)/lapse
