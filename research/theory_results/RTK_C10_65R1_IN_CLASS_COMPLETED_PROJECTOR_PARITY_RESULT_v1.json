@@ -1273,7 +1273,7 @@
     "base_patch": "rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
     "conditioning_patch": "rtk/stabilize_rtk_c10_65r1_conditioned_projector.py",
-    "repo_head_at_job_start": "f742ac77f4d61d52459139568e4eb882a367b7e3",
+    "repo_head_at_job_start": "a483bf25b0786e72c4b193f0e1b8f6a9126d5580",
     "worker": "research/shadow/rtk_c10_65r1_conditioned_parity_wrapper.py",
     "workflow": "rtk-c10-65r1-conditioned-projector-parity.yml"
   },
