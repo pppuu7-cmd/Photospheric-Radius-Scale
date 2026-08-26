@@ -1,0 +1,113 @@
+name: RTK C10.65r2 source-lock preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-65r2-source-lock-preflight.yml'
+      - 'research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json'
+
+permissions:
+  contents: write
+
+jobs:
+  source-lock:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen r2 contract and certified parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          def L(p): return json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert t['class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert t['frozen_checks']['max_r1_projector_regression_relative']==5e-11
+          assert t['frozen_checks']['max_C_vs_independent_local_rhs_relative']==5e-9
+          assert t['frozen_checks']['max_C_vs_detached_parent_rhs_relative']==1e-6
+          assert t['frozen_checks']['max_Bprime_actual_slip_invariance_relative']==5e-9
+          assert t['frozen_checks']['max_weighted_photon_baryon_slip_cancel_normalized_residual']==5e-13
+          parents={
+            'research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json':'C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED',
+            'research/theory_results/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json':'C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED',
+            'research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json':'C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED',
+            'research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json':'C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED',
+            'research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json':'C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED',
+          }
+          for p,c in parents.items():
+            d=L(p); assert d['classification']==c,(p,d.get('classification'))
+          PY
+      - name: Verify exact pinned CLASS Newtonian metric conventions
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_upstream
+          git -C class_upstream reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          grep -nF 'metric_continuity = -3.*ppw->pvecmetric[index_mt_phi_prime]' class_upstream/source/perturbations.c || true
+          grep -nE 'metric_continuity.*-3.*phi_prime|metric_continuity.*-3.*index_mt_phi_prime' class_upstream/source/perturbations.c > metric_continuity_hits.txt
+          grep -nE 'metric_euler.*k\*k.*psi|metric_euler.*k2.*psi|metric_euler.*index_mt_psi' class_upstream/source/perturbations.c > metric_euler_hits.txt
+          test -s metric_continuity_hits.txt
+          test -s metric_euler_hits.txt
+          cat metric_continuity_hits.txt
+          cat metric_euler_hits.txt
+      - name: Verify reusable q/r1 source files compile
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            research/shadow/rtk_c10_65q_numeric_bprime_slip_closure.py \
+            research/shadow/rtk_c10_65r1_in_class_completed_projector_parity.py \
+            research/shadow/rtk_c10_65r1_conditioned_parity_wrapper.py
+      - name: Record scoped implementation-preflight result
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,subprocess,datetime
+          out={
+            'schema':'RTK_C10_65R2_SOURCE_LOCK_PREFLIGHT_RESULT_v1',
+            'gate':'C10.65r2-source-lock-preflight',
+            'classification':'C10_65R2_SOURCE_LOCK_PREFLIGHT_PASS_SCOPED',
+            'r2_gate_status':'OPEN_NOT_EXECUTED',
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'verified':{
+              'frozen_target_unchanged':True,
+              'certified_parent_classifications':True,
+              'metric_continuity_source_locked':True,
+              'metric_euler_source_locked':True,
+              'q_r1_reusable_sources_compile':True
+            },
+            'non_claims':['not C10.65r2 PASS','no c10_65r2_diag implementation yet','no dy writes','no production feedback','no physical closure claim'],
+            'provenance':{
+              'repo_head_at_job_start':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+              'workflow':'rtk-c10-65r2-source-lock-preflight.yml',
+              'generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()
+            }
+          }
+          p='research/theory_results/RTK_C10_65R2_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json'
+          open(p,'w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R2_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json /tmp/r2pre.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r2pre.json research/theory_results/RTK_C10_65R2_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R2_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json
+            git commit -m 'Record C10.65r2 source-lock preflight' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
