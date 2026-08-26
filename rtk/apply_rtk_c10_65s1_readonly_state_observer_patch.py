@@ -115,3 +115,5 @@ if 'rtk_c10_65s1_observer.o' not in ms:
     ms=ms.replace(anchor,anchor+' rtk_c10_65s1_observer.o',1)
     mk.write_text(ms)
 print('C10_65S1_OBSERVER_PATCH_APPLIED')
+
+# Non-functional rerun marker: 2026-08-26T16:28Z. Frozen s1 target unchanged.
