@@ -1,0 +1,74 @@
+name: RTK C10.65g finite-onset growing-mode identifiability
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65g_finite_onset_growing_mode_identifiability.py'
+      - '.github/workflows/rtk-c10-65g-finite-onset-growing-mode-identifiability.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic dependency
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Execute frozen theorem
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65g_repo_head.txt
+          python3 -m py_compile research/shadow/rtk_c10_65g_finite_onset_growing_mode_identifiability.py
+          python3 research/shadow/rtk_c10_65g_finite_onset_growing_mode_identifiability.py | tee c10_65g.log
+          grep -q '^C10_65G_FINITE_ONSET_SNAPSHOT_RANK_INSUFFICIENT_TEMPORAL_MATCH_REQUIRED_SCOPED$' c10_65g.log
+          test -s research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json'
+          d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_65g_repo_head.txt').read().strip(),
+            'workflow':'rtk-c10-65g-finite-onset-growing-mode-identifiability.yml',
+            'worker':'research/shadow/rtk_c10_65g_finite_onset_growing_mode_identifiability.py',
+            'sympy':'1.14.0'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json
+            git commit -m 'Record C10.65g finite-onset identifiability result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65g-identifiability
+          path: |
+            c10_65g.log
+            research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json
+          if-no-files-found: warn
