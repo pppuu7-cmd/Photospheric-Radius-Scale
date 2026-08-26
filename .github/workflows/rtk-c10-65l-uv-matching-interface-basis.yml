@@ -1,0 +1,56 @@
+name: RTK C10.65l UV matching interface basis
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65l_uv_matching_interface_basis.py'
+      - '.github/workflows/rtk-c10-65l-uv-matching-interface-basis.yml'
+permissions:
+  contents: write
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic dependency
+        run: python3 -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Execute frozen C10.65l theorem
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65l_repo_head.txt
+          python3 -m py_compile research/shadow/rtk_c10_65l_uv_matching_interface_basis.py
+          python3 research/shadow/rtk_c10_65l_uv_matching_interface_basis.py | tee c10_65l.log
+          grep -q '^C10_65L_UV_MATCHING_INTERFACE_BASIS_PASS_SCOPED ' c10_65l.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65l_repo_head.txt').read().strip(),'workflow':'rtk-c10-65l-uv-matching-interface-basis.yml','worker':'research/shadow/rtk_c10_65l_uv_matching_interface_basis.py','sympy':'1.14.0'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json /tmp/c10_65l_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_65l_result.json research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json
+            git commit -m 'Record C10.65l UV matching interface basis' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
