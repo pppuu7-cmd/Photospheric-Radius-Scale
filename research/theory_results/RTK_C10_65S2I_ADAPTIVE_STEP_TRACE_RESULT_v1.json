@@ -33,9 +33,9 @@
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s2i_adaptive_step_trace_analyzer.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 33004430697,
+    "github_actions_run_id": 33004502174,
     "observer_sha256": "67c4cdcdb88a4234a875131e481de96c9f35487781845aa849ac3d62c3c88613",
-    "repo_head_at_job_start": "e06773320320f242e44ed6a40b559a2061c47db9",
+    "repo_head_at_job_start": "9486cb53e6b0f3f5446fba59f08c070bdc86ca60",
     "threshold_changed": false,
     "trace_patch": "rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py",
     "trace_sha256": "47b57c4641572fad03012d3953a911dbe60076f033c7d0eb8342f674bcf68f95",
