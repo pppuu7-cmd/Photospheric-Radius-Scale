@@ -1,0 +1,59 @@
+name: RTK C10.65n conditional completed-U1 onset seed preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65n_conditional_completed_u1_onset_seed_preflight.py'
+      - '.github/workflows/rtk-c10-65n-conditional-completed-u1-onset-seed-preflight.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  seed-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install high-precision dependency
+        run: python3 -m pip install --disable-pip-version-check 'mpmath==1.3.0'
+      - name: Execute frozen C10.65n preflight
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65n_repo_head.txt
+          python3 -m py_compile research/shadow/rtk_c10_65n_conditional_completed_u1_onset_seed_preflight.py
+          python3 research/shadow/rtk_c10_65n_conditional_completed_u1_onset_seed_preflight.py | tee c10_65n.log
+          grep -q '^C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED ' c10_65n.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65n_repo_head.txt').read().strip(),'workflow':'rtk-c10-65n-conditional-completed-u1-onset-seed-preflight.yml','worker':'research/shadow/rtk_c10_65n_conditional_completed_u1_onset_seed_preflight.py','mpmath':'1.3.0'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json /tmp/c10_65n_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_65n_result.json research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json
+            git commit -m 'Record C10.65n conditional completed-U1 onset seed preflight' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
