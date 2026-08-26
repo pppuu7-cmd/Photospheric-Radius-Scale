@@ -1,0 +1,1 @@
+Execute frozen C10.65s3a finite-short-interval endpoint stability gate. Preserve interval, constraint bounds, production physics, tolerance, and prior s2/s2k classifications.
