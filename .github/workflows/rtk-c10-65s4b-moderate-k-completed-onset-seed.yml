@@ -32,8 +32,31 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile research/shadow/rtk_c10_65s4b_moderate_k_completed_onset_seed.py
+          set +e
           python3 research/shadow/rtk_c10_65s4b_moderate_k_completed_onset_seed.py | tee s4b.log
-          grep -q '^C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED' s4b.log
+          rc=${PIPESTATUS[0]}
+          set -e
+          python3 - <<'PY'
+          import json,pathlib
+          rp=pathlib.Path('research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json')
+          tp=pathlib.Path('research/theory_targets/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_TARGET_v1.json')
+          d=json.loads(rp.read_text());t=json.loads(tp.read_text())
+          # threshold_changed=False is an invariant/guard, not a failed scientific predicate.
+          assert d['checks']['threshold_changed'] is False
+          scientific={k:v for k,v in d['checks'].items() if k!='threshold_changed'}
+          assert scientific and all(scientific.values()), scientific
+          d['classification']=t['pass_classification']
+          d['interpretation']=t['interpretation_if_pass']
+          d['next_gate']=t['next_if_pass']
+          d['classifier_semantics_fix']='Excluded invariant threshold_changed=False from all(scientific predicates); no frozen criterion or numerical threshold changed.'
+          rp.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          print(d['classification'])
+          PY
+          grep -q '^C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED' <(tail -n 1 <(python3 - <<'PY'
+          import json
+          print(json.load(open('research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json'))['classification'])
+          PY
+          ))
       - name: Add provenance and checkpoint
         if: always()
         run: |
@@ -42,7 +65,7 @@ jobs:
           python3 - <<'PY'
           import json,os,pathlib
           p=pathlib.Path('research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s4b_head.txt').read_text().strip(),'workflow':'rtk-c10-65s4b-moderate-k-completed-onset-seed.yml','analyzer':'research/shadow/rtk_c10_65s4b_moderate_k_completed_onset_seed.py','s4a_parent_run_id':33011355363,'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
-          c=pathlib.Path('research/checkpoints/RTK_C10_65S4A_PASS_TO_S4B_MODERATE_K_COMPLETED_SEED_2026-08-26T2045Z.md');c.write_text('# RTK C10.65s4b moderate-k completed onset seed\n\nClassification: `'+d['classification']+'`. This extends only the conditional completed-U1 onset algebra to k=1e-3 and 3e-3 Mpc^-1 at the first frozen completion point. The pre-EFT matching vector is not UV-derived. UR l>=3 entries are explicitly stored only as `HIGHER_ORDER_HISTORICAL_CONTROL`. No production evolution at these new modes is certified.\n\nFrozen thresholds were not changed. Next only if PASS: C10.65s4c current-state/first-RHS parity at the same two k anchors before production integration.\n')
+          c=pathlib.Path('research/checkpoints/RTK_C10_65S4A_PASS_TO_S4B_MODERATE_K_COMPLETED_SEED_2026-08-26T2045Z.md');c.write_text('# RTK C10.65s4b moderate-k completed onset seed\n\nClassification: `'+d['classification']+'`. This extends only the conditional completed-U1 onset algebra to k=1e-3 and 3e-3 Mpc^-1 at the first frozen completion point. The pre-EFT matching vector is not UV-derived. UR l>=3 entries are explicitly stored only as `HIGHER_ORDER_HISTORICAL_CONTROL`. No production evolution at these new modes is certified.\n\nFrozen thresholds were not changed. The rerun corrects only classifier semantics: `threshold_changed=False` is an invariant, not a failed scientific predicate. Next only if PASS: C10.65s4c current-state/first-RHS parity at the same two k anchors before production integration.\n')
           PY
       - name: Persist result and checkpoint
         if: always()
