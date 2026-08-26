@@ -1,0 +1,421 @@
+{
+  "checks": {
+    "all_endpoint_approximation_states": true,
+    "all_endpoint_constraints_finite": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_endpoint_states_finite": true,
+    "all_endpoint_widths_within_absolute_tolerance": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "before_rows_exact_s2k_before_all_samples": true,
+    "off_identity": true,
+    "record_count": true,
+    "same_kernel_and_tolerance_static_guard": true,
+    "sample_manifest_shape": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S3C_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+  "frozen_bound": 1e-10,
+  "gate": "C10.65s3c",
+  "interpretation": "At four prospectively frozen elapsed times from 3e-6 through 1e-4 Mpc and all four low-k anchors, independently restarted production integrations remain finite and constraint-consistent within the unchanged 1e-10 normalized bound. This widens sampled short-time evidence by two decades beyond C10.65s3b but is not a continuous-time or cosmological stability theorem.",
+  "max_abs_normalized_constraint": 5.997435543300991e-16,
+  "max_abs_normalized_constraint_change": 2.9988040102640525e-16,
+  "next_gate": "Only after freezing a separate k-domain widening or materially longer-time gate should spectra-level production tests be considered. Preserve same-full-action background, UV matching, C9 and massive-neutrino limitations.",
+  "non_claims": [
+    "not a continuous-time supremum bound",
+    "not cosmological-time stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s3c_time_widened_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33006801836,
+    "repo_head_at_job_start": "a211671bbaabb9391507935e0e8d0ad0e7b40eee",
+    "sample_interval_patch": "rtk/apply_rtk_c10_65s3b_sample_interval_patch.py",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s3c-time-widening.yml"
+  },
+  "record_count": 16,
+  "records": [
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987068503403955e-16,
+          "after": 0.0,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 63
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 73
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.99871743994312e-16,
+          "after": 0.0,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 78
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 68
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.317111971147994e-23,
+          "after": 2.9987071820515926e-16,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 84
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987080377739776e-16,
+          "after": 2.9987080377739776e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 84
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998718103357871e-16,
+          "after": 5.997435543300991e-16,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 79
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 79
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 9.951335800045227e-23,
+          "after": 2.9987078454739755e-16,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 90
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 90
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.99871743994312e-16,
+          "after": 0.0,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 85
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9988040102640525e-16,
+          "after": 2.9988040102640525e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 85
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987068503403955e-16,
+          "after": 0.0,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 95
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 106
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.317073622647239e-22,
+          "after": 2.9987207570167427e-16,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 101
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 90
+    }
+  ],
+  "s2k_parent_preserved": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "s3b_parent_preserved": "C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+  "sample_elapsed_tau_Mpc": [
+    3e-06,
+    1e-05,
+    3e-05,
+    0.0001
+  ],
+  "schema": "RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_RESULT_v1",
+  "threshold_changed": false
+}
