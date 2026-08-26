@@ -1,0 +1,102 @@
+{
+  "architecture_decision": {
+    "DAE_note": "Algebraically projected metric/TCA auxiliaries may be differentiated as needed for RHS evaluation, but those derivative definitions remain graph variables and are not independent IC constraints.",
+    "forbidden": "Do not try to close the eight C10.65i temporal amplitudes by stacking z_prime,z_double_prime,... at the same finite onset.",
+    "required": "The next selector must use genuinely nonlocal/asymptotic temporal information or an explicit UV/pre-EFT boundary functional."
+  },
+  "classification": "C10_65J_FINITE_LOCAL_TEMPORAL_JET_INSUFFICIENT_NONLOCAL_BRANCH_REQUIRED_SCOPED",
+  "eight_dimensional_direct_check": {
+    "fixed_C2_certifying_minor_det": "1",
+    "fixed_C2_graph_rank": 8,
+    "jet_order": 5,
+    "released_C2_augmented_graph_rank": 9,
+    "released_C2_certifying_minor_det": "1"
+  },
+  "exact_rational_machine_checks": [
+    {
+      "derivative_identity_minor_det": "1",
+      "derivative_variable_constraint_rank": 10,
+      "derivative_variable_nullity": 2,
+      "exact_recursion_checksum": "54790448969070526/309912359344185",
+      "jet_certifying_minor_det": "1",
+      "jet_order": 5,
+      "noncommuting_time_derivative_matrices": true,
+      "restricted_certifying_minor_det": "1",
+      "restricted_jet_graph_rank": 1,
+      "restricted_subspace_dimension": 1,
+      "stacked_jet_graph_rank": 2,
+      "state_dimension": 2
+    },
+    {
+      "derivative_identity_minor_det": "1",
+      "derivative_variable_constraint_rank": 15,
+      "derivative_variable_nullity": 3,
+      "exact_recursion_checksum": "118026180589923401/103304119781395",
+      "jet_certifying_minor_det": "1",
+      "jet_order": 5,
+      "noncommuting_time_derivative_matrices": true,
+      "restricted_certifying_minor_det": "1",
+      "restricted_jet_graph_rank": 2,
+      "restricted_subspace_dimension": 2,
+      "stacked_jet_graph_rank": 3,
+      "state_dimension": 3
+    },
+    {
+      "derivative_identity_minor_det": "1",
+      "derivative_variable_constraint_rank": 25,
+      "derivative_variable_nullity": 5,
+      "exact_recursion_checksum": "26030313610864575/1589294150483",
+      "jet_certifying_minor_det": "1",
+      "jet_order": 5,
+      "noncommuting_time_derivative_matrices": true,
+      "restricted_certifying_minor_det": "1",
+      "restricted_jet_graph_rank": 4,
+      "restricted_subspace_dimension": 4,
+      "stacked_jet_graph_rank": 5,
+      "state_dimension": 5
+    },
+    {
+      "derivative_identity_minor_det": "1",
+      "derivative_variable_constraint_rank": 40,
+      "derivative_variable_nullity": 8,
+      "exact_recursion_checksum": "-4070656467446106344/103304119781395",
+      "jet_certifying_minor_det": "1",
+      "jet_order": 5,
+      "noncommuting_time_derivative_matrices": true,
+      "restricted_certifying_minor_det": "1",
+      "restricted_jet_graph_rank": 7,
+      "restricted_subspace_dimension": 7,
+      "stacked_jet_graph_rank": 8,
+      "state_dimension": 8
+    }
+  ],
+  "gate": "C10.65j",
+  "inherited_C10_65i": {
+    "dimension_after_any_finite_local_jet": 8,
+    "fixed_C2_post_normalization_dimension": 8,
+    "released_C2_dimension_after_any_finite_local_jet": 9
+  },
+  "next_gate": "freeze C10.65k nonlocal temporal-selector feasibility: determine the earliest interval on which the completed-U1 diagnostic equations/background/approximations are simultaneously certified enough to define a backward-regularity or asymptotic branch test; if no such interval is certified, keep the selector explicitly UV/pre-EFT rather than inventing one",
+  "non_claims": [
+    "not a proof that no growing branch exists",
+    "not a UV matching prescription",
+    "not a claim that eight propagating degrees of freedom exist",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "1356f17b2f939feff6117db5433da5ccb6804ea3",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65j_finite_local_temporal_jet_identifiability.py",
+    "workflow": "rtk-c10-65j-finite-local-temporal-jet-identifiability.yml"
+  },
+  "schema": "RTK_C10_65J_FINITE_LOCAL_TEMPORAL_JET_IDENTIFIABILITY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65J_FINITE_LOCAL_TEMPORAL_JET_IDENTIFIABILITY_TARGET_v1.json",
+  "theorem": {
+    "derivative_variables": "If d1,...,dN are separate variables, recurrence equations d_m-G_m z0=0 have an exact block-diagonal identity minor in derivative columns; they add rank N*n and leave nullity n unchanged.",
+    "fixed_C2": "For z_prime=F(t)z with regular finite coefficients, every finite onset jet is J_N(z0)=(z0,G1 z0,...,GN z0). The zeroth block is I, so J_N is injective and rank(J_N)=dim(z0).",
+    "released_C2": "Augmenting the onset coordinate by the constant matching scalar C2 gives one additional zeroth-order coordinate; every finite local jet therefore retains exactly the one extra matching direction.",
+    "restricted_constraint_manifold": "For any admissible onset subspace z0=B u with rank(B)=d, the finite jet has the same rank d because the zeroth block is B.",
+    "scope_guard": "Only additional temporal boundary information not encoded by the local ODE graph\u2014e.g. backward boundedness, asymptotic power-law/eigenbranch selection, or microscopic pre-EFT matching\u2014can reduce the onset-state dimension."
+  }
+}
