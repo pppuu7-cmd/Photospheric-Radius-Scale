@@ -23,6 +23,8 @@ class Out(C.Structure):
 
 def main():
     s2=L('research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json')
+    c=L('research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json')
+    d=L('research/theory_results/RTK_C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_RESULT_v1.json')
     e=L('research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json')
     fcond=L('research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json')
     s1=L('research/theory_results/RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_RESULT_v1.json')
@@ -31,8 +33,9 @@ def main():
     b=L('research/theory_results/RTK_C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_RESULT_v1.json')
     cur=L('research/state/current.json')
     assert s2['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+    assert c['classification']=='C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_PASS_SCOPED'
+    assert d['classification']=='C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_PASS_SCOPED'
     assert fcond['classification']=='C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_PASS_SCOPED'
-    so=ROOT/'/tmp/never'
     lib=P('/tmp/libc10_65s2_kernel.so')
     subprocess.run(['gcc','-std=c99','-O2','-shared','-fPIC','-I'+str(ROOT/'rtk'),str(ROOT/'rtk/c10_65s2_kernel.c'),'-lm','-o',str(lib)],check=True)
     dll=C.CDLL(str(lib)); fn=dll.rtk_c10_65s2_current_state; fn.argtypes=[C.POINTER(In),C.POINTER(Out)]; fn.restype=C.c_int
@@ -44,16 +47,23 @@ def main():
     sbg=math.hypot(1.0,math.sqrt(lamD)*xbg); ca2=xbg/(sbg*sbg*(sbg+xbg)); tt=xbg/(sbg+1.0); Q=1.0+xbg/sbg
     mu2=3.0*rk/(2.0*xbg*(1.0+tt)); MK=math.sqrt(mu2)*Q*sbg*math.sqrt(sbg); kstar=a*MK; w=pk/rk
     states={(float(q['lambda_HL']),float(q['M_c_Mpc_inv']),float(q['k'])):q for q in s1['completed_states']}
-    emap={(float(q['lambda_HL']),float(q['M_c_Mpc_inv']),float(q['k'])):q for q in e['records']}
+    cmap={(float(q['lambda_HL']),float(q['M_c_Mpc_inv']),float(q['k'])):q['core'] for q in c['records']}
+    dmap={(float(q['lambda_HL']),float(q['M_c_Mpc_inv']),float(q['k'])):q['dynamic'] for q in d['records']}
+    emap={(float(q['lambda_HL']),float(q['M_c_Mpc_inv']),float(q['k'])):q['dynamic'] for q in e['records']}
+
+    # Parent-schema adapter only.  Each C output is compared against the gate that
+    # originally certified that quantity; no physics formula or frozen threshold
+    # is changed here.
     fields={
-      'B':'B','B_prime':'B_prime','psi_pref':'psi_pref','psi_pref_prime':'psi_pref_prime','phi_pref':'phi_pref',
-      'Psi_N_reconstructed':'Psi_N_reconstructed','Psi_N_prime':'Psi_N_prime','Phi_N':'Phi_N','sigma_g':'sigma_g','tca_slip':'tca_slip',
-      'theta_b_prime':'theta_b_prime','theta_g_prime':'theta_g_prime','theta_ur_prime':'theta_ur_prime',
-      'delta_khr_pref_prime':'delta_khr_pref_prime','theta_khr_pref_prime':'theta_khr_pref_prime',
-      'delta_khr_N_prime':'delta_khr_N_prime','theta_khr_N_prime':'theta_khr_N_prime',
-      'metric_continuity':'metric_continuity','metric_euler':'metric_euler',
-      'Bprime_affine_coefficient':'Bprime_affine_coefficient','Bprime_implicit_denominator':'Bprime_implicit_denominator',
-      'weighted_slip_cancel':'weighted_slip_cancel','feedback_denominator':'feedback_denominator'
+      'B':('c','B'),'psi_pref':('c','psi_pref'),'psi_pref_prime':('c','psi_pref_prime'),'phi_pref':('c','phi_pref'),
+      'Psi_N_reconstructed':('c','Psi_N'),'Phi_N':('d','Phi_N'),'sigma_g':('d','sigma_g'),
+      'B_prime':('e','B_prime'),'Psi_N_prime':('e','Psi_N_prime'),'tca_slip':('e','tca_slip'),
+      'theta_b_prime':('e','theta_b_prime'),'theta_g_prime':('e','theta_g_prime'),'theta_ur_prime':('e','theta_ur_prime'),
+      'delta_khr_pref_prime':('e','delta_khr_pref_prime'),'theta_khr_pref_prime':('e','theta_khr_pref_prime'),
+      'delta_khr_N_prime':('e','delta_khr_N_prime'),'theta_khr_N_prime':('e','theta_khr_N_prime'),
+      'metric_continuity':('e','metric_continuity'),'metric_euler':('e','metric_euler'),
+      'Bprime_affine_coefficient':('e','Bprime_affine_coefficient'),'Bprime_implicit_denominator':('e','Bprime_implicit_denominator'),
+      'weighted_slip_cancel':('e','weighted_slip_cancel'),'feedback_denominator':('d','feedback_denominator')
     }
     maxima={k:0.0 for k in fields}; records=[]; finite=True; rcok=True
     for key,st in states.items():
@@ -62,9 +72,9 @@ def main():
           float(st['delta_b']),float(st['theta_b']),float(st['delta_g']),float(st['theta_g']),float(st['delta_ur']),float(st['theta_ur']),float(st['shear_ur']),
           float(st['delta_cdm_khr']),float(st['theta_cdm_khr']),w,ca2,cs2)
         out=Out(); rc=fn(C.byref(inp),C.byref(out)); rcok &= rc==0
-        ex=emap[key]['dynamic']; errs={}
-        for cfield,pfield in fields.items():
-            cv=float(getattr(out,cfield)); pv=float(ex[pfield]); er=rel(cv,pv); errs[cfield]=er; maxima[cfield]=max(maxima[cfield],er); finite &= math.isfinite(cv)
+        parents={'c':cmap[key],'d':dmap[key],'e':emap[key]}; errs={}
+        for cfield,(src,pfield) in fields.items():
+            cv=float(getattr(out,cfield)); pv=float(parents[src][pfield]); er=rel(cv,pv); errs[cfield]=er; maxima[cfield]=max(maxima[cfield],er); finite &= math.isfinite(cv)
         records.append({'lambda_HL':lam,'M_c_Mpc_inv':Mc,'k':k,'return_code':rc,'errors':errs})
     phys=[k for k in maxima if k not in ['Bprime_affine_coefficient','Bprime_implicit_denominator','weighted_slip_cancel']]
     max_phys=max(maxima[k] for k in phys)
@@ -75,7 +85,8 @@ def main():
     passed=all(checks.values())
     outj={'schema':'RTK_C10_65S2_C_KERNEL_PARITY_AUDIT_RESULT_v1','classification':'C10_65S2_C_KERNEL_PARITY_PASS_SCOPED' if passed else 'C10_65S2_C_KERNEL_PARITY_FAIL_SCOPED',
           'checks':checks,'maxima':maxima,'max_physical_relative':max_phys,'max_implicit_relative':max_imp,'inherited_rhs_limit':lim,'records':records,'threshold_changed':False,
-          'interpretation':'Implementation audit only: standalone C port of the already-certified current-state stack, before production mutation.'}
+          'interpretation':'Implementation audit only: standalone C port of the already-certified current-state stack, before production mutation.',
+          'schema_adapter_note':'C outputs are compared to the original certifying parents: s2c metric core, s2d traceless/TCA closure, and s2e derivative/slip closure. This fixes only JSON parent-field routing.'}
     (ROOT/'research/theory_results/RTK_C10_65S2_C_KERNEL_PARITY_AUDIT_RESULT_v1.json').write_text(json.dumps(outj,indent=2,sort_keys=True)+'\n')
     print(outj['classification']); print(json.dumps({'max_physical':max_phys,'max_implicit':max_imp},sort_keys=True))
     return 0 if passed else 2
