@@ -1,0 +1,27 @@
+{
+  "schema": "RTK_C10_NEUTRAL_CHARGE_LONG_WAVE_MEMORY_BOUND_TARGET_v1",
+  "created_utc": "2026-08-26T00:18:00Z",
+  "status": "FROZEN_BEFORE_DERIVATION",
+  "question": "Does the exact neutral-charge identity imply that arbitrary regular superhorizon neutral-charge onset memory cannot be uniformly erased over a finite in-EFT conformal-time interval as k->0?",
+  "parent": "research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json",
+  "assumptions": [
+    "I_khr'=-(theta+k^2 B) exactly",
+    "regular long-wave branch: |theta|<=C_theta k^2 and |B|<=C_B with finite k-independent C_theta,C_B on [tau_i,tau_f]",
+    "finite conformal interval Delta_tau=tau_f-tau_i",
+    "for a relative-memory statement only: |I_khr(tau_i)|>=I_min>0 independent of k"
+  ],
+  "proof_obligation": [
+    "derive an absolute finite-time bound on |I_f-I_i|",
+    "derive a relative transfer bound when I_min>0",
+    "take k->0 without assuming a numerical production history",
+    "state precisely what this does not exclude"
+  ],
+  "acceptance": "A valid proof must use only the exact parent identity plus the stated regularity assumptions and must not infer a UV boundary prescription or a new propagating degree of freedom.",
+  "non_claims": [
+    "not a finite-k damping exclusion",
+    "not a singular-branch exclusion",
+    "not a UV/pre-EFT initial-condition mechanism",
+    "not a propagating-rank theorem",
+    "not spectra or likelihood evidence"
+  ]
+}
