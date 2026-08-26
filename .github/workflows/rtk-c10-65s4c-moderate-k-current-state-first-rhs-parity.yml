@@ -1,0 +1,102 @@
+name: RTK C10.65s4c moderate-k current-state first-RHS parity
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-65s4c-moderate-k-current-state-first-rhs-parity.yml'
+      - 'research/triggers/RTK_C10_65S4C_TRIGGER_v2.txt'
+permissions: {contents: write}
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify corrected frozen target and parent chain
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s4c_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p))
+          v1=L('research/theory_targets/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_TARGET_v1.json')
+          t=L('research/theory_targets/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_TARGET_v2.json')
+          e=L('research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json')
+          f=L('research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json')
+          g=L('research/theory_results/RTK_C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_RESULT_v1.json')
+          b=L('research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert t['scientific_contract_changed_from_v1'] is False
+          assert t['domain']==v1['domain']
+          for k,v in v1['frozen_checks'].items(): assert t['frozen_checks'][k]==v
+          assert e['classification']=='C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED'
+          assert f['classification']=='C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_PASS_SCOPED'
+          assert g['classification']=='C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_PASS_SCOPED'
+          assert f['failed_parent_classification_preserved']==e['classification']
+          assert g['failed_s2e_classification_preserved']==e['classification']
+          assert b['classification']=='C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED'
+          print('C10_65S4C_V2_FROZEN_TARGET_AND_PARENT_CHAIN_VERIFIED')
+          PY
+      - name: Execute frozen s4c v2
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s4c_moderate_k_current_state_first_rhs_parity.py
+          set +e
+          python3 research/shadow/rtk_c10_65s4c_moderate_k_current_state_first_rhs_parity.py | tee s4c.log
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo "$rc" > s4c_rc.txt
+          test -f research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json
+      - name: Add provenance
+        if: always()
+        run: |
+          set -euo pipefail
+          p=research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json
+          [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json')
+          d=json.loads(p.read_text())
+          d['provenance']={'repo_head_at_job_start':pathlib.Path('s4c_head.txt').read_text().strip(),'workflow':'rtk-c10-65s4c-moderate-k-current-state-first-rhs-parity.yml','analyzer':'research/shadow/rtk_c10_65s4c_moderate_k_current_state_first_rhs_parity.py','s4b_parent_run_id':33011880042,'s2f_parent_run_id':32998912001,'s2g_parent_run_id':32999128166,'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          PY
+      - name: Persist result
+        if: always()
+        run: |
+          set -euo pipefail
+          p=research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json
+          [ -f "$p" ] || exit 0
+          cp "$p" /tmp/s4c_result.json
+          for n in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/s4c_result.json "$p"
+            git config user.name github-actions[bot]
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$p"
+            git commit -m 'Record C10.65s4c moderate-k first-RHS parity' || exit 0
+            git push origin HEAD:rtk-class-build && exit 0
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s4c-moderate-k-current-state-first-rhs-parity
+          path: |
+            s4c.log
+            s4c_rc.txt
+            research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json
+      - name: Enforce scientific classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json'))
+          assert d['checks']['threshold_changed'] is False
+          assert d['classification']=='C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_PASS_SCOPED', d
+          print(d['classification'])
+          PY
