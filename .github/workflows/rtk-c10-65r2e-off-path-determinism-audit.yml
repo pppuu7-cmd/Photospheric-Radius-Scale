@@ -80,21 +80,21 @@ jobs:
       - name: Execute 2-thread controls
         run: |
           set -euo pipefail
-          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/same2a.ini
-          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/same2b.ini
-          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/build2a.ini
-          OMP_NUM_THREADS=2 ./class_r1b/class class_r1b/build2b.ini
-          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/r1_2.ini
-          OMP_NUM_THREADS=2 ./class_r2/class class_r2/r2_2.ini
+          (cd class_r1a && OMP_NUM_THREADS=2 ./class same2a.ini)
+          (cd class_r1a && OMP_NUM_THREADS=2 ./class same2b.ini)
+          (cd class_r1a && OMP_NUM_THREADS=2 ./class build2a.ini)
+          (cd class_r1b && OMP_NUM_THREADS=2 ./class build2b.ini)
+          (cd class_r1a && OMP_NUM_THREADS=2 ./class r1_2.ini)
+          (cd class_r2 && OMP_NUM_THREADS=2 ./class r2_2.ini)
       - name: Execute 1-thread controls
         run: |
           set -euo pipefail
-          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/same1a.ini
-          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/same1b.ini
-          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/build1a.ini
-          OMP_NUM_THREADS=1 ./class_r1b/class class_r1b/build1b.ini
-          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/r1_1.ini
-          OMP_NUM_THREADS=1 ./class_r2/class class_r2/r2_1.ini
+          (cd class_r1a && OMP_NUM_THREADS=1 ./class same1a.ini)
+          (cd class_r1a && OMP_NUM_THREADS=1 ./class same1b.ini)
+          (cd class_r1a && OMP_NUM_THREADS=1 ./class build1a.ini)
+          (cd class_r1b && OMP_NUM_THREADS=1 ./class build1b.ini)
+          (cd class_r1a && OMP_NUM_THREADS=1 ./class r1_1.ini)
+          (cd class_r2 && OMP_NUM_THREADS=1 ./class r2_1.ini)
       - name: Analyze exact determinism hierarchy
         run: |
           set -euo pipefail
