@@ -1,0 +1,169 @@
+name: RTK C10.65f exact-onset TCA domain pack
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65f_tca_domain_partition_exact_onset_pack.py'
+      - '.github/workflows/rtk-c10-65f-tca-domain-partition-exact-onset-pack.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  exact-pack:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_TARGET_v1.json'))
+          d=json.load(open('research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json'))
+          a=json.load(open('research/theory_results/RTK_C10_65E_FAILURE_AUDIT_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert t['pinned_class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert d['classification']=='C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_PASS_SCOPED'
+          assert a['classification']=='C10_65E_PREREGISTERED_ASSUMPTIONS_FALSE_METHOD_REFINEMENT_REQUIRED_SCOPED'
+          print('C10_65F_TARGET_AND_PARENTS_PASS')
+          PY
+          git rev-parse HEAD | tee c10_65f_repo_head.txt
+      - name: Prepare disposable pinned production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_export
+          git -C class_export reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_export rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_export/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_export/include/
+          python3 rtk/apply_rtk_class_patch.py class_export
+          python3 rtk/upgrade_rtk_inputs.py class_export
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_export
+          python3 rtk/upgrade_rtk_initial_conditions.py class_export
+          python3 rtk/upgrade_rtk_matter_sources.py class_export
+          python3 rtk/upgrade_rtk_gamma_root.py class_export
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_export
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_export
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_export
+          python3 rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py class_export
+          make -C class_export -j2 class
+      - name: Write pinned historical RTK input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          a=json.load(open('research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in a['technical']['k_values_Mpc_inv'])
+          body=f'''h = {p['h']!r}
+          T_cmb = 2.7255
+          Omega_b = {p['Ob']!r}
+          Omega_khronon = {p['Om']!r}
+          lambda_D = {p['lam']!r}
+          Omega_Lambda = 0.
+          model = 2.
+          N_ur = 3.046
+          N_ncdm = 0
+          Omega_k = 0.
+          Omega_fld = 0.
+          Omega_scf = 0.
+          recombination = RECFAST
+          reio_parametrization = reio_camb
+          z_reio = {p['zre']!r}
+          output = mPk,dTk,vTk
+          gauge = newtonian
+          A_s = {p['As']!r}
+          n_s = {p['ns']!r}
+          P_k_max_h/Mpc = 1.0
+          z_pk = 0
+          k_output_values = {kvals}
+          root = output/c1065f_
+          write parameters = yeap
+          background_verbose = 0
+          perturbations_verbose = 0
+          spectra_verbose = 0
+          '''
+          pathlib.Path('class_export/c1065f.ini').write_text(body)
+          pathlib.Path('class_export/output').mkdir(exist_ok=True)
+          PY
+      - name: Generate read-only histories
+        run: |
+          set -euo pipefail
+          (cd class_export && ./class c1065f.ini) > c10_65f_class.log 2>&1
+          find class_export/output -maxdepth 1 -type f -iname '*perturbations*' -print | sort | tee c10_65f_files.txt
+          test "$(wc -l < c10_65f_files.txt)" -eq 9
+      - name: Analyze exact onset pack and TCA domain
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65f_tca_domain_partition_exact_onset_pack.py
+          set +e
+          python3 research/shadow/rtk_c10_65f_tca_domain_partition_exact_onset_pack.py \
+            --glob 'class_export/output/*perturbations*' \
+            --output c10_65f_result.json | tee c10_65f.log
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo "$rc" > c10_65f_analyzer_rc.txt
+          test -s c10_65f_result.json
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='c10_65f_result.json'; d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_65f_repo_head.txt').read().strip(),
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'workflow':'rtk-c10-65f-tca-domain-partition-exact-onset-pack.yml',
+            'source_export_patch':'rtk/apply_rtk_c10_source_export_patch.py',
+            'species_control_patch':'rtk/apply_rtk_c10_65a_species_control_patch.py',
+            'tca_coefficient_patch':'rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py',
+            'worker':'research/shadow/rtk_c10_65f_tca_domain_partition_exact_onset_pack.py',
+            'analyzer_exit_code':int(open('c10_65f_analyzer_rc.txt').read())
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_65f_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json
+            git commit -m 'Record C10.65f exact-onset TCA domain pack' || exit 0
+            if git push origin HEAD:rtk-class-build; then break; fi
+          done
+      - name: Enforce preregistered classification
+        run: |
+          set -euo pipefail
+          grep -q '^C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED ' c10_65f.log
+          test "$(cat c10_65f_analyzer_rc.txt)" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65f-exact-onset-tca-domain-pack
+          path: |
+            c10_65f_class.log
+            c10_65f.log
+            c10_65f_result.json
+            c10_65f_files.txt
+            c10_65f_analyzer_rc.txt
+            class_export/c1065f.ini
+          if-no-files-found: warn
