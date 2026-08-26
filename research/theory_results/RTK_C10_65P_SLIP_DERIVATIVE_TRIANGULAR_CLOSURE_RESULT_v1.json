@@ -1,0 +1,81 @@
+{
+  "architecture_decision": "Do not solve B_prime and slip as two new dynamical states and do not set either derivative to zero. The closure is triangular because Thomson slip is internal to the photon-baryon aggregate momentum.",
+  "classification": "C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_PASS_SCOPED",
+  "exact_aggregate_cancellation": {
+    "W_gamma": "R W_b",
+    "baryon_slip_coefficient": "R/(1+R)",
+    "consequence": "internal Thomson slip redistributes photon-baryon momentum but does not source the aggregate ordinary momentum derivative consumed by the completed-U1 projector derivative.",
+    "hhat_double_prime_slip_coefficient": "0",
+    "photon_slip_coefficient": "-1/(1+R)",
+    "q0_N_prime_slip_coefficient": "0",
+    "weighted_momentum_slip_coefficient": "0"
+  },
+  "exact_slip_affinity": {
+    "coefficient": "-F*k2*(3*cb2 - 1)*(2*F*H - 1)",
+    "expected": "-(1-2 H F) F k^2 (1-3 cb2)",
+    "machine_residual": "0",
+    "metric_continuity": "-3 Psi_N_prime",
+    "why_no_other_PsiNprime_terms": "theta_prime, photon shear and shear_prime in the pinned flat-Newtonian compromise correction use metric_euler/metric_shear but not metric_continuity; at the matching point theta_b=theta_g the separate relative-velocity prefactor vanishes."
+  },
+  "gate": "C10.65p",
+  "next_gate": "freeze C10.65q derivative-pack execution: export/reconstruct the exact onset background derivatives needed by d/dtau of the aggregate projector, evaluate B_prime and Psi_N_prime on all four anchors x 3x3 grid, then evaluate the full pinned compromise_CLASS slip and verify low-k regularity before in-CLASS feedback",
+  "non_claims": [
+    "not a numerical B_prime or slip value",
+    "not a microscopic UV matching derivation",
+    "not same-full-action primordial background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "onset_numeric_coefficients": {
+    "max_abs_d_slip_d_PsiNprime": 1.352832478917126e-09,
+    "one_minus_2HF": 0.9996101441606288,
+    "records": [
+      {
+        "abs_coefficient": 1.5031471987968071e-12,
+        "d_slip_d_PsiNprime": -1.5031471987968071e-12,
+        "k_Mpc_inv": 1e-05
+      },
+      {
+        "abs_coefficient": 1.3528324789171262e-11,
+        "d_slip_d_PsiNprime": -1.3528324789171262e-11,
+        "k_Mpc_inv": 3e-05
+      },
+      {
+        "abs_coefficient": 1.5031471987968072e-10,
+        "d_slip_d_PsiNprime": -1.5031471987968072e-10,
+        "k_Mpc_inv": 0.0001
+      },
+      {
+        "abs_coefficient": 1.352832478917126e-09,
+        "d_slip_d_PsiNprime": -1.352832478917126e-09,
+        "k_Mpc_inv": 0.0003
+      }
+    ]
+  },
+  "provenance": {
+    "repo_head_at_job_start": "07a7ac4b3e1ede45aecf6de5fcdcde885617b905",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65p_slip_derivative_triangular_closure.py",
+    "workflow": "rtk-c10-65p-slip-derivative-triangular-closure.yml"
+  },
+  "remaining_numeric_inputs": "C10.65q must provide H_prime/background derivatives and the aggregate ordinary+neutral derivative pack needed for d/dtau of the algebraic projector. These are local RHS/background data, not temporal boundary data.",
+  "roundtrip_certificate": {
+    "chi_prime_status": "B_prime",
+    "interpretation": "B_prime is d/dtau of the algebraic preferred projector along the local source trajectory; it is not a ninth/tenth initial datum.",
+    "temporal_B_initial_condition_required": false
+  },
+  "schema": "RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_RESULT_v1",
+  "source_lock": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "perturbations_c_sha256": "162a45dc5f65f25d8d1d56c253193a65078e00be628003ed47822103e400fb7d",
+    "tca": "compromise_CLASS"
+  },
+  "target": "research/theory_targets/RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_TARGET_v1.json",
+  "triangular_execution_order": [
+    "evaluate the local aggregate ordinary+neutral RHS and background derivatives at the C10.65o conditional seed",
+    "differentiate the algebraic completed-U1 projector to obtain B_prime; the aggregate derivative is slip-free by the exact cancellation above",
+    "compute Psi_N_prime=psi_pref_prime-H_prime B-H B_prime",
+    "evaluate the pinned compromise_CLASS slip using that Psi_N_prime",
+    "recover individual theta_b_prime and theta_g_prime; their slip pieces cancel again in the aggregate momentum channel"
+  ]
+}
