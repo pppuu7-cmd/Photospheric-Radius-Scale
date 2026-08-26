@@ -1,0 +1,62 @@
+{
+  "schema": "RTK_C10_65R3B_EXACT_ONSET_INTERVAL_SPLIT_HANDOFF_CANARY_TARGET_v1",
+  "gate": "C10.65r3b",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "First controlled mutation experiment: insert the persisted exact onset as an integration interval boundary and opt-in hand off only the genuine model=2 Newtonian integrated carrier state before a short post-handoff evolution canary.",
+  "parents": [
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_RESULT_v1.json"
+  ],
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "canary_domain": {
+    "completion_point_count": 1,
+    "completion_point_selection": "the first persisted 3x3 completion-grid point used by C10.65r2",
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003],
+    "a_on": 0.0002203229136467,
+    "matching_vector_status": "historical phenomenological control only"
+  },
+  "implementation_contract": [
+    "add a model=2 opt-in handoff flag with default exactly OFF",
+    "derive tau_on deterministically from the pinned background and persisted a_on; no hard-coded tau from another cosmology",
+    "if tau_on lies strictly inside an existing perturb_solve approximation interval, split that interval into two while duplicating the unchanged approximation-state vector on both sides",
+    "do not modify perturb_find_approximation_switches criteria, TCA thresholds, collision coefficients, or approximation flags",
+    "at the post-split interval entry, call the ordinary perturb_vector_init redistribution first, then perform exactly one handoff before generic_evolver",
+    "handoff writes only pv->y[index_pt_delta_cdm] and pv->y[index_pt_theta_cdm] in model=2 Newtonian gauge",
+    "no state mutation is allowed inside perturb_derivs or perturb_sources callbacks",
+    "metric, lapse/curvature, B/shift, projector quantities and completed-U1 constraint quantities remain algebraic diagnostics and are never inserted as integrated state",
+    "emit explicit before-state, after-state, tau_on, a(tau_on), approximation flags and first-post-handoff RHS diagnostics for certification",
+    "short-step canary must remain local to the four low-k anchors and must not be promoted to spectra"
+  ],
+  "frozen_checks": {
+    "off_path_numeric_text_sha256_identical_all_four": true,
+    "off_path_max_relative_difference": 0.0,
+    "handoff_occurs_exactly_once_per_k": true,
+    "handoff_relative_a_error_max": 1e-12,
+    "approximation_flags_identical_across_inserted_split": true,
+    "tca_on_at_handoff_all_four": true,
+    "only_delta_theta_integrated_slots_changed_at_handoff": true,
+    "no_rhs_callback_state_write_static_guard": true,
+    "no_metric_or_shift_integrated_write_static_guard": true,
+    "first_post_handoff_r1_projector_regression_relative_max": 5e-11,
+    "first_post_handoff_C_vs_C10_65r2_relative_max": 5e-9,
+    "first_post_handoff_weighted_slip_cancel_normalized_max": 5e-13,
+    "all_first_post_handoff_outputs_finite": true,
+    "short_step_fraction_of_local_perturb_timescale": 0.0001,
+    "short_step_state_all_finite": true,
+    "short_step_fractional_change_max": 0.05,
+    "short_step_constraint_residual_growth_factor_max": 10.0
+  },
+  "constraint_drift_definition": "For each algebraic completed-U1 diagnostic residual available at the handoff, compare absolute residual at the frozen short-step endpoint with max(abs(residual_at_handoff),1e-300); the largest ratio is the reported growth factor. This is a local numerical canary, not a long-time stability theorem.",
+  "pass_classification": "C10_65R3B_EXACT_ONSET_INTERVAL_SPLIT_HANDOFF_CANARY_PASS_SCOPED",
+  "fail_classification": "C10_65R3B_EXACT_ONSET_INTERVAL_SPLIT_HANDOFF_CANARY_FAIL_SCOPED",
+  "next_if_pass": "C10.65r3c: expand the same unchanged handoff architecture to the full 3x3x4 completion grid and multiple frozen short-step fractions before any production feedback/spectra run.",
+  "next_if_fail": "Classify the failure as interval-split/rollback, handoff mapping, first-RHS parity, or short-step drift. Fix only the identified implementation/physics defect; do not loosen this frozen target without a separately documented scientific reason.",
+  "non_claims": [
+    "not primordial UV derivation",
+    "not proof of long-time stability",
+    "not production completed-U1 feedback certification",
+    "not spectra or likelihood evidence",
+    "not resolution of C9 naturalness or broader C7 weak-field completion"
+  ]
+}
