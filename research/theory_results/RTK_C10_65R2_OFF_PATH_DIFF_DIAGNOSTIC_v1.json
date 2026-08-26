@@ -1,0 +1,78 @@
+{
+  "exact_numeric_text_identity_all_four": false,
+  "files": [
+    {
+      "control": "class_r1/output/control_perturbations_k0_s.dat",
+      "exact_numeric_text_identity": false,
+      "first_difference": {
+        "abs": 1.00000761449337e-07,
+        "column_index": 86,
+        "control": -245502.1025823,
+        "off": -245502.1025824,
+        "rel": 4.073315885992173e-13,
+        "row": 162
+      },
+      "max_abs": 1.0,
+      "max_rel": 2.9979324459093542e-09,
+      "off": "class_r2/output/off_perturbations_k0_s.dat",
+      "same_row_count": true,
+      "token_shape_same": true
+    },
+    {
+      "control": "class_r1/output/control_perturbations_k1_s.dat",
+      "exact_numeric_text_identity": false,
+      "first_difference": {
+        "abs": 1.00000761449337e-07,
+        "column_index": 86,
+        "control": -502592.2783508,
+        "off": -502592.2783507,
+        "rel": 1.98969951901128e-13,
+        "row": 156
+      },
+      "max_abs": 8.0,
+      "max_rel": 1.5543967693442416e-09,
+      "off": "class_r2/output/off_perturbations_k1_s.dat",
+      "same_row_count": true,
+      "token_shape_same": true
+    },
+    {
+      "control": "class_r1/output/control_perturbations_k2_s.dat",
+      "exact_numeric_text_identity": false,
+      "first_difference": {
+        "abs": 1.00000761449337e-07,
+        "column_index": 86,
+        "control": -121522.9420726,
+        "off": -121522.9420725,
+        "rel": 8.2289615231332e-13,
+        "row": 189
+      },
+      "max_abs": 0.5,
+      "max_rel": 2.3211117923084208e-09,
+      "off": "class_r2/output/off_perturbations_k2_s.dat",
+      "same_row_count": true,
+      "token_shape_same": true
+    },
+    {
+      "control": "class_r1/output/control_perturbations_k3_s.dat",
+      "exact_numeric_text_identity": false,
+      "first_difference": {
+        "abs": 2.400047378614545e-07,
+        "column_index": 86,
+        "control": -83383.01851916,
+        "off": -83383.01851892,
+        "rel": 2.878340723612752e-12,
+        "row": 206
+      },
+      "max_abs": 8.0,
+      "max_rel": 3.730940864022068e-09,
+      "off": "class_r2/output/off_perturbations_k3_s.dat",
+      "same_row_count": true,
+      "token_shape_same": true
+    }
+  ],
+  "interpretation": "Diagnostic only. Frozen C10.65r2 criteria are unchanged.",
+  "max_abs_all_four": 8.0,
+  "max_rel_all_four": 3.730940864022068e-09,
+  "schema": "RTK_C10_65R2_OFF_PATH_DIFF_DIAGNOSTIC_v1",
+  "shape_same_all_four": true
+}
