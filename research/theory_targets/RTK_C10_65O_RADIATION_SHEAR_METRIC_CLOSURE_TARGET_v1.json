@@ -1,0 +1,51 @@
+{
+  "schema": "RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-26T01:58:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65o",
+  "question": "Does the conditional C10.65n seed admit a finite source-locked photon+massless-UR anisotropic-stress closure and a self-consistent physical Newtonian lapse Phi_N on all four exact low-k anchors and all nine completion points, without using B_prime or historical CLASS metric potentials?",
+  "parents": [
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json"
+  ],
+  "frozen_equations": [
+    "theta_g=theta_b=k^2 V_N from the declared zero-relative-velocity conditional control",
+    "delta_b=D_b+3 Psi_N and delta_g=D_g+4 Psi_N",
+    "theta_prime=[-H theta_b+k^2(cb2 delta_b+R delta_g/4)]/(1+R)+k^2 Phi_N",
+    "sigma_g_1=(16/45) tau_c theta_g in flat Newtonian gauge",
+    "sigma_g=(1-11 dtau_c/6) sigma_g_1-(11/6) tau_c (16/45) tau_c theta_prime for pinned compromise_CLASS, with metric_shear=metric_shear_prime=0",
+    "sigma_ur=k^2 S_ur0 from the declared historical phenomenological matching control",
+    "Pi=1.5[W_g sigma_g+W_ur sigma_ur]/k^2, using the already-certified CLASS-to-C10 anisotropic-stress map",
+    "for E_th=2,Pcal=1,alpha1=0: Phi_N=Psi_N-3a^2 Pi",
+    "because sigma_g is affine in Phi_N, solve Phi_N=(Psi_N-3a^2 Pi_A)/(1+3a^2 Pi_Phi) exactly"
+  ],
+  "leading_k0_certificate": [
+    "take theta/k^2 -> V_N0, D_i -> their C10.65n leading values, sigma_ur/k^2 -> S_ur0",
+    "derive sigma_g/k^2 = Sg_A+Sg_Phi Phi_N and solve the same algebraic Phi_N closure at k=0",
+    "require affine k^2 intercepts of Phi_N, sigma_g/k^2 and Pi to converge to the independent k0 certificate"
+  ],
+  "acceptance": [
+    "all four exact low-k anchors are on the pinned TCA branch",
+    "all 36 finite-k grid records are finite",
+    "the shear-feedback denominator 1+3a^2 Pi_Phi is nonzero everywhere and has absolute value >=0.9",
+    "normalized Phi_N closure residual and Pi reconstruction residual <=1e-24 in high precision",
+    "for every grid point, all-four and smallest-three affine k^2 intercepts for Phi_N, sigma_g/k^2 and Pi agree with the independent k0 certificate at <=1e-5 relative and with each other at <=1e-5 relative",
+    "record the compromise correction relative to first-order photon shear and require it finite, without imposing that it be numerically tiny",
+    "do not compute or assume B_prime, Psi_N_prime, metric_continuity or slip in this gate",
+    "do not consume historical CLASS_phi_curvature or CLASS_psi_lapse",
+    "preserve CONDITIONAL and HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY labels"
+  ],
+  "pass_classification": "C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED",
+  "fail_classification": "C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_FAIL_SCOPED",
+  "next_if_pass": "freeze C10.65p implicit derivative/slip closure: differentiate the algebraic completed-U1 seed along the local radiation+neutral RHS, solve for B_prime/Psi_N_prime together with the pinned compromise_CLASS slip, and prove no new temporal datum is introduced before implementing in-CLASS feedback",
+  "non_claims": [
+    "not a slip or B_prime closure",
+    "not a microscopic UV matching derivation",
+    "not proof of a unique primordial growing mode",
+    "not same-full-action primordial background closure",
+    "not massive-neutrino anisotropic stress",
+    "not spectra or likelihood evidence"
+  ]
+}
