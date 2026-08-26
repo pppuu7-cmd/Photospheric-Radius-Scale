@@ -81,10 +81,43 @@
   },
   "provenance": {
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 32980560380,
-    "repo_head_at_job_start": "82efd3693be928cd34880c252c03754dd099aaaf",
+    "github_actions_run_id": 32980683162,
+    "repo_head_at_job_start": "97876c00c5fba487267d00ad37170b312d85b516",
     "threshold_changed": false,
     "workflow": "rtk-c10-65r2g-separate-noinline-observer.yml"
+  },
+  "r1_control_repeat": {
+    "exact": true,
+    "records": [
+      {
+        "a": "class_r1/output/controlA_perturbations_k0_s.dat",
+        "b": "class_r1/output/controlB_perturbations_k0_s.dat",
+        "identical": true,
+        "sha_a": "c30c00ae580adff3b9abd27c69f648e9d80ebc359bfa2d2fb1522278458709d5",
+        "sha_b": "c30c00ae580adff3b9abd27c69f648e9d80ebc359bfa2d2fb1522278458709d5"
+      },
+      {
+        "a": "class_r1/output/controlA_perturbations_k1_s.dat",
+        "b": "class_r1/output/controlB_perturbations_k1_s.dat",
+        "identical": true,
+        "sha_a": "385fd61d1b5f17a3d168e3c6c55405323e23ee419a83da3b7448f8ba1027b814",
+        "sha_b": "385fd61d1b5f17a3d168e3c6c55405323e23ee419a83da3b7448f8ba1027b814"
+      },
+      {
+        "a": "class_r1/output/controlA_perturbations_k2_s.dat",
+        "b": "class_r1/output/controlB_perturbations_k2_s.dat",
+        "identical": true,
+        "sha_a": "254e540e6639a2ae561d7605edc84375305e3687d433f4290e9224862042de3e",
+        "sha_b": "254e540e6639a2ae561d7605edc84375305e3687d433f4290e9224862042de3e"
+      },
+      {
+        "a": "class_r1/output/controlA_perturbations_k3_s.dat",
+        "b": "class_r1/output/controlB_perturbations_k3_s.dat",
+        "identical": true,
+        "sha_a": "d04ddfc69a11cad2ed00c4794441ef8d0edf8333015fcc9e3f86f3c71c8d22f2",
+        "sha_b": "d04ddfc69a11cad2ed00c4794441ef8d0edf8333015fcc9e3f86f3c71c8d22f2"
+      }
+    ]
   },
   "schema": "RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1",
   "static_guards": {
