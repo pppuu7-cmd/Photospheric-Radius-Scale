@@ -7,7 +7,7 @@ on:
     paths:
       - 'research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json'
       - 'rtk/apply_rtk_c10_65s2_production_canary_patch.py'
-      - 'rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py'
+      - 'rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py'
       - 'research/shadow/rtk_c10_65s2_production_canary_analyzer.py'
       - '.github/workflows/rtk-c10-65s2-production-canary.yml'
 
@@ -77,8 +77,8 @@ jobs:
           python3 rtk/stabilize_rtk_c10_65r1_conditioned_projector.py class_control
           make -C class_control -j2 class
           cp -a class_control class_s2
-          python3 -m py_compile rtk/apply_rtk_c10_65s2_production_canary_patch.py rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py
-          python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py class_s2
+          python3 -m py_compile rtk/apply_rtk_c10_65s2_production_canary_patch.py rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py
+          python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py class_s2
           make -C class_s2 clean
           make -C class_s2 -j2 class
 
@@ -88,7 +88,6 @@ jobs:
           python3 - <<'PY'
           import json,pathlib
           L=lambda p: json.load(open(p))
-          f=L('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json')
           plan=L('research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json')
           p=L('research/state/current.json')['final_replay_result']['rtk']['params']
           d=plan['scope']; kvals=', '.join(format(float(x),'.17g') for x in d['k_Mpc_inv'])
@@ -136,7 +135,7 @@ jobs:
             --observer c10_65s2_observer.csv \
             --off-identity c10_65s2_off_identity.json \
             --patch rtk/apply_rtk_c10_65s2_production_canary_patch.py \
-            --patch-v2 rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py \
+            --patch-v2 rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py \
             --output research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json | tee c10_65s2_analyzer.log
           grep -q '^C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED$' c10_65s2_analyzer.log
 
@@ -149,7 +148,7 @@ jobs:
           python3 - <<'PY'
           import json,os
           p='research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json'; d=json.load(open(p))
-          d['provenance']={'repo_head_at_job_start':open('c10_65s2_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65s2-production-canary.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'patch':'rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py','analyzer':'research/shadow/rtk_c10_65s2_production_canary_analyzer.py','threshold_changed':False}
+          d['provenance']={'repo_head_at_job_start':open('c10_65s2_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65s2-production-canary.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'patch':'rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py','analyzer':'research/shadow/rtk_c10_65s2_production_canary_analyzer.py','threshold_changed':False}
           open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
           PY
 
