@@ -1,0 +1,67 @@
+name: RTK C10.65r3a source map
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65r3a_state_handoff_source_map.py'
+      - '.github/workflows/rtk-c10-65r3a-source-map.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  source-map:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Prepare pinned patched CLASS source tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_r3a
+          git -C class_r3a reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_r3a/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_r3a/include/
+          python3 rtk/apply_rtk_class_patch.py class_r3a
+          git rev-parse HEAD | tee c10_65r3a_repo_head.txt
+      - name: Execute frozen source-map preflight
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65r3a_state_handoff_source_map.py --class-root class_r3a --output research/theory_results/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1.json | tee c10_65r3a.log
+          grep -q '^C10_65R3A_STATE_HANDOFF_SOURCE_MAP_PREFLIGHT_PASS_SCOPED ' c10_65r3a.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1.json'
+          d=json.load(open(p))
+          d['provenance']={'repo_head_at_job_start':open('c10_65r3a_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r3a-source-map.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1.json /tmp/r3a.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r3a.json research/theory_results/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1.json
+            git commit -m 'Record C10.65r3a source map' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
