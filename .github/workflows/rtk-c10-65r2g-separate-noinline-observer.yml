@@ -30,13 +30,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12.3'
-      - name: Verify frozen gate
+      - name: Verify frozen gate and parents
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import json
           t=json.load(open('research/theory_targets/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_TARGET_v1.json'))
+          e=json.load(open('research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json'))
+          f=json.load(open('research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json'))
           assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert e['classification']=='C10_65R2E_DORMANT_R2_CODEGEN_PERTURBATION_SCOPED'
+          assert f['classification']=='C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_FAIL_SCOPED'
           PY
           git rev-parse HEAD | tee c10_65r2g_repo_head.txt
       - name: Build pinned r1 and separate-observer r2
@@ -66,24 +70,47 @@ jobs:
           kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
           common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {lam:.17g}\nc10_65r1_Mc = {Mc:.17g}\n'''
           pathlib.Path('class_r1/output').mkdir(exist_ok=True); pathlib.Path('class_r2/output').mkdir(exist_ok=True)
-          pathlib.Path('class_r1/control.ini').write_text(common+'root = output/control_\n')
+          pathlib.Path('class_r1/controlA.ini').write_text(common+'root = output/controlA_\n')
+          pathlib.Path('class_r1/controlB.ini').write_text(common+'root = output/controlB_\n')
           pathlib.Path('class_r2/off.ini').write_text(common+'c10_65r2_diag = 0\nroot = output/off_\n')
           pathlib.Path('class_r2/on.ini').write_text(common+'c10_65r2_diag = 1\nroot = output/on_\n')
           PY
-      - name: Run OFF and ON paths
+      - name: Run r1 repeats and r2 OFF/ON paths
         run: |
           set -euo pipefail
-          (cd class_r1 && ./class control.ini) > c10_65r2g_control.log 2>&1
+          (cd class_r1 && ./class controlA.ini) > c10_65r2g_controlA.log 2>&1
+          (cd class_r1 && ./class controlB.ini) > c10_65r2g_controlB.log 2>&1
           (cd class_r2 && ./class off.ini) > c10_65r2g_off.log 2>&1
           (cd class_r2 && ./class on.ini) > c10_65r2g_on.log 2>&1
-          test "$(find class_r1/output -maxdepth 1 -type f -iname 'control_*perturbations*' | wc -l)" -eq 4
+          test "$(find class_r1/output -maxdepth 1 -type f -iname 'controlA_*perturbations*' | wc -l)" -eq 4
+          test "$(find class_r1/output -maxdepth 1 -type f -iname 'controlB_*perturbations*' | wc -l)" -eq 4
           test "$(find class_r2/output -maxdepth 1 -type f -iname 'off_*perturbations*' | wc -l)" -eq 4
           test "$(find class_r2/output -maxdepth 1 -type f -iname 'on_*perturbations*' | wc -l)" -eq 4
+      - name: Verify frozen r1 control repeat exactness
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import glob,hashlib,json
+          from pathlib import Path
+          def payload(p):
+              rows=[s.strip() for s in Path(p).read_text().splitlines() if s.strip() and not s.lstrip().startswith('#')]
+              return ('\n'.join(rows)+'\n').encode()
+          aa=sorted(glob.glob('class_r1/output/controlA_*perturbations*'))
+          bb=sorted(glob.glob('class_r1/output/controlB_*perturbations*'))
+          assert len(aa)==len(bb)==4
+          rec=[]; exact=True
+          for a,b in zip(aa,bb):
+              ha=hashlib.sha256(payload(a)).hexdigest(); hb=hashlib.sha256(payload(b)).hexdigest(); same=ha==hb
+              exact = exact and same
+              rec.append({'a':a,'b':b,'sha_a':ha,'sha_b':hb,'identical':same})
+          json.dump({'exact':exact,'records':rec},open('c10_65r2g_repeat.json','w'),indent=2)
+          assert exact
+          PY
       - name: Execute frozen r2g analyzer
         run: |
           set -euo pipefail
           python3 research/shadow/rtk_c10_65r2g_separate_noinline_observer.py \
-            --control-glob 'class_r1/output/control_*perturbations*' \
+            --control-glob 'class_r1/output/controlA_*perturbations*' \
             --off-glob 'class_r2/output/off_*perturbations*' \
             --on-glob 'class_r2/output/on_*perturbations*' \
             --core-patch rtk/apply_rtk_c10_65r2g_separate_observer_patch.py \
@@ -91,17 +118,16 @@ jobs:
             --observer-h rtk/rtk_c10_65r2_observer.h \
             --output research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json | tee c10_65r2g.log
       - name: Add immutable provenance
-        if: success()
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import json,os
           p='research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json'
-          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65r2g_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2g-separate-noinline-observer.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          d=json.load(open(p)); d['r1_control_repeat']=json.load(open('c10_65r2g_repeat.json'))
+          d['provenance']={'repo_head_at_job_start':open('c10_65r2g_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2g-separate-noinline-observer.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
           open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
           PY
-      - name: Persist result
-        if: success()
+      - name: Persist result before final assertion
         run: |
           set -euo pipefail
           cp research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json /tmp/r2g.json
@@ -112,7 +138,18 @@ jobs:
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json
-            git commit -m 'Record C10.65r2g separate observer isolation' || exit 0
-            if git push origin HEAD:rtk-class-build; then exit 0; fi
+            git commit -m 'Record C10.65r2g separate observer isolation' || break
+            if git push origin HEAD:rtk-class-build; then break; fi
           done
-          exit 1
+      - name: Assert frozen r2g classification
+        run: |
+          set -euo pipefail
+          git fetch origin rtk-class-build
+          git show origin/rtk-class-build:research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json > /tmp/r2g-final.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/r2g-final.json'))
+          assert d['r1_control_repeat']['exact'] is True
+          assert d['off_path']['exact_numeric_text_identity_all_four'] is True
+          assert d['classification']=='C10_65R2G_SEPARATE_NOINLINE_OBSERVER_CODEGEN_ISOLATION_PASS_SCOPED', d['classification']
+          PY
