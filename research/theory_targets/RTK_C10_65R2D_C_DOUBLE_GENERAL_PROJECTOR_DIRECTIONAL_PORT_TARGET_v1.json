@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C10_65R2D_C_DOUBLE_GENERAL_PROJECTOR_DIRECTIONAL_PORT_TARGET_v1",
+  "gate": "C10.65r2d",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Before injecting the C10.65r2 first-RHS diagnostic into pinned CLASS, validate an IEEE-754 double C forward-directional implementation of the C10.65r2c cancellation-reduced general off-manifold projector against the independent high-precision q/r2c parents on the exact 9x4 onset grid. This is a numerical C-port preflight only and does not alter the frozen C10.65r2 gate.",
+  "parents": {
+    "C10.65r1": "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED",
+    "C10.65q": "C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED",
+    "C10.65r2c": "C10_65R2C_GENERAL_PROJECTOR_DIRECTIONAL_EQUIVALENCE_PASS_SCOPED"
+  },
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "implementation_contract": {
+    "language": "C11 / IEEE-754 double",
+    "method": "forward dual propagation from primitive background/state values and the source-locked zero-slip first-RHS direction",
+    "projector": "the exact C10.65r2c general cancellation-reduced off-manifold B formula",
+    "fixed_C2_use": "forbidden in Bprime; fixed-C2 remains only an r1 onset-value regression path",
+    "new_boundary_datum": false,
+    "r2_target_changed": false
+  },
+  "frozen_checks": {
+    "record_count": 36,
+    "max_C_double_vs_high_precision_stable_B_relative": 5e-11,
+    "max_C_double_vs_high_precision_stable_Bprime_relative": 5e-9,
+    "max_C_double_vs_persisted_q_Bprime_relative": 5e-9,
+    "all_outputs_finite": true,
+    "fixed_C2_absent_from_C_directional_source": true
+  },
+  "pass_classification": "C10_65R2D_C_DOUBLE_GENERAL_PROJECTOR_DIRECTIONAL_PORT_PASS_SCOPED",
+  "fail_classification": "C10_65R2D_C_DOUBLE_GENERAL_PROJECTOR_DIRECTIONAL_PORT_FAIL_SCOPED",
+  "next_if_pass": "Inject the validated C double directional projector into the existing dormant r1 diagnostic insertion point and execute the unchanged frozen C10.65r2 in-CLASS first-RHS parity gate.",
+  "non_claims": [
+    "not C10.65r2 first-RHS parity",
+    "not an in-CLASS Bprime result",
+    "not a dy write",
+    "not feedback or state handoff",
+    "not full integration or spectra evidence",
+    "not same-full-action primordial/background closure",
+    "not C9 radiative naturalness"
+  ]
+}
