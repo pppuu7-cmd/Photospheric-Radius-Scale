@@ -1637,9 +1637,9 @@
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s1_finite_state_completion_at_onset.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 32989757332,
+    "github_actions_run_id": 32989815944,
     "observer_patch": "rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py",
-    "repo_head_at_job_start": "c9be3cd112ed75f2bc6be423276725b10d9d6a8d",
+    "repo_head_at_job_start": "162fdce083875a9b7fca8844b033dfa0241b4652",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s1-finite-state-completion-at-onset.yml"
   },
