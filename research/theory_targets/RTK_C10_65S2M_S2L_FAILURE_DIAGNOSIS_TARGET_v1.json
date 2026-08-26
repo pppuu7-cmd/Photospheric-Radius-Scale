@@ -1,0 +1,13 @@
+{
+  "schema":"RTK_C10_65S2M_S2L_FAILURE_DIAGNOSIS_TARGET_v1",
+  "gate":"C10.65s2m",
+  "status":"FROZEN_BEFORE_DIAGNOSIS_EXECUTION",
+  "created_utc":"2026-08-26T19:35:00Z",
+  "parents":{"C10.65s2l":"C10_65S2L_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_FAIL_SCOPED","C10.65s3a":"C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED"},
+  "purpose":"Diagnose the scoped s2l failure without reclassification or post-hoc threshold changes. Separate the genuinely failed prospective sampling-density requirement (>=10 accepted substeps) from the analyzer-coupled trace_interval_consistency false value, while preserving the terminal physics evidence and the independent longer/stricter s3a pass.",
+  "frozen_checks":{"s2l_preserved_fail":true,"s3a_preserved_pass":true,"s2l_failed_sampling_density":true,"all_s2l_trace_sum_hdid_within_original_terminal_interval_tolerance":true,"trace_interval_false_due_to_traceok_boolean_coupling":true,"s2l_terminal_constraints_passed_original_bound":true,"s2l_terminal_state_and_approximation_passed":true,"no_threshold_or_classification_change":true},
+  "pass_classification":"C10_65S2M_S2L_FAILURE_DIAGNOSIS_PASS_SCOPED",
+  "fail_classification":"C10_65S2M_S2L_FAILURE_DIAGNOSIS_FAIL_SCOPED",
+  "next_if_pass":"Use C10.65s3a, not failed s2l, as the production endpoint-stability parent. Freeze a trajectory-sampled gate with fixed intermediate endpoint times and constraint bounds before execution.",
+  "non_claims":["not a reclassification of s2l","not evidence that the >=10 accepted-step requirement was met","not an intra-step constraint theorem","not long-time stability"]
+}
