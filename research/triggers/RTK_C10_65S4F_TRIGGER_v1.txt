@@ -1,0 +1,1 @@
+Trigger frozen C10.65s4f moderate-k time-widened trajectory test. No target, physics equation, integrator tolerance, endpoint, or constraint criterion is changed by this trigger.
