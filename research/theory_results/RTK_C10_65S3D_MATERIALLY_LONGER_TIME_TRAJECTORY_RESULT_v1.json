@@ -1,0 +1,422 @@
+{
+  "checks": {
+    "all_endpoint_approximation_states": true,
+    "all_endpoint_constraints_finite": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_endpoint_states_finite": true,
+    "all_endpoint_widths_within_absolute_tolerance": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "before_rows_exact_s2k_before_all_samples": true,
+    "off_identity": true,
+    "record_count": true,
+    "same_kernel_and_tolerance_static_guard": true,
+    "sample_manifest_shape": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S3D_MATERIALLY_LONGER_TIME_TRAJECTORY_PASS_SCOPED",
+  "frozen_bound": 1e-10,
+  "gate": "C10.65s3d",
+  "interpretation": "At four prospectively frozen elapsed times from 3e-4 through 1e-2 Mpc and all four already-certified low-k anchors, independently restarted completed-U1 production integrations remain finite and constraint-consistent within the unchanged 1e-10 normalized bound. This extends sampled time evidence by two decades beyond C10.65s3c, but is not a continuous-time, cosmological-time, or broad-k stability theorem.",
+  "max_abs_normalized_constraint": 5.998098292309687e-16,
+  "max_abs_normalized_constraint_change": 2.999380852366567e-16,
+  "next_gate": "Freeze a separate k-domain onset-completion and production-widening preflight before spectra-level claims. Do not infer broad-k or cosmological-time stability from this gate.",
+  "non_claims": [
+    "not a continuous-time supremum bound",
+    "not cosmological-time stability",
+    "not broad-k stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s3d_materially_longer_time_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33007757951,
+    "repo_head_at_job_start": "1a999e15d840a91c6cf32fa0cd29a35d74a38de6",
+    "sample_interval_patch": "rtk/apply_rtk_c10_65s3d_sample_interval_patch.py",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s3d-materially-longer-time.yml"
+  },
+  "record_count": 16,
+  "records": [
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987068503403955e-16,
+          "after": 0.0,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.0003,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 0.0002999999999957481,
+      "rhs_calls_after": 111
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987176573886577e-16,
+          "after": 2.9987176573886577e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0003,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 0.0002999999999957481,
+      "rhs_calls_after": 101
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 9.95122016881374e-22,
+          "after": 2.998727391163289e-16,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.0003,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 0.0002999999999957481,
+      "rhs_calls_after": 101
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9988129655282055e-16,
+          "after": 2.9988129655282055e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0003,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 0.0002999999999957481,
+      "rhs_calls_after": 101
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.3171107993444233e-21,
+          "after": 2.998740021448389e-16,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.001,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 0.0010000000000047748,
+      "rhs_calls_after": 117
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.001,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 0.0010000000000047748,
+      "rhs_calls_after": 107
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.3170725764204636e-21,
+          "after": 2.9987506106688843e-16,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.001,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 0.0010000000000047748,
+      "rhs_calls_after": 102
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.001,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 0.0010000000000047748,
+      "rhs_calls_after": 112
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987068503403955e-16,
+          "after": 0.0,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.003,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 0.0030000000000001137,
+      "rhs_calls_after": 102
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.003,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 0.0030000000000001137,
+      "rhs_calls_after": 107
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.99871743994312e-16,
+          "after": 0.0,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.003,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 0.0030000000000001137,
+      "rhs_calls_after": 118
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.003,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 0.0030000000000001137,
+      "rhs_calls_after": 123
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.3171003565270195e-20,
+          "after": 2.999038560376048e-16,
+          "before": 2.9987068503403955e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.01,
+      "k": 1e-05,
+      "observed_elapsed_tau_Mpc": 0.010000000000005116,
+      "rhs_calls_after": 113
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9990394157897406e-16,
+          "after": 2.9990394157897406e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.01,
+      "k": 3e-05,
+      "observed_elapsed_tau_Mpc": 0.010000000000005116,
+      "rhs_calls_after": 123
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.999380852366567e-16,
+          "after": 5.998098292309687e-16,
+          "before": 2.99871743994312e-16
+        }
+      },
+      "elapsed_tau_Mpc": 0.01,
+      "k": 0.0001,
+      "observed_elapsed_tau_Mpc": 0.010000000000005116,
+      "rhs_calls_after": 113
+    },
+    {
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.01,
+      "k": 0.0003,
+      "observed_elapsed_tau_Mpc": 0.010000000000005116,
+      "rhs_calls_after": 118
+    }
+  ],
+  "s2k_parent_preserved": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "s3c_parent_preserved": "C10_65S3C_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+  "sample_elapsed_tau_Mpc": [
+    0.0003,
+    0.001,
+    0.003,
+    0.01
+  ],
+  "schema": "RTK_C10_65S3D_MATERIALLY_LONGER_TIME_TRAJECTORY_RESULT_v1",
+  "threshold_changed": false
+}
