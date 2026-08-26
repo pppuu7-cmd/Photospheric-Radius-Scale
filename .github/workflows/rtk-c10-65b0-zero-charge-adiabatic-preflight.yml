@@ -1,0 +1,83 @@
+name: RTK C10.65b0 zero-charge adiabatic preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65b0_zero_charge_adiabatic_preflight.py'
+      - '.github/workflows/rtk-c10-65b0-zero-charge-adiabatic-preflight.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_TARGET_v1.json'))
+          p64=json.load(open('research/theory_results/RTK_C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_RESULT_v1.json'))
+          p65=json.load(open('research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EVALUATION'
+          assert p64['classification']=='C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_CONSISTENT_PASS_SCOPED'
+          assert p65['classification']=='C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_CONSISTENT_PASS_SCOPED'
+          print('C10_65B0_TARGET_AND_PARENTS_PASS')
+          PY
+          git rev-parse HEAD | tee c10_65b0_repo_head.txt
+      - name: Run preflight theorem and low-k control
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65b0_zero_charge_adiabatic_preflight.py
+          python3 research/shadow/rtk_c10_65b0_zero_charge_adiabatic_preflight.py | tee c10_65b0.log
+          grep -Eq '^C10_65B0_(ZERO_CHARGE_ADIABATIC_(COMPATIBLE|INCOMPATIBLE)_SCOPED|PREFLIGHT_TECHNICAL_AMBIGUOUS) ' c10_65b0.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='c10_65b0_zero_charge_adiabatic_preflight_result.json'
+          d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_65b0_repo_head.txt').read().strip(),
+            'workflow':'rtk-c10-65b0-zero-charge-adiabatic-preflight.yml',
+            'worker':'research/shadow/rtk_c10_65b0_zero_charge_adiabatic_preflight.py'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_65b0_zero_charge_adiabatic_preflight_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_RESULT_v1.json
+            git commit -m 'Record C10.65b0 zero-charge adiabatic preflight result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65b0-zero-charge-adiabatic-preflight
+          path: |
+            c10_65b0.log
+            c10_65b0_zero_charge_adiabatic_preflight_result.json
+          if-no-files-found: warn

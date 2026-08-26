@@ -1,0 +1,57 @@
+{
+  "schema": "RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_TARGET_v1",
+  "created_utc": "2026-08-26T00:58:00Z",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "gate": "C10.65b0",
+  "question": "Before implementing the frozen C10.65b rank solve, is its simultaneous use of ordinary inter-species adiabaticity and the absolute neutral zero-charge condition I_khr=0 mutually compatible on the nonzero-curvature baseline growing branch?",
+  "parents": [
+    "research/theory_results/RTK_C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FINITE_ONSET_ADIABATIC_INVARIANCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json",
+    "research/theory_targets/RTK_C10_65B_COMPLETED_U1_ADIABATIC_GRADIENT_SYSTEM_TARGET_v1.json"
+  ],
+  "definitions": {
+    "J_i": "delta_i/(1+w_i)-3 Psi_N",
+    "preferred_invariance": "delta_i,pref/(1+w_i)=delta_i,N/(1+w_i)+3 H B and Psi_N=psi_pref-HB imply J_i=delta_i,pref/(1+w_i)-3 psi_pref",
+    "relative_entropy": "S_ij=J_i-J_j=delta_i/(1+w_i)-delta_j/(1+w_j)",
+    "ordinary_from_C10_65a": {
+      "J_b": "D_b=delta_b-3 CLASS_phi_curvature",
+      "J_g": "(3/4) D_g=(3/4)(delta_g-4 CLASS_phi_curvature)",
+      "J_ur": "(3/4) D_ur=(3/4)(delta_ur-4 CLASS_phi_curvature)"
+    },
+    "C10_64_zero_charge": "J_khr=I_khr=0"
+  },
+  "evaluation": {
+    "low_k_modes": 3,
+    "fit_variable": "x=k^2",
+    "fit": "independent least-squares affine fits J_i(x)=J_i0+s_i x for b,g,ur using the three smallest positive k values from C10.65a",
+    "ordinary_common_intercept": "mean(J_b0,J_g0,J_ur0)",
+    "ordinary_intercept_spread": "max_i |J_i0-J_ad0|",
+    "zero_charge_relative_entropy_intercept": "S_khr,ad,0=-J_ad0"
+  },
+  "preregistered_tolerances": {
+    "ordinary_common_abs_spread": 1e-6,
+    "zero_intercept_abs": 1e-4,
+    "note": "The compatibility threshold is orders of magnitude above the C10.65a density-control floor and is fixed before this script evaluates the parent records."
+  },
+  "classification_rule": {
+    "C10_65B0_ZERO_CHARGE_ADIABATIC_COMPATIBLE_SCOPED": "ordinary intercepts are common within 1e-6 and |J_ad0|<=1e-4",
+    "C10_65B0_ZERO_CHARGE_ADIABATIC_INCOMPATIBLE_SCOPED": "ordinary intercepts are common within 1e-6 and |J_ad0|>1e-4, so J_khr=0 carries nonzero relative entropy on the ordinary growing branch",
+    "C10_65B0_PREFLIGHT_TECHNICAL_AMBIGUOUS": "ordinary low-k intercepts fail the common-intercept guard or required parent data are nonfinite"
+  },
+  "architecture_if_incompatible": {
+    "do_not_execute_as_written": "Do not interpret the frozen C10.65b zero-charge system as an adiabatic rank theorem.",
+    "replacement_adiabatic_boundary": "I_khr(tau_on)=J_ad(tau_on), equivalently delta_khr/(1+w_khr)-3 psi_pref=J_ad, where J_ad is the common ordinary curvature/entropy invariant in the same normalization.",
+    "isocurvature_coordinate": "Delta I_iso=I_khr-J_ad; the adiabatic branch sets Delta I_iso=0, while nonzero Delta I_iso remains the independent neutral charge-isocurvature sector.",
+    "C10_64_status": "Retain the exact C10.64 zero-charge theorem as a valid charge-sector boundary theorem, but supersede its labeling as the generic nonzero-curvature adiabatic branch if this preflight is incompatible."
+  },
+  "non_claims": [
+    "not a no-go for the RTK/U1 completion",
+    "not a completed-U1 gradient/rank solve",
+    "not a microscopic derivation of the replacement boundary",
+    "not a spectra or likelihood result",
+    "not massive-neutrino coverage"
+  ]
+}
