@@ -1,0 +1,49 @@
+name: RTK C10.65s2c current-state DAE metric core
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s2c_current_state_dae_metric_core.py'
+      - '.github/workflows/rtk-c10-65s2c-current-state-dae-metric-core.yml'
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Execute frozen current-state core audit
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s2c_head.txt
+          python3 -m py_compile research/shadow/rtk_c10_65s2c_current_state_dae_metric_core.py
+          python3 research/shadow/rtk_c10_65s2c_current_state_dae_metric_core.py | tee c10_65s2c.log
+          grep -q '^C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_PASS_SCOPED$' c10_65s2c.log
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json'; d=json.load(open(p))
+          d['provenance']={'repo_head_at_job_start':open('c10_65s2c_head.txt').read().strip(),'workflow':'rtk-c10-65s2c-current-state-dae-metric-core.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json /tmp/s2c.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build; git reset --hard origin/rtk-class-build
+            cp /tmp/s2c.json research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json
+            git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json
+            git commit -m 'Record C10.65s2c current-state DAE metric core' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
