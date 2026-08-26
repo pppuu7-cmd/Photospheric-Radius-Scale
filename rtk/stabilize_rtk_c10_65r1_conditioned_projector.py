@@ -32,7 +32,16 @@ new='''        /* RTK_C10_65R1_CONDITIONED_B_CLOSURE_V2
          * cancels before evaluation:
          *   B = [E(Q-D psipA)-D H C2-2D H P psi]
          *       / [lapse + D E psipB].
-         * This removes the remaining O(1)-O(1) cancellation at low k. */
+         * This removes the remaining O(1)-O(1) cancellation at low k.
+         *
+         * IMPORTANT: c10_65r1_B_den is a frozen diagnostic whose parent
+         * semantics are the original finite-k denominator
+         *   rr*L + D*(psipB + H*phiB).
+         * After using the conditioned denominator internally, restore that
+         * diagnostic in the algebraically equivalent, well-conditioned form
+         *   rr*L*(lapse + D*E*psipB)/lapse.
+         * This changes neither B nor any dynamics; it only preserves the
+         * pre-frozen diagnostic definition across the numerical refactor. */
         r1_phiA=(-3.*r1_a*r1_a*r1_rr*r1_dm-r1_D*r1_H*r1_Q+2.*r1_D*r1_H*r1_psipA+2.*r1_rr*r1_Pcal*r1_L*r1_psi)/r1_lapse;
         r1_phiB=(2.*r1_D*r1_H*r1_psipB)/r1_lapse;
         r1_shift=r1_rr*r1_L;
@@ -42,6 +51,8 @@ new='''        /* RTK_C10_65R1_CONDITIONED_B_CLOSURE_V2
                  -r1_D*r1_H*r1_C2
                  -2.*r1_D*r1_H*r1_Pcal*r1_psi;
         r1_B=r1_Brhs/r1_Bden;
+        r1_Bden=r1_rr*r1_L*r1_Bden/r1_lapse;
+        class_test(r1_Bden == 0.,error_message,"C10.65r1 frozen diagnostic B denominator vanished");
         r1_psip=r1_psipA+r1_psipB*r1_B;
         r1_phi=(-3.*r1_a*r1_a*r1_rr*r1_dm-r1_D*r1_H*r1_Q+2.*r1_D*r1_H*r1_psip+2.*r1_rr*r1_Pcal*r1_L*r1_psi)/r1_lapse;'''
 if old not in s:
