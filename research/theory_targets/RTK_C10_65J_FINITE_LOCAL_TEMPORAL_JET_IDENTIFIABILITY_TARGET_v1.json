@@ -1,0 +1,35 @@
+{
+  "schema": "RTK_C10_65J_FINITE_LOCAL_TEMPORAL_JET_IDENTIFIABILITY_TARGET_v1",
+  "created_utc": "2026-08-26T01:19:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65j",
+  "question": "Can any finite collection of local conformal-time derivatives/Taylor-jet coefficients at the same finite onset reduce the eight fixed-C2 temporal amplitudes found by C10.65i without imposing an additional nonlocal/asymptotic temporal boundary condition?",
+  "parents": [
+    "research/theory_results/RTK_C10_65I_COUPLED_COEFFICIENT_NULLITY_WITH_SYMBOLIC_C2_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65H_MINIMAL_C2_TEMPORAL_MATCHING_COORDINATE_RESULT_v1.json"
+  ],
+  "frozen_scope": {
+    "core_state": "the C10.65i algebraically admissible fixed-C2 coefficient seed after quotienting overall normalization",
+    "local_dynamics": "a regular finite-dimensional first-order linearized hierarchy z'=F(t)z+s(t)C2 after algebraic metric/TCA auxiliaries are projected",
+    "finite_jet": "z,z',...,z^(N) at one finite onset for arbitrary finite N",
+    "forbidden_selector": "do not add an asymptotic power law, backward boundedness, UV matching value, historical CLASS metric trajectory, or hand-set coefficient in this gate"
+  },
+  "acceptance": [
+    "prove that for fixed C2 the N-jet is a graph over the admissible onset state, with the zeroth block equal to the identity, so the graph has exactly the same dimension as the onset state for every finite N",
+    "prove the affine released-C2 version adds exactly the same single matching direction already identified by C10.65h/C10.65i",
+    "show that introducing derivative variables d1,...,dN together with recurrence equations d_{n+1}=F_n(z,d_1,...,d_n) adds identity blocks and cannot reduce onset-state nullity",
+    "machine-check the theorem on exact-rational noncommuting time-dependent coefficient matrices through at least N=5 and multiple state dimensions",
+    "separate this statement from differentiated physical boundary conditions: a condition such as backward boundedness or an asymptotic eigen/power-law branch is extra temporal information and is not covered by the no-go",
+    "report the inherited C10.65i fixed-C2 post-normalization dimension and verify it remains eight under all finite local-jet constructions tested"
+  ],
+  "pass_classification": "C10_65J_FINITE_LOCAL_TEMPORAL_JET_INSUFFICIENT_NONLOCAL_BRANCH_REQUIRED_SCOPED",
+  "next_if_pass": "freeze C10.65k nonlocal temporal-selector feasibility: determine the earliest interval on which the completed-U1 diagnostic equations/background/approximations are simultaneously certified enough to define a backward-regularity or asymptotic branch test; if no such interval is certified, keep the selector explicitly UV/pre-EFT rather than inventing one",
+  "non_claims": [
+    "not a proof that no growing branch exists",
+    "not a UV matching prescription",
+    "not a claim that eight propagating degrees of freedom exist",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
