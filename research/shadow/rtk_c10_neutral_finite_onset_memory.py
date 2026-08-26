@@ -84,6 +84,15 @@ def bg_from_row(x,k,closure):
     return {'a':x['a'],'H':H,'Wo':Wo,'Wk':Wk,'rhok':rhok,'w':w,'ca':ca,'cs':cs,'kstar':kstar,'ca_err':ca_err}
 
 
+def raw_ca_error(rr,k,closure):
+    err=0.0
+    for x in rr:
+        ca,_,_=khr_state(x['a'],k,closure)
+        ca_exp=x['c10_khr_ca2']
+        err=max(err,abs(ca-ca_exp)/max(abs(ca),abs(ca_exp),1e-300))
+    return err
+
+
 def bg_lerp(b0,b1,f):
     return {k:b0[k]+f*(b1[k]-b0[k]) for k in b0}
 
@@ -132,7 +141,11 @@ def integrate_transfer(rr,k,lam,closure,a_on,tracker):
             x0,x1=ns[i],ns[i+1]; dt=x1['tau']-x0['tau']
             if not dt>0.0: raise RuntimeError('nonpositive dt')
             b0=bg_from_row(x0,k,closure); b1=bg_from_row(x1,k,closure); bm=bg_lerp(b0,b1,0.5)
-            tracker['max_ca_rel_error']=max(tracker['max_ca_rel_error'],b0['ca_err'],b1['ca_err'])
+            # Boundary nodes are linearly interpolated exported rows while ca2 is
+            # reconstructed nonlinearly from a.  Keep this interpolation mismatch
+            # as a diagnostic, but do not confuse it with the frozen raw-sample
+            # reconstruction cross-check below.
+            tracker['max_interpolated_ca_rel_error']=max(tracker['max_interpolated_ca_rel_error'],b0['ca_err'],b1['ca_err'])
             k1=rhs4(Y,b0)
             ym=[Y[j]+0.5*dt*k1[j] for j in range(4)]; k2=rhs4(ym,bm)
             ym=[Y[j]+0.5*dt*k2[j] for j in range(4)]; k3=rhs4(ym,bm)
@@ -165,7 +178,13 @@ def main():
     if any(abs(a-b)>1e-10*max(1.0,abs(b)) for (a,_,_),b in zip(histories,expected)): raise RuntimeError('k history mismatch')
     H_EFT=max(Hphys_on)
 
-    records=[]; tracker={'min_det':float('inf'),'max_res':0.0,'max_abs_alg':0.0,'max_ca_rel_error':0.0}
+    # Frozen acceptance asks for reconstruction against the exported production
+    # ca2 column.  Evaluate that identity on actual CLASS samples.  Interpolated
+    # boundary nodes are a separate numerical approximation and are diagnosed
+    # independently during integration.
+    max_raw_ca_rel_error=max(raw_ca_error(rr,k,closure) for k,_,rr in histories)
+
+    records=[]; tracker={'min_det':float('inf'),'max_res':0.0,'max_abs_alg':0.0,'max_interpolated_ca_rel_error':0.0}
     by_key={}
     eta_guards=[]
     for point in protocol['points']:
@@ -205,7 +224,7 @@ def main():
     else:
         cls='C10_NEUTRAL_FINITE_ONSET_MEMORY_NONMONOTONE_PARTIAL_CONTRACTION_SCOPED'
 
-    assert tracker['max_ca_rel_error']<1e-9, tracker['max_ca_rel_error']
+    assert max_raw_ca_rel_error<1e-9, max_raw_ca_rel_error
     assert tracker['max_res']<1e-8, tracker['max_res']
     assert tracker['min_det']>0.0
     assert max_mc_invariance<1e-12
@@ -214,7 +233,9 @@ def main():
       'scope':'neutral-Khronon onset-difference transfer at fixed ordinary curvature-dressed production trajectory; not full coupled adiabatic-mode uniqueness',
       'production_reference':{'gamma_root':gamma,'params':prod,'a_on':a_on,'H_EFT_max_Mpc_inv':H_EFT,'k_values_Mpc_inv':[x[0] for x in histories]},
       'khronon_reconstruction':closure,
-      'diagnostics':{'max_reconstructed_ca2_relative_error':tracker['max_ca_rel_error'],'max_abs_H_M_constraint_residual':tracker['max_res'],
+      'diagnostics':{'max_reconstructed_ca2_relative_error_raw_CLASS_samples':max_raw_ca_rel_error,
+                     'max_interpolated_boundary_ca2_relative_mismatch':tracker['max_interpolated_ca_rel_error'],
+                     'max_abs_H_M_constraint_residual':tracker['max_res'],
                      'min_abs_coupled_phi_B_determinant':tracker['min_det'],'max_abs_algebraic_phi_or_B':tracker['max_abs_alg'],
                      'max_M_c_transfer_invariance_abs_difference':max_mc_invariance,'all_finite':True,
                      'eta0_min_guard_range':[min(eta_guards),max(eta_guards)]},
@@ -226,6 +247,6 @@ def main():
       'non_claims':['not full adiabatic-mode uniqueness','not full Boltzmann hierarchy','not massive-neutrino completion','not exact k=0','not parameter selection','not local-window certification','not spectra or likelihood evidence']
     }
     Path(args.output).write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
-    print(cls,json.dumps({'max_final_sigma':max_final,'min_final_sigma':min(finals),'monotone':all_monotone,'max_mc_invariance':max_mc_invariance,'max_ca_err':tracker['max_ca_rel_error'],'max_constraint':tracker['max_res']},sort_keys=True))
+    print(cls,json.dumps({'max_final_sigma':max_final,'min_final_sigma':min(finals),'monotone':all_monotone,'max_mc_invariance':max_mc_invariance,'max_raw_ca_err':max_raw_ca_rel_error,'max_interp_ca_mismatch':tracker['max_interpolated_ca_rel_error'],'max_constraint':tracker['max_res']},sort_keys=True))
 
 if __name__=='__main__': main()
