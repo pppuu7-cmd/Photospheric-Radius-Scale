@@ -1,0 +1,2 @@
+Trigger frozen C10.65s3c widened-time trajectory gate.
+Target, production kernel, RK tolerance, k anchors and 1e-10 constraint bound were frozen before execution.
