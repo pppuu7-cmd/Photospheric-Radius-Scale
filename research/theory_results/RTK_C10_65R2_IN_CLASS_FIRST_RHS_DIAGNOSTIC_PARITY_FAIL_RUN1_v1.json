@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_FAIL_RUN1_v1",
+  "gate": "C10.65r2",
+  "classification": "C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_FAIL_SCOPED",
+  "target": "research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json",
+  "executed": true,
+  "grid_point_count": 9,
+  "anchor_count_per_point": 4,
+  "global_checks": {
+    "all_four_anchors_tca_on": true,
+    "all_outputs_finite": true,
+    "exact_onset_all": true,
+    "max_Bprime_actual_slip_invariance_relative": 0.0,
+    "max_C_vs_detached_parent_rhs_relative": 1.0470898424005182,
+    "max_C_vs_independent_local_rhs_relative": 1.0470898424005182,
+    "max_r1_projector_regression_relative": 0.0,
+    "max_weighted_photon_baryon_slip_cancel_normalized_residual": 2.387833495702e-16,
+    "no_dy_write_static_guard": true,
+    "no_production_metric_or_rhs_write_static_guard": true
+  },
+  "frozen_thresholds": {
+    "max_r1_projector_regression_relative": 5e-11,
+    "max_C_vs_independent_local_rhs_relative": 5e-9,
+    "max_C_vs_detached_parent_rhs_relative": 1e-6,
+    "max_Bprime_actual_slip_invariance_relative": 5e-9,
+    "max_weighted_photon_baryon_slip_cancel_normalized_residual": 5e-13
+  },
+  "threshold_changed": false,
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "repo_head_at_job_start": "793fdea7568a4175ab2c8d75a615a8af1feeba64",
+    "workflow": ".github/workflows/rtk-c10-65r2-in-class-first-rhs-diagnostic-parity-v2.yml",
+    "github_actions_run_id": 32976026130,
+    "github_actions_job_id": 98200855975,
+    "on_grid_completed": true,
+    "frozen_analyzer_executed": true,
+    "canonical_full_result_not_persisted_by_failed_workflow": true
+  },
+  "diagnosis": {
+    "status": "implementation_unit_bug_identified",
+    "finding": "The r1 shear quantities r1_sg and r1_Sur are sigma/k^2 quantities. The first r2 C port used them as sigma inside photon/UR Euler RHS terms, omitting one factor of k^2. This is an implementation bug, not a reason to relax the frozen r2 thresholds.",
+    "required_fix": "Use k^2*r1_sg and k^2*r1_Sur wherever physical shear sigma enters first-RHS Euler expressions, then rerun the unchanged frozen 36-point gate."
+  },
+  "interpretation": "First genuinely executed frozen C10.65r2 gate. It is a scoped implementation failure. Production dy, metric sources, feedback, and state handoff remain forbidden."
+}
