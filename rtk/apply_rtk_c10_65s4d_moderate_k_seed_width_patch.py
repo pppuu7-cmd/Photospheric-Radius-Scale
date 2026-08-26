@@ -18,27 +18,27 @@ assert k['classification']=='C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED'
 assert float(t['execution']['retry_width_Mpc'])==float(k['retry_width_Mpc'])
 ks=[float(x) for x in t['domain']['k_Mpc_inv']]; by={float(r['k']):r for r in b['records']}; assert set(by)==set(ks)
 def f(x): return format(float(x),'.17g')
+def fdt(x):
+    # Canonical shortest-enough decimal used only for the frozen step width.
+    # It round-trips to exactly the same binary64 value as the target while
+    # remaining compatible with the original frozen workflow's textual guard.
+    s=format(float(x),'.16g')
+    assert float(s)==float(x)
+    return s
 rows=[]
 for kval in ks:
     r=by[kval]; c=r['carrier']; U={int(q['l']):float(q['F_l']) for q in r['ur_l_ge_3']}; assert set(U)==set(range(3,18))
     vals=[kval,c['phi_CLASS_equals_Psi_N'],c['delta_b'],c['theta_b'],c['delta_g'],c['theta_g'],c['delta_ur'],c['theta_ur'],c['shear_ur'],c['delta_cdm_khr'],c['theta_cdm_khr']]
     rows.append('  {'+','.join(f(x) for x in vals)+',{'+','.join(f(U[l]) for l in range(3,18))+'}}')
 p=root/'source'/'rtk_c10_65s2_class_bridge.c'; s=p.read_text()
-# Match the generated C, not the Python f-string source spelling.  Bound the
-# replacement by the immediately following DT declaration so this remains a
-# structural, domain-only edit and fails closed if the bridge layout changes.
 pat=r'static const s2seed S\[4\]\s*=\s*\{.*?\n\};\s*\nstatic const double DT\s*=\s*[^;]+;'
 matches=list(re.finditer(pat,s,re.S))
 if len(matches)!=1: raise SystemExit(f's2 bridge low-k seed/DT block not found uniquely: {len(matches)} matches')
 m=matches[0]
-rep='static const s2seed S[2]={\n'+',\n'.join(rows)+'\n};\nstatic const double DT='+f(t['execution']['retry_width_Mpc'])+';'
+rep='static const s2seed S[2]={\n'+',\n'.join(rows)+'\n};\nstatic const double DT='+fdt(t['execution']['retry_width_Mpc'])+';'
 s=s[:m.start()]+rep+s[m.end():]
 if s.count('for(i=0;i<4;i++)')!=1: raise SystemExit('seed loop anchor missing/nonunique')
 s=s.replace('for(i=0;i<4;i++)','for(i=0;i<2;i++)',1)
-# Audit only the generated seed initializer.  A previous whole-file substring
-# guard incorrectly treated unrelated constants such as 0.0001 as surviving
-# low-k seeds.  Here we parse the first field of each actual S[2] row, which is
-# the quantity that defines the canary k-domain.
 tab=re.search(r'static const s2seed S\[2\]\s*=\s*\{(.*?)\n\};',s,re.S)
 if tab is None: raise SystemExit('moderate-k S[2] initializer missing after replacement')
 row_matches=re.findall(r'^\s*\{\s*([^,]+),',tab.group(1),re.M)
@@ -48,4 +48,4 @@ if parsed!=ks: raise SystemExit(f'moderate-k seed-domain mismatch: {parsed} != {
 if 'static const s2seed S[2]={' not in s or 'for(i=0;i<2;i++)' not in s:
     raise SystemExit('moderate-k seed table postcondition failed')
 p.write_text(s)
-print('C10_65S4D_MODERATE_K_SEED_WIDTH_PATCH_APPLIED',','.join(f(x) for x in ks),f(t['execution']['retry_width_Mpc']))
+print('C10_65S4D_MODERATE_K_SEED_WIDTH_PATCH_APPLIED',','.join(f(x) for x in ks),fdt(t['execution']['retry_width_Mpc']))
