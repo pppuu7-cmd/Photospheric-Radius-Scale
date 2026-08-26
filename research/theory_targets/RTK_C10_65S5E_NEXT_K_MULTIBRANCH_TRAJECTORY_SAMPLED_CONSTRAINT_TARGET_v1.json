@@ -3,9 +3,17 @@
   "gate": "C10.65s5e",
   "created_utc": "2026-08-26T23:48:00Z",
   "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parent_identity_correction": {
+    "applied_after_run_id": 33024369623,
+    "reason": "preflight-only provenance typo: persisted C10.65s5c classification includes _MAP_",
+    "old": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_PASS_SCOPED",
+    "new": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
+    "physics_or_threshold_changed": false,
+    "production_execution_before_correction": false
+  },
   "parents": {
     "C10.65s5d": "C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED",
-    "C10.65s5c": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_PASS_SCOPED",
+    "C10.65s5c": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
     "C10.65s3b_method": "C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
     "C10.65s2e_historical": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED"
   },
