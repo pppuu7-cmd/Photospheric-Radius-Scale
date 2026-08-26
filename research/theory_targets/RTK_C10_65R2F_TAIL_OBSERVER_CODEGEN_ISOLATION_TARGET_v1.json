@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_TARGET_v1",
+  "gate": "C10.65r2f",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Test whether the C10.65r2 dormant code-generation perturbation can be eliminated without changing any r2 equation by moving the existing r2 observer block after all r1 projector values have already been computed and stored, while restoring title/store order and retaining the onset-only finiteness scope fix.",
+  "parents": [
+    "research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json",
+    "research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json",
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_FAIL_RUN2_v1.json"
+  ],
+  "implementation_constraints": [
+    "apply the existing r2 first-RHS patch unchanged first",
+    "retain the existing shear-unit correction unchanged",
+    "remove only the historical all-history fatal finiteness guard; exact-onset finiteness remains enforced by the frozen analyzer",
+    "move the existing `if (c10_65r2_diag)` observer block from immediately after r1_sg construction to immediately after the last r1 class_store_double and before the r1 block closes",
+    "do not apply the old column-order rearrangement; with the observer moved to the tail, the original r1-then-r2 title order matches the new r1-then-r2 store order",
+    "do not alter any arithmetic expression, constant, target tolerance, production dy, metric source, collision coefficient, switching rule or matching value"
+  ],
+  "frozen_checks": {
+    "same_binary_r1_control_reproducible": true,
+    "dormant_r2_numeric_text_exact_identity_all_four": true,
+    "dormant_r2_max_relative_difference": 0.0,
+    "on_path_four_anchor_outputs_finite": true,
+    "on_path_r1_projector_regression_relative": 5e-11,
+    "on_path_r2_vs_previous_scientific_parity_relative": 5e-9,
+    "no_dy_write_static_guard": true,
+    "no_production_metric_or_rhs_write_static_guard": true
+  },
+  "pass_classification": "C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_PASS_SCOPED",
+  "fail_classification": "C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_FAIL_SCOPED",
+  "next_if_pass": "Rerun the original frozen C10.65r2 3x3x4 parity target unchanged, using the tail-isolated implementation. Only an actual pass of that original target closes C10.65r2.",
+  "next_if_fail": "Escalate to a separately compiled/noinline observer helper while preserving the original C10.65r2 target unchanged.",
+  "non_claims": [
+    "not a change to C10.65r2 frozen criteria",
+    "not a pass of C10.65r2 by itself",
+    "not production completed-U1 feedback",
+    "not spectra or likelihood evidence"
+  ]
+}
