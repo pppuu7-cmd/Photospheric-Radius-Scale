@@ -1,0 +1,714 @@
+{
+  "branches": [
+    "baseline",
+    "joint_extremum",
+    "phi_extremum"
+  ],
+  "checks": {
+    "all_endpoint_A_H_M_T_constraints_finite": true,
+    "all_endpoint_approximation_states": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_endpoint_state_and_rhs_finite": false,
+    "all_endpoint_widths_within_absolute_tolerance": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "before_rows_exact_s5d_before_all_samples": true,
+    "boundary_higher_ur_exact_s5d": true,
+    "branch_count": true,
+    "first_rhs_bound_inherited": true,
+    "no_double_gauge_transform": true,
+    "no_k_or_time_widening": true,
+    "no_legacy_nlde_physical_role": true,
+    "off_identity": true,
+    "record_count": true,
+    "s2e_failed_parent_preserved": true,
+    "s5c_envelope_nonprobabilistic": true,
+    "same_kernel_and_single_seed_static_guard": true,
+    "sample_manifest_shape": true,
+    "sample_patch_static_guard": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S5E_NEXT_K_MULTIBRANCH_TRAJECTORY_SAMPLED_CONSTRAINT_FAIL_SCOPED",
+  "frozen_bound": 1e-10,
+  "gate": "C10.65s5e",
+  "interpretation": "At least one preregistered C10.65s5e multibranch trajectory check failed; preserve the result and diagnose without changing the frozen branches, sample times or 1e-10 bound.",
+  "max_abs_normalized_constraint": 6.219257360537699e-16,
+  "max_abs_normalized_constraint_change": 6.219257359949102e-16,
+  "max_first_rhs_relative_inherited_from_s5d": 4.441607914714873e-12,
+  "next_gate": "Diagnose C10.65s5e before widening time or k.",
+  "non_claims": [
+    "not a continuous-time supremum theorem between endpoints",
+    "not long-time or cosmological-time stability at k=0.01",
+    "not proof that true omitted O(k^4) matching terms lie in the s5c envelope",
+    "not a UV-derived probability or uncertainty distribution",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not microscopic UV/pre-EFT matching of higher-order coefficients or higher-UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s5e_multibranch_trajectory_sample_analyzer.py",
+    "base_production_patch": "rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py",
+    "branch_patch": "rtk/apply_rtk_c10_65s5d_branch_seed_patch.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33024447606,
+    "observer_hashes": [
+      "0b6daa5e5e0142662d7405fd58715f18219b2807bcfd10699f4bb2c807b7ea38",
+      "638001867dbec37e717797be25caabd705cf89bdfed7a45bba6d9375ca23561d",
+      "974868ddf689229b9a806b171b222e521841fac827c2e313a757997bff4a1c18",
+      "6ddaec050f04fa69a2a09dd98cc7556403c16c1486563f9982920e2c2de0dfdf",
+      "2f2b8042e74f3f16593ac3d814a49bd14c4691b15658c57584bfdae60ae64d12",
+      "53c2a6dab7bd9ab5afae93a91a163e5da69d1332db1cb11d0bbd5bcd5cdca686",
+      "a24badc162159631a14796eae8038ef2c9974ae343757b639faeed076d4f0fac",
+      "6a03264bdcb48e75db8e86de26c2928512e956d2b6ab2289edfa1f7d93a0b4c5",
+      "3347e2552d9de1b06e16cd0f80309bd642cc36cad1b1810eb12f3f0e6a9dac6d",
+      "cdbc57d29bad7c4a3e032548bb6630b8f5dea82e8d85cebbcd7742126ec5a361",
+      "07aef10558bad2166a54b400a24e9a6a941915875c2f03164283881352fc3f6c",
+      "847afb844a94e911f802d378bfb8b368e31f18d0080c5b277fd29ef0bfdb8935",
+      "1a7aa5bada89f6fa512ec1af9710c216dc082b04f13e3f31bc1e5cd0e33cbbd2",
+      "8d0219570d9165c8a53cbc5bda692680b1e3c869767ea2757180fb6a7fc7fa7d",
+      "eecbe01eb6534431da39d8435e901fe4db062da49659546f181af44c511c77b6",
+      "32d1c6de400774a5d90451b07e3ce1d8846e5869d88abc80bae39b47be2ab837",
+      "4f5a620bc9ceee8ea1be02a1373fdc31bdf146c538bdbda737bdaec255cbe48b",
+      "4d9d7f65b7e2d01c1301bb84ce3cb667787164a13e81f77a2171136efd5b9f4e",
+      "b82f4cb3bb639b174d544d7853874cd3282a71098d9f0fd3239ad8ec119f7f10",
+      "d7a391bd76dd62f1831906afa4713199588ef2ce54b9834eb0f9e0023429fe6a",
+      "b2764869bb76e8f63d0436a481536073fcc26279982da06ae83c5dde1a99a52a"
+    ],
+    "repo_head_at_job_start": "d09a43438bcd2a13cfeff1507db0fad1fc9699bd",
+    "s3b_method_parent": "C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+    "s5d_parent_run_id": 33023782012,
+    "sample_interval_patch": "rtk/apply_rtk_c10_65s5e_sample_interval_patch.py",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s5e-next-k-multibranch-trajectory-sampling.yml"
+  },
+  "record_count": 21,
+  "records": [
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 6.219257359949102e-16,
+          "after": 0.0,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 7
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.1096286798862607e-16,
+          "after": 3.1096286800628413e-16,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-09,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.999996695507434e-09,
+      "rhs_calls_after": 18
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 5.885967315170796e-26,
+          "after": 6.219257360537699e-16,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-08,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999993721976352e-09,
+      "rhs_calls_after": 45
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 6.219257359949102e-16,
+          "after": 0.0,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-08,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.999999537678377e-08,
+      "rhs_calls_after": 50
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 6.219257359949102e-16,
+          "after": 0.0,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-07,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999999406318238e-08,
+      "rhs_calls_after": 40
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.109628671145706e-16,
+          "after": 3.109628688803396e-16,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-07,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.9999999640040187e-07,
+      "rhs_calls_after": 62
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.109628650545076e-16,
+          "after": 3.109628709404026e-16,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-06,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999999974752427e-07,
+      "rhs_calls_after": 68
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 7
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987067316605297e-16,
+          "after": 2.9987067316605297e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-09,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.999996695507434e-09,
+      "rhs_calls_after": 29
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 1.246601240584135e-16,
+          "after": 1.246601240584135e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-08,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999993721976352e-09,
+      "rhs_calls_after": 39
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998706732355398e-16,
+          "after": 2.998706732355398e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 1.2466012410567726e-16,
+          "after": 1.2466012410567726e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-08,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.999999537678377e-08,
+      "rhs_calls_after": 40
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998706734156901e-16,
+          "after": 2.998706734156901e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-07,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999999406318238e-08,
+      "rhs_calls_after": 51
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-07,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.9999999640040187e-07,
+      "rhs_calls_after": 62
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 5.99741351463821e-16,
+          "after": 5.99741351463821e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 1.2466012639796996e-16,
+          "after": 1.2466012639796996e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-06,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999999974752427e-07,
+      "rhs_calls_after": 52
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-09,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 1.0000036354540498e-09,
+      "rhs_calls_after": 7
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998706731662728e-16,
+          "after": 2.998706731662728e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-09,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.999996695507434e-09,
+      "rhs_calls_after": 18
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998706731848012e-16,
+          "after": 2.998706731848012e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-08,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999993721976352e-09,
+      "rhs_calls_after": 34
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987067323773844e-16,
+          "after": 2.9987067323773844e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-08,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.999999537678377e-08,
+      "rhs_calls_after": 40
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-07,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999999406318238e-08,
+      "rhs_calls_after": 61
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-07,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.9999999640040187e-07,
+      "rhs_calls_after": 56
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.99870675805195e-16,
+          "after": 2.99870675805195e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-06,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 9.999999974752427e-07,
+      "rhs_calls_after": 62
+    }
+  ],
+  "s2e_classification_preserved": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED",
+  "s5c_envelope_interpretation": "NONPROBABILISTIC_POINTWISE_STRESS_ENVELOPE",
+  "s5d_parent_preserved": "C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED",
+  "sample_elapsed_tau_Mpc": [
+    1e-09,
+    3e-09,
+    1e-08,
+    3e-08,
+    1e-07,
+    3e-07,
+    1e-06
+  ],
+  "schema": "RTK_C10_65S5E_NEXT_K_MULTIBRANCH_TRAJECTORY_SAMPLED_CONSTRAINT_RESULT_v1",
+  "threshold_changed": false
+}
