@@ -1,0 +1,43 @@
+{
+  "schema": "RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_TARGET_v1",
+  "created_utc": "2026-08-26T01:31:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65l",
+  "question": "What minimal gauge/source-coordinate invariant boundary vector should a pre-EFT/UV completion supply at a_on in order to resolve the eight normalized fixed-C2 temporal amplitudes identified by C10.65i plus the independent matching scalar C2?",
+  "parents": [
+    "research/theory_results/RTK_C10_65K_NONLOCAL_TEMPORAL_SELECTOR_FEASIBILITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65I_COUPLED_COEFFICIENT_NULLITY_WITH_SYMBOLIC_C2_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65H_MINIMAL_C2_TEMPORAL_MATCHING_COORDINATE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json"
+  ],
+  "candidate_boundary_vector": [
+    "A2 = D_b2 (common ordinary density-gradient coordinate)",
+    "E_gb2 = D_g2-(4/3)D_b2",
+    "E_urb2 = D_ur2-(4/3)D_b2",
+    "E_khr2 = [I_khr-J_b]_O(k^2)",
+    "R_gb0 = V_g0-V_b0",
+    "R_urb0 = V_ur0-V_b0",
+    "R_khrb0 = V_khr,pref0+B0-V_b,N0 = V_khr,N0-V_b,N0",
+    "S_ur0 = sigma_ur/k^2 at leading regular order",
+    "C2 = [3a^2 delta_mu+3H Q]_O(k^2)"
+  ],
+  "acceptance": [
+    "derive the density/curvature invariants from Psi_N=psi_pref-HB and delta_N/(1+w)=delta_pref/(1+w)-3HB",
+    "derive theta_N=theta_pref+k^2 B from q_N=q_pref+aWB and q=aW theta/k^2; use this to prove R_khrb0 is gauge invariant rather than subtracting a preferred velocity directly from a Newtonian one",
+    "show E_gb2, E_urb2 and E_khr2 are invariant relative-entropy gradient coordinates",
+    "treat S_ur0 as gauge invariant because the background anisotropic stress vanishes and the linear anisotropic stress perturbation is therefore invariant",
+    "reuse the exact C10.65h proof that C2 is invariant between preferred and Newtonian source coordinates",
+    "prove the four density-gradient coordinates (A2,E_gb2,E_urb2,E_khr2) form an invertible reparameterization of (D_b2,D_g2,D_ur2,delta_khr2) for any finite 1+w_khr>0 and arbitrary algebraic psi_pref2 dependence on ordinary gradients",
+    "count exactly nine UV matching coordinates: eight normalized temporal directions plus C2; do not count overall primordial normalization",
+    "define, but do not yet numerically instantiate, a phenomenological regular-control subfamily with E_gb2=E_urb2=E_khr2=R_gb0=R_urb0=R_khrb0=0 and A2,S_ur0,C2 supplied by an explicitly declared external control"
+  ],
+  "pass_classification": "C10_65L_UV_MATCHING_INTERFACE_BASIS_PASS_SCOPED",
+  "next_if_pass": "freeze C10.65m read-only numerical control extraction: estimate A2 and S_ur0 from the low-k standard CLASS control and regenerate the gauge-invariant total comoving source C(k) to estimate a historical-control C2, while labeling all three as phenomenological pre-EFT control values rather than completed-U1 predictions",
+  "non_claims": [
+    "not a derivation of the UV boundary vector values",
+    "not proof that the phenomenological zero-relative-entropy/zero-relative-velocity subfamily is selected by a microscopic UV completion",
+    "not same-full-action background closure",
+    "not a propagating-DOF count",
+    "not spectra or likelihood evidence"
+  ]
+}
