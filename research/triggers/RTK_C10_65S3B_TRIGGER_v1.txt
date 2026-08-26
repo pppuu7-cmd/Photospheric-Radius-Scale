@@ -1,0 +1,1 @@
+Execute frozen C10.65s3b trajectory-sampled constraint gate at the seven preregistered elapsed times. Do not change production physics, tolerance, sample times, or 1e-10 constraint bound.
