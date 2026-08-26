@@ -1,0 +1,447 @@
+{
+  "checks": {
+    "accepted_hdid_positive": true,
+    "accepted_steps_per_anchor_greater_than_one": true,
+    "all_rejection_counts_nonnegative": true,
+    "all_trace_values_finite": true,
+    "first_production_rhs_bound_inherited": true,
+    "four_begin_and_four_end_markers": true,
+    "no_physics_or_tolerance_mutation_static_guard": true,
+    "retry_width_selected": false,
+    "sum_hdid_matches_1e-4": true,
+    "threshold_changed": false,
+    "trace_rhs_accounting_matches_observer_exactly": true
+  },
+  "classification": "C10_65S2I_ADAPTIVE_STEP_TRACE_PASS_SCOPED",
+  "gate": "C10.65s2i",
+  "global": {
+    "maximum_first_accepted_hdid": 1.4767416038634654e-09,
+    "minimum_first_accepted_hdid": 7.07987222954994e-10,
+    "total_accepted_substeps": 38,
+    "total_rejected_trials": 32
+  },
+  "next_gate": "Freeze a separate C10.65s2j retry-width selection contract before executing a retry. The width-selection rule must be stated prospectively from the s2i trace (for example a fixed safety fraction of the minimum first accepted hdid across all four anchors), while retaining the original integrator tolerance and exactly-one-accepted-step requirement. C10.65s2 remains FAIL_SCOPED.",
+  "non_claims": [
+    "not a C10.65s2 retry",
+    "not a reclassification of C10.65s2",
+    "not a new integrator or altered tolerance",
+    "not finite-time stability",
+    "not full-time completed-U1 evolution",
+    "not spectra or likelihood evidence"
+  ],
+  "original_s2_classification_preserved": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s2i_adaptive_step_trace_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33004430697,
+    "observer_sha256": "67c4cdcdb88a4234a875131e481de96c9f35487781845aa849ac3d62c3c88613",
+    "repo_head_at_job_start": "e06773320320f242e44ed6a40b559a2061c47db9",
+    "threshold_changed": false,
+    "trace_patch": "rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py",
+    "trace_sha256": "47b57c4641572fad03012d3953a911dbe60076f033c7d0eb8342f674bcf68f95",
+    "workflow": "rtk-c10-65s2i-adaptive-step-trace.yml"
+  },
+  "records": [
+    {
+      "accepted_steps": [
+        {
+          "errmax": 0.32338837622819033,
+          "hdid": 1.4767416038634654e-09,
+          "hnext": 1.6657205306397568e-09,
+          "htry": 0.00010000000000331966,
+          "rejected": 8,
+          "x0": 87.89051579642643,
+          "x1": 87.89051579790316
+        },
+        {
+          "errmax": 7.107308410410215e-09,
+          "hdid": 1.6657205306397568e-09,
+          "hnext": 8.328602653198785e-09,
+          "htry": 1.6657205306397568e-09,
+          "rejected": 0,
+          "x0": 87.89051579790316,
+          "x1": 87.89051579956889
+        },
+        {
+          "errmax": 1.2304436322442678e-08,
+          "hdid": 8.328602653198785e-09,
+          "hnext": 4.164301326599392e-08,
+          "htry": 8.328602653198785e-09,
+          "rejected": 0,
+          "x0": 87.89051579956889,
+          "x1": 87.89051580789749
+        },
+        {
+          "errmax": 1.1453724599927884e-08,
+          "hdid": 4.164301326599392e-08,
+          "hnext": 2.0821506632996962e-07,
+          "htry": 4.164301326599392e-08,
+          "rejected": 0,
+          "x0": 87.89051580789749,
+          "x1": 87.8905158495405
+        },
+        {
+          "errmax": 5.559949374153463e-09,
+          "hdid": 2.0821506632996962e-07,
+          "hnext": 1.041075331649848e-06,
+          "htry": 2.0821506632996962e-07,
+          "rejected": 0,
+          "x0": 87.8905158495405,
+          "x1": 87.89051605775558
+        },
+        {
+          "errmax": 1.7127503268784412e-08,
+          "hdid": 1.041075331649848e-06,
+          "hnext": 5.2053766582492394e-06,
+          "htry": 1.041075331649848e-06,
+          "rejected": 0,
+          "x0": 87.89051605775558,
+          "x1": 87.89051709883091
+        },
+        {
+          "errmax": 3.452119440514615e-08,
+          "hdid": 5.2053766582492394e-06,
+          "hnext": 2.6026883291246197e-05,
+          "htry": 5.2053766582492394e-06,
+          "rejected": 0,
+          "x0": 87.89051709883091,
+          "x1": 87.89052230420756
+        },
+        {
+          "errmax": 1.8493587172659997e-08,
+          "hdid": 2.6026883291246197e-05,
+          "hnext": 0.00013013441645623098,
+          "htry": 2.6026883291246197e-05,
+          "rejected": 0,
+          "x0": 87.89052230420756,
+          "x1": 87.89054833109086
+        },
+        {
+          "errmax": 6.916793423037204e-09,
+          "hdid": 6.746533557588918e-05,
+          "hnext": 0.0003373266778794459,
+          "htry": 6.746533557588918e-05,
+          "rejected": 0,
+          "x0": 87.89054833109086,
+          "x1": 87.89061579642643
+        }
+      ],
+      "accepted_substeps": 9,
+      "accounting_rhs_calls": 95,
+      "first_accepted_hdid": 1.4767416038634654e-09,
+      "k": 1e-05,
+      "maximum_hdid": 6.746533557588918e-05,
+      "minimum_hdid": 1.4767416038634654e-09,
+      "observer_rhs_calls": 95,
+      "rejected_trials": 8,
+      "rkck_trials": 17,
+      "sum_hdid": 0.00010000000000141814
+    },
+    {
+      "accepted_steps": [
+        {
+          "errmax": 0.2117286547049443,
+          "hdid": 7.07987222954994e-10,
+          "hnext": 8.691845577288775e-10,
+          "htry": 0.00010000000000331966,
+          "rejected": 9,
+          "x0": 87.89051579642643,
+          "x1": 87.89051579713441
+        },
+        {
+          "errmax": 1.016806419694032e-08,
+          "hdid": 8.691845577288775e-10,
+          "hnext": 4.3459227886443875e-09,
+          "htry": 8.691845577288775e-10,
+          "rejected": 0,
+          "x0": 87.89051579713441,
+          "x1": 87.89051579800359
+        },
+        {
+          "errmax": 9.48778994678216e-09,
+          "hdid": 4.3459227886443875e-09,
+          "hnext": 2.172961394322194e-08,
+          "htry": 4.3459227886443875e-09,
+          "rejected": 0,
+          "x0": 87.89051579800359,
+          "x1": 87.89051580234951
+        },
+        {
+          "errmax": 1.2397421748249002e-08,
+          "hdid": 2.172961394322194e-08,
+          "hnext": 1.0864806971610969e-07,
+          "htry": 2.172961394322194e-08,
+          "rejected": 0,
+          "x0": 87.89051580234951,
+          "x1": 87.89051582407913
+        },
+        {
+          "errmax": 1.519802304309972e-08,
+          "hdid": 1.0864806971610969e-07,
+          "hnext": 5.432403485805484e-07,
+          "htry": 1.0864806971610969e-07,
+          "rejected": 0,
+          "x0": 87.89051582407913,
+          "x1": 87.8905159327272
+        },
+        {
+          "errmax": 2.470079148842085e-08,
+          "hdid": 5.432403485805484e-07,
+          "hnext": 2.716201742902742e-06,
+          "htry": 5.432403485805484e-07,
+          "rejected": 0,
+          "x0": 87.8905159327272,
+          "x1": 87.89051647596754
+        },
+        {
+          "errmax": 2.218435967662006e-08,
+          "hdid": 2.716201742902742e-06,
+          "hnext": 1.358100871451371e-05,
+          "htry": 2.716201742902742e-06,
+          "rejected": 0,
+          "x0": 87.89051647596754,
+          "x1": 87.8905191921693
+        },
+        {
+          "errmax": 1.15074217851416e-08,
+          "hdid": 1.358100871451371e-05,
+          "hnext": 6.790504357256855e-05,
+          "htry": 1.358100871451371e-05,
+          "rejected": 0,
+          "x0": 87.8905191921693,
+          "x1": 87.89053277317801
+        },
+        {
+          "errmax": 1.58789323091869e-08,
+          "hdid": 6.790504357256855e-05,
+          "hnext": 0.00033952521786284276,
+          "htry": 6.790504357256855e-05,
+          "rejected": 0,
+          "x0": 87.89053277317801,
+          "x1": 87.89060067822159
+        },
+        {
+          "errmax": 4.415048591427306e-10,
+          "hdid": 1.5118204842679006e-05,
+          "hnext": 7.559102421339503e-05,
+          "htry": 1.5118204842679006e-05,
+          "rejected": 0,
+          "x0": 87.89060067822159,
+          "x1": 87.89061579642643
+        }
+      ],
+      "accepted_substeps": 10,
+      "accounting_rhs_calls": 106,
+      "first_accepted_hdid": 7.07987222954994e-10,
+      "k": 3e-05,
+      "maximum_hdid": 6.790504357256855e-05,
+      "minimum_hdid": 7.07987222954994e-10,
+      "observer_rhs_calls": 106,
+      "rejected_trials": 9,
+      "rkck_trials": 19,
+      "sum_hdid": 9.999999999947322e-05
+    },
+    {
+      "accepted_steps": [
+        {
+          "errmax": 0.7783577897506525,
+          "hdid": 1.0318821578851002e-09,
+          "hnext": 9.764202044178177e-10,
+          "htry": 0.00010000000000331966,
+          "rejected": 8,
+          "x0": 87.89051579642643,
+          "x1": 87.8905157974583
+        },
+        {
+          "errmax": 6.295152244563519e-09,
+          "hdid": 9.764202044178177e-10,
+          "hnext": 4.882101022089088e-09,
+          "htry": 9.764202044178177e-10,
+          "rejected": 0,
+          "x0": 87.8905157974583,
+          "x1": 87.89051579843472
+        },
+        {
+          "errmax": 2.0741615111348894e-08,
+          "hdid": 4.882101022089088e-09,
+          "hnext": 2.4410505110445444e-08,
+          "htry": 4.882101022089088e-09,
+          "rejected": 0,
+          "x0": 87.89051579843472,
+          "x1": 87.89051580331682
+        },
+        {
+          "errmax": 1.4652040114518853e-08,
+          "hdid": 2.4410505110445444e-08,
+          "hnext": 1.2205252555222722e-07,
+          "htry": 2.4410505110445444e-08,
+          "rejected": 0,
+          "x0": 87.89051580331682,
+          "x1": 87.89051582772733
+        },
+        {
+          "errmax": 1.6047321712436637e-08,
+          "hdid": 1.2205252555222722e-07,
+          "hnext": 6.102626277611361e-07,
+          "htry": 1.2205252555222722e-07,
+          "rejected": 0,
+          "x0": 87.89051582772733,
+          "x1": 87.89051594977985
+        },
+        {
+          "errmax": 1.2089957453072645e-08,
+          "hdid": 6.102626277611361e-07,
+          "hnext": 3.0513131388056807e-06,
+          "htry": 6.102626277611361e-07,
+          "rejected": 0,
+          "x0": 87.89051594977985,
+          "x1": 87.89051656004249
+        },
+        {
+          "errmax": 7.720518711499376e-09,
+          "hdid": 3.0513131388056807e-06,
+          "hnext": 1.5256565694028404e-05,
+          "htry": 3.0513131388056807e-06,
+          "rejected": 0,
+          "x0": 87.89051656004249,
+          "x1": 87.89051961135563
+        },
+        {
+          "errmax": 2.471133753935328e-08,
+          "hdid": 1.5256565694028404e-05,
+          "hnext": 7.628282847014202e-05,
+          "htry": 1.5256565694028404e-05,
+          "rejected": 0,
+          "x0": 87.89051961135563,
+          "x1": 87.89053486792132
+        },
+        {
+          "errmax": 1.524731630870344e-08,
+          "hdid": 7.628282847014202e-05,
+          "hnext": 0.00038141414235071005,
+          "htry": 7.628282847014202e-05,
+          "rejected": 0,
+          "x0": 87.89053486792132,
+          "x1": 87.89061115074979
+        },
+        {
+          "errmax": 2.759973927869259e-10,
+          "hdid": 4.645676639825069e-06,
+          "hnext": 2.3228383199125346e-05,
+          "htry": 4.645676639825069e-06,
+          "rejected": 0,
+          "x0": 87.89061115074979,
+          "x1": 87.89061579642643
+        }
+      ],
+      "accepted_substeps": 10,
+      "accounting_rhs_calls": 101,
+      "first_accepted_hdid": 1.0318821578851002e-09,
+      "k": 0.0001,
+      "maximum_hdid": 7.628282847014202e-05,
+      "minimum_hdid": 9.764202044178177e-10,
+      "observer_rhs_calls": 101,
+      "rejected_trials": 8,
+      "rkck_trials": 18,
+      "sum_hdid": 0.00010000000000460937
+    },
+    {
+      "accepted_steps": [
+        {
+          "errmax": 0.30147293616331156,
+          "hdid": 1.1135266564102233e-09,
+          "hnext": 1.273777171515213e-09,
+          "htry": 0.00010000000000331966,
+          "rejected": 7,
+          "x0": 87.89051579642643,
+          "x1": 87.89051579753995
+        },
+        {
+          "errmax": 2.746656800249324e-09,
+          "hdid": 1.273777171515213e-09,
+          "hnext": 6.368885857576065e-09,
+          "htry": 1.273777171515213e-09,
+          "rejected": 0,
+          "x0": 87.89051579753995,
+          "x1": 87.89051579881372
+        },
+        {
+          "errmax": 1.1675779287519724e-08,
+          "hdid": 6.368885857576065e-09,
+          "hnext": 3.1844429287880325e-08,
+          "htry": 6.368885857576065e-09,
+          "rejected": 0,
+          "x0": 87.89051579881372,
+          "x1": 87.8905158051826
+        },
+        {
+          "errmax": 1.2715376581313004e-09,
+          "hdid": 3.1844429287880325e-08,
+          "hnext": 1.5922214643940162e-07,
+          "htry": 3.1844429287880325e-08,
+          "rejected": 0,
+          "x0": 87.8905158051826,
+          "x1": 87.89051583702702
+        },
+        {
+          "errmax": 1.0796479288987202e-08,
+          "hdid": 1.5922214643940162e-07,
+          "hnext": 7.961107321970081e-07,
+          "htry": 1.5922214643940162e-07,
+          "rejected": 0,
+          "x0": 87.89051583702702,
+          "x1": 87.89051599624916
+        },
+        {
+          "errmax": 7.0763053980328815e-09,
+          "hdid": 7.961107321970081e-07,
+          "hnext": 3.9805536609850405e-06,
+          "htry": 7.961107321970081e-07,
+          "rejected": 0,
+          "x0": 87.89051599624916,
+          "x1": 87.89051679235989
+        },
+        {
+          "errmax": 9.056230738702412e-09,
+          "hdid": 3.9805536609850405e-06,
+          "hnext": 1.99027683049252e-05,
+          "htry": 3.9805536609850405e-06,
+          "rejected": 0,
+          "x0": 87.89051679235989,
+          "x1": 87.89052077291355
+        },
+        {
+          "errmax": 2.189673124581452e-08,
+          "hdid": 1.99027683049252e-05,
+          "hnext": 9.9513841524626e-05,
+          "htry": 1.99027683049252e-05,
+          "rejected": 0,
+          "x0": 87.89052077291355,
+          "x1": 87.89054067568185
+        },
+        {
+          "errmax": 1.7688579410705317e-08,
+          "hdid": 7.512074458304596e-05,
+          "hnext": 0.0003756037229152298,
+          "htry": 7.512074458304596e-05,
+          "rejected": 0,
+          "x0": 87.89054067568185,
+          "x1": 87.89061579642643
+        }
+      ],
+      "accepted_substeps": 9,
+      "accounting_rhs_calls": 90,
+      "first_accepted_hdid": 1.1135266564102233e-09,
+      "k": 0.0003,
+      "maximum_hdid": 7.512074458304596e-05,
+      "minimum_hdid": 1.1135266564102233e-09,
+      "observer_rhs_calls": 90,
+      "rejected_trials": 7,
+      "rkck_trials": 16,
+      "sum_hdid": 0.000100000000046566
+    }
+  ],
+  "retry_width_selected": false,
+  "schema": "RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_RESULT_v1",
+  "threshold_changed": false
+}
