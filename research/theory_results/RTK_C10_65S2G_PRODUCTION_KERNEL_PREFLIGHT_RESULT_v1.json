@@ -1,0 +1,121 @@
+{
+  "checks": {
+    "anchor_count": true,
+    "delta_khr_N_prime_vs_s2b": true,
+    "existing_s2e_nonconditioning_parity": true,
+    "finite": true,
+    "implicit_denominator": true,
+    "no_file_or_history_reads": true,
+    "no_matching_seed_constants": true,
+    "no_onset_numeric_literals": true,
+    "no_production_patch": true,
+    "runtime_stage_inputs": true,
+    "s2_rhs_threshold_unchanged": true,
+    "s2_target_frozen": true,
+    "s2e_failed_parent_preserved": true,
+    "s2f_pass": true,
+    "scalar_implicit_amplification": true,
+    "theta_khr_N_prime_vs_s2b": true
+  },
+  "classification": "C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_PASS_SCOPED",
+  "conditioning": {
+    "max_scalar_implicit_amplification": 1.437319161302909,
+    "min_abs_implicit_denominator": 0.6957396985465041
+  },
+  "failed_s2e_classification_preserved": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED",
+  "gate": "C10.65s2g",
+  "maxima": {
+    "delta_khr_N_prime_vs_s2b": 1.039080201200683e-12,
+    "existing_s2e_nonconditioning_parity": 1.106601882510684e-09,
+    "theta_khr_N_prime_vs_s2b": 1.3562898777804596e-12
+  },
+  "next": "Implement and execute the already-frozen C10.65s2 direct-onset one-accepted-step production canary in disposable pinned CLASS. Preserve exact OFF rollback, use only delta_cdm/theta_cdm handoff writes, source all current-state coefficients from the production stage, capture the first production RHS and exactly one accepted step, and measure A/H/M drift without adding a post-hoc drift tolerance.",
+  "non_claims": [
+    "does not convert C10.65s2e FAIL into PASS",
+    "not production feedback",
+    "not one accepted integration step",
+    "not finite-time stability",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "github_actions_run_id": 32999128166,
+    "repo_head_at_job_start": "9cc758680304a26b2e49b47d8b1fbc53438e0b89",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s2g-production-kernel-preflight.yml"
+  },
+  "records": [
+    {
+      "delta_khr_N_prime": -0.1919467126412049,
+      "delta_relative": 4.225224325694323e-13,
+      "delta_s2b": -0.19194671264112378,
+      "implicit_denominator": 0.6957396985465691,
+      "k": 1e-05,
+      "theta_khr_N_prime": 3.801667624107725e-10,
+      "theta_relative": 7.691581049411844e-13,
+      "theta_s2b": 3.801667624104801e-10
+    },
+    {
+      "delta_khr_N_prime": -0.19194650523030762,
+      "delta_relative": 2.458209827261752e-13,
+      "delta_s2b": -0.19194650523026044,
+      "implicit_denominator": 0.6957399689966048,
+      "k": 3e-05,
+      "theta_khr_N_prime": 3.4214982724420983e-09,
+      "theta_relative": 5.548386568245227e-13,
+      "theta_s2b": 3.4214982724402e-09
+    },
+    {
+      "delta_khr_N_prime": -0.19194414593913306,
+      "delta_relative": 7.126004076060392e-13,
+      "delta_s2b": -0.19194414593899628,
+      "implicit_denominator": 0.695743045391013,
+      "k": 0.0001,
+      "theta_khr_N_prime": 3.8016320220018526e-08,
+      "theta_relative": 8.818311628145468e-13,
+      "theta_s2b": 3.8016320219985e-08
+    },
+    {
+      "delta_khr_N_prime": -0.19192340549637515,
+      "delta_relative": 1.039080201200683e-12,
+      "delta_s2b": -0.19192340549617573,
+      "implicit_denominator": 0.6957700927194899,
+      "k": 0.0003,
+      "theta_khr_N_prime": 3.4212099051944395e-07,
+      "theta_relative": 1.3562898777804596e-12,
+      "theta_s2b": 3.4212099051897993e-07
+    }
+  ],
+  "runtime_signature": [
+    "H",
+    "Hprime",
+    "Mc",
+    "PsiN",
+    "a",
+    "ca2",
+    "cb2",
+    "cs2",
+    "db",
+    "dg",
+    "dkN",
+    "dtau",
+    "du",
+    "k",
+    "lam",
+    "pk",
+    "rb",
+    "rg",
+    "rk",
+    "ru",
+    "sigma_ur",
+    "tau",
+    "tb",
+    "tg",
+    "thetaN",
+    "tu",
+    "w"
+  ],
+  "schema": "RTK_C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_TARGET_v1.json",
+  "threshold_changed": false
+}
