@@ -17,30 +17,24 @@ if 'RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_V1' not in ps:
 if not (root/'source/rtk_c10_65r2_observer.c').exists() or not (root/'include/rtk_c10_65r2_observer.h').exists():
     raise SystemExit('copy rtk_c10_65r2_observer.c/.h into the disposable CLASS tree first')
 
-# Dormant runtime switch: identical data model to the original r2 attempt.
 if 'double c10_65r2_diag;' not in hs:
-    needle='  double c10_65r1_Mc;'
-    pos=hs.find(needle)
+    needle='  double c10_65r1_Mc;'; pos=hs.find(needle)
     if pos<0: raise SystemExit('C10.65r2g background anchor missing')
-    eol=hs.find('\n',pos)
-    hs=hs[:eol+1]+'  double c10_65r2_diag;/** C10.65r2 dormant first-RHS diagnostic flag */\n'+hs[eol+1:]
+    eol=hs.find('\n',pos); hs=hs[:eol+1]+'  double c10_65r2_diag;/** C10.65r2 dormant first-RHS diagnostic flag */\n'+hs[eol+1:]
 if 'pba->c10_65r2_diag = 0.;' not in ins:
-    needle='  pba->c10_65r1_Mc = 1.;'
-    pos=ins.find(needle)
+    needle='  pba->c10_65r1_Mc = 1.;'; pos=ins.find(needle)
     if pos<0: raise SystemExit('C10.65r2g default anchor missing')
-    eol=ins.find('\n',pos)
-    ins=ins[:eol+1]+'  pba->c10_65r2_diag = 0.;\n'+ins[eol+1:]
+    eol=ins.find('\n',pos); ins=ins[:eol+1]+'  pba->c10_65r2_diag = 0.;\n'+ins[eol+1:]
 if 'class_read_double("c10_65r2_diag",pba->c10_65r2_diag);' not in ins:
-    needle='  class_read_double("c10_65r1_Mc",pba->c10_65r1_Mc);'
-    pos=ins.find(needle)
+    needle='  class_read_double("c10_65r1_Mc",pba->c10_65r1_Mc);'; pos=ins.find(needle)
     if pos<0: raise SystemExit('C10.65r2g parser anchor missing')
     eol=ins.find('\n',pos)
     add=('  class_read_double("c10_65r2_diag",pba->c10_65r2_diag);\n'
          '  class_test((pba->c10_65r2_diag != 0.) && (pba->c10_65r2_diag != 1.),errmsg,"c10_65r2_diag must be 0 or 1");\n')
     ins=ins[:eol+1]+add+ins[eol+1:]
 
-# The production/output translation unit sees only the observer prototype.
-inc_anchor='#include "khronon_background.h"'
+# Stable pinned upstream include anchor; only a prototype is added here.
+inc_anchor='#include "perturbations.h"'
 if '#include "rtk_c10_65r2_observer.h"' not in ps:
     if inc_anchor not in ps: raise SystemExit('C10.65r2g include anchor missing')
     ps=ps.replace(inc_anchor,inc_anchor+'\n#include "rtk_c10_65r2_observer.h"',1)
@@ -65,9 +59,6 @@ if 'c10_65r2_B_general' not in ps:
       class_store_columntitle(ppt->scalar_titles,"c10_65r2_weighted_slip_cancel",{cond});'''
     ps=ps.replace(title_anchor,title_anchor+titles,1)
 
-# One external call after the final r1 value has been materialized.  The call
-# intentionally passes no r1_* temporary.  The observer reconstructs its r1
-# input from dataptr[storeidx-16:storeidx].
 store_anchor='        class_store_double(dataptr,r1_feedback,_TRUE_,storeidx);'
 if 'rtk_c10_65r2_observe(pba,pth,ppw,k,dataptr,&storeidx);' not in ps:
     if ps.count(store_anchor)!=1: raise SystemExit(f'C10.65r2g expected one r1 final-store anchor, found {ps.count(store_anchor)}')
@@ -75,7 +66,6 @@ if 'rtk_c10_65r2_observe(pba,pth,ppw,k,dataptr,&storeidx);' not in ps:
           '        rtk_c10_65r2_observe(pba,pth,ppw,k,dataptr,&storeidx);')
     ps=ps.replace(store_anchor,store_anchor+call,1)
 
-# Separate object, no LTO in pinned upstream Makefile.
 if 'rtk_c10_65r2_observer.o' not in ms:
     needle='khronon_background.o khronon_perturbations.o'
     if needle not in ms: raise SystemExit('C10.65r2g Makefile RTK object anchor missing')
