@@ -1,0 +1,143 @@
+name: RTK C10.65s3c widened-time trajectory
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['research/triggers/RTK_C10_65S3C_TIME_WIDENING_TRIGGER_v1.txt']
+permissions: {contents: write, actions: read}
+jobs:
+  widen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen parents
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s3c_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_TARGET_v1.json')
+          b=L('research/theory_results/RTK_C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_RESULT_v1.json')
+          k=L('research/theory_results/RTK_C10_65S2K_ONE_ACCEPTED_STEP_RETRY_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert t['sample_elapsed_tau_Mpc']==[3e-6,1e-5,3e-5,1e-4]
+          assert t['constraint_policy']['max_abs_normalized_momentum']==1e-10
+          assert b['classification']=='C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED'
+          assert k['classification']=='C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED'
+          print('C10_65S3C_TARGET_AND_PARENTS_LOCKED')
+          PY
+      - name: Prepare pinned control and production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control
+          git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          for x in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do python3 "rtk/$x" class_control; done
+          make -C class_control -j2 class
+          cp -a class_control class_s3c
+          python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py class_s3c
+          python3 rtk/apply_rtk_c10_65s3b_sample_interval_patch.py class_s3c --width 3e-6
+          make -C class_s3c clean
+          make -C class_s3c -j2 class
+      - name: Write frozen-domain inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p:json.load(open(p));plan=L('research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json');p=L('research/state/current.json')['final_replay_result']['rtk']['params'];d=plan['scope'];ks=', '.join(format(float(x),'.17g') for x in d['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_1/Mpc = 0.00031\nz_pk = 0\nk_output_values = {ks}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nevolver = 0\nl_max_ur = 17\nc10_65r0_diag = 0\nc10_65r1_diag = 0\nc10_65r1_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65r1_Mc = {float(d['M_c_Mpc_inv']):.17g}\n'''
+          pathlib.Path('class_control/output').mkdir(exist_ok=True);pathlib.Path('class_s3c/output').mkdir(exist_ok=True)
+          pathlib.Path('class_control/control.ini').write_text(common+'root = output/control_\n')
+          extra=f'''c10_65s2_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65s2_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_a_on = {float(d['a_on']):.17g}\n'''
+          pathlib.Path('class_s3c/off.ini').write_text(common+'c10_65s2_canary = 0\n'+extra+'root = output/off_\n')
+          pathlib.Path('class_s3c/on.ini').write_text(common+'c10_65s2_canary = 1\n'+extra+'root = output/on_\n')
+          PY
+      - name: Verify exact dormant OFF identity
+        run: |
+          set -euo pipefail
+          (cd class_control && ./class control.ini)>s3c_control.log 2>&1
+          (cd class_s3c && env -u RTK_C10_65S2_OBSERVER_FILE ./class off.ini)>s3c_off.log 2>&1
+          python3 - <<'PY'
+          import glob,hashlib,json,pathlib
+          def d(p):return hashlib.sha256(('\n'.join(x.strip() for x in pathlib.Path(p).read_text().splitlines() if x.strip() and not x.lstrip().startswith('#'))+'\n').encode()).hexdigest()
+          A=sorted(glob.glob('class_control/output/control_*perturbations*'));B=sorted(glob.glob('class_s3c/output/off_*perturbations*'));assert len(A)==len(B)==4;rec=[];ok=True
+          for x,y in zip(A,B):
+              a,b=d(x),d(y);z=a==b;ok &= z;rec.append({'control':x,'off':y,'control_sha256':a,'off_sha256':b,'identical':z})
+          pathlib.Path('s3c_off_identity.json').write_text(json.dumps({'all_four_numeric_rows_sha256_identical':bool(ok),'records':rec},indent=2)+'\n');assert ok
+          PY
+      - name: Recover certified onset observer
+        run: |
+          mkdir -p s2k
+          gh run download 33004868239 --repo pppuu7-cmd/Photospheric-Radius-Scale --name rtk-c10-65s2k-one-accepted-step-retry --dir s2k
+          test -s s2k/c10_65s2k_observer.csv
+      - name: Execute frozen widened endpoints
+        run: |
+          set -euo pipefail
+          mapfile -t widths < <(python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_TARGET_v1.json'))
+          for x in t['sample_elapsed_tau_Mpc']: print(format(float(x),'.17g'))
+          PY
+          )
+          test "${#widths[@]}" -eq 4
+          printf '[\n' > s3c_manifest.json
+          for i in "${!widths[@]}"; do
+            w="${widths[$i]}"
+            python3 rtk/apply_rtk_c10_65s3b_sample_interval_patch.py class_s3c --width "$w" </dev/null
+            make -C class_s3c -j2 class </dev/null >/dev/null
+            f="$(pwd)/s3c_observer_${i}.csv"; rm -f "$f"
+            (cd class_s3c && RTK_C10_65S2_OBSERVER_FILE="$f" ./class on.ini </dev/null) > "s3c_on_${i}.log" 2>&1
+            test -s "$f"
+            [ "$i" -eq 0 ] || printf ',\n' >> s3c_manifest.json
+            printf '{"width":%.17g,"observer":"%s"}' "$w" "$f" >> s3c_manifest.json
+          done
+          printf '\n]\n' >> s3c_manifest.json
+      - name: Analyze frozen widened-time samples
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s3c_time_widened_analyzer.py --manifest s3c_manifest.json --s2k-observer s2k/c10_65s2k_observer.csv --off-identity s3c_off_identity.json --patch rtk/apply_rtk_c10_65s3b_sample_interval_patch.py --output research/theory_results/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_RESULT_v1.json | tee s3c.log
+          grep -q '^C10_65S3C_TIME_WIDENED_TRAJECTORY_PASS_SCOPED$' s3c.log
+      - name: Persist result provenance and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_RESULT_v1.json'; [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_RESULT_v1.json');d=json.loads(p.read_text())
+          d['provenance']={'repo_head_at_job_start':pathlib.Path('s3c_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s3c-time-widening.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'analyzer':'research/shadow/rtk_c10_65s3c_time_widened_analyzer.py','sample_interval_patch':'rtk/apply_rtk_c10_65s3b_sample_interval_patch.py','threshold_changed':False}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          c=pathlib.Path('research/checkpoints/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_2026-08-26T1945Z.md')
+          c.write_text(f"# RTK C10.65s3c widened-time trajectory\n\nClassification: `{d['classification']}`. Frozen endpoints: `{d['sample_elapsed_tau_Mpc']}` Mpc on four unchanged low-k anchors.\n\nMaximum absolute normalized constraint: `{d['max_abs_normalized_constraint']:.17e}`; maximum normalized change from onset: `{d['max_abs_normalized_constraint_change']:.17e}`; frozen bound: `{d['frozen_bound']:.17e}`.\n\nThis is scoped sampled widened-time evidence, not a continuous-time or cosmological stability theorem.\n")
+          PY
+          cp "$p" /tmp/r.json; cp research/checkpoints/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_2026-08-26T1945Z.md /tmp/c.md
+          for n in 1 2 3 4 5; do
+            git fetch origin rtk-class-build; git reset --hard origin/rtk-class-build
+            cp /tmp/r.json "$p"; cp /tmp/c.md research/checkpoints/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_2026-08-26T1945Z.md
+            git config user.name github-actions[bot]; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$p" research/checkpoints/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_2026-08-26T1945Z.md
+            git commit -m 'Record C10.65s3c widened-time trajectory' || exit 0
+            git push origin HEAD:rtk-class-build && exit 0
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s3c-time-widened-trajectory
+          path: |
+            s3c_manifest.json
+            s3c_observer_*.csv
+            s3c_on_*.log
+            s3c_off_identity.json
+            s3c.log
+            research/theory_results/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_RESULT_v1.json
