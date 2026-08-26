@@ -8,6 +8,7 @@ from pathlib import Path
 # parses the diagnostic tail as R2+R1.  This adapter performs ONLY the exact
 # token permutation (R1,R2)->(R2,R1) in disposable copies.  No numeric token is
 # parsed, rounded, recomputed or changed.
+# C10.65r2 frozen full-rerun dispatch marker; semantics unchanged.
 N_R1=16
 N_R2=13
 N=N_R1+N_R2
