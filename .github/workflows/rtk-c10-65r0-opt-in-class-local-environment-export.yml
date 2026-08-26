@@ -1,0 +1,142 @@
+name: RTK C10.65r0 opt-in CLASS local environment export
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_TARGET_v1.json'
+      - 'rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py'
+      - 'research/shadow/rtk_c10_65r0_opt_in_class_local_environment_export.py'
+      - '.github/workflows/rtk-c10-65r0-opt-in-class-local-environment-export.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  local-environment-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          def L(p): return json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_TARGET_v1.json')
+          f=L('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json')
+          n=L('research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json')
+          o=L('research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json')
+          p=L('research/theory_results/RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_RESULT_v1.json')
+          q=L('research/theory_results/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert f['classification']=='C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED'
+          assert n['classification']=='C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED'
+          assert o['classification']=='C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED'
+          assert p['classification']=='C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_PASS_SCOPED'
+          assert q['classification']=='C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED'
+          PY
+          git rev-parse HEAD | tee c10_65r0_repo_head.txt
+      - name: Prepare pinned control and patched trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_base
+          git -C class_base reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_base/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_base/include/
+          python3 rtk/apply_rtk_class_patch.py class_base
+          python3 rtk/upgrade_rtk_inputs.py class_base
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_base
+          python3 rtk/upgrade_rtk_initial_conditions.py class_base
+          python3 rtk/upgrade_rtk_matter_sources.py class_base
+          python3 rtk/upgrade_rtk_gamma_root.py class_base
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_base
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_base
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_base
+          python3 rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py class_base
+          make -C class_base -j2 class
+          cp -a class_base class_r0
+          python3 rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py class_r0
+          make -C class_r0 clean
+          make -C class_r0 -j2 class
+      - name: Write matched four-anchor inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\n'''
+          pathlib.Path('class_base/output').mkdir(exist_ok=True)
+          pathlib.Path('class_r0/output').mkdir(exist_ok=True)
+          pathlib.Path('class_base/c1065r0_base.ini').write_text(common+'root = output/base_\n')
+          pathlib.Path('class_r0/c1065r0_off.ini').write_text(common+'root = output/off_\n')
+          pathlib.Path('class_r0/c1065r0_on.ini').write_text(common+'c10_65r0_diag = 1\nroot = output/on_\n')
+          PY
+      - name: Run unpatched control and dormant OFF path
+        run: |
+          set -euo pipefail
+          (cd class_base && ./class c1065r0_base.ini) > c10_65r0_base.log 2>&1
+          (cd class_r0 && ./class c1065r0_off.ini) > c10_65r0_off.log 2>&1
+          test "$(find class_base/output -maxdepth 1 -type f -iname '*perturbations*' | wc -l)" -eq 4
+          test "$(find class_r0/output -maxdepth 1 -type f -iname 'off_*perturbations*' | wc -l)" -eq 4
+          if grep -q 'c10_65r0_a' class_r0/output/off_*perturbations*; then echo 'r0 columns leaked into OFF path'; exit 1; fi
+      - name: Run explicit ON environment export
+        run: |
+          set -euo pipefail
+          (cd class_r0 && ./class c1065r0_on.ini) > c10_65r0_on.log 2>&1
+          test "$(find class_r0/output -maxdepth 1 -type f -iname 'on_*perturbations*' | wc -l)" -eq 4
+          grep -q 'c10_65r0_a' class_r0/output/on_*perturbations*
+      - name: Analyze frozen parity contract
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65r0_opt_in_class_local_environment_export.py
+          python3 research/shadow/rtk_c10_65r0_opt_in_class_local_environment_export.py \
+            --baseline-glob 'class_base/output/*perturbations*' \
+            --off-glob 'class_r0/output/off_*perturbations*' \
+            --on-glob 'class_r0/output/on_*perturbations*' \
+            --output research/theory_results/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1.json | tee c10_65r0.log
+          grep -q '^C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_PASS_SCOPED ' c10_65r0.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={
+            'repo_head_at_job_start':open('c10_65r0_repo_head.txt').read().strip(),
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'workflow':'rtk-c10-65r0-opt-in-class-local-environment-export.yml',
+            'worker':'research/shadow/rtk_c10_65r0_opt_in_class_local_environment_export.py',
+            'patch':'rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py',
+            'control_tree':'same pinned RTK diagnostic tree through C10.65e, without r0 patch'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1.json /tmp/c10_65r0_result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/c10_65r0_result.json research/theory_results/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1.json
+            git commit -m 'Record C10.65r0 opt-in CLASS environment export' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
