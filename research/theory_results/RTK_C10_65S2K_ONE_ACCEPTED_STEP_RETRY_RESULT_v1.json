@@ -1,0 +1,182 @@
+{
+  "checks": {
+    "after_rhs_calls_exact7": true,
+    "before_observer_exact_original": true,
+    "before_rhs_calls": true,
+    "constraint_capture_finite": true,
+    "first_rhs_bound_inherited": true,
+    "off_identity": true,
+    "original_s2_remains_fail": true,
+    "post_state_finite": true,
+    "record_counts": true,
+    "retry_step_width": true,
+    "same_kernel_and_tolerance_static_guard": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "constraint_drift_measurement_only": {
+    "0.0001": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.99871743994312e-16,
+        "absolute_change_raw": 1.3877787807814457e-17,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 2.99871743994312e-16,
+        "before_raw": 1.3877787807814457e-17,
+        "signed_change_normalized": -2.99871743994312e-16,
+        "signed_change_raw": -1.3877787807814457e-17
+      }
+    },
+    "0.00029999999999999997": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 5.997606030492666e-16,
+        "absolute_change_raw": 2.7755575615628914e-17,
+        "after_normalized": 5.997606030492666e-16,
+        "after_raw": 2.7755575615628914e-17,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 5.997606030492666e-16,
+        "signed_change_raw": 2.7755575615628914e-17
+      }
+    },
+    "1.0000000000000001e-05": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.9987068503403955e-16,
+        "absolute_change_raw": 1.3877787807814457e-17,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 2.9987068503403955e-16,
+        "before_raw": 1.3877787807814457e-17,
+        "signed_change_normalized": -2.9987068503403955e-16,
+        "signed_change_raw": -1.3877787807814457e-17
+      }
+    },
+    "3.0000000000000001e-05": {
+      "A": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "H": {
+        "absolute_change_normalized": 0.0,
+        "absolute_change_raw": 0.0,
+        "after_normalized": 0.0,
+        "after_raw": 0.0,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 0.0,
+        "signed_change_raw": 0.0
+      },
+      "M": {
+        "absolute_change_normalized": 2.9987077060748343e-16,
+        "absolute_change_raw": 1.3877787807814457e-17,
+        "after_normalized": 2.9987077060748343e-16,
+        "after_raw": 1.3877787807814457e-17,
+        "before_normalized": 0.0,
+        "before_raw": 0.0,
+        "signed_change_normalized": 2.9987077060748343e-16,
+        "signed_change_raw": 1.3877787807814457e-17
+      }
+    }
+  },
+  "expected_rhs_calls": 7,
+  "gate": "C10.65s2k",
+  "inherited_original_max_first_rhs_relative": 2.2437607327674414e-13,
+  "integrator_tolerance_changed": false,
+  "interpretation": "At the same frozen completion point and four low-k anchors, the completed-U1 production path can execute exactly one accepted no-rejection Cash-Karp step when the short interval is prospectively chosen below the worst-anchor accepted step measured in C10.65s2i. This repairs the implementation-scale mismatch exposed by C10.65s2 without reclassifying that failed run and does not establish finite-time stability.",
+  "next_gate": "Freeze a new finite-short-interval stability gate using s2k only as the one-step production-entry certificate. Choose any multi-step interval and drift tolerance prospectively before that later run.",
+  "non_claims": [
+    "not a reclassification of C10.65s2",
+    "not finite-time stability",
+    "not full-time completed-U1 production evolution",
+    "not a UV derivation of the higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "observed_step_widths_Mpc": {
+    "0.0001": 3.539923909556819e-10,
+    "0.00029999999999999997": 3.539923909556819e-10,
+    "1.0000000000000001e-05": 3.539923909556819e-10,
+    "3.0000000000000001e-05": 3.539923909556819e-10
+  },
+  "original_s2_classification_preserved": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s2k_one_accepted_step_retry_analyzer.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33004868239,
+    "observer_sha256": "ea2a1aab3495faf55f673eaf9b0926cc3f17d0af2a21b5814fa821cffe54d419",
+    "repo_head_at_job_start": "ade2707018e6eea9c6ec4321420e95f218770393",
+    "source_original_s2_run_id": 33003225136,
+    "threshold_changed": false,
+    "width_patch": "rtk/apply_rtk_c10_65s2k_retry_width_patch.py",
+    "workflow": "rtk-c10-65s2k-one-accepted-step-retry.yml"
+  },
+  "retry_width_Mpc": 3.53993611477497e-10,
+  "schema": "RTK_C10_65S2K_ONE_ACCEPTED_STEP_RETRY_RESULT_v1",
+  "threshold_changed": false
+}
