@@ -1,0 +1,52 @@
+{
+  "schema": "RTK_C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-26T18:04:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s2d",
+  "purpose": "Certify the current-state physical-lapse/traceless closure required by the C10.65s2 production canary. Generalize the already-certified C10.65o source-locked compromise_CLASS photon shear from the zero-relative-velocity onset coefficient form to arbitrary instantaneous TCA-on Newtonian photon/baryon state, without importing historical CLASS metric potentials.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_RESULT_v1.json"
+  ],
+  "source_locked_dynamic_formula": {
+    "domain": "flat Newtonian gauge, TCA on, compromise_CLASS",
+    "tau_c": "1/dkappa",
+    "dtau_c": "-ddkappa*tau_c^2",
+    "R": "(4/3)rho_gamma/rho_b",
+    "c": "(16/45)tau_c",
+    "theta0_prime": "[-H theta_b + k^2(cb2 delta_b + R delta_g/4)]/(1+R)",
+    "sigma_g_first": "c theta_g",
+    "sigma_g": "(1-11 dtau_c/6) sigma_g_first - (11/6)tau_c*c*(theta0_prime+k^2 Phi_N)",
+    "Pi": "1.5[(4/3)rho_g sigma_g + (4/3)rho_ur sigma_ur]/k^2",
+    "traceless": "Phi_N=Psi_N-3a^2 Pi",
+    "affine_solution": "write sigma_g=sigma_A+sigma_Phi Phi_N with sigma_Phi=-(11/6)tau_c*c*k^2; then Phi_N=[Psi_N-3a^2 Pi_A]/[1+3a^2 Pi_Phi]"
+  },
+  "frozen_checks": {
+    "grid_point_count": 9,
+    "anchor_count_per_point": 4,
+    "all_four_anchors_tca_on": true,
+    "max_Phi_N_relative_vs_C10_65o": 5e-10,
+    "max_sigma_g_relative_vs_C10_65o": 5e-10,
+    "max_metric_euler_relative_vs_C10_65r2": 5e-9,
+    "max_traceless_normalized_residual": 5e-13,
+    "min_abs_feedback_denominator": 0.9,
+    "all_outputs_finite": true,
+    "dynamic_formula_contains_no_A2_C2_Jad_Sur0_constants": true,
+    "sigma_ur_is_consumed_from_current_state_not_hard_coded_Sur0": true,
+    "historical_CLASS_psi_not_consumed": true,
+    "no_production_patch_in_s2d": true
+  },
+  "pass_classification": "C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_PASS_SCOPED",
+  "fail_classification": "C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_FAIL_SCOPED",
+  "next_if_pass": "Freeze C10.65s2e current-state derivative/slip closure: differentiate the s2c+s2d algebraic projector along the current ordinary+neutral RHS, solve B_prime and Psi_N_prime without a new datum, feed those into the source-locked compromise_CLASS slip and the s2b Newtonian Khronon bridge, and reproduce C10.65r2 at onset before implementing the one-step production canary.",
+  "non_claims": [
+    "not B_prime/Psi_N_prime closure",
+    "not production feedback",
+    "not finite-time stability",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
