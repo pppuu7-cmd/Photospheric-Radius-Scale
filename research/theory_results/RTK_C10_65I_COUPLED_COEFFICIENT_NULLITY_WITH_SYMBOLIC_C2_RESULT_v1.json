@@ -1,0 +1,466 @@
+{
+  "auxiliary_elimination": {
+    "B0": "(C2+2 Pcal psi0-E_th phi0)/(2H)",
+    "S_g0": "source-locked compromise_CLASS TCA shear closure; no independent photon shear amplitude",
+    "phi_pref0": "Hamiltonian output with nonzero lapse denominator",
+    "psi_pref0": "dressed ordinary-only A constraint",
+    "psi_pref_prime0": "differentiated dressed A output after d=Fz is evaluated",
+    "rule": "psi_pref0, psi_pref_prime0, phi_pref0, B0 and photon S_g0 are uniquely reconstructed outputs; their equations have an identity block in auxiliary columns and do not reduce core nullity"
+  },
+  "classification": "C10_65I_COUPLED_COEFFICIENT_NULLITY_REMAINING_TEMPORAL_AMPLITUDES_8_SCOPED",
+  "exact_rank_certificate": {
+    "auxiliary_count": 5,
+    "block_identity": "[[A,0],[-G,I_aux]] has rank(A)+N_aux and the same nullity as A",
+    "certifying_minor_columns": [
+      "D_g0",
+      "D_ur0",
+      "delta_khr0",
+      "Q_pref0"
+    ],
+    "core_constraint_count": 4,
+    "core_variable_count_fixed_C2": 13,
+    "full_pre_elimination_nullity_fixed_C2": 9,
+    "full_pre_elimination_rank_fixed_C2": 9,
+    "full_pre_elimination_variable_count_fixed_C2": 18,
+    "guards": [
+      "H>0",
+      "1+w_khr>0"
+    ],
+    "minor_determinant": "H/(1+w_khr)",
+    "nullity_fixed_C2_after_normalization": 8,
+    "nullity_fixed_C2_before_normalization": 9,
+    "nullity_released_C2_after_normalization": 9,
+    "nullity_released_C2_before_normalization": 10,
+    "rank_core": 4
+  },
+  "gate": "C10.65i",
+  "independent_algebraic_constraints": [
+    {
+      "equation": "D_g0-(4/3)D_b0=0",
+      "name": "ordinary_entropy_gb0",
+      "provenance": "C10.65i frozen target / ordinary adiabatic leading branch"
+    },
+    {
+      "equation": "D_ur0-D_g0=0",
+      "name": "ordinary_entropy_ur0",
+      "provenance": "C10.65i frozen target / ordinary adiabatic leading branch"
+    },
+    {
+      "equation": "delta_khr0/(1+w_khr)-3 psi_pref0-D_b0=0",
+      "name": "neutral_common_curvature",
+      "provenance": "C10.65c; Delta I_iso=0"
+    },
+    {
+      "equation": "a^2 delta_mu_pref,0+H Q_pref0=0",
+      "name": "leading_comoving_regularity",
+      "provenance": "C10.54/C10.55 finite-B regularity"
+    }
+  ],
+  "next_gate": "freeze C10.65j temporal gradient-recursion/eigenbranch contract: use the actual ODE hierarchy as a time-evolution/series recursion (not snapshot constraints) to determine whether the eight fixed-C2 subleading amplitudes are uniquely slaved to normalization and C2 on a regular growing branch; preserve C2 as external until a UV prescription is justified",
+  "non_claims": [
+    "not a UV value of C2",
+    "not a growing-mode theorem by snapshot rank",
+    "not a propagating-DOF count",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ],
+  "null_basis_fixed_C2_after_normalization": [
+    {
+      "classification": "unresolved temporal branch / O(k^2) ordinary density-gradient amplitude",
+      "name": "D_b2"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) photon-baryon entropy-gradient content",
+      "name": "D_g2"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) UR entropy-gradient content",
+      "name": "D_ur2"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) neutral relative-charge/entropy-gradient content",
+      "name": "delta_khr2"
+    },
+    {
+      "classification": "unresolved temporal branch / photon-baryon relative-velocity amplitude",
+      "name": "R_gb0"
+    },
+    {
+      "classification": "unresolved temporal branch / UR-baryon relative-velocity amplitude",
+      "name": "R_urb0"
+    },
+    {
+      "classification": "unresolved temporal branch / neutral-preferred versus baryon relative-velocity amplitude",
+      "name": "R_kb0"
+    },
+    {
+      "classification": "hierarchy/multipole / massless-UR shear amplitude",
+      "name": "S_ur0"
+    }
+  ],
+  "null_basis_fixed_C2_before_normalization": [
+    {
+      "classification": "normalization",
+      "coordinates": "D_b0=1,D_g0=4/3,D_ur0=4/3; delta_khr0 and Q_pref0 solved by DeltaI=0 and C0=0",
+      "name": "overall_adiabatic_normalization"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) ordinary density-gradient amplitude",
+      "name": "D_b2"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) photon-baryon entropy-gradient content",
+      "name": "D_g2"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) UR entropy-gradient content",
+      "name": "D_ur2"
+    },
+    {
+      "classification": "unresolved temporal branch / O(k^2) neutral relative-charge/entropy-gradient content",
+      "name": "delta_khr2"
+    },
+    {
+      "classification": "unresolved temporal branch / photon-baryon relative-velocity amplitude",
+      "name": "R_gb0"
+    },
+    {
+      "classification": "unresolved temporal branch / UR-baryon relative-velocity amplitude",
+      "name": "R_urb0"
+    },
+    {
+      "classification": "unresolved temporal branch / neutral-preferred versus baryon relative-velocity amplitude",
+      "name": "R_kb0"
+    },
+    {
+      "classification": "hierarchy/multipole / massless-UR shear amplitude",
+      "name": "S_ur0"
+    }
+  ],
+  "numerical_crosscheck": {
+    "background_reconstruction": {
+      "Hc_Mpc_inv": 0.0129629303512,
+      "N_ur": 3.046,
+      "R_4rho_gamma_over_3rho_b": 6.6951521502165,
+      "gamma_root": 0.05170371280716,
+      "onset_a": 0.0002203229136467,
+      "ur_to_gamma_density_ratio": 0.6917688895930879
+    },
+    "k_seed_Mpc_inv": 1e-05,
+    "max_normalization_vector_abs_constraint_residual": 1.1102230246251565e-16,
+    "minimum_guards": {
+      "A_dressed_denominator": 20407531.073349744,
+      "finite_k_filter_abs": 0.9900000001000001,
+      "finite_k_lapse_abs": 0.0006738348405950697,
+      "finite_k_shift_abs": 1.6708437761068231e-13,
+      "velocity_reparameterization_abs_det": 4120.187669183783
+    },
+    "record_count": 9,
+    "records": [
+      {
+        "M_c_Mpc_inv": 9066.231026460177,
+        "guards": {
+          "A_dressed_denominator": 82209444.62609346,
+          "finite_k_filter_denominator": 3.9900000000999993,
+          "finite_k_lapse_denominator": -0.0006738348405950697,
+          "finite_k_shift_denominator": -1.6708437761068231e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0016708437761068,
+        "normalization_psi_pref0": -5.23038076828552e-05,
+        "normalization_vector_max_abs_residual": 1.1102230246251565e-16,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3065778540387105,
+          1.0004238423537097,
+          0.9995637927890477,
+          0.5411826596732481
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 9066.231026460177,
+        "guards": {
+          "A_dressed_denominator": 82209444.62609346,
+          "finite_k_filter_denominator": 3.9900000000999993,
+          "finite_k_lapse_denominator": -0.0006755278932933822,
+          "finite_k_shift_denominator": -3.3500837520936694e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0033500837520937,
+        "normalization_psi_pref0": -5.23038076828552e-05,
+        "normalization_vector_max_abs_residual": 1.1102230246251565e-16,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3065778540387105,
+          1.0004238423537097,
+          0.9995637927890477,
+          0.5411826596732481
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 9066.231026460177,
+        "guards": {
+          "A_dressed_denominator": 82209444.62609346,
+          "finite_k_filter_denominator": 3.9900000000999993,
+          "finite_k_lapse_denominator": -0.000678939651003618,
+          "finite_k_shift_denominator": -6.734006734006704e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0067340067340067,
+        "normalization_psi_pref0": -5.23038076828552e-05,
+        "normalization_vector_max_abs_residual": 1.1102230246251565e-16,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3065778540387105,
+          1.0004238423537097,
+          0.9995637927890477,
+          0.5411826596732481
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 6402.7548229898675,
+        "guards": {
+          "A_dressed_denominator": 41008168.92426432,
+          "finite_k_filter_denominator": 1.9900000001000002,
+          "finite_k_lapse_denominator": -0.0006738348405950697,
+          "finite_k_shift_denominator": -1.6708437761068231e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0016708437761068,
+        "normalization_psi_pref0": -0.00010485391311615763,
+        "normalization_vector_max_abs_residual": 1.1102230246251565e-16,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3065869050312449,
+          1.0004216285255554,
+          0.9995612565163731,
+          0.5411695845578874
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 6402.7548229898675,
+        "guards": {
+          "A_dressed_denominator": 41008168.92426432,
+          "finite_k_filter_denominator": 1.9900000001000002,
+          "finite_k_lapse_denominator": -0.0006755278932933822,
+          "finite_k_shift_denominator": -3.3500837520936694e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0033500837520937,
+        "normalization_psi_pref0": -0.00010485391311615763,
+        "normalization_vector_max_abs_residual": 1.1102230246251565e-16,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3065869050312449,
+          1.0004216285255554,
+          0.9995612565163731,
+          0.5411695845578874
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 6402.7548229898675,
+        "guards": {
+          "A_dressed_denominator": 41008168.92426432,
+          "finite_k_filter_denominator": 1.9900000001000002,
+          "finite_k_lapse_denominator": -0.000678939651003618,
+          "finite_k_shift_denominator": -6.734006734006704e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0067340067340067,
+        "normalization_psi_pref0": -0.00010485391311615763,
+        "normalization_vector_max_abs_residual": 1.1102230246251565e-16,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3065869050312449,
+          1.0004216285255554,
+          0.9995612565163731,
+          0.5411695845578874
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 4516.041571155588,
+        "guards": {
+          "A_dressed_denominator": 20407531.073349744,
+          "finite_k_filter_denominator": 0.9900000001000001,
+          "finite_k_lapse_denominator": -0.0006738348405950697,
+          "finite_k_shift_denominator": -1.6708437761068231e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0016708437761068,
+        "normalization_psi_pref0": -0.00021070000903013376,
+        "normalization_vector_max_abs_residual": 0.0,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3066051342704252,
+          1.0004172091912185,
+          0.9995561083128397,
+          0.54114324996872
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 4516.041571155588,
+        "guards": {
+          "A_dressed_denominator": 20407531.073349744,
+          "finite_k_filter_denominator": 0.9900000001000001,
+          "finite_k_lapse_denominator": -0.0006755278932933822,
+          "finite_k_shift_denominator": -3.3500837520936694e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0033500837520937,
+        "normalization_psi_pref0": -0.00021070000903013376,
+        "normalization_vector_max_abs_residual": 0.0,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3066051342704252,
+          1.0004172091912185,
+          0.9995561083128397,
+          0.54114324996872
+        ]
+      },
+      {
+        "M_c_Mpc_inv": 4516.041571155588,
+        "guards": {
+          "A_dressed_denominator": 20407531.073349744,
+          "finite_k_filter_denominator": 0.9900000001000001,
+          "finite_k_lapse_denominator": -0.000678939651003618,
+          "finite_k_shift_denominator": -6.734006734006704e-13,
+          "velocity_coordinate_jacobian_det_proportional_W_total": 4120.187669183783
+        },
+        "lambda_HL": 1.0067340067340067,
+        "normalization_psi_pref0": -0.00021070000903013376,
+        "normalization_vector_max_abs_residual": 0.0,
+        "nullity_core_fixed_C2_after_normalization": 8,
+        "nullity_core_fixed_C2_before_normalization": 9,
+        "nullity_core_released_C2_after_normalization": 9,
+        "nullity_core_released_C2_before_normalization": 10,
+        "rank_core_fixed_C2": 4,
+        "row_normalized_singular_values": [
+          1.3066051342704252,
+          1.0004172091912185,
+          0.9995561083128397,
+          0.54114324996872
+        ]
+      }
+    ]
+  },
+  "ordered_amplitude_ledger": {
+    "algebraic_auxiliaries_eliminated": [
+      "psi_pref0",
+      "psi_pref_prime0",
+      "phi_pref0",
+      "B0",
+      "S_g0"
+    ],
+    "core_after_invertible_velocity_reparameterization": [
+      "D_b0",
+      "D_g0",
+      "D_ur0",
+      "delta_khr0",
+      "D_b2",
+      "D_g2",
+      "D_ur2",
+      "delta_khr2",
+      "Q_pref0",
+      "R_gb0",
+      "R_urb0",
+      "R_kb0",
+      "S_ur0"
+    ],
+    "derivative_outputs_not_counted_as_constraints": "all local continuity/Euler/UR/neutral derivatives d=Fz, including quantities entering compromise_CLASS slip/shear and psi_pref_prime0",
+    "physical_interface_before_reparameterization": [
+      "D_b0",
+      "D_g0",
+      "D_ur0",
+      "delta_khr0",
+      "D_b2",
+      "D_g2",
+      "D_ur2",
+      "delta_khr2",
+      "V_b0",
+      "V_g0",
+      "V_ur0",
+      "V_khr0",
+      "S_ur0"
+    ],
+    "released_matching_extension": [
+      "D_b0",
+      "D_g0",
+      "D_ur0",
+      "delta_khr0",
+      "D_b2",
+      "D_g2",
+      "D_ur2",
+      "delta_khr2",
+      "Q_pref0",
+      "R_gb0",
+      "R_urb0",
+      "R_kb0",
+      "S_ur0",
+      "C2_matching"
+    ],
+    "velocity_reparameterization": {
+      "aggregate": "Q_pref0 replaces one common velocity combination after the algebraic B0 projection",
+      "jacobian": "proportional to W_total>0; hence the change of coordinates is invertible on the frozen onset branch",
+      "relative_coordinates": [
+        "R_gb0=V_g0-V_b0",
+        "R_urb0=V_ur0-V_b0",
+        "R_kb0=V_khr0-V_b0"
+      ]
+    }
+  },
+  "provenance": {
+    "numpy": "2.3.2",
+    "repo_head_at_job_start": "1128ebee182321f2a2a4239f0f9fcaf92567492d",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65i_coupled_coefficient_nullity_with_symbolic_c2.py",
+    "workflow": "rtk-c10-65i-coupled-coefficient-nullity-with-symbolic-c2.yml"
+  },
+  "released_C2_extra_direction": {
+    "auxiliary_response": "delta B0 = delta C2/(2H), with psi_pref0 and phi_pref0 fixed",
+    "classification": "matching coordinate, not propagating mode",
+    "core_change": "zero",
+    "name": "C2_matching",
+    "source": "C10.65h"
+  },
+  "schema": "RTK_C10_65I_COUPLED_COEFFICIENT_NULLITY_WITH_SYMBOLIC_C2_RESULT_v1",
+  "scientific_interpretation": {
+    "C2": "Releasing C2 adds exactly one boundary/matching direction; its core state change is zero and B0 responds by delta C2/(2H).",
+    "TCA": "The source-locked compromise_CLASS closure removes photon shear as an auxiliary but does not identify theta_gamma with theta_b or reduce the dynamic velocity nullity.",
+    "consequence": "A temporal gradient-recursion/eigenbranch or microscopic pre-EFT matching condition is required before a unique completed-U1 seed can be built.",
+    "leading_sector": "After the two ordinary entropy conditions, corrected neutral common-curvature condition and finite-B comoving regularity, the leading k^0 seed has exactly one direction: overall normalization.",
+    "subleading_sector": "Snapshot algebra leaves eight independent O(k^2)/velocity/shear amplitudes after normalization even when C2 is fixed. These are temporal-branch data, not extra propagating DOF claims."
+  },
+  "target": "research/theory_targets/RTK_C10_65I_COUPLED_COEFFICIENT_NULLITY_WITH_SYMBOLIC_C2_TARGET_v1.json"
+}
