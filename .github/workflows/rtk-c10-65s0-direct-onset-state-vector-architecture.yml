@@ -1,0 +1,60 @@
+name: RTK C10.65s0 direct-onset state-vector architecture
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s0_direct_onset_state_vector_architecture.py'
+      - '.github/workflows/rtk-c10-65s0-direct-onset-state-vector-architecture.yml'
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Prepare pinned patched source tree
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s0_head.txt
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_s0
+          git -C class_s0 reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_s0/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_s0/include/
+          python3 rtk/apply_rtk_class_patch.py class_s0
+          python3 rtk/upgrade_rtk_inputs.py class_s0
+      - name: Execute frozen source-lock audit
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s0_direct_onset_state_vector_architecture.py
+          python3 research/shadow/rtk_c10_65s0_direct_onset_state_vector_architecture.py --class-root class_s0 --output research/theory_results/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_RESULT_v1.json | tee c10_65s0.log
+          grep -q '^C10_65S0_DIRECT_ONSET_INITIALIZATION_ARCHITECTURE_PASS_LEGACY_AUX_EXCLUSION_REQUIRED_SCOPED ' c10_65s0.log
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65s0_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65s0-direct-onset-state-vector-architecture.yml','worker':'research/shadow/rtk_c10_65s0_direct_onset_state_vector_architecture.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_RESULT_v1.json /tmp/s0.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build; git reset --hard origin/rtk-class-build
+            cp /tmp/s0.json research/theory_results/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_RESULT_v1.json
+            git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65S0_DIRECT_ONSET_STATE_VECTOR_ARCHITECTURE_RESULT_v1.json
+            git commit -m 'Record C10.65s0 direct-onset architecture audit' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
