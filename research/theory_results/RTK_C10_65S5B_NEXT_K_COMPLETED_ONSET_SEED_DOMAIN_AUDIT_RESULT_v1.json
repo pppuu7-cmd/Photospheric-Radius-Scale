@@ -1,0 +1,212 @@
+{
+  "checks": {
+    "all_projector_and_carrier_values_finite": true,
+    "all_projector_denominators_nonzero": true,
+    "higher_ur_controls_explicitly_labeled": true,
+    "historical_metric_not_consumed": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "new_anchor_count": true,
+    "physical_traceless_normalized_residual_max": true,
+    "preferred_A_Hamiltonian_momentum_normalized_residual_max": true,
+    "regression_relative_max": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED",
+  "completed_carrier_vs_legacy_observer_measurement_only": {
+    "delta_b": {
+      "completed": 4.009311758528872,
+      "legacy_observer": -1.1386501425437017,
+      "relative_difference": 1.284001397527017
+    },
+    "delta_g": {
+      "completed": 5.34574901137183,
+      "legacy_observer": -1.5181980652566391,
+      "relative_difference": 1.2840010000520092
+    },
+    "delta_ur": {
+      "completed": 5.34574901137183,
+      "legacy_observer": -1.5151705149680557,
+      "relative_difference": 1.2834346527951246
+    },
+    "shear_ur": {
+      "completed": 0.029890841588141415,
+      "legacy_observer": 0.027833355185213703,
+      "relative_difference": 0.06883333802631968
+    },
+    "theta_b": {
+      "completed": -0.010873003151613176,
+      "legacy_observer": 0.0023488884996089596,
+      "relative_difference": 1.2160294140318046
+    },
+    "theta_g": {
+      "completed": -0.010873003151613176,
+      "legacy_observer": 0.0023487755999474034,
+      "relative_difference": 1.2160190305471332
+    },
+    "theta_ur": {
+      "completed": -0.010873003151613176,
+      "legacy_observer": 0.002243507945792523,
+      "relative_difference": 1.2063374685456303
+    }
+  },
+  "gate": "C10.65s5b",
+  "interpretation": "The inherited phenomenological O(k^2) matching polynomial can be algebraically propagated through the completed-U1 onset projector at k=0.01 Mpc^-1 without a pole or numerical inconsistency, producing a finite carrier while preserving the certified k=0.003 regression. This is an algebraic/extrapolation usability result only, not evidence that omitted O(k^4) matching terms are small.",
+  "matching_polynomial_status": "INHERITED_PRE_EFT_PHENOMENOLOGICAL_EXTRAPOLATION_UNCERTIFIED_OMITTED_ORDER",
+  "maxima": {
+    "abs_A2_k2_over_J": 0.03736355212852027,
+    "min_abs_denominator": 1.6707917960713469e-07,
+    "projector_constraint_normalized": 3.6725310741523293e-90,
+    "regression_relative": 1.2315331994035796e-16,
+    "traceless_normalized": 2.0680309211356558e-91
+  },
+  "next_gate": "Freeze C10.65s5c omitted-order/sensitivity gate before any k=0.01 production feedback: perturb the uncomputed higher-order matching content through a prospectively specified dimensionless envelope and quantify its effect on the completed onset carrier/projector without tuning to the outcome.",
+  "non_claims": [
+    "not a derivation of the pre-EFT matching polynomial at near-horizon k",
+    "not proof that omitted O(k^4) terms are negligible",
+    "not production feedback at k=0.01",
+    "not finite-time stability at k=0.01",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s5b_next_k_completed_onset_seed_domain_audit.py",
+    "github_actions_run_id": 33021127591,
+    "repo_head_at_job_start": "1b36dbd19efae4043174a2b9efcb99ed34d00f85",
+    "s5a_parent_run_id": 33020948421,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s5b-next-k-completed-onset-seed-domain-audit.yml"
+  },
+  "record": {
+    "carrier": {
+      "delta_b": 4.009311758528872,
+      "delta_cdm_khr": 4.009311758528873,
+      "delta_g": 5.34574901137183,
+      "delta_ur": 5.34574901137183,
+      "phi_CLASS_equals_Psi_N": 2.3738008049714776,
+      "shear_ur": 0.029890841588141415,
+      "theta_b": -0.010873003151613176,
+      "theta_cdm_khr": -0.010873003151613176,
+      "theta_g": -0.010873003151613176,
+      "theta_ur": -0.010873003151613176
+    },
+    "historical_CLASS_metric_consumed": false,
+    "k": 0.01,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "projector": {
+      "A_residual_normalized": 0.0,
+      "B_denominator": -1.6707917960713469e-07,
+      "B_pref": -183.10968049283503,
+      "D_A": 1.0001569321149715,
+      "Hamiltonian_residual_normalized": 0.0,
+      "Phi_N": 2.304999651213194,
+      "Psi_N": 2.3738008049714776,
+      "V_N": -108.73003151613176,
+      "lapse_denominator": -0.0006741690090161221,
+      "momentum_residual_normalized": 3.6725310741523293e-90,
+      "phi_pref": 1.7165880634964616,
+      "psi_pref": 0.00016277011237187563,
+      "psi_pref_prime": -8.8360205415549e-06,
+      "shear_feedback_denominator": 0.9999970315069496,
+      "traceless_residual_normalized": 2.0680309211356558e-91
+    },
+    "ur_l_ge_3": [
+      {
+        "F_l": 2.2844430305544366e-11,
+        "F_l_over_k_pow_l": 2284443030.5544367,
+        "l": 10,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 8.683532378048927e-13,
+        "F_l_over_k_pow_l": 8683532378.048927,
+        "l": 11,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 3.031880163046453e-14,
+        "F_l_over_k_pow_l": 30318801630.46453,
+        "l": 12,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 9.786902242791236e-16,
+        "F_l_over_k_pow_l": 97869022427.91237,
+        "l": 13,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 2.937042239465057e-17,
+        "F_l_over_k_pow_l": 293704223946.5057,
+        "l": 14,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 8.23377912474181e-19,
+        "F_l_over_k_pow_l": 823377912474.181,
+        "l": 15,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 2.1654180075249404e-20,
+        "F_l_over_k_pow_l": 2165418007524.9404,
+        "l": 16,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 5.40536059141381e-22,
+        "F_l_over_k_pow_l": 5405360591413.81,
+        "l": 17,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 0.007183514641118566,
+        "F_l_over_k_pow_l": 7183.514641118566,
+        "l": 3,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 0.0007125149014787112,
+        "F_l_over_k_pow_l": 71251.49014787111,
+        "l": 4,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 5.746368937579751e-05,
+        "F_l_over_k_pow_l": 574636.8937579751,
+        "l": 5,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 3.905932728776648e-06,
+        "F_l_over_k_pow_l": 3905932.7287766486,
+        "l": 6,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 2.294342370162967e-07,
+        "F_l_over_k_pow_l": 22943423.70162967,
+        "l": 7,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 1.186394025158943e-08,
+        "F_l_over_k_pow_l": 118639402.51589431,
+        "l": 8,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      },
+      {
+        "F_l": 5.478082472635765e-10,
+        "F_l_over_k_pow_l": 547808247.2635765,
+        "l": 9,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY"
+      }
+    ]
+  },
+  "schema": "RTK_C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_TARGET_v1.json",
+  "threshold_changed": false
+}
