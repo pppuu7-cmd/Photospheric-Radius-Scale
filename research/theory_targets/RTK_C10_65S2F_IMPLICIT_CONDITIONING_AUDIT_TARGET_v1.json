@@ -1,0 +1,46 @@
+{
+  "schema": "RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_TARGET_v1",
+  "created_utc": "2026-08-26T18:18:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s2f",
+  "purpose": "Postmortem the single failed guard in C10.65s2e without modifying that failed gate. Determine whether the scalar B-prime implicit feedback is the expected enthalpy-fraction coupling of the differentiated completed-U1 DAE and whether it is numerically well conditioned enough to justify a separate production preflight.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json"
+  ],
+  "failed_parent_is_not_reclassified": true,
+  "analytic_contract": {
+    "dae_matrix": "A11=lapse; A12=-D H Xt; A21=D H; A22=r L+Xt",
+    "detA": "A11*A22-A12*A21",
+    "Q0_response_to_Bprime_trial": "dQ0/du=3 a^2 W_khr",
+    "analytic_cB": "[(A11+D^2 H^2)/detA] * 3 a^2 W_khr",
+    "implicit_denominator": "1-cB",
+    "superhorizon_limit": "cB -> W_khr/W_total and 1-cB -> W0/W_total as k->0",
+    "amplification": "1/abs(1-cB)"
+  },
+  "frozen_checks": {
+    "record_count": 36,
+    "max_dual_vs_analytic_cB_relative": 5e-12,
+    "max_dual_vs_analytic_denominator_relative": 5e-12,
+    "max_smallest_k_denominator_vs_W0_over_W_relative": 1e-6,
+    "max_scalar_implicit_amplification": 2.0,
+    "min_abs_implicit_denominator": 0.5,
+    "max_denominator_relative_spread_over_grid": 1e-3,
+    "s2e_all_nonconditioning_checks_must_have_passed": true,
+    "s2e_threshold_changed_must_be_false": true,
+    "all_values_finite": true
+  },
+  "pass_classification": "C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_PASS_SCOPED",
+  "fail_classification": "C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_FAIL_SCOPED",
+  "next_if_pass": "Freeze a new C10.65s2g production-kernel preflight that inherits the original s2 RHS parity checks but uses the analytically certified scalar implicit solve and does not alter the historical C10.65s2e FAIL. Only after s2g passes may the already-frozen C10.65s2 one-accepted-step production canary be implemented.",
+  "non_claims": [
+    "does not convert C10.65s2e FAIL into PASS",
+    "not production feedback",
+    "not finite-time stability",
+    "not a proof of conditioning away from the audited onset grid",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
