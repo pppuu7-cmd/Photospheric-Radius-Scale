@@ -1,0 +1,122 @@
+{
+  "a_on": 0.0002203229136467,
+  "acceptance": {
+    "A2_nested_threshold": 0.0001,
+    "C2_nested_threshold": 0.1,
+    "S_ur0_nested_threshold": 1e-08,
+    "all_finite": true,
+    "pass": true
+  },
+  "classification": "C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_PASS_SCOPED",
+  "control_status": "HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY",
+  "fits": {
+    "A2": {
+      "D_b0_all4": -2.9999999999995617,
+      "D_b0_smallest3": -2.999999999999516,
+      "all4": -1120.906563855608,
+      "nested_relative_disagreement": 1.1975203424885014e-08,
+      "smallest3": -1120.9065772786923
+    },
+    "C2": {
+      "all4": -1.314425482950032,
+      "nested_relative_disagreement": 2.9402199593063025e-07,
+      "smallest3": -1.314425096480028
+    },
+    "S_ur0": {
+      "all4": 298.90841588141416,
+      "nested_relative_disagreement": 2.7004142571338068e-14,
+      "smallest3": 298.90841588142223
+    },
+    "direct_C_quadratic": {
+      "C0": 9.813011103277725e-17,
+      "C2": -1.314426239229694,
+      "C4": -1.2164311673707952e-07
+    }
+  },
+  "gate": "C10.65m",
+  "interpretation": "These values are read-only historical boundary controls. They are not completed-U1 predictions and do not derive the pre-EFT matching physics. C(k) uses only total matter source columns and H, not historical metric potentials.",
+  "next_gate": "freeze C10.65n conditional completed-U1 onset-seed construction using the C10.65m phenomenological control vector; solve the algebraic metric/shift auxiliaries for the 3x3 completion grid and perform onset-shift/low-k consistency tests before any full Boltzmann spectra run",
+  "non_claims": [
+    "not a microscopic pre-EFT derivation",
+    "not a low-energy completed-U1 prediction of the matching values",
+    "not proof that zero relative entropies/velocities are UV-selected",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "phenomenological_regular_control_vector": {
+    "A2": -1120.906563855608,
+    "C2": -1.314425482950032,
+    "E_gb2": 0.0,
+    "E_khr2": 0.0,
+    "E_urb2": 0.0,
+    "R_gb0": 0.0,
+    "R_khrb0": 0.0,
+    "R_urb0": 0.0,
+    "S_ur0": 298.90841588141416
+  },
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "numpy": "2.3.2",
+    "repo_head_at_job_start": "30be3a6859127b45fae3d421e69f482c5d3af635",
+    "source_export_patch": "rtk/apply_rtk_c10_source_export_patch.py",
+    "species_control_patch": "rtk/apply_rtk_c10_65a_species_control_patch.py",
+    "worker": "research/shadow/rtk_c10_65m_historical_control_matching_values.py",
+    "workflow": "rtk-c10-65m-historical-control-matching-values.yml"
+  },
+  "records": [
+    {
+      "C": -1.3144242129187883e-10,
+      "C_over_k2": -1.3144242129187882,
+      "D_b": -3.0000001120902997,
+      "Hc": 0.0129629303512,
+      "S_ur_over_k2": 298.90841588139995,
+      "delta_mu_total": -4237.039300553,
+      "k_Mpc_inv": 1e-05,
+      "relative_a_error": 0.0,
+      "rpp_theta_total": 1.089526900467e-05,
+      "source_file": "c1065m_perturbations_k0_s.dat",
+      "x_k2": 1.0000000000000002e-10
+    },
+    {
+      "C": -1.182983562562738e-09,
+      "C_over_k2": -1.3144261806252644,
+      "D_b": -3.0000010088152997,
+      "Hc": 0.0129629303512,
+      "S_ur_over_k2": 298.9084158814444,
+      "delta_mu_total": -4237.042995229,
+      "k_Mpc_inv": 3e-05,
+      "relative_a_error": 0.0,
+      "rpp_theta_total": 9.80573394371e-05,
+      "source_file": "c1065m_perturbations_k1_s.dat",
+      "x_k2": 9e-10
+    },
+    {
+      "C": -1.3144262361050943e-08,
+      "C_over_k2": -1.3144262361050942,
+      "D_b": -3.0000112090653,
+      "Hc": 0.0129629303512,
+      "S_ur_over_k2": 298.9084158814,
+      "delta_mu_total": -4237.085022172,
+      "k_Mpc_inv": 0.0001,
+      "relative_a_error": 0.0,
+      "rpp_theta_total": 0.001089515679793,
+      "source_file": "c1065m_perturbations_k2_s.dat",
+      "x_k2": 1e-08
+    },
+    {
+      "C": -1.1829836142477398e-07,
+      "C_over_k2": -1.3144262380530445,
+      "D_b": -3.0001008815902996,
+      "Hc": 0.0129629303512,
+      "S_ur_over_k2": 298.90841588144445,
+      "delta_mu_total": -4237.454489802,
+      "k_Mpc_inv": 0.0003,
+      "relative_a_error": 0.0,
+      "rpp_theta_total": 0.009804825069146,
+      "source_file": "c1065m_perturbations_k3_s.dat",
+      "x_k2": 8.999999999999999e-08
+    }
+  ],
+  "schema": "RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_TARGET_v1.json"
+}
