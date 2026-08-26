@@ -1,0 +1,55 @@
+{
+  "schema": "RTK_C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s5a",
+  "created_utc": "2026-08-26T22:59:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s4g": "C10_65S4G_MODERATE_K_LONGER_TIME_TRAJECTORY_PASS_SCOPED",
+    "C10.65s4a": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED"
+  },
+  "purpose": "Widen only the k axis by one prospectively selected next anchor, k=0.01 Mpc^-1. Because this point lies outside the earlier s4a superhorizon/O(k^2) guards, first test only exact-onset state materialization and approximation-branch availability. Do not silently extend the s4a domain certificate and do not yet construct a completed-U1 seed or production trajectory at k=0.01.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "Hc_on_Mpc_inv": 0.0129629303512,
+    "regression_k_Mpc_inv": [0.003],
+    "new_k_Mpc_inv": [0.01],
+    "all_k_Mpc_inv": [0.003, 0.01],
+    "inherited_matching_J": -3.0,
+    "inherited_matching_A2_Mpc2": -1120.906563855608
+  },
+  "prospective_checks": {
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "require_TCA_enum": 0,
+    "require_RSA_enum": 0,
+    "require_UFA_enum": 0,
+    "require_l_max_ur": 17,
+    "regression_relative_tolerance": 1e-12,
+    "off_numeric_text_sha256_identical_both": true,
+    "all_state_coordinates_finite": true,
+    "all_active_UR_higher_coordinates_finite": true,
+    "observer_read_only_static_guard": true,
+    "threshold_changed": false
+  },
+  "measurement_only": {
+    "k_over_Hc": "record without pass/fail threshold; s4a max 0.25 is intentionally not relaxed",
+    "abs_A2_k2_over_J": "record without pass/fail threshold; s4a max 0.005 is intentionally not relaxed"
+  },
+  "pass_classification": "C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_FAIL_SCOPED",
+  "interpretation_if_pass": "Pinned CLASS can materialize a finite exact-onset scalar state at the single next anchor k=0.01 Mpc^-1 in the same TCA/RSA/UFA branch, while exact OFF rollback and the k=0.003 regression control are preserved. This does not certify the inherited superhorizon matching expansion at k=0.01; a separate completed-U1 seed/domain gate is required before production feedback.",
+  "next_if_pass": "Freeze a separate C10.65s5b completed-U1 onset seed/domain audit at k=0.01 Mpc^-1 that explicitly tests, rather than assumes, whether the inherited pre-EFT matching polynomial and algebraic projector remain usable outside the old s4a guards.",
+  "non_claims": [
+    "not an extension of the s4a k/Hc or A2 k2/J guard",
+    "not certification of the inherited matching polynomial at k=0.01",
+    "not completed-U1 seed certification at k=0.01",
+    "not production feedback at k=0.01",
+    "not finite-time stability at k=0.01",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
