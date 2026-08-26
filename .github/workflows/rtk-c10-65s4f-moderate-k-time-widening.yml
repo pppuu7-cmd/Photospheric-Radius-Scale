@@ -1,0 +1,86 @@
+name: RTK C10.65s4f moderate-k time widening
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['research/triggers/RTK_C10_65S4F_TRIGGER_v1.txt']
+permissions: {contents: write, actions: read}
+jobs:
+  sample:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen parents and criteria
+        run: |
+          set -euo pipefail;git rev-parse HEAD > s4f_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_TARGET_v1.json');e=L('research/theory_results/RTK_C10_65S4E_MODERATE_K_TRAJECTORY_SAMPLED_CONSTRAINT_RESULT_v1.json');c=L('research/theory_results/RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_RESULT_v1.json');d=L('research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_EXECUTION';assert t['sample_elapsed_tau_Mpc']==[3e-6,1e-5,3e-5,0.0001];assert t['constraint_policy']['max_abs_normalized_momentum']==1e-10;assert e['classification']==t['parents']['C10.65s4e'];assert c['classification']==t['parents']['C10.65s3c'];assert d['classification']==t['parents']['C10.65s4d'];print('C10_65S4F_FROZEN_PARENTS_VERIFIED')
+          PY
+      - name: Prepare pinned moderate-k production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control;git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/;cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          for x in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py;do python3 "rtk/$x" class_control;done
+          make -C class_control -j2 class;cp -a class_control class_s4f;python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py class_s4f;python3 rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py class_s4f;make -C class_s4f clean;make -C class_s4f -j2 class
+      - name: Write frozen-domain inputs
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_TARGET_v1.json');p=L('research/state/current.json')['final_replay_result']['rtk']['params'];d=t['domain'];ks=', '.join(format(float(x),'.17g') for x in d['k_Mpc_inv']);common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_1/Mpc = 0.0031\nz_pk = 0\nk_output_values = {ks}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nevolver = 0\nl_max_ur = 17\nc10_65r0_diag = 0\nc10_65r1_diag = 0\nc10_65r1_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65r1_Mc = {float(d['M_c_Mpc_inv']):.17g}\n''';pathlib.Path('class_control/output').mkdir(exist_ok=True);pathlib.Path('class_s4f/output').mkdir(exist_ok=True);pathlib.Path('class_control/control.ini').write_text(common+'root = output/control_\n');extra=f'''c10_65s2_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65s2_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_a_on = {float(d['a_on']):.17g}\n''';pathlib.Path('class_s4f/off.ini').write_text(common+'c10_65s2_canary = 0\n'+extra+'root = output/off_\n');pathlib.Path('class_s4f/on.ini').write_text(common+'c10_65s2_canary = 1\n'+extra+'root = output/on_\n')
+          PY
+      - name: Verify exact dormant OFF identity
+        run: |
+          set -euo pipefail;(cd class_control && ./class control.ini)>s4f_control.log 2>&1;(cd class_s4f && env -u RTK_C10_65S2_OBSERVER_FILE ./class off.ini)>s4f_off.log 2>&1
+          python3 - <<'PY'
+          import glob,hashlib,json,pathlib
+          def d(p):return hashlib.sha256(('\n'.join(x.strip() for x in pathlib.Path(p).read_text().splitlines() if x.strip() and not x.lstrip().startswith('#'))+'\n').encode()).hexdigest()
+          A=sorted(glob.glob('class_control/output/control_*perturbations*'));B=sorted(glob.glob('class_s4f/output/off_*perturbations*'));assert len(A)==len(B)==2;rec=[];ok=True
+          for x,y in zip(A,B):a,b=d(x),d(y);z=a==b;ok &= z;rec.append({'control':x,'off':y,'identical':z})
+          pathlib.Path('s4f_off_identity.json').write_text(json.dumps({'all_two_numeric_rows_sha256_identical':bool(ok),'records':rec},indent=2)+'\n');assert ok
+          PY
+      - name: Recover s4d boundary observer
+        run: |
+          mkdir -p s4d_parent;gh run download 33015496671 --repo pppuu7-cmd/Photospheric-Radius-Scale --name rtk-c10-65s4d-moderate-k-one-step-production-canary --dir s4d_parent;test -s s4d_parent/s4d_observer.csv
+      - name: Execute four frozen widened endpoints
+        run: |
+          set -euo pipefail
+          mapfile -t widths < <(python3 - <<'PY'
+          import json
+          for x in json.load(open('research/theory_targets/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_TARGET_v1.json'))['sample_elapsed_tau_Mpc']:print(format(float(x),'.17g'))
+          PY
+          );test "${#widths[@]}" -eq 4;printf '[\n' > s4f_manifest.json
+          for i in "${!widths[@]}";do w="${widths[$i]}";python3 rtk/apply_rtk_c10_65s4f_sample_interval_patch.py class_s4f --width "$w" </dev/null;make -C class_s4f -j2 class </dev/null >/dev/null;f="$(pwd)/s4f_observer_${i}.csv";rm -f "$f";(cd class_s4f && RTK_C10_65S2_OBSERVER_FILE="$f" ./class on.ini </dev/null)>"s4f_on_${i}.log" 2>&1;test -s "$f";[ "$i" -eq 0 ] || printf ',\n' >> s4f_manifest.json;printf '{"width":%.17g,"observer":"%s"}' "$w" "$f" >> s4f_manifest.json;done;printf '\n]\n' >> s4f_manifest.json
+      - name: Analyze frozen s4f
+        run: |
+          python3 research/shadow/rtk_c10_65s4f_moderate_k_time_widened_analyzer.py --manifest s4f_manifest.json --s4d-observer s4d_parent/s4d_observer.csv --off-identity s4f_off_identity.json --patch rtk/apply_rtk_c10_65s4f_sample_interval_patch.py --bridge class_s4f/source/rtk_c10_65s2_class_bridge.c --output research/theory_results/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_RESULT_v1.json | tee s4f.log
+      - name: Add provenance and persist
+        if: always()
+        run: |
+          set -euo pipefail;p=research/theory_results/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_RESULT_v1.json;[ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s4f_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s4f-moderate-k-time-widening.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'sample_interval_patch':'rtk/apply_rtk_c10_65s4f_sample_interval_patch.py','analyzer':'research/shadow/rtk_c10_65s4f_moderate_k_time_widened_analyzer.py','s4d_parent_run_id':33015496671,'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n');c=pathlib.Path('research/checkpoints/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_RESULT_2026-08-26T2245Z.md');c.write_text(f"# RTK C10.65s4f moderate-k time-widened result\n\nClassification: `{d['classification']}`. Maximum normalized A/H/M residual: `{d['max_abs_normalized_constraint']:.17e}`; maximum change: `{d['max_abs_normalized_constraint_change']:.17e}`; frozen bound: `{d['frozen_bound']:.17e}`. Thresholds unchanged. This is sampled finite-time evidence only, not cosmological stability or broad-k validation.\n")
+          PY
+          cp "$p" /tmp/r;cp research/checkpoints/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_RESULT_2026-08-26T2245Z.md /tmp/c
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r "$p";cp /tmp/c research/checkpoints/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_RESULT_2026-08-26T2245Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_RESULT_2026-08-26T2245Z.md;git commit -m 'Record C10.65s4f moderate-k time widening' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: rtk-c10-65s4f-moderate-k-time-widening, path: "s4f_manifest.json\ns4f_observer_*.csv\ns4f_on_*.log\ns4f.log\nresearch/theory_results/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_RESULT_v1.json"}
+      - name: Enforce classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_RESULT_v1.json'));assert d['classification']=='C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_PASS_SCOPED';assert d['checks']['threshold_changed'] is False;print(d['classification'])
+          PY
