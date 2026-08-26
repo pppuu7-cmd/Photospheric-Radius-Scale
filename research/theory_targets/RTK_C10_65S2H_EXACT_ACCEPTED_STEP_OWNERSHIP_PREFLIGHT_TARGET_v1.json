@@ -1,0 +1,35 @@
+{
+  "schema": "RTK_C10_65S2H_EXACT_ACCEPTED_STEP_OWNERSHIP_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s2h",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Before mutating pinned CLASS for the already-frozen C10.65s2 canary, prove the exact accepted-step ownership semantics needed to execute exactly one adaptive Cash-Karp step. The preflight must show that outer evolver_rk segments are not equivalent to accepted RK steps, that rkqs owns acceptance after errmax<=1, and that a direct canary call to rkqs can execute one accepted production perturb_derivs step while preserving the frozen s2 state-handoff ownership and criteria.",
+  "parents": {
+    "C10.65s2g": "C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_PASS_SCOPED",
+    "C10.65s0": "C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_PASS_SCOPED"
+  },
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_checks": {
+    "s2_target_remains_frozen": true,
+    "s2_rhs_threshold_remains_5e-9": true,
+    "evolver_calls_generic_integrator": true,
+    "generic_integrator_calls_rkqs": true,
+    "rkqs_rejects_until_errmax_le_1": true,
+    "rkqs_updates_x_once_after_acceptance": true,
+    "rkqs_updates_integrator_state_once_after_acceptance": true,
+    "direct_rkqs_uses_same_derivs_callback": true,
+    "direct_rkqs_supports_rejected_trials_before_single_accept": true,
+    "s0_handoff_remains_after_vector_init_before_evolver": true,
+    "no_production_patch_in_s2h": true
+  },
+  "implementation_decision_if_pass": "Implement C10.65s2 as an opt-in disposable canary at the s0-certified handoff site. Initialize the completed state through the frozen ownership rules, evaluate the first production RHS, initialize a generic_integrator_workspace, evaluate the normal production perturb_derivs at tau_on for dydx/yscal, then call rkqs exactly once. rkqs may internally retry rejected trial sizes, but returns only after one accepted step and mutates the integrator state once. Copy that accepted state to the canary state capture, measure A/H/M constraints, and terminate the canary path without entering a second accepted step. Do not redefine an outer evolver_rk interval as one accepted step.",
+  "pass_classification": "C10_65S2H_EXACT_ACCEPTED_STEP_OWNERSHIP_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65S2H_EXACT_ACCEPTED_STEP_OWNERSHIP_PREFLIGHT_FAIL_SCOPED",
+  "next_if_pass": "Implement and execute the already-frozen C10.65s2 direct-onset one-accepted-step production canary using one direct rkqs acceptance on the normal production perturb_derivs callback, with exact OFF rollback and unchanged frozen criteria.",
+  "non_claims": [
+    "not production feedback",
+    "not an accepted completed-U1 step",
+    "not finite-time stability",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
