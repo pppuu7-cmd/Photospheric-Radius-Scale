@@ -1,0 +1,61 @@
+{
+  "schema": "RTK_C10_65S3C_TIME_WIDENED_TRAJECTORY_TARGET_v1",
+  "gate": "C10.65s3c",
+  "created_utc": "2026-08-26T19:43:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "parents": {
+    "C10.65s3b": "C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+    "C10.65s3a": "C10_65S3A_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED",
+    "C10.65s2k": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED"
+  },
+  "purpose": "Prospectively widen the independently restarted completed-U1 production trajectory from the certified 1e-6 Mpc short interval to four logarithmically spaced endpoints through 1e-4 Mpc, without changing the production kernel, integrator tolerance, low-k anchors, or constraint threshold.",
+  "domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "sample_elapsed_tau_Mpc": [3e-06, 1e-05, 3e-05, 0.0001],
+  "sampling_policy": {
+    "independent_restart_from_same_onset_for_each_endpoint": true,
+    "same_production_kernel": true,
+    "same_integrator_tolerance": true,
+    "same_evolver": "rk",
+    "no_intra_step_observer_instrumentation": true,
+    "endpoint_width_absolute_tolerance_Mpc": 5e-12
+  },
+  "constraint_policy": {
+    "max_abs_normalized_A": 1e-10,
+    "max_abs_normalized_Hamiltonian": 1e-10,
+    "max_abs_normalized_momentum": 1e-10,
+    "max_abs_normalized_change_from_onset": 1e-10,
+    "threshold_frozen_before_execution": true
+  },
+  "frozen_checks": {
+    "sample_count": 4,
+    "anchor_count": 4,
+    "record_count": 16,
+    "off_numeric_text_sha256_identical_all_four": true,
+    "before_rows_exact_s2k_before_all_samples": true,
+    "all_endpoint_widths_within_absolute_tolerance": true,
+    "all_endpoint_states_finite": true,
+    "all_endpoint_approximation_states_tca_rsa_ufa_lmax": [0, 0, 0, 17],
+    "all_endpoint_constraints_finite": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "same_kernel_and_tolerance_static_guard": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S3C_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+  "fail_classification": "C10_65S3C_TIME_WIDENED_TRAJECTORY_FAIL_SCOPED",
+  "interpretation_if_pass": "At four prospectively frozen elapsed times from 3e-6 through 1e-4 Mpc and all four low-k anchors, independently restarted production integrations remain finite and constraint-consistent within the unchanged 1e-10 normalized bound. This widens sampled short-time evidence by two decades beyond C10.65s3b but is not a continuous-time or cosmological stability theorem.",
+  "next_if_pass": "Only after freezing a separate k-domain widening or materially longer-time gate should spectra-level production tests be considered. Preserve same-full-action background, UV matching, C9 and massive-neutrino limitations.",
+  "non_claims": [
+    "not a continuous-time supremum bound",
+    "not cosmological-time stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ]
+}
