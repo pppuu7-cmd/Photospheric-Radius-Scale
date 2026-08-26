@@ -1,0 +1,67 @@
+{
+  "schema": "RTK_C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_TARGET_v1",
+  "gate": "C10.65s4a1",
+  "created_utc": "2026-08-26T20:06:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parent": {
+    "gate": "C10.65s4a",
+    "classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED",
+    "github_actions_run_id": 33008095108,
+    "persisted_failure_commit": "3f50db6b"
+  },
+  "diagnosis": {
+    "only_failed_check": "all_exact_onset_rows_present",
+    "all_other_s4a_checks_passed": true,
+    "k_0p001_nearest_relative_a_offset": -0.004358592067821632,
+    "k_0p003_nearest_relative_a_offset": 0.008915701342738336,
+    "source_cause": "The inherited s1 observer is called from perturb_print_variables and therefore only records existing outer-evolver print points; it does not insert a deterministic sample at the frozen a_on for arbitrary k."
+  },
+  "immutable_s4a_contract": {
+    "new_k_Mpc_inv": [0.001, 0.003],
+    "max_k_over_Hc": 0.25,
+    "max_abs_A2_k2_over_J": 0.005,
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "required_approximation_state": [0, 0, 0, 17],
+    "scientific_thresholds_changed": false
+  },
+  "allowed_repair": {
+    "observer_only_runtime_opt_in": true,
+    "split_only_the_existing_uniform_approximation_interval_containing_tau_on": true,
+    "tau_on_method": "background_tau_of_z(pba,1/a_on-1,&tau_on)",
+    "first_segment": "same generic_evolver from original interval start to tau_on",
+    "second_segment": "same generic_evolver from tau_on to original interval end",
+    "same_derivs": "perturb_derivs",
+    "same_tolerance": true,
+    "same_timescale_function": true,
+    "same_approximation_flags": true,
+    "same_integrated_state_ownership": true,
+    "manual_state_writes_forbidden": true,
+    "metric_workspace_writes_forbidden": true,
+    "dy_writes_forbidden": true,
+    "production_kernel_changes_forbidden": true,
+    "off_path_must_use_original_unsplit_call": true
+  },
+  "frozen_checks": {
+    "parent_failure_preserved": true,
+    "source_has_runtime_observer_guard": true,
+    "source_uses_background_tau_of_z": true,
+    "source_splits_only_containing_interval": true,
+    "source_reuses_same_generic_evolver_arguments": true,
+    "source_contains_no_dy_assignment": true,
+    "source_contains_no_pvecmetric_assignment": true,
+    "source_contains_no_manual_index_pt_state_assignment": true,
+    "source_contains_no_tolerance_mutation": true,
+    "source_contains_no_approximation_criterion_mutation": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_PASS_SCOPED",
+  "fail_classification": "C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_FAIL_SCOPED",
+  "next_if_pass": "Rerun the unchanged frozen C10.65s4a scientific target with the repaired exact-onset observer path; retain run 33008095108 and commit 3f50db6b as the historical failed attempt.",
+  "non_claims": [
+    "not a reclassification of the first C10.65s4a attempt",
+    "not completed-U1 seed certification at new k",
+    "not production feedback at new k",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ]
+}
