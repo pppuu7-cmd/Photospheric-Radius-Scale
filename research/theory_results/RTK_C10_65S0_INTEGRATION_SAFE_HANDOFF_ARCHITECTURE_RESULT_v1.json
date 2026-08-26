@@ -1,0 +1,52 @@
+{
+  "architecture_decision": {
+    "allowed_integrated_writes": [
+      "pv->y[index_pt_delta_cdm]",
+      "pv->y[index_pt_theta_cdm]"
+    ],
+    "arbitrary_a_on_policy": "split the containing interval at deterministic tau_on; do not alter approximation criteria",
+    "forbidden_writes": [
+      "metric constraints",
+      "shift/projector algebraic quantities",
+      "TCA/collision coefficients",
+      "approximation flags",
+      "production metric source variables",
+      "state mutation inside perturb_derivs"
+    ],
+    "reason": "The evolver owns pv->y inside each interval; vector allocation/redistribution is centralized at interval entry. A handoff performed there is deterministic and outside adaptive RHS callbacks.",
+    "safe_handoff_site": "perturb_solve interval boundary, after perturb_vector_init and before generic_evolver"
+  },
+  "checks": {
+    "approx_switches_define_interval_limits": true,
+    "explicit_split_required_by_ownership": true,
+    "first_interval_null_previous": true,
+    "later_interval_previous_approx": true,
+    "metric_constraints_declared_nonintegrated": true,
+    "model2_carrier_delta": true,
+    "model2_carrier_theta": true,
+    "model2_sources_read_same_carrier": true,
+    "ordinary_rhs_exists": true,
+    "piecewise_interval_loop": true,
+    "vector_init_before_evolver": true,
+    "vector_init_present": true
+  },
+  "classification": "C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_PASS_SCOPED",
+  "gate": "C10.65s0",
+  "next": "C10.65s1: freeze and implement an opt-in exact-tau_on interval-split handoff canary on one completion point x four exact low-k anchors, with exact OFF rollback, first-post-handoff RHS parity, and one-short-step constraint drift diagnostics.",
+  "non_claims": [
+    "not a state handoff implementation",
+    "not a completed-U1 production feedback pass",
+    "not primordial UV derivation",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 32982082902,
+    "repo_head_at_job_start": "b6496215ce477b80d284bb723f4f18ebc601ccae",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s0-handoff-architecture-preflight.yml"
+  },
+  "schema": "RTK_C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_TARGET_v1.json",
+  "threshold_changed": false
+}
