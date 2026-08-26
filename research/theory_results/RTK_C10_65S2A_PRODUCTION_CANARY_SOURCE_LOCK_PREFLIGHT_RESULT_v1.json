@@ -217,8 +217,8 @@
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s2a_production_canary_source_lock_preflight.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
-    "github_actions_run_id": 32994439241,
-    "repo_head_at_job_start": "3db4f6f2c40576c6deda5268b4207f5328cfdeb2",
+    "github_actions_run_id": 32994519843,
+    "repo_head_at_job_start": "00f76817d436e42673458dd05d4b8fcbd368afd8",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s2a-production-canary-source-lock-preflight.yml"
   },
