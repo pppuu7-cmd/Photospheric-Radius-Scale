@@ -6,7 +6,7 @@ cancellation-sensitive combinations at small k.  Here the same frozen
 Hamiltonian+momentum system is reduced analytically using
 Q=(C2*k^2-3*a^2*dm)/(3*H) and L=-k^2, so the common L factor cancels before
 floating-point evaluation.  No threshold, state, RHS, or physical assumption is
-changed.
+changed.  The frozen B-denominator diagnostic normalization is preserved.
 """
 from pathlib import Path
 import sys
