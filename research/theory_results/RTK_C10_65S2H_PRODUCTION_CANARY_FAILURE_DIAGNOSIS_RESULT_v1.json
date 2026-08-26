@@ -1,0 +1,152 @@
+{
+  "adaptive_step_diagnostics": [
+    {
+      "after_rhs_calls": 95,
+      "before_rhs_calls": 1,
+      "compatible_A_trials_rejections": [
+        {
+          "accepted": 4,
+          "rejected": 14,
+          "trials": 18
+        },
+        {
+          "accepted": 9,
+          "rejected": 8,
+          "trials": 17
+        },
+        {
+          "accepted": 14,
+          "rejected": 2,
+          "trials": 16
+        }
+      ],
+      "k": 1e-05,
+      "maximum_accepted_substeps_compatible": 14,
+      "minimum_accepted_substeps": 4
+    },
+    {
+      "after_rhs_calls": 106,
+      "before_rhs_calls": 1,
+      "compatible_A_trials_rejections": [
+        {
+          "accepted": 5,
+          "rejected": 15,
+          "trials": 20
+        },
+        {
+          "accepted": 10,
+          "rejected": 9,
+          "trials": 19
+        },
+        {
+          "accepted": 15,
+          "rejected": 3,
+          "trials": 18
+        }
+      ],
+      "k": 3e-05,
+      "maximum_accepted_substeps_compatible": 15,
+      "minimum_accepted_substeps": 5
+    },
+    {
+      "after_rhs_calls": 101,
+      "before_rhs_calls": 1,
+      "compatible_A_trials_rejections": [
+        {
+          "accepted": 5,
+          "rejected": 14,
+          "trials": 19
+        },
+        {
+          "accepted": 10,
+          "rejected": 8,
+          "trials": 18
+        },
+        {
+          "accepted": 15,
+          "rejected": 2,
+          "trials": 17
+        }
+      ],
+      "k": 0.0001,
+      "maximum_accepted_substeps_compatible": 15,
+      "minimum_accepted_substeps": 5
+    },
+    {
+      "after_rhs_calls": 90,
+      "before_rhs_calls": 1,
+      "compatible_A_trials_rejections": [
+        {
+          "accepted": 4,
+          "rejected": 13,
+          "trials": 17
+        },
+        {
+          "accepted": 9,
+          "rejected": 7,
+          "trials": 16
+        },
+        {
+          "accepted": 14,
+          "rejected": 1,
+          "trials": 15
+        }
+      ],
+      "k": 0.0003,
+      "maximum_accepted_substeps_compatible": 14,
+      "minimum_accepted_substeps": 4
+    }
+  ],
+  "cash_karp_accounting": "N_RHS = N_accepted + 5*N_RKCK_trials + 1, N_RKCK_trials >= N_accepted. The observed counts therefore lower-bound accepted substeps without assuming how many trials were rejected.",
+  "checks": {
+    "all_other_static_guards_pass": true,
+    "literal_phrase_absent_from_v3": true,
+    "multiple_accepted_substeps_proven": true,
+    "observer_shape": true,
+    "old_static_guard_literal_identified": true,
+    "original_failed_checks_exact": true,
+    "original_physics_checks_preserved": true,
+    "original_s2_preserved_fail": true,
+    "pinned_cash_karp_accounting_source_locked": true,
+    "static_guard_false_negative_is_text_only": true,
+    "threshold_unchanged": true,
+    "v3_semantic_compile_only_statement": true
+  },
+  "classification": "C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED",
+  "gate": "C10.65s2h",
+  "next_gate": "Freeze C10.65s2i adaptive-step trace instrumentation at the original 1e-4 Mpc interval and unchanged integrator tolerance. Record accepted hdid/hnext values and rejection counts in the actual pinned production path. Only after that measurement may a separate prospective retry width be frozen; the original C10.65s2 result remains FAIL_SCOPED.",
+  "non_claims": [
+    "not a reclassification of C10.65s2",
+    "not a weakening of the exactly-one-accepted-step criterion",
+    "not a choice of a smaller retry step",
+    "not finite-time completed-U1 stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "original_s2_classification_preserved": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+  "original_s2_failed_checks": [
+    "exactly_one_accepted_step",
+    "static_guards"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s2h_failure_diagnosis.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33004085097,
+    "repo_head_at_job_start": "879efcd24b4cc1400453f0bd1a40f05adbd02378",
+    "source_observer_sha256": "67c4cdcdb88a4234a875131e481de96c9f35487781845aa849ac3d62c3c88613",
+    "source_s2_artifact_id": 9619456810,
+    "source_s2_github_actions_run_id": 33003225136,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s2h-production-canary-failure-diagnosis.yml"
+  },
+  "retry_width_selected": false,
+  "s2_reclassified": false,
+  "schema": "RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_RESULT_v1",
+  "scientific_decision": "Keep C10.65s2 FAIL_SCOPED because the exactly-one-accepted-step condition genuinely failed. Do not treat the thermo static text mismatch as physics. Instrument adaptive accepted/rejected steps at the same frozen 1e-4 interval before prospectively choosing any retry width.",
+  "static_guard_diagnosis": {
+    "diagnosis": "ANALYZER_LITERAL_NEEDLE_FALSE_NEGATIVE",
+    "original_value": false
+  },
+  "threshold_changed": false
+}
