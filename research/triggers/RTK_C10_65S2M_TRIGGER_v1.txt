@@ -1,0 +1,1 @@
+Execute frozen C10.65s2m diagnosis. Preserve s2l FAIL_SCOPED and s3a PASS_SCOPED; no threshold changes.
