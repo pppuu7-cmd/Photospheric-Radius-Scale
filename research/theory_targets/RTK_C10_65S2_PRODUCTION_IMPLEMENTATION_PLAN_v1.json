@@ -1,0 +1,53 @@
+{
+  "schema": "RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1",
+  "gate": "C10.65s2-implementation",
+  "created_utc": "2026-08-26T18:46:00Z",
+  "status": "FROZEN_BEFORE_PRODUCTION_EXECUTION",
+  "parent_target": "research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json",
+  "parent_kernel_result": "research/theory_results/RTK_C10_65S2_C_KERNEL_PARITY_AUDIT_RESULT_v1.json",
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "scope": {
+    "completion_point_count": 1,
+    "anchor_count": 4,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003],
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177
+  },
+  "execution": {
+    "evolver": "rk",
+    "short_step_delta_tau_Mpc": 0.0001,
+    "short_step_choice_status": "prospectively frozen implementation scale before the production run; not an acceptance threshold",
+    "expected_rhs_calls_for_one_accepted_no_rejection_cash_karp_step": 7,
+    "rhs_call_count_derivation": "one derivative at generic_integrator entry + five Cash-Karp internal derivative stages + one compulsory final derivative in evolver_rk",
+    "on_path_after_step": "terminate this canary perturb_solve after the one short step and zero the remaining source samples; do not continue the completed state through the historical model=2 perturbation evolution",
+    "off_path": "unmodified full historical CLASS evolution"
+  },
+  "state_ownership": {
+    "ordinary_and_metric_initial_state": "perturb_initial_conditions / perturb_vector_init only",
+    "post_vector_handoff_writes": ["index_pt_delta_cdm", "index_pt_theta_cdm"],
+    "higher_ur_l3_to_l17": "C10.65s1 historical higher-order controls only",
+    "legacy_nlde_auxiliaries": "may remain allocated as inert compatibility storage in the disposable canary tree, but are excluded from completed boundary data, completed metric algebra, and completed CDM/Khronon RHS while the canary is active"
+  },
+  "feedback": {
+    "metric_constraint_outputs": "rtk_c10_65s2_current_state at every production perturb_einstein call",
+    "class_index_mt_psi": "completed physical Phi_N",
+    "class_index_mt_phi_prime": "completed physical Psi_N_prime",
+    "cdm_slots": "completed Newtonian Khronon delta/theta derivatives from the same current-state kernel",
+    "ordinary_species": "native pinned CLASS photon/baryon/UR equations and compromise_CLASS TCA consume the completed metric workspaces"
+  },
+  "frozen_checks_inherited_unchanged": {
+    "first_production_rhs_relative_tolerance": 5e-09,
+    "exact_off_numeric_text_sha256_identity": true,
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "exactly_one_accepted_post_handoff_step_each_anchor": true,
+    "constraint_drift": "measurement only; no numerical acceptance threshold is introduced here"
+  },
+  "non_claims": [
+    "not finite-time stability",
+    "not full-time completed-U1 production evolution",
+    "not a UV derivation of the higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
