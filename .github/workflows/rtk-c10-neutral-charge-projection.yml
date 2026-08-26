@@ -1,0 +1,80 @@
+name: RTK C10 neutral charge projection
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_NEUTRAL_CHARGE_PROJECTION_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_neutral_charge_projection.py'
+      - '.github/workflows/rtk-c10-neutral-charge-projection.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  projection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_NEUTRAL_CHARGE_PROJECTION_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          print('C10_63_TARGET_FROZEN_PASS')
+          PY
+          git rev-parse HEAD | tee c10_63_repo_head.txt
+      - name: Run charge-aware projection
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_neutral_charge_projection.py
+          python3 research/shadow/rtk_c10_neutral_charge_projection.py \
+            --output c10_neutral_charge_projection_result.json | tee c10_63.log
+          grep -q '^C10_NEUTRAL_CHARGE_PROJECTION_' c10_63.log
+      - name: Add provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='c10_neutral_charge_projection_result.json'
+          d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_63_repo_head.txt').read().strip(),
+            'workflow':'rtk-c10-neutral-charge-projection.yml',
+            'worker':'research/shadow/rtk_c10_neutral_charge_projection.py'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_neutral_charge_projection_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_NEUTRAL_CHARGE_PROJECTION_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_NEUTRAL_CHARGE_PROJECTION_RESULT_v1.json
+            git commit -m 'Record C10.63 neutral charge projection result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-neutral-charge-projection
+          path: |
+            c10_63.log
+            c10_neutral_charge_projection_result.json
+          if-no-files-found: warn
