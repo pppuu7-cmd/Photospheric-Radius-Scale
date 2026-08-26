@@ -1,3 +1,4 @@
 Trigger C10.65s3c widened-time trajectory gate after C10.65s3b PASS_SCOPED.
 Frozen elapsed tau endpoints: 3e-6, 1e-5, 3e-5, 1e-4 Mpc.
 Four unchanged low-k anchors; unchanged 1e-10 normalized constraint bound; no spectra or likelihood claim.
+Retry reason: endpoint selector now accepts the independently frozen s3c list; no physics or tolerance mutation.
