@@ -1,0 +1,85 @@
+{
+  "affine_k2_fits": {
+    "b": {
+      "intercept": -2.999999999999517,
+      "max_abs_fit_residual": 1.3677947663381929e-13,
+      "slope_per_k2": -1120.9065772302642
+    },
+    "g": {
+      "intercept": -2.999999999999917,
+      "max_abs_fit_residual": 2.5002222514558525e-13,
+      "slope_per_k2": -1120.906536308518
+    },
+    "ur": {
+      "intercept": -2.999999999999917,
+      "max_abs_fit_residual": 2.5002222514558525e-13,
+      "slope_per_k2": -1120.906536308518
+    }
+  },
+  "architecture_decision": "If incompatible, preserve C10.64 as an exact zero-shift-charge sector theorem but do not call that absolute-zero sector the generic cosmological adiabatic branch. The replacement adiabatic boundary is I_khr=J_ad, and the independent neutral isocurvature coordinate is Delta I_iso=I_khr-J_ad. The frozen C10.65b zero-charge rank contract must therefore be superseded before implementation rather than interpreted as an adiabatic uniqueness test.",
+  "classification": "C10_65B0_ZERO_CHARGE_ADIABATIC_INCOMPATIBLE_SCOPED",
+  "diagnostics": {
+    "low_k_values_Mpc_inv": [
+      1e-05,
+      3e-05,
+      0.0001
+    ],
+    "ordinary_common_J_ad_intercept": -2.9999999999997833,
+    "ordinary_common_abs_spread_tolerance": 1e-06,
+    "ordinary_intercept_abs_spread": 2.6645352591003757e-13,
+    "zero_charge_relative_entropy_intercept_S_khr_minus_ad": 2.9999999999997833,
+    "zero_intercept_abs_tolerance": 0.0001
+  },
+  "exact_logic": {
+    "C10_64_boundary": "J_khr=I_khr=0",
+    "adiabatic_criterion": "J_khr=J_b=J_g=J_ur at leading regular order, not J_i=0 component by component",
+    "consequence": "the C10.64 absolute zero-charge boundary is compatible with a nonzero-curvature ordinary adiabatic mode iff the common ordinary J_ad tends to zero",
+    "gauge_invariant_component_curvature": "J_i=delta_i/(1+w_i)-3 Psi_N = delta_i,pref/(1+w_i)-3 psi_pref",
+    "relative_entropy": "S_ij=J_i-J_j"
+  },
+  "gate": "C10.65b0",
+  "low_k_records": [
+    {
+      "J_b": -3.0000001120902997,
+      "J_g": -3.0000001120907998,
+      "J_ur": -3.0000001120907998,
+      "S_zerocharge_minus_b": 3.0000001120902997,
+      "S_zerocharge_minus_g": 3.0000001120907998,
+      "S_zerocharge_minus_ur": 3.0000001120907998,
+      "k_Mpc_inv": 1e-05
+    },
+    {
+      "J_b": -3.0000010088152997,
+      "J_g": -3.0000010088155498,
+      "J_ur": -3.0000010088155498,
+      "S_zerocharge_minus_b": 3.0000010088152997,
+      "S_zerocharge_minus_g": 3.0000010088155498,
+      "S_zerocharge_minus_ur": 3.0000010088155498,
+      "k_Mpc_inv": 3e-05
+    },
+    {
+      "J_b": -3.0000112090653,
+      "J_g": -3.0000112090653,
+      "J_ur": -3.0000112090653,
+      "S_zerocharge_minus_b": 3.0000112090653,
+      "S_zerocharge_minus_g": 3.0000112090653,
+      "S_zerocharge_minus_ur": 3.0000112090653,
+      "k_Mpc_inv": 0.0001
+    }
+  ],
+  "next_gate": "If incompatible, freeze C10.65c with the corrected common-curvature boundary I_khr=J_ad, derive delta_khr0 from it, solve V_khr0 and B0 from the completed preferred DAE O(k^2) system, and rerun the one-growing-direction rank test. If compatible, proceed with the existing C10.65b contract.",
+  "non_claims": [
+    "not a no-go for the RTK/U1 completion",
+    "not a completed-U1 gradient/rank solve",
+    "not a microscopic derivation of the replacement boundary",
+    "not a spectra or likelihood result",
+    "not massive-neutrino coverage"
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "42bcb2614566f433c457e919c4ff9e5773e86b16",
+    "worker": "research/shadow/rtk_c10_65b0_zero_charge_adiabatic_preflight.py",
+    "workflow": "rtk-c10-65b0-zero-charge-adiabatic-preflight.yml"
+  },
+  "schema": "RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65B0_ZERO_CHARGE_ADIABATIC_PREFLIGHT_TARGET_v1.json"
+}
