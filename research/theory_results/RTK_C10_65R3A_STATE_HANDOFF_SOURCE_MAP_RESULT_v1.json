@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "accepted_step_output_occurs_after_integrator": true,
+    "derivative_callback_writes_same_two_slots": true,
+    "integrator_advances_y_in_place": true,
+    "integrator_derivative_callback_owns_dy": true,
+    "khronon_state_reuses_delta_cdm_slot": true,
+    "khronon_state_reuses_theta_cdm_slot": true,
+    "newtonian_phi_prime_from_metric_continuity": true,
+    "newtonian_psi_from_metric_euler_over_k2": true,
+    "r2_parent_pass": true,
+    "r3_production_write_absent_before_later_gate": true,
+    "stress_tensor_reads_same_two_slots": true
+  },
+  "classification": "C10_65R3A_STATE_HANDOFF_SOURCE_MAP_PREFLIGHT_PASS_SCOPED",
+  "gate": "C10.65r3a",
+  "interpretation": "The exact software ownership boundary for a later opt-in state handoff/short-step experiment is mapped in the pinned implementation. This does not authorize or execute a handoff and gives no dynamical-stability result.",
+  "next": "Freeze C10.65r3b before coding: an opt-in, rollback-capable onset handoff experiment on a disposable state copy, with an exact OFF-path identity check, explicit before/after state vectors, a separately frozen step prescription derived from the pinned integrator timescale, completed-U1 constraint residuals, and no full-spectrum claim.",
+  "non_claims": [
+    "not a state handoff",
+    "not a dy override",
+    "not one-step integration",
+    "not short-step stability",
+    "not full time integration",
+    "not spectra or likelihood evidence",
+    "not same-full-action primordial/background closure",
+    "not resolution of C9 radiative naturalness"
+  ],
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 32982045014,
+    "repo_head_at_job_start": "ee5a052f3391586808c3e29755a12ada9ba5420d",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65r3a-source-map.yml"
+  },
+  "schema": "RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_RESULT_v1",
+  "state_map": {
+    "derivative_write_slots": [
+      "index_pt_delta_cdm",
+      "index_pt_theta_cdm"
+    ],
+    "integrator_evidence": {
+      "ndf_derivs_callback": true,
+      "rk_derivs_callback": true,
+      "rk_generic_integrator_in_place_y": true,
+      "rk_output_after_integrator": true
+    },
+    "metric_mapping": {
+      "phi_prime": "-metric_continuity/3",
+      "psi": "metric_euler/k2"
+    },
+    "source_files": [
+      "rtk/apply_rtk_class_patch.py",
+      "source/perturbations.c",
+      "tools/evolver_rkck.c",
+      "tools/evolver_ndf15.c"
+    ],
+    "state_slots": {
+      "delta": "index_pt_delta_cdm",
+      "theta": "index_pt_theta_cdm"
+    },
+    "stress_tensor_read_slots": [
+      "index_pt_delta_cdm",
+      "index_pt_theta_cdm"
+    ]
+  },
+  "target": "research/theory_targets/RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_TARGET_v1.json",
+  "threshold_changed": false
+}
