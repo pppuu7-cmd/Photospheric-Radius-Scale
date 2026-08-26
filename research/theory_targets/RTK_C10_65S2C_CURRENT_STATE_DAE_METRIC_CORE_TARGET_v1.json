@@ -1,0 +1,73 @@
+{
+  "schema": "RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_TARGET_v1",
+  "created_utc": "2026-08-26T17:58:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s2c",
+  "purpose": "Derive and certify a current-state completed-U1 metric-core map suitable for internal integrator stages. It must consume the instantaneous Newtonian CLASS state plus local background/completion parameters and reconstruct B, psi_pref, psi_pref_prime, phi_pref and Psi_N without reusing the hard-coded onset matching coefficients embedded in the C10.65r1 seed evaluator.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_RESULT_v1.json"
+  ],
+  "input_state": [
+    "Psi_N = Newtonian CLASS integrated phi state",
+    "delta_b,theta_b,delta_g,theta_g,delta_ur,theta_ur",
+    "delta_khr_N,theta_khr_N in the repurposed CDM slots",
+    "local a,H,rho_b,rho_g,rho_ur,rho_khr,p_khr",
+    "lambda_HL,M_c"
+  ],
+  "derived_current_state_core": {
+    "ordinary_dressed": "D_b=delta_b-3 Psi_N; D_g=delta_g-4 Psi_N; D_ur=delta_ur-4 Psi_N",
+    "h": "rho_b D_b + rho_g D_g + rho_ur D_ur",
+    "p_hat0": "(rho_g D_g + rho_ur D_ur)/3",
+    "W0": "rho_b+4(rho_g+rho_ur)/3",
+    "Wk": "rho_khr+p_khr",
+    "K": "-(3/2)a^2/(k^2+a^2 M_c^2)",
+    "D_A": "1-3 K W0",
+    "psi_pref": "K h/D_A",
+    "q0_N": "a[rho_b theta_b+(4/3)rho_g theta_g+(4/3)rho_ur theta_ur]/k^2",
+    "h_prime": "-3H(h+p_hat0)-(k^2/a)q0_N",
+    "psi_pref_prime": "[K_prime h+K h_prime-D_A_prime psi_pref]/D_A",
+    "delta_mu_pref_zeroB_part": "h+3W0 psi_pref+rho_khr delta_khr_N",
+    "Q_partial_zeroB": "3a[q0_N+a Wk theta_khr_N/k^2]",
+    "neutral_coordinate_dependence": "delta_khr_pref=delta_khr_N+3(1+w_khr)H B; theta_khr_pref=theta_khr_N-k^2 B",
+    "B_denominator_after_exact_neutral_and_ordinary_source_maps": "r E L^2-2D L H^2+E L[3a^2(W0+Wk)]+3D H^2[3a^2 W0]",
+    "B_numerator_zeroB": "E L(Q0-D psi_pref_prime)+3D H^2 Q0+3D H a^2 delta_mu0-2D P L H psi_pref",
+    "B": "B_numerator_zeroB/B_denominator",
+    "delta_mu_pref": "delta_mu0+3H Wk B",
+    "Q_pref": "Q0-3a^2(W0+Wk)B",
+    "phi_pref": "[-3a^2 r delta_mu_pref-D H Q_pref+2D H psi_pref_prime+2rP L psi_pref]/[r E L-2D H^2]",
+    "Psi_N_reconstructed": "psi_pref-H B"
+  },
+  "constants_for_frozen_diagnostic_grid": {"E": 2.0, "P": 1.0},
+  "frozen_checks": {
+    "grid_point_count": 9,
+    "anchor_count_per_point": 4,
+    "max_B_relative_vs_C10_65n": 5e-9,
+    "max_psi_pref_relative_vs_C10_65n": 5e-9,
+    "max_psi_pref_prime_relative_vs_C10_65n": 5e-9,
+    "max_phi_pref_relative_vs_C10_65n": 5e-9,
+    "max_Psi_N_relative_vs_integrated_state": 5e-9,
+    "max_normalized_A_residual": 5e-12,
+    "max_normalized_Hamiltonian_residual": 5e-12,
+    "max_normalized_momentum_residual": 5e-12,
+    "all_denominators_finite_nonzero": true,
+    "all_outputs_finite": true,
+    "forbidden_hard_coded_seed_inputs": ["A2", "C2", "J_ad", "S_ur0"],
+    "no_traceless_Phi_N_claim_in_s2c": true,
+    "no_production_patch_in_s2c": true
+  },
+  "pass_classification": "C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_PASS_SCOPED",
+  "fail_classification": "C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_FAIL_SCOPED",
+  "next_if_pass": "Freeze C10.65s2d current-state traceless/TCA closure: source-lock a dynamic compromise_CLASS photon shear plus massless-UR shear interface and reconstruct Phi_N from the current state, reproducing C10.65r2 first-RHS lapse/euler quantities at onset before the s2 production canary is implemented.",
+  "non_claims": [
+    "not the photon TCA traceless closure",
+    "not production feedback",
+    "not finite-time stability",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
