@@ -1,0 +1,53 @@
+{
+  "schema": "RTK_C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_TARGET_v1",
+  "gate": "C10.65s5b",
+  "created_utc": "2026-08-26T22:53:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s5a": "C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_PASS_SCOPED",
+    "C10.65s4b": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED"
+  },
+  "purpose": "At the single next anchor k=0.01 Mpc^-1, evaluate the inherited phenomenological matching polynomial and the already-certified completed-U1 algebraic onset projector without production feedback. Require a finite completed carrier, finite/nonzero algebraic denominators, exact A/Hamiltonian/momentum and physical traceless closure to the preregistered numerical residual levels, and exact regression to the previously certified k=0.003 seed. This tests algebraic usability only; it does not certify that omitted O(k^4) pre-EFT matching terms are negligible outside the old s4a superhorizon guards.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "regression_k_Mpc_inv": [0.003],
+    "new_k_Mpc_inv": [0.01],
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "matching_polynomial_status": "INHERITED_PRE_EFT_PHENOMENOLOGICAL_EXTRAPOLATION_UNCERTIFIED_OMITTED_ORDER"
+  },
+  "prospective_checks": {
+    "new_anchor_count": 1,
+    "projector_constraint_normalized_residual_max": 1e-20,
+    "physical_traceless_normalized_residual_max": 1e-20,
+    "regression_relative_max": 1e-12,
+    "all_projector_denominators_nonzero": true,
+    "all_projector_and_carrier_values_finite": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "historical_CLASS_metric_not_consumed": true,
+    "active_UR_l_ge_3_source": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S5A_ONLY",
+    "threshold_changed": false
+  },
+  "measurement_only": {
+    "abs_A2_k2_over_J": "record from s5a; no new threshold is introduced here",
+    "completed_carrier_vs_legacy_observer": "record selected ordinary-coordinate differences only as a diagnostic; historical CLASS metric/state is not promoted to completed-U1 boundary truth",
+    "algebraic_denominator_magnitudes": "record all, require only finite and nonzero in this gate"
+  },
+  "pass_classification": "C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED",
+  "fail_classification": "C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_FAIL_SCOPED",
+  "interpretation_if_pass": "The inherited phenomenological O(k^2) matching polynomial can be algebraically propagated through the completed-U1 onset projector at k=0.01 Mpc^-1 without a pole or numerical inconsistency, producing a finite carrier while preserving the certified k=0.003 regression. This is an algebraic/extrapolation usability result only, not evidence that omitted O(k^4) matching terms are small.",
+  "next_if_pass": "Freeze C10.65s5c omitted-order/sensitivity gate before any k=0.01 production feedback: perturb the uncomputed higher-order matching content through a prospectively specified dimensionless envelope and quantify its effect on the completed onset carrier/projector without tuning to the outcome.",
+  "non_claims": [
+    "not a derivation of the pre-EFT matching polynomial at near-horizon k",
+    "not proof that omitted O(k^4) terms are negligible",
+    "not production feedback at k=0.01",
+    "not finite-time stability at k=0.01",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
