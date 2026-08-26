@@ -1,0 +1,52 @@
+{
+  "schema": "RTK_C10_65R3_OPT_IN_FIRST_STATE_HANDOFF_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65r3",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Test the first opt-in production-facing state handoff of the completed-U1 onset RHS without yet claiming stable time evolution, spectra, or likelihood validity.",
+  "parents": [
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json"
+  ],
+  "implementation_contract": [
+    "start from the pinned r1 plus r2g implementation stack and pinned CLASS upstream SHA 36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "add a separate opt-in c10_65r3_feedback flag with default 0; default/OFF execution must not alter the production trajectory",
+    "when c10_65r3_feedback=1, the first handoff is allowed only at the already frozen exact completion onset and only in the explicitly enumerated completed-U1 derivative/state slots required by the closed system",
+    "the pre-handoff RHS must be captured before any write and compared to the r2-certified completed-U1 RHS reconstruction",
+    "no background equation, thermodynamics equation, TCA switching criterion, collision coefficient, primordial initial condition, matching value, or unrelated perturbation slot may be changed",
+    "no tolerance from C10.65r2 may be weakened",
+    "this gate tests the first state handoff only; it must not be interpreted as evidence that subsequent integration is stable or physically certified"
+  ],
+  "frozen_checks": {
+    "off_path_numeric_text_sha256_identical_all_four": true,
+    "off_path_max_relative_difference": 0.0,
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "all_handoff_values_finite": true,
+    "max_prewrite_r2_rhs_reconstruction_relative": 5e-9,
+    "max_postwrite_value_vs_certified_r2_rhs_relative": 5e-9,
+    "max_r1_projector_regression_relative": 5e-11,
+    "max_weighted_photon_baryon_slip_cancel_normalized_residual": 5e-13,
+    "no_background_write_static_guard": true,
+    "no_thermodynamics_write_static_guard": true,
+    "no_tca_switch_or_collision_coefficient_write_static_guard": true,
+    "writes_confined_to_explicit_completed_u1_handoff_slots": true,
+    "default_feedback_flag_zero": true
+  },
+  "required_scope": {
+    "parameter_grid_points": 9,
+    "k_anchors_per_point": 4,
+    "first_handoff_only": true,
+    "must_include_control_off_run": true
+  },
+  "pass_classification": "C10_65R3_OPT_IN_FIRST_STATE_HANDOFF_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65R3_OPT_IN_FIRST_STATE_HANDOFF_PREFLIGHT_FAIL_SCOPED",
+  "next_if_pass": "freeze C10.65r4 short-interval integration stability target before allowing completed-U1 feedback to propagate over a finite time interval",
+  "next_if_fail": "localize state-index, gauge-variable, or write-order mismatch; do not proceed to finite-time feedback integration",
+  "non_claims": [
+    "not stable completed-U1 evolution",
+    "not a full production implementation certification",
+    "not spectra evidence",
+    "not likelihood or model-selection evidence",
+    "not a proof of the RTK model"
+  ]
+}
