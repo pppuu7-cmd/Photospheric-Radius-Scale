@@ -1,0 +1,126 @@
+name: RTK C10.65s4d moderate-k one-step production canary
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/triggers/RTK_C10_65S4D_TRIGGER_v1.txt'
+permissions: {contents: write, actions: read}
+jobs:
+  canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen parents
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s4d_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_TARGET_v1.json');b=L('research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json');c=L('research/theory_results/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2.json');k=L('research/theory_results/RTK_C10_65S2K_ONE_ACCEPTED_STEP_RETRY_RESULT_v1.json');e=L('research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION';assert b['classification']=='C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED';assert c['classification']=='C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_PASS_SCOPED';assert k['classification']=='C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED';assert e['classification']=='C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED';assert t['execution']['retry_width_Mpc']==k['retry_width_Mpc'];assert t['execution']['evolver']=='rk';assert t['execution']['before_rhs_calls']==1 and t['execution']['after_rhs_calls']==7
+          print('C10_65S4D_FROZEN_PARENTS_VERIFIED')
+          PY
+      - name: Prepare pinned control and moderate-k trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control
+          git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          for x in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do python3 "rtk/$x" class_control; done
+          make -C class_control -j2 class
+          cp -a class_control class_s4d
+          python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py class_s4d
+          python3 rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py class_s4d
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('class_s4d/source/rtk_c10_65s2_class_bridge.c').read_text()
+          assert 'static const s2seed S[2]' in s
+          assert 'for(i=0;i<2;i++)' in s
+          assert '3.53993611477497e-10' in s or '3.5399361147749699e-10' in s
+          for z in ['1.0000000000000001e-05','3.0000000000000001e-05']: assert z not in s
+          print('C10_65S4D_DOMAIN_ONLY_SOURCE_GUARD_PASS')
+          PY
+          make -C class_s4d clean
+          make -C class_s4d -j2 class
+      - name: Write frozen-domain inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_TARGET_v1.json');p=L('research/state/current.json')['final_replay_result']['rtk']['params'];d=t['domain'];ks=', '.join(format(float(x),'.17g') for x in d['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_1/Mpc = 0.0031\nz_pk = 0\nk_output_values = {ks}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nevolver = 0\nl_max_ur = 17\nc10_65r0_diag = 0\nc10_65r1_diag = 0\nc10_65r1_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65r1_Mc = {float(d['M_c_Mpc_inv']):.17g}\n'''
+          for q in ('class_control/output','class_s4d/output'):pathlib.Path(q).mkdir(exist_ok=True)
+          pathlib.Path('class_control/control.ini').write_text(common+'root = output/control_\n')
+          extra=f'''c10_65s2_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65s2_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_a_on = {float(d['a_on']):.17g}\n'''
+          pathlib.Path('class_s4d/off.ini').write_text(common+'c10_65s2_canary = 0\n'+extra+'root = output/off_\n')
+          pathlib.Path('class_s4d/on.ini').write_text(common+'c10_65s2_canary = 1\n'+extra+'root = output/on_\n')
+          PY
+      - name: Verify exact OFF rollback
+        run: |
+          set -euo pipefail
+          (cd class_control && ./class control.ini) > s4d_control.log 2>&1
+          (cd class_s4d && env -u RTK_C10_65S2_OBSERVER_FILE ./class off.ini) > s4d_off.log 2>&1
+          python3 - <<'PY'
+          import glob,hashlib,json,pathlib
+          def dig(p):
+            q='\n'.join(x.strip() for x in pathlib.Path(p).read_text().splitlines() if x.strip() and not x.lstrip().startswith('#'))+'\n';return hashlib.sha256(q.encode()).hexdigest()
+          A=sorted(glob.glob('class_control/output/control_*perturbations*'));B=sorted(glob.glob('class_s4d/output/off_*perturbations*'));assert len(A)==len(B)==2,(A,B)
+          rec=[];ok=True
+          for x,y in zip(A,B):
+            a,b=dig(x),dig(y);z=a==b;ok &= z;rec.append({'control':x,'s4d_off':y,'control_sha256':a,'s4d_off_sha256':b,'identical':z})
+          pathlib.Path('s4d_off_identity.json').write_text(json.dumps({'all_two_numeric_rows_sha256_identical':bool(ok),'records':rec},indent=2,sort_keys=True)+'\n');assert ok
+          PY
+      - name: Execute moderate-k one-step canary
+        run: |
+          set -euo pipefail
+          rm -f s4d_observer.csv
+          (cd class_s4d && RTK_C10_65S2_OBSERVER_FILE="$(pwd)/../s4d_observer.csv" ./class on.ini) > s4d_on.log 2>&1
+          test -s s4d_observer.csv
+      - name: Analyze frozen s4d
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s4d_moderate_k_one_step_analyzer.py --observer s4d_observer.csv --off-identity s4d_off_identity.json --domain-patch rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py --bridge class_s4d/source/rtk_c10_65s2_class_bridge.c --output research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json | tee s4d.log
+      - name: Add provenance
+        if: always()
+        run: |
+          set -euo pipefail
+          p=research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json;[ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib,hashlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s4d_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s4d-moderate-k-one-step-production-canary.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'observer_sha256':hashlib.sha256(pathlib.Path('s4d_observer.csv').read_bytes()).hexdigest(),'base_production_patch':'rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py','domain_patch':'rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py','analyzer':'research/shadow/rtk_c10_65s4d_moderate_k_one_step_analyzer.py','s2k_parent_run_id':33004868239,'s4b_parent_run_id':33011880042,'s4c_parent_run_id':33013704766,'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          PY
+      - name: Persist result
+        if: always()
+        run: |
+          set -euo pipefail
+          p=research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json;[ -f "$p" ] || exit 0;cp "$p" /tmp/r.json
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r.json "$p";git config user.name 'github-actions[bot]';git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p";git commit -m 'Record C10.65s4d moderate-k one-step canary' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s4d-moderate-k-one-step-production-canary
+          path: |
+            s4d_control.log
+            s4d_off.log
+            s4d_on.log
+            s4d.log
+            s4d_observer.csv
+            s4d_off_identity.json
+            research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json
+      - name: Enforce scientific classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1.json'));assert d['checks']['threshold_changed'] is False;assert d['classification']=='C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_PASS_SCOPED',d
+          print(d['classification'])
+          PY
