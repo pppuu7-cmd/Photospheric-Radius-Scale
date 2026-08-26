@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_65R2G_SEPARATE_NOINLINE_OBSERVER_TARGET_v1",
+  "gate": "C10.65r2g",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Eliminate the C10.65r2 dormant code-generation perturbation by moving all heavy first-RHS diagnostic arithmetic into a separately compiled noinline/noclone observer while leaving only one post-r1-store external call in perturbations.c.",
+  "parents": [
+    "research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_FAIL_RUN2_v1.json"
+  ],
+  "implementation_contract": [
+    "start from the pinned r1 patch stack; do not apply the inline r2 patch",
+    "add only the dormant c10_65r2_diag input field/parser and the 13 conditional r2 output titles to CLASS core files",
+    "compile the r2 dual algebra and first-RHS observer in a separate source/rtk_c10_65r2_observer.c translation unit with noinline,noclone entry point and no LTO",
+    "after the final r1 class_store_double, perturbations.c makes exactly one external observer call; it must not reference any r1_* temporary in its argument list",
+    "the observer reads the 16 already-materialized r1 output doubles from dataptr[storeidx-16:storeidx], reconstructs background/TCA quantities from pvecback/pvecthermo, and appends the 13 r2 columns only when c10_65r2_diag=1",
+    "preserve the corrected physical-shear convention: photon and UR sigma/k^2 coefficients acquire k^2 only where physical sigma enters Euler equations",
+    "preserve every r2 arithmetic expression and all frozen scientific tolerances; no production dy, production metric source, TCA switch, collision coefficient, matching value or r1 arithmetic may be changed"
+  ],
+  "frozen_checks": {
+    "r1_control_repeat_exact": true,
+    "dormant_r2_numeric_text_exact_identity_all_four": true,
+    "dormant_r2_max_relative_difference": 0.0,
+    "on_path_exact_onset_relative_tolerance": 1e-12,
+    "on_path_all_finite": true,
+    "on_path_r1_projector_regression_relative": 5e-11,
+    "on_path_r2_vs_previous_scientific_parity_relative": 5e-9,
+    "on_path_weighted_slip_cancel_normalized": 5e-13,
+    "static_no_dy_write": true,
+    "static_no_production_metric_or_rhs_write": true,
+    "caller_does_not_reference_r1_temporaries": true,
+    "observer_is_separate_object": true,
+    "observer_entry_noinline_noclone": true
+  },
+  "pass_classification": "C10_65R2G_SEPARATE_NOINLINE_OBSERVER_CODEGEN_ISOLATION_PASS_SCOPED",
+  "fail_classification": "C10_65R2G_SEPARATE_NOINLINE_OBSERVER_CODEGEN_ISOLATION_FAIL_SCOPED",
+  "next_if_pass": "rerun the original frozen C10.65r2 3x3x4 target unchanged with the r2g implementation; only that original target may close C10.65r2",
+  "next_if_fail": "move the single observer hook outside perturbations.c entirely, into a post-row observer in output serialization, while keeping the original C10.65r2 target unchanged",
+  "non_claims": [
+    "not a pass of C10.65r2 by itself",
+    "not production completed-U1 feedback",
+    "not a change to any frozen scientific tolerance",
+    "not spectra or likelihood evidence"
+  ]
+}
