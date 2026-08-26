@@ -1,0 +1,24 @@
+{
+  "gate": "C10.65r2c",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Resolve the r2b finite-k non-tangency obstruction without changing C10.65r2: derive a cancellation-reduced form of the general mixed-interface projector that is valid off the fixed-C2 onset manifold, then verify both B and its directional derivative against the original C10.65q projector.",
+  "derived_general_form": {
+    "definitions": "r=lambda_HL-1, D=3 lambda_HL-1, L=-k^2, E=2, P=1, X0=3 a^2 W0, Q=Qbase, s=psi_pref_prime",
+    "B": "[E L (Q-D s) + 3 D H^2 Q + 3 D H a^2 delta_mu_pref - 2 D H P L psi_pref] / [r E L^2 - 2 D H^2 L + E L X0 + 3 D H^2 X0]",
+    "identity_used": "D(D-2)=3 r D"
+  },
+  "grid": {"completion_points":9,"low_k_anchors":4,"record_count":36},
+  "direction": "Exactly the C10.65q zero-slip aggregate first-RHS direction; actual-slip invariance remains inherited from q.",
+  "frozen_checks": {
+    "max_stable_vs_original_B_relative": 1e-40,
+    "max_stable_vs_original_Bprime_relative": 1e-35,
+    "max_70_vs_100_dps_stable_Bprime_relative": 1e-30,
+    "max_onset_q_Bprime_record_relative": 5e-15,
+    "record_count": 36
+  },
+  "pass_classification": "C10_65R2C_GENERAL_PROJECTOR_DIRECTIONAL_EQUIVALENCE_PASS_SCOPED",
+  "fail_classification": "C10_65R2C_GENERAL_PROJECTOR_DIRECTIONAL_EQUIVALENCE_FAIL",
+  "interpretation_if_pass": "The r2 C implementation should differentiate this general off-manifold cancellation-reduced projector, not the fixed-C2 onset specialization. This preserves the same physical mixed-interface projector and q direction while avoiding the invalid assumption that the onset matching condition is dynamically tangent.",
+  "hard_nonclaims": ["not C10.65r2 first-RHS parity","not a dy write","not feedback integration","not same-full-action primordial/background closure","not radiative naturalness"],
+  "r2_frozen_target_unchanged": true
+}
