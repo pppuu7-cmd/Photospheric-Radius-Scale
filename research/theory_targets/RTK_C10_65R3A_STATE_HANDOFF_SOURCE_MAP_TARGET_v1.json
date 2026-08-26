@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_65R3A_STATE_HANDOFF_SOURCE_MAP_TARGET_v1",
+  "gate": "C10.65r3a",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Before any completed-U1 production state handoff or dy override is implemented, extract and certify the exact pinned-CLASS state slots, derivative write slots, stress-tensor read slots, Newtonian metric-source convention, and integrator ownership/step hooks that a later one/short-step gate must use. This gate is static/source-map only and must not write state.",
+  "parents": {
+    "C10.65r2": "C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_PASS_SCOPED",
+    "C10.65r1": "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED"
+  },
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_checks": {
+    "r2_parent_pass": true,
+    "khronon_state_reuses_delta_cdm_slot": true,
+    "khronon_state_reuses_theta_cdm_slot": true,
+    "stress_tensor_reads_same_two_slots": true,
+    "derivative_callback_writes_same_two_slots": true,
+    "newtonian_phi_prime_from_metric_continuity": true,
+    "newtonian_psi_from_metric_euler_over_k2": true,
+    "integrator_derivative_callback_owns_dy": true,
+    "integrator_advances_y_in_place": true,
+    "accepted_step_output_occurs_after_integrator": true,
+    "r3_production_write_absent_before_later_gate": true
+  },
+  "pass_classification": "C10_65R3A_STATE_HANDOFF_SOURCE_MAP_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65R3A_STATE_HANDOFF_SOURCE_MAP_PREFLIGHT_FAIL_SCOPED",
+  "interpretation_if_pass": "The exact software ownership boundary for a later opt-in state handoff/short-step experiment is mapped in the pinned implementation. This does not authorize or execute a handoff and gives no dynamical-stability result.",
+  "next_if_pass": "Freeze C10.65r3b before coding: an opt-in, rollback-capable onset handoff experiment on a disposable state copy, with an exact OFF-path identity check, explicit before/after state vectors, a separately frozen step prescription derived from the pinned integrator timescale, completed-U1 constraint residuals, and no full-spectrum claim.",
+  "non_claims": [
+    "not a state handoff",
+    "not a dy override",
+    "not one-step integration",
+    "not short-step stability",
+    "not full time integration",
+    "not spectra or likelihood evidence",
+    "not same-full-action primordial/background closure",
+    "not resolution of C9 radiative naturalness"
+  ]
+}
