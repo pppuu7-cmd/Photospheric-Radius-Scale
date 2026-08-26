@@ -1,2 +1,4 @@
 C10.65s4d frozen moderate-k one-accepted-step production canary trigger v1
-2026-08-26T21:15:00Z
+2026-08-27T00:29:00+03:00
+retry_reason=software_anchor_fix_only
+frozen_criteria_unchanged=true
