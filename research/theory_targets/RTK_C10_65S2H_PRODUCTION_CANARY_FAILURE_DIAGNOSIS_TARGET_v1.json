@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_TARGET_v1",
+  "gate": "C10.65s2h",
+  "created_utc": "2026-08-26T19:13:00Z",
+  "status": "FROZEN_BEFORE_DIAGNOSIS_EXECUTION",
+  "purpose": "Diagnose the two preregistered failures of C10.65s2 without reclassifying the failed gate, changing its physical thresholds, or selecting a retry step size post hoc. Separate a substantive adaptive-step multiplicity failure from any analyzer-only static-guard false negative using the immutable C10.65s2 artifact and the pinned CLASS Cash-Karp implementation.",
+  "parent": {
+    "result": "research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json",
+    "classification": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+    "github_actions_run_id": 33003225136,
+    "artifact_id": 9619456810,
+    "artifact_name": "rtk-c10-65s2-production-canary",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317"
+  },
+  "frozen_diagnosis_contract": {
+    "preserve_original_s2_fail": true,
+    "required_original_failed_checks_exactly": ["exactly_one_accepted_step", "static_guards"],
+    "required_original_physics_checks_true": ["approximation", "boundary_state", "constraint_capture", "finite", "first_production_rhs", "first_rhs_calls", "off_identity", "onset", "record_counts", "step_width", "threshold_unchanged"],
+    "cash_karp_rhs_accounting": "For the pinned evolver_rk/generic_integrator/rkqs/rkck path with no output callback inside the frozen short interval, N_RHS = N_accepted + 5*N_RKCK_trials + 1 compulsory final derivative, with N_RKCK_trials >= N_accepted >= 1.",
+    "substantive_step_failure_test": "For every anchor, infer the minimum integer N_accepted compatible with the observed AFTER rhs_calls and require that minimum to exceed 1. This proves that the frozen 1e-4 Mpc interval was split into multiple accepted adaptive substeps, rather than merely suffering rejected trials.",
+    "static_guard_diagnosis": "The original analyzer's thermo_signature_fix_only guard searched for the literal phrase 'no physics/criteria changes'. The executed v3 patch instead states 'No physics or frozen criteria change' and 'compile-only thermo/prototype fixes'. Confirm this is a text-needle mismatch while retaining all other static guards and the independent OFF identity / first-RHS parity evidence.",
+    "no_retry_width_selection": true,
+    "no_threshold_change": true,
+    "no_s2_reclassification": true
+  },
+  "pass_classification": "C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED",
+  "fail_classification": "C10_65S2H_FAILURE_DIAGNOSIS_FAIL_SCOPED",
+  "next_if_pass": "Freeze C10.65s2i adaptive-step trace instrumentation at the original 1e-4 Mpc interval and unchanged integrator tolerance. Record accepted hdid/hnext values and rejection counts in the actual pinned production path. Only after that measurement may a separate prospective retry width be frozen; the original C10.65s2 result remains FAIL_SCOPED.",
+  "non_claims": [
+    "not a reclassification of C10.65s2",
+    "not a weakening of the exactly-one-accepted-step criterion",
+    "not a choice of a smaller retry step",
+    "not finite-time completed-U1 stability",
+    "not full-time production evolution",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
