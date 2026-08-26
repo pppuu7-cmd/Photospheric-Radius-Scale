@@ -1,0 +1,171 @@
+{
+  "background": {
+    "Hc": 0.0129629303512,
+    "Hc_prime": -0.00013196681271516545,
+    "a": 0.0002203229136467,
+    "ca2_khr": 1.6858216039721475e-30,
+    "kstar_Mpc_inv": 7358353656213.812,
+    "w_khr": 5.992459774689938e-17
+  },
+  "checks": {
+    "B": true,
+    "Phi_N": true,
+    "Psi_N": true,
+    "algebraic_denominators_nonzero": true,
+    "first_rhs_finite": true,
+    "historical_metric_not_consumed": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "preferred_A_H_M": true,
+    "record_count": true,
+    "s2e_failed_parent_preserved": true,
+    "s2f_conditioning_pass": true,
+    "s2g_kernel_preflight_pass": true,
+    "threshold_changed": false,
+    "traceless": true,
+    "weighted_slip_cancel": true
+  },
+  "classification": "C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_PASS_SCOPED",
+  "gate": "C10.65s4c",
+  "interpretation": "At k=1e-3 and 3e-3 Mpc^-1 the widened onset carrier can be consumed by the same current-state completed-U1 DAE/TCA/derivative kernels already certified at low k under the s2f/s2g conditioning resolution, with algebraic metric parity to s4b and a finite first RHS. This authorizes only a later short production canary at these two modes; it is not finite-time stability.",
+  "maxima": {
+    "B": 1.5146403437928713e-16,
+    "Phi_N": 1.8745776221798272e-16,
+    "Psi_N": 0.0,
+    "preferred_A_H_M": 3.008364625367285e-16,
+    "traceless": 0.0,
+    "weighted_slip_cancel": 0.0
+  },
+  "min_abs_algebraic_denominator": 4.172030445637459e-07,
+  "next_gate": "Freeze C10.65s4d moderate-k one-step production canary at exactly k=1e-3 and 3e-3 Mpc^-1, preserving the existing completed-U1 production equations, OFF rollback and integrator settings before execution.",
+  "non_claims": [
+    "not a reclassification of C10.65s2e",
+    "not production integration at the new modes",
+    "not finite-time moderate-k stability",
+    "not validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not a UV derivation of the matching control or higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s4c_moderate_k_current_state_first_rhs_parity.py",
+    "github_actions_run_id": 33013704766,
+    "repo_head_at_job_start": "76987be1ec67ae2ff73758762408ac36be686bf7",
+    "s2f_parent_run_id": 32998912001,
+    "s2g_parent_run_id": 32999128166,
+    "s4b_parent_run_id": 33011880042,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s4c-moderate-k-current-state-first-rhs-parity.yml"
+  },
+  "records": [
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "cs2": 1.6858216039721475e-30,
+      "current_metric": {
+        "B": -188.04562856557183,
+        "Phi_N": 2.3690094482919277,
+        "Psi_N": 2.437779355954528
+      },
+      "denominators": {
+        "B": 4.214122385388255e-07,
+        "Bprime_implicit": 0.6960780220913207,
+        "D_A": 1.000156936008775,
+        "filter": 3.9900009999999995,
+        "lapse": -0.0006738381819484531,
+        "shear_feedback": 0.9999970315069496
+      },
+      "first_rhs": {
+        "B_prime": 3.0169931364078075,
+        "Psi_N_prime": -0.0639328327873428,
+        "delta_khr_N_prime": -0.19168755616707722,
+        "delta_khr_pref_prime": 8.700626528647942e-05,
+        "metric_continuity": 0.1917984983620284,
+        "metric_euler": 2.3690094482919274e-06,
+        "tca_slip": -1.168289982131232e-12,
+        "theta_b_prime": 3.80651302628374e-06,
+        "theta_g_prime": 3.806514194573722e-06,
+        "theta_khr_N_prime": 3.798073311105274e-06,
+        "theta_khr_pref_prime": 7.810801746974661e-07,
+        "theta_ur_prime": 3.806116260309289e-06
+      },
+      "historical_CLASS_metric_consumed": false,
+      "k": 0.001,
+      "lambda_HL": 1.0016708437761068,
+      "legacy_nlde_auxiliaries_excluded": true,
+      "metric_relative_errors_vs_s4b": {
+        "B": 1.511426223901467e-16,
+        "Phi_N": 1.8745776221798272e-16,
+        "Psi_N": 0.0
+      },
+      "preferred_residuals": {
+        "A": 0.0,
+        "Hamiltonian": 0.0,
+        "momentum": 1.4998883890237636e-16
+      },
+      "s4b_metric": {
+        "B": -188.0456285655718,
+        "Phi_N": 2.3690094482919273,
+        "Psi_N": 2.437779355954528
+      },
+      "traceless_residual_normalized": 0.0,
+      "weighted_photon_baryon_slip_cancellation": 0.0
+    },
+    {
+      "M_c_Mpc_inv": 9066.231026460177,
+      "cs2": 1.6858216039721475e-30,
+      "current_metric": {
+        "B": -187.6465891515346,
+        "Phi_N": 2.363834669481397,
+        "Psi_N": 2.432607104528696
+      },
+      "denominators": {
+        "B": 4.172030445637459e-07,
+        "Bprime_implicit": 0.6988063045012538,
+        "D_A": 1.000156935694117,
+        "filter": 3.9900089999999993,
+        "lapse": -0.0006738649154488708,
+        "shear_feedback": 0.9999970315069496
+      },
+      "first_rhs": {
+        "B_prime": 2.9906642830419807,
+        "Psi_N_prime": -0.06353894387094244,
+        "delta_khr_N_prime": -0.18961996227870387,
+        "delta_khr_pref_prime": 0.0009727229975806588,
+        "metric_continuity": 0.19061683161282733,
+        "metric_euler": 2.1274512025332574e-05,
+        "tca_slip": -6.698805125889144e-11,
+        "theta_b_prime": 3.414566137893471e-05,
+        "theta_g_prime": 3.4145728366985966e-05,
+        "theta_khr_N_prime": 3.392482857004624e-05,
+        "theta_khr_pref_prime": 7.008850022668416e-06,
+        "theta_ur_prime": 3.411349990718034e-05
+      },
+      "historical_CLASS_metric_consumed": false,
+      "k": 0.003,
+      "lambda_HL": 1.0016708437761068,
+      "legacy_nlde_auxiliaries_excluded": true,
+      "metric_relative_errors_vs_s4b": {
+        "B": 1.5146403437928713e-16,
+        "Phi_N": 0.0,
+        "Psi_N": 0.0
+      },
+      "preferred_residuals": {
+        "A": 0.0,
+        "Hamiltonian": 0.0,
+        "momentum": 3.008364625367285e-16
+      },
+      "s4b_metric": {
+        "B": -187.64658915153458,
+        "Phi_N": 2.363834669481397,
+        "Psi_N": 2.432607104528696
+      },
+      "traceless_residual_normalized": 0.0,
+      "weighted_photon_baryon_slip_cancellation": 0.0
+    }
+  ],
+  "schema": "RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_RESULT_v2",
+  "superseded_target_v1_preserved": true,
+  "target": "research/theory_targets/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_TARGET_v2.json",
+  "threshold_changed": false
+}
