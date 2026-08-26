@@ -1,0 +1,65 @@
+{
+  "schema": "RTK_C10_65S2L_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_TARGET_v1",
+  "created_utc": "2026-08-26T19:32:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65s2l",
+  "purpose": "Test a prospectively fixed finite short completed-U1 production interval after the C10.65s2k one-step entry certificate. Use the identical frozen completion point, four low-k anchors, production kernel, state ownership, approximation criteria and perturbation tolerance. Advance over an interval fixed before execution to 100 times the C10.65s2k retry width, retain adaptive Cash-Karp bookkeeping, require finite terminal state and bounded terminal preferred A/H/momentum normalized residuals. This is an endpoint short-interval stability certificate only; it does not bound the unobserved intra-step peak residual or establish full-time evolution.",
+  "parents": {
+    "C10.65s2_original": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+    "C10.65s2i": "C10_65S2I_ADAPTIVE_STEP_TRACE_PASS_SCOPED",
+    "C10.65s2j": "C10_65S2J_PROSPECTIVE_RETRY_WIDTH_PASS_SCOPED",
+    "C10.65s2k": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED"
+  },
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "execution": {
+    "base_retry_width_Mpc": 3.53993611477497e-10,
+    "interval_multiplier": 100,
+    "finite_short_interval_Mpc": 3.53993611477497e-08,
+    "integrator": "rk/Cash-Karp through unchanged generic_evolver path",
+    "integrator_tolerance_policy": "unchanged from C10.65s2/s2k",
+    "minimum_accepted_substeps_per_anchor": 10,
+    "rejected_trial_policy": "measure and report; no post-hoc rejection-count bound"
+  },
+  "prospective_constraint_policy": {
+    "terminal_normalized_A_abs_max": 1e-08,
+    "terminal_normalized_Hamiltonian_abs_max": 1e-08,
+    "terminal_normalized_momentum_abs_max": 1e-08,
+    "rationale": "Frozen before s2l execution. The bound is approximately seven orders of magnitude above the largest one-step normalized drift measured in C10.65s2k (~6e-16), leaving substantial floating-point accumulation margin while still rejecting macroscopic departure from the algebraic constraint manifold.",
+    "intra_step_peak_claim": false
+  },
+  "frozen_checks": {
+    "original_s2_remains_fail": true,
+    "s2k_remains_pass": true,
+    "off_numeric_text_sha256_identical_to_control_all_four": true,
+    "before_observer_exact_s2k_before": true,
+    "first_rhs_relative_tolerance_inherited": 5e-09,
+    "terminal_interval_absolute_tolerance_Mpc": 5e-13,
+    "minimum_accepted_substeps_each_anchor": 10,
+    "terminal_state_all_finite": true,
+    "terminal_approximation_state_tca_rsa_ufa": [0, 0, 0],
+    "terminal_l_max_ur": 17,
+    "terminal_constraint_normalized_abs_max": 1e-08,
+    "same_kernel_state_ownership_and_tolerance_static_guard": true,
+    "threshold_changed_from_frozen_s2k": false
+  },
+  "pass_classification": "C10_65S2L_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_PASS_SCOPED",
+  "fail_classification": "C10_65S2L_FINITE_SHORT_INTERVAL_ENDPOINT_STABILITY_FAIL_SCOPED",
+  "interpretation_if_pass": "On the frozen one-completion-point x four-low-k domain, the completed-U1 production path remains finite and on the preferred A/H/momentum constraint manifold at the end of a prospectively fixed ~3.54e-8 Mpc interval spanning at least ten accepted adaptive substeps per anchor, with unchanged equations and perturbation tolerance. This is a finite-short-interval endpoint certificate only.",
+  "next_if_pass": "Freeze a separate trajectory-resolved constraint-stability gate that records preferred A/H/momentum residuals at every accepted substep before widening time span, k coverage or completion-parameter coverage.",
+  "non_claims": [
+    "not a reclassification of original C10.65s2",
+    "not an intra-step or accepted-step peak constraint bound",
+    "not long-time completed-U1 stability",
+    "not full-time production evolution",
+    "not a UV derivation of higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not spectra or likelihood evidence"
+  ]
+}
