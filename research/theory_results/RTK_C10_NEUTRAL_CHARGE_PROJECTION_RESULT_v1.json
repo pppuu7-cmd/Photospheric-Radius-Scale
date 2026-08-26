@@ -1,0 +1,259 @@
+{
+  "background_reconstruction": {
+    "H_EFT_Mpc_inv": 58.84274666857371,
+    "a_f": 0.5,
+    "a_i": 0.0002203229136467,
+    "closure": {
+      "H0": 0.00023052738703802013,
+      "Omega_K0": 0.2522864064078236,
+      "lambda_D": 219457.5727136581,
+      "mu_K": 0.0001572550669049847,
+      "x0": 0.8115162588884344
+    },
+    "w_f": 7.001540808677088e-07,
+    "w_i": 5.992459774689937e-17
+  },
+  "classification": "C10_NEUTRAL_CHARGE_PROJECTION_RETENTION_PASS_SCOPED",
+  "coordinate_statement": {
+    "Y": "(delta,theta/k)",
+    "fixed_difference_subspace": "Delta psi_pref=0, hence I_khr=delta/(1+w)",
+    "regular_velocity": "U=H_EFT*theta/k^2",
+    "warning": "A unit Y velocity basis has theta=O(k), so its singular norm is not the regular theta=O(k^2) long-wave family."
+  },
+  "diagnostics": {
+    "all_finite": true,
+    "all_preregistered_asymptotic_conditions_pass": true,
+    "lambda_count": 3,
+    "max_M_c_duplicate_transfer_abs_difference": 0.0,
+    "minimum_p_Q_loglog": 2.07425909653829,
+    "minimum_p_U_loglog": 1.990875741462291,
+    "unique_k_lambda_count": 27
+  },
+  "interpretation": "On the fixed-ordinary C10.62b difference subspace, pure neutral charge is tested directly rather than through the coordinate norm Y. The regular velocity family rescales the Y velocity basis by k/H_EFT, enforcing theta=O(k^2). A scoped pass confirms the numerical low-k transfer approaches the exact finite-time charge-memory theorem; it does not establish full coupled cosmological initial-condition uniqueness.",
+  "next_gate": "Freeze a pre-EFT/UV neutral-charge boundary prescription (for example a declared I_khr value, without claiming a dynamical mechanism), then implement the photon+baryon+massless-UR dual-interface growing/decaying-mode test. Keep C9 radiative protection independent and open.",
+  "non_claims": [
+    "not a full photon+baryon+UR adiabatic/isocurvature classification",
+    "not a proof that finite observational k modes are stable",
+    "not a UV/pre-EFT charge boundary prescription",
+    "not a propagating-rank theorem",
+    "not spectra or likelihood evidence"
+  ],
+  "parents": [
+    "research/theory_results/RTK_C10_NEUTRAL_FINITE_ONSET_MEMORY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_SHIFT_CHARGE_MEMORY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_CHARGE_LONG_WAVE_MEMORY_BOUND_RESULT_v1.json"
+  ],
+  "per_lambda": [
+    {
+      "charge_deviation_monotone_to_zero_as_k_decreases": true,
+      "classification_conditions_pass": true,
+      "lambda_HL": 1.0016708437761068,
+      "low_k_records": [
+        {
+          "L_QU_regular_velocity_to_charge": -1.051233563153774e-09,
+          "L_QV_Y_velocity_to_charge": -0.0061857470246159596,
+          "R_Q_pure_charge": 0.9999700559169954,
+          "T_Y": [
+            [
+              0.9999707560501109,
+              -0.006185751355591983
+            ],
+            [
+              -0.014027684877010858,
+              0.000527084889306241
+            ]
+          ],
+          "abs_L_QU": 1.051233563153774e-09,
+          "abs_R_Q_minus_1": 2.9944083004607158e-05,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9999808294434739,
+          "k_Mpc_inv": 1e-05
+        },
+        {
+          "L_QU_regular_velocity_to_charge": -9.447638246304658e-09,
+          "L_QV_Y_velocity_to_charge": -0.0185308327981211,
+          "R_Q_pure_charge": 0.999711839764014,
+          "T_Y": [
+            [
+              0.9997125397163383,
+              -0.01853084577255931
+            ],
+            [
+              -0.04210933634612769,
+              0.0012209982963648346
+            ]
+          ],
+          "abs_L_QU": 9.447638246304658e-09,
+          "abs_R_Q_minus_1": 0.0002881602359859903,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9998279059380686,
+          "k_Mpc_inv": 3e-05
+        },
+        {
+          "L_QU_regular_velocity_to_charge": -1.0327490646022617e-07,
+          "L_QV_Y_velocity_to_charge": -0.06076979158059735,
+          "R_Q_pure_charge": 0.9951812144940936,
+          "T_Y": [
+            [
+              0.9951819112742821,
+              -0.060769834128814926
+            ],
+            [
+              -0.1415068882244295,
+              0.009083544847216346
+            ]
+          ],
+          "abs_L_QU": 1.0327490646022617e-07,
+          "abs_R_Q_minus_1": 0.00481878550590642,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9981370227317581,
+          "k_Mpc_inv": 0.0001
+        }
+      ],
+      "p_Q_loglog": 2.208745360725957,
+      "p_U_loglog": 1.9922023890692717,
+      "regular_velocity_leakage_monotone_to_zero_as_k_decreases": true,
+      "slope_conditions_pass": true
+    },
+    {
+      "charge_deviation_monotone_to_zero_as_k_decreases": true,
+      "classification_conditions_pass": true,
+      "lambda_HL": 1.0033500837520937,
+      "low_k_records": [
+        {
+          "L_QU_regular_velocity_to_charge": -1.051221140588225e-09,
+          "L_QV_Y_velocity_to_charge": -0.006185673926828203,
+          "R_Q_pure_charge": 0.9999571881093804,
+          "T_Y": [
+            [
+              0.9999578882334864,
+              -0.006185678257753046
+            ],
+            [
+              -0.013992314036035122,
+              0.0005268718447292109
+            ]
+          ],
+          "abs_L_QU": 1.051221140588225e-09,
+          "abs_R_Q_minus_1": 4.281189061960955e-05,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9999808294981234,
+          "k_Mpc_inv": 1e-05
+        },
+        {
+          "L_QU_regular_velocity_to_charge": -9.446646944166971e-09,
+          "L_QV_Y_velocity_to_charge": -0.01852888843343577,
+          "R_Q_pure_charge": 0.999597634533452,
+          "T_Y": [
+            [
+              0.999598334405815,
+              -0.018528901406512623
+            ],
+            [
+              -0.04199808634644721,
+              0.0012189937194344864
+            ]
+          ],
+          "abs_L_QU": 9.446646944166971e-09,
+          "abs_R_Q_minus_1": 0.00040236546654803806,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9998279035236404,
+          "k_Mpc_inv": 3e-05
+        },
+        {
+          "L_QU_regular_velocity_to_charge": -1.031698259981854e-07,
+          "L_QV_Y_velocity_to_charge": -0.06070795935052053,
+          "R_Q_pure_charge": 0.9940804407765798,
+          "T_Y": [
+            [
+              0.9940811367860571,
+              -0.06070800185544601
+            ],
+            [
+              -0.14096038157069826,
+              0.009051426658890714
+            ]
+          ],
+          "abs_L_QU": 1.031698259981854e-07,
+          "abs_R_Q_minus_1": 0.005919559223420245,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9981366950669024,
+          "k_Mpc_inv": 0.0001
+        }
+      ],
+      "p_Q_loglog": 2.1421982130374135,
+      "p_U_loglog": 1.9917602861066148,
+      "regular_velocity_leakage_monotone_to_zero_as_k_decreases": true,
+      "slope_conditions_pass": true
+    },
+    {
+      "charge_deviation_monotone_to_zero_as_k_decreases": true,
+      "classification_conditions_pass": true,
+      "lambda_HL": 1.0067340067340067,
+      "low_k_records": [
+        {
+          "L_QU_regular_velocity_to_charge": -1.0511962957754709e-09,
+          "L_QV_Y_velocity_to_charge": -0.006185527733125911,
+          "R_Q_pure_charge": 0.9999314528408464,
+          "T_Y": [
+            [
+              0.9999321529469337,
+              -0.006185532063948397
+            ],
+            [
+              -0.01392157423562549,
+              0.0005264457661224513
+            ]
+          ],
+          "abs_L_QU": 1.0511962957754709e-09,
+          "abs_R_Q_minus_1": 6.85471591536091e-05,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9999808296074384,
+          "k_Mpc_inv": 1e-05
+        },
+        {
+          "L_QU_regular_velocity_to_charge": -9.4446645663605e-09,
+          "L_QV_Y_velocity_to_charge": -0.01852500014826685,
+          "R_Q_pure_charge": 0.999369251500095,
+          "T_Y": [
+            [
+              0.9993699512125548,
+              -0.018525013118621304
+            ],
+            [
+              -0.04177563843554132,
+              0.0012149854405612594
+            ]
+          ],
+          "abs_L_QU": 9.4446645663605e-09,
+          "abs_R_Q_minus_1": 0.0006307484999049651,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9998278986951037,
+          "k_Mpc_inv": 3e-05
+        },
+        {
+          "L_QU_regular_velocity_to_charge": -1.0295990652816115e-07,
+          "L_QV_Y_velocity_to_charge": -0.06058443696856615,
+          "R_Q_pure_charge": 0.9918815492232521,
+          "T_Y": [
+            [
+              0.9918822436931666,
+              -0.06058447938700694
+            ],
+            [
+              -0.13986975543125577,
+              0.008987322606130013
+            ]
+          ],
+          "abs_L_QU": 1.0295990652816115e-07,
+          "abs_R_Q_minus_1": 0.008118450776747888,
+          "dominant_Y_singular_vector_charge_axis_alignment_abs": 0.9981360387879656,
+          "k_Mpc_inv": 0.0001
+        }
+      ],
+      "p_Q_loglog": 2.07425909653829,
+      "p_U_loglog": 1.990875741462291,
+      "regular_velocity_leakage_monotone_to_zero_as_k_decreases": true,
+      "slope_conditions_pass": true
+    }
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "cd2cf5ce15026b2e60250ffc692456bb2b178ce6",
+    "worker": "research/shadow/rtk_c10_neutral_charge_projection.py",
+    "workflow": "rtk-c10-neutral-charge-projection.yml"
+  },
+  "schema": "RTK_C10_NEUTRAL_CHARGE_PROJECTION_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_NEUTRAL_CHARGE_PROJECTION_TARGET_v1.json"
+}
