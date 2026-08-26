@@ -12,21 +12,22 @@
     "s4a_domain_guards_inherited_unchanged": true,
     "threshold_changed": false
   },
-  "classification": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_FAIL_SCOPED",
+  "classification": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED",
+  "classifier_semantics_fix": "Excluded invariant threshold_changed=False from all(scientific predicates); no frozen criterion or numerical threshold changed.",
   "completion_point": {
     "M_c_Mpc_inv": 9066.231026460177,
     "lambda_HL": 1.0016708437761068
   },
   "control_status": "PRE_EFT_PHENOMENOLOGICAL_CONTROL_ONLY",
   "gate": "C10.65s4b",
-  "interpretation": "The frozen moderate-k completed onset seed gate failed; do not proceed to production/current-state RHS at the new modes.",
+  "interpretation": "At the first frozen completion point, the same conditional completed-U1 onset algebra and carrier map remain finite and constraint-consistent at k=1e-3 and 3e-3 Mpc^-1. This extends the conditional onset seed only; higher UR multipoles remain historical controls and no production trajectory at the new modes is certified.",
   "maxima": {
     "low_k_parent_regression_relative": 1.0742685748422727e-16,
     "min_abs_denominator": 1.670843256038343e-09,
     "projector_constraint_normalized": 1.9713427703194027e-86,
     "traceless_normalized": 0.0
   },
-  "next_gate": "Diagnose C10.65s4b without weakening the frozen criteria.",
+  "next_gate": "Freeze C10.65s4c first-RHS/current-state-kernel parity at k=1e-3 and 3e-3 Mpc^-1 before any production integration at those modes.",
   "non_claims": [
     "not a UV derivation of the matching control",
     "not a UV derivation of UR l>=3",
@@ -40,8 +41,8 @@
   ],
   "provenance": {
     "analyzer": "research/shadow/rtk_c10_65s4b_moderate_k_completed_onset_seed.py",
-    "github_actions_run_id": 33011798872,
-    "repo_head_at_job_start": "109476f62dae5ec10db5ae888714edfbce87cba6",
+    "github_actions_run_id": 33011863509,
+    "repo_head_at_job_start": "547d06b8db7d4731bb09109658a50bbf31c3ee05",
     "s4a_parent_run_id": 33011355363,
     "threshold_changed": false,
     "workflow": "rtk-c10-65s4b-moderate-k-completed-onset-seed.yml"
