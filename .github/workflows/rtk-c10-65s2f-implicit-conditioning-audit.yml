@@ -1,0 +1,58 @@
+name: RTK C10.65s2f implicit conditioning audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s2f_implicit_conditioning_audit.py'
+      - '.github/workflows/rtk-c10-65s2f-implicit-conditioning-audit.yml'
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Execute frozen s2f audit
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s2f_head.txt
+          python3 -m py_compile research/shadow/rtk_c10_65s2f_implicit_conditioning_audit.py
+          python3 research/shadow/rtk_c10_65s2f_implicit_conditioning_audit.py | tee c10_65s2f.log
+          grep -q '^C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_PASS_SCOPED$' c10_65s2f.log
+      - name: Add provenance
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json'
+          if [ ! -f "$p" ]; then exit 0; fi
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json'
+          d=json.load(open(p))
+          d['provenance']={'repo_head_at_job_start':open('c10_65s2f_head.txt').read().strip(),'workflow':'rtk-c10-65s2f-implicit-conditioning-audit.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json'
+          if [ ! -f "$p" ]; then exit 0; fi
+          cp "$p" /tmp/s2f.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/s2f.json "$p"
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$p"
+            git commit -m 'Record C10.65s2f implicit conditioning audit' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
