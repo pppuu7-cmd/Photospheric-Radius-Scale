@@ -26,3 +26,4 @@ assert q in ps
 ps=ps.replace(q,'                 ppt->error_message,ppt->error_message);\n      rtk_c10_65s2i_trace_end();\n      class_call(rtk_c10_65s2_observe("AFTER",c10_65s2_end,ppw->pv->y,NULL,&ppaw,ppt->error_message),ppt->error_message,ppt->error_message);',1)
 h.write_text(hs);c.write_text(cs);p.write_text(ps)
 print('C10_65S2I_TRACE_PATCH_APPLIED')
+# Frozen execution trigger only; no scientific or integration change.
