@@ -38,8 +38,8 @@
     "weighted_slip_cancel": 0.0
   },
   "provenance": {
-    "github_actions_run_id": 33000701658,
-    "repo_head_at_job_start": "07818b1332d1f2cc8f0e94e7ac9b5421eb4a4fb2",
+    "github_actions_run_id": 33000737462,
+    "repo_head_at_job_start": "7877060fcfa0c9a8f9d63875c12f3dee14af757c",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s2-c-kernel-parity-audit.yml"
   },
