@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_TARGET_v1",
+  "created_utc": "2026-08-26T01:38:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65m",
+  "question": "What reproducible read-only historical-control values of A2, S_ur0 and C2 can be extracted at the exact low-k onset anchors for the phenomenological regular matching subfamily defined by C10.65l?",
+  "parents": [
+    "research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json"
+  ],
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "sample": "the four exact C10.65f low-k onset anchors only; no interpolation",
+  "definitions": {
+    "A2": "coefficient of k^2 in D_b(k)=D_b0+k^2 A2+O(k^4), D_b=delta_b-3 Psi_N on the historical control",
+    "S_ur0": "intercept of sigma_ur/k^2 as k^2->0",
+    "C": "3 a^2 delta_mu_N + 9 H a^2 rpp_theta_total/k^2",
+    "C2": "intercept of C(k)/k^2 as k^2->0"
+  },
+  "acceptance": [
+    "regenerate a disposable pinned production CLASS tree using the normal RTK production patch sequence plus the read-only C10 source and C10.65a species-control exporters",
+    "run only the four exact low-k modes from C10.65f and require a raw output row at exactly a_on within 1e-12 relative; do not interpolate",
+    "fit D_b versus x=k^2 with affine fits on the smallest three and all four anchors; require finite A2 and <=1e-4 relative nested-fit disagreement",
+    "fit sigma_ur/k^2 versus x with affine fits on the smallest three and all four anchors; require finite S_ur0 and <=1e-8 relative nested-fit disagreement",
+    "compute C(k) only from exported total matter source columns and H; do not use CLASS phi/psi in C(k)",
+    "fit C(k)/k^2 versus x on the smallest three and all four anchors; require finite C2 and <=0.1 relative nested-fit disagreement; if cancellation noise violates this, classify the historical C2 control as numerically unresolved rather than weakening the frozen threshold",
+    "report the constant-term leakage from a direct quadratic C(k)=C0+C2 k^2+C4 k^4 fit as a numerical cancellation diagnostic",
+    "label A2,S_ur0,C2 as HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY and never as completed-U1 predictions",
+    "instantiate the C10.65l regular-control vector by setting E_gb2=E_urb2=E_khr2=R_gb0=R_urb0=R_khrb0=0 and inserting the extracted A2,S_ur0,C2 only if all numerical acceptance conditions pass"
+  ],
+  "pass_classification": "C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_PASS_SCOPED",
+  "fail_classification": "C10_65M_HISTORICAL_C2_CONTROL_NUMERICALLY_UNRESOLVED_SCOPED",
+  "next_if_pass": "freeze C10.65n conditional completed-U1 onset-seed construction using the C10.65m phenomenological control vector; solve the algebraic metric/shift auxiliaries for the 3x3 completion grid and perform onset-shift/low-k consistency tests before any full Boltzmann spectra run",
+  "non_claims": [
+    "not a microscopic pre-EFT derivation",
+    "not a low-energy completed-U1 prediction of the matching values",
+    "not proof that zero relative entropies/velocities are UV-selected",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
