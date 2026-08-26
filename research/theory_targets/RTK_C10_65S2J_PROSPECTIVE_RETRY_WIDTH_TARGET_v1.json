@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S2J_PROSPECTIVE_RETRY_WIDTH_TARGET_v1",
+  "gate": "C10.65s2j",
+  "created_utc": "2026-08-26T19:22:00Z",
+  "status": "FROZEN_BEFORE_SELECTION_CHECK",
+  "purpose": "Freeze a prospective retry step width from the completed C10.65s2i adaptive trace before any retry execution. This changes only the short canary interval length in a new retry gate; it does not modify the original C10.65s2 result, integrator tolerance, equations, state, or acceptance criterion.",
+  "parents": {
+    "C10.65s2": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+    "C10.65s2h": "C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED",
+    "C10.65s2i": "C10_65S2I_ADAPTIVE_STEP_TRACE_PASS_SCOPED"
+  },
+  "selection_rule": {
+    "source_quantity": "minimum first_accepted_hdid across the four C10.65s2i anchors",
+    "source_value_Mpc": 7.07987222954994e-10,
+    "fixed_safety_factor": 0.5,
+    "retry_width_Mpc": 3.53993611477497e-10,
+    "rationale": "The first accepted hdid at each anchor is the step accepted by the unchanged pinned RKQS controller after shrinking the original trial. A fixed factor 1/2 below the worst-anchor accepted value is frozen before retry, giving margin without changing the error tolerance or acceptance logic."
+  },
+  "retry_contract": {
+    "same_four_anchors": true,
+    "same_completion_point": true,
+    "same_boundary_state": true,
+    "same_completed_U1_kernel": true,
+    "same_pinned_CLASS": true,
+    "same_evolver": "rk",
+    "same_integrator_tolerance": true,
+    "exactly_one_accepted_step_required": true,
+    "zero_rejected_trials_required": true,
+    "expected_rhs_calls": 7,
+    "constraint_drift_policy": "measurement only; no new numerical drift threshold",
+    "first_rhs_relative_tolerance": 5e-9,
+    "off_path_identity_inherited_and_must_remain_exact": true
+  },
+  "pass_classification": "C10_65S2J_PROSPECTIVE_RETRY_WIDTH_PASS_SCOPED",
+  "fail_classification": "C10_65S2J_PROSPECTIVE_RETRY_WIDTH_FAIL_SCOPED",
+  "next_if_pass": "Execute C10.65s2k as a separate production retry using exactly retry_width_Mpc, unchanged tolerance and equations, and require one accepted/no-rejection Cash-Karp step on all four anchors. Preserve C10.65s2 as FAIL_SCOPED regardless of s2k outcome.",
+  "non_claims": [
+    "not a reclassification of C10.65s2",
+    "not an integrator tolerance relaxation",
+    "not a stability interval",
+    "not full-time evolution",
+    "not spectra or likelihood evidence"
+  ]
+}
