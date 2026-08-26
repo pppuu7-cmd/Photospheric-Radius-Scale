@@ -1,0 +1,62 @@
+{
+  "schema": "RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_TARGET_v1",
+  "created_utc": "2026-08-26T01:47:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65n",
+  "question": "Does the explicitly phenomenological C10.65m matching vector define a finite, algebraically self-consistent completed-U1 low-k onset seed on all nine diagnostic completion points, without importing historical CLASS metric potentials?",
+  "parents": [
+    "research/theory_results/RTK_C10_65M_HISTORICAL_CONTROL_MATCHING_VALUES_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65L_UV_MATCHING_INTERFACE_BASIS_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json",
+    "research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json"
+  ],
+  "frozen_control": {
+    "normalization": "J_ad0=-3 in the historical CLASS normalization",
+    "boundary_source": "C10.65m HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY",
+    "relative_entropy_gradients": "E_gb2=E_urb2=E_khr2=0",
+    "relative_velocities": "R_gb0=R_urb0=R_khrb0=0",
+    "ordinary_gradient": "A2 from C10.65m",
+    "UR_shear": "S_ur0 from C10.65m; carried as hierarchy boundary data but not yet inserted into the full traceless/TCA physical Phi_N correction in this preflight",
+    "matching_scalar": "C2 from C10.65m"
+  },
+  "finite_k_seed_construction": [
+    "for each exact low-k anchor set D_b=J_ad0+A2*k^2, D_g=(4/3)D_b, D_ur=(4/3)D_b and J_khr=D_b through the declared O(k^2) control",
+    "construct h_hat=W0*D_b and mu_hat=W_total*D_b, so no historical metric potential enters the density sources",
+    "solve dressed A exactly: K=-(3/2)a^2/(k^2+a^2 M_c^2), D_A=1-3 K W0, psi_pref=K h_hat/D_A",
+    "set delta_mu_pref=mu_hat+3 W_total psi_pref and impose C(k)=C2*k^2 through Q_pref=[C2*k^2-3a^2 delta_mu_pref]/(3H)",
+    "zero relative velocities imply q0_pref=(W0/W_total)q_pref; q0_N=q0_pref+a W0 B",
+    "use h_hat_prime=-3H(h_hat+p0_hat)-(k^2/a)q0_N with p0_hat=C0*D_b and the differentiated dressed A equation; this makes psi_pref_prime affine in B",
+    "insert that affine psi_pref_prime into the preferred Hamiltonian, making phi_pref affine in B, then solve the momentum equation as one scalar linear equation for B",
+    "construct Psi_N=psi_pref-HB. Phi_N is reported only at leading/no-anisotropic-stress level in this preflight; source-locked photon+UR shear completion is deferred to the next gate"
+  ],
+  "leading_k0_certificate": [
+    "derive K0=-3/(2 M_c^2), D_A0=1-3 K0 W0 and h_hat0=W0 J_ad0",
+    "derive psi0=K0 h_hat0/D_A0 and psi0_prime from the k0 differentiated dressed-A equation",
+    "derive delta_mu_pref0=W_total(J_ad0+3psi0), Q_pref0=-a^2 delta_mu_pref0/H",
+    "derive phi0 from the k0 Hamiltonian and B0=(C2+2 Pcal psi0-E_th phi0)/(2H)",
+    "require the finite-k solver to approach psi0,psi0_prime,phi0,B0 with convergent O(k^2)-compatible behavior over the four exact anchors"
+  ],
+  "acceptance": [
+    "all nine grid points finite and denominator-safe: D_A>1, lapse denominator nonzero, finite-k scalar B denominator nonzero, W_total>0, 1+w_khr>0",
+    "leading A, comoving, Hamiltonian and C2/B matching residuals <=1e-24 in high-precision arithmetic after dimensionless normalization",
+    "finite-k dressed A, differentiated-A, Hamiltonian and momentum residuals <=1e-24 after dimensionless normalization",
+    "for every grid point, affine fits versus k^2 over the four exact low-k anchors give intercepts for psi,psi_prime,phi,B consistent with the independent k0 certificate at <=1e-5 relative for psi/psi_prime/phi and <=1e-3 relative for B",
+    "the four-anchor sequence remains finite and the smallest-three versus all-four intercept disagreement is <=1e-5 for psi/psi_prime/phi and <=1e-3 for B",
+    "verify neutral common-curvature residual J_khr-D_b=0 and all declared relative-velocity residuals are zero by construction",
+    "do not read CLASS_phi_curvature or CLASS_psi_lapse anywhere in the implementation",
+    "preserve explicit labels: CONDITIONAL, HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY, not a UV derivation"
+  ],
+  "pass_classification": "C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65N_CONDITIONAL_ONSET_SEED_PREFLIGHT_FAIL_SCOPED",
+  "next_if_pass": "freeze C10.65o source-locked radiation-shear seed completion: evaluate compromise_CLASS photon TCA shear/slip and massless-UR shear/traceless source on the conditional seed, reconstruct full Phi_N through O(k^2), and test the four-anchor 3x3 grid before any in-CLASS completed-U1 feedback",
+  "non_claims": [
+    "not a microscopic UV/pre-EFT derivation of the matching vector",
+    "not proof of a unique primordial growing mode",
+    "not full photon TCA/traceless shear completion",
+    "not same-full-action primordial background closure",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ]
+}
