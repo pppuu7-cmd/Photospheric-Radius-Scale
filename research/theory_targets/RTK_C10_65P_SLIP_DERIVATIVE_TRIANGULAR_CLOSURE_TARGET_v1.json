@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-26T02:08:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65p",
+  "question": "Does the pinned compromise_CLASS TCA slip create a new independent temporal datum when B_prime/Psi_N_prime are obtained by differentiating the completed-U1 algebraic projector, or is the onset derivative system triangular?",
+  "parents": [
+    "research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_DAE_NEWTONIAN_ROUNDTRIP_RESULT_v1.json"
+  ],
+  "frozen_claims_to_test": [
+    "in TCA the baryon Euler slip coefficient is R/(1+R)",
+    "the photon Euler equation obtained from the pinned TCA branch has slip coefficient -1/(1+R)",
+    "with W_gamma=R W_b, the weighted photon+baryon momentum derivative has exactly zero slip coefficient",
+    "the curvature-dressed A projector and its differentiated source depend on photon+baryon velocities through the aggregate ordinary momentum q0_N, so the slip-induced directional derivative of the algebraic B projector vanishes",
+    "the C10.51 roundtrip theorem means B_prime is the derivative of algebraic B[z(t)] and not an independent chi evolution datum",
+    "in flat Newtonian gauge at the zero-relative-velocity matching point, pinned compromise_CLASS slip is affine in Psi_N_prime; its exact coefficient is -(1-2 H F) F k^2 (1-3 cb2)",
+    "therefore compute aggregate projector derivative -> B_prime -> Psi_N_prime first, and only then evaluate slip; no simultaneous new IC solve is required"
+  ],
+  "acceptance": [
+    "symbolically prove weighted photon+baryon slip cancellation exactly",
+    "symbolically propagate this cancellation into q0_N_prime and the slip-sensitive part of the second differentiated ordinary A source",
+    "symbolically derive the exact compromise_CLASS d(slip)/d(Psi_N_prime) coefficient from the pinned source-locked formulas",
+    "verify all four exact low-k anchors give finite derivative coefficients and report their maximum absolute value",
+    "verify 1-2 H F is finite and nonzero on the frozen onset pack",
+    "state explicitly that numerical B_prime still requires the ordinary/neutral aggregate local RHS and background derivative pack, but not an extra temporal boundary condition",
+    "do not set B_prime or Psi_N_prime to zero",
+    "do not claim the slip value itself is already numerically closed in this gate"
+  ],
+  "pass_classification": "C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_PASS_SCOPED",
+  "next_if_pass": "freeze C10.65q derivative-pack execution: export/reconstruct the exact onset background derivatives needed by d/dtau of the aggregate projector, evaluate B_prime and Psi_N_prime on all four anchors x 3x3 grid, then evaluate the full pinned compromise_CLASS slip and verify low-k regularity before in-CLASS feedback",
+  "non_claims": [
+    "not a numerical B_prime or slip value",
+    "not a microscopic UV matching derivation",
+    "not same-full-action primordial background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ]
+}
