@@ -1,0 +1,46 @@
+{
+  "architecture_decision": {
+    "C10_64_status": "retain the exact zero-charge theorem but supersede its generic adiabatic labeling for nonzero primordial curvature",
+    "C10_65b_status": "do not execute the frozen absolute-zero-charge rank contract as an adiabatic uniqueness theorem; replace only its neutral boundary condition and preserve the rest of its preferred-DAE architecture",
+    "adiabatic_branch": "impose Delta I_iso=I_khr-J_ad=0",
+    "independent_charge_isocurvature": "retain arbitrary nonzero Delta I_iso as a separate initial-condition sector"
+  },
+  "baseline_normalization_control": {
+    "J_ad_low_k_intercept": -2.9999999999997833,
+    "absolute_zero_charge_slice_Delta_I_iso_intercept": 2.9999999999997833,
+    "interpretation": "In the pinned C10.65a normalization, the adiabatic neutral charge is nonzero and tracks the common ordinary curvature invariant; absolute I_khr=0 is a finite charge-isocurvature displacement.",
+    "ordinary_intercept_abs_spread": 2.6645352591003757e-13,
+    "ordinary_intercept_abs_spread_tolerance": 1e-06
+  },
+  "classification": "C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_PASS_SCOPED",
+  "exact_identities": {
+    "adiabatic_isocurvature_coordinate": "Delta I_iso=I_khr-J_ad",
+    "corrected_newtonian_boundary": "delta_khr,N=(1+w)(3 Psi_N+J_ad)",
+    "corrected_preferred_boundary": "delta_khr=(1+w)(3 psi_pref+J_ad)",
+    "gauge_invariance": "I_khr,pref=delta_khr,pref/(1+w)-3 psi_pref = delta_khr,N/(1+w)-3 Psi_N=I_khr,N",
+    "machine_residuals": {
+      "newtonian_boundary": "0",
+      "preferred_boundary": "0",
+      "preferred_to_newtonian_I": "0",
+      "relative_entropy_map": "0"
+    },
+    "relative_entropy": "for any ordinary species on the common branch, S_khr,i=Delta I_iso"
+  },
+  "gate": "C10.65c",
+  "next_gate": "freeze the pinned compromise_CLASS photon-baryon tight-coupling port contract, then implement the corrected completed-U1 O(k^2) rank system with Delta I_iso=0 and solve V_khr0 and B0.",
+  "non_claims": [
+    "not a microscopic UV derivation of Delta I_iso=0",
+    "not the full coupled gradient/rank solve",
+    "not a determination of theta_khr or B0",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "351d632d935b73d94c32a9a619e183ab6cec2ab0",
+    "sympy": "1.14.0",
+    "worker": "research/shadow/rtk_c10_65c_common_curvature_adiabatic_boundary.py",
+    "workflow": "rtk-c10-65c-common-curvature-adiabatic-boundary.yml"
+  },
+  "schema": "RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_TARGET_v1.json"
+}
