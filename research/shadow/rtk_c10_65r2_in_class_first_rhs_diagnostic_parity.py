@@ -16,8 +16,11 @@ def load(p): return json.loads((ROOT/p).read_text())
 def rel(a,b): return abs(a-b)/max(abs(a),abs(b),1e-300)
 def numeric(path): return [s.strip() for s in Path(path).read_text().splitlines() if s.strip() and not s.lstrip().startswith('#')]
 def digest(path): return hashlib.sha256(('\n'.join(numeric(path))+'\n').encode()).hexdigest()
-def rows(path,r2=False):
-    names=TAIL+(R2+R1 if r2 else R1)
+def rows(path,r2=False,r2_layout='r2-r1'):
+    if not r2: names=TAIL+R1
+    elif r2_layout=='r2-r1': names=TAIL+R2+R1
+    elif r2_layout=='r1-r2': names=TAIL+R1+R2
+    else: raise ValueError(r2_layout)
     out=[]
     for s in numeric(path):
         v=[float(x) for x in s.split()]
@@ -25,10 +28,10 @@ def rows(path,r2=False):
         z=v[-len(names):]; d={n:z[i] for i,n in enumerate(names)}; d['tau']=v[0]; out.append(d)
     return out
 
-def modes(pat,r2=False):
+def modes(pat,r2=False,r2_layout='r2-r1'):
     a=[]
     for f in sorted(glob.glob(pat)):
-        rr=rows(f,r2); k=sum(x['c10_k_Mpc_inv'] for x in rr)/len(rr); a.append((k,f,rr,digest(f)))
+        rr=rows(f,r2,r2_layout); k=sum(x['c10_k_Mpc_inv'] for x in rr)/len(rr); a.append((k,f,rr,digest(f)))
     return sorted(a)
 def point(points,lam,Mc): return min(points,key=lambda p:abs(float(p['lambda_HL'])-lam)+abs(float(p['M_c_Mpc_inv'])-Mc)/max(Mc,1.))
 def record(recs,k): return min(recs,key=lambda r:abs(float(r['k'])-k))
@@ -51,7 +54,7 @@ def parent_rhs(nr,orr,qr,bg,pack):
       'c10_65r2_theta_ur_prime_shadow':thurp,'c10_65r2_delta_khr_prime_shadow':dkp,'c10_65r2_theta_khr_prime_shadow':thkp}
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--r1-control-glob',required=True); ap.add_argument('--r2-off-glob',required=True); ap.add_argument('--r2-dir',required=True); ap.add_argument('--manifest',required=True); ap.add_argument('--patch',required=True); ap.add_argument('--output',required=True); a=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument('--r1-control-glob',required=True); ap.add_argument('--r2-off-glob',required=True); ap.add_argument('--r2-dir',required=True); ap.add_argument('--manifest',required=True); ap.add_argument('--patch',required=True); ap.add_argument('--extra-source',action='append',default=[]); ap.add_argument('--r2-layout',choices=['r2-r1','r1-r2'],default='r2-r1'); ap.add_argument('--output',required=True); a=ap.parse_args()
     t=load('research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json'); n=load('research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json'); o=load('research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json'); q=load('research/theory_results/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json'); f=load('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'); r1=load('research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json')
     assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'; assert r1['classification']=='C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED'; assert q['classification']=='C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED'; assert n['classification']=='C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED'; assert o['classification']=='C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED'; assert f['classification']=='C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED'
     expected=[float(x) for x in f['exact_anchor']['k_Mpc_inv']]; aon=float(f['exact_anchor']['a_on']); tol=float(t['frozen_checks']['exact_onset_relative_a_tolerance']); th=t['frozen_checks']
@@ -60,12 +63,11 @@ def main():
       for u,v,k in zip(c1,c2,expected):
         same=u[3]==v[3]; off_ok &= same and rel(u[0],k)<=1e-12 and rel(v[0],k)<=1e-12; off.append({'k':k,'r1_sha256':u[3],'r2_off_sha256':v[3],'identical':same})
     manifest=json.loads(Path(a.manifest).read_text())['points']; assert len(manifest)==9
-    op={(str(p['lambda_HL']),str(p['M_c_Mpc_inv'])):p for p in o['points']}; qp={(str(p['lambda_HL']),str(p['M_c_Mpc_inv'])):p for p in q['points']}
     bg={'H':float(n['background']['H']),'R':(4/3)*float(n['background']['rhog'])/float(n['background']['rhob']),'w':float(n['background']['w_khr'])}; pack=f['coefficient_pack']
     max_local=max_parent=max_r1=max_binv=max_cancel=0.; finite=True; exact=True; all_tca=True; points=[]
     comps=['c10_65r2_B_prime','c10_65r2_Psi_N_prime','c10_65r2_metric_continuity_shadow','c10_65r2_metric_euler_shadow','c10_65r2_tca_slip_shadow','c10_65r2_theta_b_prime_shadow','c10_65r2_theta_g_prime_shadow','c10_65r2_theta_ur_prime_shadow','c10_65r2_delta_khr_prime_shadow','c10_65r2_theta_khr_prime_shadow']
     for e in manifest:
-      lam=float(e['lambda_HL']); Mc=float(e['M_c_Mpc_inv']); ms=modes(str(Path(a.r2_dir)/(e['prefix']+'*perturbations*')),True); assert len(ms)==4
+      lam=float(e['lambda_HL']); Mc=float(e['M_c_Mpc_inv']); ms=modes(str(Path(a.r2_dir)/(e['prefix']+'*perturbations*')),True,a.r2_layout); assert len(ms)==4
       np=point(n['points'],lam,Mc); oo=point(o['points'],lam,Mc); qq=point(q['points'],lam,Mc); rec=[]; pmax=0.
       for (km,fn,rr,sha),k in zip(ms,expected):
         z=min(rr,key=lambda x:abs(x['c10_65r0_a']-aon)); erra=abs(z['c10_65r0_a']-aon)/aon; exact &= erra<=tol; all_tca &= z['c10_65r0_tca_flag']<0.5
@@ -76,10 +78,10 @@ def main():
         finite &= all(math.isfinite(z[x]) for x in R2)
         rec.append({'k':k,'relative_a_error':erra,'max_C_vs_independent_parent_reconstruction_relative':loc,'r1_projector_regression_relative':e1,'Bprime_actual_slip_invariance_relative':bi,'weighted_slip_cancel':z['c10_65r2_weighted_slip_cancel'],'C':{c:z[c] for c in R2},'expected':ex})
       points.append({'lambda_HL':lam,'M_c_Mpc_inv':Mc,'max_C_vs_independent_parent_reconstruction_relative':pmax,'records':rec})
-    src=Path(a.patch).read_text(); static_no_dy=('dy[' not in src and 'dy [' not in src); static_no_prod=('ppw->metric_continuity=' not in src and 'ppw->metric_euler=' not in src and 'metric_continuity =' not in src and 'metric_euler =' not in src)
+    src='\n'.join(Path(p).read_text() for p in [a.patch]+a.extra_source); static_no_dy=('dy[' not in src and 'dy [' not in src); static_no_prod=('ppw->metric_continuity=' not in src and 'ppw->metric_euler=' not in src and 'metric_continuity =' not in src and 'metric_euler =' not in src)
     ok=off_ok and exact and all_tca and finite and static_no_dy and static_no_prod and max_r1<=float(th['max_r1_projector_regression_relative']) and max_local<=float(th['max_C_vs_independent_local_rhs_relative']) and max_parent<=float(th['max_C_vs_detached_parent_rhs_relative']) and max_binv<=float(th['max_Bprime_actual_slip_invariance_relative']) and max_cancel<=float(th['max_weighted_photon_baryon_slip_cancel_normalized_residual'])
     cls=t['pass_classification'] if ok else t['fail_classification']
-    out={'schema':'RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1','gate':'C10.65r2','classification':cls,'target':'research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json','grid_point_count':len(points),'anchor_count_per_point':4,'off_path':{'numeric_text_sha256_identical_all_four':off_ok,'records':off},'global_checks':{'exact_onset_all':exact,'all_four_anchors_tca_on':all_tca,'all_outputs_finite':finite,'max_r1_projector_regression_relative':max_r1,'max_C_vs_independent_local_rhs_relative':max_local,'max_C_vs_detached_parent_rhs_relative':max_parent,'max_Bprime_actual_slip_invariance_relative':max_binv,'max_weighted_photon_baryon_slip_cancel_normalized_residual':max_cancel,'no_dy_write_static_guard':static_no_dy,'no_production_metric_or_rhs_write_static_guard':static_no_prod},'thresholds':th,'threshold_changed':False,'points':points,'interpretation':'Diagnostic-only in-CLASS first-RHS parity. No state handoff or production feedback is claimed.'}
+    out={'schema':'RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1','gate':'C10.65r2','classification':cls,'target':'research/theory_targets/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_TARGET_v1.json','grid_point_count':len(points),'anchor_count_per_point':4,'implementation_layout':a.r2_layout,'off_path':{'numeric_text_sha256_identical_all_four':off_ok,'records':off},'global_checks':{'exact_onset_all':exact,'all_four_anchors_tca_on':all_tca,'all_outputs_finite':finite,'max_r1_projector_regression_relative':max_r1,'max_C_vs_independent_local_rhs_relative':max_local,'max_C_vs_detached_parent_rhs_relative':max_parent,'max_Bprime_actual_slip_invariance_relative':max_binv,'max_weighted_photon_baryon_slip_cancel_normalized_residual':max_cancel,'no_dy_write_static_guard':static_no_dy,'no_production_metric_or_rhs_write_static_guard':static_no_prod},'thresholds':th,'threshold_changed':False,'points':points,'interpretation':'Diagnostic-only in-CLASS first-RHS parity. No state handoff or production feedback is claimed.'}
     Path(a.output).write_text(json.dumps(out,indent=2,sort_keys=True)+'\n'); print(cls,json.dumps(out['global_checks'],sort_keys=True))
     raise SystemExit(0 if ok else 1)
 if __name__=='__main__': main()
