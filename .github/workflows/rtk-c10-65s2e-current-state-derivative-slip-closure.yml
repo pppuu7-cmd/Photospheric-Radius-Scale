@@ -26,26 +26,38 @@ jobs:
           python3 research/shadow/rtk_c10_65s2e_current_state_derivative_slip_closure.py | tee c10_65s2e.log
           grep -q '^C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_PASS_SCOPED$' c10_65s2e.log
       - name: Add provenance
+        if: always()
         run: |
           set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json'
+          if [ ! -f "$p" ]; then
+            echo 'No s2e result JSON was produced; nothing to persist.'
+            exit 0
+          fi
           python3 - <<'PY'
           import json,os
           p='research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json'
           d=json.load(open(p))
-          d['provenance']={'repo_head_at_job_start':open('c10_65s2e_head.txt').read().strip(),'workflow':'rtk-c10-65s2e-current-state-derivative-slip-closure.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False}
+          d['provenance']={'repo_head_at_job_start':open('c10_65s2e_head.txt').read().strip(),'workflow':'rtk-c10-65s2e-current-state-derivative-slip-closure.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False,'persisted_on_scientific_failure':True}
           open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
           PY
       - name: Persist result
+        if: always()
         run: |
           set -euo pipefail
-          cp research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json /tmp/s2e.json
+          p='research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json'
+          if [ ! -f "$p" ]; then
+            echo 'No s2e result JSON was produced; nothing to persist.'
+            exit 0
+          fi
+          cp "$p" /tmp/s2e.json
           for attempt in 1 2 3 4 5; do
             git fetch origin rtk-class-build
             git reset --hard origin/rtk-class-build
-            cp /tmp/s2e.json research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json
+            cp /tmp/s2e.json "$p"
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add research/theory_results/RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_RESULT_v1.json
+            git add "$p"
             git commit -m 'Record C10.65s2e current-state derivative slip closure' || exit 0
             if git push origin HEAD:rtk-class-build; then exit 0; fi
           done
