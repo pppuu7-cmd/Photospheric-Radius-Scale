@@ -40,7 +40,7 @@ jobs:
           assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
           assert b['status']=='FROZEN_BEFORE_EXECUTION'
           assert b['r2_frozen_target_unchanged'] is True
-          assert t['frozen_checks']['max_C_vs_local_python_first_rhs_relative']==5e-9
+          assert t['frozen_checks']['max_C_vs_independent_local_rhs_relative']==5e-9
           PY
       - name: Execute pre-registered tangent discriminator
         run: |
