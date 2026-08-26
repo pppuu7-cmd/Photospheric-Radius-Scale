@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_TARGET_v1",
+  "created_utc": "2026-08-26T00:54:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65f",
+  "question": "Can the pinned onset thermodynamic coefficient pack be extracted without sparse-history interpolation bias, while explicitly partitioning the frozen k grid into TCA-on and TCA-off modes according to the source-locked compromise_CLASS trigger?",
+  "parents": [
+    "research/theory_results/RTK_C10_65E_FAILURE_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json"
+  ],
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "method": {
+    "histories": "regenerate the same nine read-only pinned CLASS histories as C10.65e",
+    "exact_onset_anchor": "for each mode search raw rows for |a-a_on|/a_on <= 1e-12; do not interpolate thermodynamic coefficients for the certified common pack",
+    "minimum_exact_anchor_modes": 3,
+    "common_pack": "form the pack only from exact-onset anchor rows and require their k-independent thermodynamic primitives to agree",
+    "tca_partition": "derive k_TCA=trigger_k/tau_c from the certified common pack and evaluate the source-locked pair of TCA trigger inequalities for every frozen k",
+    "exported_flag_check": "compare the predicted on/off partition against the nearest-onset exported tca_flag for each mode; infer the numeric enum values from the observed low-k/high-k partition rather than hard-coding them"
+  },
+  "acceptance": [
+    "at least three frozen histories must contain an exact onset anchor row at relative a tolerance <=1e-12",
+    "R, cb2, dkappa, ddkappa, tau_c, dtau_c, F and F_prime must be finite and satisfy R>0, 0<=cb2<1, dkappa>0, tau_c>0, F>0",
+    "within the exact-anchor subset, relative spread of R,cb2,dkappa,ddkappa,tau_c,dtau_c,F,F_prime and Hc must be <=1e-10",
+    "within the exact-anchor subset, algebraic reconstructions of tau_c,dtau_c,F,F_prime and tau_c/tau_h must agree with exports to <=1e-12 relative",
+    "the common pack must satisfy tau_c/tau_h<0.015",
+    "derive and report k_TCA=0.01/tau_c; do not require all nine frozen modes to lie below it",
+    "predicted TCA on/off partition over the nine frozen k values must agree with exported tca_flag states at the nearest onset rows",
+    "the rank-seed domain must contain at least the first three low-k modes and must approach the k->0 tight-coupling branch",
+    "report the first frozen mode outside TCA, if any, as a regime boundary rather than a model failure"
+  ],
+  "pass_classification": "C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED",
+  "next_if_pass": "freeze and implement C10.65g corrected completed-U1 O(k^2) superhorizon coefficient/rank solver using Delta I_iso=0, the exact-onset low-k TCA pack, the source-locked hierarchy and the preferred DAE metric projector; solve V_khr0 and B0 rather than prescribing them",
+  "non_claims": [
+    "not the completed-U1 rank solution",
+    "not a claim that TCA applies to the full finite-k grid",
+    "not same-full-action background closure",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ]
+}
