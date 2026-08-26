@@ -1,0 +1,111 @@
+{
+  "architecture_decision": "Do not extrapolate the pinned production histories below a_on to manufacture a growing-mode selector. Keep the unresolved seed explicitly UV/pre-EFT matched at this stage.",
+  "classification": "C10_65K_NO_CERTIFIED_PRE_ONSET_BACKWARD_INTERVAL_UV_MATCH_REQUIRED_SCOPED",
+  "feasibility_matrix": {
+    "analytic_Khronon_background_accepts_positive_a": true,
+    "historical_CLASS_metric_allowed_as_completed_U1_backward_solution": false,
+    "low_k_TCA_at_onset": true,
+    "low_k_gradient_seed_certified_at_onset": true,
+    "persisted_coupled_production_support_strictly_before_onset_for_low_k_seed": false,
+    "preferred_finite_k_metric_projector_certified_given_a_supported_background_snapshot": true,
+    "same_full_action_primordial_background_closed": false
+  },
+  "gate": "C10.65k",
+  "independent_control_anchor": [
+    {
+      "a": 0.0002203229136467,
+      "a_equals_onset": true,
+      "k_Mpc_inv": 1e-05,
+      "tau_Mpc": 87.89051579644
+    },
+    {
+      "a": 0.0002203229136467,
+      "a_equals_onset": true,
+      "k_Mpc_inv": 3e-05,
+      "tau_Mpc": 87.89051579644
+    },
+    {
+      "a": 0.0002203229136467,
+      "a_equals_onset": true,
+      "k_Mpc_inv": 0.0001,
+      "tau_Mpc": 87.89051579644
+    },
+    {
+      "a": 0.0002203229136467,
+      "a_equals_onset": true,
+      "k_Mpc_inv": 0.0003,
+      "tau_Mpc": 87.89051579645
+    }
+  ],
+  "low_k_seed_support": {
+    "a_on": 0.0002203229136467,
+    "all_exact_low_k_histories_start_at_a_on": true,
+    "backward_width_in_a_with_persisted_common_support": 0.0,
+    "common_earliest_a": 0.0002203229136467,
+    "common_earliest_tau_Mpc": 87.89051579645,
+    "exact_anchor_k_Mpc_inv": [
+      1e-05,
+      3e-05,
+      0.0001,
+      0.0003
+    ],
+    "nonzero_certified_pre_onset_interval": false,
+    "records": [
+      {
+        "a_max": 0.9769085344631,
+        "a_min": 0.0002203229136467,
+        "k_Mpc_inv": 1e-05,
+        "tau_max_Mpc": 14040.44603497,
+        "tau_min_Mpc": 87.89051579644
+      },
+      {
+        "a_max": 0.9650153971172,
+        "a_min": 0.0002203229136467,
+        "k_Mpc_inv": 3e-05,
+        "tau_max_Mpc": 13986.39576079,
+        "tau_min_Mpc": 87.89051579644
+      },
+      {
+        "a_max": 0.9653891483803,
+        "a_min": 0.0002203229136467,
+        "k_Mpc_inv": 0.0001,
+        "tau_max_Mpc": 13988.11015422,
+        "tau_min_Mpc": 87.89051579644
+      },
+      {
+        "a_max": 0.9761880210973,
+        "a_min": 0.0002203229136467,
+        "k_Mpc_inv": 0.0003,
+        "tau_max_Mpc": 14037.20092048,
+        "tau_min_Mpc": 87.89051579645
+      }
+    ]
+  },
+  "next_gate": "freeze C10.65l explicit pre-EFT/UV matching-interface contract for the eight fixed-C2 C10.65i amplitudes plus C2: define the minimal gauge-invariant boundary data and a phenomenological control prescription without claiming it is derived by the low-energy completed action; only then build conditional completed-U1 seeds and onset-shift tests",
+  "non_claims": [
+    "not a proof that the UV theory cannot select a unique growing mode",
+    "not a proof that the analytic Khronon background fails before a_on",
+    "not a choice of C2 or of the eight temporal amplitudes",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "f2d6d97744571aabe6f0aa503a0ae63c3068a951",
+    "worker": "research/shadow/rtk_c10_65k_nonlocal_temporal_selector_feasibility.py",
+    "workflow": "rtk-c10-65k-nonlocal-temporal-selector-feasibility.yml"
+  },
+  "schema": "RTK_C10_65K_NONLOCAL_TEMPORAL_SELECTOR_FEASIBILITY_RESULT_v1",
+  "selector_consequence": {
+    "asymptotic_primordial_eigenbranch_from_current_stack": "NOT_CERTIFIED",
+    "backward_regularity_from_current_stack": "NOT_CERTIFIED",
+    "later_time_boundedness": "Would be a new phenomenological final-time boundary condition, not silently equivalent to primordial growing-mode selection.",
+    "required_boundary_class": "explicit pre-EFT/UV matching functional for C2 and the eight C10.65i fixed-C2 temporal amplitudes, unless a new independently certified earlier completed-U1 background branch is constructed"
+  },
+  "target": "research/theory_targets/RTK_C10_65K_NONLOCAL_TEMPORAL_SELECTOR_FEASIBILITY_TARGET_v1.json",
+  "why_analytic_extension_is_not_enough": {
+    "Khronon": "The analytic action-fluid background can be evaluated for positive a, but this certifies only that sector.",
+    "background_scope_guard": "The first implementation may use the pinned production background only as a diagnostic matching branch. It must label the result scoped until the independent same-full-action Friedmann/gravity-normalization gate is closed.",
+    "coupled_background": "The completed projector needs H and total/ordinary source background data. Extending those below persisted production support would be a new assumption, not a consequence of the existing certificates.",
+    "metric": "Historical CLASS phi/psi are read-only controls and cannot be used as the completed-U1 backward metric trajectory."
+  }
+}
