@@ -1,0 +1,2 @@
+Trigger frozen C10.65s3b deterministic retry after infrastructure-only stdin-loop diagnosis.
+Frozen target and scientific criteria unchanged.
