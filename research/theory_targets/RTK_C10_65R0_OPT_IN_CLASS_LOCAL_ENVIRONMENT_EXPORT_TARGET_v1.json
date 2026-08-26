@@ -1,0 +1,71 @@
+{
+  "schema": "RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_TARGET_v1",
+  "gate": "C10.65r0",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Create the first strictly opt-in in-CLASS completed-U1 bridge scaffold without yet claiming a C implementation of the completed metric projector. The dormant OFF path must preserve the existing pinned RTK CLASS numeric history, while the ON path must export the exact local background/TCA environment needed by the detached C10.65n/o/q seed on the four exact-onset low-k anchors.",
+  "parents": {
+    "C10.65f": "C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_PASS_SCOPED",
+    "C10.65n": "C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED",
+    "C10.65o": "C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED",
+    "C10.65p": "C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_PASS_SCOPED",
+    "C10.65q": "C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_PASS_SCOPED"
+  },
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "runtime_contract": {
+    "flag": "c10_65r0_diag",
+    "default": 0.0,
+    "enabled_value": 1.0,
+    "scope": "diagnostic output only",
+    "forbidden": [
+      "changing any background equation",
+      "changing any perturbation equation",
+      "changing any tight-coupling switch or collision coefficient",
+      "using historical CLASS metric potentials as completed-U1 metric data",
+      "adding an independent B, Bprime, chi, PsiNprime or slip initial datum"
+    ]
+  },
+  "anchors": {
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "required_on_export": [
+    "a",
+    "Hc",
+    "rho_b",
+    "rho_g",
+    "rho_ur",
+    "R",
+    "cb2",
+    "dkappa",
+    "ddkappa",
+    "tau_c",
+    "dtau_c",
+    "F",
+    "F_prime",
+    "tca_flag"
+  ],
+  "frozen_checks": {
+    "off_numeric_text_sha256_identical_to_unpatched_control": true,
+    "off_file_count": 4,
+    "on_file_count": 4,
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "max_on_duplicate_relative_residual": 1e-14,
+    "max_onset_pack_relative_to_C10_65f": 1e-10,
+    "onset_tca_flag_must_equal_C10_65f_numeric_on_flag": true,
+    "all_exported_environment_values_finite": true,
+    "positive_guards": ["rho_b", "rho_g", "rho_ur", "R", "dkappa", "tau_c", "F"]
+  },
+  "pass_classification": "C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_PASS_SCOPED",
+  "fail_classification": "C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_FAIL_SCOPED",
+  "interpretation_if_pass": "The real pinned CLASS perturbation output path exposes a dormant-by-default diagnostic environment interface whose enabled values reproduce the frozen exact-onset TCA/background pack. This is an implementation scaffold only; it does not yet prove C parity of the completed-U1 projector or first RHS.",
+  "next_if_pass": "Freeze C10.65r1: implement the completed-U1 algebraic seed/projector in a diagnostic C helper, evaluate it from the C10.65r0 exported local environment plus the frozen UV matching vector at a_on, and compare psi_pref, phi_pref, B_pref, PsiN and PhiN against detached C10.65n/o before touching integration state.",
+  "non_claims": [
+    "not an in-CLASS completed-U1 metric implementation",
+    "not first-RHS parity",
+    "not a state handoff",
+    "not time integration",
+    "not spectra or likelihood evidence",
+    "not same-full-action primordial background closure",
+    "not a solution of the C9 radiative-naturalness gate"
+  ]
+}
