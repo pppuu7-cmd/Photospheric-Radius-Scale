@@ -83,6 +83,11 @@ decl='extern void rtk_c10_65s1_observe(double tau,double *y,void *parameters_and
 inc='#include "perturbations.h"\n'
 if inc not in ps: raise SystemExit('perturbations include anchor missing')
 ps=ps.replace(inc,inc+decl,1)
+# perturbations.c needs stdlib for getenv. Add it before computing any byte
+# offsets used for the later injection; changing ps after computing absret would
+# shift the insertion point and can split an existing statement.
+if '#include <stdlib.h>' not in ps:
+    ps=ps.replace(decl,decl+'#include <stdlib.h>\n',1)
 
 # Inject exactly one call at the very end of perturb_print_variables, after all
 # ordinary scalar/vector/tensor output values have already been materialized.
@@ -101,9 +106,6 @@ ret=segment.rfind('return _SUCCESS_;')
 if ret<0: raise SystemExit('success return not found in perturb_print_variables')
 absret=brace+ret
 call='  if (getenv("RTK_C10_65S1_OBSERVER_FILE") != NULL) rtk_c10_65s1_observe(tau,y,parameters_and_workspace);\n\n  '
-# perturbations.c needs stdlib for getenv; common headers may expose it, but add explicitly.
-if '#include <stdlib.h>' not in ps[:start]:
-    ps=ps.replace(decl,decl+'#include <stdlib.h>\n',1)
 ps=ps[:absret]+call+ps[absret:]
 pt.write_text(ps)
 
