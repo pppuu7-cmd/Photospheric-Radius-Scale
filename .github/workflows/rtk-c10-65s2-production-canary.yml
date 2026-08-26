@@ -1,0 +1,184 @@
+name: RTK C10.65s2 direct-onset one-step production canary
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json'
+      - 'rtk/apply_rtk_c10_65s2_production_canary_patch.py'
+      - 'rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py'
+      - 'research/shadow/rtk_c10_65s2_production_canary_analyzer.py'
+      - '.github/workflows/rtk-c10-65s2-production-canary.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+
+      - name: Verify frozen production contracts and parents
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s2_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p: json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json')
+          p=L('research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert p['status']=='FROZEN_BEFORE_PRODUCTION_EXECUTION'
+          assert t['pinned_class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert p['execution']['short_step_delta_tau_Mpc']==1e-4
+          assert p['execution']['expected_rhs_calls_for_one_accepted_no_rejection_cash_karp_step']==7
+          parents=[
+            ('research/theory_results/RTK_C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_RESULT_v1.json','C10_65S1_FINITE_STATE_COMPLETION_AT_ONSET_PASS_SCOPED'),
+            ('research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json','C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_PASS_SCOPED'),
+            ('research/theory_results/RTK_C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_RESULT_v1.json','C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_PASS_SCOPED'),
+            ('research/theory_results/RTK_C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_RESULT_v1.json','C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_PASS_SCOPED'),
+            ('research/theory_results/RTK_C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_RESULT_v1.json','C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_PASS_SCOPED'),
+            ('research/theory_results/RTK_C10_65S2_C_KERNEL_PARITY_AUDIT_RESULT_v1.json','C10_65S2_C_KERNEL_PARITY_PASS_SCOPED')]
+          for fn,c in parents:
+            d=L(fn); assert d['classification']==c,(fn,d.get('classification'))
+          assert t['frozen_checks']['max_first_production_rhs_vs_certified_r2_relative']==5e-9
+          print('C10_65S2_FROZEN_CONTRACTS_AND_PARENTS_PASS')
+          PY
+
+      - name: Prepare pinned control and disposable production trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control
+          git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_control rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          python3 rtk/apply_rtk_class_patch.py class_control
+          python3 rtk/upgrade_rtk_inputs.py class_control
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_control
+          python3 rtk/upgrade_rtk_initial_conditions.py class_control
+          python3 rtk/upgrade_rtk_matter_sources.py class_control
+          python3 rtk/upgrade_rtk_gamma_root.py class_control
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_control
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_control
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_control
+          python3 rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py class_control
+          python3 rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py class_control
+          python3 rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py class_control
+          python3 rtk/stabilize_rtk_c10_65r1_conditioned_projector.py class_control
+          make -C class_control -j2 class
+          cp -a class_control class_s2
+          python3 -m py_compile rtk/apply_rtk_c10_65s2_production_canary_patch.py rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py
+          python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py class_s2
+          make -C class_s2 clean
+          make -C class_s2 -j2 class
+
+      - name: Write frozen-domain control OFF and ON inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p: json.load(open(p))
+          f=L('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json')
+          plan=L('research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json')
+          p=L('research/state/current.json')['final_replay_result']['rtk']['params']
+          d=plan['scope']; kvals=', '.join(format(float(x),'.17g') for x in d['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_1/Mpc = 0.00031\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nevolver = 0\nl_max_ur = 17\nc10_65r0_diag = 0\nc10_65r1_diag = 0\nc10_65r1_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65r1_Mc = {float(d['M_c_Mpc_inv']):.17g}\n'''
+          for q in ('class_control/output','class_s2/output'): pathlib.Path(q).mkdir(exist_ok=True)
+          pathlib.Path('class_control/control.ini').write_text(common+'root = output/control_\n')
+          off=common+f'''c10_65s2_canary = 0\nc10_65s2_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65s2_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_a_on = {float(d['a_on']):.17g}\nroot = output/off_\n'''
+          on=common+f'''c10_65s2_canary = 1\nc10_65s2_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65s2_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_a_on = {float(d['a_on']):.17g}\nroot = output/on_\n'''
+          pathlib.Path('class_s2/off.ini').write_text(off); pathlib.Path('class_s2/on.ini').write_text(on)
+          PY
+
+      - name: Verify exact dormant OFF numeric-text identity
+        run: |
+          set -euo pipefail
+          (cd class_control && ./class control.ini) > c10_65s2_control.log 2>&1
+          (cd class_s2 && env -u RTK_C10_65S2_OBSERVER_FILE ./class off.ini) > c10_65s2_off.log 2>&1
+          python3 - <<'PY'
+          import glob,hashlib,json,pathlib
+          def numeric(p): return [x.strip() for x in pathlib.Path(p).read_text().splitlines() if x.strip() and not x.lstrip().startswith('#')]
+          def digest(p): return hashlib.sha256(('\n'.join(numeric(p))+'\n').encode()).hexdigest()
+          A=sorted(glob.glob('class_control/output/control_*perturbations*')); B=sorted(glob.glob('class_s2/output/off_*perturbations*'))
+          assert len(A)==len(B)==4,(len(A),len(B),A,B)
+          rows=[]; ok=True
+          for x,y in zip(A,B):
+            dx,dy=digest(x),digest(y); same=dx==dy; ok &= same
+            rows.append({'control':x,'s2_off':y,'control_sha256':dx,'s2_off_sha256':dy,'identical':same})
+          out={'all_four_numeric_rows_sha256_identical':bool(ok),'records':rows}
+          pathlib.Path('c10_65s2_off_identity.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(out,indent=2)); assert ok
+          PY
+
+      - name: Execute four-anchor one-step production canary
+        run: |
+          set -euo pipefail
+          rm -f c10_65s2_observer.csv
+          (cd class_s2 && RTK_C10_65S2_OBSERVER_FILE="$(pwd)/../c10_65s2_observer.csv" ./class on.ini) > c10_65s2_on.log 2>&1
+          test -s c10_65s2_observer.csv
+          wc -l c10_65s2_observer.csv
+
+      - name: Execute frozen C10.65s2 analyzer
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s2_production_canary_analyzer.py
+          python3 research/shadow/rtk_c10_65s2_production_canary_analyzer.py \
+            --observer c10_65s2_observer.csv \
+            --off-identity c10_65s2_off_identity.json \
+            --patch rtk/apply_rtk_c10_65s2_production_canary_patch.py \
+            --patch-v2 rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py \
+            --output research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json | tee c10_65s2_analyzer.log
+          grep -q '^C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED$' c10_65s2_analyzer.log
+
+      - name: Add immutable provenance
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json'
+          if [ ! -f "$p" ]; then exit 0; fi
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json'; d=json.load(open(p))
+          d['provenance']={'repo_head_at_job_start':open('c10_65s2_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65s2-production-canary.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'patch':'rtk/apply_rtk_c10_65s2_production_canary_patch_v2.py','analyzer':'research/shadow/rtk_c10_65s2_production_canary_analyzer.py','threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+
+      - name: Persist result
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json'
+          if [ ! -f "$p" ]; then exit 0; fi
+          cp "$p" /tmp/s2result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build; git reset --hard origin/rtk-class-build
+            cp /tmp/s2result.json "$p"
+            git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$p"; git commit -m 'Record C10.65s2 one-step production canary' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s2-production-canary
+          path: |
+            c10_65s2_control.log
+            c10_65s2_off.log
+            c10_65s2_on.log
+            c10_65s2_analyzer.log
+            c10_65s2_off_identity.json
+            c10_65s2_observer.csv
+            research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json
+          if-no-files-found: warn
