@@ -1,0 +1,71 @@
+{
+  "schema": "RTK_C10_65S4E_MODERATE_K_TRAJECTORY_SAMPLED_CONSTRAINT_TARGET_v1",
+  "gate": "C10.65s4e",
+  "created_utc": "2026-08-26T22:28:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "parents": {
+    "C10.65s4d": "C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_PASS_SCOPED",
+    "C10.65s3b": "C10_65S3B_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+    "C10.65s2e_historical": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED"
+  },
+  "purpose": "Test finite-short moderate-k completed-U1 production trajectory stability at seven prospectively fixed elapsed conformal times, using exactly the s4d production kernel/domain and the already-certified s3b independent-restart endpoint-sampling methodology. Each endpoint is a fresh integration from the same completed onset state; no observer call is inserted inside adaptive RK stages.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "k_Mpc_inv": [0.001, 0.003]
+  },
+  "sample_elapsed_tau_Mpc": [1e-9, 3e-9, 1e-8, 3e-8, 1e-7, 3e-7, 1e-6],
+  "sampling_policy": {
+    "independent_restart_from_identical_onset_per_endpoint": true,
+    "same_completed_U1_production_kernel_as_s4d": true,
+    "same_rk_evolver_as_s4d": true,
+    "same_integrator_tolerance_as_s4d": true,
+    "no_intra_step_observer_instrumentation": true,
+    "endpoint_width_absolute_tolerance_Mpc": 5e-14
+  },
+  "constraint_policy": {
+    "normalized_constraints": ["preferred_A", "preferred_Hamiltonian", "preferred_momentum"],
+    "max_abs_normalized_each_sample": 1e-10,
+    "max_abs_normalized_change_from_onset": 1e-10,
+    "bound_source": "prospectively inherited unchanged from low-k C10.65s3b; frozen before moderate-k trajectory execution"
+  },
+  "frozen_checks": {
+    "sample_count": 7,
+    "anchor_count": 2,
+    "endpoint_record_count": 14,
+    "off_numeric_text_sha256_identical_both": true,
+    "before_state_exactly_matches_s4d_before_per_anchor": true,
+    "first_rhs_relative_tolerance_vs_s4c": 5e-9,
+    "endpoint_width_absolute_tolerance_Mpc": 5e-14,
+    "approximation_state": {"TCA_enum": 0, "RSA_enum": 0, "UFA_enum": 0, "l_max_ur": 17},
+    "all_endpoint_state_and_rhs_finite": true,
+    "all_normalized_constraints_finite": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "same_kernel_integrator_tolerance_static_guard": true,
+    "moderate_k_seed_only_static_guard": true,
+    "no_low_k_seed_lookup": true,
+    "no_legacy_nlde_physical_role": true,
+    "no_double_gauge_transform": true,
+    "s2e_failed_parent_preserved": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4E_MODERATE_K_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+  "fail_classification": "C10_65S4E_MODERATE_K_TRAJECTORY_SAMPLED_CONSTRAINT_FAIL_SCOPED",
+  "interpretation_if_pass": "At k=1e-3 and 3e-3 Mpc^-1, seven independently restarted production trajectories from the same certified completed onset remain finite and satisfy the prospectively frozen 1e-10 preferred A/H/M normalized constraint bound through elapsed conformal time 1e-6 Mpc. This is sampled finite-short-trajectory evidence only, not a continuous-time supremum or long-time stability theorem.",
+  "next_if_pass": "Freeze a separate moderate-k time-widening gate using the already-established low-k s3c/s3d methodology before widening the k-domain to 0.01 or 0.03 Mpc^-1.",
+  "non_claims": [
+    "not a continuous-time supremum theorem between sampled endpoints",
+    "not long-time or cosmological-time moderate-k stability",
+    "not validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not a UV derivation of higher UR multipoles or matching control",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "threshold_changed": false
+}
