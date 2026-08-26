@@ -1,0 +1,48 @@
+{
+  "schema": "RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_TARGET_v1",
+  "created_utc": "2026-08-26T00:38:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65a",
+  "question": "What are the individual baryon/photon/massless-UR scalar perturbations of the pinned historical RTK production trajectory at the already-frozen common superhorizon onset, and do they provide a clean read-only control for the subsequent completed-U1 O(k^2) gradient solve?",
+  "scope": "read-only historical action-fluid CLASS control; no completed-U1 metric feedback and no physical seed claim",
+  "parents": [
+    "research/theory_results/RTK_C10_PHYSICAL_CLASS_SOURCE_EXPORT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PRODUCTION_SOURCE_COMPOSITION_AUDIT_2026-08-24.md",
+    "research/theory_results/RTK_C10_NEUTRAL_FINITE_ONSET_MEMORY_RESULT_v1.json"
+  ],
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "species": ["baryons", "photons", "massless_UR"],
+  "forbidden_species_interpretation": "Do not treat the legacy Omega0_cdm storage alias or fitted RTK Om as physical CDM; RTK Om is Omega_khronon on model=2.",
+  "sample": {
+    "a": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1]
+  },
+  "export_fields": [
+    "delta_g", "theta_g", "shear_g",
+    "delta_b", "theta_b",
+    "CLASS_psi_lapse", "CLASS_phi_curvature",
+    "delta_ur", "theta_ur", "shear_ur"
+  ],
+  "derived_controls": [
+    "D_g=delta_g-4*CLASS_phi_curvature",
+    "D_b=delta_b-3*CLASS_phi_curvature",
+    "D_ur=delta_ur-4*CLASS_phi_curvature",
+    "epsilon_density=max(|D_g-4 D_b/3|,|D_ur-D_g|)/max(|D_g|,|4 D_b/3|,|D_ur|,floor)",
+    "epsilon_velocity=max(|theta_g-theta_b|,|theta_ur-theta_g|)/max(|theta_g|,|theta_b|,|theta_ur|,floor)",
+    "theta_i/k^2 and shear_ur/k^2 are exported as regularity controls, not fitted initial conditions"
+  ],
+  "classification_rule": {
+    "technical_pass": "Exactly nine histories at the frozen k values, all requested fields finite, and interpolation covers the frozen onset.",
+    "control_consistent_scoped": "technical pass and at k=1e-5 Mpc^-1 both epsilon_density<1e-3 and epsilon_velocity<1e-2.",
+    "control_deviation_scoped": "technical pass but one or both conservative low-k control thresholds fail; this does not falsify the completed theory and must be diagnosed before C10.65b.",
+    "technical_fail": "missing histories/fields, nonfinite values, or onset outside support."
+  },
+  "acceptance_warning": "The baseline ratios are controls only. C10.65b must solve the completed preferred-DAE gradient system independently and may not import the historical CLASS metric potentials as the completed solution.",
+  "non_claims": [
+    "not completed-U1 initial conditions",
+    "not a derivation of B0 or N2",
+    "not a completed-U1 growing-mode uniqueness theorem",
+    "not massive-neutrino coverage",
+    "not spectra or likelihood evidence"
+  ]
+}
