@@ -1,0 +1,110 @@
+{
+  "checks": {
+    "after_rhs_calls": true,
+    "approximation": true,
+    "before_rhs_calls": true,
+    "boundary_carrier": true,
+    "boundary_higher_ur": true,
+    "constraint_capture_finite": true,
+    "first_rhs": true,
+    "kernel_metric": true,
+    "moderate_k_seed_only_static_guard": true,
+    "no_double_gauge_transform": true,
+    "no_legacy_nlde_physical_role": true,
+    "no_low_k_seed_lookup": true,
+    "off_identity": true,
+    "onset": true,
+    "post_step_finite": true,
+    "record_counts": true,
+    "s2e_failed_parent_preserved": true,
+    "same_kernel_integrator_tolerance_static_guard": true,
+    "step_width": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_PASS_SCOPED",
+  "constraint_drift_measurement_only": {
+    "0.001": {
+      "A": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "H": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "M": {
+        "absolute_change": 2.99977677806037e-16,
+        "after": 2.99977677806037e-16,
+        "before": 0.0
+      },
+      "T": {
+        "absolute_change": 1.8216956705506703e-16,
+        "after": 0.0,
+        "before": 1.8216956705506703e-16
+      }
+    },
+    "0.0030000000000000001": {
+      "A": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "H": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      },
+      "M": {
+        "absolute_change": 3.0083646253800744e-16,
+        "after": 3.0083646253800744e-16,
+        "before": 0.0
+      },
+      "T": {
+        "absolute_change": 0.0,
+        "after": 0.0,
+        "before": 0.0
+      }
+    }
+  },
+  "gate": "C10.65s4d",
+  "integrator_tolerance_changed": false,
+  "interpretation": "At k=1e-3 and 3e-3 Mpc^-1, the s4b completed onset carrier enters the unchanged completed-U1 production equations, reproduces the s4c first RHS, and executes exactly one accepted no-rejection Cash-Karp step at the prospectively inherited s2k width. This is a production-entry certificate only, not finite-time stability.",
+  "max_boundary_carrier_relative": 0.0,
+  "max_boundary_higher_ur_relative": 0.0,
+  "max_first_rhs_relative_vs_s4c": 4.262129182962879e-11,
+  "max_kernel_metric_relative_vs_s4c": 1.2128517215502012e-13,
+  "next_gate": "Freeze C10.65s4e moderate-k finite-short-trajectory gate on exactly these two modes, with all sample times and any trajectory residual bounds fixed before execution.",
+  "non_claims": [
+    "not finite-time moderate-k stability",
+    "not validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not a UV derivation of higher UR multipoles",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "observed_step_widths_Mpc": {
+    "0.001": 3.539923909556819e-10,
+    "0.0030000000000000001": 3.539923909556819e-10
+  },
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s4d_moderate_k_one_step_analyzer.py",
+    "base_production_patch": "rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "domain_patch": "rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py",
+    "github_actions_run_id": 33015496671,
+    "observer_sha256": "714cb37db2239479b08c90c46ca10761f61dcbf4d008fb641bc4870de3edca91",
+    "repo_head_at_job_start": "b77683165a30e1a6d61c3bf2d5ee322a45ae2e4d",
+    "s2k_parent_run_id": 33004868239,
+    "s4b_parent_run_id": 33011880042,
+    "s4c_parent_run_id": 33013704766,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s4d-moderate-k-one-step-production-canary.yml"
+  },
+  "s2e_classification_preserved": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED",
+  "schema": "RTK_C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_RESULT_v1",
+  "threshold_changed": false
+}
