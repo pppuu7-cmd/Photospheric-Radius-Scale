@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "marker_unique": true,
+    "parent_failure_preserved": true,
+    "source_contains_no_approximation_criterion_mutation": true,
+    "source_contains_no_dy_assignment": true,
+    "source_contains_no_manual_index_pt_state_assignment": true,
+    "source_contains_no_pvecmetric_assignment": true,
+    "source_contains_no_tolerance_mutation": true,
+    "source_has_runtime_observer_guard": true,
+    "source_reuses_same_generic_evolver_arguments": true,
+    "source_splits_only_containing_interval": true,
+    "source_uses_background_tau_of_z": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_PASS_SCOPED",
+  "gate": "C10.65s4a1",
+  "historical_s4a_failure": {
+    "classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED",
+    "false_checks": [
+      "all_exact_onset_rows_present"
+    ],
+    "run_id": 33008095108
+  },
+  "interpretation": "The exact-onset repair changes observer sampling geometry only: under a dedicated runtime opt-in it splits the already-selected uniform-approximation generic_evolver interval at tau_on, with the same RHS, state vector, tolerances, timescale and approximation flags.",
+  "next_gate": "Rerun the unchanged frozen C10.65s4a scientific target with the repaired exact-onset observer path; retain run 33008095108 and commit 3f50db6b as the historical failed attempt.",
+  "non_claims": [
+    "not a reclassification of the first C10.65s4a attempt",
+    "not completed-U1 seed certification at new k",
+    "not production feedback at new k",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s4a1_exact_onset_sampling_repair.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33008538013,
+    "patch": "rtk/apply_rtk_c10_65s4a1_exact_onset_sampling_patch.py",
+    "repo_head_at_job_start": "50d5f2f6655ccec5214b8d97453e75890b270c0f",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s4a1-exact-onset-sampling-repair.yml"
+  },
+  "schema": "RTK_C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_RESULT_v1",
+  "threshold_changed": false
+}
