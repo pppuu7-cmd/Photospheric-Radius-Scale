@@ -1,4 +1,5 @@
 name: RTK C10 neutral finite-onset memory
+# Research resume trigger: execute frozen C10.62b gate on 2026-08-26.
 
 on:
   workflow_dispatch:
