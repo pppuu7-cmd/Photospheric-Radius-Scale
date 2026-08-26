@@ -22,8 +22,6 @@ if marker in s:
 if 'RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_V1' not in s:
     raise SystemExit('apply the base C10.65r2 patch first')
 
-# Keep the previously justified onset-only finiteness scope correction, but do
-# not reorder any titles here.
 finite_guard='''          class_test(!isfinite(r2_B0.v)||!isfinite(r2_B0.d)||!isfinite(r2_Ba.d)||!isfinite(r2_Psip)||!isfinite(r2_slip)\n            ||!isfinite(r2_thbp)||!isfinite(r2_thgp)||!isfinite(r2_thurp)||!isfinite(r2_dkp)||!isfinite(r2_thkp),error_message,"C10.65r2 non-finite shadow first RHS");\n'''
 if finite_guard not in s:
     raise SystemExit('r2 all-history finiteness guard anchor missing')
@@ -34,8 +32,6 @@ start=s.find(start_token)
 if start<0 or s.find(start_token,start+1)>=0:
     raise SystemExit('expected exactly one r2 observer block')
 
-# Find the matching closing brace, respecting C string/character literals and
-# comments so braces there do not affect the balance.
 def matching_brace(text, open_pos):
     depth=0; i=open_pos; quote=None; line_comment=False; block_comment=False; esc=False
     while i<len(text):
@@ -63,18 +59,15 @@ def matching_brace(text, open_pos):
 
 open_pos=s.find('{',start)
 end_brace=matching_brace(s,open_pos)
-# Include one following newline for a clean relocation.
 end=end_brace+1
 if end<len(s) and s[end]=='\n': end+=1
 block=s[start:end]
-if 'c10_65r2_B_prime' not in block or 'c10_65r2_weighted_slip_cancel' not in block:
+# Guard on actual observer arithmetic/store symbols, not output-title strings
+# (the titles live in a different code section).
+if 'r2_B0=rtk_c10_65r2_general_B' not in block or 'class_store_double(dataptr,r2_cancel' not in block:
     raise SystemExit('captured r2 observer block failed content guard')
 
-# Remove observer from the middle of the r1 arithmetic first.
 s=s[:start]+s[end:]
-
-# Place it only after the last already-existing r1 store.  At that point all
-# numerical values contributing to the r1 OFF output have been materialized.
 anchor='        class_store_double(dataptr,r1_feedback,_TRUE_,storeidx);'
 pos=s.find(anchor)
 if pos<0 or s.find(anchor,pos+1)>=0:
