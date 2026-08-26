@@ -36,7 +36,6 @@ def main():
     pack=f['coefficient_pack']; R=M(pack['R']); cb2=M(pack['cb2']); tau=M(pack['tau_c_Mpc']); dtau=M(pack['dtau_c'])
     Wg=M(4)/3*bg['rhog']; Wur=M(4)/3*bg['rhour']
 
-    # Regression: same algebra must reproduce the persisted low-k C10.65n/o parent.
     oldks=[M('1e-4'),M('3e-4')]; nmap={M(r['k']):r for r in q['finite_records']}; omap={M(r['k']):r for r in o['points'][0]['finite_records']}
     max_reg=mp.mpf('0')
     for k in oldks:
@@ -86,7 +85,7 @@ def main():
       'historical_metric_not_consumed':all(not r['historical_CLASS_metric_consumed'] for r in records),
       'higher_ur_controls_explicitly_labeled':bool(labels_ok),
       'threshold_changed':False}
-    passed=all(checks.values())
+    passed=(checks['threshold_changed'] is False and all(v for k,v in checks.items() if k!='threshold_changed'))
     out={'schema':'RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1','gate':'C10.65s4b','classification':t['pass_classification'] if passed else t['fail_classification'],'target':'research/theory_targets/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_TARGET_v1.json','completion_point':{'lambda_HL':F(lam),'M_c_Mpc_inv':F(Mc)},'control_status':'PRE_EFT_PHENOMENOLOGICAL_CONTROL_ONLY','checks':checks,'maxima':{'projector_constraint_normalized':F(max_projector),'traceless_normalized':F(max_trace),'low_k_parent_regression_relative':F(max_reg),'min_abs_denominator':F(min_den)},'records':records,'interpretation':t['interpretation_if_pass'] if passed else 'The frozen moderate-k completed onset seed gate failed; do not proceed to production/current-state RHS at the new modes.','next_gate':t['next_if_pass'] if passed else 'Diagnose C10.65s4b without weakening the frozen criteria.','non_claims':t['non_claims'],'threshold_changed':False}
     p=ROOT/'research/theory_results/RTK_C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_RESULT_v1.json';p.write_text(json.dumps(out,indent=2,sort_keys=True,allow_nan=False)+'\n')
     print(out['classification']);print(json.dumps(out['maxima'],sort_keys=True));raise SystemExit(0 if passed else 2)
