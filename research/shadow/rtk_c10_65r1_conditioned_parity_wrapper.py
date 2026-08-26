@@ -5,6 +5,8 @@ This overrides only local_project().  All frozen thresholds, parent comparisons,
 OFF-path SHA checks and classifications remain those of the frozen r1 analyzer.
 The B closure is analytically reduced using the already-frozen Q definition so
 that the common L=-k^2 factor is cancelled before floating-point evaluation.
+The exported c10_65r1_B_den retains its frozen parent meaning (the original
+finite-k denominator) even though B itself is solved through a conditioned form.
 """
 from pathlib import Path
 import importlib.util
@@ -25,13 +27,16 @@ def conditioned_local_project(r,lam,Mc):
     hpA=-3.*H*(h+ph)-(x/a)*q0pref; hpB=-x*W0
     psipA=(Kp*h+K*hpA-DAp*psi)/DA; psipB=K*hpB/DA
     lapse=rr*Eth*L-2.*D*H*H
-    # phiA/phiB are retained only as split diagnostics.  For B, use the exact
-    # reduced form obtained after substituting 3H Q = C2*k^2-3a^2 dm and L=-k^2.
+    # phiA/phiB are retained as split diagnostics.  B is solved with the exact
+    # conditioned denominator, but the frozen B_den diagnostic is restored in
+    # its original finite-k normalization using an algebraically equivalent
+    # product that avoids the small-k subtraction.
     phiA=(-3.*a*a*rr*dm-D*H*Q+2.*D*H*psipA+2.*rr*Pcal*L*psi)/lapse
     phiB=(2.*D*H*psipB)/lapse
-    Bden=lapse+D*Eth*psipB
-    Brhs=Eth*(Q-D*psipA)-D*H*C2-2.*D*H*Pcal*psi
-    B=Brhs/Bden
+    Bden_cond=lapse+D*Eth*psipB
+    Brhs_cond=Eth*(Q-D*psipA)-D*H*C2-2.*D*H*Pcal*psi
+    B=Brhs_cond/Bden_cond
+    Bden=rr*L*Bden_cond/lapse
     psip=psipA+psipB*B
     phi=(-3.*a*a*rr*dm-D*H*Q+2.*D*H*psip+2.*rr*Pcal*L*psi)/lapse
     Vpref=qpref/(a*W); VN=Vpref+B; Psi=psi-H*B
