@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [rtk-class-build]
-    paths: ['.github/workflows/rtk-c10-65s4a3-targeted-endpoint-materialization-repair.yml','research/triggers/RTK_C10_65S4A3_TRIGGER_v1.txt']
+    paths: ['.github/workflows/rtk-c10-65s4a3-targeted-endpoint-materialization-repair.yml','research/triggers/RTK_C10_65S4A3_TRIGGER_v1.txt','research/shadow/rtk_c10_65s4a3_targeted_endpoint_materialization_repair.py']
 permissions: {contents: write}
 jobs:
   audit:
@@ -52,7 +52,7 @@ jobs:
           python3 - <<'PY'
           import json,os,pathlib
           p=pathlib.Path('research/theory_results/RTK_C10_65S4A3_TARGETED_ENDPOINT_MATERIALIZATION_REPAIR_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s4a3_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s4a3-targeted-endpoint-materialization-repair.yml','patch':'rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py','analyzer':'research/shadow/rtk_c10_65s4a3_targeted_endpoint_materialization_repair.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
-          c=pathlib.Path('research/checkpoints/RTK_C10_65S4A3_TARGETED_ENDPOINT_REPAIR_2026-08-26T2030Z.md');c.write_text('# RTK C10.65s4a3 targeted endpoint materialization repair\n\nClassification: `'+d['classification']+'`. Historical C10.65s4a failures 33008095108 and 33008706959 remain preserved. The repair is sampling-only and only applies to k=1e-3,3e-3 Mpc^-1. Regression k and dormant execution retain the original unsplit evolver path. No dy, metric, state, tolerance, approximation-criterion, or scientific-threshold mutation.\n\nNext only if PASS: retry the unchanged frozen C10.65s4a scientific analyzer with s4a3 enabled solely at the two new k anchors.\n')
+          c=pathlib.Path('research/checkpoints/RTK_C10_65S4A3_TARGETED_ENDPOINT_REPAIR_2026-08-26T2030Z.md');c.write_text('# RTK C10.65s4a3 targeted endpoint materialization repair\n\nClassification: `'+d['classification']+'`. Historical C10.65s4a failures 33008095108 and 33008706959 remain preserved. Earlier s4a3 implementation-only failed runs 33010618236, 33010775420 and 33010968444 are not scientific failures. The repair is sampling-only and only applies to k=1e-3,3e-3 Mpc^-1. Regression k and dormant execution retain the original unsplit evolver path. No dy, metric, state, tolerance, approximation-criterion, or scientific-threshold mutation.\n\nNext only if PASS: retry the unchanged frozen C10.65s4a scientific analyzer with s4a3 enabled solely at the two new k anchors.\n')
           PY
       - name: Persist result and checkpoint
         if: always()
