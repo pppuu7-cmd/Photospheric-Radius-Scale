@@ -1,0 +1,97 @@
+{
+  "schema": "RTK_C10_65B_COMPLETED_U1_ADIABATIC_GRADIENT_SYSTEM_TARGET_v1",
+  "created_utc": "2026-08-26T00:46:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65b",
+  "question": "Does the baseline completed-U1 photon+baryon+massless-UR+neutral-Khronon system possess a regular zero-charge adiabatic superhorizon branch whose O(k^2) gradient coefficients satisfy the preferred DAE constraints and determine B0 rather than prescribing chi/B?",
+  "parents": [
+    "research/theory_results/RTK_C10_ZERO_CHARGE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CHI_NEXT_ORDER_ADIABATIC_REQUIREMENT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json",
+    "research/theory_results/RTK_C10_CURVATURE_DRESSED_ORDINARY_DAE_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_KHRONON_ACTION_FLUID_EVOLUTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_TOTAL_MOMENTUM_SOURCE_SCOPE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_STUECKELBERG_METRIC_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_U1_NEWTONIAN_SOURCE_TRANSFORM_POLE_AUDIT_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json"
+  ],
+  "baseline_species": {
+    "ordinary_filtered_A_source": ["baryons", "photons", "massless_UR"],
+    "neutral_unfiltered_metric_source": ["RTK/Khronon"],
+    "physical_CDM": false,
+    "massive_ncdm": false
+  },
+  "mandatory_architecture": {
+    "gravity_solve": "preferred-coordinate finite-k DAE: A constraint -> Hamiltonian -> momentum; Newtonian/Stueckelberg potentials are outputs",
+    "forbidden_newtonian_solve": "do not globally invert the known crossing-prone Newtonian 3x3 basis",
+    "chi_B": "no independently integrated chi/B state and no convenience choice B0=0",
+    "ordinary_variables": "curvature-dressed physical-interface densities D_i=delta_i-3(1+w_i)Psi_N plus physical velocities/higher moments",
+    "neutral_variables": "preferred action-fluid delta_khr,theta_khr using phi_pref in Euler and k^2 B in continuity",
+    "source_channels": "ordinary-only deltaH0 for A filter; total density, pressure, anisotropic stress and momentum for metric/Ward equations"
+  },
+  "gradient_ansatz": {
+    "x": "k^2",
+    "regular_metric": ["psi_pref=psi0+x psi2+O(x^2)", "phi_pref=phi0+x phi2+O(x^2)", "B=B0+x B2+O(x^2)"],
+    "ordinary_density": "D_i=D_i0+x D_i2+O(x^2)",
+    "ordinary_velocity": "theta_i=x V_i0+O(x^2)",
+    "massless_UR_shear": "sigma_ur=x S_ur0+O(x^2)",
+    "neutral_density": "delta_khr=delta_khr0+x delta_khr2+O(x^2)",
+    "neutral_velocity": "theta_khr=x V_khr0+O(x^2)",
+    "higher_regular_multipoles": "F_l=O(k^l) for l>=3, with the implemented hierarchy retaining every term needed through O(k^2)"
+  },
+  "adiabatic_branch_conditions": {
+    "normalization": "fix one nonzero overall curvature/density amplitude only; final rank statement must be invariant under this normalization",
+    "ordinary_entropy": ["D_g0=(4/3)D_b0", "D_ur0=D_g0"],
+    "photon_baryon_tight_coupling": "use the actual early-time tight-coupling equations/limit; do not hard-code a finite-k equality beyond its controlled order",
+    "neutral_charge": "I_khr=delta_khr/(1+w_khr)-3 psi_pref=0 at the declared pre-EFT boundary",
+    "neutral_velocity": "must be solved; do not set theta_khr by copying an ordinary velocity or by convenience",
+    "leading_comoving_regularity": "a^2 delta_mu_pref,0 + H Q_pref,0=0",
+    "next_order_shift": "N(x)=x N2+O(x^2) and B0=-N2/(lambda_HL-1)",
+    "equivalent_B0_formula": "B0=[C2+2 Pcal psi0-E_th phi0]/(2H), C2=3a^2 delta_mu2+3H Q2"
+  },
+  "ordinary_physical_interface_equations_required": {
+    "continuity": "use curvature-dressed continuity so explicit Psi_N' cancels; for constant-w collisionless/perfect components D_i'=-(1+w_i)theta_i plus the appropriate collision/source terms",
+    "Euler": "ordinary species feel Phi_N and the physical Newtonian-coordinate shear-aware bridge, not phi_pref",
+    "UR": "retain massless-UR anisotropic stress at O(k^2); it contributes at leading order to the potential relation because Pi~(rho+p)sigma/k^2 is finite",
+    "baryon_photon": "retain the controlled tight-coupling momentum exchange needed at the chosen onset/order"
+  },
+  "neutral_equations_required": {
+    "continuity": "delta_khr'=-(1+w)(theta_khr+k^2 B-3 psi_pref')-3H(c_a^2-w)delta_khr",
+    "euler": "theta_khr'=-H(1-3c_a^2)theta_khr+k^2[c_s^2 delta_khr/(1+w)+phi_pref]",
+    "Pi_khr": 0
+  },
+  "metric_bridge_required": {
+    "Psi_N": "psi_pref-H B",
+    "Phi_N": "(1-Pcal)phi_pref+psi_pref+alpha1 L psi_pref-H B-8 pi G a^2 Pi_total",
+    "IR_diagnostic_grid": {"E_th": 2.0, "Pcal": 1.0, "alpha1": 0.0},
+    "warning": "The diagnostic grid is not a fitted or UV-complete parameter selection."
+  },
+  "preregistered_rank_tests": [
+    "After removing one overall normalization, compute the rank/nullity of the complete O(k^0)+O(k^2) coefficient system.",
+    "A scoped growing-mode pass requires exactly one regular zero-charge adiabatic direction before normalization and no extra free B0/chi datum.",
+    "Verify B0 obtained from the momentum expansion equals the independent C10.55 C2 formula within symbolic zero or <=1e-10 relative numerical residual.",
+    "Verify every preferred A/H/M constraint residual is <=1e-10 in a numerical realization and no quantity diverges faster than its frozen k-scaling as k decreases.",
+    "Verify the finite-k preferred solve stays inside the already-certified nonzero-determinant domain; do not interpret the known Newtonian 3x3 crossing as physical rank loss.",
+    "Repeat at least the three frozen lambda_HL values and three M_c values from the diagnostic onset protocol; report parameter dependence without fitting."
+  ],
+  "baseline_control_policy": {
+    "allowed": "C10.65a historical CLASS values may be used only for regression of signs, normalization conventions and the zero-deformation/control limit.",
+    "forbidden": "Do not import historical CLASS psi/phi, B=0, theta_khr, or total source trajectory as the completed-U1 solution.",
+    "reason": "C10.65b must establish self-consistent completed metric feedback rather than replaying the action-fluid shadow."
+  },
+  "background_scope_guard": "The first implementation may use the pinned production background only as a diagnostic matching branch. It must label the result scoped until the independent same-full-action Friedmann/gravity-normalization gate is closed.",
+  "classification_rule": {
+    "pass_scoped": "regular coefficient system, exactly one zero-charge adiabatic growing direction modulo normalization, solved (not prescribed) neutral velocity and B0, B0 cross-check pass, preferred constraint residual/rank guards pass across the frozen diagnostic grid",
+    "nonunique_scoped": "two or more regular zero-charge adiabatic directions remain after normalization",
+    "no_regular_branch_scoped": "the frozen equations have no regular zero-charge adiabatic solution across the required grid",
+    "technical_incomplete": "required hierarchy/source/constraint equations are not yet encoded self-consistently"
+  },
+  "non_claims": [
+    "not a UV derivation of the zero-charge boundary",
+    "not radiative protection of sigma1=sigma2=0",
+    "not a same-full-action background-normalization proof",
+    "not massive-neutrino completion",
+    "not completed-U1 spectra or likelihood evidence"
+  ],
+  "next_if_pass": "Implement the same coefficient/seed construction inside an opt-in completed-U1 Boltzmann shadow and run onset-shift plus spectra controls before any refit."
+}
