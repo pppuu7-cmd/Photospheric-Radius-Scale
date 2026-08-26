@@ -1,0 +1,80 @@
+name: RTK C10.65r2 runtime failure diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/workflows/rtk-c10-65r2-runtime-failure-diagnostic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose-first-on-point:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Prepare disposable r2 tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_r2
+          git -C class_r2 reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_r2/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_r2/include/
+          python3 rtk/apply_rtk_class_patch.py class_r2
+          python3 rtk/upgrade_rtk_inputs.py class_r2
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_r2
+          python3 rtk/upgrade_rtk_initial_conditions.py class_r2
+          python3 rtk/upgrade_rtk_matter_sources.py class_r2
+          python3 rtk/upgrade_rtk_gamma_root.py class_r2
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_r2
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_r2
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_r2
+          python3 rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py class_r2
+          python3 rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py class_r2
+          python3 rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py class_r2
+          python3 rtk/stabilize_rtk_c10_65r1_conditioned_projector.py class_r2
+          python3 rtk/apply_rtk_c10_65r2_in_class_first_rhs_diagnostic_patch.py class_r2
+          python3 rtk/fix_rtk_c10_65r2_column_order.py class_r2
+          make -C class_r2 -j2 class
+      - name: Write first frozen ON input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          proto=json.load(open('research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          pts=[]; seen=set()
+          for q in proto['points']:
+            key=(float(q['lambda_HL']),float(q['M_c_Mpc_inv']))
+            if key not in seen: seen.add(key); pts.append(key)
+          lam,Mc=pts[0]
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          text=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 2\nspectra_verbose = 0\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {lam:.17g}\nc10_65r1_Mc = {Mc:.17g}\nc10_65r2_diag = 1\nroot = output/r2debug_\n'''
+          pathlib.Path('class_r2/output').mkdir(exist_ok=True)
+          pathlib.Path('class_r2/r2debug.ini').write_text(text)
+          print('lambda_HL',lam,'M_c',Mc,'k',kvals)
+          PY
+      - name: Run and expose exact runtime failure
+        run: |
+          set +e
+          (cd class_r2 && ./class r2debug.ini) > c10_65r2_runtime.log 2>&1
+          rc=$?
+          echo "CLASS_EXIT_CODE=$rc"
+          echo '===== C10.65r2 runtime log ====='
+          cat c10_65r2_runtime.log
+          echo '===== produced perturbation files ====='
+          find class_r2/output -maxdepth 1 -type f -print || true
+          exit $rc
