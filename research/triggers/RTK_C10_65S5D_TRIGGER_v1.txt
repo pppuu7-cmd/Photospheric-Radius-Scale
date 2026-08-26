@@ -1,1 +1,2 @@
 C10.65s5d frozen multibranch one-step production canary trigger
+retry 1: install pinned mpmath dependency only; frozen target unchanged
