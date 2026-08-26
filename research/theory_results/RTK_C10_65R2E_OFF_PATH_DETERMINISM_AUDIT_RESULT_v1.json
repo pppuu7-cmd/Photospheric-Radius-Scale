@@ -1,0 +1,364 @@
+{
+  "classification": "C10_65R2E_DORMANT_R2_CODEGEN_PERTURBATION_SCOPED",
+  "gate": "C10.65r2e",
+  "interpretation": "Diagnostic only. Original frozen C10.65r2 criteria remain unchanged.",
+  "next": "If same-binary and independent-r1 controls are exact while r2 OFF is not, isolate code-generation perturbation by moving diagnostic arithmetic out of the production perturbations translation unit and rerun the original frozen C10.65r2 target unchanged.",
+  "provenance": {
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "compiler_mode": "upstream Makefile -O4 -ffast-math -fopenmp",
+    "repo_head_at_job_start": "fa73cda08673dbc30a03db9d7218c1f974bd25f9",
+    "workflow": "rtk-c10-65r2e-off-path-determinism-audit.yml"
+  },
+  "schema": "RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1",
+  "summary": {
+    "independent_r1_builds_exact_both_thread_modes": true,
+    "r1_vs_dormant_r2_exact_both_thread_modes": false,
+    "same_binary_exact_both_thread_modes": true
+  },
+  "tests": {
+    "independent_r1_builds_1thread": {
+      "exact_numeric_text_identity_all_four": true,
+      "files": [
+        {
+          "a": "class_r1a/output/build1a_perturbations_k0_s.dat",
+          "b": "class_r1b/output/build1b_perturbations_k0_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/build1a_perturbations_k1_s.dat",
+          "b": "class_r1b/output/build1b_perturbations_k1_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/build1a_perturbations_k2_s.dat",
+          "b": "class_r1b/output/build1b_perturbations_k2_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/build1a_perturbations_k3_s.dat",
+          "b": "class_r1b/output/build1b_perturbations_k3_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        }
+      ],
+      "max_abs_all_four": 0.0,
+      "max_rel_all_four": 0.0,
+      "shape_same_all_four": true
+    },
+    "independent_r1_builds_2threads": {
+      "exact_numeric_text_identity_all_four": true,
+      "files": [
+        {
+          "a": "class_r1a/output/build2a_perturbations_k0_s.dat",
+          "b": "class_r1b/output/build2b_perturbations_k0_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/build2a_perturbations_k1_s.dat",
+          "b": "class_r1b/output/build2b_perturbations_k1_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/build2a_perturbations_k2_s.dat",
+          "b": "class_r1b/output/build2b_perturbations_k2_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/build2a_perturbations_k3_s.dat",
+          "b": "class_r1b/output/build2b_perturbations_k3_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        }
+      ],
+      "max_abs_all_four": 0.0,
+      "max_rel_all_four": 0.0,
+      "shape_same_all_four": true
+    },
+    "r1_vs_dormant_r2_1thread": {
+      "exact_numeric_text_identity_all_four": false,
+      "files": [
+        {
+          "a": "class_r1a/output/r1_1_perturbations_k0_s.dat",
+          "b": "class_r2/output/r2_1_perturbations_k0_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -245502.1025823,
+            "abs": 1.00000761449337e-07,
+            "b": -245502.1025824,
+            "column_index": 86,
+            "rel": 4.073315885992173e-13,
+            "row": 162
+          },
+          "max_abs": 1.0,
+          "max_rel": 2.9979324459093542e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/r1_1_perturbations_k1_s.dat",
+          "b": "class_r2/output/r2_1_perturbations_k1_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -502592.2783508,
+            "abs": 1.00000761449337e-07,
+            "b": -502592.2783507,
+            "column_index": 86,
+            "rel": 1.98969951901128e-13,
+            "row": 156
+          },
+          "max_abs": 8.0,
+          "max_rel": 1.5543967693442416e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/r1_1_perturbations_k2_s.dat",
+          "b": "class_r2/output/r2_1_perturbations_k2_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -121522.9420726,
+            "abs": 1.00000761449337e-07,
+            "b": -121522.9420725,
+            "column_index": 86,
+            "rel": 8.2289615231332e-13,
+            "row": 189
+          },
+          "max_abs": 0.5,
+          "max_rel": 2.3211117923084208e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/r1_1_perturbations_k3_s.dat",
+          "b": "class_r2/output/r2_1_perturbations_k3_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -83383.01851916,
+            "abs": 2.400047378614545e-07,
+            "b": -83383.01851892,
+            "column_index": 86,
+            "rel": 2.878340723612752e-12,
+            "row": 206
+          },
+          "max_abs": 8.0,
+          "max_rel": 3.730940864022068e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        }
+      ],
+      "max_abs_all_four": 8.0,
+      "max_rel_all_four": 3.730940864022068e-09,
+      "shape_same_all_four": true
+    },
+    "r1_vs_dormant_r2_2threads": {
+      "exact_numeric_text_identity_all_four": false,
+      "files": [
+        {
+          "a": "class_r1a/output/r1_2_perturbations_k0_s.dat",
+          "b": "class_r2/output/r2_2_perturbations_k0_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -245502.1025823,
+            "abs": 1.00000761449337e-07,
+            "b": -245502.1025824,
+            "column_index": 86,
+            "rel": 4.073315885992173e-13,
+            "row": 162
+          },
+          "max_abs": 1.0,
+          "max_rel": 2.9979324459093542e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/r1_2_perturbations_k1_s.dat",
+          "b": "class_r2/output/r2_2_perturbations_k1_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -502592.2783508,
+            "abs": 1.00000761449337e-07,
+            "b": -502592.2783507,
+            "column_index": 86,
+            "rel": 1.98969951901128e-13,
+            "row": 156
+          },
+          "max_abs": 8.0,
+          "max_rel": 1.5543967693442416e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/r1_2_perturbations_k2_s.dat",
+          "b": "class_r2/output/r2_2_perturbations_k2_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -121522.9420726,
+            "abs": 1.00000761449337e-07,
+            "b": -121522.9420725,
+            "column_index": 86,
+            "rel": 8.2289615231332e-13,
+            "row": 189
+          },
+          "max_abs": 0.5,
+          "max_rel": 2.3211117923084208e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/r1_2_perturbations_k3_s.dat",
+          "b": "class_r2/output/r2_2_perturbations_k3_s.dat",
+          "exact_numeric_text_identity": false,
+          "first_difference": {
+            "a": -83383.01851916,
+            "abs": 2.400047378614545e-07,
+            "b": -83383.01851892,
+            "column_index": 86,
+            "rel": 2.878340723612752e-12,
+            "row": 206
+          },
+          "max_abs": 8.0,
+          "max_rel": 3.730940864022068e-09,
+          "same_row_count": true,
+          "token_shape_same": true
+        }
+      ],
+      "max_abs_all_four": 8.0,
+      "max_rel_all_four": 3.730940864022068e-09,
+      "shape_same_all_four": true
+    },
+    "same_binary_1thread": {
+      "exact_numeric_text_identity_all_four": true,
+      "files": [
+        {
+          "a": "class_r1a/output/same1a_perturbations_k0_s.dat",
+          "b": "class_r1a/output/same1b_perturbations_k0_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/same1a_perturbations_k1_s.dat",
+          "b": "class_r1a/output/same1b_perturbations_k1_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/same1a_perturbations_k2_s.dat",
+          "b": "class_r1a/output/same1b_perturbations_k2_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/same1a_perturbations_k3_s.dat",
+          "b": "class_r1a/output/same1b_perturbations_k3_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        }
+      ],
+      "max_abs_all_four": 0.0,
+      "max_rel_all_four": 0.0,
+      "shape_same_all_four": true
+    },
+    "same_binary_2threads": {
+      "exact_numeric_text_identity_all_four": true,
+      "files": [
+        {
+          "a": "class_r1a/output/same2a_perturbations_k0_s.dat",
+          "b": "class_r1a/output/same2b_perturbations_k0_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/same2a_perturbations_k1_s.dat",
+          "b": "class_r1a/output/same2b_perturbations_k1_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/same2a_perturbations_k2_s.dat",
+          "b": "class_r1a/output/same2b_perturbations_k2_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        },
+        {
+          "a": "class_r1a/output/same2a_perturbations_k3_s.dat",
+          "b": "class_r1a/output/same2b_perturbations_k3_s.dat",
+          "exact_numeric_text_identity": true,
+          "first_difference": null,
+          "max_abs": 0.0,
+          "max_rel": 0.0,
+          "same_row_count": true,
+          "token_shape_same": true
+        }
+      ],
+      "max_abs_all_four": 0.0,
+      "max_rel_all_four": 0.0,
+      "shape_same_all_four": true
+    }
+  }
+}
