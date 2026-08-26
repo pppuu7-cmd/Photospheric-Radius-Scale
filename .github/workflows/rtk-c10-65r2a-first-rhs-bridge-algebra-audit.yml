@@ -1,0 +1,58 @@
+name: RTK C10.65r2a first-RHS bridge algebra audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65r2a_first_rhs_bridge_algebra_audit.py'
+      - '.github/workflows/rtk-c10-65r2a-first-rhs-bridge-algebra-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  bridge-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Record starting provenance
+        run: git rev-parse HEAD | tee c10_65r2a_repo_head.txt
+      - name: Execute frozen bridge audit
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65r2a_first_rhs_bridge_algebra_audit.py
+          python3 research/shadow/rtk_c10_65r2a_first_rhs_bridge_algebra_audit.py | tee c10_65r2a.log
+          grep -q '^C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT_PASS_SCOPED ' c10_65r2a.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,datetime
+          p='research/theory_results/RTK_C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65r2a_repo_head.txt').read().strip(),'workflow':'rtk-c10-65r2a-first-rhs-bridge-algebra-audit.yml','worker':'research/shadow/rtk_c10_65r2a_first_rhs_bridge_algebra_audit.py','generated_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'threshold_changed':False,'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist scoped result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT_RESULT_v1.json /tmp/r2a.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r2a.json research/theory_results/RTK_C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R2A_FIRST_RHS_BRIDGE_ALGEBRA_AUDIT_RESULT_v1.json
+            git commit -m 'Record C10.65r2a bridge algebra audit' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
