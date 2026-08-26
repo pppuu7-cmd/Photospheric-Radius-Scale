@@ -1,0 +1,132 @@
+name: RTK C10.65r2e OFF-path determinism audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65r2e_off_path_determinism_audit.py'
+      - '.github/workflows/rtk-c10-65r2e-off-path-determinism-audit.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  determinism:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_TARGET_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert t['class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          PY
+          git rev-parse HEAD | tee c10_65r2e_repo_head.txt
+      - name: Build two independent r1 controls and one dormant r2
+        run: |
+          set -euo pipefail
+          for d in class_r1a class_r1b; do
+            git clone --branch nonlocal https://github.com/dirian/class_public.git "$d"
+            git -C "$d" reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+            cp rtk/khronon_background.c rtk/khronon_perturbations.c "$d/source/"
+            cp rtk/khronon_background.h rtk/khronon_perturbations.h "$d/include/"
+            for s in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py; do
+              python3 "rtk/$s" "$d"
+            done
+            make -C "$d" -j2 class
+          done
+          cp -a class_r1a class_r2
+          python3 rtk/apply_rtk_c10_65r2_in_class_first_rhs_diagnostic_patch.py class_r2
+          python3 rtk/fix_rtk_c10_65r2_column_order.py class_r2
+          python3 rtk/fix_rtk_c10_65r2_shear_units.py class_r2
+          make -C class_r2 clean
+          make -C class_r2 -j2 class
+      - name: Write matched inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          proto=json.load(open('research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          q=proto['points'][0]; lam=float(q['lambda_HL']); Mc=float(q['M_c_Mpc_inv'])
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {lam:.17g}\nc10_65r1_Mc = {Mc:.17g}\n'''
+          roots={
+            'class_r1a':['same2a','same2b','build2a','r1_2','same1a','same1b','build1a','r1_1'],
+            'class_r1b':['build2b','build1b'],
+            'class_r2':['r2_2','r2_1']
+          }
+          for d,names in roots.items():
+            pathlib.Path(d+'/output').mkdir(exist_ok=True)
+            for name in names:
+              extra='c10_65r2_diag = 0\n' if d=='class_r2' else ''
+              pathlib.Path(f'{d}/{name}.ini').write_text(common+extra+f'root = output/{name}_\n')
+          PY
+      - name: Execute 2-thread controls
+        run: |
+          set -euo pipefail
+          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/same2a.ini
+          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/same2b.ini
+          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/build2a.ini
+          OMP_NUM_THREADS=2 ./class_r1b/class class_r1b/build2b.ini
+          OMP_NUM_THREADS=2 ./class_r1a/class class_r1a/r1_2.ini
+          OMP_NUM_THREADS=2 ./class_r2/class class_r2/r2_2.ini
+      - name: Execute 1-thread controls
+        run: |
+          set -euo pipefail
+          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/same1a.ini
+          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/same1b.ini
+          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/build1a.ini
+          OMP_NUM_THREADS=1 ./class_r1b/class class_r1b/build1b.ini
+          OMP_NUM_THREADS=1 ./class_r1a/class class_r1a/r1_1.ini
+          OMP_NUM_THREADS=1 ./class_r2/class class_r2/r2_1.ini
+      - name: Analyze exact determinism hierarchy
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65r2e_off_path_determinism_audit.py \
+            --same2a 'class_r1a/output/same2a_*perturbations*' --same2b 'class_r1a/output/same2b_*perturbations*' \
+            --build2a 'class_r1a/output/build2a_*perturbations*' --build2b 'class_r1b/output/build2b_*perturbations*' \
+            --r1-2 'class_r1a/output/r1_2_*perturbations*' --r2-2 'class_r2/output/r2_2_*perturbations*' \
+            --same1a 'class_r1a/output/same1a_*perturbations*' --same1b 'class_r1a/output/same1b_*perturbations*' \
+            --build1a 'class_r1a/output/build1a_*perturbations*' --build1b 'class_r1b/output/build1b_*perturbations*' \
+            --r1-1 'class_r1a/output/r1_1_*perturbations*' --r2-1 'class_r2/output/r2_1_*perturbations*' \
+            --output research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json | tee c10_65r2e.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json'
+          d=json.load(open(p)); d['provenance']={'repo_head_at_job_start':open('c10_65r2e_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r2e-off-path-determinism-audit.yml','compiler_mode':'upstream Makefile -O4 -ffast-math -fopenmp'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json /tmp/r2e.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r2e.json research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R2E_OFF_PATH_DETERMINISM_AUDIT_RESULT_v1.json
+            git commit -m 'Record C10.65r2e OFF-path determinism audit' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
