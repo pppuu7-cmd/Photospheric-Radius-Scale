@@ -1,0 +1,95 @@
+{
+  "checks": {
+    "all_values_finite": true,
+    "containing_interval_exported_both": true,
+    "corrected_forward_relative_a_error_max": true,
+    "corrected_tau_inside_existing_integration_domain_both": true,
+    "diagnostic_patch_contains_no_dy_assignment": true,
+    "diagnostic_patch_contains_no_index_pt_state_assignment": true,
+    "diagnostic_patch_contains_no_pvecmetric_assignment": true,
+    "diagnostic_patch_contains_no_tolerance_or_approximation_criterion_mutation": true,
+    "inverse_roundtrip_error_measured": true,
+    "record_count": true,
+    "same_approximation_interval_membership_reported": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_PASS_SCOPED",
+  "gate": "C10.65s4a2",
+  "historical_failures_preserved": [
+    {
+      "classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED",
+      "run_id": 33008095108
+    },
+    {
+      "classification": "C10_65S4A_MODERATE_K_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED",
+      "run_id": 33008706959
+    }
+  ],
+  "interpretation": "The remaining acquisition problem is now measured without changing the perturbation evolution: tau(z_on), its forward-spline round trip, a forward-spline-consistent tau_*, and both approximation-interval memberships are explicitly recorded for the two new k anchors.",
+  "max_corrected_forward_relative_a_error": 7.787433043435558e-14,
+  "max_inverse_roundtrip_relative_a_error": 1.3286615619131758e-13,
+  "next_gate": "Freeze a sampling-only s4a3 repair using the forward-spline-consistent tau_* and the measured interval geometry; do not alter the original s4a k-domain or scientific guards.",
+  "non_claims": [
+    "not a reclassification of either failed C10.65s4a execution",
+    "not a new completed-U1 seed",
+    "not production feedback at new k",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s4a2_exact_onset_geometry_audit.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33009457306,
+    "patch": "rtk/apply_rtk_c10_65s4a2_geometry_audit_patch.py",
+    "repo_head_at_job_start": "c98d836b6ca58a20b62becc4ede892c3841e4713",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s4a2-exact-onset-geometry-audit.yml"
+  },
+  "records": [
+    {
+      "a_corrected": 0.00022032291364671716,
+      "a_z": 0.00022032291364667073,
+      "corrected_forward_relative_a_error": 7.787433043435558e-14,
+      "corrected_rsa": 0,
+      "corrected_tca": 0,
+      "corrected_ufa": 0,
+      "integration_tau_hi": 14142.485566084002,
+      "integration_tau_lo": 78.87924917174482,
+      "interval_hi_corrected": 246.2410691883897,
+      "interval_hi_tau_z": 246.2410691883897,
+      "interval_index_corrected": 0,
+      "interval_index_tau_z": 0,
+      "interval_lo_corrected": 78.87924917174482,
+      "interval_lo_tau_z": 78.87924917174482,
+      "inverse_roundtrip_relative_a_error": 1.3286615619131758e-13,
+      "k": 0.001,
+      "same_interval": 1,
+      "tau_corrected": 87.89051579644268,
+      "tau_z": 87.89051579642643
+    },
+    {
+      "a_corrected": 0.00022032291364671716,
+      "a_z": 0.00022032291364667073,
+      "corrected_forward_relative_a_error": 7.787433043435558e-14,
+      "corrected_rsa": 0,
+      "corrected_tca": 0,
+      "corrected_ufa": 0,
+      "integration_tau_hi": 14142.485566084002,
+      "integration_tau_lo": 24.334205362749806,
+      "interval_hi_corrected": 246.2410691884084,
+      "interval_hi_tau_z": 246.2410691884084,
+      "interval_index_corrected": 0,
+      "interval_index_tau_z": 0,
+      "interval_lo_corrected": 24.334205362749806,
+      "interval_lo_tau_z": 24.334205362749806,
+      "inverse_roundtrip_relative_a_error": 1.3286615619131758e-13,
+      "k": 0.003,
+      "same_interval": 1,
+      "tau_corrected": 87.89051579644268,
+      "tau_z": 87.89051579642643
+    }
+  ],
+  "s4a1_parent": "C10_65S4A1_EXACT_ONSET_SAMPLING_REPAIR_PASS_SCOPED",
+  "schema": "RTK_C10_65S4A2_EXACT_ONSET_GEOMETRY_AUDIT_RESULT_v1",
+  "threshold_changed": false
+}
