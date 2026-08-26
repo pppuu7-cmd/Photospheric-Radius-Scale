@@ -1,0 +1,35 @@
+{
+  "schema": "RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_RESULT_v1",
+  "gate": "C10.65r2f",
+  "classification": "C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_FAIL_SCOPED",
+  "target": "research/theory_targets/RTK_C10_65R2F_TAIL_OBSERVER_CODEGEN_ISOLATION_TARGET_v1.json",
+  "provenance": {
+    "github_actions_run_id": 32979032404,
+    "github_actions_job_id": 98210770971,
+    "repo_head_at_job_start": "8f621a5eceaa77fd6eddff1f81714f3bc7a3c893",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "workflow": "rtk-c10-65r2f-tail-observer-codegen-isolation.yml"
+  },
+  "execution": {
+    "r1_build": "PASS",
+    "tail_isolated_r2_build": "PASS",
+    "off_runtime": "PASS",
+    "on_runtime": "PASS",
+    "four_histories_each": true,
+    "analyzer_reached": true
+  },
+  "checks": {
+    "dormant_off_numeric_text_exact_identity_all_four": false,
+    "on_path_max_r1_projector_regression_relative": 0.0,
+    "on_path_max_r2_vs_previous_scientific_parity_relative": 0.0,
+    "frozen_thresholds_changed": false
+  },
+  "interpretation": "Moving the existing inline r2 observer after the final r1 store preserves all tested ON scientific quantities exactly but does not restore the frozen OFF-path SHA identity. Combined with C10.65r2e, this isolates the remaining effect to the presence of the heavy r2 observer/dependencies in the perturbations translation unit rather than runtime execution order, OpenMP scheduling, independent-build reproducibility, or the scientific r2 arithmetic.",
+  "next": "C10.65r2g: move heavy r2 arithmetic into a separately compiled noinline observer. The perturbations translation unit should contain only a minimal post-r1-store observer call that consumes already materialized r1 output plus existing raw CLASS pointers, so no r1 temporary must remain live for the diagnostic.",
+  "non_claims": [
+    "not a pass of the original frozen C10.65r2 target",
+    "not permission to weaken the exact OFF-path requirement",
+    "not production completed-U1 feedback",
+    "not spectra or likelihood evidence"
+  ]
+}
