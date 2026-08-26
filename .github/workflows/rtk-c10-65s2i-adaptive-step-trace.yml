@@ -1,0 +1,120 @@
+name: RTK C10.65s2i adaptive-step trace
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_TARGET_v1.json'
+      - 'rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py'
+      - 'research/shadow/rtk_c10_65s2i_adaptive_step_trace_analyzer.py'
+      - '.github/workflows/rtk-c10-65s2i-adaptive-step-trace.yml'
+permissions:
+  contents: write
+jobs:
+  trace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen trace contract
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s2i_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p: json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_TARGET_v1.json')
+          h=L('research/theory_results/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_RESULT_v1.json')
+          s=L('research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_TRACE_EXECUTION'
+          assert h['classification']=='C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED'
+          assert s['classification']=='C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED'
+          assert t['frozen_execution']['short_step_delta_tau_Mpc']==1e-4
+          assert s['threshold_changed'] is False
+          print('C10_65S2I_FROZEN_CONTRACT_PASS')
+          PY
+      - name: Prepare disposable pinned production tree
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_s2i
+          git -C class_s2i reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_s2i/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_s2i/include/
+          python3 rtk/apply_rtk_class_patch.py class_s2i
+          python3 rtk/upgrade_rtk_inputs.py class_s2i
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_s2i
+          python3 rtk/upgrade_rtk_initial_conditions.py class_s2i
+          python3 rtk/upgrade_rtk_matter_sources.py class_s2i
+          python3 rtk/upgrade_rtk_gamma_root.py class_s2i
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_s2i
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_s2i
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_s2i
+          python3 rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py class_s2i
+          python3 rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py class_s2i
+          python3 rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py class_s2i
+          python3 rtk/stabilize_rtk_c10_65r1_conditioned_projector.py class_s2i
+          python3 rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py class_s2i
+          python3 rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py class_s2i
+          make -C class_s2i -j2 class
+      - name: Write unchanged frozen-domain ON input
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p: json.load(open(p))
+          plan=L('research/theory_targets/RTK_C10_65S2_PRODUCTION_IMPLEMENTATION_PLAN_v1.json')
+          p=L('research/state/current.json')['final_replay_result']['rtk']['params']; d=plan['scope']; ks=', '.join(format(float(x),'.17g') for x in d['k_Mpc_inv'])
+          s=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_1/Mpc = 0.00031\nz_pk = 0\nk_output_values = {ks}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nevolver = 0\nl_max_ur = 17\nc10_65r0_diag = 0\nc10_65r1_diag = 0\nc10_65r1_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65r1_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_canary = 1\nc10_65s2_lambda_HL = {float(d['lambda_HL']):.17g}\nc10_65s2_Mc = {float(d['M_c_Mpc_inv']):.17g}\nc10_65s2_a_on = {float(d['a_on']):.17g}\nroot = output/on_\n'''
+          pathlib.Path('class_s2i/output').mkdir(exist_ok=True); pathlib.Path('class_s2i/on.ini').write_text(s)
+          PY
+      - name: Execute traced original-width canary
+        run: |
+          set -euo pipefail
+          rm -f c10_65s2i_trace.csv c10_65s2i_observer.csv
+          (cd class_s2i && RTK_C10_65S2_OBSERVER_FILE="$(pwd)/../c10_65s2i_observer.csv" RTK_C10_65S2I_TRACE_FILE="$(pwd)/../c10_65s2i_trace.csv" ./class on.ini) > c10_65s2i_on.log 2>&1
+          test -s c10_65s2i_trace.csv
+          test -s c10_65s2i_observer.csv
+      - name: Analyze adaptive trace
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s2i_adaptive_step_trace_analyzer.py --trace c10_65s2i_trace.csv --observer c10_65s2i_observer.csv --patch rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py --output research/theory_results/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_RESULT_v1.json | tee c10_65s2i.log
+          grep -q '^C10_65S2I_ADAPTIVE_STEP_TRACE_PASS_SCOPED$' c10_65s2i.log
+      - name: Add provenance and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_RESULT_v1.json'; [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib,hashlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_RESULT_v1.json'); d=json.loads(p.read_text())
+          tr=pathlib.Path('c10_65s2i_trace.csv').read_bytes(); ob=pathlib.Path('c10_65s2i_observer.csv').read_bytes()
+          d['provenance']={'repo_head_at_job_start':pathlib.Path('c10_65s2i_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s2i-adaptive-step-trace.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'trace_sha256':hashlib.sha256(tr).hexdigest(),'observer_sha256':hashlib.sha256(ob).hexdigest(),'trace_patch':'rtk/apply_rtk_c10_65s2i_adaptive_trace_patch.py','analyzer':'research/shadow/rtk_c10_65s2i_adaptive_step_trace_analyzer.py','threshold_changed':False}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          g=d['global']; lines=[]
+          for r in d['records']: lines.append(f"- k={r['k']:.8g}: accepted={r['accepted_substeps']}, rejected={r['rejected_trials']}, first_hdid={r['first_accepted_hdid']:.17e}, min_hdid={r['minimum_hdid']:.17e}")
+          pathlib.Path('research/checkpoints/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_2026-08-26T1917Z.md').write_text('# RTK C10.65s2i adaptive-step trace checkpoint\n\nClassification: `'+d['classification']+'`. Original C10.65s2 remains FAIL_SCOPED. The run reused the original 1e-4 Mpc interval and unchanged perturbation tolerance; only integrator bookkeeping was logged.\n\n'+'\n'.join(lines)+f"\n\nTotal accepted substeps: {g['total_accepted_substeps']}; total rejected RKCK trials: {g['total_rejected_trials']}. Minimum first accepted hdid across anchors: {g['minimum_first_accepted_hdid']:.17e}.\n\nNo retry width was selected in this gate. Next: freeze C10.65s2j prospective retry-width contract from this trace, then execute a separate retry with unchanged tolerance and exactly-one-accepted-step requirement.\n")
+          PY
+      - name: Persist result and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_RESULT_v1.json'; ck='research/checkpoints/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_2026-08-26T1917Z.md'; [ -f "$p" ] || exit 0
+          cp "$p" /tmp/r.json; cp "$ck" /tmp/c.md
+          for n in 1 2 3 4 5; do git fetch origin rtk-class-build; git reset --hard origin/rtk-class-build; cp /tmp/r.json "$p"; cp /tmp/c.md "$ck"; git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'; git add "$p" "$ck"; git commit -m 'Record C10.65s2i adaptive-step trace' || exit 0; git push origin HEAD:rtk-class-build && exit 0; done; exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s2i-adaptive-step-trace
+          path: |
+            c10_65s2i_trace.csv
+            c10_65s2i_observer.csv
+            c10_65s2i_on.log
+            c10_65s2i.log
+            research/theory_results/RTK_C10_65S2I_ADAPTIVE_STEP_TRACE_RESULT_v1.json
