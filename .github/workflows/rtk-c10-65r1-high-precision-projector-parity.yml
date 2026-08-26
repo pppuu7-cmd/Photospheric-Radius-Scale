@@ -1,0 +1,150 @@
+name: RTK C10.65r1 high-precision projector parity
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'rtk/apply_rtk_c10_65r1_high_precision_sidecar_patch.py'
+      - 'research/shadow/rtk_c10_65r1_high_precision_sidecar_wrapper.py'
+      - '.github/workflows/rtk-c10-65r1-high-precision-projector-parity.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  high-precision-parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify unchanged frozen target and parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          def L(p): return json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_TARGET_v1.json')
+          r0=L('research/theory_results/RTK_C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_RESULT_v1.json')
+          n=L('research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json')
+          o=L('research/theory_results/RTK_C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert t['frozen_checks']['max_C_vs_local_python_relative']==5e-11
+          assert t['frozen_checks']['max_C_vs_detached_parent_relative']==1e-6
+          assert r0['classification']=='C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_PASS_SCOPED'
+          assert n['classification']=='C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED'
+          assert o['classification']=='C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED'
+          PY
+          git rev-parse HEAD | tee c10_65r1_hp_repo_head.txt
+      - name: Prepare pinned r0 control and high-precision conditioned r1 trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_r0
+          git -C class_r0 reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_r0/source/
+          cp rtk/khronon_background.h rtk/khronon_perturbations.h class_r0/include/
+          python3 rtk/apply_rtk_class_patch.py class_r0
+          python3 rtk/upgrade_rtk_inputs.py class_r0
+          python3 rtk/upgrade_rtk_nonlocal_initial_conditions.py class_r0
+          python3 rtk/upgrade_rtk_initial_conditions.py class_r0
+          python3 rtk/upgrade_rtk_matter_sources.py class_r0
+          python3 rtk/upgrade_rtk_gamma_root.py class_r0
+          python3 rtk/upgrade_rtk_spectra_endpoint.py class_r0
+          python3 rtk/apply_rtk_c10_source_export_patch.py class_r0
+          python3 rtk/apply_rtk_c10_65a_species_control_patch.py class_r0
+          python3 rtk/apply_rtk_c10_65e_tca_coefficient_export_patch.py class_r0
+          python3 rtk/apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py class_r0
+          make -C class_r0 -j2 class
+          cp -a class_r0 class_r1
+          python3 rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py class_r1
+          python3 rtk/stabilize_rtk_c10_65r1_conditioned_projector.py class_r1
+          python3 rtk/apply_rtk_c10_65r1_high_precision_sidecar_patch.py class_r1
+          make -C class_r1 clean
+          make -C class_r1 -j2 class
+      - name: Write matched inputs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          f=json.load(open('research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json'))
+          proto=json.load(open('research/theory_results/RTK_C10_DIAGNOSTIC_COMPLETION_ONSET_PROTOCOL_RESULT_v1.json'))
+          p=json.load(open('research/state/current.json'))['final_replay_result']['rtk']['params']
+          kvals=', '.join(format(float(x),'.17g') for x in f['exact_anchor']['k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {kvals}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nc10_65r0_diag = 1\n'''
+          pathlib.Path('class_r0/output').mkdir(exist_ok=True); pathlib.Path('class_r1/output').mkdir(exist_ok=True)
+          pathlib.Path('class_r0/control.ini').write_text(common+'root = output/control_\n')
+          pathlib.Path('class_r1/off.ini').write_text(common+'root = output/off_\n')
+          pts=[]; seen=set()
+          for q in proto['points']:
+              key=(float(q['lambda_HL']),float(q['M_c_Mpc_inv']))
+              if key not in seen: seen.add(key); pts.append(key)
+          assert len(pts)==9
+          man=[]
+          for i,(lam,Mc) in enumerate(pts):
+              prefix=f'p{i:02d}_'
+              pathlib.Path(f'class_r1/p{i:02d}.ini').write_text(common+f'c10_65r1_diag = 1\nc10_65r1_lambda_HL = {lam:.17g}\nc10_65r1_Mc = {Mc:.17g}\nroot = output/{prefix}\n')
+              man.append({'prefix':prefix,'lambda_HL':lam,'M_c_Mpc_inv':Mc})
+          pathlib.Path('c10_65r1_manifest.json').write_text(json.dumps({'points':man},indent=2)+'\n')
+          PY
+      - name: Verify standard dormant OFF path remains exact and has no sidecar
+        run: |
+          set -euo pipefail
+          (cd class_r0 && ./class control.ini) > c10_65r1_hp_control.log 2>&1
+          (cd class_r1 && ./class off.ini) > c10_65r1_hp_off.log 2>&1
+          test "$(find class_r0/output -maxdepth 1 -type f -name 'control_*perturbations_k*_s.dat' | wc -l)" -eq 4
+          test "$(find class_r1/output -maxdepth 1 -type f -name 'off_*perturbations_k*_s.dat' | wc -l)" -eq 4
+          test "$(find class_r1/output -maxdepth 1 -type f -name 'off_*r1hp.dat' | wc -l)" -eq 0
+          if grep -q 'c10_65r1_W_khr' class_r1/output/off_*perturbations_k*_s.dat; then echo 'r1 columns leaked into OFF standard path'; exit 1; fi
+      - name: Run 3x3x4 diagnostic grid and require full-precision sidecars
+        run: |
+          set -euo pipefail
+          for f in class_r1/p*.ini; do b="$(basename "$f")"; (cd class_r1 && ./class "$b") >> ../c10_65r1_hp_on.log 2>&1; done
+          test "$(find class_r1/output -maxdepth 1 -type f -name 'p*_perturbations_k*_s.dat' | wc -l)" -eq 36
+          test "$(find class_r1/output -maxdepth 1 -type f -name 'p*_perturbations_k*_s_r1hp.dat' | wc -l)" -eq 36
+      - name: Analyze full-precision C parity with unchanged frozen thresholds
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65r1_in_class_completed_projector_parity.py research/shadow/rtk_c10_65r1_conditioned_parity_wrapper.py research/shadow/rtk_c10_65r1_high_precision_sidecar_wrapper.py
+          python3 research/shadow/rtk_c10_65r1_high_precision_sidecar_wrapper.py \
+            --r0-control-glob 'class_r0/output/control_*perturbations_k*_s.dat' \
+            --r1-off-glob 'class_r1/output/off_*perturbations_k*_s.dat' \
+            --r1-dir class_r1/output \
+            --manifest c10_65r1_manifest.json \
+            --output research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json | tee c10_65r1_hp.log
+          grep -q '^C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED ' c10_65r1_hp.log
+      - name: Add immutable provenance and serialization diagnosis
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json'
+          d=json.load(open(p))
+          d['numerical_conditioning']={'method':'algebraically equivalent cancellation-free B closure','threshold_changed':False,'conditioned_C_patch':'rtk/stabilize_rtk_c10_65r1_conditioned_projector.py','conditioned_python_wrapper':'research/shadow/rtk_c10_65r1_conditioned_parity_wrapper.py'}
+          d['serialization_channel']={'standard_CLASS_precision_digits':12,'standard_output_modified':False,'sidecar_precision':'%.17e','sidecar_enabled_only_when_c10_65r1_diag_is_1':True,'patch':'rtk/apply_rtk_c10_65r1_high_precision_sidecar_patch.py','reason':'legacy CLASS class_fprintf_double uses _OUTPUTPRECISION_=12; full-precision parity must inspect the identical stored double array before 12-digit truncation'}
+          d['provenance']={'repo_head_at_job_start':open('c10_65r1_hp_repo_head.txt').read().strip(),'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317','workflow':'rtk-c10-65r1-high-precision-projector-parity.yml','base_patch':'rtk/apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py','conditioning_patch':'rtk/stabilize_rtk_c10_65r1_conditioned_projector.py','sidecar_patch':'rtk/apply_rtk_c10_65r1_high_precision_sidecar_patch.py','worker':'research/shadow/rtk_c10_65r1_high_precision_sidecar_wrapper.py'}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json /tmp/r1hp.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/r1hp.json research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_RESULT_v1.json
+            git commit -m 'Record full-precision C10.65r1 projector parity' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
