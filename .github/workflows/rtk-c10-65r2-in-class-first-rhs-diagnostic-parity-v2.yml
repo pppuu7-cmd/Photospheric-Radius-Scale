@@ -61,6 +61,7 @@ jobs:
           cp -a class_r1 class_r2
           python3 rtk/apply_rtk_c10_65r2_in_class_first_rhs_diagnostic_patch.py class_r2
           python3 rtk/fix_rtk_c10_65r2_column_order.py class_r2
+          python3 rtk/fix_rtk_c10_65r2_shear_units.py class_r2
           make -C class_r2 clean
           make -C class_r2 -j2 class
       - name: Generate non-duplicated control/off/on inputs
