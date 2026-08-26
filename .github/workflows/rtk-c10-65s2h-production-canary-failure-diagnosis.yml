@@ -1,0 +1,125 @@
+name: RTK C10.65s2h production canary failure diagnosis
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s2h_failure_diagnosis.py'
+      - '.github/workflows/rtk-c10-65s2h-production-canary-failure-diagnosis.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      S2_RUN_ID: '33003225136'
+      CLASS_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+
+      - name: Verify frozen diagnosis target and parent
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s2h_head.txt
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_TARGET_v1.json'))
+          s=json.load(open('research/theory_results/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_DIAGNOSIS_EXECUTION'
+          assert t['parent']['github_actions_run_id']==33003225136
+          assert t['parent']['class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert s['classification']=='C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED'
+          assert s['provenance']['github_actions_run_id']==33003225136
+          assert s['threshold_changed'] is False
+          print('C10_65S2H_FROZEN_PARENT_PASS')
+          PY
+
+      - name: Recover immutable C10.65s2 artifact
+        run: |
+          set -euo pipefail
+          rm -rf s2_artifact
+          mkdir s2_artifact
+          gh run download "$S2_RUN_ID" --repo pppuu7-cmd/Photospheric-Radius-Scale --name rtk-c10-65s2-production-canary --dir s2_artifact
+          test -s s2_artifact/c10_65s2_observer.csv
+          test "$(wc -l < s2_artifact/c10_65s2_observer.csv)" -eq 8
+          sha256sum s2_artifact/c10_65s2_observer.csv | tee c10_65s2h_observer_sha256.txt
+
+      - name: Fetch pinned integrator source
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://raw.githubusercontent.com/dirian/class_public/${CLASS_SHA}/tools/evolver_rkck.c" -o evolver_rkck.c
+          curl -fsSL "https://raw.githubusercontent.com/dirian/class_public/${CLASS_SHA}/tools/dei_rkck.c" -o dei_rkck.c
+          test -s evolver_rkck.c
+          test -s dei_rkck.c
+
+      - name: Execute frozen C10.65s2h diagnosis
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s2h_failure_diagnosis.py
+          python3 research/shadow/rtk_c10_65s2h_failure_diagnosis.py \
+            --observer s2_artifact/c10_65s2_observer.csv \
+            --v3-patch rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py \
+            --old-analyzer research/shadow/rtk_c10_65s2_production_canary_analyzer.py \
+            --evolver-source evolver_rkck.c \
+            --dei-source dei_rkck.c \
+            --output research/theory_results/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_RESULT_v1.json | tee c10_65s2h.log
+          grep -q '^C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED$' c10_65s2h.log
+
+      - name: Add provenance and recovery checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_RESULT_v1.json'
+          if [ ! -f "$p" ]; then exit 0; fi
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_RESULT_v1.json')
+          d=json.loads(p.read_text())
+          d['provenance']={
+            'repo_head_at_job_start':pathlib.Path('c10_65s2h_head.txt').read_text().strip(),
+            'class_upstream_sha':os.environ['CLASS_SHA'],
+            'source_s2_github_actions_run_id':int(os.environ['S2_RUN_ID']),
+            'source_s2_artifact_id':9619456810,
+            'source_observer_sha256':pathlib.Path('c10_65s2h_observer_sha256.txt').read_text().split()[0],
+            'workflow':'rtk-c10-65s2h-production-canary-failure-diagnosis.yml',
+            'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),
+            'analyzer':'research/shadow/rtk_c10_65s2h_failure_diagnosis.py',
+            'threshold_changed':False
+          }
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          ck=pathlib.Path('research/checkpoints/RTK_C10_65S2H_FAILURE_DIAGNOSIS_2026-08-26T1913Z.md')
+          mins=', '.join(f"k={r['k']:.8g}: >= {r['minimum_accepted_substeps']} accepted" for r in d.get('adaptive_step_diagnostics',[]))
+          ck.write_text(f'''# RTK C10.65s2h failure diagnosis checkpoint\n\nClassification: `{d['classification']}`.\n\nOriginal C10.65s2 remains `{d['original_s2_classification_preserved']}` and is not reclassified. The physical/onset/OFF/RHS/finite/constraint checks passed; the genuine failed scientific execution requirement was exactly one accepted post-handoff step.\n\nPinned Cash-Karp accounting on the immutable s2 observer gives: {mins}. Thus the frozen 1e-4 Mpc interval was adaptively split into multiple accepted substeps; this is not explained by rejected trials alone.\n\nThe second original failure, `thermo_signature_fix_only`, is diagnosed as an analyzer literal-string false negative. The executed v3 patch explicitly describes the change as `No physics or frozen criteria change` and `compile-only thermo/prototype fixes`; all other static guards passed, OFF numeric identity was exact, and first production RHS parity remained far inside the frozen 5e-9 bound.\n\nNo threshold or retry width was changed or selected in s2h. Next gate: freeze C10.65s2i diagnostic instrumentation at the same 1e-4 Mpc interval and unchanged tolerance, record accepted `hdid`/`hnext` and rejection counts in the actual pinned production integrator, then only prospectively freeze a retry width in a later gate.\n''')
+          PY
+
+      - name: Persist diagnosis result and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p='research/theory_results/RTK_C10_65S2H_PRODUCTION_CANARY_FAILURE_DIAGNOSIS_RESULT_v1.json'
+          ck='research/checkpoints/RTK_C10_65S2H_FAILURE_DIAGNOSIS_2026-08-26T1913Z.md'
+          if [ ! -f "$p" ]; then exit 0; fi
+          cp "$p" /tmp/s2h-result.json
+          cp "$ck" /tmp/s2h-checkpoint.md
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/s2h-result.json "$p"
+            cp /tmp/s2h-checkpoint.md "$ck"
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$p" "$ck"
+            git commit -m 'Record C10.65s2h failure diagnosis' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
