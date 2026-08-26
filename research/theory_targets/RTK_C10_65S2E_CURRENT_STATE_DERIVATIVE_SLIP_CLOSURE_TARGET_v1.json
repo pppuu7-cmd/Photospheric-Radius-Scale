@@ -1,0 +1,70 @@
+{
+  "schema": "RTK_C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_TARGET_v1",
+  "created_utc": "2026-08-26T18:10:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "gate": "C10.65s2e",
+  "purpose": "Close the final current-state temporal interface required before C10.65s2 production feedback: obtain B_prime and Psi_N_prime by differentiating the current-state DAE along the ordinary+neutral action RHS, then evaluate the exact source-locked compromise_CLASS slip and Newtonian-coordinate Khronon RHS without adding any temporal, metric or shift datum.",
+  "parents": [
+    "research/theory_results/RTK_C10_65S2B_NEWTONIAN_KHRONON_RHS_BRIDGE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65P_SLIP_DERIVATIVE_TRIANGULAR_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65Q_NUMERIC_BPRIME_SLIP_CLOSURE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json"
+  ],
+  "gauge_invariant_derivative_coordinates": {
+    "D_b": "delta_b-3 Psi_N; D_b_prime=-theta_b",
+    "D_g": "delta_g-4 Psi_N; D_g_prime=-(4/3)theta_g",
+    "D_ur": "delta_ur-4 Psi_N; D_ur_prime=-(4/3)theta_ur",
+    "J_khr": "delta_khr_N/(1+w)-3 Psi_N; J_khr_prime=-theta_khr_N"
+  },
+  "neutral_preferred_reconstruction": {
+    "delta_khr_pref": "(1+w)(J_khr+3 psi_pref)",
+    "theta_khr_pref": "theta_khr_N-k^2 B",
+    "theta_khr_pref_prime": "-H(1-3c_a^2)theta_khr_pref+k^2[c_s^2 delta_khr_pref/(1+w)+phi_pref]",
+    "theta_khr_N_prime": "theta_khr_pref_prime+k^2 B_prime"
+  },
+  "Bprime_solve": {
+    "method": "forward-mode differentiation of the current-state 2x2 Hamiltonian+momentum DAE solve",
+    "only_implicit_derivative": "theta_khr_N_prime=theta_khr_pref_prime+k^2 B_prime",
+    "affine_form": "Bdot=f0+c_B Bdot",
+    "solution": "B_prime=f0/(1-c_B)",
+    "required_guard": "abs(1-c_B)>0.9"
+  },
+  "ordinary_aggregate_momentum_derivative": {
+    "policy": "differentiate q0_N using the exact baryon+photon weighted aggregate plus massless-UR Euler source",
+    "Thomson_slip": "must cancel exactly from rho_b theta_b_prime+(4/3)rho_g theta_g_prime because R=(4/3)rho_g/rho_b is reconstructed from the same current state",
+    "inputs": "current Phi_N, corrected compromise_CLASS sigma_g, current sigma_ur"
+  },
+  "PsiNprime": "psi_pref_prime-H_prime B-H B_prime",
+  "source_locked_slip": "evaluate the exact pinned compromise_CLASS first+leading-second-order slip after Psi_N_prime is known; use metric_continuity=-3 Psi_N_prime and metric_euler=k^2 Phi_N",
+  "frozen_checks": {
+    "grid_point_count": 9,
+    "anchor_count_per_point": 4,
+    "max_B_prime_relative_vs_C10_65r2": 5e-9,
+    "max_Psi_N_prime_relative_vs_C10_65r2": 5e-9,
+    "max_metric_continuity_relative_vs_C10_65r2": 5e-9,
+    "max_tca_slip_relative_vs_C10_65r2": 5e-9,
+    "max_theta_b_prime_relative_vs_C10_65r2": 5e-9,
+    "max_theta_g_prime_relative_vs_C10_65r2": 5e-9,
+    "max_theta_ur_prime_relative_vs_C10_65r2": 5e-9,
+    "max_preferred_delta_khr_prime_relative_vs_C10_65r2": 5e-9,
+    "max_preferred_theta_khr_prime_relative_vs_C10_65r2": 5e-9,
+    "max_weighted_photon_baryon_slip_cancel_normalized": 5e-13,
+    "min_abs_Bprime_implicit_denominator": 0.9,
+    "all_outputs_finite": true,
+    "no_hard_coded_A2_C2_Jad_Sur0_in_dynamic_kernel": true,
+    "no_new_temporal_metric_or_shift_datum": true,
+    "no_production_patch_in_s2e": true
+  },
+  "pass_classification": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_PASS_SCOPED",
+  "fail_classification": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED",
+  "next_if_pass": "Implement the already-frozen C10.65s2 one-step production canary using s2b+s2c+s2d+s2e as the complete current-state kernel stack; do not introduce further detached onset coefficients into internal integrator stages.",
+  "non_claims": [
+    "not production feedback",
+    "not finite-time stability",
+    "not a UV derivation of the matching vector",
+    "not same-full-action background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
