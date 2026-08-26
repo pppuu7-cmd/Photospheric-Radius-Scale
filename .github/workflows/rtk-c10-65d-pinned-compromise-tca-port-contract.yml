@@ -1,0 +1,92 @@
+name: RTK C10.65d pinned compromise TCA port contract
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65d_pinned_compromise_tca_port_contract.py'
+      - '.github/workflows/rtk-c10-65d-pinned-compromise-tca-port-contract.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CLASS_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and parents
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_TARGET_v1.json'))
+          p=json.load(open('research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_SOURCE_AUDIT'
+          assert p['classification']=='C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_PASS_SCOPED'
+          print('C10_65D_TARGET_AND_PARENTS_PASS')
+          PY
+          git rev-parse HEAD | tee c10_65d_repo_head.txt
+      - name: Checkout pinned CLASS source
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_pinned
+          git -C class_pinned reset --hard "$CLASS_SHA"
+          test "$(git -C class_pinned rev-parse HEAD)" = "$CLASS_SHA"
+      - name: Audit source-locked TCA contract
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65d_pinned_compromise_tca_port_contract.py
+          python3 research/shadow/rtk_c10_65d_pinned_compromise_tca_port_contract.py \
+            --class-root class_pinned \
+            --output c10_65d_pinned_compromise_tca_port_contract_result.json | tee c10_65d.log
+          grep -q '^C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_PASS_SCOPED ' c10_65d.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p='c10_65d_pinned_compromise_tca_port_contract_result.json'
+          d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_65d_repo_head.txt').read().strip(),
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'workflow':'rtk-c10-65d-pinned-compromise-tca-port-contract.yml',
+            'worker':'research/shadow/rtk_c10_65d_pinned_compromise_tca_port_contract.py'
+          }
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp c10_65d_pinned_compromise_tca_port_contract_result.json /tmp/result.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/result.json research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_RESULT_v1.json
+            git commit -m 'Record C10.65d pinned compromise TCA port contract' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65d-pinned-compromise-tca-port-contract
+          path: |
+            c10_65d.log
+            c10_65d_pinned_compromise_tca_port_contract_result.json
+          if-no-files-found: warn

@@ -1,0 +1,57 @@
+{
+  "schema": "RTK_C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_TARGET_v1",
+  "created_utc": "2026-08-26T01:12:00Z",
+  "status": "FROZEN_BEFORE_SOURCE_AUDIT",
+  "gate": "C10.65d",
+  "question": "Can the exact photon-baryon tight-coupling branch needed by the corrected C10.65 coupled rank solve be frozen directly from the pinned CLASS source, including its default compromise_CLASS choice, switch triggers, density equations, baryon TCA momentum equation, slip and photon shear formulas?",
+  "parents": [
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65B_IMPLEMENTATION_READINESS_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65A_BASELINE_RADIATION_SPECIES_CONTROL_RESULT_v1.json"
+  ],
+  "pinned_upstream": {
+    "repository": "https://github.com/dirian/class_public.git",
+    "sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "files": ["source/input.c", "source/perturbations.c"]
+  },
+  "required_source_facts": {
+    "default_tca": "compromise_CLASS",
+    "trigger_tau_c_over_tau_h": 0.015,
+    "trigger_tau_c_over_tau_k": 0.01,
+    "newtonian_metric_inputs": {
+      "metric_continuity": "-3 phi_prime",
+      "metric_euler": "k^2 psi",
+      "metric_shear": "0",
+      "metric_shear_prime": "0 in the TCA helper"
+    },
+    "density_equations": {
+      "photon": "delta_g'=-(4/3)(theta_g+metric_continuity)",
+      "baryon": "delta_b'=-(theta_b+metric_continuity)"
+    },
+    "tca_helper": "perturb_tca_slip_and_shear",
+    "first_order_photon_shear": "sigma_g=(16/45) tau_c (theta_g+metric_shear)",
+    "baryon_tca_momentum": "theta_b'=[-H theta_b+k^2(cb2(delta_b+delta_temp)+R(delta_g/4-s2_squared sigma_g))+R slip]/(1+R)+metric_euler",
+    "compromise_second_order": "retain the pinned compromise_CLASS slip correction and photon-shear correction exactly in convention"
+  },
+  "port_policy": {
+    "metric_replacement_only": "When ported to the completed solver, preserve thermodynamic/collision/TCA coefficients and replace only the metric interface by certified completed Phi_N/Psi_N and their required derivatives/shear bridge.",
+    "curvature_dressed_density": "Use D_b=delta_b-3 Psi_N and D_g=delta_g-4 Psi_N so the explicit metric_continuity term cancels from constant-w density continuity.",
+    "no_formula_reconstruction": "Do not rederive slip/shear coefficients from memory; source-lock them to the pinned upstream implementation and hashes."
+  },
+  "acceptance": [
+    "clone and hard-reset the upstream repository to the pinned SHA",
+    "verify all frozen literal markers for defaults, switch triggers, Newtonian metric inputs, photon/baryon density equations, TCA helper invocation, baryon TCA momentum equation, first-order shear and compromise_CLASS second-order correction",
+    "record SHA256 hashes of the two audited upstream source files",
+    "record the exact pinned Git SHA and the source-marker verification count",
+    "do not execute the completed-U1 rank solve in this gate"
+  ],
+  "pass_classification": "C10_65D_PINNED_COMPROMISE_TCA_PORT_CONTRACT_PASS_SCOPED",
+  "next_if_pass": "implement the detached corrected O(k^2) photon+baryon+massless-UR+neutral-Khronon coefficient system with Delta I_iso=0, using this source-locked TCA contract and the preferred DAE metric projector; solve V_khr0 and B0 and run the frozen lambda_HL/M_c rank grid",
+  "non_claims": [
+    "not the completed-U1 coupled rank result",
+    "not a new approximation scheme",
+    "not a spectra calculation",
+    "not massive-neutrino coverage",
+    "not same-full-action background closure"
+  ]
+}
