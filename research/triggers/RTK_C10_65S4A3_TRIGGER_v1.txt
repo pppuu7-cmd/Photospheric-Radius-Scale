@@ -1,1 +1,1 @@
-retry frozen C10.65s4a3 after implementation-only marker guard correction; scientific target unchanged
+retry frozen C10.65s4a3 after analyzer syntax correction; target and scientific criteria unchanged
