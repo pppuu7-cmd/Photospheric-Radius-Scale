@@ -1,0 +1,85 @@
+name: RTK C10.65s2a production canary source-lock preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s2a_production_canary_source_lock_preflight.py'
+      - '.github/workflows/rtk-c10-65s2a-production-canary-source-lock-preflight.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Record job-start head and verify frozen contracts
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee c10_65s2a_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p: json.load(open(p))
+          t=L('research/theory_targets/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_TARGET_v1.json')
+          s2=L('research/theory_targets/RTK_C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_TARGET_v1.json')
+          assert t['status']=='FROZEN_BEFORE_EXECUTION'
+          assert t['pinned_class_upstream_sha']=='36cf283628c4a3330ec9fd3d84239bf775f77317'
+          assert s2['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert s2['frozen_checks']['max_first_production_rhs_vs_certified_r2_relative']==5e-9
+          assert s2['runtime_contract']['allowed_integrated_handoff_writes']==['pv->y[index_pt_delta_cdm]','pv->y[index_pt_theta_cdm]']
+          PY
+      - name: Clone exact pinned CLASS source
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_pinned
+          git -C class_pinned reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          test "$(git -C class_pinned rev-parse HEAD)" = "$RTK_CLASS_UPSTREAM_SHA"
+      - name: Execute frozen s2a preflight
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s2a_production_canary_source_lock_preflight.py
+          python3 research/shadow/rtk_c10_65s2a_production_canary_source_lock_preflight.py \
+            --class-source class_pinned/source/perturbations.c \
+            --output research/theory_results/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json | tee c10_65s2a.log
+          grep -q '^C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_PASS_SCOPED$' c10_65s2a.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          p='research/theory_results/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json'
+          d=json.load(open(p))
+          d['provenance']={
+            'repo_head_at_job_start':open('c10_65s2a_head.txt').read().strip(),
+            'class_upstream_sha':'36cf283628c4a3330ec9fd3d84239bf775f77317',
+            'workflow':'rtk-c10-65s2a-production-canary-source-lock-preflight.yml',
+            'analyzer':'research/shadow/rtk_c10_65s2a_production_canary_source_lock_preflight.py',
+            'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),
+            'threshold_changed':False}
+          open(p,'w').write(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result
+        run: |
+          set -euo pipefail
+          cp research/theory_results/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json /tmp/s2a.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin rtk-class-build
+            git reset --hard origin/rtk-class-build
+            cp /tmp/s2a.json research/theory_results/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/theory_results/RTK_C10_65S2A_PRODUCTION_CANARY_SOURCE_LOCK_PREFLIGHT_RESULT_v1.json
+            git commit -m 'Record C10.65s2a source-lock preflight result' || exit 0
+            if git push origin HEAD:rtk-class-build; then exit 0; fi
+          done
+          exit 1
