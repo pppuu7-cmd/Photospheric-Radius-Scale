@@ -1,0 +1,81 @@
+{
+  "schema": "RTK_C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_TARGET_v1",
+  "gate": "C10.65r1",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Port the already-certified C10.65n finite-k completed-U1 algebraic seed and C10.65o radiation-shear metric closure into a diagnostic-only C block executed by the real pinned CLASS perturbation output path. Compare the C result first against an independent Python recomputation using exactly the C-exported local environment, and separately against the detached n/o persisted parent values. Do not modify integration state or any RHS.",
+  "parents": {
+    "C10.65r0": "C10_65R0_OPT_IN_CLASS_LOCAL_ENVIRONMENT_EXPORT_PASS_SCOPED",
+    "C10.65n": "C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_PASS_SCOPED",
+    "C10.65o": "C10_65O_RADIATION_SHEAR_METRIC_CLOSURE_PASS_SCOPED"
+  },
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "matching_control": {
+    "status": "HISTORICAL_PHENOMENOLOGICAL_CONTROL_ONLY",
+    "J_ad0": -3.0,
+    "A2": -1120.906563855608,
+    "C2": -1.314425482950032,
+    "S_ur0": 298.90841588141416,
+    "E_th": 2.0,
+    "Pcal": 1.0
+  },
+  "runtime_contract": {
+    "enable_flag": "c10_65r1_diag",
+    "lambda_input": "c10_65r1_lambda_HL",
+    "Mc_input": "c10_65r1_Mc",
+    "defaults": {"c10_65r1_diag": 0.0, "c10_65r1_lambda_HL": 1.0, "c10_65r1_Mc": 1.0},
+    "diagnostic_grid": "exact persisted 3x3 C10 diagnostic completion onset grid",
+    "forbidden": [
+      "writing completed metric values into CLASS integration state",
+      "changing metric_continuity or metric_euler",
+      "changing photon/baryon/UR/Khronon RHS",
+      "changing TCA switching or collision coefficients",
+      "consuming historical CLASS psi/phi as completed-U1 inputs",
+      "adding an independent metric/shift initial datum"
+    ]
+  },
+  "required_C_outputs": [
+    "W_khr",
+    "Db",
+    "Dg",
+    "DA",
+    "delta_mu_pref",
+    "Qpref",
+    "psi_pref",
+    "psi_pref_prime",
+    "phi_pref",
+    "B_pref",
+    "B_linear_denominator",
+    "V_N",
+    "Psi_N",
+    "Phi_N",
+    "sigma_gamma_over_k2",
+    "radiation_shear_feedback_denominator"
+  ],
+  "frozen_checks": {
+    "r1_off_numeric_text_sha256_identical_to_r0_control_all_four": true,
+    "grid_point_count": 9,
+    "anchor_count_per_point": 4,
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "max_C_vs_local_python_relative": 5e-11,
+    "max_C_vs_detached_parent_relative": 1e-6,
+    "max_W_khr_relative_to_detached_background": 1e-10,
+    "DA_must_exceed_one": true,
+    "B_linear_denominator_nonzero": true,
+    "radiation_shear_feedback_abs_denominator_min": 0.9,
+    "all_outputs_finite": true
+  },
+  "pass_classification": "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_PASS_SCOPED",
+  "fail_classification": "C10_65R1_IN_CLASS_COMPLETED_PROJECTOR_PARITY_FAIL_SCOPED",
+  "interpretation_if_pass": "The completed-U1 onset projector plus radiation anisotropic-stress metric closure has an executable double-precision C representation inside real pinned CLASS that agrees with an independent local-environment Python reconstruction and the detached n/o parents, while remaining dormant and numerically inert when disabled. This still does not alter or validate the CLASS time-evolution RHS.",
+  "next_if_pass": "Freeze C10.65r2 first-RHS diagnostic parity: use the C projector outputs to construct completed metric_continuity/metric_euler and source-locked TCA/UR/Khronon derivatives in a shadow C RHS, compare to detached n/o/q, still without writing dy. Only after r2 passes may a controlled a_on state handoff/short-step integration be attempted.",
+  "non_claims": [
+    "not first-RHS parity",
+    "not completed-U1 feedback into integration",
+    "not a state handoff",
+    "not short-step or full time integration",
+    "not spectra or likelihood evidence",
+    "not a microscopic derivation of the matching vector",
+    "not same-full-action primordial background closure",
+    "not resolution of C9 radiative naturalness"
+  ]
+}
