@@ -24,48 +24,16 @@
   "classification": "C10_65S4D_MODERATE_K_ONE_ACCEPTED_STEP_PRODUCTION_CANARY_PASS_SCOPED",
   "constraint_drift_measurement_only": {
     "0.001": {
-      "A": {
-        "absolute_change": 0.0,
-        "after": 0.0,
-        "before": 0.0
-      },
-      "H": {
-        "absolute_change": 0.0,
-        "after": 0.0,
-        "before": 0.0
-      },
-      "M": {
-        "absolute_change": 2.99977677806037e-16,
-        "after": 2.99977677806037e-16,
-        "before": 0.0
-      },
-      "T": {
-        "absolute_change": 1.8216956705506703e-16,
-        "after": 0.0,
-        "before": 1.8216956705506703e-16
-      }
+      "A": {"absolute_change": 0.0, "after": 0.0, "before": 0.0},
+      "H": {"absolute_change": 0.0, "after": 0.0, "before": 0.0},
+      "M": {"absolute_change": 2.99977677806037e-16, "after": 2.99977677806037e-16, "before": 0.0},
+      "T": {"absolute_change": 1.8216956705506703e-16, "after": 0.0, "before": 1.8216956705506703e-16}
     },
     "0.0030000000000000001": {
-      "A": {
-        "absolute_change": 0.0,
-        "after": 0.0,
-        "before": 0.0
-      },
-      "H": {
-        "absolute_change": 0.0,
-        "after": 0.0,
-        "before": 0.0
-      },
-      "M": {
-        "absolute_change": 3.0083646253800744e-16,
-        "after": 3.0083646253800744e-16,
-        "before": 0.0
-      },
-      "T": {
-        "absolute_change": 0.0,
-        "after": 0.0,
-        "before": 0.0
-      }
+      "A": {"absolute_change": 0.0, "after": 0.0, "before": 0.0},
+      "H": {"absolute_change": 0.0, "after": 0.0, "before": 0.0},
+      "M": {"absolute_change": 3.0083646253800744e-16, "after": 3.0083646253800744e-16, "before": 0.0},
+      "T": {"absolute_change": 0.0, "after": 0.0, "before": 0.0}
     }
   },
   "gate": "C10.65s4d",
@@ -95,7 +63,7 @@
     "base_production_patch": "rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py",
     "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
     "domain_patch": "rtk/apply_rtk_c10_65s4d_moderate_k_seed_width_patch.py",
-    "github_actions_run_id": 33014408144,
+    "github_actions_run_id": 33015496671,
     "observer_sha256": "714cb37db2239479b08c90c46ca10761f61dcbf4d008fb641bc4870de3edca91",
     "repo_head_at_job_start": "b77683165a30e1a6d61c3bf2d5ee322a45ae2e4d",
     "s2k_parent_run_id": 33004868239,
