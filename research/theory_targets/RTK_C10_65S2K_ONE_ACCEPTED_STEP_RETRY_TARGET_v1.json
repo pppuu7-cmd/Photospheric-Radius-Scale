@@ -1,0 +1,55 @@
+{
+  "schema": "RTK_C10_65S2K_ONE_ACCEPTED_STEP_RETRY_TARGET_v1",
+  "gate": "C10.65s2k",
+  "created_utc": "2026-08-26T19:25:00Z",
+  "status": "FROZEN_BEFORE_RETRY_EXECUTION",
+  "purpose": "Execute a separate completed-U1 production retry after the original C10.65s2 failed its exactly-one-accepted-step requirement. Use the prospectively frozen C10.65s2j width and otherwise preserve the original production path, tolerance, four anchors, boundary state, completed-U1 kernel, OFF rollback and scientific thresholds.",
+  "parents": {
+    "C10.65s2": "C10_65S2_DIRECT_ONSET_ONE_STEP_PRODUCTION_CANARY_FAIL_SCOPED",
+    "C10.65s2h": "C10_65S2H_FAILURE_DIAGNOSIS_PASS_SCOPED",
+    "C10.65s2i": "C10_65S2I_ADAPTIVE_STEP_TRACE_PASS_SCOPED",
+    "C10.65s2j": "C10_65S2J_PROSPECTIVE_RETRY_WIDTH_PASS_SCOPED"
+  },
+  "pinned_class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "frozen_domain": {
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [1e-05, 3e-05, 0.0001, 0.0003]
+  },
+  "retry_execution": {
+    "retry_width_Mpc": 3.53993611477497e-10,
+    "width_source": "C10.65s2j fixed 0.5 safety factor times minimum first accepted hdid from C10.65s2i",
+    "evolver": "rk",
+    "integrator_tolerance": "unchanged from original C10.65s2 workflow",
+    "expected_rhs_calls_after_step": 7,
+    "required_accepted_substeps": 1,
+    "required_rejected_trials": 0
+  },
+  "frozen_checks": {
+    "original_s2_remains_fail": true,
+    "off_numeric_text_sha256_identical_all_four": true,
+    "retry_before_observer_exactly_matches_original_s2_before_observer": true,
+    "first_rhs_relative_tolerance_inherited": 5e-9,
+    "before_rhs_calls": 1,
+    "after_rhs_calls": 7,
+    "step_width_absolute_tolerance_Mpc": 5e-14,
+    "post_step_state_all_finite": true,
+    "constraint_before_after_all_finite": true,
+    "constraint_drift_measurement_only": true,
+    "same_kernel_and_tolerance_static_guard": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_PASS_SCOPED",
+  "fail_classification": "C10_65S2K_ONE_ACCEPTED_STEP_RETRY_FAIL_SCOPED",
+  "interpretation_if_pass": "At the same frozen completion point and four low-k anchors, the completed-U1 production path can execute exactly one accepted no-rejection Cash-Karp step when the short interval is prospectively chosen below the worst-anchor accepted step measured in C10.65s2i. This repairs the implementation-scale mismatch exposed by C10.65s2 without reclassifying that failed run and does not establish finite-time stability.",
+  "next_if_pass": "Freeze a new finite-short-interval stability gate using s2k only as the one-step production-entry certificate. Choose any multi-step interval and drift tolerance prospectively before that later run.",
+  "non_claims": [
+    "not a reclassification of C10.65s2",
+    "not finite-time stability",
+    "not full-time completed-U1 production evolution",
+    "not a UV derivation of the higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ]
+}
