@@ -64,7 +64,7 @@ def main():
         'source_map':'delta_mu_N=delta_mu_pref-3 H W B; q_N=q_pref+a W B',
         'machine_full_C_residual':'0',
         'machine_C2_residual':'0',
-        'regular_B_required':true,
+        'regular_B_required':True,
         'consequence':'C2 is a source-coordinate/gauge-invariant regular-branch matching coordinate; no choice B0=0 is used.'
       },
       'leading_regularity':{
