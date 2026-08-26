@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_TARGET_v1",
+  "gate": "C10.65s0",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Certify the only allowed architecture for a future completed-U1 state handoff in pinned CLASS before any integrator-state mutation is implemented.",
+  "parents": [
+    "research/theory_results/RTK_C10_65R2_IN_CLASS_FIRST_RHS_DIAGNOSTIC_PARITY_RESULT_v1.json",
+    "research/checkpoints/RTK_CROSS_CHAT_CONSOLIDATED_FRONTIER_2026-08-26T1440Z.md"
+  ],
+  "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+  "architecture_claims_to_verify": {
+    "perturb_solve_integrates_piecewise_uniform_approximation_intervals": true,
+    "perturb_vector_init_runs_before_each_interval_evolver": true,
+    "first_interval_uses_null_previous_approx": true,
+    "later_intervals_redistribute_from_previous_approx": true,
+    "constraint_metric_quantities_are_not_independent_integrated_state": true,
+    "rtk_model2_newtonian_integrated_carrier_is_cdm_slot_delta_theta": true,
+    "handoff_at_arbitrary_a_on_requires_explicit_interval_split": true,
+    "handoff_must_occur_after_vector_init_and_before_generic_evolver": true,
+    "ordinary_rhs_callback_state_mutation_forbidden": true
+  },
+  "frozen_handoff_contract": [
+    "opt-in switch defaults OFF",
+    "OFF path must remain numeric-text SHA identical to the C10.65r2 production/control path",
+    "compute tau_on deterministically from exact persisted a_on=0.0002203229136467 using the pinned background",
+    "insert tau_on as an explicit interval boundary only when it lies strictly inside an existing approximation interval; do not change any approximation criterion",
+    "perform the handoff outside perturb_derivs, after perturb_vector_init has produced the interval vector and before generic_evolver starts the post-handoff interval",
+    "write only genuine integrated state components corresponding to the model=2 Newtonian cdm-slot carrier delta and theta",
+    "do not write metric constraints, shift/projector quantities, TCA collision coefficients, approximation flags, or production metric source variables",
+    "historical matching vector is phenomenological control only and cannot be relabeled primordial prediction",
+    "first post-handoff RHS must reproduce C10.65r2 diagnostic quantities within its unchanged frozen thresholds",
+    "first implementation gate must stop after one/short-step diagnostics; no spectra/likelihood claim"
+  ],
+  "pass_classification": "C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_PASS_SCOPED",
+  "fail_classification": "C10_65S0_INTEGRATION_SAFE_HANDOFF_ARCHITECTURE_FAIL_SCOPED",
+  "next_if_pass": "C10.65s1: freeze and implement an opt-in exact-tau_on interval-split handoff canary on one completion point x four exact low-k anchors, with exact OFF rollback, first-post-handoff RHS parity, and one-short-step constraint drift diagnostics.",
+  "next_if_fail": "Do not mutate state. Resolve the CLASS interval/vector ownership conflict or choose a different integration-safe boundary architecture, then freeze a new preflight target.",
+  "non_claims": [
+    "not a state handoff implementation",
+    "not a completed-U1 production feedback pass",
+    "not primordial UV derivation",
+    "not spectra or likelihood evidence"
+  ]
+}
