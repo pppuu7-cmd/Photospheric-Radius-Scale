@@ -1,0 +1,58 @@
+{
+  "schema": "RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_TARGET_v2",
+  "gate": "C10.65s4c",
+  "created_utc": "2026-08-26T20:58:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "supersedes_before_implementation": "research/theory_targets/RTK_C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_TARGET_v1.json",
+  "supersession_reason": "v1 named the historical C10.65s2e closure as PASS although its immutable persisted classification is FAIL_SCOPED solely because the preregistered >0.9 conditioning guard failed. C10.65s2f separately certified the exact well-conditioned implicit coupling and C10.65s2g certified the production-kernel/Newtonian-carrier preflight while explicitly preserving the s2e FAIL. No s4c implementation had been committed when this provenance defect was found.",
+  "scientific_contract_changed_from_v1": false,
+  "parents": {
+    "C10.65s4b": "C10_65S4B_MODERATE_K_COMPLETED_ONSET_SEED_PASS_SCOPED",
+    "C10.65s2c": "C10_65S2C_CURRENT_STATE_DAE_METRIC_CORE_PASS_SCOPED",
+    "C10.65s2d": "C10_65S2D_CURRENT_STATE_TRACELESS_TCA_CLOSURE_PASS_SCOPED",
+    "C10.65s2e_historical": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED",
+    "C10.65s2f": "C10_65S2F_IMPLICIT_CONDITIONING_AUDIT_PASS_SCOPED",
+    "C10.65s2g": "C10_65S2G_PRODUCTION_KERNEL_PREFLIGHT_PASS_SCOPED"
+  },
+  "purpose": "Before any production integration at the newly widened modes, verify that the already-certified current-state DAE metric, traceless/TCA and derivative/slip kernels, with the s2f/s2g-certified implicit conditioning semantics, consume the C10.65s4b completed onset carrier at k=1e-3 and 3e-3 Mpc^-1, reproduce the independently constructed s4b algebraic metric state, and return a finite first RHS with no new datum or loss of the exact photon-baryon aggregate slip cancellation.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "k_Mpc_inv": [0.001, 0.003],
+    "completion_point_count": 1,
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177
+  },
+  "frozen_checks": {
+    "record_count": 2,
+    "max_B_relative_vs_s4b": 5e-9,
+    "max_Psi_N_relative_vs_s4b": 5e-9,
+    "max_Phi_N_relative_vs_s4b": 5e-9,
+    "max_preferred_A_Hamiltonian_momentum_normalized_residual": 1e-12,
+    "max_physical_traceless_normalized_residual": 1e-12,
+    "max_weighted_photon_baryon_slip_cancellation": 1e-12,
+    "all_first_rhs_outputs_finite": true,
+    "all_algebraic_denominators_nonzero": true,
+    "historical_metric_not_consumed": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "s2e_failed_parent_preserved": true,
+    "s2f_conditioning_pass": true,
+    "s2g_kernel_preflight_pass": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_PASS_SCOPED",
+  "fail_classification": "C10_65S4C_MODERATE_K_CURRENT_STATE_FIRST_RHS_PARITY_FAIL_SCOPED",
+  "interpretation_if_pass": "At k=1e-3 and 3e-3 Mpc^-1 the widened onset carrier can be consumed by the same current-state completed-U1 DAE/TCA/derivative kernels already certified at low k under the s2f/s2g conditioning resolution, with algebraic metric parity to s4b and a finite first RHS. This authorizes only a later short production canary at these two modes; it is not finite-time stability.",
+  "next_if_pass": "Freeze C10.65s4d moderate-k one-step production canary at exactly k=1e-3 and 3e-3 Mpc^-1, preserving the existing completed-U1 production equations, OFF rollback and integrator settings before execution.",
+  "non_claims": [
+    "not a reclassification of C10.65s2e",
+    "not production integration at the new modes",
+    "not finite-time moderate-k stability",
+    "not validation of k=0.01 or 0.03 Mpc^-1",
+    "not broad-k stability",
+    "not a UV derivation of the matching control or higher UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
