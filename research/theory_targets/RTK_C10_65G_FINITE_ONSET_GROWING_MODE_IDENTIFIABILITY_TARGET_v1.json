@@ -1,0 +1,43 @@
+{
+  "schema": "RTK_C10_65G_FINITE_ONSET_GROWING_MODE_IDENTIFIABILITY_TARGET_v1",
+  "created_utc": "2026-08-26T01:03:00Z",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "gate": "C10.65g",
+  "question": "Can the corrected completed-U1 finite-onset O(k^2) photon+baryon+massless-UR+neutral-Khronon DAE/hierarchy determine a unique growing adiabatic direction from an instantaneous coefficient-rank solve alone, or is an independent temporal/pre-EFT matching condition mathematically required?",
+  "parents": [
+    "research/theory_results/RTK_C10_65F_TCA_DOMAIN_PARTITION_EXACT_ONSET_PACK_RESULT_v1.json",
+    "research/theory_results/RTK_C10_65C_COMMON_CURVATURE_ADIABATIC_BOUNDARY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_FINITE_ONSET_ADIABATIC_INVARIANCE_RESULT_v1.json",
+    "research/theory_results/RTK_C10_B0_NEXT_ORDER_SOURCE_FORMULA_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_FINITE_ONSET_MEMORY_RESULT_v1.json",
+    "research/theory_results/RTK_C10_NEUTRAL_CHARGE_PROJECTION_RESULT_v1.json",
+    "research/theory_results/RTK_C10_PREFERRED_METRIC_PROJECTOR_API_RESULT_v1.json"
+  ],
+  "frozen_logic": {
+    "state": "z denotes all independent regular O(k^0)+O(k^2) perturbation coefficients at tau_on after algebraic preferred-metric projection; d denotes their first conformal-time derivatives",
+    "instantaneous_constraints": "A z=0 contains algebraic preferred A/H/M constraints plus corrected adiabatic density/relative-entropy conditions and any instantaneous tight-coupling algebraic relations",
+    "evolution": "d=F z is the local first-order photon/baryon/UR/Khronon evolution law after the algebraic DAE metric variables have been projected",
+    "augmented_snapshot_system": "[A 0; -F I] [z;d]=0",
+    "rank_claim_to_test": "adding local first-order evolution equations at one time cannot reduce the admissible initial-state nullity: nullity([A 0;-F I])=nullity(A)",
+    "B0_dependency": "C10.55 gives B0=[C2+2 Pcal psi0-E_th phi0]/(2H), so dB0/dC2=1/(2H) !=0 for finite H>0",
+    "finite_onset_prior": "C10.54 states instantaneous adiabatic relative-density/common-velocity conditions plus leading regularity do not determine C2/B0",
+    "attractor_prior": "C10.62/C10.63 show finite in-EFT evolution does not generically erase the independent neutral-memory direction"
+  },
+  "acceptance": [
+    "prove by exact block-rank algebra that rank([A 0;-F I_n])=rank(A)+n for arbitrary F whenever the derivative block is nonsingular, hence snapshot evolution rows do not reduce initial-state nullity",
+    "machine-check the rank/nullity identity over several exact rational matrices spanning under-, exactly- and over-constrained A cases",
+    "verify symbolically dB0/dC2=1/(2H) and that it is nonzero under the certified finite-onset guard H>0",
+    "verify the corrected Delta I_iso=0 boundary removes the neutral relative-entropy amplitude but does not supply a temporal equation for C2",
+    "classify a unique growing-mode claim as not identifiable from finite-onset snapshot rank alone unless an additional temporal eigen/power-law condition, backward-regularity condition, or explicit pre-EFT/UV matching functional is supplied",
+    "do not classify this as a no-go for the model or as evidence of an extra propagating scalar"
+  ],
+  "pass_classification": "C10_65G_FINITE_ONSET_SNAPSHOT_RANK_INSUFFICIENT_TEMPORAL_MATCH_REQUIRED_SCOPED",
+  "next_if_pass": "freeze C10.65h minimal temporal matching contract: define the smallest gauge-invariant pre-EFT/growing-branch boundary functional needed to determine C2 (and therefore B0) without reintroducing the obsolete absolute I_khr=0 condition; then solve the corrected coupled O(k^2) coefficients under that explicit boundary prescription",
+  "non_claims": [
+    "not a model no-go",
+    "not a propagating-DOF count",
+    "not a UV derivation of the temporal boundary",
+    "not completed-U1 spectra or likelihood evidence",
+    "not massive-neutrino coverage"
+  ]
+}
