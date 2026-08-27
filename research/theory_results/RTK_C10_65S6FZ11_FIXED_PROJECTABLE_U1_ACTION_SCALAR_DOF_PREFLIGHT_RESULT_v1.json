@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "carrier_hessian_rank_one_exact": true,
+    "carrier_invariant_under_gravity_u1": true,
+    "carrier_invariant_under_internal_null": true,
+    "cross_commutator_zero": true,
+    "hmt_A_and_prepotential_source_locked": true,
+    "hmt_action_eq104_fixed": true,
+    "hmt_local_u1_source_locked": true,
+    "hmt_scalar_graviton_eliminated_source_locked": true,
+    "invariant_shift_exact": true,
+    "no_soft_s_or_k003": true,
+    "null_direction_orthogonal_exact": true,
+    "projectable_lapse_fixed": true,
+    "shared_normal_derivative_invariant": true,
+    "threshold_unchanged": true,
+    "z10_parent_exact": true,
+    "z7_parent_exact": true
+  },
+  "classification": "C10_65S6FZ11_FIXED_PROJECTABLE_U1_ONE_SCALAR_PREFLIGHT_PASS_SCOPED",
+  "gate": "C10.65s6fZ11",
+  "interpretation": "The literature-fixed projectable local-U1 HMT gravitational action removes the gravitational scalar, while the preregistered Z7 direct-product representation leaves exactly one regular gauge-invariant carrier direction Phi at the scalar kinetic preflight level. This is a fixed-action/interface DOF preflight only, not RTK background, quadratic-response, radiative-naturalness, or soft-s certification.",
+  "next_gate": "C10.65s6fZ12: freeze the same HMT+Z7 candidate and derive the coupled FLRW background plus finite-k quadratic scalar kernel, then test whether the previously certified RTK pole/residue/remainder and static/canonical regularity can be reproduced without coefficient fitting to soft-s.",
+  "nonclaims": [
+    "not full coupled RTK Dirac closure rederived from scratch",
+    "not RTK background equivalence",
+    "not RTK pole/residue/remainder equivalence",
+    "not C9 radiative naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "preflight_count": {
+    "propagating_carrier_scalars": 1,
+    "propagating_gravitational_scalars": 0,
+    "status": "conditional_on_source_locked_HMT_nonlinear_constraint_result"
+  },
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33109736123,
+    "threshold_changed": false,
+    "trigger_head_sha": "bfffdd23b005367ec746e45a5b6532dddc919170",
+    "workflow": "rtk-c10-65s6fz11-fixed-projectable-u1-action-scalar-dof-preflight.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
