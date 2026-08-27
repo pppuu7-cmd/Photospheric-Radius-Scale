@@ -1,1 +1,1 @@
-trigger C10.65s6fZ9 frozen historical source-lock audit
+trigger C10.65s6fZ9 frozen historical source-lock audit rerun after exact projectability-token fix
