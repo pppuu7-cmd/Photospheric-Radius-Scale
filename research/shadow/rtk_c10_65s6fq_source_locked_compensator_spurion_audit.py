@@ -62,7 +62,8 @@ def main():
       'threshold_changed':False,
     }
     print(json.dumps({'evidence':evidence,'explicit_rule_hits':explicit_rule_hits,'checks':checks},sort_keys=True))
-    assert all(checks.values())
+    assert all(v for k,v in checks.items() if k != 'threshold_changed')
+    assert checks['threshold_changed'] is False
     out={
       'schema':'RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_SPURION_AUDIT_RESULT_v1',
       'gate':'C10.65s6fQ','classification':classification,'decision':decision,
