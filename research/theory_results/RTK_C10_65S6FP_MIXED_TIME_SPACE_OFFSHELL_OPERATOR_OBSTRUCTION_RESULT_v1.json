@@ -1,0 +1,83 @@
+{
+  "checks": {
+    "constant_zeta0_leaves_mixed_index_K_invariant": true,
+    "exact_quadratic_preservation_implies_zero_grouped_coefficient_per_monomial": true,
+    "no_on_shell_dispersion_substitution": true,
+    "off_shell_independence_of_distinct_omega_r_k_s": true,
+    "parent_nonzero_soft_vertex_unchanged": true,
+    "parent_s6fM_nonzero_locked": true,
+    "parent_s6fO_obstruction_pass_locked": true,
+    "quadratic_monomial_weight_rule_w_equals_3_minus_s": true,
+    "representative_weights_match_frozen_target": true,
+    "soft_change_zero_when_offshell_quadratic_change_zero": true,
+    "target_frozen_before_execution": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_PASS_SCOPED",
+  "escape_routes_not_excluded": [
+    "additional fields or compensators with independent homogeneous transformation laws",
+    "explicit spurions that alter homogeneous conformal weight",
+    "nonlocal structures",
+    "a genuinely new symmetry relating sectors while requiring a separately re-certified quadratic action",
+    "abandoning exact preservation and re-deriving/re-certifying the quadratic phenomenology"
+  ],
+  "exact_relations": {
+    "K_mixed_weight": "K_i^j -> K_i^j",
+    "constant_homogeneous_rescaling": "gamma_ij -> exp(2 zeta_0) gamma_ij with dot(zeta_0)=0",
+    "exact_preservation_condition": "Delta Q2 == 0 as polynomial in independent omega,k => Delta C_rs=0 for every (r,s)",
+    "existing_nonzero_alpha6_piece": "-96*k**6/a**3",
+    "homogeneous_soft_change": "Delta Vsoft=sum_{r,s}(3-s) Delta C_rs omega^r k^s = 0",
+    "offshell_quadratic_deformation": "Delta Q2(omega,k)=sum_{r,s} Delta C_rs omega^r k^s",
+    "quadratic_density_weight": "w(r,s)=3-s for omega^r k^s"
+  },
+  "gate": "C10.65s6fP",
+  "important_guard": "An apparent cancellation obtained only after substituting omega=omega(k) would alter the off-shell quadratic action and is not accepted as preservation of the already-certified quadratic theory.",
+  "next_gate": "Audit the remaining local escape route requiring an additional field/compensator or spurion with an independent homogeneous transformation law. Before proposing a coefficient, determine whether any such structure is already source-locked by the RTK action/symmetry stack; otherwise classify the nonlinear completion as genuinely new and keep k=0.03 production blocked.",
+  "nonclaims": [
+    "not a no-go for RTK as a whole",
+    "not a theorem for extra-field or compensator completions",
+    "not a theorem for nonlocal actions",
+    "not a radiative-naturalness proof",
+    "not same-full-action primordial/background closure",
+    "does not unblock k=0.03 Mpc^-1 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33064317914,
+    "repo_head_at_job_start": "c3e1afe53734f070bbdb5bca1f4b1f6087f66003",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fp-mixed-time-space-offshell-obstruction.yml"
+  },
+  "representative_offshell_monomials": {
+    "K2_omega2_k0": {
+      "r": 2,
+      "s": 0,
+      "w": 3
+    },
+    "K_D2_K_omega2_k2": {
+      "r": 2,
+      "s": 2,
+      "w": 1
+    },
+    "K_D4_K_omega2_k4": {
+      "r": 2,
+      "s": 4,
+      "w": -1
+    },
+    "K_R_omega1_k2": {
+      "r": 1,
+      "s": 2,
+      "w": 1
+    },
+    "R_D2_R_omega0_k6": {
+      "r": 0,
+      "s": 6,
+      "w": -3
+    }
+  },
+  "schema": "RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_RESULT_v1",
+  "scientific_statement": "Within the frozen local metric-only projectable ADM class built from K_i^j, R_i^j and spatial covariant derivatives, mixed time-space operators do not evade the homogeneous-soft obstruction if the complete hard quadratic action is required to remain exactly identical off shell. Distinct omega^r k^s monomials are independent before imposing the dispersion relation; within each monomial class the homogeneous conformal weight is fixed by spatial momentum power s as w=3-s. Hence exact off-shell quadratic preservation forces the corresponding soft-cubic change to vanish.",
+  "target_path": "research/theory_targets/RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_TARGET_v1.json",
+  "threshold_changed": false
+}
