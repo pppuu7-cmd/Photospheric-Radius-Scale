@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "continuous_family_invertible_for_t_positive": true,
+    "continuous_family_same_Q": true,
+    "continuous_family_same_pole_denominator": true,
+    "determinant_affine_in_z": true,
+    "k003_still_blocked": true,
+    "matrix_determinant_lemma_exact": true,
+    "no_soft_s_retest": true,
+    "noncollinear_sources_have_different_static_response": true,
+    "parent_is_exact_s6fu_pass": true,
+    "pole_independent_of_source_vector": true,
+    "response_numerator_depends_on_source": true,
+    "same_operator_denominator_for_source_examples": true,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FV_RANK_ONE_FULL_EMBEDDING_NON_IDENTIFIABLE_PASS_SCOPED",
+  "exact_results": {
+    "Q_vMinv_v": "(a**2*m11 - 2*a*m12 + m22)/(m11*m22 - m12**2)",
+    "det_M_minus_zK": "-a**2*kappa*m11*z + 2*a*kappa*m12*z - kappa*m22*z + m11*m22 - m12**2",
+    "determinant_lemma_form": "-a**2*kappa*m11*z + 2*a*kappa*m12*z - kappa*m22*z + m11*m22 - m12**2",
+    "example_full_response_s_equal_e1": "(2*z - 5)/(12*(z - 1))",
+    "example_full_response_s_equal_v": "-1/(z - 1)",
+    "example_static_response_s_equal_e1": "5/12",
+    "example_static_response_s_equal_v": "1",
+    "finite_pole_if_Q_nonzero": "z_star = 1/(kappa*Q)",
+    "general_response_denominator": "a**2*kappa*m11*z - 2*a*kappa*m12*z + kappa*m22*z - m11*m22 + m12**2",
+    "general_response_numerator": "a**2*kappa*s1**2*z - 2*a*kappa*s1*s2*z + kappa*s2**2*z - m11*s2**2 + 2*m12*s1*s2 - m22*s1**2",
+    "same_pole_family_Q": "1",
+    "same_pole_family_a1_kappa1_Mt": "Matrix([[t/2 + 1, 1 - t/2], [1 - t/2, t/2 + 1]])",
+    "same_pole_family_detM": "2*t",
+    "same_pole_family_det_M_minus_zK": "-2*t*(z - 1)"
+  },
+  "gate": "C10.65s6fV",
+  "interpretation": "Rank-one kinematics plus one finite-pole structure do not uniquely determine either the symmetric potential matrix or the action-derived source direction. A continuous potential ambiguity and an independent source-direction ambiguity remain. Therefore s6fU cannot by itself be promoted to one fixed projectable ADM action.",
+  "missing_principle": "An independently motivated action-level principle is required to select the field map, potential/algebraic sector, source coupling and background coefficient functions before rerunning s6fT.",
+  "next_gate": "Audit the pre-soft-s C8/C9 archive for an independent principle that fixes source alignment and potential data inside the rank-one class. If none exists, keep s6fT blocked rather than fitting these ambiguities to soft-s.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33078801540,
+    "repo_head_at_job_start": "6efe12b9dd632d86e92688b2a9ef26d354d89581",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fv-rank-one-embedding-identifiability.yml"
+  },
+  "schema": "RTK_C10_65S6FV_RANK_ONE_EMBEDDING_IDENTIFIABILITY_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
