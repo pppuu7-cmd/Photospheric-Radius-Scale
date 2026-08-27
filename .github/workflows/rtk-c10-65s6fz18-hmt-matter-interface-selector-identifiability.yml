@@ -1,0 +1,65 @@
+name: RTK C10.65s6fZ18 HMT matter interface selector identifiability audit
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fz18-hmt-matter-interface-selector-identifiability-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target and parent
+        run: |
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_TARGET_v1.json'))
+          p=json.load(open('research/theory_results/RTK_C10_65S6FZ17_HMT_MATTER_COEFFICIENT_SELECTION_IR_EQUIVALENCE_RESULT_v1.json'))
+          assert p['classification']==t['parent_required']
+          assert t['threshold_changed'] is False
+          assert t['soft_s_retest_allowed'] is False
+          assert t['production_k003_unblocked'] is False
+          PY
+      - name: Run frozen selector identifiability audit
+        run: python research/shadow/rtk_c10_65s6fz18_hmt_matter_interface_selector_identifiability.py
+      - name: Verify result semantics
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('research/theory_results/RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_RESULT_v1.json'))
+          allowed={
+            'C10_65S6FZ18_UNIQUE_PRE_SOFT_MATTER_INTERFACE_SELECTOR_FOUND_PASS_SCOPED',
+            'C10_65S6FZ18_SOURCE_LOCKED_PRE_SOFT_SET_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PASS_SCOPED',
+            'C10_65S6FZ18_SELECTOR_AUDIT_INCOMPLETE_BLOCKED_SCOPED'}
+          assert r['classification'] in allowed
+          assert all(r['checks'].values())
+          assert r['threshold_changed'] is False
+          assert r['soft_s_retest_allowed'] is False
+          assert r['production_k003_unblocked'] is False
+          PY
+      - name: Persist provenance and checkpoint
+        run: |
+          RUN_ID='${{ github.run_id }}' RUN_ATTEMPT='${{ github.run_attempt }}' HEAD_SHA='${{ github.sha }}' python - <<'PY'
+          import json,os,datetime,pathlib
+          rp=pathlib.Path('research/theory_results/RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_RESULT_v1.json')
+          r=json.loads(rp.read_text())
+          r['provenance']={'github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'trigger_head_sha':os.environ['HEAD_SHA'],'workflow':'rtk-c10-65s6fz18-hmt-matter-interface-selector-identifiability.yml','threshold_changed':False}
+          rp.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          d=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_{d}.md')
+          cp.write_text('# RTK C10.65s6fZ18 checkpoint\n\nClassification: `'+r['classification']+'`.\n\n'+r['interpretation']+'\n\nFrozen guards remain: no soft-s retest and no k=0.03 production.\n\nNext: '+r['next_gate']+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_RESULT_v1.json research/checkpoints/
+          git commit -m 'Record C10.65s6fZ18 HMT matter interface selector audit'
+          git push origin HEAD:rtk-class-build
