@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_65S6FZ20_HMT_MICROSCOPIC_MATTER_COMPLETION_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fZ20",
+  "parent_required": "C10_65S6FZ19_INTRINSIC_SECTOR_FIXED_FULL_RESPONSE_INTERFACE_DEPENDENT_PASS_SCOPED",
+  "question": "Does the independently published pre-soft-s HMT/U(1) universal-matter construction provide a microscopic/UV action principle that uniquely fixes the surviving physical-metric matter-interface parameters before any RTK response comparison?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1310.6666v4_section_IV_and_appendix_C_description",
+      "url": "https://arxiv.org/html/1310.6666v4",
+      "role": "published source statement on UV action-principle origin, IR scalar-tensor emergence, and status of a1,a2"
+    },
+    {
+      "id": "arxiv:1009.4885v3",
+      "url": "https://arxiv.org/abs/1009.4885",
+      "role": "independent pre-soft-s gauge-invariant matter-coupling prescription"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ20_UNIQUE_MICROSCOPIC_HMT_MATTER_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ20_PUBLISHED_HMT_MICROSCOPIC_ORIGIN_UNFIXED_FINE_TUNED_IR_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ20_MICROSCOPIC_SOURCE_LOCK_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "UNIQUE requires the audited pre-soft-s sources themselves to derive a unique physical-metric matter interface from a microscopic/UV action principle, including fixing all scalar-response-relevant coupling parameters. UNFIXED_FINE_TUNED_IR applies if the universal-coupling source explicitly states that its UV action-principle origin is not obvious, supplies only an IR scalar-tensor emergence with fine-tuning, and leaves a1,a2 arbitrary. INCOMPLETE applies if these source statements cannot be locked. This is scoped to the audited sources and is not a literature-wide impossibility theorem.",
+  "required_guards": [
+    "Z19 parent exact",
+    "sources predate current RTK soft-s obstruction",
+    "do not infer uniqueness from gauge invariance alone",
+    "do not choose a1 or a2 from RTK pole/residue/remainder",
+    "do not choose a1 or a2 from the observed soft-s obstruction",
+    "do not promote an IR fine-tuned emergence to a UV microscopic derivation",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "no C9 naturalness claim",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
