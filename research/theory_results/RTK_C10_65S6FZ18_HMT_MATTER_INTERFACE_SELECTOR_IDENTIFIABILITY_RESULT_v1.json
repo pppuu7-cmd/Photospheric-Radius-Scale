@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "da_silva_gauge_invariance_not_parameter_unique_witness": true,
+    "da_silva_manifest_gauge_invariant_recipe_explicit": true,
+    "da_silva_matter_coupling_explicit": true,
+    "independent_sources_predate_softs": true,
+    "no_rtk_response_selection": true,
+    "no_soft_s_or_k003": true,
+    "ppn_gr_limit_realisable_explicit": true,
+    "ppn_large_allowed_region_explicit": true,
+    "ppn_parameters_depend_on_couplings": true,
+    "ppn_universal_coupling_explicit": true,
+    "threshold_unchanged": true,
+    "z17_parent_exact": true
+  },
+  "classification": "C10_65S6FZ18_SOURCE_LOCKED_PRE_SOFT_SET_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PASS_SCOPED",
+  "gate": "C10.65s6fZ18",
+  "interpretation": "The independently published pre-soft-s gauge principle does provide a manifestly gauge-invariant matter-coupling recipe, but it is not a unique parameter-selection principle: the same source explicitly shows that the enlarged gauge invariance does not force lambda. The later universal HMT/U(1) matter-coupling source derives PPN observables in terms of coupling constants and admits a large phenomenologically allowed region. Therefore the audited pre-soft-s source set does not uniquely select the scalar-response physical-ADM interface. This is a scoped identifiability result, not a literature-wide no-go. The Z16/Z17 source-interface blocker must remain, and no RTK pole/residue/remainder or soft-s observable may be used to pick a point in the family.",
+  "next_gate": "C10.65s6fZ19: freeze a candidate-independent consequence audit of the unresolved universal-matter interface. Determine which background/quadratic RTK statements are invariant over the full source-locked HMT matter-coupling family and which depend on the unfixed interface parameters. Do not choose a representative point. If pole/residue/remainder equivalence is interface-dependent, preserve the full-action blocker and return to an independently specified microscopic matter completion rather than fitting coefficients.",
+  "nonclaims": [
+    "not a literature-wide no-selector theorem",
+    "not a unique HMT+Z7 action",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 2,
+    "github_actions_run_id": 33119237490,
+    "threshold_changed": false,
+    "trigger_head_sha": "194217b98cb2b4b691d45381636ac85cafa8b4f5",
+    "workflow": "rtk-c10-65s6fz18-hmt-matter-interface-selector-identifiability.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_RESULT_v1",
+  "selector_audit": {
+    "gauge_principle_alone_parameter_unique": false,
+    "manifest_gauge_invariant_matter_recipe_exists": true,
+    "scope": "audited pre-soft-s source set only",
+    "unique_scalar_response_interface_selected": false,
+    "universal_ppn_family_continuous": true
+  },
+  "soft_s_retest_allowed": false,
+  "source_hashes": {
+    "arxiv_1009_4885_sha256": "450e97204d94f8a08e36057f04756cf080e8bc57fadfd6f3d8d4a762b540f263",
+    "arxiv_1310_6666_sha256": "e6a2aca43a3480dca653217fcbf81f2c3156e3907882607fa0de7079168cd42d"
+  },
+  "threshold_changed": false
+}
