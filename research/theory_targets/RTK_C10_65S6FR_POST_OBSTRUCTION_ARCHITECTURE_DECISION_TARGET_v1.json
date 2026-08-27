@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_65S6FR_POST_OBSTRUCTION_ARCHITECTURE_DECISION_TARGET_v1",
+  "gate": "C10.65s6fR",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Make an outcome-disciplined architecture decision after the local exact-quadratic-preserving metric/operator escape audits and the source-locked compensator audit, without fitting a new field or symmetry to cancel the already-observed soft-s obstruction.",
+  "parents": {
+    "C10.65s6fP": "C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_PASS_SCOPED",
+    "C10.65s6fQ": "C10_65S6FQ_NO_SOURCE_LOCKED_COMPENSATOR_PASS_SCOPED"
+  },
+  "frozen_options": {
+    "AD_HOC_NEW_COMPENSATOR": "Introduce a new compensator/spurion or spatial-conformal symmetry specifically to cancel the current soft-s obstruction.",
+    "REJECT_MINIMAL_BRANCH_PENDING_INDEPENDENT_NEW_COMPLETION": "Do not tune a new compensator to the obstruction. Record the minimal nonlinear branch as rejected at this scoped cubic test, keep k=0.03 production blocked, and require any enlarged completion to be independently specified and to restart background/quadratic/DOF certification before re-testing the soft channel."
+  },
+  "frozen_decision_rule": "If s6fP shows the tested local metric-only/mixed-operator exact-off-shell-quadratic-preserving escape class cannot alter the soft response, and s6fQ finds no source-locked compensator/spurion law, select REJECT_MINIMAL_BRANCH_PENDING_INDEPENDENT_NEW_COMPLETION. AD_HOC_NEW_COMPENSATOR is forbidden because it would fit new nonlinear structure to a known failed observable rather than derive it independently.",
+  "required_guards": [
+    "s6fP parent classification exact match",
+    "s6fQ parent classification exact match",
+    "s6fQ decision is NO_SOURCE_LOCKED_COMPENSATOR",
+    "no new field, coefficient, Weyl weight, or symmetry law introduced",
+    "k=0.03 Mpc^-1 production remains blocked",
+    "minimal-branch rejection is explicitly scoped and not an RTK-wide no-go",
+    "C9 radiative naturalness remains open",
+    "same-full-action primordial/background closure remains open"
+  ],
+  "classification": "C10_65S6FR_REJECT_MINIMAL_BRANCH_REQUIRE_INDEPENDENT_NEW_COMPLETION_PASS_SCOPED",
+  "forbidden": [
+    "choosing a compensator coupling after seeing the soft-s result",
+    "calling the result a no-go for RTK as a whole",
+    "unblocking k=0.03 production",
+    "claiming radiative naturalness or same-full-action closure",
+    "weakening prior frozen criteria"
+  ],
+  "nonclaims": [
+    "not a theorem excluding extra-field UV completions",
+    "not a theorem excluding nonlocal completions",
+    "not a theorem excluding a new independently motivated symmetry",
+    "not a radiative-naturalness proof",
+    "not same-full-action primordial/background closure",
+    "not spectra/likelihood validation"
+  ]
+}
