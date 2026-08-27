@@ -8,4 +8,4 @@ This is an interface/identifiability blocker, not evidence that the symmetries c
 
 Next gate: C10.65s6fZ6: source-lock audit for a pre-soft-s representation of the new scalar carrier under the projectable gravitational gauge symmetry. If none exists, freeze a symmetry-first representation theorem/class before writing any combined action.
 
-Provenance: frozen target commit `953d37a2c7a28b9530e738368282eeea8382b2ff`; run `33096035335`, attempt `1`, start SHA `5d5a790a11fa1f1ed403677282a6b469b5d9231e`. Thresholds changed: false.
+Provenance: frozen target commit `953d37a2c7a28b9530e738368282eeea8382b2ff`; run `33095963591`, attempt `2`, start SHA `ad1b8f70d0c367e9008a16e95654ffccb78b379e`. Thresholds changed: false.

@@ -24,9 +24,9 @@
   "production_k003_unblocked": false,
   "provenance": {
     "frozen_target_commit": "953d37a2c7a28b9530e738368282eeea8382b2ff",
-    "github_actions_run_attempt": 1,
-    "github_actions_run_id": 33096035335,
-    "repo_head_at_job_start": "5d5a790a11fa1f1ed403677282a6b469b5d9231e",
+    "github_actions_run_attempt": 2,
+    "github_actions_run_id": 33095963591,
+    "repo_head_at_job_start": "ad1b8f70d0c367e9008a16e95654ffccb78b379e",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s6fz5-symmetry-interface-closure-audit.yml"
   },
