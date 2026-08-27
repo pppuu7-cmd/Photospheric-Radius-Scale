@@ -1,0 +1,59 @@
+name: RTK C10.65s6fZ1 source-locked nonlinear symmetry realization audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fz1_source_locked_nonlinear_symmetry_realization_audit.py'
+      - '.github/workflows/rtk-c10-65s6fz1-source-locked-nonlinear-symmetry-realization-audit.yml'
+      - '.github/rtk-c10-65s6fz1-source-locked-nonlinear-symmetry-realization-audit-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_TARGET_v1.json'))
+          assert t['gate']=='C10.65s6fZ1'
+          assert t['parent']=='C10_65S6FZ_SYMMETRY_PROTECTED_PROJECTABLE_RANK_ONE_CLASS_PASS_SCOPED'
+          assert t['guards']['no_soft_s_retest'] is True
+          assert t['guards']['no_k003_production'] is True
+          assert t['guards']['no_new_fitted_coefficients'] is True
+          assert t['guards']['threshold_changed'] is False
+          PY
+      - name: Run frozen source-lock audit
+        run: python research/shadow/rtk_c10_65s6fz1_source_locked_nonlinear_symmetry_realization_audit.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA']})
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          Path('research/checkpoints/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_2026-08-27.md').write_text(f'''# RTK C10.65s6fZ1 — source-locked nonlinear symmetry realization audit\n\nClassification: **{r['classification']}**\n\nNo pre-soft-s archived construction is a source-locked projectable nonlinear realization of the s6fZ null-direction symmetry. The rank-one Dirac direction remains explicitly quadratic/scoped; the U(1) route is nonprojectable and retains an open full coupled constraint rank.\n\nTherefore the mathematical symmetry-protected class from s6fZ has no already-certified RTK full-action representative. s6fT remains blocked; no soft-s retest or k=0.03 production is authorized. This is not a no-go for a newly constructed independently motivated projectable gauge completion.\n\nNext gate: {r['next_gate']}\n\nProvenance: run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.\n''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fZ1 nonlinear symmetry realization audit'
+            git push origin HEAD:rtk-class-build
+          fi

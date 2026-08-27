@@ -1,0 +1,35 @@
+{
+  "schema": "RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ1",
+  "title": "Source-locked nonlinear symmetry realization audit",
+  "parent": "C10_65S6FZ_SYMMETRY_PROTECTED_PROJECTABLE_RANK_ONE_CLASS_PASS_SCOPED",
+  "question": "Does the pre-soft-s RTK archive already contain an independently motivated, projectable, nonlinear local symmetry realization whose ADM/clock reduction implements the s6fZ null-direction redundancy and thereby fixes M proportional to u*u^T and source s parallel to u from one action?",
+  "required_for_REALIZATION_FOUND": [
+    "explicit projectable nonlinear action, not only a quadratic toy",
+    "explicit local transformation law generating the kinetic null direction",
+    "same-action derivation of algebraic/potential degeneracy M*n=0",
+    "same-action derivation of source orthogonality s.n=0",
+    "closed or explicitly demonstrated full coupled constraint/DOF count"
+  ],
+  "source_lock": {
+    "archived_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "dirac_appendix": "research/methods/RTK_FORMULA_BIBLE_C8_DEGENERATE_AUXILIARY_APPENDIX.md",
+    "u1_appendix": "research/methods/RTK_FORMULA_BIBLE_C8_U1_COMPLETION_APPENDIX.md",
+    "u1_narrowing": "research/RTK_C8_U1_CANONICAL_NARROWING_2026-08-22.md",
+    "candidate_space_parent": "research/theory_results/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_RESULT_v1.json"
+  },
+  "decision_rule": {
+    "SOURCE_LOCKED_REALIZATION_FOUND_PASS_SCOPED": "Only if one pre-soft-s archived construction satisfies every required item without new coefficients or reinterpretation.",
+    "NO_SOURCE_LOCKED_REALIZATION_FOUND_PASS_SCOPED": "If audited archived constructions fail at least one required item for documented structural reasons; retain the action-selection blocker.",
+    "AUDIT_INCOMPLETE_BLOCKED_SCOPED": "If source material cannot be read or parent/source lock cannot be verified."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_new_fitted_coefficients": true,
+    "no_promoting_nonprojectable_to_projectable": true,
+    "no_promoting_quadratic_toy_to_full_action": true,
+    "threshold_changed": false
+  },
+  "scope": "Archive/source-lock theorem only; absence is not a no-go for a new independently motivated symmetry completion."
+}
