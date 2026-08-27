@@ -1,0 +1,52 @@
+name: RTK C10.65s6fQ source-locked compensator audit
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fq-source-locked-compensator-audit-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute frozen C10.65s6fQ audit
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fq_source_locked_compensator_spurion_audit.py | tee /tmp/s6fq.log
+      - name: Add provenance and checkpoint
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          HEAD_AT_JOB_START: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          rp=Path('research/theory_results/RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_SPURION_AUDIT_RESULT_v1.json')
+          d=json.loads(rp.read_text())
+          d['provenance']={'workflow':'rtk-c10-65s6fq-source-locked-compensator-audit.yml','github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['HEAD_AT_JOB_START'],'threshold_changed':False}
+          rp.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          cp=Path('research/checkpoints/RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_AUDIT_2026-08-27T1041Z.md')
+          cp.write_text('''# RTK C10.65s6fQ source-locked compensator/spurion audit\n\nClassification: `C10_65S6FQ_NO_SOURCE_LOCKED_COMPENSATOR_PASS_SCOPED`.\n\nThe archived fixed U(1) stack was read from commit `13acfdbc16d2f3117f1299b8552bcf7b1f996bd1`. It explicitly source-locks the U(1) rules `delta_alpha N_i=N D_i alpha`, `delta_alpha nu=alpha`, `delta_alpha N=0`, the invariant shift `Ntilde^i=N^i-ND^i nu`, and a U(1)-neutral RTK scalar `Sigma`.\n\nNo independent homogeneous spatial-conformal/Weyl transformation law is specified for `nu`, `A`, `Sigma`, or another frozen field. Thus these existing U(1) variables cannot be silently reinterpreted as the compensator/spurion required to evade the s6fO/s6fP soft-weight obstruction. Doing so would be a new nonlinear symmetry/action assumption.\n\nThis is not a no-go for enlarged UV completions. It means the current source-locked RTK stack has exhausted the local exact-quadratic-preserving metric/U(1) escape routes checked so far. `k=0.03 Mpc^-1` production remains blocked.\n\nNext frontier: architecture decision between a genuinely enlarged compensator/symmetry completion requiring renewed background/quadratic/DOF certification, or retaining the present field content and accepting the soft-s obstruction as rejection of the minimal nonlinear branch.\n''')
+          PY
+      - name: Commit result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_SPURION_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_AUDIT_2026-08-27T1041Z.md
+          git commit -m 'Record C10.65s6fQ source-locked compensator audit'
+          git push origin HEAD:rtk-class-build
