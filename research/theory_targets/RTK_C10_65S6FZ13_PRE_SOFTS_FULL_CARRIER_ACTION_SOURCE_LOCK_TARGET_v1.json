@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fZ13",
+  "parent_required": "C10_65S6FZ12_BACKGROUND_QUADRATIC_UNDERSPECIFIED_BLOCKED_SCOPED",
+  "question": "Does an independently motivated pre-soft-s source already fix a complete local projectable HMT+Z7 carrier action, including every same-action datum that Z12 found missing, without selecting anything from the old RTK pole/residue/remainder or soft-s observable?",
+  "pinned_pre_soft_source": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md",
+    "role": "independent C8 production-DBI/spatial-covariant carrier source predating the present soft-s completion line"
+  },
+  "required_same_action_inputs": [
+    "full_local_potential_or_background_function",
+    "background_solution_or_boundary_prescription",
+    "finite_k_spatial_gradient_operator_and_coefficient",
+    "action_derived_matter_source_coupling",
+    "carrier_couplings_to_HMT_A_and_prepotential_or_explicit_zero_by_same_action"
+  ],
+  "projectability_guard": "For N=N(t), a_i=D_i ln N vanishes identically; a C_acc a_i a^i mechanism cannot be counted as a projectable finite-k carrier gradient term.",
+  "allowed_classifications": [
+    "C10_65S6FZ13_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_FOUND_PASS_SCOPED",
+    "C10_65S6FZ13_NO_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "FOUND is allowed only if one independently selected pre-soft-s source fixes all five required inputs in a projectable HMT+Z7-compatible action. If the only finite-k bridge relies on a_i=D_i ln N, it is inadmissible under projectability and must not be repurposed. Missing inputs may not be chosen by matching the previously certified RTK kernel.",
+  "required_guards": [
+    "Z12 parent classification exact",
+    "historical C8 source read at pinned commit",
+    "no reinterpretation of nonprojectable acceleration term as projectable",
+    "no new carrier coefficient or function selected",
+    "no old RTK pole/residue/remainder used as a fit target",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "no C9 naturalness claim"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
