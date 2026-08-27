@@ -12,4 +12,4 @@ This is a scoped source-identifiability result, not a no-go theorem. No field ch
 
 Next gate: C10.65s6fZ7: freeze a symmetry-first representation theorem/class for the new scalar carrier under the projectable gravitational gauge symmetry, outcome-neutral and without using the soft-s observable, before writing any combined action.
 
-Provenance: frozen target commit `5313cc814314c2f2fb9a45c84b8a8b6145f53f9e`; run `33098648327`, attempt `1`, start SHA `10890d7ab07e79371583b64fc5f0bece2859e092`. Thresholds changed: false.
+Provenance: frozen target commit `5313cc814314c2f2fb9a45c84b8a8b6145f53f9e`; run `33098660889`, attempt `1`, start SHA `b1e5d6ffe7171a337e4bcabc49b3827749841b61`. Thresholds changed: false.
