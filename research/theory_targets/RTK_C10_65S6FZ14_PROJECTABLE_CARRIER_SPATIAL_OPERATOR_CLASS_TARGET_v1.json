@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_65S6FZ14_PROJECTABLE_CARRIER_SPATIAL_OPERATOR_CLASS_TARGET_v1",
+  "gate": "C10.65s6fZ14",
+  "parent_required": "C10_65S6FZ13_NO_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_BLOCKED_SCOPED",
+  "question": "Before choosing any coefficient, does the frozen HMT+Z7 representation admit a local projectable finite-k carrier spatial operator, and do the frozen symmetries determine its coefficient?",
+  "frozen_representation": {
+    "carrier": "Phi=u1*phi+u2*chi",
+    "internal_null_symmetry": "delta_epsilon(phi,chi)=epsilon*(-u2,u1), hence delta_epsilon Phi=0",
+    "gravity_U1_charge": "Phi neutral",
+    "HMT_spatial_metric_U1": "delta_alpha gamma_ij=0",
+    "projectable_lapse": "N=N(t)"
+  },
+  "candidate_operator_class": {
+    "Y_Phi": "gamma^{ij} D_i Phi D_j Phi / 2",
+    "derivative_order": 2,
+    "parity": "even",
+    "locality": "local on the preferred foliation"
+  },
+  "allowed_classification": "C10_65S6FZ14_PROJECTABLE_SPATIAL_OPERATOR_EXISTS_COEFFICIENT_UNFIXED_PASS_SCOPED",
+  "decision_rule": "Prove invariance of Y_Phi under both frozen symmetries and show that projectability does not set D_i Phi to zero. Then exhibit a continuous coefficient family c_Y*Y_Phi with identical symmetry content but inequivalent finite-k quadratic kernels. Do not select c_Y in this gate.",
+  "required_guards": [
+    "Z13 parent classification exact",
+    "no coefficient value selected",
+    "no potential/background prescription selected",
+    "no matter/source coupling selected",
+    "no HMT auxiliary carrier coupling selected",
+    "old RTK pole/residue/remainder hidden from coefficient selection",
+    "no soft-s retest",
+    "no k=0.03 production"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
