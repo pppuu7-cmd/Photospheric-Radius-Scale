@@ -1,0 +1,51 @@
+{
+  "schema": "RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s6fZ11",
+  "parents_required": {
+    "z10": "C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_U1_PRINCIPLE_FOUND_PASS_SCOPED",
+    "z7": "C10_65S6FZ7_REPRESENTATION_CLASS_EXISTS_PASS_SCOPED"
+  },
+  "question": "Does one explicit literature-fixed projectable local-U1 gravitational action, coupled only to the preregistered Z7 gauge-invariant carrier representation, pass a same-action scalar constraint/DOF preflight with no gravitational scalar plus one carrier scalar before any RTK background or soft-s matching?",
+  "fixed_gravity_source": {
+    "paper": "Horava-Melby-Thompson 2010, arXiv:1007.2410",
+    "equation": 104,
+    "lambda": 1,
+    "action_structure": "sqrt(g){N[KijKij-K^2-V+nu Theta^ij(2Kij+nabla_i nabla_j nu)]-A(R-2Omega)}",
+    "Theta": "Theta^ij=R^ij-(1/2)g^ij R+Omega g^ij",
+    "projectable_lapse": "N=N(t)"
+  },
+  "fixed_carrier_interface": {
+    "representation_parent": "C10.65s6fZ7",
+    "Phi": "u1*phi+u2*chi",
+    "internal_null_symmetry": "delta(phi,chi)=epsilon*(-u2,u1)",
+    "gravity_U1_charge_of_phi_chi": "neutral",
+    "invariant_shift": "Nbar_i=N_i-N D_i nu",
+    "normal_derivative": "DperpPhi=(dot(Phi)-Nbar^i D_i Phi)/N",
+    "carrier_kinetic_assumption": "regular nonzero coefficient kappa multiplying (DperpPhi)^2/2; no coefficient value selected"
+  },
+  "preflight_logic": [
+    "literature HMT gravity has nonlinear local U1 and eliminates the scalar graviton",
+    "A and nu are nondynamical/constrained gravitational fields; no new carrier coupling to dot(A) or dot(nu) is introduced",
+    "Z7 internal null symmetry removes the orthogonal phi-chi direction exactly",
+    "regular carrier Hessian in invariant Phi direction has rank one",
+    "direct-product gauge representation has vanishing cross commutator",
+    "therefore the scalar preflight count is one propagating carrier scalar and zero propagating gravitational scalars, conditional on the literature HMT nonlinear constraint result"
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ11_FIXED_PROJECTABLE_U1_ONE_SCALAR_PREFLIGHT_PASS_SCOPED",
+    "C10_65S6FZ11_SCALAR_DOF_PREFLIGHT_BLOCKED_SCOPED"
+  ],
+  "required_guards": [
+    "parent classifications exact",
+    "HMT Eq.104 action is frozen before evaluating RTK observables",
+    "no coefficient is fit to the previous soft-s failure",
+    "no background equivalence is claimed",
+    "no pole/residue/remainder equivalence is claimed",
+    "no radiative naturalness is claimed",
+    "no soft-s retest",
+    "no k=0.03 production"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
