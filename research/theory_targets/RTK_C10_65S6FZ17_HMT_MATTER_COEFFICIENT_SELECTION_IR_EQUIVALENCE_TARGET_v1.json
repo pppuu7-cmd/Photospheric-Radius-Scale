@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_65S6FZ17_HMT_MATTER_COEFFICIENT_SELECTION_IR_EQUIVALENCE_TARGET_v1",
+  "gate": "C10.65s6fZ17",
+  "parent_required": "C10_65S6FZ16_HMT_UNIVERSAL_MATTER_INTERFACE_CLASS_FOUND_COEFFICIENTS_UNFIXED_PARTIAL_PASS_SCOPED",
+  "question": "Do independently published pre-soft-s GR/PPN or equivalence-principle conditions uniquely select the scalar-response-relevant coupling parameters of the projectable universal HMT/U(1) matter-coupling family, without using RTK pole/residue/remainder or the observed soft-s obstruction?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/abs/1310.6666",
+      "role": "published universal HMT matter coupling and PPN/GR-limit constraints, including projectable case"
+    },
+    {
+      "id": "CPC_2024_covariant_HL_review_interface",
+      "url": "https://cpc.ihep.ac.cn/article/doi/10.1088/1674-1137/ad873d",
+      "role": "independent review/source-lock for physical-ADM universal matter interface and its coupling-parameter status"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ17_IR_EQUIVALENCE_UNIQUELY_FIXES_HMT_MATTER_INTERFACE_PASS_SCOPED",
+    "C10_65S6FZ17_PPN_GR_LIMIT_LEAVES_CONTINUOUS_HMT_MATTER_FAMILY_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ17_NO_INDEPENDENT_COEFFICIENT_SELECTION_PRINCIPLE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "UNIQUE_PASS requires a pre-soft-s published projectable HMT/U(1) IR-equivalence/PPN/equivalence-principle condition that fixes all matter-interface parameters relevant to the scalar response to a single source map. CONTINUOUS_FAMILY_PARTIAL_PASS applies if the published GR/PPN constraints explicitly admit a nontrivial region/family or leave at least one relevant coupling free, even while GR PPN values are achievable. BLOCKED applies if no independent pre-soft-s coefficient-selection condition can be source-locked. No RTK finite-k, pole/residue/remainder, soft-s or k=0.03 result may be used to select coefficients.",
+  "required_guards": [
+    "Z16 parent exact",
+    "sources predate current RTK soft-s obstruction",
+    "projectable case must be explicitly represented",
+    "no coefficients selected from RTK pole/residue/remainder",
+    "no coefficients selected from failed soft-s observable",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "do not promote a phenomenologically allowed region to a unique action",
+    "no C9 naturalness claim"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
