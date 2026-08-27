@@ -1,0 +1,34 @@
+{
+  "archived_source_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+  "checks": {
+    "c8_does_not_derive_epoch_source_alignment": true,
+    "c8_future_full_flrw_embedding": true,
+    "c8_future_source_from_same_action": true,
+    "c8_pointwise_matching_only": true,
+    "c8_quadratic_scoped_not_final": true,
+    "c9nat_does_not_claim_final_completion": true,
+    "c9nat_requires_same_completed_action": true,
+    "c9uv_no_selected_uv_scale": true,
+    "c9uv_not_globally_green": true,
+    "c9uv_open_nonlinear_constraint_reduction": true,
+    "parent_is_exact_s6fv_pass": true,
+    "parent_result_present": true,
+    "target_present": true
+  },
+  "classification": "C10_65S6FW_NO_INDEPENDENT_PRE_SOFTS_EMBEDDING_PRINCIPLE_FOUND_PASS_SCOPED",
+  "finding": "The source-locked pre-soft-s C8/C9 archive contains no independently motivated rule that uniquely fixes the rank-one field map, potential/algebraic matrix and action-derived source direction. C8 explicitly leaves full FLRW lapse/shift embedding and source derivation from the same action as future work; C9 likewise remains an open same-completed-action/naturalness program.",
+  "gate": "C10.65s6fW",
+  "next_gate": "C10.65s6fX: freeze an independent action-selection requirement outside the failed soft-s observable. Do not choose potential/source data from the s6fM obstruction. If no independently motivated candidate action exists, retain the s6fT blocker rather than inventing one.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33082450208,
+    "repo_head_at_job_start": "fe8b318fc681fe23323e0947b90e62a794e9fd02",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fw-pre-softs-archive-principle-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
