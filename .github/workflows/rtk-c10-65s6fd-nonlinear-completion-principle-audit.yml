@@ -1,0 +1,56 @@
+name: RTK C10.65s6fD nonlinear completion principle audit
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fd_nonlinear_completion_principle_audit.py'
+      - '.github/workflows/rtk-c10-65s6fd-nonlinear-completion-principle-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute frozen nonlinear principle audit
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fd_nonlinear_completion_principle_audit.py | tee /tmp/s6fd.txt
+          grep -q 'C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_PASS_SCOPED' /tmp/s6fd.txt
+      - name: Add immutable provenance
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_RESULT_v1.json')
+          d=json.loads(p.read_text()); d['provenance']={'github_actions_run_id':int(os.environ['RUN_ID']),'repo_head_at_job_start':os.environ['HEAD_SHA'],'workflow':'rtk-c10-65s6fd-nonlinear-completion-principle-audit.yml','threshold_changed':False}; p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          mkdir -p research/checkpoints
+          cat > research/checkpoints/RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_RESULT_2026-08-27.md <<'EOF'
+          # RTK C10.65s6fD checkpoint
+
+          The source-locked RTK stack contains no already-fixed nonlinear principle that determines the cubic scalar-shift ambiguity exposed by C10.65s6fC. The archived Formula Bible states that the final covariant completion is not fixed; s6fB confirms the complete shift-dependent ADM Lagrangian is absent; s6fC gives an explicit lower-order-invisible witness.
+
+          Therefore the next scientifically legitimate step is a separately labeled candidate nonlinear completion branch. Its coefficients must be specified before and independently of the desired soft-s cancellation. k=0.03 production remains blocked.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_RESULT_2026-08-27.md
+          if ! git diff --cached --quiet; then git commit -m 'Record C10.65s6fD nonlinear completion principle audit'; git push origin HEAD:rtk-class-build; fi
