@@ -1,0 +1,84 @@
+{
+  "schema": "RTK_C10_65S5H_NEXT_K_MULTIBRANCH_LONGER_TIME_TRAJECTORY_TARGET_v1",
+  "gate": "C10.65s5h",
+  "created_utc": "2026-08-27T01:05:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s5g": "C10_65S5G_AXIS_DECISION_PASS_SCOPED",
+    "C10.65s5f": "C10_65S5F_NEXT_K_MULTIBRANCH_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+    "C10.65s5d": "C10_65S5D_NEXT_K_MULTIBRANCH_ONE_STEP_PRODUCTION_CANARY_PASS_SCOPED",
+    "C10.65s4g_method": "C10_65S4G_MODERATE_K_LONGER_TIME_TRAJECTORY_PASS_SCOPED",
+    "C10.65s2e_historical": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED"
+  },
+  "purpose": "Execute the C10.65s5g-selected one-axis extension: materially widen elapsed conformal time at the already-stress-tested k=0.01 Mpc^-1 while keeping exactly the same three prospectively fixed omitted-order branches, onset state ownership, completed-U1 production kernel, RK evolver, integrator tolerance and preregistered 1e-10 normalized A/H/M/T constraint bound. The four elapsed times are inherited exactly from the already-passed C10.65s4g longer-time methodology.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "lambda_HL": 1.0016708437761068,
+    "M_c_Mpc_inv": 9066.231026460177,
+    "k_Mpc_inv": 0.01,
+    "branches": [
+      {"id": "baseline", "eta_D": 0.0, "eta_C": 0.0, "eta_S": 0.0},
+      {"id": "joint_extremum", "eta_D": -1.0, "eta_C": -1.0, "eta_S": -1.0},
+      {"id": "phi_extremum", "eta_D": -1.0, "eta_C": -1.0, "eta_S": 1.0}
+    ]
+  },
+  "sample_elapsed_tau_Mpc": [0.0003, 0.001, 0.003, 0.01],
+  "sampling_policy": {
+    "independent_restart_from_identical_branch_onset_per_endpoint": true,
+    "sample_times_inherited_exactly_from_C10.65s4g": true,
+    "same_completed_U1_production_kernel_as_s5d_s5e_s5f": true,
+    "same_rk_evolver": true,
+    "same_integrator_tolerance": true,
+    "no_intra_step_observer_instrumentation": true,
+    "endpoint_width_absolute_tolerance_Mpc": 5e-10
+  },
+  "constraint_policy": {
+    "normalized_constraints": ["preferred_A", "preferred_Hamiltonian", "preferred_momentum", "physical_traceless"],
+    "max_abs_normalized_each_sample": 1e-10,
+    "max_abs_normalized_change_from_onset": 1e-10,
+    "bound_source": "prospectively inherited unchanged from C10.65s3b/s4g/s5e/s5f before C10.65s5h execution"
+  },
+  "frozen_checks": {
+    "branch_count": 3,
+    "sample_count": 4,
+    "endpoint_record_count": 12,
+    "fixed_branch_selection_exactly_s5d_s5e_s5f": true,
+    "sample_times_exactly_s4g": true,
+    "off_numeric_text_sha256_identical_all_three": true,
+    "before_state_exactly_matches_s5d_before_per_branch": true,
+    "boundary_higher_ur_exactly_matches_s5d_before_per_branch": true,
+    "first_rhs_relative_tolerance_inherited": 5e-9,
+    "endpoint_width_absolute_tolerance_Mpc": 5e-10,
+    "approximation_state": {"TCA_enum": 0, "RSA_enum": 0, "UFA_enum": 0, "l_max_ur": 17},
+    "all_endpoint_states_finite": true,
+    "all_normalized_A_H_M_T_constraints_finite": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "same_kernel_integrator_tolerance_static_guard": true,
+    "s5c_envelope_remains_nonprobabilistic": true,
+    "no_k_widening": true,
+    "no_branch_widening": true,
+    "no_legacy_nlde_physical_role": true,
+    "no_double_gauge_transform": true,
+    "s2e_failed_parent_preserved": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S5H_NEXT_K_MULTIBRANCH_LONGER_TIME_TRAJECTORY_PASS_SCOPED",
+  "fail_classification": "C10_65S5H_NEXT_K_MULTIBRANCH_LONGER_TIME_TRAJECTORY_FAIL_SCOPED",
+  "interpretation_if_pass": "At k=0.01 Mpc^-1, each of the three prospectively fixed omitted-order branches remains finite and on the completed-U1 A/H/M/T constraint manifold within the unchanged 1e-10 normalized bound at four independently restarted elapsed conformal times from 3e-4 through 1e-2 Mpc. This extends sampled time evidence by another two decades beyond C10.65s5f without widening k or branch assumptions.",
+  "next_if_pass": "Freeze C10.65s6a k=0.03 onset-domain preflight. It must assess horizon ratio, inherited matching-order control and algebraic conditioning before any k=0.03 production feedback; do not jump directly to spectra or likelihood.",
+  "non_claims": [
+    "not a continuous-time supremum theorem between endpoints",
+    "not cosmological-time stability",
+    "not proof that true omitted O(k^4) matching terms lie in the s5c envelope",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not microscopic UV/pre-EFT matching",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "threshold_changed": false
+}
