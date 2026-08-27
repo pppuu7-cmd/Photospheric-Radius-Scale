@@ -1,0 +1,58 @@
+name: RTK C10.65s6fP mixed time-space off-shell obstruction
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fp-mixed-time-space-offshell-obstruction-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute frozen C10.65s6fP theorem
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fp_mixed_time_space_offshell_operator_obstruction.py | tee /tmp/s6fp.log
+      - name: Persist immutable provenance and checkpoint
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          HEAD_AT_JOB_START: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          rp=Path('research/theory_results/RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_RESULT_v1.json')
+          d=json.loads(rp.read_text())
+          d['provenance']={
+            'workflow':'rtk-c10-65s6fp-mixed-time-space-offshell-obstruction.yml',
+            'github_actions_run_id':int(os.environ['RUN_ID']),
+            'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),
+            'repo_head_at_job_start':os.environ['HEAD_AT_JOB_START'],
+            'threshold_changed':False
+          }
+          rp.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          cp=Path('research/checkpoints/RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OBSTRUCTION_2026-08-27T1041Z.md')
+          cp.write_text('''# RTK C10.65s6fP mixed time-space off-shell operator obstruction\n\nClassification: `C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_PASS_SCOPED`.\n\nFor the frozen local metric-only projectable ADM class built from mixed-index `K_i^j`, `R_i^j`, and spatial covariant derivatives, a constant homogeneous spatial conformal mode leaves `K_i^j` invariant. A hard quadratic off-shell monomial `omega^r k^s` therefore has density weight\n\n`w(r,s)=3-s`.\n\nExact preservation of the complete hard quadratic action is imposed **off shell**: `omega` and `k` remain independent and the hard dispersion relation is not inserted. Thus\n\n`Delta Q2(omega,k)=sum Delta C_rs omega^r k^s == 0`\n\nrequires every grouped `Delta C_rs=0`. Its constant-homogeneous hard-hard-soft variation is then\n\n`Delta Vsoft=sum (3-s) Delta C_rs omega^r k^s = 0`.\n\nHence mixed time-space derivative retuning cannot cancel the already-certified nonzero homogeneous cubic vertex while leaving the complete off-shell quadratic functional exactly unchanged. Any apparent cancellation that occurs only after substituting `omega=omega(k)` is not an action-level preservation of the certified quadratic theory.\n\nThis remains scoped: extra fields/compensators, explicit spurions with independent homogeneous transformation law, nonlocal structures, or a separately re-certified quadratic completion are not excluded. `k=0.03 Mpc^-1` production remains blocked.\n\nNext frontier: audit whether the existing source-locked RTK stack already contains an independent compensator/spurion/symmetry transformation capable of changing the homogeneous soft weight without introducing a genuinely new nonlinear completion.\n''')
+          PY
+      - name: Commit result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_RESULT_v1.json research/checkpoints/RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OBSTRUCTION_2026-08-27T1041Z.md
+          git commit -m 'Record C10.65s6fP mixed time-space off-shell obstruction'
+          git push origin HEAD:rtk-class-build
