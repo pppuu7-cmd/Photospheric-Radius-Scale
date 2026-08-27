@@ -1,0 +1,56 @@
+{
+  "target_id": "RTK_C10_65S6FO_FIXED_DERIVATIVE_OPERATOR_CLASS_OBSTRUCTION_TARGET_v1",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "scope": "MINIMAL_PROJECTABLE_N2_S1HALF_v1 and any local metric-only pure-spatial six-derivative deformation tested only through its hard quadratic kernel and constant homogeneous conformal response",
+  "parent_frontier": {
+    "C10.65s6fM": "NONZERO scoped reduced soft result for the minimal candidate branch",
+    "C10.65s6fN": "PASS_SCOPED pure higher-spatial carrier homogeneous-soft obstruction",
+    "branch_head_before_freeze": "a07f0fadf5a85fe2726041d467ee982873997f5f"
+  },
+  "scientific_question": "Can a finite linear combination of local metric-only pure-spatial operators with exactly six spatial derivatives cancel the hard-hard to homogeneous-soft cubic source while preserving the already certified hard quadratic sector exactly?",
+  "frozen_assumptions": {
+    "local": true,
+    "metric_only": true,
+    "pure_spatial": true,
+    "total_spatial_derivative_order": 6,
+    "homogeneous_soft_mode": "constant zeta_0 conformal rescaling gamma_ij -> exp(2 zeta_0) gamma_ij",
+    "exact_hard_quadratic_preservation": true,
+    "no_extra_fields_or_spurions": true,
+    "no_time_derivatives": true,
+    "no_nonlocal_operators": true,
+    "no_post_result_coefficient_fitting": true
+  },
+  "frozen_theorem": {
+    "density_weight_rule": "w = 3 - d for a local pure-spatial metric scalar density of fixed total spatial derivative order d under constant homogeneous conformal rescaling",
+    "six_derivative_weight": "w(d=6) = -3",
+    "family_crosscheck": "for D^(n-1)R D^(n-1)R, d=2n+2 and w=1-2n; n=2 gives -3",
+    "soft_source_rule": "delta_zeta0 DeltaQ2 = w DeltaQ2, so the hard-hard-homogeneous cubic response of any same-weight finite linear combination is proportional to its total hard quadratic functional",
+    "quadratic_preservation_corollary": "if DeltaQ2 = 0 as a functional for all hard modes, then DeltaV3_soft = 0",
+    "retuning_corollary": "retuning among six-derivative metric-only operators while keeping the total certified quadratic kernel fixed cannot change its homogeneous soft response",
+    "zero_quadratic_corollary": "an operator whose quadratic hard contribution vanishes has zero hard-hard-homogeneous response through this constant-scaling channel"
+  },
+  "required_checks": [
+    "symbolically derive the constant-rescaling weight w=3-d and evaluate d=6",
+    "cross-check the n=2 D^(n-1)R D^(n-1)R family weight",
+    "show the first homogeneous variation of a generic hard quadratic functional is w times that functional",
+    "impose exact quadratic preservation and verify the compensating soft variation vanishes identically",
+    "verify the retuning statement for a generic finite same-weight linear combination",
+    "verify the zero-quadratic corollary",
+    "record explicit escape routes and non-claims"
+  ],
+  "allowed_classifications": [
+    "C10_65S6FO_FIXED_DERIVATIVE_OPERATOR_CLASS_OBSTRUCTION_PASS_SCOPED",
+    "C10_65S6FO_COUNTEREXAMPLE_FOUND_FAIL_SCOPED",
+    "C10_65S6FO_SOURCE_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "scope_nonclaims": [
+    "not a no-go for RTK as a whole",
+    "does not exclude mixed time-space derivative operators",
+    "does not exclude operators with extra fields, compensators, or spurions",
+    "does not exclude nonlocal structures",
+    "does not derive the true microscopic UV completion",
+    "does not unblock k=0.03 Mpc^-1 production",
+    "does not close radiative naturalness or same-full-action primordial/background closure"
+  ],
+  "threshold_changed": false
+}
