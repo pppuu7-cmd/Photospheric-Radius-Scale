@@ -1,0 +1,66 @@
+name: RTK C10.65s6fI punctured-soft shift direction audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fi_punctured_soft_shift_direction.py'
+      - '.github/workflows/rtk-c10-65s6fi-punctured-soft-shift-direction.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Verify parents and execute frozen theorem
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          g=json.load(open('research/theory_results/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_RESULT_v1.json'))
+          h=json.load(open('research/theory_results/RTK_C10_65S6FH_SOFT_SHIFT_REGULARITY_RESULT_v1.json'))
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_TARGET_v1.json'))
+          assert g['classification']=='C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED'
+          assert h['classification']=='C10_65S6FH_SOFT_SHIFT_REGULARITY_PASS_SCOPED'
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert t['candidate_branch']=='MINIMAL_PROJECTABLE_N2_S1HALF_v1'
+          PY
+          python3 -m py_compile research/shadow/rtk_c10_65s6fi_punctured_soft_shift_direction.py
+          python3 research/shadow/rtk_c10_65s6fi_punctured_soft_shift_direction.py | tee /tmp/s6fi.log
+          grep -q '^C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED$' /tmp/s6fi.log
+      - name: Add immutable provenance and checkpoint
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,datetime,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance']={'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'repo_head_at_job_start':os.environ['GITHUB_SHA'],'workflow':'rtk-c10-65s6fi-punctured-soft-shift-direction.yml','threshold_changed':False}
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_{stamp}.md')
+          cp.write_text(f'''# C10.65s6fI punctured-soft shift direction checkpoint\n\nClassification: `{r["classification"]}`.\n\nThe complete shift-dependent cubic ADM kinetic action (beta-linear plus beta^2 zeta kernel variation) was reduced with the same frozen projectable action. After solving beta at linear order and only then taking q->0, the soft coefficient contains\n\n`9(1-lambda_HL) omega + 4 mu^2 (k v_g - 3 omega)`.\n\nFor the frozen n=2 dispersion,\n\n`3-n_g = 2 M_U^4/(M_U^4+k^4) + k^2/(M_K^2+k^2) > 0`,\n\nso `k v_g-3 omega = omega(n_g-3)` is strictly nonzero for finite positive scales. The punctured q->0 limit is therefore direction dependent.\n\nThis is not a final ZERO/NONZERO result. It means the exact projectable homogeneous q=0 channel cannot be silently identified with the punctured limit. Next gate: C10.65s6fJ homogeneous-vs-punctured channel selection theorem. k=0.03 production remains blocked.\n''')
+          print(cp)
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_RESULT_v1.json research/checkpoints/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_*.md
+          git commit -m 'Record C10.65s6fI punctured-soft shift direction audit'
+          git push origin HEAD:rtk-class-build
