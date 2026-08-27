@@ -1,0 +1,64 @@
+name: RTK C10.65s6fW pre-soft-s archive principle audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fw_pre_softs_archive_principle_audit.py'
+      - '.github/workflows/rtk-c10-65s6fw-pre-softs-archive-principle-audit.yml'
+      - '.github/rtk-c10-65s6fw-pre-softs-archive-principle-audit-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target and fetch archived source
+        run: |
+          set -euo pipefail
+          test -f research/theory_targets/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_TARGET_v1.json
+          git cat-file -e 13acfdbc16d2f3117f1299b8552bcf7b1f996bd1^{commit}
+          python - <<'PY'
+          import json
+          p='research/theory_targets/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_TARGET_v1.json'
+          t=json.load(open(p))
+          assert t['gate']=='C10.65s6fW'
+          assert t['guards']['threshold_changed'] is False
+          assert t['archived_source_lock']['commit']=='13acfdbc16d2f3117f1299b8552bcf7b1f996bd1'
+          PY
+      - name: Run frozen archive audit
+        run: python research/shadow/rtk_c10_65s6fw_pre_softs_archive_principle_audit.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance'].update({
+            'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'github_actions_run_attempt': int(os.environ['GITHUB_RUN_ATTEMPT']),
+            'repo_head_at_job_start': os.environ['GITHUB_SHA'],
+          })
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          cp=Path('research/checkpoints/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_AUDIT_2026-08-27.md')
+          cp.write_text(f'''# RTK C10.65s6fW — pre-soft-s archive principle audit\n\nClassification: **{r['classification']}**\n\nArchived source lock: `13acfdbc16d2f3117f1299b8552bcf7b1f996bd1`.\n\nThe frozen C8 archive explicitly labels the rank-one construction quadratic/scoped, not a final covariant completion, and lists full FLRW lapse/shift embedding plus derivation of the source direction from the same action as future work. The audited C9 notes remain open same-action/naturalness/UV programs and do not uniquely select the missing field map, potential matrix, or source vector.\n\nTherefore s6fV's non-identifiability is not resolved by a hidden pre-soft-s principle. s6fT remains blocked; soft-s retest and production at `k=0.03 Mpc^-1` remain forbidden.\n\nNext gate: {r['next_gate']}\n\nProvenance: GitHub Actions run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.\n''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_AUDIT_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fW pre-soft-s archive principle audit'
+            git push origin HEAD:rtk-class-build
+          fi
