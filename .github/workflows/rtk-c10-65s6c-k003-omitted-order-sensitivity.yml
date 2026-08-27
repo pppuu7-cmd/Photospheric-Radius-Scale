@@ -1,0 +1,59 @@
+name: RTK C10.65s6c k003 omitted-order sensitivity
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['.github/workflows/rtk-c10-65s6c-k003-omitted-order-sensitivity.yml','research/triggers/RTK_C10_65S6C_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  sensitivity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - run: python3 -m pip install --disable-pip-version-check mpmath==1.3.0
+      - name: Verify frozen parents
+        run: |
+          set -euo pipefail;git rev-parse HEAD > s6c_head.txt
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_TARGET_v1.json'))
+          b=json.load(open('research/theory_results/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1.json'))
+          c=json.load(open('research/theory_results/RTK_C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert b['classification']==t['parents']['C10.65s6b']
+          assert c['classification']==t['parents']['C10.65s5c']
+          assert t['domain']['eta_values']==[-1.0,0.0,1.0]
+          assert t['domain']['cartesian_point_count']==27
+          assert t['domain']['k_Mpc_inv']==0.03
+          assert t['threshold_changed'] is False
+          print('C10_65S6C_FROZEN_PARENTS_VERIFIED')
+          PY
+      - name: Execute frozen sensitivity map
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s6c_k003_omitted_order_sensitivity.py | tee s6c.log
+      - name: Add provenance and persist
+        if: always()
+        run: |
+          set -euo pipefail;p=research/theory_results/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_v1.json;[ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s6c_head.txt').read_text().strip(),'workflow':'rtk-c10-65s6c-k003-omitted-order-sensitivity.yml','analyzer':'research/shadow/rtk_c10_65s6c_k003_omitted_order_sensitivity.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False,'s6b_parent_run_id':33034239784};p.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          r=d['response_map_measurement_only'];c=pathlib.Path('research/checkpoints/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_2026-08-27T0350Z.md');keys=['Psi_N','Phi_N','B_pref','V_N','delta_b','theta_b'];lines='\n'.join(f"- {k}: max relative response `{r[k]['max_relative']:.17e}` at eta `{r[k]['eta']}`" for k in keys);c.write_text(f"# RTK C10.65s6c k=0.03 omitted-order sensitivity map\n\nClassification: `{d['classification']}`. The inherited 27-point eta_D x eta_C x eta_S envelope is a pointwise order-unity stress test, not a UV probability distribution or derived error bar.\n\n{lines}\n\nNo production feedback at k=0.03 is certified by this gate. The next step must be a separately frozen prospective branch-selection/architecture gate.\n")
+          PY
+          cp "$p" /tmp/r;cp research/checkpoints/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_2026-08-27T0350Z.md /tmp/c
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r "$p";cp /tmp/c research/checkpoints/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_2026-08-27T0350Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_2026-08-27T0350Z.md;git commit -m 'Record C10.65s6c k=0.03 omitted-order sensitivity map' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: rtk-c10-65s6c-k003-omitted-order-sensitivity, path: "s6c.log\nresearch/theory_results/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_v1.json"}
+      - name: Enforce classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_v1.json'));assert d['classification']=='C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED';assert d['threshold_changed'] is False;print(d['classification'])
+          PY
