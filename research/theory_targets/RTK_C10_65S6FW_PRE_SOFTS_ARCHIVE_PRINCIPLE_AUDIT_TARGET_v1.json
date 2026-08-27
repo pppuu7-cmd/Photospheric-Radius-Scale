@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_65S6FW_PRE_SOFTS_ARCHIVE_PRINCIPLE_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fW",
+  "title": "Pre-soft-s archive audit for an independent rank-one embedding principle",
+  "parent": {
+    "gate": "C10.65s6fV",
+    "required_classification": "C10_65S6FV_RANK_ONE_FULL_EMBEDDING_NON_IDENTIFIABLE_PASS_SCOPED"
+  },
+  "archived_source_lock": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "required_files": [
+      "research/methods/RTK_FORMULA_BIBLE_C8_DEGENERATE_AUXILIARY_APPENDIX.md",
+      "research/RTK_C9_U1_TECHNICAL_NATURALNESS_GATE_2026-08-22.md",
+      "research/methods/RTK_FORMULA_BIBLE_C9_UV_O4_FRONTIER_2026-08-23T2155Z.md"
+    ]
+  },
+  "question": "Before the later soft-s obstruction was known, did the archived C8/C9 RTK stack already contain an independently motivated action-level principle that uniquely fixes the field map, symmetric potential/algebraic data and action-derived source direction inside the rank-one one-pole class?",
+  "required_checks": [
+    "C8 archive explicitly states its Dirac-degenerate construction is quadratic/scoped rather than a final covariant completion",
+    "C8 archive explicitly lists full FLRW lapse/shift embedding and deriving source direction from the same action as future work",
+    "C8 one-pole matching is pointwise through kappa and Q and does not uniquely fix the potential matrix",
+    "C9 technical-naturalness material does not source-lock the missing rank-one field map, potential matrix and source direction",
+    "C9 UV/O4 material does not source-lock the missing rank-one field map, potential matrix and source direction",
+    "no post-soft-s material may be used as a selecting principle"
+  ],
+  "decision_rule": {
+    "INDEPENDENT_PRINCIPLE_FOUND_PASS_SCOPED": "Only if a pre-soft-s archived action/symmetry principle uniquely fixes all missing embedding data without fitting any later failed soft-s observable.",
+    "NO_INDEPENDENT_PRINCIPLE_FOUND_PASS_SCOPED": "If the pre-soft-s archive leaves at least one of field map, potential/algebraic data or action-derived source direction explicitly open. Keep s6fT blocked."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_new_completion_hypothesis": true,
+    "no_parameter_fit_to_failed_cubic_observable": true,
+    "no_new_numeric_threshold": true,
+    "threshold_changed": false
+  },
+  "scope": "Source-identifiability audit only. Failure to find a principle is not a no-go for RTK or for rank-one embeddings; it means the archive does not justify selecting one full nonlinear action."
+}
