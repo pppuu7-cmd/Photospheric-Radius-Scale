@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_65S6FZ12_HMT_Z7_BACKGROUND_QUADRATIC_IDENTIFIABILITY_TARGET_v1",
+  "gate": "C10.65s6fZ12",
+  "parent_required": "C10_65S6FZ11_FIXED_PROJECTABLE_U1_ONE_SCALAR_PREFLIGHT_PASS_SCOPED",
+  "question": "Does the already frozen HMT Eq.104 + Z7 carrier interface uniquely determine a same-action FLRW carrier background and finite-k quadratic scalar response, so that comparison to the previously certified RTK pole/residue/remainder can be performed without introducing post-hoc completion data?",
+  "frozen_candidate": {
+    "gravity": "HMT 2010 Eq.104, projectable local U1, lambda=1",
+    "carrier_interface": "Phi=u1*phi+u2*chi with Z7 internal-null symmetry, gravity-U1-neutral phi/chi, DperpPhi built from invariant shift",
+    "carrier_kinetic": "regular nonzero kappa*(DperpPhi)^2/2"
+  },
+  "required_same_action_inputs_for_match_ready": [
+    "full local carrier potential U(Phi) or equivalent action-level background function",
+    "background solution Phi_bar(t) or equations plus boundary data selecting it",
+    "finite-k carrier spatial-gradient operator/coefficient",
+    "action-derived matter/source coupling fixing the scalar response numerator",
+    "all carrier couplings to HMT nondynamical A/prepotential fields if nonzero"
+  ],
+  "identifiability_test": {
+    "background": "show whether U'(Phi_bar) and the background trajectory are fixed by the frozen candidate",
+    "quadratic": "show whether U''(Phi_bar), spatial-gradient coefficient, and source direction are fixed",
+    "constructive_witness": "if not fixed, exhibit two completions compatible with Z11 but with different finite-k inverse response D(omega,k) and/or different background equation"
+  },
+  "allowed_classifications": [
+    "C10_65S6FZ12_BACKGROUND_QUADRATIC_MATCH_READY_PASS_SCOPED",
+    "C10_65S6FZ12_BACKGROUND_QUADRATIC_UNDERSPECIFIED_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "MATCH_READY is allowed only if every required same-action input is already source-locked before this gate. If at least one is absent and two compatible completions give inequivalent background/quadratic response, classify UNDERSPECIFIED_BLOCKED. Do not select missing functions or coefficients from the old RTK pole/residue/remainder or soft-s observable.",
+  "required_guards": [
+    "Z11 parent classification exact",
+    "no new U(Phi), gradient coefficient, matter coupling, HMT auxiliary coupling, or background trajectory is fitted in this gate",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "no C9 radiative-naturalness claim",
+    "no same-full-action primordial/background-closure claim"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
