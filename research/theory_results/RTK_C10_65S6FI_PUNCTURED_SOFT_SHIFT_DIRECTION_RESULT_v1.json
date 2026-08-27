@@ -1,0 +1,52 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "all_beta_linear_and_beta_squared_cubic_terms_included": true,
+    "full_soft_expression_matches_closed_form": true,
+    "homogeneous_mode_not_identified_with_punctured_limit": true,
+    "k003_production_remains_blocked": true,
+    "linear_beta_solution_same_action": true,
+    "mu2_coefficient_matches": true,
+    "n2_log_slope_strictly_below_three_for_positive_scales": true,
+    "n2_three_minus_log_slope_positive_form": true,
+    "no_alpha6_or_scale_refit": true,
+    "punctured_soft_limit_direction_dependent": true,
+    "q_zero_only_after_reduction": true,
+    "s6fH_parent_required": true,
+    "target_frozen": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED",
+  "cubic_shift_action": {
+    "beta_linear": "a Mstar^2(1-3lambda_HL) zeta grad(dot(zeta)).grad(beta)",
+    "beta_squared": "(Mstar^2/2a)[-4 beta_ij zeta_i beta_j +2(1-lambda_HL) Delta(beta) zeta_i beta_i -zeta beta_ij beta_ij +lambda_HL zeta (Delta beta)^2]",
+    "linear_solution": "beta_1(k)=-a^2(1-3lambda_HL)/(1-lambda_HL) dot(zeta)_k/k^2"
+  },
+  "decision": "PUNCTURED_SOFT_SHIFT_LIMIT_DIRECTION_DEPENDENT_HOMOGENEOUS_CHANNEL_MUST_BE_SEPARATED",
+  "gate": "C10.65s6fI",
+  "interpretation": "The complete shift-dependent cubic ADM kinetic reduction has a finite but direction-dependent punctured q->0 limit. Intrinsic alpha6(X) and local F(t,N) terms do not supply a scalar-shift direction variable that could remove this mu^2 dependence by the frozen candidate definition. Therefore the exact projectable homogeneous q=0 channel cannot be silently identified with the punctured limit; the COM soft-s channel requires a separate homogeneous-vs-punctured prescription before any exact ZERO/NONZERO statement.",
+  "next_gate": "C10.65s6fJ: derive the exact homogeneous q=0 projectable channel and decide whether elastic COM uses the homogeneous constraint sector or the punctured q->0 reduced kernel; do not rerun s6fF until this channel-selection theorem is fixed.",
+  "non_claims": [
+    "not final cancellation/survival of the n=2 soft-s vertex",
+    "not a choice of M_U or M_K",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33051442707,
+    "repo_head_at_job_start": "a6aeac8b9c42f5bbc2fc7d0d7e938058c8c4ba26",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fi-punctured-soft-shift-direction.yml"
+  },
+  "punctured_soft_result": {
+    "closed_form": "Mstar^2 a^3 omega (3lambda_HL-1)^2/(lambda_HL-1)^2 * [9(1-lambda_HL)omega +4 mu^2(k v_g-3omega)]",
+    "coefficient_up_to_common_Fourier_time_convention": "Mstar**2*a**3*omega*(3*lambda_HL - 1)**2*(4*k*mu**2*v_g - 9*lambda_HL*omega - 12*mu**2*omega + 9*omega)/(lambda_HL - 1)**2",
+    "consequence": "k v_g-3 omega = omega(n_g-3) is strictly negative for k>0 and finite positive M_U,M_K; hence the mu^2 coefficient cannot vanish on the frozen n=2 dispersion.",
+    "dispersion_log_slope": "n_g=1+2 k^4/(M_U^4+k^4)-k^2/(M_K^2+k^2)",
+    "mu2_coefficient": "4 Mstar^2 a^3 omega (3lambda_HL-1)^2/(lambda_HL-1)^2 * (k v_g-3omega)",
+    "three_minus_ng": "2 M_U^4/(M_U^4+k^4)+k^2/(M_K^2+k^2) > 0"
+  },
+  "schema": "RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_TARGET_v1.json",
+  "threshold_changed": false
+}
