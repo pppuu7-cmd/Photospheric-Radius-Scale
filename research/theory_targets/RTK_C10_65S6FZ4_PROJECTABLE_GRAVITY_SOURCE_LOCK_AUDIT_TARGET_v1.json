@@ -1,0 +1,20 @@
+{
+  "schema": "RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ4",
+  "parent": "C10_65S6FZ3_FULL_COUPLED_CONSTRAINT_NON_IDENTIFIABLE_PASS_SCOPED",
+  "question": "Is there an independently motivated projectable gravitational parent in the pre-soft-s RTK archive that is sufficiently specified for a future coupled Dirac reduction with s6fZ2?",
+  "sources": [
+    "research/checkpoints/RTK_PROJECTABLE_U1_C9_ARCHITECTURE_CHECKPOINT_2026-08-23T2007Z.md",
+    "research/checkpoints/RTK_C10_65S6FT_ADM_EMBEDDING_SOURCE_LOCK_2026-08-27T1224Z.md",
+    "research/checkpoints/RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_2026-08-27.md"
+  ],
+  "outcomes": ["READY_PARENT_PASS_SCOPED", "PARTIAL_PARENT_PASS_SCOPED", "NO_PARENT_PASS_SCOPED", "FAIL_SCOPED"],
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_parameter_fit": true,
+    "no_new_gravity_coefficient": true,
+    "no_claim_full_combined_dof_count": true,
+    "threshold_changed": false
+  }
+}
