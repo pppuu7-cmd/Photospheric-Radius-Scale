@@ -1,0 +1,53 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "J1J2_over_K_finite_scaling": true,
+    "cubic_beta_linear_identity": true,
+    "hard_hard_soft_J2_q2": true,
+    "k003_production_remains_blocked": true,
+    "no_new_coefficient": true,
+    "premature_q0_erases_candidate_exchange": true,
+    "quadratic_kernel_q4": true,
+    "quadratic_mixing_q2": true,
+    "soft_limit_finite": true,
+    "target_frozen": true,
+    "threshold_changed": false,
+    "trace_identity": true
+  },
+  "classification": "C10_65S6FH_SOFT_SHIFT_REGULARITY_PASS_SCOPED",
+  "decision": "SOFT_SHIFT_REDUCTION_FINITE_LIMIT_REQUIRES_POST_REDUCTION_Q0",
+  "derived": {
+    "S_ij": "-beta_ij+zeta_i beta_j+zeta_j beta_i-delta_ij grad(zeta).grad(beta)",
+    "TrS": "-Delta(beta)-grad(zeta).grad(beta)",
+    "cubic_beta_linear_action": "a Mstar^2(1-3 lambda_HL) integral zeta grad(dot(zeta)).grad(beta)",
+    "hard_hard_soft_source_numerator": "q.p omega(p)+q.k omega(k)",
+    "interpretation": "The projectable scalar-shift constraint is singular term-by-term at q=0 but its reduced cubic cross term can have a finite q->0 limit. Therefore exact q_s=0 must be imposed only after constraint reduction.",
+    "quadratic_shift_kernel": "(Mstar^2/a)(1-lambda_HL) q^4 (overall Fourier normalization aside)",
+    "quadratic_zeta_beta_source": "a Mstar^2(1-3 lambda_HL) q^2 dot(zeta)",
+    "scaling": {
+      "J1": "O(q^2)",
+      "J1_J2_over_K_beta": "O(q^0)",
+      "J2": "O(q^2)",
+      "K_beta": "O(q^4)"
+    },
+    "soft_J2_over_q2": "-k*mu**2*v_g - omega",
+    "soft_J2_over_q2_expected": "-(omega(k)+k v_g(k) mu^2)"
+  },
+  "gate": "C10.65s6fH",
+  "next_gate": "C10.65s6fI: derive the complete cubic reduced scalar vertex of MINIMAL_PROJECTABLE_N2_S1HALF_v1 by including the beta^2*zeta kernel variation and alpha6(X) contribution, then evaluate q_s->0 and rerun the unchanged s6fF ZERO/NONZERO semantics.",
+  "non_claims": [
+    "not final soft-s cancellation or survival",
+    "not proof the candidate nonlinear branch is unique",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33051042902,
+    "repo_head_at_job_start": "88c3b774130aabfb0a9f1c30f288509867c90895",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fh-soft-shift-regularity.yml"
+  },
+  "schema": "RTK_C10_65S6FH_SOFT_SHIFT_REGULARITY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FH_SOFT_SHIFT_REGULARITY_TARGET_v1.json",
+  "threshold_changed": false
+}
