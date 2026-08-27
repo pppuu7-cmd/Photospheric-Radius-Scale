@@ -1,0 +1,33 @@
+{
+  "action_selection_ready": false,
+  "checks": {
+    "no_k003_production": true,
+    "no_soft_s_retest": true,
+    "parent_s6fv_exact": true,
+    "parent_s6fv_present": true,
+    "parent_s6fw_exact": true,
+    "parent_s6fw_present": true,
+    "s6fw_embedding_not_ready": true,
+    "s6fw_k003_forbidden": true,
+    "s6fw_softs_forbidden": true,
+    "target_gate_exact": true,
+    "target_present": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FX_NO_ADMISSIBLE_INDEPENDENT_ACTION_SELECTION_BLOCKED_SCOPED",
+  "finding": "The source-locked RTK state cannot uniquely select a full projectable rank-one nonlinear action without adding an independent principle. s6fV establishes non-identifiability inside the rank-one one-pole class and s6fW establishes that the pre-soft-s C8/C9 archive does not supply the missing selector. The correct action is therefore to retain the s6fT blocker rather than fit field-map, potential/algebraic data, or source direction to the already observed soft-s obstruction.",
+  "gate": "C10.65s6fX",
+  "next_gate": "C10.65s6fY: symmetry-first candidate-space audit. Search only independently motivated projectable symmetry/degeneracy constructions that fix the missing full-action data before any new soft-s calculation; if none is source-lockable, keep the branch blocked.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33083985320,
+    "repo_head_at_job_start": "ee3108df2aca59d6425b4fe32f1b17f08cc1a7a2",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fx-independent-action-selection-requirement.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FX_INDEPENDENT_ACTION_SELECTION_REQUIREMENT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
