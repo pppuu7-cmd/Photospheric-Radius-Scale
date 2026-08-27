@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "different_gravity_kinetic_structure_exact": true,
+    "field_space_symmetry_unchanged_by_gravity_family": true,
+    "lambda_one_third_trace_degenerate": true,
+    "lambda_one_trace_nondegenerate": true,
+    "no_k003_production": true,
+    "no_soft_s_input_used": true,
+    "no_unique_total_scalar_dof_claim": true,
+    "parent_exact": true,
+    "parent_full_adm_count_unfixed": true,
+    "target_gate_exact": true,
+    "threshold_changed_false": true,
+    "trace_coefficient_exact": true
+  },
+  "classification": "C10_65S6FZ3_FULL_COUPLED_CONSTRAINT_NON_IDENTIFIABLE_PASS_SCOPED",
+  "exact_witness": {
+    "coefficient_at_lambda_1": "-2/3",
+    "coefficient_at_lambda_1_over_3": "0",
+    "decomposition": "K_ij K^ij - lambda K^2 = Sigma_ij Sigma^ij + (1/3-lambda) K^2",
+    "gravity_family": "K_ij K^ij - lambda K^2 + R^(3)",
+    "interpretation": "The otherwise-unfixed L_ADM slot admits members with distinct gravitational trace kinetic/constraint structure while the s6fZ2 field-space gauge symmetry is identical.",
+    "trace_kinetic_coefficient": "1/3-lambda"
+  },
+  "finding": "The s6fZ2 local field-space gauge symmetry is not sufficient to determine the full coupled projectable-ADM constraint rank. An independent gravitational-sector specification is required before any total scalar DOF count or s6fT embedding-ready claim can be made.",
+  "gate": "C10.65s6fZ3",
+  "next_gate": "C10.65s6fZ4: source-lock/pre-register an independently motivated projectable gravitational ADM sector and its lapse/shift constraint content, without using soft-s or k=0.03 outputs; only then perform a full coupled Dirac/constraint count with the s6fZ2 symmetry template.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "frozen_target_commit": "6d903d73615c8c50d052460fd496d4256e3aa5b7",
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33094762180,
+    "repo_head_at_job_start": "97fa7272f52af0ae74649aed10927c69ec870de2",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz3-full-coupled-constraint-identifiability-preflight.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ3_FULL_COUPLED_CONSTRAINT_IDENTIFIABILITY_PREFLIGHT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
