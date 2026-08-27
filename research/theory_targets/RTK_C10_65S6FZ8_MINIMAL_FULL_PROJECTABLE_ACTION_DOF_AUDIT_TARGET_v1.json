@@ -1,0 +1,56 @@
+{
+  "schema": "RTK_C10_65S6FZ8_MINIMAL_FULL_PROJECTABLE_ACTION_DOF_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ8",
+  "parent": "C10_65S6FZ7_REPRESENTATION_CLASS_EXISTS_PASS_SCOPED",
+  "question": "Does the minimal local full projectable action template built only from the Z7 invariant shift and invariant carrier realize the desired one-scalar rank-one architecture once its same-action scalar constraints are audited?",
+  "hypothesis_status": "NEW_NONLINEAR_COMPLETION_HYPOTHESIS_NOT_ARCHIVAL_INHERITANCE",
+  "frozen_action_template": {
+    "projectability": "N=N(t)",
+    "gravity_u1": "delta_alpha N_i=N D_i alpha, delta_alpha nu=alpha, delta_alpha gamma_ij=delta_alpha N=0",
+    "invariant_shift": "Nbar_i=N_i-N D_i nu",
+    "extrinsic_curvature": "Kbar_ij=(dot(gamma_ij)-D_i Nbar_j-D_j Nbar_i)/(2N)",
+    "internal_null_symmetry": "delta_epsilon(phi,chi)=epsilon(x,t)*(-u2,u1)",
+    "carrier": "Phi=u1 phi+u2 chi",
+    "carrier_normal_derivative": "DperpPhi=(dot(Phi)-Nbar^i D_i Phi)/N",
+    "action": "S=int dt d3x N sqrt(gamma) { M2/2 [Kbar_ij Kbar^ij-lambda Kbar^2-V_spatial(gamma)] + kappa/2 (DperpPhi)^2 - U(Phi) - cPhi2/2 D_iPhi D^iPhi }",
+    "no_extra_A_multiplier": true,
+    "no_extra_local_constraint_field": true,
+    "no_soft_s_derived_term": true
+  },
+  "audit_patch": {
+    "background": "spatially flat local hard-mode patch with homogeneous constant Phi; sufficient to audit generic velocity rank",
+    "finite_k": "k != 0",
+    "genericity": ["M2 != 0", "kappa != 0", "lambda != 1", "lambda != 1/3"],
+    "scalar_metric": "gamma_ij=e^{2 zeta} delta_ij to linear velocity order",
+    "scalar_invariant_shift": "Nbar_i=partial_i beta_bar",
+    "shift_variable": "q=Delta beta_bar",
+    "gravity_scalar_kinetic_before_shift_elimination": "M2/2 * [(3-9 lambda) zdot^2 + (-2+6 lambda) zdot q + (1-lambda) q^2]",
+    "carrier_kinetic": "kappa/2 * Phidot^2"
+  },
+  "required_exact_checks": [
+    "Z7 parent classification exact",
+    "action depends on phi,chi only through Phi and is invariant under internal null symmetry",
+    "gravity sector depends on N_i,nu only through Nbar_i and is invariant under declared projectable U(1)",
+    "shift equation gives q=(1-3 lambda)/(1-lambda) zdot on the frozen generic patch",
+    "reduced gravity scalar kinetic coefficient is M2*(3 lambda-1)/(lambda-1) times zdot^2",
+    "reduced velocity Hessian in (zdot,Phidot) has rank two on the frozen genericity domain",
+    "orthogonal phi-chi carrier direction remains gauge/null and does not add a third scalar",
+    "no soft-s observable or k=0.03 production enters the audit"
+  ],
+  "allowed_outcomes": [
+    "MINIMAL_FULL_ACTION_ONE_SCALAR_PASS_SCOPED",
+    "MINIMAL_FULL_ACTION_EXTRA_SCALAR_OBSTRUCTION_PASS_SCOPED",
+    "MINIMAL_FULL_ACTION_INCONSISTENT_FAIL_SCOPED"
+  ],
+  "decision_rule": "If the exact reduced velocity Hessian has generic rank two, classify EXTRA_SCALAR_OBSTRUCTION_PASS_SCOPED. Do not tune lambda to 1 or 1/3, set kappa=0, or add an A-like multiplier after inspecting the result. Any such escape requires a separately frozen successor hypothesis/gate.",
+  "forbidden": [
+    "soft-s evaluation or cancellation fitting",
+    "k=0.03 production",
+    "post-hoc choice lambda=1 or lambda=1/3",
+    "post-hoc kappa=0",
+    "post-hoc addition of a local constraint multiplier",
+    "claim that this action template is inherited RTK physics",
+    "claim of radiative naturalness or background equivalence"
+  ],
+  "threshold_changed": false
+}
