@@ -46,7 +46,7 @@ checks = {
   'delta_Phi_zero': sp.simplify(Phi_shifted-Phi) == 0,
   'kinetic_hessian_rank_one_exact': sp.simplify(K-K_expected) == sp.zeros(2) and sp.simplify(K.det()) == 0,
   'algebraic_hessian_rank_one_exact': sp.simplify(M-M_expected) == sp.zeros(2) and sp.simplify(M.det()) == 0,
-  'source_parallel_exact': sp.simplify(source-source_expected) == sp.zeros(2) and sp.simplify((n.T*source)[0]) == 0,
+  'source_parallel_exact': sp.simplify(source-source_expected) == sp.zeros(2,1) and sp.simplify((n.T*source)[0]) == 0,
   'primary_null_constraint_exact': sp.simplify(null_primary) == 0,
   'null_coordinate_absent_from_action': sp.simplify((n.T*sp.Matrix([sp.diff(L2,q1),sp.diff(L2,q2)]))[0]) == 0 and sp.simplify((n.T*pvec)[0]) == 0,
   'two_field_subsystem_dof_one': True,
