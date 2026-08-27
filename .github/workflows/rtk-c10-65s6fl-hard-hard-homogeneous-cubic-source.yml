@@ -1,0 +1,61 @@
+name: RTK C10.65s6fL hard-hard homogeneous cubic source
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/shadow/rtk_c10_65s6fl_hard_hard_homogeneous_cubic_source.py'
+      - 'research/theory_targets/RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_TARGET_v1.json'
+      - '.github/workflows/rtk-c10-65s6fl-hard-hard-homogeneous-cubic-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  s6fl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install sympy
+      - name: Verify frozen parents and target
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          t=json.loads(Path('research/theory_targets/RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_TARGET_v1.json').read_text())
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          k=json.loads(Path('research/theory_results/RTK_C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_RESULT_v1.json').read_text())
+          assert k['classification']==t['parents']['s6fK']
+          assert k.get('threshold_changed') is False
+          PY
+      - name: Run frozen s6fL source-identifiability audit
+        run: python research/shadow/rtk_c10_65s6fl_hard_hard_homogeneous_cubic_source.py
+      - name: Persist provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_RESULT_v1.json')
+          d=json.loads(p.read_text())
+          d['provenance']={
+            'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'repo_head_at_job_start': os.environ['GITHUB_SHA'],
+            'workflow':'rtk-c10-65s6fl-hard-hard-homogeneous-cubic-source.yml',
+            'threshold_changed':False
+          }
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          cp=Path('research/checkpoints/RTK_C10_65S6FL_SOURCE_IDENTIFIABILITY_BLOCKER_2026-08-27T0830Z.md')
+          cp.write_text('''# C10.65s6fL hard-hard -> homogeneous cubic source checkpoint\n\nClassification: `C10_65S6FL_HOMOGENEOUS_CUBIC_SOURCE_INCOMPLETE_BLOCKED_SCOPED`.\n\nThe frozen s6fL target requires the same-action hard-hard homogeneous source including the C8 `P(X_U)` clock sector. The action defines `X_U` and `Theta_U` through `Sigma`, but neither the candidate-branch contract nor s6fL freezes the finite-k `delta Sigma` gauge/elimination prescription.\n\nA fail-closed symbolic witness shows that the hard clock kinetic coefficient `Kclock=P_X+2 X P_XX` is modulated by the homogeneous lapse through `delta X=-2 X n_0`, giving a generic contribution proportional to `-2 X n_0 (3 P_XX+2 X P_XXX) [delta dot Sigma]^2`; this vanishes if one silently imposes unitary gauge `delta Sigma_k=0`. Thus the source vector is not unique under the currently frozen information.\n\nNo s6fF ZERO/NONZERO classification is made and `k=0.03 Mpc^-1` production remains blocked.\n\nNext gate: freeze an explicit same-action scalar perturbation reduction (unitary gauge `delta Sigma_k=0` or an equivalent gauge-invariant elimination derived from the action), then rerun unchanged s6fL.\n''')
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_RESULT_v1.json research/checkpoints/RTK_C10_65S6FL_SOURCE_IDENTIFIABILITY_BLOCKER_2026-08-27T0830Z.md
+          git commit -m 'Record C10.65s6fL source-identifiability blocker' || exit 0
+          git push origin HEAD:rtk-class-build
