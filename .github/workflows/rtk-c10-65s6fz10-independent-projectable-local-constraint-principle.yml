@@ -1,0 +1,69 @@
+name: RTK C10.65s6fZ10 independent projectable local constraint principle
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fz10-independent-projectable-local-constraint-principle-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target and corrected parent
+        run: |
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_TARGET_v1.json'))
+          p=json.load(open('research/theory_results/RTK_C10_65S6FZ9_PRE_SOFTS_LOCAL_CONSTRAINT_SOURCE_LOCK_AUDIT_RESULT_v1.json'))
+          assert p['classification']==t['parent_required']
+          assert p['candidate_count']==0
+          assert p['checks']['nonprojectable_not_reinterpreted_as_projectable'] is True
+          assert t['threshold_changed'] is False
+          assert t['soft_s_retest_allowed'] is False
+          assert t['production_k003_unblocked'] is False
+          PY
+      - name: Run frozen independent literature source-lock audit
+        run: python research/shadow/rtk_c10_65s6fz10_independent_projectable_local_constraint_principle.py
+      - name: Verify classification semantics
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('research/theory_results/RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_RESULT_v1.json'))
+          allowed={
+            'C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_U1_PRINCIPLE_FOUND_PASS_SCOPED',
+            'C10_65S6FZ10_NO_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_FOUND_PASS_SCOPED',
+            'C10_65S6FZ10_EXTERNAL_SOURCE_LOCK_INCOMPLETE_BLOCKED_SCOPED'}
+          assert r['classification'] in allowed
+          assert r['checks']['parent_exact'] is True
+          assert r['checks']['no_soft_s_or_k003'] is True
+          assert r['checks']['no_coefficient_or_rtk_action_selected'] is True
+          assert r['threshold_changed'] is False
+          assert r['soft_s_retest_allowed'] is False
+          assert r['production_k003_unblocked'] is False
+          PY
+      - name: Persist result provenance and checkpoint
+        run: |
+          RUN_ID='${{ github.run_id }}' RUN_ATTEMPT='${{ github.run_attempt }}' HEAD_SHA='${{ github.sha }}' python - <<'PY'
+          import json,os,datetime,pathlib
+          rp=pathlib.Path('research/theory_results/RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_RESULT_v1.json')
+          r=json.loads(rp.read_text())
+          r['provenance']={'github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'trigger_head_sha':os.environ['HEAD_SHA'],'workflow':'rtk-c10-65s6fz10-independent-projectable-local-constraint-principle.yml','threshold_changed':False}
+          rp.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          d=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_{d}.md')
+          cp.write_text('# RTK C10.65s6fZ10 checkpoint\n\nClassification: `'+r['classification']+'`.\n\n'+r['interpretation']+'\n\nFrozen guards remain: no soft-s retest and no k=0.03 production.\n\nNext: '+r['next_gate']+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_RESULT_v1.json research/checkpoints/
+          git commit -m 'Record C10.65s6fZ10 independent projectable constraint principle'
+          git push origin HEAD:rtk-class-build
