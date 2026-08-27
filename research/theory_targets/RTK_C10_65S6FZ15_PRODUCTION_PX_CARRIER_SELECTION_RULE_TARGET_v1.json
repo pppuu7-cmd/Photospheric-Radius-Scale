@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_65S6FZ15_PRODUCTION_PX_CARRIER_SELECTION_RULE_TARGET_v1",
+  "gate": "C10.65s6fZ15",
+  "parent_required": "C10_65S6FZ14_PROJECTABLE_SPATIAL_OPERATOR_EXISTS_COEFFICIENT_UNFIXED_PASS_SCOPED",
+  "question": "Can the independently pre-soft-s production P(X)-type clock principle fix the intrinsic temporal/spatial quadratic carrier coefficients and background trajectory for the HMT+Z7 invariant Phi without using the old RTK finite-k kernel, and what same-action data remain open?",
+  "pinned_source": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md"
+  },
+  "frozen_production_identities": [
+    "x=x0/a^3",
+    "G_8piG=rho_8piG+p_8piG=2*mu_K^2*x*Q",
+    "K_8piG=(rho_8piG+p_8piG)/c_a^2=2*mu_K^2*Q^2*s^3=2*M_K^2",
+    "c_a^2=x/(s^3*Q)"
+  ],
+  "px_quadratic_rule": "For a P(X)-type clock, the intrinsic scalar spatial/temporal quadratic coefficient ratio is G/K=c_a^2; use the production G and K identities, not the previously observed RTK finite-k kernel.",
+  "allowed_classifications": [
+    "C10_65S6FZ15_PX_INTRINSIC_CARRIER_SECTOR_FIXED_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ15_PX_SELECTION_RULE_NOT_SOURCE_LOCKED_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "PARTIAL_PASS requires a pinned pre-soft-s source for the P(X)-type production background, exact G/K=c_a^2, and x=x0/a^3. It may fix the intrinsic carrier derivative coefficients along the production background but must not claim a full HMT+matter response if matter/source or auxiliary interfaces are absent.",
+  "required_guards": [
+    "Z14 parent exact",
+    "no use of old RTK pole/residue/remainder to select coefficients",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "no claim that matter/source map is fixed unless derived",
+    "no C9 naturalness claim"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
