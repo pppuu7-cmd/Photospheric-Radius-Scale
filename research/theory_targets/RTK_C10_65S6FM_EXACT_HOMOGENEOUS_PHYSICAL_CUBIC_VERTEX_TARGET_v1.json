@@ -1,0 +1,67 @@
+{
+  "schema": "RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_TARGET_v1",
+  "gate": "C10.65s6fM",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Classify the exact q=0 physical homogeneous cubic soft-s vertex on the already frozen MINIMAL_PROJECTABLE_N2_S1HALF_v1 candidate without mixing perturbative orders. Eliminate only the nondynamical homogeneous lapse n0 from the independently certified s6fK global quadratic block, contract the exact s6fL2 hard-hard source onto the remaining physical homogeneous zeta0 mode, and decide whether that cubic source is identically ZERO or NONZERO. The quadratic-in-source hard^4 exchange functional from s6fL2 is retained as a separate higher-order object and is not added to the cubic vertex.",
+  "parents": {
+    "s6fE": "MINIMAL_PROJECTABLE_N2_S1HALF_v1 candidate frozen before reduction",
+    "s6fK": "exact homogeneous/global quadratic block certified",
+    "s6fL1": "unitary hard-clock source lock certified",
+    "s6fL2": "C10_65S6FL2_HOMOGENEOUS_VIRTUAL_CHANNEL_FINITE_PASS_SCOPED"
+  },
+  "frozen_candidate": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "kinematic_domain": "exact homogeneous q=0 channel with finite hard k>0; no punctured q->0 prescription",
+  "quadratic_block": {
+    "A": "(3/2) Mstar^2(1-3lambda_HL)",
+    "D": "Mstar^2 M_K^2",
+    "Delta_N": "A H^2 + D",
+    "Omega": "2 omega",
+    "lapse_elimination": "n0=(A H/Delta_N) dot(zeta0) - S_n0/(2 Delta_N)",
+    "physical_cubic_source_frequency_convention": "V_hom^(3)=S_zeta0+(A H Omega/Delta_N) S_n0, using the same algebraic Omega convention as s6fL2"
+  },
+  "frozen_checks": {
+    "parents_exact": true,
+    "candidate_branch_exact": true,
+    "s6fL2_source_expressions_reproduced_symbolically": true,
+    "bare_n2_alpha6_contact_counted_exactly_once": true,
+    "hard4_exchange_not_added_to_cubic_vertex": true,
+    "no_punctured_q_limit_or_mu_prescription": true,
+    "no_parameter_fit_or_soft_cancellation_tuning": true,
+    "no_k003_production_output_used": true,
+    "explicit_global_degeneracy_surfaces_preserved": true,
+    "zero_nonzero_decision_is_symbolic_identity_test": true
+  },
+  "outcome_semantics": {
+    "ZERO": "The fully lapse-reduced exact homogeneous physical cubic source vanishes identically as a symbolic function on the frozen candidate branch, away from explicit global degeneracy surfaces.",
+    "NONZERO": "The fully lapse-reduced exact homogeneous physical cubic source is not an identically vanishing symbolic function on the frozen candidate branch. No parameter point is tuned to manufacture this outcome.",
+    "SINGULAR_SURFACE": "Classification applies only on an exposed A=0, D=0, Omega=0 or Delta_N=0 degeneracy surface and does not represent the generic candidate branch.",
+    "INCOMPLETE": "A required same-action term cannot be identified from the frozen parents; missing terms may not be silently set to zero."
+  },
+  "pass_classifications": [
+    "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_ZERO_PASS_SCOPED",
+    "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_NONZERO_PASS_SCOPED",
+    "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_SINGULAR_SURFACE_PASS_SCOPED",
+    "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_consequence": {
+    "ZERO": "Only then may a successor reassess the old n=2 soft-s blocker; this gate alone still does not authorize k=0.03 production.",
+    "NONZERO": "The frozen minimal projectable n=2,s1=1/2 nonlinear candidate does not cancel the exact homogeneous soft-s cubic vertex. Keep k=0.03 production blocked and move to a genuinely different symmetry/operator completion rather than fitting this candidate.",
+    "SINGULAR_SURFACE": "Audit the exposed global degeneracy; do not infer cancellation.",
+    "INCOMPLETE": "Identify the missing fixed-action term before further classification."
+  },
+  "forbidden": [
+    "adding the s6fL2 quadratic-in-source exchange functional to the cubic vertex",
+    "counting -96 alpha6_0 k^6/a^3 both as part of S_zeta0 and as a second separate contact",
+    "choosing a finite-q direction mu or angular average for exact q=0",
+    "tuning lambda_HL, M_U, M_K, alpha6_0 or matching amplitudes to obtain ZERO",
+    "using k=0.03 production, spectra or likelihood output",
+    "changing the frozen candidate action after seeing the symbolic result"
+  ],
+  "non_claims": [
+    "not a theorem excluding all nonlinear RTK completions",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ]
+}
