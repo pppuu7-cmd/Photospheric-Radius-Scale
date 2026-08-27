@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "arxiv_gr_values_realisable_explicit": true,
+    "arxiv_large_allowed_parameter_region_explicit": true,
+    "arxiv_ppn_does_not_fix_lambda_explicit": true,
+    "arxiv_ppn_in_terms_of_couplings_explicit": true,
+    "arxiv_projectable_case_explicit": true,
+    "arxiv_universal_coupling_explicit": true,
+    "cpc_universal_physical_adm_interface_still_present": true,
+    "independent_sources_predate_softs": true,
+    "no_old_kernel_matching": true,
+    "no_soft_s_or_k003": true,
+    "threshold_unchanged": true,
+    "z16_parent_exact": true
+  },
+  "classification": "C10_65S6FZ17_PPN_GR_LIMIT_LEAVES_CONTINUOUS_HMT_MATTER_FAMILY_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ17",
+  "interpretation": "The pre-soft-s published universal HMT/U(1) matter-coupling analysis supplies an independent IR/PPN test, but it explicitly states that all solar-system tests are satisfied in a large region of parameter space and that GR PPN values are readily realizable. Therefore phenomenological IR equivalence does not uniquely select the universal-coupling parameters or a unique scalar-response source map. The Z16 source-interface ambiguity must be preserved; RTK pole/residue/remainder or soft-s data may not be used to choose a point in this family.",
+  "next_gate": "C10.65s6fZ18: freeze a same-action identifiability/selection audit for the remaining HMT universal-matter coupling family. Search only for an independent pre-soft-s symmetry, equivalence-principle, microscopic-matter, or radiative principle that fixes the physical-metric coupling parameters. If no unique selector exists, keep the full-action/source-interface blocker instead of matching RTK response data.",
+  "nonclaims": [
+    "not a unique HMT+Z7 action",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33118536199,
+    "threshold_changed": false,
+    "trigger_head_sha": "7c8978b995509b608242c60cfe5391849f1fc0db",
+    "workflow": "rtk-c10-65s6fz17-hmt-matter-coefficient-selection-ir-equivalence.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ17_HMT_MATTER_COEFFICIENT_SELECTION_IR_EQUIVALENCE_RESULT_v1",
+  "selection_audit": {
+    "continuous_family_remains": true,
+    "independent_ppn_selection_source_found": true,
+    "published_gr_ppn_values_realisable": true,
+    "published_large_allowed_parameter_region": true,
+    "published_ppn_leaves_lambda_unconstrained": true,
+    "unique_scalar_response_interface_selected": false
+  },
+  "soft_s_retest_allowed": false,
+  "source_hashes": {
+    "arxiv_1310_6666_sha256": "e6a2aca43a3480dca653217fcbf81f2c3156e3907882607fa0de7079168cd42d",
+    "cpc_ad873d_sha256": "834d117ddb1a22b9a1d73dca391d50eb7567ec0427474b871fc11adc3ec1e6a6"
+  },
+  "threshold_changed": false
+}
