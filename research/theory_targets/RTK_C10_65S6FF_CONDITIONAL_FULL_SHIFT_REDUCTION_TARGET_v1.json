@@ -1,0 +1,36 @@
+{
+  "schema": "RTK_C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_TARGET_v1",
+  "gate": "C10.65s6fF",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "s6fB": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_BLOCKED_INCOMPLETE_FIXED_ACTION_SCOPED",
+    "s6fE": "C10_65S6FE_CANDIDATE_NONLINEAR_COMPLETION_BRANCH_CONTRACT_PASS_SCOPED"
+  },
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Rerun the s6fB ZERO/NONZERO cubic scalar-shift reduction semantics on the frozen s6fE candidate branch. Before classifying a vertex, verify that every nonlinear sector entering the scalar shift equation is source-locked by an explicit formula or immutable source reference; do not silently interpret a lower-order inheritance statement as a cubic action.",
+  "frozen_checks": {
+    "candidate_branch_frozen_before_reduction": true,
+    "projectable_lapse_no_local_finite_k_mode": true,
+    "gravitational_shift_sector_explicit": true,
+    "alpha6_full_state_rule_explicit": true,
+    "all_scalar_shift_sources_explicit_or_immutably_referenced": true,
+    "quadratic_shift_kernel_explicit": true,
+    "cubic_shift_source_explicit": true,
+    "q_s_zero_taken_after_constraint_reduction": true,
+    "zero_or_nonzero_classified_exactly_only_if_action_complete": true,
+    "no_soft_s_driven_coefficient_fit": true,
+    "k003_production_remains_blocked": true,
+    "threshold_changed": false
+  },
+  "pass_if_zero": "C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_EXACT_CANCELLATION_PASS_SCOPED",
+  "pass_if_nonzero": "C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_SURVIVING_VERTEX_PASS_SCOPED",
+  "blocked_if_incomplete": "C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_BLOCKED_ACTION_SOURCE_LOCK_INCOMPLETE_SCOPED",
+  "interpretation_rule": "ZERO and NONZERO are both valid scientific outcomes only after the complete candidate action is reproducibly source-locked. Missing cubic action data is a blocker, not evidence for cancellation or survival.",
+  "next_if_blocked": "Freeze a narrow source-lock gate for the inherited nonlinear scalar/P(X) sector: identify its exact action, immutable source and scalar-shift dependence through cubic order, or prove from the explicit action that it cannot source the scalar shift at that order; then rerun this unchanged target.",
+  "non_claims": [
+    "not a unique RTK nonlinear completion",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure",
+    "not spectra or likelihood evidence"
+  ]
+}
