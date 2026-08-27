@@ -1,0 +1,68 @@
+name: RTK C10.65s6fZ11 fixed projectable U1 action scalar DOF preflight
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fz11-fixed-projectable-u1-action-scalar-dof-preflight-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen parents and guards
+        run: |
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_TARGET_v1.json'))
+          z10=json.load(open('research/theory_results/RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_RESULT_v1.json'))
+          z7=json.load(open('research/theory_results/RTK_C10_65S6FZ7_SYMMETRY_FIRST_REPRESENTATION_CLASS_RESULT_v1.json'))
+          assert z10['classification']==t['parents_required']['z10']
+          assert z7['classification']==t['parents_required']['z7']
+          assert t['fixed_gravity_source']['equation']==104
+          assert t['fixed_gravity_source']['lambda']==1
+          assert t['threshold_changed'] is False
+          assert t['soft_s_retest_allowed'] is False
+          assert t['production_k003_unblocked'] is False
+          PY
+      - name: Run frozen same-action scalar DOF preflight
+        run: python research/shadow/rtk_c10_65s6fz11_fixed_projectable_u1_action_scalar_dof_preflight.py
+      - name: Verify result semantics
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('research/theory_results/RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_RESULT_v1.json'))
+          assert r['classification'] in {
+            'C10_65S6FZ11_FIXED_PROJECTABLE_U1_ONE_SCALAR_PREFLIGHT_PASS_SCOPED',
+            'C10_65S6FZ11_SCALAR_DOF_PREFLIGHT_BLOCKED_SCOPED'}
+          assert r['checks']['no_soft_s_or_k003'] is True
+          assert r['checks']['threshold_unchanged'] is True
+          assert r['threshold_changed'] is False
+          assert r['soft_s_retest_allowed'] is False
+          assert r['production_k003_unblocked'] is False
+          PY
+      - name: Persist result provenance and checkpoint
+        run: |
+          RUN_ID='${{ github.run_id }}' RUN_ATTEMPT='${{ github.run_attempt }}' HEAD_SHA='${{ github.sha }}' python - <<'PY'
+          import json,os,datetime,pathlib
+          rp=pathlib.Path('research/theory_results/RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_RESULT_v1.json')
+          r=json.loads(rp.read_text())
+          r['provenance']={'github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'trigger_head_sha':os.environ['HEAD_SHA'],'workflow':'rtk-c10-65s6fz11-fixed-projectable-u1-action-scalar-dof-preflight.yml','threshold_changed':False}
+          rp.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          d=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_{d}.md')
+          cp.write_text('# RTK C10.65s6fZ11 checkpoint\n\nClassification: `'+r['classification']+'`.\n\n'+r['interpretation']+'\n\nFrozen guards remain: no soft-s retest and no k=0.03 production.\n\nNext: '+r['next_gate']+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ11_FIXED_PROJECTABLE_U1_ACTION_SCALAR_DOF_PREFLIGHT_RESULT_v1.json research/checkpoints/
+          git commit -m 'Record C10.65s6fZ11 fixed projectable U1 scalar DOF preflight'
+          git push origin HEAD:rtk-class-build
