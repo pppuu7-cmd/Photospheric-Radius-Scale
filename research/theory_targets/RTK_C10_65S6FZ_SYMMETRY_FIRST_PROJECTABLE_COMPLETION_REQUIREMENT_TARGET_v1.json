@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65S6FZ_SYMMETRY_FIRST_PROJECTABLE_COMPLETION_REQUIREMENT_TARGET_v1",
+  "gate": "C10.65s6fZ",
+  "title": "Symmetry-first projectable completion requirement/class theorem",
+  "parent": "C10_65S6FY_NO_SOURCE_LOCKED_PROJECTABLE_CANDIDATE_FOUND_PASS_SCOPED",
+  "question": "What exact structural conditions can protect the rank-one scalar kinetic architecture in a projectable ADM completion without choosing coefficients from the failed soft-s observable, and are those conditions sufficient by themselves to identify one full RTK action?",
+  "frozen_setup": {
+    "projectable_lapse": "N=N(t)",
+    "two_scalar_velocity_vector": "v=(v_phi,v_chi)^T",
+    "rank_one_kinetic_form": "K=kappa*u*u^T with nonzero u",
+    "null_direction": "n=(-u_2,u_1)^T",
+    "quadratic_algebraic_sector": "1/2 q^T M q + s^T q J, with symmetric M",
+    "symmetry_test": "local field-space redundancy delta q = epsilon(x,t) n"
+  },
+  "theorem_checks": [
+    "K*n=0 identically for K=kappa*u*u^T",
+    "local null-direction gauge invariance of the algebraic quadratic sector requires M*n=0",
+    "local null-direction gauge invariance of a linear source coupling requires s.n=0",
+    "for symmetric 2x2 M with M*n=0, M is rank <=1 and proportional to u*u^T",
+    "s.n=0 forces s proportional to u",
+    "after quotienting the null direction, the quadratic scalar response contains at most one finite pole"
+  ],
+  "decision_rule": {
+    "SYMMETRY_PROTECTED_CLASS_PASS_SCOPED": "If all exact structural identities hold. This establishes a nonempty symmetry-protected rank-one class, not a unique full action.",
+    "THEOREM_FAIL_SCOPED": "If any frozen exact identity fails.",
+    "FULL_ACTION_IDENTIFIED": "Forbidden classification in this gate; the theorem must not infer a unique nonlinear completion from quadratic symmetry conditions alone."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_new_fitted_coefficients": true,
+    "no_claim_unique_full_action": true,
+    "no_change_to_existing_rtks": true,
+    "threshold_changed": false
+  },
+  "scope": "Exact kinematic/algebraic class theorem only. A future candidate must separately specify a nonlinear symmetry realization, ADM/clock field map, gravitational and potential operators, background functions, matter coupling, and full constraint algebra before s6fT can be rerun."
+}
