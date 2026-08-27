@@ -1,0 +1,54 @@
+name: RTK C10.65s6fS Dirac-degenerate candidate restart
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fs-dirac-degenerate-candidate-restart-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install symbolic dependency
+        run: pip install sympy==1.14.0
+      - name: Execute frozen C10.65s6fS audit
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fs_dirac_degenerate_candidate_restart.py | tee /tmp/s6fs.log
+      - name: Add immutable provenance and checkpoint
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          HEAD_AT_JOB_START: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          rp=Path('research/theory_results/RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_RESULT_v1.json')
+          d=json.loads(rp.read_text())
+          d['provenance']={'workflow':'rtk-c10-65s6fs-dirac-degenerate-candidate-restart.yml','github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['HEAD_AT_JOB_START'],'threshold_changed':False}
+          rp.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          cp=Path('research/checkpoints/RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_2026-08-27T1142Z.md')
+          cp.write_text('''# RTK C10.65s6fS Dirac-degenerate candidate restart\n\nCandidate: `DIRAC_DEGENERATE_RANK_ONE_AUXILIARY_v1`.\n\nThis candidate predates the present soft-s obstruction and was originally constructed in C8 to escape the ordinary positive-auxiliary extra-pole/DOF obstruction. The historical corrected CI was run `32525622115`, artifact `9462068516`.\n\nC10.65s6fS re-confirms only the structural theorem: rank-one velocity Hessian, a second-class constraint pair, one physical scalar DOF, and one finite aligned-source pole. No soft-s cancellation was tested or fitted.\n\n`k=0.03 Mpc^-1` production remains blocked.\n\nNext frontier if PASS: freeze C10.65s6fT full projectable ADM embedding/restart contract. Source alignment must be derived from the action, not imposed. Before any soft-s retest require background equivalence, full Dirac count, quadratic RTK pole/residue/remainder across multiple epochs, canonical static-limit regularity and C9 radiative-naturalness checks.\n''')
+          PY
+      - name: Commit result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_RESULT_v1.json research/checkpoints/RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_2026-08-27T1142Z.md
+          git commit -m 'Record C10.65s6fS independent candidate restart'
+          git push origin HEAD:rtk-class-build
