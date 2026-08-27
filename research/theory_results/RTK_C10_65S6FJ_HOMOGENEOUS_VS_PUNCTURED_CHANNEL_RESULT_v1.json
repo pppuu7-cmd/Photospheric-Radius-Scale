@@ -1,0 +1,47 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "K_beta_zero_at_q0": true,
+    "finite_q_beta_has_inverse_q2": true,
+    "generic_beta_coordinate_no_regular_q0_limit": true,
+    "gradient_source_zero_at_q0": true,
+    "homogeneous_zeta_is_scale_factor_redefinition": true,
+    "k003_production_remains_blocked": true,
+    "no_special_mu_or_angular_average_chosen": true,
+    "projectable_q0_constraint_is_global_not_finite_q_elliptic": true,
+    "projectable_shift_map_exact_q0_zero": true,
+    "s6fI_direction_dependence_forbids_unique_punctured_identification": true,
+    "target_frozen": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FJ_EXACT_HOMOGENEOUS_CHANNEL_SEPARATE_PASS_SCOPED",
+  "decision": "EXACT_Q0_IS_SEPARATE_HOMOGENEOUS_GLOBAL_SECTOR_NOT_PUNCTURED_FINITE_Q_LIMIT",
+  "derivation": {
+    "constraint_architecture": "For projectable lapse the Hamiltonian constraint at q=0 is global/spatially integrated. It is not obtained by setting q=0 in a finite-q local scalar constraint.",
+    "exact_q0_statement": "At q=0 the gradient-shift variable disappears from the local Fourier sector: the beta equation degenerates to 0=0 rather than the finite-q elliptic constraint.",
+    "finite_q_kernel": "K_beta(q)~(1-lambda_HL)q^4",
+    "finite_q_solution": "beta(q)~dot(zeta_q)/q^2, which is not a regular coordinate limit at q=0",
+    "finite_q_source": "J_beta(q)~q^2 dot(zeta_q)",
+    "homogeneous_geometry": "gamma_ij=a^2 exp(2 zeta_0(t)) delta_ij = [a exp(zeta_0)]^2 delta_ij; zeta_0 is a homogeneous scale-factor/background perturbation.",
+    "punctured_guard": "s6fI proves the q->0 reduced shift contribution is direction dependent, so no unique mu-independent punctured value exists to identify with the exact homogeneous channel.",
+    "scalar_shift_map": "N_i(q)=i q_i beta(q), hence N_i(0)=0 for any regular beta_0"
+  },
+  "gate": "C10.65s6fJ",
+  "interpretation": "The exact COM spatial-q=0 channel is a separate projectable homogeneous/global sector. A finite-q scalar shift is a gradient constraint variable whose coordinate solution diverges as 1/q^2; at exact q=0 its physical gradient N_i vanishes and the local beta equation disappears. Since the punctured reduction is direction dependent, no special approach direction or average can define the exact homogeneous channel. The homogeneous virtual channel must be derived from the homogeneous action/global constraint before any final soft-s ZERO/NONZERO classification.",
+  "next_gate": "C10.65s6fK: source-lock the exact homogeneous scalar action/global Hamiltonian constraint on MINIMAL_PROJECTABLE_N2_S1HALF_v1 and compute the spatial-q=0, nonzero-frequency virtual channel before revising/rerunning s6fF.",
+  "non_claims": [
+    "not final soft-s cancellation/survival",
+    "not a homogeneous propagator calculation yet",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33051604611,
+    "repo_head_at_job_start": "9f15fba9ad742698e38647fa911badf08c115104",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fj-homogeneous-vs-punctured-channel.yml"
+  },
+  "schema": "RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_TARGET_v1.json",
+  "threshold_changed": false
+}
