@@ -1,0 +1,57 @@
+name: RTK C10.65s6fZ5 symmetry interface closure audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fz5_symmetry_interface_closure_audit.py'
+      - '.github/workflows/rtk-c10-65s6fz5-symmetry-interface-closure-audit.yml'
+      - '.github/rtk-c10-65s6fz5-symmetry-interface-closure-audit-trigger.txt'
+
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_TARGET_v1.json'))
+          assert t['gate']=='C10.65s6fZ5'
+          assert t['parent']=='C10_65S6FZ4_PROJECTABLE_GRAVITY_PARTIAL_PARENT_PASS_SCOPED'
+          g=t['guards']; assert g['no_soft_s_retest'] and g['no_k003_production'] and g['no_new_charge_assignment'] and g['no_new_parameter'] and g['no_claim_full_dirac_count'] and g['threshold_changed'] is False
+          PY
+      - name: Run source-lock audit
+        run: python research/shadow/rtk_c10_65s6fz5_symmetry_interface_closure_audit.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_RESULT_v1.json'); r=json.loads(p.read_text())
+          r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA']}); p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          Path('research/checkpoints/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_2026-08-27.md').write_text(f'''# RTK C10.65s6fZ5 — symmetry interface closure audit\n\nClassification: **{r['classification']}**\n\nThe independently motivated projectable gravity parent and the s6fZ2 two-field class share projectability, but the combination is not yet action-level source-locked. In particular, the new `phi,chi` fields have no frozen representation under the gravitational-parent local gauge symmetry, and `D_perp Phi` has not been tied to the same invariant lapse/shift variables. Therefore the cross-symmetry commutator and same-action lapse/shift source cannot yet be derived.\n\nThis is an interface/identifiability blocker, not evidence that the symmetries conflict. No neutrality or charge assignment was invented, no parameter was fitted, and no soft-s or k=0.03 output was used.\n\nNext gate: {r['next_gate']}\n\nProvenance: frozen target commit `953d37a2c7a28b9530e738368282eeea8382b2ff`; run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.\n''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fZ5 symmetry interface audit'
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
