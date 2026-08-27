@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "Mclass_null_identity": true,
+    "Mclass_rank_one": true,
+    "Mn_zero_patch_u1_solved": true,
+    "Mn_zero_patch_u2_solved": true,
+    "kinetic_null_identity": true,
+    "one_finite_pole_max": true,
+    "parent_exact": true,
+    "quotient_inverse_affine": true,
+    "quotient_source_aligned": true,
+    "source_alignment_patch_u1": true,
+    "source_alignment_patch_u2": true,
+    "source_class_null_identity": true,
+    "target_exact_gate": true
+  },
+  "classification": "C10_65S6FZ_SYMMETRY_PROTECTED_PROJECTABLE_RANK_ONE_CLASS_PASS_SCOPED",
+  "exact_theorem": {
+    "gauge_invariance_conditions": [
+      "M n = 0",
+      "s.n = 0"
+    ],
+    "kinetic_class": "K = kappa u u^T",
+    "null_direction": "n = (-u2,u1)^T",
+    "pole_statement": "After quotienting the local null direction, the inverse response is affine in z=omega^2 and has at most one finite pole.",
+    "quotient_inverse_response": "-(u1**2 + u2**2)**2*(kappa*z - m)",
+    "source_solution": "s = sigma u",
+    "symmetric_M_solution": "M = m u u^T (patchwise for nonzero u)"
+  },
+  "finding": "A nonempty local symmetry-protected projectable rank-one quadratic class exists. Local redundancy along the kinetic null direction forces both the symmetric algebraic matrix and the linear source to align with the kinetic direction. This protects the one-pole structure, but it does not identify a unique nonlinear ADM/clock action or its background functions.",
+  "gate": "C10.65s6fZ",
+  "next_gate": "C10.65s6fZ1: source-lock whether the RTK archive contains an independently motivated nonlinear symmetry realization whose projectable ADM reduction implements this null-direction redundancy. If absent, retain the action-selection blocker rather than inventing coefficients.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33087838888,
+    "repo_head_at_job_start": "682d561888fbe7eaec7a07d41365b2e6238192a1",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz-symmetry-first-projectable-completion-requirement.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ_SYMMETRY_FIRST_PROJECTABLE_COMPLETION_REQUIREMENT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
