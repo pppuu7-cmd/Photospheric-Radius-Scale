@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import json
+import subprocess
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
-ARCH=ROOT/'research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md'
+ARCH_COMMIT='13acfdbc16d2f3117f1299b8552bcf7b1f996bd1'
+ARCH_PATH='research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md'
 
 def load(p): return json.loads((ROOT/p).read_text())
+
+def archived_text(commit: str, path: str) -> str:
+    return subprocess.check_output(
+        ['git','-C',str(ROOT),'show',f'{commit}:{path}'],
+        text=True,
+    )
 
 def main():
     t=load('research/theory_targets/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_TARGET_v1.json')
     e=load('research/theory_results/RTK_C10_65S6FE_CANDIDATE_NONLINEAR_COMPLETION_BRANCH_RESULT_v1.json')
     f=load('research/theory_results/RTK_C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_RESULT_v1.json')
-    txt=ARCH.read_text()
+    txt=archived_text(ARCH_COMMIT, ARCH_PATH)
     checks={
       'target_frozen': t['status']=='FROZEN_BEFORE_IMPLEMENTATION',
       's6fE_parent': e['classification']=='C10_65S6FE_CANDIDATE_NONLINEAR_COMPLETION_BRANCH_CONTRACT_PASS_SCOPED',
       's6fF_parent': f['classification']=='C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_BLOCKED_ACTION_SOURCE_LOCK_INCOMPLETE_SCOPED',
+      'archived_action_exactly_identified': t['archived_action_source']['commit']==ARCH_COMMIT and t['archived_action_source']['path']==ARCH_PATH,
       'unitary_action_present': 'F(t,N)' in txt and 'N_i = partial_i psi' in txt,
       'action_identifies_F_as_clock_background': 'unitary-gauge form of the fixed Khronon/P(X)-type clock background' in txt,
       'quadratic_shift_constraint_present': 'Exact momentum/shift constraint' in txt,
@@ -33,8 +42,8 @@ def main():
       'gate':'C10.65s6fG','classification':cls,
       'target':'research/theory_targets/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_TARGET_v1.json',
       'source_lock':{
-        'commit':'13acfdbc16d2f3117f1299b8552bcf7b1f996bd1',
-        'path':'research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md',
+        'commit':ARCH_COMMIT,
+        'path':ARCH_PATH,
         'archived_action':'S = integral N sqrt(gamma) [Mpl^2/2 (R3 + Kij Kij - K^2) + F(t,N) + C_acc a_i a^i]'
       },
       'derivation':{
