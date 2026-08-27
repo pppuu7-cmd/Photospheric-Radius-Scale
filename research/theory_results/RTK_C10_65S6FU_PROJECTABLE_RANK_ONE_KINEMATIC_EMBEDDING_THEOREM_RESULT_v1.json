@@ -1,0 +1,59 @@
+{
+  "checks": {
+    "general_z2_coefficient_is_detK": true,
+    "hessian_matrix_exact": true,
+    "historical_toy_kinetic_structure_reproduced": true,
+    "k003_still_blocked": true,
+    "kinetic_perfect_square_exact": true,
+    "no_soft_s_retest": true,
+    "parent_is_exact_s6ft_blocker": true,
+    "parent_k003_still_blocked": true,
+    "primary_constraint_exact": true,
+    "rank_one_A_patch_exact": true,
+    "rank_one_affine_z1_exact": true,
+    "rank_one_determinant_exact": true,
+    "rank_one_z0_is_detM": true,
+    "rank_one_z2_vanishes": true,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FU_PROJECTABLE_RANK_ONE_KINEMATIC_EMBEDDING_CLASS_PASS_SCOPED",
+  "exact_results": {
+    "A_nonzero_patch": {
+      "B": "a*A",
+      "C": "a^2*A",
+      "a": "B/A"
+    },
+    "det_M_minus_zK_general": "A*C*z**2 - A*m22*z - B**2*z**2 + 2*B*m12*z - C*m11*z + m11*m22 - m12**2",
+    "det_M_minus_zK_rank_one": "-A*a**2*m11*z + 2*A*a*m12*z - A*m22*z + m11*m22 - m12**2",
+    "kinetic_combination": "A*(v_phi+a*v_chi)^2",
+    "pole_statement": "det(M-zK) is affine in z=omega^2; hence at most one finite dynamical pole unless the affine coefficient also degenerates",
+    "primary_constraint": "p_chi-a*p_phi=0",
+    "rank_one_condition": "A*C-B^2=0 with K nonzero",
+    "velocity_hessian_up_to_positive_nonzero_prefactor": "[[A,B],[B,C]]",
+    "z1_coefficient_rank_one": "-A*(a**2*m11 - 2*a*m12 + m22)",
+    "z2_coefficient_rank_one": "0"
+  },
+  "gate": "C10.65s6fU",
+  "interpretation": "The historical rank-one kinetic architecture has a nonempty local projectable-ADM two-scalar kinematic embedding class. This does not select the RTK field map, potential/algebraic sector, source direction, background functions, or nonlinear completion.",
+  "missing_for_full_s6ft_embedding": [
+    "one explicit projectable ADM action containing the rank-one kinetic pair",
+    "explicit map from toy variables X,y to ADM/clock fields",
+    "lapse and scalar-shift dependence fixed by the same action",
+    "source direction derived from the action rather than imposed",
+    "background coefficient functions fixed without using the failed soft-s observable",
+    "nonlinear action sufficient for a full Dirac constraint count"
+  ],
+  "next_gate": "Use the theorem only as a construction constraint. The next fixed-action gate must independently choose/source-lock the field map, algebraic/potential sector, source couplings and background coefficient functions, then rerun C10.65s6fT unchanged.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33076798701,
+    "repo_head_at_job_start": "90186915b7fc7356532eb645fffe7d33500f5cca",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fu-projectable-rank-one-kinematic-theorem.yml"
+  },
+  "schema": "RTK_C10_65S6FU_PROJECTABLE_RANK_ONE_KINEMATIC_EMBEDDING_THEOREM_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
