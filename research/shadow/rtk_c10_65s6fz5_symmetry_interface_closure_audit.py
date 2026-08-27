@@ -10,7 +10,6 @@ for p in (T,Z2T,Z4,C9):
     if not p.exists(): print('missing',p,file=sys.stderr); sys.exit(3)
 t=json.loads(T.read_text()); z2=json.loads(Z2T.read_text()); z4=json.loads(Z4.read_text()); c9=C9.read_text()
 ft=z2['frozen_template']; ft_text=json.dumps(ft,sort_keys=True)
-# Source-lock audit only: absence below is intentionally classified, not repaired by an invented assignment.
 checks={
  'target_exact':t.get('gate')=='C10.65s6fZ5',
  'parent_exact':z4.get('classification')=='C10_65S6FZ4_PROJECTABLE_GRAVITY_PARTIAL_PARENT_PASS_SCOPED',
@@ -23,16 +22,17 @@ checks={
  'no_k003':t['guards']['no_k003_production'] is True,
  'threshold_unchanged':t['guards']['threshold_changed'] is False,
 }
-# The new fields phi,chi were introduced by s6fZ2. Its frozen template contains no U(1)
-# representation/charge assignment and no invariant-shift/prepotential/gauge-field mapping.
+# Structured source-lock audit. Do not use short substring tokens such as "nu", which
+# would falsely match "null_vector". A representation is counted only if explicitly named.
+explicit_gravity_rep_markers=['U(1)','U1','gauge charge','Newtonian prepotential','gauge field A']
+explicit_shift_markers=['invariant shift','tilde N','Newtonian prepotential']
 missing={
- 'phi_chi_gravity_gauge_representation_not_source_locked': not any(tok in ft_text for tok in ['U(1)','U1','charge','prepotential','nu','gauge field A']),
- 'Dperp_shared_shift_definition_not_source_locked': 'D_perp Phi' in ft.get('action_class','') and not any(tok in ft_text for tok in ['invariant shift','tilde N','prepotential','nu']),
+ 'phi_chi_gravity_gauge_representation_not_source_locked': not any(tok in ft_text for tok in explicit_gravity_rep_markers),
+ 'Dperp_shared_shift_definition_not_source_locked': 'D_perp Phi' in ft.get('action_class','') and not any(tok in ft_text for tok in explicit_shift_markers),
  'cross_symmetry_commutator_not_source_locked': True,
  'same_action_scalar_lapse_shift_interface_not_source_locked': z4.get('s6ft_embedding_ready') is False,
 }
-base_ok=all(checks.values())
-under=base_ok and all(missing.values())
+base_ok=all(checks.values()); under=base_ok and all(missing.values())
 cls='C10_65S6FZ5_SYMMETRY_INTERFACE_UNDERDETERMINED_PASS_SCOPED' if under else 'C10_65S6FZ5_FAIL_SCOPED'
 r={
  'schema':'RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_RESULT_v1','gate':'C10.65s6fZ5','classification':cls,
