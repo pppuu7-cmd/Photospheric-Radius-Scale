@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "integer_n_ge_1_has_no_zero_weight": true,
+    "n2_normalization_matches_archived_K3_s": true,
+    "no_k003_production_output": true,
+    "no_new_operator_coefficient": true,
+    "no_parameter_fit": true,
+    "no_punctured_q_limit": true,
+    "parent_exact": true,
+    "target_frozen": true,
+    "threshold_changed": false,
+    "weight_derived_from_volume_R_inverse_metric_factors": true
+  },
+  "classification": "C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_OBSTRUCTION_PASS_SCOPED",
+  "decision": "OBSTRUCTION",
+  "gate": "C10.65s6fN",
+  "interpretation": "Within the pure projectable curvature-carrier family sqrt(gamma)[D^(n-1)R3]^2, simply increasing the integer spatial derivative order cannot eliminate the exact homogeneous hard-hard-soft cubic coupling: its homogeneous conformal weight is 1-2n, nonzero for every integer n>=1. The n=2 normalization reproduces the archived exact K3_s=-96 k^6. Therefore a soft-s cure must use genuinely different nonlinear structure (for example an independently motivated operator combination or symmetry), not just n>2 in this pure family.",
+  "next_gate": "Keep k=0.03 production blocked. Audit source-locked operator/symmetry classes that can change the homogeneous conformal weight or produce a structurally correlated cancellation while preserving the certified background/quadratic sector; preregister any candidate before evaluating its soft vertex.",
+  "non_claims": [
+    "not a no-go for linear combinations of independent nonlinear operators",
+    "not a no-go for symmetry-protected or additional-field completions",
+    "not radiative-naturalness closure",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ],
+  "parent": "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_NONZERO_PASS_SCOPED",
+  "provenance": {
+    "frozen_target_commit": "e54b9c22d32b4d078826d03d6460cdd3bbabd30c",
+    "github_actions_run_id": 33060626021,
+    "repo_head_at_job_start": "e51d1b23894f8bad1cc4799bd2ce961c4bed8092",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fn-pure-higher-spatial-carrier-homogeneous-soft-obstruction.yml"
+  },
+  "schema": "RTK_C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_OBSTRUCTION_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_OBSTRUCTION_TARGET_v1.json",
+  "theorem": {
+    "factor_decomposition": {
+      "inverse_metric_derivative_contractions": "-2(n-1)",
+      "sqrt_gamma": 3,
+      "two_R3": -4
+    },
+    "homogeneous_conformal_weight": "1-2n",
+    "integer_domain": "n>=1",
+    "n2_Q2_hard_pair_cross": "32 k^6",
+    "n2_archived_K3_s": "-96 k^6",
+    "n2_predicted_K3_s": "-96*k**6",
+    "n2_weight": -3,
+    "soft_cubic_to_quadratic_cross_ratio": "1-2n",
+    "zero_weight_solution_in_integer_domain": null,
+    "zero_weight_solution_over_reals": "n=1/2"
+  },
+  "threshold_changed": false
+}
