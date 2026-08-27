@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_TARGET_v1",
+  "gate": "C10.65s6fZ2",
+  "title": "Minimal action-level projectable gauge realization template theorem",
+  "parent": "C10_65S6FZ1_NO_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_FOUND_PASS_SCOPED",
+  "question": "Does there exist an explicit local projectable-ADM-compatible two-scalar action template, fixed before any soft-s evaluation and with no fitted coefficients, whose exact local field-space redundancy realizes the s6fZ null direction and enforces rank-one kinetic, algebraic and source sectors while leaving exactly one physical scalar in the two-field subsystem?",
+  "frozen_template": {
+    "fields": ["phi", "chi"],
+    "constant_vector": "u=(u1,u2), with u.u != 0",
+    "null_vector": "n=(-u2,u1)",
+    "gauge_transformation": "delta(phi,chi)=epsilon(x,t)*n",
+    "gauge_invariant_scalar": "Phi=u1*phi+u2*chi",
+    "projectable_adm": "N=N(t); gamma_ij and N^i are inert under this field-space redundancy",
+    "action_class": "S = integral dt d3x N sqrt(gamma) [L_ADM(gamma,K,N;t) + F(Phi,X_Phi,t) + J(Phi,t)], where X_Phi=(D_perp Phi)^2/2 and no dependence on the orthogonal field combination is allowed",
+    "coefficient_policy": "F, J and L_ADM remain arbitrary predeclared functions; no coefficient is selected from the failed soft-s observable"
+  },
+  "required_exact_checks": [
+    "u.n = 0",
+    "delta Phi = 0 under arbitrary local epsilon(x,t)",
+    "quadratic scalar kinetic Hessian is proportional to u*u^T and has determinant zero",
+    "quadratic algebraic Hessian is proportional to u*u^T",
+    "linear source vector is parallel to u",
+    "canonical momenta obey the primary null constraint n.p = 0",
+    "the local redundancy makes the null constraint first-class within the two-field subsystem",
+    "two-field subsystem physical scalar count is exactly one",
+    "reduced inverse response is affine in omega^2 and therefore has at most one finite dynamical pole"
+  ],
+  "decision_rule": {
+    "TEMPLATE_CLASS_PASS_SCOPED": "All exact structural checks pass for the frozen template without fitting any coefficient to soft-s.",
+    "TEMPLATE_FAIL_SCOPED": "At least one exact structural identity fails for the frozen template.",
+    "INCOMPLETE_BLOCKED_SCOPED": "The parent or frozen target cannot be verified."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_failed_observable_fitting": true,
+    "no_claim_unique_full_rtk_action": true,
+    "no_claim_full_coupled_adm_dof_count": true,
+    "no_claim_background_equivalence": true,
+    "no_claim_radiative_naturalness": true,
+    "threshold_changed": false
+  },
+  "scope": "Constructive action-template theorem only. A PASS proves non-emptiness of a symmetry-realized projectable two-scalar class; it does not select a unique RTK completion or close the full ADM/gravity constraint system."
+}
