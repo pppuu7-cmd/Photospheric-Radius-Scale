@@ -1,0 +1,46 @@
+name: RTK C10.65s6d k003 production architecture decision
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['.github/workflows/rtk-c10-65s6d-k003-production-architecture-decision.yml','research/triggers/RTK_C10_65S6D_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  decision:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - name: Verify frozen parent
+        run: |
+          set -euo pipefail;git rev-parse HEAD > s6d_head.txt
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_TARGET_v1.json'));s=json.load(open('research/theory_results/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_v1.json'));assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION';assert s['classification']==t['parents']['C10.65s6c'];assert t['threshold_changed'] is False;print('C10_65S6D_FROZEN_PARENT_VERIFIED')
+          PY
+      - name: Execute frozen decision
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s6d_k003_production_architecture_decision.py | tee s6d.log
+      - name: Add provenance and persist
+        if: always()
+        run: |
+          set -euo pipefail;p=research/theory_results/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_RESULT_v1.json;[ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s6d_head.txt').read_text().strip(),'workflow':'rtk-c10-65s6d-k003-production-architecture-decision.yml','analyzer':'research/shadow/rtk_c10_65s6d_k003_production_architecture_decision.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'s6c_parent_run_id':33037402981,'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          c=pathlib.Path('research/checkpoints/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_2026-08-27T0355Z.md');c.write_text(f"# RTK C10.65s6d k=0.03 production architecture decision\n\nClassification: `{d['classification']}`.\n\nDecision: `{d['decision']}`.\n\nMaximum key metric/carrier response: `{d['max_key_response_relative']:.17e}`. Responses at or above the frozen order-unity boundary: `{d['key_responses_at_or_above_order_unity']}`.\n\nNo k=0.03 production output was consumed. If production is blocked, return to the UV/pre-EFT matching interface rather than tuning production branches.\n")
+          PY
+          cp "$p" /tmp/r;cp research/checkpoints/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_2026-08-27T0355Z.md /tmp/c
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r "$p";cp /tmp/c research/checkpoints/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_2026-08-27T0355Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_2026-08-27T0355Z.md;git commit -m 'Record C10.65s6d k=0.03 production architecture decision' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: rtk-c10-65s6d-k003-production-architecture-decision, path: "s6d.log\nresearch/theory_results/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_RESULT_v1.json"}
+      - name: Enforce classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_RESULT_v1.json'));assert d['classification']=='C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_PASS_SCOPED';assert d['threshold_changed'] is False;print(d['classification'],d['decision'])
+          PY
