@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_65S6FT_FULL_PROJECTABLE_ADM_EMBEDDING_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fT",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "parent": "C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_PASS_SCOPED",
+  "purpose": "Determine whether the independently motivated rank-one Dirac-degenerate candidate is already specified by one source-locked projectable ADM action strongly enough to begin the full restart. Fail closed rather than inventing lapse/shift couplings or source alignment.",
+  "required_for_embedding_ready": [
+    "one explicit projectable ADM action containing the rank-one kinetic pair",
+    "explicit map from toy variables X,y to ADM/clock fields",
+    "lapse and scalar-shift dependence fixed by the same action",
+    "source direction derived from the action rather than imposed",
+    "background coefficient functions fixed without using the failed soft-s observable",
+    "enough nonlinear information to perform a full Dirac constraint count"
+  ],
+  "frozen_decision_rule": {
+    "if_all_required_source_locked": "EMBEDDING_READY_PASS_SCOPED",
+    "otherwise": "BLOCKED_NO_FULL_PROJECTABLE_ADM_EMBEDDING_SCOPED"
+  },
+  "guards": [
+    "do not fit any coefficient to the C10.65 soft-s failure",
+    "do not infer source alignment from the toy response identity",
+    "do not reinterpret the quadratic toy model as a covariant/full ADM action",
+    "k=0.03 Mpc^-1 production remains blocked",
+    "soft-s retest remains forbidden"
+  ],
+  "next_if_blocked": "Freeze a separately motivated fixed-action construction gate only when an explicit projectable ADM embedding is proposed independently of the failed soft-s observable; then rerun this source-lock unchanged.",
+  "next_if_ready": "Proceed to full Dirac count, background equivalence, multi-epoch quadratic RTK pole/residue/remainder, canonical static-limit regularity and C9 radiative-naturalness gates before any soft-s retest.",
+  "nonclaims": [
+    "not a no-go for Dirac-degenerate completions",
+    "not a soft-s calculation",
+    "not radiative naturalness",
+    "not k=0.03 production permission"
+  ]
+}
