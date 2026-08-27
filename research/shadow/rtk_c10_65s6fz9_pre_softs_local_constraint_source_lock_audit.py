@@ -13,10 +13,20 @@ assert p['soft_s_retest_allowed'] is False and p['production_k003_unblocked'] is
 commit=t['historical_source_commit']
 
 # Audit only the pinned pre-soft-s tree. Broad grep first; classification requires
-# same historical file to carry projectability + U(1)/gauge architecture + explicit A field/constraint language.
+# the same historical file to carry a genuinely PROJECTABLE architecture plus
+# U(1)/gauge architecture + explicit A field/constraint language.
+# IMPORTANT: the frozen target explicitly forbids reinterpreting a
+# NONPROJECTABLE candidate as projectable. Therefore substring matching is not
+# admissible here: "projectable" inside "nonprojectable" is a negative datum.
 def grep(pattern):
     cp=subprocess.run(['git','grep','-n','-I','-E',pattern,commit,'--','research'],cwd=ROOT,text=True,capture_output=True)
     return cp.stdout.splitlines() if cp.returncode in (0,1) else (_ for _ in ()).throw(RuntimeError(cp.stderr))
+
+def has_positive_projectable(text):
+    # Remove explicit negative forms before asking whether a standalone positive
+    # projectable declaration remains anywhere in the same source file.
+    cleaned=re.sub(r'\bnon(?:-|\s*)projectable\b',' ',text,flags=re.I)
+    return bool(re.search(r'\bprojectable\b',cleaned,re.I))
 
 lines=grep(r'projectable|U\(1\)|Newtonian prepotential|gauge field|constraint|N_i|\bA\b')
 byfile={}
@@ -28,15 +38,19 @@ for line in lines:
     byfile.setdefault(path,[]).append((lineno,text))
 
 candidates=[]
+rejected_nonprojectable=[]
 for path,rows in byfile.items():
     blob='\n'.join(x[1] for x in rows)
     low=blob.lower()
-    projectable=('projectable' in low)
+    projectable=has_positive_projectable(blob)
+    nonprojectable=bool(re.search(r'\bnon(?:-|\s*)projectable\b',blob,re.I))
     gauge=('u(1)' in low or 'newtonian prepotential' in low or 'gauge field' in low)
     explicit_A=bool(re.search(r'\bgauge field\s+A\b|\bA\s*(?:field|constraint|multiplier)\b|\bA\b.*\bconstraint\b',blob,re.I))
     constraint=('constraint' in low)
     if projectable and gauge and explicit_A and constraint:
         candidates.append({'path':path,'evidence':[{'line':n,'text':s[:500]} for n,s in rows[:40]]})
+    elif nonprojectable and gauge and explicit_A and constraint:
+        rejected_nonprojectable.append({'path':path,'reason':'explicitly nonprojectable evidence cannot satisfy frozen projectable requirement'})
 
 found=bool(candidates)
 classification=('C10_65S6FZ9_PRE_SOFTS_LOCAL_CONSTRAINT_PARENT_FOUND_PASS_SCOPED' if found else
@@ -50,15 +64,19 @@ result={
     'historical_commit_pinned':True,
     'audit_restricted_to_pre_softs_tree':True,
     'outcome_neutral_classification':True,
+    'projectability_token_semantics_exact':True,
+    'nonprojectable_not_reinterpreted_as_projectable':True,
     'no_new_multiplier_coefficient':True,
     'no_soft_s_or_k003':True
   },
   'historical_source_commit':commit,
   'candidate_count':len(candidates),
   'candidates':candidates,
+  'rejected_nonprojectable_count':len(rejected_nonprojectable),
+  'rejected_nonprojectable':rejected_nonprojectable,
   'interpretation':(
     'A pre-soft-s projectable local constraint parent is source-locked in the pinned archive. This only licenses a separate same-action embedding/Dirac audit; it does not prove that the mechanism removes the Z8 extra scalar or cures soft-s.' if found else
-    'No pre-soft-s projectable local constraint parent satisfying all frozen source-lock requirements was found in the pinned archive. Adding an A-like multiplier now would therefore be a new completion hypothesis and cannot be justified from the observed soft-s failure.'),
+    'No pre-soft-s projectable local constraint parent satisfying all frozen source-lock requirements was found in the pinned archive. Explicitly nonprojectable U(1) parents are rejected by the frozen semantics. Adding an A-like multiplier now would therefore be a new completion hypothesis and cannot be justified from the observed soft-s failure.'),
   'next_gate':(
     'C10.65s6fZ10: reconstruct the exact historical local-constraint action/interface and perform a same-action scalar constraint-rank/DOF audit with the frozen Z7 carrier, without soft-s.' if found else
     'C10.65s6fZ10: formulate an independently motivated projectable local-constraint completion principle before writing any new multiplier action; no soft-s-guided coefficient choice is allowed.'),
