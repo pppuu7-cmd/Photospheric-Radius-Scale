@@ -1,0 +1,74 @@
+{
+  "candidate": {
+    "assumptions": [
+      "kappa>0",
+      "Omega2>0",
+      "m2>0",
+      "Omega2*m2-g^2>0"
+    ],
+    "historical_artifact": 9462068516,
+    "historical_artifact_sha256": "c9f42d3b8917cdaa083972edd9bc1ad4961a082ca62ce5c1cc2d45a08f8a4800",
+    "historical_ci_run": 32525622115,
+    "historical_motivation": "C8 escape from ordinary auxiliary extra-pole/static-regularity obstruction; constructed before C10.65 soft-s failure",
+    "lagrangian": "L=kappa/2*(dotX+a*doty)^2-[Omega2*X^2/2+g*X*y+m2*y^2/2]",
+    "name": "DIRAC_DEGENERATE_RANK_ONE_AUXILIARY_v1",
+    "velocity_vector": "v=(1,a)"
+  },
+  "checks": {
+    "aligned_source_response_identity": true,
+    "determinant_lemma_one_pole_identity": true,
+    "k003_production_remains_blocked": true,
+    "no_new_parameter_fit_to_failed_observable": true,
+    "no_soft_s_cancellation_test": true,
+    "parent_s6fR_exact_match": true,
+    "physical_scalar_dof_count_one": true,
+    "positive_domain_nonempty": true,
+    "primary_constraint_source_locked": true,
+    "second_class_bracket_identity": true,
+    "secondary_constraint_source_locked": true,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false,
+    "velocity_hessian_rank_one": true
+  },
+  "classification": "C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_PASS_SCOPED",
+  "decision": "OPEN_FULL_FIXED_ACTION_RESTART_FOR_INDEPENDENT_DIRAC_DEGENERATE_CANDIDATE",
+  "gate": "C10.65s6fS",
+  "next_gate": "Freeze C10.65s6fT full projectable ADM embedding contract: embed the rank-one kinetic pair into the lapse/shift scalar block from one fixed action, derive source alignment rather than impose it, and require background equivalence, full Dirac DOF count, quadratic RTK pole/residue/remainder reproduction across multiple epochs, canonical regularity/static-limit and C9 radiative-naturalness checks before any soft-s retest.",
+  "nonclaims": [
+    "not a full RTK action",
+    "not background equivalence",
+    "not a soft-s cancellation",
+    "not radiative naturalness",
+    "not k=0.03 production permission",
+    "not spectra or likelihood evidence"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33068792420,
+    "repo_head_at_job_start": "47116222e53fb81f7651827b3f97fcf9083a589c",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fs-dirac-degenerate-candidate-restart.yml"
+  },
+  "schema": "RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "symbolic": {
+    "Q": "(-a*g + a*(Om2*a - g) + m2)/(Om2*m2 - g**2)",
+    "aligned_response": "-(Om2*a**2 - 2*a*g + m2)/(Om2*a**2*kappa*w**2 - Om2*m2 - 2*a*g*kappa*w**2 + g**2 + kappa*m2*w**2)",
+    "constraint_bracket": "Om2*a**2 - 2*a*g + m2",
+    "determinant": "-Om2*a**2*kappa*w**2 + Om2*m2 + 2*a*g*kappa*w**2 - g**2 - kappa*m2*w**2",
+    "velocity_hessian": "Matrix([[kappa, a*kappa], [a*kappa, a**2*kappa]])"
+  },
+  "target_path": "research/theory_targets/RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_TARGET_v1.json",
+  "threshold_changed": false,
+  "witness": {
+    "Omega2": 5,
+    "Q": 0.21428571428571427,
+    "a": 0.4,
+    "constraint_bracket": 3.0,
+    "g": 1,
+    "kappa": 2,
+    "m2": 3,
+    "omega_pole_squared": 2.3333333333333335
+  }
+}
