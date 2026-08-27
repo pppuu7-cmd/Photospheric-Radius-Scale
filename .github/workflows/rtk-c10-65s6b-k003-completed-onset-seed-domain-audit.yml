@@ -1,0 +1,59 @@
+name: RTK C10.65s6b k=0.03 completed onset seed domain audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['.github/workflows/rtk-c10-65s6b-k003-completed-onset-seed-domain-audit.yml']
+permissions: {contents: write}
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Install numeric dependency
+        run: python3 -m pip install --disable-pip-version-check mpmath==1.3.0
+      - name: Verify frozen target and parents
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s6b_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_TARGET_v1.json');a=L('research/theory_results/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json');b=L('research/theory_results/RTK_C10_65S5B_NEXT_K_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION';assert t['threshold_changed'] is False;assert t['domain']['new_k_Mpc_inv']==[0.03];assert t['domain']['regression_k_Mpc_inv']==[0.01]
+          assert a['classification']==t['parents']['C10.65s6a'];assert b['classification']==t['parents']['C10.65s5b'];print('C10_65S6B_FROZEN_PARENTS_VERIFIED')
+          PY
+      - name: Execute frozen detached algebraic audit
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s6b_k003_completed_onset_seed_domain_audit.py | tee s6b.log
+      - name: Add immutable provenance and checkpoint
+        if: always()
+        run: |
+          set -euo pipefail
+          p=research/theory_results/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1.json
+          [ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib,datetime
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s6b_head.txt').read_text().strip(),'workflow':'rtk-c10-65s6b-k003-completed-onset-seed-domain-audit.yml','analyzer':'research/shadow/rtk_c10_65s6b_k003_completed_onset_seed_domain_audit.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False,'s6a_parent_run_id':33031013387};p.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          m=d['maxima'];c=pathlib.Path('research/checkpoints/RTK_C10_65S6B_K003_COMPLETED_SEED_RESULT_2026-08-27T0242Z.md');c.write_text(f"# RTK C10.65s6b k=0.03 completed onset seed audit\n\nClassification: `{d['classification']}`. Anchor `k=0.03 Mpc^-1` uses the inherited pre-EFT phenomenological O(k^2) matching polynomial only as an explicitly uncertified extrapolation. Max normalized A/H/M residual: `{m['projector_constraint_normalized']:.17e}`; traceless residual: `{m['traceless_normalized']:.17e}`; regression error at k=0.01: `{m['regression_relative']:.17e}`; minimum absolute algebraic denominator: `{m['min_abs_denominator']:.17e}`. `|A2 k^2/J|={m['abs_A2_k2_over_J']:.17e}` and `k/Hc={m['k_over_Hc']:.17e}` remain measurement-only. No production feedback is certified by this gate.\n")
+          PY
+          cp "$p" /tmp/r;cp research/checkpoints/RTK_C10_65S6B_K003_COMPLETED_SEED_RESULT_2026-08-27T0242Z.md /tmp/c
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r "$p";cp /tmp/c research/checkpoints/RTK_C10_65S6B_K003_COMPLETED_SEED_RESULT_2026-08-27T0242Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S6B_K003_COMPLETED_SEED_RESULT_2026-08-27T0242Z.md;git commit -m 'Record C10.65s6b k=0.03 completed seed audit' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rtk-c10-65s6b-k003-completed-seed-audit
+          path: |
+            s6b.log
+            research/theory_results/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1.json
+      - name: Enforce classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1.json'));assert d['classification']=='C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED';assert d['threshold_changed'] is False;print(d['classification'])
+          PY
