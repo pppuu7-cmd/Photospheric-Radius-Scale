@@ -1,0 +1,1 @@
+Trigger corrected frozen C10.65s6fZ6 after decision-rule implementation fix. No target, physics, or threshold change.
