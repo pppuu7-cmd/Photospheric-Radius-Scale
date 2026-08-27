@@ -1,0 +1,46 @@
+{
+  "schema": "RTK_C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6e",
+  "created_utc": "2026-08-27T04:24:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s6d": "C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_PASS_SCOPED"
+  },
+  "purpose": "After s6d blocks k=0.03 production because the inherited omitted-order envelope produces order-unity carrier response, recover and independently source-lock the corrected RTK n=2 intrinsic-curvature UV theorem before attempting any stronger pre-EFT matching. This gate does not select M_U and does not invent O(k^4) matching coefficients.",
+  "archived_rtk_source": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C9_N2_SOFT_S_O4_CORRECTION_2026-08-23T2205Z.md",
+    "blob_sha": "1a72ffd7fd30068ae40ad2e45443c35773f922de"
+  },
+  "frozen_theorem": {
+    "cubic_symmetric_kernel": "16*((q1+q2+q3)^3-7*(q1+q2+q3)*(q1*q2+q1*q3+q2*q3)+12*q1*q2*q3)",
+    "elastic_soft_s_substitution": {"q1": "k^2", "q2": "k^2", "q3": "0"},
+    "expected_K3_s_over_k6": -96,
+    "intermediate_expected_coefficient": "-3*H^2*M_U^2/(128*pi*K*c_a)",
+    "deep_expected_coefficient_per_k": "-9*H^2*M_U^2/(256*pi*K*c_a*M_K)"
+  },
+  "prospective_checks": {
+    "s6d_parent_pass": true,
+    "s6d_production_k003_allowed_false": true,
+    "K3_s_exact": true,
+    "intermediate_soft_s_limit_exact": true,
+    "deep_soft_s_limit_exact": true,
+    "no_numeric_M_U_selected": true,
+    "no_eta_D_C_S_mapping_claimed": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_PASS_SCOPED",
+  "fail_classification": "C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_FAIL_SCOPED",
+  "decision_if_pass": "K003_PRODUCTION_REMAINS_BLOCKED_PENDING_FULL_CUBIC_CONSTRAINT_REDUCTION",
+  "next_if_pass": "C10.65s6f: derive the full cubic lapse/shift constraint reduction including perturbations of the state-dependent n=2 carrier coefficient, then test whether the reduced elastic q_s=0 cubic vertex cancels. Do not use the bare carrier to choose eta_D, eta_C, eta_S or M_U.",
+  "non_claims": [
+    "not a derivation of the true O(k^4) matching coefficients",
+    "not a numerical choice of M_U",
+    "not proof that the n=2 carrier is a viable UV completion",
+    "not k=0.03 production feedback",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
