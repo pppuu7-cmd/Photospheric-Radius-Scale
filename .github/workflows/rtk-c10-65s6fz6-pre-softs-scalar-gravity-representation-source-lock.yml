@@ -1,0 +1,79 @@
+name: RTK C10.65s6fZ6 pre-soft-s scalar-gravity representation source lock
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fz6_pre_softs_scalar_gravity_representation_source_lock.py'
+      - '.github/workflows/rtk-c10-65s6fz6-pre-softs-scalar-gravity-representation-source-lock.yml'
+      - '.github/rtk-c10-65s6fz6-pre-softs-scalar-gravity-representation-source-lock-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target and archival commit
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin 13acfdbc16d2f3117f1299b8552bcf7b1f996bd1
+          git cat-file -e 13acfdbc16d2f3117f1299b8552bcf7b1f996bd1^{commit}
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_TARGET_v1.json'))
+          assert t['gate']=='C10.65s6fZ6'
+          assert t['parent']=='C10_65S6FZ5_SYMMETRY_INTERFACE_UNDERDETERMINED_PASS_SCOPED'
+          assert t['source_scope']['pre_soft_s_archive_commit']=='13acfdbc16d2f3117f1299b8552bcf7b1f996bd1'
+          g=t['guards']
+          assert g['no_soft_s_retest'] and g['no_k003_production'] and g['no_new_charge_assignment'] and g['no_new_field_identification'] and g['no_new_parameter'] and g['no_claim_full_dirac_count'] and g['threshold_changed'] is False
+          PY
+      - name: Run frozen representation source-lock audit
+        run: python research/shadow/rtk_c10_65s6fz6_pre_softs_scalar_gravity_representation_source_lock.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA']})
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          Path('research/checkpoints/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_2026-08-27.md').write_text(f'''# RTK C10.65s6fZ6 — pre-soft-s scalar/gravity representation source lock
+
+Classification: **{r['classification']}**
+
+Frozen archive: `13acfdbc16d2f3117f1299b8552bcf7b1f996bd1`.
+
+Evidence counts: `{json.dumps(r['archive_evidence_counts'],sort_keys=True)}`.
+
+{r['finding']}
+
+This is a scoped source-identifiability result, not a no-go theorem. No field charge, neutrality rule, invariant-shift coupling, soft-s coefficient or k=0.03 production parameter was introduced.
+
+Next gate: {r['next_gate']}
+
+Provenance: frozen target commit `5313cc814314c2f2fb9a45c84b8a8b6145f53f9e`; run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.
+''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_RESULT_v1.json research/checkpoints/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fZ6 representation source-lock audit'
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
