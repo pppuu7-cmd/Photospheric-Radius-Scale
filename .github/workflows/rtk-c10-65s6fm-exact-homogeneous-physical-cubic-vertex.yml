@@ -1,0 +1,78 @@
+name: RTK C10.65s6fM exact homogeneous physical cubic vertex
+
+on:
+  push:
+    branches: [ rtk-class-build ]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fm_exact_homogeneous_physical_cubic_vertex.py'
+      - '.github/workflows/rtk-c10-65s6fm-exact-homogeneous-physical-cubic-vertex.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  derive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install symbolic dependency
+        run: python -m pip install --disable-pip-version-check sympy
+      - name: Execute frozen s6fM symbolic audit
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fm_exact_homogeneous_physical_cubic_vertex.py | tee /tmp/s6fm.log
+      - name: Add immutable provenance
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_RESULT_v1.json')
+          x=json.loads(p.read_text())
+          x['provenance']={
+            'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'repo_head_at_job_start': os.environ['GITHUB_SHA'],
+            'frozen_target_commit':'6f18eba3355291c4e912184e7efdd291e6a24810',
+            'workflow':'rtk-c10-65s6fm-exact-homogeneous-physical-cubic-vertex.yml',
+            'threshold_changed':False
+          }
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          ts=$(date -u +%Y-%m-%dT%H%MZ)
+          cpfile="research/checkpoints/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_CUBIC_${ts}.md"
+          python - <<'PY' > "$cpfile"
+          import json
+          from pathlib import Path
+          x=json.loads(Path('research/theory_results/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_RESULT_v1.json').read_text())
+          print('# RTK C10.65s6fM exact homogeneous physical cubic vertex')
+          print()
+          print('Classification:',x['classification'])
+          print()
+          print('Decision:',x['decision'])
+          print()
+          print('Frozen target commit: `6f18eba3355291c4e912184e7efdd291e6a24810`.')
+          print('No scientific threshold or candidate coefficient was changed after seeing the result.')
+          print()
+          print('Order guard: the s6fL2 quadratic-in-source exchange is an effective hard^4 object and was NOT added to the hard-hard-soft cubic source. The bare n=2 alpha6 term is already inside S_zeta0 and was counted exactly once.')
+          print()
+          print('Nonzero proof:',x['proof_of_nonzero'])
+          print()
+          print('Interpretation:',x['interpretation'])
+          print()
+          print('Next gate:',x['next_gate'])
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_RESULT_v1.json "$cpfile"
+          git commit -m "Record C10.65s6fM exact homogeneous cubic vertex result" || exit 0
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
