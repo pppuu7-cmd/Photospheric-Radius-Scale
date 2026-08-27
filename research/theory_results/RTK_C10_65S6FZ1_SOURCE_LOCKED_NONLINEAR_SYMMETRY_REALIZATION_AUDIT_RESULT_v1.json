@@ -1,0 +1,31 @@
+{
+  "archived_source_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+  "checks": {
+    "candidate_space_parent_exact": true,
+    "dirac_quadratic_scoped": true,
+    "parent_exact": true,
+    "target_present": true,
+    "u1_candidate_nonprojectable": true,
+    "u1_not_asserted_solution": true,
+    "u1_requires_full_constrained_action": true,
+    "u1n_full_coupled_rank_open": true,
+    "u1n_nonprojectable": true
+  },
+  "classification": "C10_65S6FZ1_NO_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_FOUND_PASS_SCOPED",
+  "finding": "No pre-soft-s archived construction is a source-locked projectable nonlinear realization of the s6fZ null-direction symmetry. The rank-one Dirac direction is explicitly quadratic/scoped; the U(1) direction is explicitly nonprojectable and retains an open full coupled constraint rank. Therefore the s6fZ symmetry class is nonempty mathematically but has no already-certified RTK action representative in the archive.",
+  "gate": "C10.65s6fZ1",
+  "next_gate": "C10.65s6fZ2: derive a minimal action-level projectable gauge realization template (field content and transformation law first, coefficients unfitted), then test whether it can embed the rank-one class while preserving one scalar DOF. Do not evaluate soft-s in that gate.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33089338197,
+    "repo_head_at_job_start": "21ef78428779bd6c00cc813a68ffc7e291d179cd",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz1-source-locked-nonlinear-symmetry-realization-audit.yml"
+  },
+  "realization_found": false,
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ1_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
