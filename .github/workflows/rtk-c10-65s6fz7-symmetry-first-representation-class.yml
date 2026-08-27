@@ -1,0 +1,60 @@
+name: RTK C10.65s6fZ7 symmetry-first representation class
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fz7-symmetry-first-representation-class-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen parent
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_RESULT_v1.json'
+          r=json.load(open(p))
+          assert r['classification']=='C10_65S6FZ6_NO_PRE_SOFTS_REPRESENTATION_FOUND_PASS_SCOPED'
+          assert r['production_k003_unblocked'] is False
+          assert r['soft_s_retest_allowed'] is False
+          PY
+      - name: Run frozen representation theorem
+        run: python research/shadow/rtk_c10_65s6fz7_symmetry_first_representation_class.py
+      - name: Verify classification
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C10_65S6FZ7_SYMMETRY_FIRST_REPRESENTATION_CLASS_RESULT_v1.json'
+          r=json.load(open(p))
+          assert r['classification']=='C10_65S6FZ7_REPRESENTATION_CLASS_EXISTS_PASS_SCOPED'
+          assert all(r['checks'].values())
+          assert r['production_k003_unblocked'] is False
+          assert r['soft_s_retest_allowed'] is False
+          PY
+      - name: Persist result provenance and checkpoint
+        run: |
+          RUN_ID='${{ github.run_id }}' RUN_ATTEMPT='${{ github.run_attempt }}' HEAD_SHA='${{ github.sha }}' python - <<'PY'
+          import json,os,datetime,pathlib
+          rp=pathlib.Path('research/theory_results/RTK_C10_65S6FZ7_SYMMETRY_FIRST_REPRESENTATION_CLASS_RESULT_v1.json')
+          r=json.loads(rp.read_text())
+          r['provenance']={'github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'trigger_head_sha':os.environ['HEAD_SHA'],'workflow':'rtk-c10-65s6fz7-symmetry-first-representation-class.yml','threshold_changed':False}
+          rp.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          d=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FZ7_REPRESENTATION_CLASS_RESULT_{d}.md')
+          cp.write_text('# RTK C10.65s6fZ7 checkpoint\n\nClassification: `'+r['classification']+'`.\n\nA nonempty prospective direct-product representation class exists: gravitational projectable U(1) acts through the invariant shift `Nbar_i=N_i-N D_i nu`; the new rank-one carrier fields are U(1)-neutral in this declared class; the internal null redundancy leaves `Phi=u1 phi+u2 chi` invariant; the two transformations commute; and `DperpPhi` built from `Nbar_i` is invariant under both.\n\nThis is not claimed to be inherited archival physics, a full nonlinear action, a complete Dirac-count result, or a soft-s cure. `k=0.03` production and soft-s retest remain blocked.\n\nNext: C10.65s6fZ8 full-action-template preregistration and same-action constraint/DOF audit.\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ7_SYMMETRY_FIRST_REPRESENTATION_CLASS_RESULT_v1.json research/checkpoints/
+          git commit -m 'Record C10.65s6fZ7 symmetry-first representation theorem'
+          git push origin HEAD:rtk-class-build
