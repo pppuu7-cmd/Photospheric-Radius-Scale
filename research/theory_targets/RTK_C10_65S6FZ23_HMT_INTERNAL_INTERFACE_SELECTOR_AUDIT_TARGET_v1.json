@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C10_65S6FZ23_HMT_INTERNAL_INTERFACE_SELECTOR_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ23",
+  "parent_required": "C10_65S6FZ22_CANDIDATE_PROTECTION_MECHANISMS_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "question": "Does the fixed projectable HMT U(1) symmetry/universal physical-metric construction plus GR/PPN recovery impose an exact action-level relation that uniquely reduces the surviving matter-interface family, independently of RTK response and soft-s data?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/html/1310.6666v4",
+      "role": "universal HMT physical-ADM matter interface and full PPN analysis"
+    },
+    {
+      "id": "arxiv:1206.1338",
+      "url": "https://arxiv.org/abs/1206.1338",
+      "role": "earlier projectable U(1)-invariant physical-metric prescription and solar-system constraint"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ23_EXACT_INTERNAL_HMT_INTERFACE_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ23_HMT_SYMMETRY_PPN_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ23_INTERNAL_INTERFACE_SELECTOR_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "EXACT_SELECTOR requires an explicit action-level identity from the audited HMT symmetry/physical-metric construction that fixes every scalar-response-relevant surviving interface parameter before any RTK response comparison. CONTINUOUS_FAMILY applies when the sources explicitly retain arbitrary interface constants and/or only observationally bounded regions while GR PPN recovery is achievable without a unique action-level relation. INCOMPLETE applies if the required source statements cannot be locked. Phenomenological choice of one allowed point is not a selector.",
+  "required_guards": [
+    "Z22 parent exact",
+    "projectable HMT source lock",
+    "distinguish U(1) invariance from uniqueness of coupling coefficients",
+    "distinguish unit normalization freedom from fixing a1,a2",
+    "do not treat GR/PPN recoverability as a unique action-level identity",
+    "do not select a representative point from an allowed region",
+    "no RTK pole/residue/remainder input",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "do not claim C9 closure",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
