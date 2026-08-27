@@ -49,22 +49,17 @@ jobs:
           r=json.loads(p.read_text())
           r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA']})
           p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
-          Path('research/checkpoints/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_2026-08-27.md').write_text(f'''# RTK C10.65s6fZ6 — pre-soft-s scalar/gravity representation source lock
-
-Classification: **{r['classification']}**
-
-Frozen archive: `13acfdbc16d2f3117f1299b8552bcf7b1f996bd1`.
-
-Evidence counts: `{json.dumps(r['archive_evidence_counts'],sort_keys=True)}`.
-
-{r['finding']}
-
-This is a scoped source-identifiability result, not a no-go theorem. No field charge, neutrality rule, invariant-shift coupling, soft-s coefficient or k=0.03 production parameter was introduced.
-
-Next gate: {r['next_gate']}
-
-Provenance: frozen target commit `5313cc814314c2f2fb9a45c84b8a8b6145f53f9e`; run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.
-''')
+          lines=[
+            '# RTK C10.65s6fZ6 — pre-soft-s scalar/gravity representation source lock','',
+            f"Classification: **{r['classification']}**",'',
+            'Frozen archive: `13acfdbc16d2f3117f1299b8552bcf7b1f996bd1`.','',
+            'Evidence counts: `'+json.dumps(r['archive_evidence_counts'],sort_keys=True)+'`.','',
+            r['finding'],'',
+            'This is a scoped source-identifiability result, not a no-go theorem. No field charge, neutrality rule, invariant-shift coupling, soft-s coefficient or k=0.03 production parameter was introduced.','',
+            'Next gate: '+r['next_gate'],'',
+            f"Provenance: frozen target commit `5313cc814314c2f2fb9a45c84b8a8b6145f53f9e`; run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.",''
+          ]
+          Path('research/checkpoints/RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_2026-08-27.md').write_text('\n'.join(lines))
           PY
       - name: Persist result and checkpoint
         run: |
