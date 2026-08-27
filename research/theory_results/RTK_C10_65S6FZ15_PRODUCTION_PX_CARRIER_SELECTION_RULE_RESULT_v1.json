@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "exact_G_over_K_equals_ca2": true,
+    "hmt_auxiliary_interface_kept_open": true,
+    "intrinsic_spatial_coefficient_fixed_by_production_G_along_background": true,
+    "intrinsic_temporal_coefficient_fixed_by_production_K_along_background": true,
+    "matter_source_interface_kept_open": true,
+    "no_old_kernel_matching": true,
+    "no_soft_s_or_k003": true,
+    "pinned_pre_soft_source_read": true,
+    "production_enthalpy_G_source_locked": true,
+    "production_kinetic_K_source_locked": true,
+    "production_px_principle_source_locked": true,
+    "production_x_a_minus3_source_locked": true,
+    "threshold_unchanged": true,
+    "z14_parent_exact": true
+  },
+  "classification": "C10_65S6FZ15_PX_INTRINSIC_CARRIER_SECTOR_FIXED_PARTIAL_PASS_SCOPED",
+  "exact_identities": {
+    "G_8piG": "2*Q*mu**2*x",
+    "G_over_K": "x/(Q*s**3)",
+    "G_over_K_minus_ca2": "0",
+    "K_8piG": "2*Q**2*mu**2*s**3",
+    "background_charge_scaling": "x=x0/a^3",
+    "c_a_squared": "x/(Q*s**3)"
+  },
+  "gate": "C10.65s6fZ15",
+  "interpretation": "The pre-soft-s production P(X)-type clock principle supplies a genuine independent selection rule for the intrinsic carrier derivative sector. Along the certified production background, G=rho+p and K=(rho+p)/c_a^2 obey G/K=c_a^2 exactly, so the temporal and ordinary spatial-gradient quadratic coefficients are fixed by the production background rather than by the previously observed finite-k RTK kernel. This removes the free c_Y ambiguity of Z14 at the intrinsic-carrier quadratic level. It does not yet make the HMT+Z7 completion match-ready because the action-derived matter/source numerator and the complete HMT auxiliary interface remain source-open, and no claim about the full nonlinear P(X) completion away from the background trajectory is made.",
+  "intrinsic_carrier_selection": {
+    "ratio": "G_phys/K_phys=c_a^2",
+    "selection_origin": "pre-soft-s production P(X)-type clock principle, not finite-k RTK matching",
+    "spatial_quadratic_coefficient": "G_phys=Mpl^2*G_8piG",
+    "temporal_quadratic_coefficient": "K_phys=Mpl^2*K_8piG"
+  },
+  "next_gate": "C10.65s6fZ16: source-lock the HMT matter/physical-metric coupling and the carrier A/prepotential interface for the P(X)-selected Z7 carrier. Only if one same action fixes those response interfaces may the unchanged Z12 match-ready audit be reopened; otherwise classify the remaining source-interface blocker without fitting to RTK observables.",
+  "nonclaims": [
+    "not a full HMT+carrier action",
+    "not full response numerator determination",
+    "not RTK pole/residue/remainder equivalence",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33115035096,
+    "threshold_changed": false,
+    "trigger_head_sha": "d376e3e0a788af954e146171d1f8a8ab913b66d7",
+    "workflow": "rtk-c10-65s6fz15-production-px-carrier-selection-rule.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ15_PRODUCTION_PX_CARRIER_SELECTION_RULE_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "still_open_same_action_interfaces": [
+    "matter/source coupling fixing response numerator",
+    "explicit carrier coupling to HMT A/prepotential beyond the already frozen invariant-shift representation",
+    "global nonlinear P(X) completion away from the production background trajectory if needed beyond quadratic order"
+  ],
+  "threshold_changed": false
+}
