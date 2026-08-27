@@ -1,0 +1,55 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "additional_shift_operator_basis_closed": true,
+    "all_scalar_shift_sources_explicit_or_immutably_referenced": false,
+    "alpha6_full_state_rule_explicit": true,
+    "candidate_branch_frozen_before_reduction": true,
+    "cubic_shift_source_explicit": false,
+    "gravitational_shift_sector_explicit": true,
+    "k003_production_remains_blocked": true,
+    "no_soft_s_driven_coefficient_fit": true,
+    "projectable_lapse_no_local_finite_k_mode": true,
+    "q_s_zero_taken_after_constraint_reduction": true,
+    "quadratic_shift_kernel_explicit": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_BLOCKED_ACTION_SOURCE_LOCK_INCOMPLETE_SCOPED",
+  "decision": "SOURCE_LOCK_INHERITED_NONLINEAR_SCALAR_SECTOR_BEFORE_ZERO_NONZERO_CLASSIFICATION",
+  "derived": {
+    "additional_shift_operator_basis_closed": true,
+    "alpha6_state_function_source_locked": true,
+    "gravitational_kinetic_sector_source_locked": true,
+    "inherited_scalar_cubic_shift_source_explicit": false,
+    "inherited_scalar_nonlinear_action_explicit_or_immutable_reference": false,
+    "inherited_scalar_sector_declaration": "inherited unchanged from the already-certified RTK lower-order stack; no new shift-dependent operator is introduced here",
+    "kernel_soft_scaling": "K_beta(q) proportional to q^4; exact q=0 is degenerate and must only be approached after the full source is reduced",
+    "quadratic_scalar_shift_kernel": "(Mstar^2/2)*(1-lambda_HL)*q^4 (overall Fourier/sign convention aside)"
+  },
+  "gate": "C10.65s6fF",
+  "interpretation": "s6fE closes the new gravitational/extra-shift operator choices, but its inherited scalar sector is specified only by a lower-order inheritance statement, with no explicit nonlinear action or immutable source reference for its cubic N_i dependence. Because the scalar shift is a constraint variable, silently setting that missing cubic source to zero would change the fixed action. The candidate reduction therefore remains scientifically blocked at a narrower, now explicit source-lock boundary.",
+  "next_gate": "C10.65s6fG: source-lock the exact inherited nonlinear scalar/P(X) action and derive/prove its cubic scalar-shift source; then rerun the unchanged s6fF ZERO/NONZERO target.",
+  "non_claims": [
+    "not an exact cancellation result",
+    "not a surviving-vertex result",
+    "not a no-go for MINIMAL_PROJECTABLE_N2_S1HALF_v1 after complete scalar-sector source lock",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33047044951,
+    "repo_head_at_job_start": "f8c4be3e01645356778c7d134d5b61d26928cc53",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6ff-conditional-full-shift-reduction.yml"
+  },
+  "schema": "RTK_C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_RESULT_v1",
+  "shift_reduction": {
+    "cubic_source": "NOT_FULLY_DEFINED_FROM_SOURCE_LOCKED_CANDIDATE",
+    "exact_cancellation_residual": "NOT_DEFINED",
+    "exchange_contribution": "NOT_CLASSIFIED",
+    "quadratic_kernel": "EXPOSED_FOR_GRAVITATIONAL_KINETIC_SECTOR",
+    "total_reduced_vertex": "NOT_CLASSIFIED"
+  },
+  "target": "research/theory_targets/RTK_C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_TARGET_v1.json",
+  "threshold_changed": false
+}
