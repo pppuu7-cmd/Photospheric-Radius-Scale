@@ -21,6 +21,10 @@ def textify(s):
     s=re.sub(r'<[^>]+>',' ',s)
     return re.sub(r'\s+',' ',html.unescape(s)).strip()
 
+def local_u1(text):
+    # arXiv HTML/MathJax rendering can serialize U(1) as U ( 1 ).
+    return bool(re.search(r'local\s+U\s*\(\s*1\s*\)',text,re.I))
+
 urls={
   'hmt_abs':'https://arxiv.org/abs/1007.2410',
   'hmt_html':'https://arxiv.org/html/1007.2410',
@@ -59,13 +63,12 @@ if source_complete:
     checks['hmt_title_exact']='General Covariance in Quantum Gravity at a Lifshitz Point' in hmt_abs
     # HMT full text explicitly states N(t) is constant on spatial slices and calls the minimal theory projectable.
     checks['hmt_projectable_lapse_explicit']=(
-        bool(re.search(r'N\s*\(t\)',hmt_html,re.I)) and
-        bool(re.search(r'projectable',hmt_html,re.I)) and
+        bool(re.search(r'N\s*\(\s*t\s*\)',hmt_html,re.I)) and
+        bool(re.search(r'\bprojectable\b',hmt_html,re.I)) and
         bool(re.search(r'constant along the spatial slices|only a function of time',hmt_html,re.I))
     )
     checks['hmt_local_u1_explicit']=(
-        bool(re.search(r'local\s+U\s*\(1\)',hmt_abs,re.I)) or
-        bool(re.search(r'U\s*\(1\).*Diff',hmt_html,re.I))
+        local_u1(hmt_abs) or bool(re.search(r'U\s*\(\s*1\s*\).*Diff',hmt_html,re.I))
     )
     checks['hmt_scalar_graviton_elimination_explicit']=bool(
         re.search(r'(eliminates|eliminate).*scalar graviton|scalar graviton.*(eliminated|eliminate)',hmt_abs,re.I)
@@ -73,7 +76,7 @@ if source_complete:
     checks['ww_title_exact']='Cosmology in nonrelativistic general covariant theory of gravity' in ww
     checks['ww_prepotential_explicit']=bool(re.search(r'Newtonian pre-?potential|Newtonian prepotential',ww,re.I))
     checks['ww_local_u1_gauge_field_A_explicit']=bool(
-        re.search(r'local\s+U\s*\(1\)',ww,re.I) and re.search(r'gauge field\s+A',ww,re.I)
+        local_u1(ww) and re.search(r'gauge field\s+\$?\s*A\b',ww,re.I)
     )
     checks['ww_constraint_equations_explicit']=bool(
         re.search(r'Hamiltonian.*super-?momentum constraints',ww,re.I) and
