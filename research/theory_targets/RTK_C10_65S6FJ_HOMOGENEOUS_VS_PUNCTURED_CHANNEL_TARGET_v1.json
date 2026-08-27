@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_TARGET_v1",
+  "gate": "C10.65s6fJ",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Decide from projectability and the fixed ADM variable map whether the exact spatial q=0 scalar-shift channel is the same dynamical object as the punctured finite-q limit. This gate does not compute the final homogeneous exchange amplitude; it determines the correct channel architecture before any s6fF ZERO/NONZERO rerun.",
+  "parents": {
+    "s6fG": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED",
+    "s6fI": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED"
+  },
+  "frozen_facts": {
+    "projectability": "N=N(t)",
+    "scalar_shift_map": "N_i(q)=i q_i beta(q)",
+    "finite_q_kernel": "K_beta(q) proportional to (1-lambda_HL) q^4",
+    "finite_q_linear_solution": "beta_1(q) proportional to dot(zeta_q)/q^2",
+    "punctured_limit": "direction dependent by s6fI"
+  },
+  "required_checks": [
+    "at exact q=0 the scalar gradient shift N_i vanishes identically for regular beta_0",
+    "K_beta(0)=0 and all local gradient-shift sources vanish at exact q=0",
+    "the finite-q beta solution has no regular q->0 coordinate limit for generic nonzero dot(zeta)",
+    "therefore beta_0 is not a local constraint variable continuously inherited from finite q",
+    "a spatially homogeneous zeta_0 rescales the FLRW scale factor and belongs to the homogeneous/background sector",
+    "projectable Hamiltonian information at q=0 is global rather than the finite-q local elliptic constraint",
+    "because s6fI is direction dependent, no unique punctured prescription can be promoted to the exact homogeneous channel"
+  ],
+  "outcome_policy": "PASS if the exact homogeneous channel is rigorously separated from the punctured finite-q channel. If they are proven identical despite s6fI, PASS with that explicit proof. Do not choose a direction-averaged or special-mu punctured limit post hoc.",
+  "forbidden": [
+    "identifying exact q=0 with mu=0, mu=1, or an angular average of the punctured limit",
+    "inventing a local projectable lapse Fourier mode",
+    "using k=0.03 production output",
+    "fitting any coefficient to restore continuity"
+  ],
+  "pass_separate_classification": "C10_65S6FJ_EXACT_HOMOGENEOUS_CHANNEL_SEPARATE_PASS_SCOPED",
+  "pass_identical_classification": "C10_65S6FJ_EXACT_HOMOGENEOUS_EQUALS_PUNCTURED_PASS_SCOPED",
+  "fail_classification": "C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_FAIL_SCOPED",
+  "next_if_separate": "C10.65s6fK: source-lock the exact homogeneous scalar action/global Hamiltonian constraint on MINIMAL_PROJECTABLE_N2_S1HALF_v1 and compute the spatial-q=0, nonzero-frequency virtual channel before revising/rerunning s6fF.",
+  "non_claims": [
+    "not final soft-s cancellation/survival",
+    "not a homogeneous propagator calculation yet",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ]
+}
