@@ -1,0 +1,62 @@
+{
+  "checks": {
+    "all_representative_six_derivative_weights_match": true,
+    "certified_kernel_retuning_invariance": true,
+    "exact_quadratic_preservation_kills_compensating_soft_response": true,
+    "generic_same_weight_retuning_with_zero_deltaQ_has_zero_soft_delta": true,
+    "n2_family_crosscheck_is_minus3": true,
+    "parent_s6fM_nonzero_locked": true,
+    "parent_s6fN_obstruction_pass_locked": true,
+    "six_derivative_soft_variation_is_minus3Q": true,
+    "six_derivative_weight_is_minus3": true,
+    "target_frozen_before_execution": true,
+    "threshold_unchanged": true,
+    "weight_rule_w_equals_3_minus_d": true,
+    "zero_quadratic_operator_has_zero_scaling_channel_soft_source": true
+  },
+  "classification": "C10_65S6FO_FIXED_DERIVATIVE_OPERATOR_CLASS_OBSTRUCTION_PASS_SCOPED",
+  "escape_routes_not_excluded": [
+    "mixed time-space derivative operators",
+    "operators with additional fields, compensators, or spurions",
+    "operators of a different homogeneous conformal weight accompanied by a separately re-certified quadratic sector",
+    "nonlocal structures",
+    "a new symmetry principle that correlates multiple sectors beyond this frozen class"
+  ],
+  "exact_relations": {
+    "d": 6,
+    "density_weight": "w=3-d",
+    "family_n2_weight": -3,
+    "family_weight": "1 - 2*n",
+    "preservation_limit": "0",
+    "retuning_change_at_fixed_quadratic_kernel": "0",
+    "soft_variation": "-3*DeltaQ2",
+    "w": -3,
+    "zero_quadratic_soft_source": "0"
+  },
+  "gate": "C10.65s6fO",
+  "nonclaims": [
+    "not a no-go for RTK as a whole",
+    "does not exclude mixed time-space derivative operators",
+    "does not exclude operators with extra fields, compensators, or spurions",
+    "does not exclude nonlocal structures",
+    "does not derive the true microscopic UV completion",
+    "does not unblock k=0.03 Mpc^-1 production",
+    "does not close radiative naturalness or same-full-action primordial/background closure"
+  ],
+  "parent_checkpoint_paths": [
+    "research/checkpoints/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_CUBIC_2026-08-27T0952Z.md",
+    "research/checkpoints/RTK_C10_65S6FN_HIGHER_SPATIAL_SOFT_OBSTRUCTION_2026-08-27T0954Z.md"
+  ],
+  "production_k003_unblocked": false,
+  "representative_operator_density_weights": {
+    "D_i R D^i R": -3,
+    "D_k R_ij D^k R^ij": -3,
+    "R Delta R": -3,
+    "R R_ij R^ij": -3,
+    "R^3": -3,
+    "R_i^j R_j^k R_k^i": -3
+  },
+  "scientific_statement": "Within the frozen local metric-only pure-spatial six-derivative class, constant-homogeneous soft response has universal weight -3.  Therefore any deformation that preserves the complete hard quadratic functional exactly also has identically zero change in this homogeneous soft cubic response.  The existing s6fM nonzero result cannot be cancelled by same-weight retuning without changing the certified quadratic sector.",
+  "target_path": "research/theory_targets/RTK_C10_65S6FO_FIXED_DERIVATIVE_OPERATOR_CLASS_OBSTRUCTION_TARGET_v1.json",
+  "threshold_changed": false
+}
