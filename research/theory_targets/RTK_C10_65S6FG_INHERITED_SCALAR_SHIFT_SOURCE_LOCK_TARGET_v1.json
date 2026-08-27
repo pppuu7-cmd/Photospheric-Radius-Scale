@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fG",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "s6fE": "C10_65S6FE_CANDIDATE_NONLINEAR_COMPLETION_BRANCH_CONTRACT_PASS_SCOPED",
+    "s6fF": "C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_BLOCKED_ACTION_SOURCE_LOCK_INCOMPLETE_SCOPED"
+  },
+  "archived_action_source": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md"
+  },
+  "purpose": "Source-lock the inherited unitary-gauge scalar/Khronon nonlinear action dependence relevant to the scalar shift. Determine exactly whether the inherited F(t,N) sector contributes any N_i source through cubic order, without fitting or modifying the s6fE candidate branch.",
+  "frozen_checks": {
+    "archived_action_exactly_identified": true,
+    "unitary_gauge_scalar_sector_is_F_t_N": true,
+    "F_has_no_shift_N_i_dependence": true,
+    "functional_shift_derivative_zero_exactly": true,
+    "cubic_scalar_shift_source_from_F_zero_exactly": true,
+    "no_new_action_coefficient_introduced": true,
+    "k003_production_remains_blocked": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED",
+  "interpretation_if_pass": "The inherited clock/scalar sector does not contribute a direct scalar-shift source because its unitary-gauge nonlinear dependence is F(t,N), with no N_i. The remaining s6fF obstruction is therefore confined to explicit cubic reduction of the already-frozen gravitational kinetic/geometry sector plus the alpha6 carrier, not to an unspecified scalar-shift coupling.",
+  "next_if_pass": "C10.65s6fH: derive the cubic scalar-shift source and reduced q_s->0 limit from the explicit MINIMAL_PROJECTABLE_N2_S1HALF_v1 gravitational kinetic/geometry sector; then rerun unchanged s6fF ZERO/NONZERO classification.",
+  "non_claims": [
+    "not a ZERO/NONZERO soft-s classification",
+    "not proof the candidate branch is unique",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ]
+}
