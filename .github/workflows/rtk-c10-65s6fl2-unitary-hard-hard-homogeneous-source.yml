@@ -1,0 +1,76 @@
+name: RTK C10.65s6fL2 unitary hard-hard homogeneous source
+
+on:
+  push:
+    branches: [ rtk-class-build ]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fl2_unitary_hard_hard_homogeneous_source.py'
+      - '.github/workflows/rtk-c10-65s6fl2-unitary-hard-hard-homogeneous-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  derive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install symbolic dependency
+        run: python -m pip install --disable-pip-version-check sympy
+      - name: Execute frozen s6fL2 derivation
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fl2_unitary_hard_hard_homogeneous_source.py | tee /tmp/s6fl2.log
+      - name: Add immutable provenance
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_RESULT_v1.json')
+          x=json.loads(p.read_text())
+          x['provenance']={
+            'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'repo_head_at_job_start': os.environ['GITHUB_SHA'],
+            'frozen_target_commit':'968487c5cafdc303c0a365d446b2cc76cf011f7a',
+            'workflow':'rtk-c10-65s6fl2-unitary-hard-hard-homogeneous-source.yml',
+            'threshold_changed':False
+          }
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          ts=$(date -u +%Y-%m-%dT%H%MZ)
+          cpfile="research/checkpoints/RTK_C10_65S6FL2_HOMOGENEOUS_SOURCE_${ts}.md"
+          python - <<'PY' > "$cpfile"
+          import json
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_RESULT_v1.json')
+          x=json.loads(p.read_text())
+          print('# RTK C10.65s6fL2 exact homogeneous hard-hard source')
+          print()
+          print('Classification:', x['classification'])
+          print()
+          print('Frozen target commit: `968487c5cafdc303c0a365d446b2cc76cf011f7a`. Criteria and outcome semantics were not changed after implementation.')
+          print()
+          print('The finite-k projectable/unitary hard constraints were reduced before the exact q=0 global block. S_zeta0 and S_n0 are persisted separately, as are gravity/R3/P-volume/bare-n2-alpha6 pieces. No punctured q->0 beta propagator, mu prescription, parameter fit, or k=0.03 production output is used.')
+          print()
+          print('Decision:', x['decision'])
+          print()
+          print('Next gate:', x['next_gate'])
+          print()
+          print('Important: this gate is not the final bare+contact+homogeneous-exchange soft-s ZERO/NONZERO classification and does not unblock k=0.03 production.')
+          PY
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_RESULT_v1.json "$cpfile"
+          git commit -m "Record C10.65s6fL2 homogeneous source result" || exit 0
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
