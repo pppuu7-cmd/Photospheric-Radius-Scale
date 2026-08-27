@@ -1,0 +1,4 @@
+C10.65s5g frozen widening-axis decision trigger
+created_utc=2026-08-27T01:00:00Z
+future_outputs_inspected=false
+threshold_changed=false
