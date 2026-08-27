@@ -1,0 +1,27 @@
+{
+  "schema": "RTK_C10_65S6FZ9_PRE_SOFTS_LOCAL_CONSTRAINT_SOURCE_LOCK_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ9",
+  "parent_required": "C10_65S6FZ8_MINIMAL_FULL_ACTION_EXTRA_SCALAR_OBSTRUCTION_PASS_SCOPED",
+  "question": "Does a pre-soft-s, independently motivated, projectable local gravitational constraint mechanism already exist in the pinned RTK archive and therefore qualify for a same-action restart without fitting to the observed soft-s failure?",
+  "historical_source_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+  "required_for_source_found": [
+    "explicit projectable gravitational architecture",
+    "explicit local auxiliary/gauge field beyond lapse and shift",
+    "explicit local constraint or gauge role for that field",
+    "source predates the present soft-s obstruction line"
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ9_PRE_SOFTS_LOCAL_CONSTRAINT_PARENT_FOUND_PASS_SCOPED",
+    "C10_65S6FZ9_NO_PRE_SOFTS_LOCAL_CONSTRAINT_PARENT_FOUND_PASS_SCOPED"
+  ],
+  "forbidden": [
+    "choosing a new multiplier coefficient from soft-s cancellation",
+    "reinterpreting a nonprojectable candidate as projectable",
+    "soft-s retest",
+    "k=0.03 production",
+    "claiming full coupled DOF closure from source-lock alone"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
