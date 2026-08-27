@@ -1,0 +1,46 @@
+{
+  "schema": "RTK_C10_65S6FE_CANDIDATE_NONLINEAR_COMPLETION_BRANCH_TARGET_v1",
+  "gate": "C10.65s6fE",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Define and audit one explicit nonlinear projectable ADM candidate branch before any soft-s reduction. This is a new hypothesis, not an inference from the certified linear stack.",
+  "parents": {
+    "C10.65s6fB": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_BLOCKED_INCOMPLETE_FIXED_ACTION_SCOPED",
+    "C10.65s6fC": "C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_PASS_SCOPED",
+    "C10.65s6fD": "C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_PASS_SCOPED"
+  },
+  "candidate_branch": {
+    "name": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+    "hypothesis_label": "NEW_NONLINEAR_COMPLETION_HYPOTHESIS",
+    "projectability": "N=N(t)",
+    "gravitational_kinetic_sector": "(Mstar^2/2) [K_ij K^ij - lambda_HL K^2]",
+    "intrinsic_IR_sector": "(Mstar^2/2) [xi R3 - 2 Lambda]",
+    "n2_carrier": "alpha6(X) D_i R3 D^i R3",
+    "alpha6_rule": "alpha6(X)=alpha6_0*(X/X0)^(1/2)",
+    "alpha6_log_slope_s1": "1/2",
+    "extra_shift_dependent_operator_basis": [],
+    "nu_Sigma2_rule": "nu(X) identically zero by candidate-branch definition",
+    "mixed_K_R_and_DK_operators": "absent by candidate-branch definition",
+    "matter_and_existing_scalar_sector": "inherited unchanged from the already-certified RTK lower-order stack; no new shift-dependent operator is introduced here"
+  },
+  "frozen_checks": {
+    "branch_explicitly_labeled_hypothesis": true,
+    "alpha6_full_state_rule_fixed_before_soft_s_output": true,
+    "uses_archived_s1_half_not_a_soft_s_fit": true,
+    "all_additional_shift_dependent_operator_coefficients_fixed_by_branch_definition": true,
+    "nu_X_not_fitted_to_soft_s_output": true,
+    "preserve_certified_background_and_quadratic_stack_by_construction": true,
+    "k003_production_remains_blocked": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S6FE_CANDIDATE_NONLINEAR_COMPLETION_BRANCH_CONTRACT_PASS_SCOPED",
+  "interpretation_if_pass": "One explicit minimal nonlinear candidate branch is frozen independently of the desired soft-s result. This only makes a conditional cubic reduction well-posed; it does not establish that nature chooses this branch.",
+  "next_if_pass": "C10.65s6fF: rerun the scalar-shift cubic reduction on MINIMAL_PROJECTABLE_N2_S1HALF_v1 and classify the exact reduced q_s=0 soft-s vertex without changing the s6fB zero/nonzero semantics.",
+  "non_claims": [
+    "not a unique RTK completion",
+    "not derived from linear data",
+    "not proof nu(X)=0 in nature",
+    "not soft-s cancellation",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ]
+}
