@@ -1,0 +1,1 @@
+trigger C10.65s6fZ19 unresolved interface consequence audit
