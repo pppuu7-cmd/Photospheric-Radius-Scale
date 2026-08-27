@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_SPURION_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fQ",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Audit whether the already source-locked RTK/U(1) action and symmetry stack contains an additional field, compensator, or spurion with an independently specified constant-homogeneous spatial-conformal transformation law that could evade the s6fO/s6fP operator-weight obstruction without inventing a new nonlinear completion.",
+  "parents": {
+    "C10.65s6fP": "C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_PASS_SCOPED"
+  },
+  "source_lock": {
+    "archive_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "u1_appendix": "research/methods/RTK_FORMULA_BIBLE_C8_U1_COMPLETION_APPENDIX.md",
+    "canonical_narrowing": "research/RTK_C8_U1_CANONICAL_NARROWING_2026-08-22.md"
+  },
+  "frozen_questions": [
+    "Is the Newtonian prepotential nu assigned an independent homogeneous spatial-conformal/Weyl weight in the source-locked stack?",
+    "Is the U(1) gauge field A assigned such a weight?",
+    "Is the RTK scalar Sigma assigned such a weight, rather than being U(1)-neutral?",
+    "Is there an explicit Weyl/anisotropic-Weyl symmetry or compensator rule already frozen in the cited action stack?",
+    "Can any existing U(1) transformation be reinterpreted as the required homogeneous spatial-conformal compensator without adding a new transformation law?"
+  ],
+  "frozen_decision_rule": {
+    "FOUND_SOURCE_LOCKED_COMPENSATOR": "Only if an explicit independent homogeneous spatial-conformal transformation law is present in the cited source-lock and can change the soft weight without redefining the frozen symmetry.",
+    "NO_SOURCE_LOCKED_COMPENSATOR": "If fields/gauge variables exist but only U(1)/Diff transformation laws are source-locked and no spatial-conformal compensator/spurion law is specified."
+  },
+  "pass_classifications": {
+    "FOUND_SOURCE_LOCKED_COMPENSATOR": "C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_FOUND_PASS_SCOPED",
+    "NO_SOURCE_LOCKED_COMPENSATOR": "C10_65S6FQ_NO_SOURCE_LOCKED_COMPENSATOR_PASS_SCOPED"
+  },
+  "forbidden": [
+    "assigning a new Weyl weight to nu, A, Sigma, N, or another field",
+    "choosing a compensator coupling to cancel the existing soft vertex",
+    "using k=0.03 production output",
+    "claiming absence from this audit is a no-go for all enlarged UV completions"
+  ],
+  "nonclaims": [
+    "not a no-go for an enlarged extra-field UV completion",
+    "not a radiative-naturalness theorem",
+    "not same-full-action primordial/background closure",
+    "does not unblock k=0.03 Mpc^-1 production"
+  ]
+}
