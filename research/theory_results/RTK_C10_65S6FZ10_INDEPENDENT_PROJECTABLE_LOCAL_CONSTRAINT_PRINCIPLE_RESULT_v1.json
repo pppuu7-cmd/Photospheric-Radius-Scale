@@ -1,0 +1,60 @@
+{
+  "checks": {
+    "external_source_fetch_complete": true,
+    "hmt_local_u1_explicit": true,
+    "hmt_projectable_lapse_explicit": true,
+    "hmt_scalar_graviton_elimination_explicit": true,
+    "hmt_title_exact": true,
+    "no_coefficient_or_rtk_action_selected": true,
+    "no_soft_s_or_k003": true,
+    "nonprojectable_not_reinterpreted": true,
+    "parent_exact": true,
+    "target_frozen_semantics": true,
+    "ww_constraint_equations_explicit": true,
+    "ww_local_u1_gauge_field_A_explicit": false,
+    "ww_prepotential_explicit": true,
+    "ww_title_exact": true
+  },
+  "classification": "C10_65S6FZ10_NO_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_FOUND_PASS_SCOPED",
+  "gate": "C10.65s6fZ10",
+  "interpretation": "The frozen external literature audit did not establish every required projectable local-constraint fact. No new RTK multiplier action is licensed by this gate.",
+  "next_gate": "Keep s6fT blocked; improve or replace the independent projectable constraint principle without using soft-s.",
+  "nonclaims": [
+    "not a full RTK completion",
+    "not full coupled Dirac closure",
+    "not radiative naturalness",
+    "not background equivalence",
+    "not a soft-s result",
+    "not a k=0.03 production result"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33108711781,
+    "threshold_changed": false,
+    "trigger_head_sha": "a21fc57cb8c0a8fe67bff826cb85ebcda1c4ce34",
+    "workflow": "rtk-c10-65s6fz10-independent-projectable-local-constraint-principle.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_errors": {},
+  "source_lock": {
+    "HMT_2010": {
+      "arxiv": "1007.2410",
+      "nonclaim": "not yet coupled to the frozen RTK Z7 carrier and not an RTK action",
+      "role": "independent projectable local-U1 gravitational constraint/gauge principle"
+    },
+    "WANG_WU_2010": {
+      "arxiv": "1009.2089",
+      "nonclaim": "cosmology of the literature architecture is not RTK background equivalence",
+      "role": "independent source for Newtonian prepotential, local U1 gauge field A, and explicit constraint/equation structure"
+    }
+  },
+  "source_urls": {
+    "hmt_abs": "https://arxiv.org/abs/1007.2410",
+    "hmt_html": "https://arxiv.org/html/1007.2410",
+    "ww_abs": "https://arxiv.org/abs/1009.2089"
+  },
+  "threshold_changed": false
+}
