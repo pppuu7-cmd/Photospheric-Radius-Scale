@@ -1,0 +1,54 @@
+{
+  "schema": "RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_TARGET_v1",
+  "gate": "C10.65s6c",
+  "created_utc": "2026-08-27T03:50:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s6b": "C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED",
+    "C10.65s5c": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED"
+  },
+  "purpose": "Before any k=0.03 production feedback, propagate exactly the same preregistered dimensionless omitted-order matching stress envelope used by C10.65s5c. At the tested anchor only, use eta_D, eta_C, eta_S in {-1,0,+1}, with A2_effective=A2*(1+eta_D), C2_effective=C2*(1+eta_C), and S_ur_effective=S_ur0*(1+eta_S). This is a pointwise order-unity stress-test envelope, not a probability distribution or a UV-derived error bar. No response-size acceptance threshold is introduced after observing k=0.03 behavior.",
+  "domain": {
+    "k_Mpc_inv": 0.03,
+    "eta_values": [-1.0, 0.0, 1.0],
+    "cartesian_point_count": 27,
+    "pointwise_parameterization": {
+      "A2_effective": "A2*(1+eta_D)",
+      "C2_effective": "C2*(1+eta_C)",
+      "S_ur_effective": "S_ur0*(1+eta_S)"
+    }
+  },
+  "prospective_checks": {
+    "baseline_reproduces_s6b_relative_max": 1e-12,
+    "all_27_points_finite": true,
+    "projector_constraint_normalized_residual_max": 1e-20,
+    "physical_traceless_normalized_residual_max": 1e-20,
+    "all_four_algebraic_denominators_nonzero": true,
+    "no_algebraic_denominator_sign_flip_relative_to_baseline": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "historical_CLASS_metric_not_consumed": true,
+    "threshold_changed": false
+  },
+  "measurement_only": {
+    "max_relative_response": ["psi_pref", "phi_pref", "B_pref", "Psi_N", "Phi_N", "V_N", "delta_b", "delta_g", "theta_b", "shear_ur"],
+    "extremal_points": "Record which envelope coordinates maximize each response. No response-size pass threshold is introduced in this gate."
+  },
+  "pass_classification": "C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
+  "fail_classification": "C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_MAP_FAIL_SCOPED",
+  "interpretation_if_pass": "Across the inherited preregistered 27-point order-unity pointwise omitted-order stress envelope at k=0.03, the completed onset algebraic system remains finite and does not cross an algebraic denominator sign change. The measured response magnitudes quantify sensitivity but are not themselves a validation threshold or UV uncertainty distribution.",
+  "next_if_pass": "Use only the completed s6c response map to freeze a separate prospective C10.65s6d branch-selection/architecture gate before any k=0.03 production feedback. If key metric/carrier responses are order-unity or larger, do not promote k=0.03 to production without stronger UV/pre-EFT matching input. If a bounded multibranch canary remains scientifically defensible, freeze its branches before production execution.",
+  "non_claims": [
+    "not a probability distribution for omitted terms",
+    "not a UV-derived error bar",
+    "not proof that true higher-order matching terms lie in this envelope",
+    "not proof that omitted higher-order terms are negligible",
+    "not production feedback at k=0.03",
+    "not finite-time stability at k=0.03",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
