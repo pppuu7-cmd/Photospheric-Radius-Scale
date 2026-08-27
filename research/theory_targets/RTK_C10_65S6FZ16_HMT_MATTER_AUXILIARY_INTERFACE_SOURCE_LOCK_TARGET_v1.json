@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65S6FZ16_HMT_MATTER_AUXILIARY_INTERFACE_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fZ16",
+  "parent_required": "C10_65S6FZ15_PX_INTRINSIC_CARRIER_SECTOR_FIXED_PARTIAL_PASS_SCOPED",
+  "question": "Does an independently published projectable HMT/U(1) matter-coupling principle source-lock the physical matter/source and A/Newtonian-prepotential interfaces strongly enough to make the P(X)-selected Z7 carrier response unique, without using the already observed RTK finite-k or soft-s results?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/abs/1310.6666",
+      "role": "universal gravity-matter coupling in Hořava-Lifshitz gravity with extra U(1), explicitly including projectable case"
+    },
+    {
+      "id": "CPC_2024_covariant_HL_review_interface",
+      "url": "https://cpc.ihep.ac.cn/article/doi/10.1088/1674-1137/ad873d",
+      "role": "explicit projectable covariant-HL matter action written with physical ADM variables and A/Newtonian-prepotential context"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ16_HMT_UNIVERSAL_MATTER_INTERFACE_CLASS_FOUND_COEFFICIENTS_UNFIXED_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ16_NO_SOURCE_LOCKED_HMT_MATTER_AUXILIARY_INTERFACE_BLOCKED_SCOPED",
+    "C10_65S6FZ16_UNIQUE_HMT_MATTER_AUXILIARY_INTERFACE_FIXED_PASS_SCOPED"
+  ],
+  "decision_rule": "UNIQUE_PASS requires one source-locked projectable HMT/U(1) matter action whose physical ADM map and A/prepotential dependence uniquely determine the response/source interface with no unfixed coupling parameters relevant to the linear scalar response. PARTIAL_PASS applies if an independent projectable universal-coupling class exists and explicitly uses the HMT auxiliary structure, but leaves a continuous coupling family so the RTK numerator/interface is not unique. BLOCKED applies if no such projectable source-locked class is found.",
+  "required_guards": [
+    "Z15 parent exact",
+    "sources predate current RTK soft-s obstruction",
+    "no coefficients selected from RTK pole/residue/remainder",
+    "no coefficients selected from failed soft-s observable",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "do not promote a coupling class to a unique RTK action",
+    "no C9 naturalness claim"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
