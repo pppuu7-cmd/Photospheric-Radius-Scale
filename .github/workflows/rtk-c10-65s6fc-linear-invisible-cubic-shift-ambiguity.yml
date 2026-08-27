@@ -1,0 +1,71 @@
+name: RTK C10.65s6fC linear-invisible cubic shift ambiguity
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fc_linear_invisible_cubic_shift_ambiguity.py'
+      - '.github/workflows/rtk-c10-65s6fc-linear-invisible-cubic-shift-ambiguity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute frozen ambiguity audit
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fc_linear_invisible_cubic_shift_ambiguity.py | tee /tmp/s6fc.txt
+          grep -q 'C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_PASS_SCOPED' /tmp/s6fc.txt
+      - name: Add immutable provenance
+        env:
+          RUN_ID: ${{ github.run_id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_RESULT_v1.json')
+          d=json.loads(p.read_text())
+          d['provenance']={'github_actions_run_id':int(os.environ['RUN_ID']),'repo_head_at_job_start':os.environ['HEAD_SHA'],'workflow':'rtk-c10-65s6fc-linear-invisible-cubic-shift-ambiguity.yml','threshold_changed':False}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          mkdir -p research/checkpoints
+          cat > research/checkpoints/RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_RESULT_2026-08-27.md <<'EOF'
+          # RTK C10.65s6fC checkpoint
+
+          C10.65s6fC establishes a scoped identifiability obstruction: a projectable local deformation
+
+          `DeltaS_nu = integral N sqrt(gamma) nu(X) Sigma_ij Sigma^ij`
+
+          with `Sigma_ij=K_ij-K gamma_ij/3`, `Sigma_ij[FLRW]=0`, `nu(X0)=0`, and otherwise free `nu_X(X0)` is invisible on the FLRW background and at quadratic/linear order, yet modifies the cubic scalar-shift source.
+
+          For a scalar Fourier shift beta with k along z, the traceless Hessian eigenvalues are `(-1/3,-1/3,2/3) k^2 beta`, hence
+
+          `deltaSigma_ij deltaSigma^ij = (2/3) k^4 beta^2`.
+
+          Therefore the leading cubic deformation is proportional to `(2/3) nu_X(X0) deltaX k^4 beta^2`, and its shift source is proportional to `(4/3) nu_X(X0) deltaX k^4 beta`.
+
+          Consequence: already-certified background and linear/quadratic RTK data cannot uniquely determine the cubic shift reduction required by s6fB. A new nonlinear UV/symmetry principle is required; `nu_X` must not be fitted to obtain the desired soft-s cancellation. k=0.03 production remains blocked.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_RESULT_v1.json research/checkpoints/RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_RESULT_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fC cubic shift ambiguity theorem'
+            git push origin HEAD:rtk-class-build
+          fi
