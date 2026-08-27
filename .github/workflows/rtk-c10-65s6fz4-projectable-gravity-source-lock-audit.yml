@@ -1,0 +1,62 @@
+name: RTK C10.65s6fZ4 projectable gravity source-lock audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fz4_projectable_gravity_source_lock_audit.py'
+      - '.github/workflows/rtk-c10-65s6fz4-projectable-gravity-source-lock-audit.yml'
+      - '.github/rtk-c10-65s6fz4-projectable-gravity-source-lock-audit-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_TARGET_v1.json'))
+          assert t['gate']=='C10.65s6fZ4'
+          assert t['parent']=='C10_65S6FZ3_FULL_COUPLED_CONSTRAINT_NON_IDENTIFIABLE_PASS_SCOPED'
+          g=t['guards']
+          assert g['no_soft_s_retest'] and g['no_k003_production'] and g['no_parameter_fit'] and g['no_new_gravity_coefficient']
+          assert g['no_claim_full_combined_dof_count'] and g['threshold_changed'] is False
+          PY
+      - name: Run frozen source audit
+        run: python research/shadow/rtk_c10_65s6fz4_projectable_gravity_source_lock_audit.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA']})
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          Path('research/checkpoints/RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_2026-08-27.md').write_text(f'''# RTK C10.65s6fZ4 — projectable gravitational-parent source-lock audit\n\nClassification: **{r['classification']}**\n\nA genuine independently motivated projectable-U(1) architecture predates the present soft-s problem and carries scoped C9 projectability/all-q DOF certificates. This is useful: the gravitational side is not an arbitrary post-failure invention.\n\nHowever, the audited archive still does not contain one full nonlinear projectable ADM action that simultaneously realizes the new s6fZ2 field-space null symmetry and fixes its same-action lapse/shift/source interface. Historical s6fT and s6fZ1 therefore remain binding. The projectable-U(1) archive is a **partial gravitational parent**, not a certified combined embedding.\n\nNo parameter was selected from soft-s or k=0.03 output. No soft-s retest or production was run. Thresholds changed: false.\n\nNext gate: {r['next_gate']}\n\nProvenance: frozen target commit `f2fd6ddb55058d3ab768d0dc948c693e4e736737`; run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`.\n''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fZ4 projectable gravity source-lock audit'
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
