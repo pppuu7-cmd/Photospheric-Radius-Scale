@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_65S6FZ19_UNRESOLVED_INTERFACE_CONSEQUENCE_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ19",
+  "parent_required": "C10_65S6FZ18_SOURCE_LOCKED_PRE_SOFT_SET_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PASS_SCOPED",
+  "question": "Which background/quadratic statements remain source-locked over the full unresolved HMT universal-matter interface family, and can RTK pole/residue/remainder equivalence be certified without selecting a representative interface?",
+  "required_parents": {
+    "z12": "C10_65S6FZ12_BACKGROUND_QUADRATIC_UNDERSPECIFIED_BLOCKED_SCOPED",
+    "z15": "C10_65S6FZ15_PX_INTRINSIC_CARRIER_SECTOR_FIXED_PARTIAL_PASS_SCOPED",
+    "z16": "C10_65S6FZ16_HMT_UNIVERSAL_MATTER_INTERFACE_CLASS_FOUND_COEFFICIENTS_UNFIXED_PARTIAL_PASS_SCOPED",
+    "z17": "C10_65S6FZ17_PPN_GR_LIMIT_LEAVES_CONTINUOUS_HMT_MATTER_FAMILY_PARTIAL_PASS_SCOPED"
+  },
+  "allowed_classifications": [
+    "C10_65S6FZ19_FULL_QUADRATIC_RESPONSE_INTERFACE_INVARIANT_PASS_SCOPED",
+    "C10_65S6FZ19_INTRINSIC_SECTOR_FIXED_FULL_RESPONSE_INTERFACE_DEPENDENT_PASS_SCOPED",
+    "C10_65S6FZ19_CONSEQUENCE_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "FULL_INVARIANT requires source-lock of the same-action background carrier, finite-k denominator/kernel, and response source/numerator over the entire surviving universal-matter family. INTERFACE_DEPENDENT applies if independently fixed intrinsic P(X) identities survive but at least one scalar-response observable required by the old RTK certificate (in particular residue/source normalization, or the denominator through auxiliary couplings) changes with an unfixed interface parameter. No representative coupling point may be chosen.",
+  "exact_witness": "For a fixed inverse denominator D(z) and two allowed source normalizations c1 != c2, R_c(z)=c^2/D(z). The finite pole can remain identical while the residue scales as c^2. Thus unresolved source normalization alone is sufficient to prevent unique pole+residue+remainder equivalence certification.",
+  "required_guards": [
+    "Z18 parent exact",
+    "Z12 Z15 Z16 Z17 classifications exact",
+    "preserve Z15 intrinsic G/K=c_a^2 selection",
+    "do not promote intrinsic carrier coefficients to a full response source map",
+    "do not choose a representative HMT matter-interface point",
+    "no old RTK pole/residue/remainder matching",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
