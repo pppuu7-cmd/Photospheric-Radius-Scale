@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_65S6FX_INDEPENDENT_ACTION_SELECTION_REQUIREMENT_TARGET_v1",
+  "gate": "C10.65s6fX",
+  "title": "Independent action-selection admissibility requirement after rank-one non-identifiability",
+  "parents": {
+    "s6fV": "C10_65S6FV_RANK_ONE_FULL_EMBEDDING_NON_IDENTIFIABLE_PASS_SCOPED",
+    "s6fW": "C10_65S6FW_NO_INDEPENDENT_PRE_SOFTS_EMBEDDING_PRINCIPLE_FOUND_PASS_SCOPED",
+    "s6fT_embedding_ready_required_false": true
+  },
+  "question": "Can the currently source-locked RTK repository select a unique full projectable rank-one nonlinear action without using the already observed soft-s obstruction as fitting data?",
+  "admissibility_requirements": [
+    "candidate full action is written explicitly before any new soft-s evaluation",
+    "field map from rank-one variables to ADM/clock variables is explicit",
+    "lapse and shift dependence are derived from the same action",
+    "symmetric potential/algebraic matrix is fixed independently of the failed soft-s observable",
+    "source direction is derived from the same action rather than chosen by response fitting",
+    "background coefficient functions are fixed by an independent symmetry, microscopic construction, or already certified lower-order physics",
+    "full nonlinear action is sufficient for a complete Dirac constraint count",
+    "candidate must subsequently re-certify background equivalence, quadratic pole/residue/remainder, static/canonical regularity, and C9 radiative naturalness before any soft-s retest"
+  ],
+  "decision_rule": {
+    "ACTION_SELECTION_READY_PASS_SCOPED": "Only if a repository source predating the new soft-s retest supplies every admissibility item without fitting to s6fM or later soft-s results.",
+    "NO_ADMISSIBLE_INDEPENDENT_ACTION_SELECTION_BLOCKED_SCOPED": "If one or more required action-selection data remain unspecified, retain the s6fT blocker and do not invent a preferred nonlinear action."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_fit_to_s6fM_or_later_soft_s": true,
+    "no_new_numeric_threshold": true,
+    "threshold_changed": false
+  },
+  "scope": "Action-selection identifiability/admissibility only. A blocked result is not a no-go for RTK or rank-one completions; it means the present source-locked theory does not uniquely select one nonlinear action."
+}
