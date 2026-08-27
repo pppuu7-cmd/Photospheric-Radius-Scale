@@ -1,0 +1,69 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "A_definition": true,
+    "D_definition": true,
+    "Kphys_equals_2D": true,
+    "background_zeta2_cancel": true,
+    "background_zn_cancel": true,
+    "fixed_action_D_equals_Mstar2_MK2": true,
+    "fixed_scalar_action_source_locked": true,
+    "homogeneous_L2_exact": true,
+    "k003_production_remains_blocked": true,
+    "lapse_solution_exact_when_den_nonzero": true,
+    "no_finite_q_momentum_constraint_imported": true,
+    "no_homogeneous_shift_added": true,
+    "punctured_not_assumed_equal": true,
+    "ratio_exposed": true,
+    "reduced_Q_exact": true,
+    "s6fJ_parent": true,
+    "target_frozen": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_PASS_SCOPED",
+  "decision": "HOMOGENEOUS_GLOBAL_LAPSE_BLOCK_SOURCE_LOCKED_AND_NOT_EQUAL_TO_PUNCTURED_FINITE_Q_BLOCK",
+  "derivation": {
+    "A": "(3/2) Mstar^2 (1-3 lambda_HL)",
+    "D": "X P_X+2 X^2 P_XX = K_phys/2",
+    "Delta_N": "A H^2+D",
+    "Delta_N_production": "-Mstar**2*(9*H**2*lambda_HL - 3*H**2 - 2*M_K**2)/2",
+    "L2_hom_over_a3": "A dot(zeta_0)^2-2 A H n_0 dot(zeta_0)+(A H^2+D)n_0^2",
+    "Q_hom": "A D/(A H^2+D)",
+    "Q_hom_production": "3*Mstar**2*X*(P_X + 2*P_XX*X)*(3*lambda_HL - 1)/(9*H**2*Mstar**2*lambda_HL - 3*H**2*Mstar**2 - 2*P_X*X - 4*P_XX*X**2)",
+    "Qhom_over_Qpunctured": "A H^2/(A H^2+D)",
+    "background_equations": {
+      "U0": "A H^2+(2/3)A Hdot",
+      "U1": "A H^2",
+      "zeta2_after_ibp_residual": "0",
+      "zeta_n_residual": "0"
+    },
+    "difference": "-D^2/[H^2(A H^2+D)]",
+    "n0_solution": "n_0=A H dot(zeta_0)/(A H^2+D), provided Delta_N != 0",
+    "production_D": "Mstar^2 M_K^2",
+    "punctured_finite_y_Q": "D/H^2",
+    "singular_surface": "Delta_N=0 is an explicit homogeneous/global degeneracy surface; no parameter is adjusted to avoid it"
+  },
+  "gate": "C10.65s6fK",
+  "interpretation": "The exact q=0 sector has its own global-lapse algebraic denominator Delta_N=A H^2+D and, away from that degeneracy surface, reduced homogeneous kinetic coefficient Q_hom=A D/Delta_N. It is not the finite-q coefficient D/H^2. This independently confirms the discontinuity implied by s6fJ. Because q=0 is a global/background sector, the sign of Q_hom is not promoted here to a local propagating ghost criterion.",
+  "next_gate": "C10.65s6fL: derive the hard-hard-homogeneous cubic source for (zeta_0,n_0) from the same fixed action, including the n=2 alpha6(X) carrier and hard-mode shift already reduced at finite k, then compute the exact q=0 virtual exchange or prove the global constraint removes it.",
+  "non_claims": [
+    "not final soft-s cancellation/survival",
+    "not a local homogeneous ghost theorem",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33052025105,
+    "repo_head_at_job_start": "da3a74cb471253bbf35caf4ddb0b1ad5434591b7",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fk-homogeneous-quadratic-channel.yml"
+  },
+  "schema": "RTK_C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_RESULT_v1",
+  "source_lock": {
+    "P_X_action": "2 mu_K^2/lambda_D * [1-sqrt(1-lambda_D (sqrt(X_U/X_star)-1)^2)]",
+    "fixed_scalar_action": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "homogeneous_gradient_carriers": "R3=D_iR3=D_iTheta_U=0, so alpha6 and C(X)(DTheta)^2 vanish in the homogeneous quadratic block"
+  },
+  "target": "research/theory_targets/RTK_C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_TARGET_v1.json",
+  "threshold_changed": false
+}
