@@ -1,0 +1,54 @@
+{
+  "schema": "RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_TARGET_v1",
+  "gate": "C10.65s6fI",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Complete the cubic scalar-shift-dependent ADM kinetic reduction on the frozen projectable candidate and test whether its punctured q->0 hard-hard-soft limit is unique or direction dependent. Both outcomes are valid scientific PASS outcomes. Do not yet force the exact homogeneous q=0 channel to equal the punctured limit.",
+  "parents": {
+    "s6fG": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED",
+    "s6fH": "C10_65S6FH_SOFT_SHIFT_REGULARITY_PASS_SCOPED"
+  },
+  "frozen_action": {
+    "metric": "gamma_ij=a^2 exp(2 zeta) delta_ij",
+    "shift": "N_i=partial_i beta",
+    "kinetic": "(Mstar^2/2) sqrt(gamma) [K_ij K^ij-lambda_HL K^2]",
+    "projectability": "N=N(t)",
+    "direct_F_shift_source": "0 exactly by s6fG",
+    "extra_shift_operators": "none"
+  },
+  "required_derivation": [
+    "expand the full shift-dependent kinetic action through cubic order",
+    "include both beta-linear zeta^2 and beta^2 zeta terms",
+    "solve beta at linear order from the exact quadratic kernel",
+    "substitute beta_1 into the cubic action (stationary-action reduction)",
+    "evaluate hard-hard-soft kinematics k1=k, k2=-k-q, k3=q with frequency conservation before q->0",
+    "derive the exact punctured soft coefficient as a function of mu=hat(k).hat(q)",
+    "derive the mu^2 coefficient and test whether it can vanish on the frozen n=2 completed dispersion without parameter fitting"
+  ],
+  "dispersion": "omega(k)=c_a k sqrt[(1+k^4/M_U^4)/(1+k^2/M_K^2)]",
+  "dispersion_log_slope": "n_g=d ln omega/d ln k=1+2 k^4/(M_U^4+k^4)-k^2/(M_K^2+k^2)",
+  "outcome_policy": {
+    "unique": "PASS_SCOPED_UNIQUE_PUNCTURED_LIMIT if the mu dependence cancels exactly from the complete shift-dependent ADM cubic reduction",
+    "direction_dependent": "PASS_SCOPED_DIRECTION_DEPENDENT if a nonzero mu dependence survives; this is not a failure but requires a separate exact-homogeneous-vs-punctured channel prescription before rerunning s6fF ZERO/NONZERO semantics"
+  },
+  "frozen_checks": {
+    "all_beta_linear_and_beta_squared_cubic_terms_included": true,
+    "linear_beta_solution_from_same_action": true,
+    "q_zero_only_after_reduction": true,
+    "no_alpha6_or_scale_refit": true,
+    "projectable_homogeneous_mode_not_silently_identified_with_punctured_limit": true,
+    "k003_production_remains_blocked": true,
+    "threshold_changed": false
+  },
+  "pass_unique_classification": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_UNIQUE_LIMIT_PASS_SCOPED",
+  "pass_direction_dependent_classification": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED",
+  "fail_classification": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_AUDIT_FAIL_SCOPED",
+  "next_if_direction_dependent": "C10.65s6fJ: derive the exact homogeneous q=0 projectable channel and decide whether elastic COM uses the homogeneous constraint sector or the punctured q->0 reduced kernel; do not rerun s6fF until this channel-selection theorem is fixed.",
+  "next_if_unique": "Combine bare n=2, alpha6(X) state-function and unique shift-reduction pieces and rerun unchanged s6fF ZERO/NONZERO classification.",
+  "non_claims": [
+    "not final cancellation/survival of the n=2 soft-s vertex",
+    "not a choice of M_U or M_K",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ]
+}
