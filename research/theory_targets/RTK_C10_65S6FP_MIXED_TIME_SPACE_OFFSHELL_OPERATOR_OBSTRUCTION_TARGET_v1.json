@@ -1,0 +1,59 @@
+{
+  "schema": "RTK_C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_TARGET_v1",
+  "gate": "C10.65s6fP",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "purpose": "Test the local metric-only mixed time-space derivative escape route left open by C10.65s6fO. Work off shell in the hard quadratic functional: do not impose the hard-mode dispersion relation to identify otherwise independent omega^r k^s structures. Derive the constant-homogeneous spatial-conformal weight of local projectable ADM quadratic monomials built from K_i^j, R_i^j and spatial covariant derivatives, and determine whether an exact-preserving retuning of the complete hard quadratic functional can change the homogeneous hard-hard-soft cubic response.",
+  "parents": {
+    "C10.65s6fM": "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_NONZERO_PASS_SCOPED",
+    "C10.65s6fN": "C10_65S6FN_HIGHER_SPATIAL_CARRIER_OBSTRUCTION_PASS_SCOPED",
+    "C10.65s6fO": "C10_65S6FO_FIXED_DERIVATIVE_OPERATOR_CLASS_OBSTRUCTION_PASS_SCOPED"
+  },
+  "frozen_domain": {
+    "projectable": true,
+    "local": true,
+    "metric_only": true,
+    "building_blocks": ["K_i^j", "R_i^j", "D_i"],
+    "homogeneous_soft_mode": "constant spatial conformal zeta_0",
+    "hard_quadratic_analysis": "off_shell",
+    "forbidden_shortcut": "never use omega=omega(k) to cancel independent quadratic monomials",
+    "no_new_fields": true,
+    "no_nonlocal_operators": true,
+    "no_explicit_spatial_conformal_compensator": true
+  },
+  "frozen_checks": {
+    "constant_zeta0_leaves_mixed_index_K_invariant": true,
+    "each_net_spatial_derivative_power_contributes_minus_one_to_density_weight": true,
+    "quadratic_monomial_weight_rule_w_equals_3_minus_s": true,
+    "representative_weights": {
+      "K2_omega2_k0": 3,
+      "K_D2_K_omega2_k2": 1,
+      "K_D4_K_omega2_k4": -1,
+      "R_D2_R_omega0_k6": -3,
+      "K_R_omega1_k2": 1
+    },
+    "off_shell_independence_of_distinct_omega_r_k_s": true,
+    "exact_quadratic_preservation_implies_zero_coefficient_change_per_independent_monomial": true,
+    "same_monomial_weight_deformation_has_zero_soft_change_when_quadratic_change_is_zero": true,
+    "no_on_shell_dispersion_substitution": true,
+    "parent_nonzero_soft_vertex_unchanged": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_PASS_SCOPED",
+  "fail_classification": "C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_FAIL_SCOPED",
+  "interpretation_if_pass": "Within local metric-only projectable ADM operators built from K_i^j, R_i^j and D_i, exact preservation of the complete off-shell hard quadratic functional prevents mixed time-space derivative retuning from changing the constant-homogeneous hard-hard-soft cubic response. Cancellation that appears only after inserting omega(k) is not an exact action-level preservation and is rejected.",
+  "escape_routes_not_excluded": [
+    "additional fields or compensators with independent homogeneous transformation laws",
+    "explicit spurions that alter homogeneous conformal weight",
+    "nonlocal structures",
+    "a genuinely new symmetry relating sectors while requiring a separately re-certified quadratic action",
+    "abandoning exact preservation and re-deriving/re-certifying the quadratic phenomenology"
+  ],
+  "nonclaims": [
+    "not a no-go for RTK as a whole",
+    "not a theorem for extra-field or compensator completions",
+    "not a theorem for nonlocal actions",
+    "not a radiative-naturalness proof",
+    "not same-full-action primordial/background closure",
+    "does not unblock k=0.03 Mpc^-1 production"
+  ]
+}
