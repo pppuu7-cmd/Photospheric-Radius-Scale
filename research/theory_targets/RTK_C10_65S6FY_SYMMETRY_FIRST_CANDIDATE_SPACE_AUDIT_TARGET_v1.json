@@ -1,0 +1,25 @@
+{
+  "schema": "RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fY",
+  "title": "Symmetry-first candidate-space audit after action-selection blocker",
+  "parent": "C10_65S6FX_NO_ADMISSIBLE_INDEPENDENT_ACTION_SELECTION_BLOCKED_SCOPED",
+  "archived_source_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+  "question": "Does the pre-soft-s RTK archive contain any independently motivated projectable symmetry/degeneracy completion that already fixes a full nonlinear action sufficiently to reopen s6fT without using the failed soft-s observable?",
+  "candidate_classes_to_audit": [
+    "C8 Dirac-degenerate rank-one auxiliary construction",
+    "C8 local-U(1) completion route",
+    "C8 U(1) canonical family-I narrowing"
+  ],
+  "decision_rule": {
+    "SOURCE_LOCKED_PROJECTABLE_CANDIDATE_FOUND_PASS_SCOPED": "Only if an archived pre-soft-s candidate is projectable and supplies a full nonlinear action, field map, lapse/shift dependence, action-derived source direction, and complete coupled constraint architecture.",
+    "NO_SOURCE_LOCKED_PROJECTABLE_CANDIDATE_FOUND_PASS_SCOPED": "If every audited route is either explicitly quadratic/incomplete or explicitly nonprojectable/incomplete. Retain s6fT and s6fX blockers."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_new_action_hypothesis": true,
+    "no_parameter_fit_to_failed_soft_s": true,
+    "threshold_changed": false
+  },
+  "scope": "Archive candidate-space audit only; absence of a source-locked candidate is not a no-go for future projectable completions."
+}
