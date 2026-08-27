@@ -1,0 +1,47 @@
+{
+  "checks": {
+    "decision_rule_applied_without_future_outputs": true,
+    "k003_horizon_ratio_finite": true,
+    "k003_proxy_finite": true,
+    "parents": true,
+    "s5f_headroom_finite": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S5G_AXIS_DECISION_PASS_SCOPED",
+  "decision": "LONGER_TIME_AT_K0P01_FIRST",
+  "decision_rule": {
+    "choose_A_if": "s5f headroom >= 1e4 AND (k003 omitted-order proxy >= 0.1 OR k003/Hc_on >= 1)",
+    "headroom_definition": "1e-10 / max(s5f max_abs_normalized_constraint, s5f max_abs_normalized_constraint_change)",
+    "k003_horizon_ratio_definition": "k/Hc_on using the source-locked onset Hc",
+    "k003_horizon_ratio_large_if_ge": 1.0,
+    "k003_omitted_order_proxy_definition": "abs(A2*k^2/J_ad0) using the same inherited C10.65m phenomenological O(k^2) control",
+    "k003_omitted_order_proxy_large_if_ge": 0.1,
+    "otherwise": "choose B only if the above A condition is false; do not inspect future production outputs because neither candidate has been executed yet",
+    "s5f_constraint_headroom_required": 10000.0
+  },
+  "gate": "C10.65s5g",
+  "interpretation": "Select the next experimental axis prospectively. This does not validate either future domain.",
+  "metrics": {
+    "k003_omitted_order_proxy_abs_A2k2_over_J": 0.33627196915668245,
+    "k003_over_Hc_on": 2.3142915364983696,
+    "s5f_constraint_headroom": 160790.9018912483,
+    "s5f_worst_normalized_constraint_or_change": 6.219257359949102e-16
+  },
+  "next_gate": "Freeze C10.65s5h multibranch longer-time production trajectory at k=0.01 using exactly the s4g elapsed times 3e-4,1e-3,3e-3,1e-2 Mpc, the same three s5d/s5e branches and unchanged 1e-10 constraint bound.",
+  "non_claims": [
+    "not validation of the selected future domain",
+    "not rejection of the unselected future domain",
+    "not a probability statement about omitted-order coefficients",
+    "not a UV matching derivation",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "evaluator": "research/shadow/rtk_c10_65s5g_axis_decision.py",
+    "github_actions_run_id": 33028258798,
+    "repo_head_at_job_start": "18c2fed2cb5a0b3c1cf9d1063c9b1283faf0bcc8",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s5g-axis-decision.yml"
+  },
+  "schema": "RTK_C10_65S5G_AXIS_DECISION_RESULT_v1",
+  "threshold_changed": false
+}
