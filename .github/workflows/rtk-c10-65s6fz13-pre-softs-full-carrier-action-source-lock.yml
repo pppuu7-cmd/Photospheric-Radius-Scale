@@ -1,0 +1,78 @@
+name: RTK C10.65s6fZ13 pre-soft-s full carrier action source-lock
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6fz13-pre-softs-full-carrier-action-source-lock-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target and parent
+        run: |
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_TARGET_v1.json'))
+          p=json.load(open('research/theory_results/RTK_C10_65S6FZ12_HMT_Z7_BACKGROUND_QUADRATIC_IDENTIFIABILITY_RESULT_v1.json'))
+          assert p['classification']==t['parent_required']
+          assert len(t['required_same_action_inputs'])==5
+          assert t['threshold_changed'] is False
+          assert t['soft_s_retest_allowed'] is False
+          assert t['production_k003_unblocked'] is False
+          PY
+      - name: Run frozen pre-soft-s carrier action source-lock audit
+        run: python research/shadow/rtk_c10_65s6fz13_pre_softs_full_carrier_action_source_lock.py
+      - name: Verify result semantics
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('research/theory_results/RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_RESULT_v1.json'))
+          assert r['classification'] in {
+            'C10_65S6FZ13_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_FOUND_PASS_SCOPED',
+            'C10_65S6FZ13_NO_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_BLOCKED_SCOPED'}
+          assert all(r['checks'].values())
+          assert r['threshold_changed'] is False
+          assert r['soft_s_retest_allowed'] is False
+          assert r['production_k003_unblocked'] is False
+          if r['classification'].endswith('NO_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_BLOCKED_SCOPED'):
+              assert r['source_lock']['projectable_N_implies_a_i_zero'] is True
+              assert r['source_lock']['C8_acceleration_bridge_admissible_projectably'] is False
+          PY
+      - name: Persist provenance and checkpoint
+        run: |
+          RUN_ID='${{ github.run_id }}' RUN_ATTEMPT='${{ github.run_attempt }}' HEAD_SHA='${{ github.sha }}' python - <<'PY'
+          import json,os,datetime,pathlib
+          rp=pathlib.Path('research/theory_results/RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_RESULT_v1.json')
+          r=json.loads(rp.read_text())
+          r['provenance']={
+            'github_actions_run_id':int(os.environ['RUN_ID']),
+            'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),
+            'trigger_head_sha':os.environ['HEAD_SHA'],
+            'workflow':'rtk-c10-65s6fz13-pre-softs-full-carrier-action-source-lock.yml',
+            'threshold_changed':False}
+          rp.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          d=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_{d}.md')
+          cp.write_text(
+            '# RTK C10.65s6fZ13 checkpoint\n\n'
+            'Classification: `'+r['classification']+'`.\n\n'
+            +r['interpretation']+'\n\n'
+            +'Exact projectability guard: `'+r['exact_projectability_observation']+'`\n\n'
+            +'Frozen guards remain: no soft-s retest and no k=0.03 production.\n\n'
+            +'Next: '+r['next_gate']+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_RESULT_v1.json research/checkpoints/
+          git commit -m 'Record C10.65s6fZ13 pre-soft-s carrier action source-lock audit'
+          git push origin HEAD:rtk-class-build
