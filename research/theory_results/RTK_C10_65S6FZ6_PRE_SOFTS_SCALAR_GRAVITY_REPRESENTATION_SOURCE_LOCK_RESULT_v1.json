@@ -1,0 +1,77 @@
+{
+  "archive_evidence_counts": {
+    "cross_symmetry_closure_hits": 0,
+    "gravity_gauge_hits": 439,
+    "joint_representation_hits": 0,
+    "rank_one_hits": 39,
+    "shared_normal_derivative_hits": 0,
+    "transformation_hits": 3
+  },
+  "archive_evidence_samples": {
+    "closure": [],
+    "gravity_gauge": [
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-projectable-integration-constant-dust-degeneracy-trigger.txt:2:reason: certify exact background amplitude degeneracy of projectable C_int/a^3 with RTK dust tail/CDM and freeze resolution routes.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-projectable-u1-coupled-dof-allq-trigger.txt:2:reason: certify scoped projectable carrier count 2 tensor + 1 RTK scalar using all-q d(q)>0 pair rank and invertible elliptic auxiliary block.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-projectable-u1-finite-mc-o4-resolvent-potential-map-trigger.txt:2:reason: map the certified single-resolvent O4 source into the published projectable A4 equation and prove whether it is generically a new nonlocal potential or a constant PPN shift.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-projectable-u1-finite-mc-static-o2-transfer-trigger.txt:2:reason: derive exact finite-Mc projectable static O2 Newton-transfer law and gamma_PPN result from published Eqs.(6.14),(6.15).",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-projectable-u1-flrw-global-hamiltonian-trigger.txt:2:reason: rerun unchanged projectable FLRW theorem after CI-only result-string assertion fix.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-projectable-u1-rtk-compatibility-trigger.txt:2:reason: test projectable U1 as structural C9 escape while retaining exact RTK rational dispersion and elliptic A-source compensator.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-rtk-scalar-current-frequency-crossover-trigger.txt:2:reason: evaluate the replay-certified current-point ordering between the low-k DBI cubic coefficient scale and the exact rational-mode frequency cap c_a M_K as a function of redshift.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-c9-rtk-scalar-px-tree-powercount-scan-trigger.txt:2:reason: run a resolution-audited exact-background tree power-counting proxy across k/M_K and redshift while the projectable O4 convolution branch runs independently."
+    ],
+    "joint_representation": [],
+    "rank_one": [
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-route-b-dirac-degenerate-one-dof-trigger.txt:4:purpose=C8 constructive rank-one kinetic Dirac constraint and exact one-pole response gate",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-route-b-dirac-lapse-shift-schur-bridge-trigger.txt:4:purpose=C8 rank-one Dirac kinetic pair plus invertible lapse-shift Schur block bridge",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/rtk-route-b-mixed-kinetic-alignment-gate-trigger.txt:4:purpose=C8 exact rank-one alignment condition for IR and mixed-spatial kinetic operators",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/workflows/rtk-route-b-dirac-degenerate-one-dof.yml:1:name: RTK Route-B Dirac-degenerate one-DOF gate",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:.github/workflows/rtk-route-b-dirac-degenerate-one-dof.yml:26:      - name: Run Dirac-degenerate one-DOF theorem",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/RESEARCH_LEDGER.md:20:| C8-Dirac | rank-one degenerate one-scalar mechanism | one-DOF theorem and lapse/shift Schur bridge artifact-verified | \u2705 GREEN quadratic/constraint toy scope | embed same rank-one direction in a complete fixed action |",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/RESEARCH_LEDGER.md:21:| C8-mixed kinetic | fixed-state local mixed-kinetic scalar EFT | corrected run `32528572862`, artifact `9463080405`; exact production RTK dispersion, one scalar in isolated rank-one sector | \u2705 GREEN quadratic scalar EFT | avoid additive second kinetic direction; full gravitational embedding |",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/RESEARCH_LEDGER.md:145:The rank-one Dirac mechanism and invertible lapse/shift Schur bridge show that an isolated aligned two-field kinetic sector can retain one physical scalar and one source-channel pole. Bridge run `32525916760`, artifact `9462166939`, digest `sha256:1b23375d2dbd6af5076c3bb9b1404bc4cd84cec5702fc0831ff93e3d3a35dc77`."
+    ],
+    "shared_normal_derivative": [],
+    "transform": [
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/RTK_ITERATION_CHRONOLOGY.md:152:The proven `U~H^-2` statement is a regularity obstruction for a particular minimal unitary-gauge/EH+clock+grad-K representation. It must not automatically be called physical strong coupling. On a punctured `H!=0` branch a field normalization `X=H chi` converts `(u/H^2)X^2` to `u chi^2`; the transformation itself becomes singular at `H=0`. Therefore the physical question is whether a regular covariant/canonical variable and constraint system exists through the static boundary. Future claims must use canonical kinetic eigenvalues, Dirac rank and cutoff calculations rather than the divergence of one gauge-dependent Wilson coefficient alone.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/methods/RTK_FORMULA_BIBLE_C8_DEGENERATE_AUXILIARY_APPENDIX.md:30:Interpretation guard: the divergence of this unitary-gauge coefficient is not by itself a physical strong-coupling theorem. A field normalization `X=H chi` can make `(u/H^2)X^2=u chi^2` for `H!=0`, although that transformation itself loses invertibility at `H=0`. Physical regularity must ultimately be tested by canonical kinetic eigenvalues, the complete Dirac constraint algebra and the cutoff in a representation that remains well-defined at the static boundary.",
+      "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/methods/RTK_FORMULA_BIBLE_C8_U1_COMPLETION_APPENDIX.md:16:The paper gives the local U(1) transformation of the shift, gauge field and Newtonian prepotential and exhibits explicit parameter families for which all PPN parameters equal their GR values. This appendix records only the pieces directly used by the executable gates."
+    ]
+  },
+  "checks": {
+    "archive_commit_exact": true,
+    "archive_contains_gravity_gauge_material": true,
+    "archive_contains_rank_one_material": true,
+    "no_k003": true,
+    "no_new_charge": true,
+    "no_new_field_identification": true,
+    "no_soft_s": true,
+    "parent_exact": true,
+    "target_gate_exact": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FZ6_REPRESENTATION_SOURCE_LOCKED_PASS_SCOPED",
+  "finding": "At least one explicit joint representation marker exists in the frozen archive and requires dedicated follow-up before any new representation theorem is introduced.",
+  "gate": "C10.65s6fZ6",
+  "missing_representation_data": {
+    "cross_symmetry_closure_absent": true,
+    "explicit_gravity_transformation_or_charge_absent": false,
+    "explicit_joint_field_identification_absent": true,
+    "shared_normal_derivative_or_invariant_shift_absent": true
+  },
+  "next_gate": "C10.65s6fZ6a: inspect the explicit archival joint-representation candidates before any new theorem.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "archive_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "frozen_target_commit": "5313cc814314c2f2fb9a45c84b8a8b6145f53f9e",
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33098567798,
+    "repo_head_at_job_start": "a9d4cf1828012c892d19b371c11c252fb03b0d62",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz6-pre-softs-scalar-gravity-representation-source-lock.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false,
+  "what_is_not_claimed": "Absence of a source-locked archival representation is not a no-go for a compatible representation. It forbids only treating an unrecorded neutrality/charge/invariant-shift choice as inherited physics."
+}
