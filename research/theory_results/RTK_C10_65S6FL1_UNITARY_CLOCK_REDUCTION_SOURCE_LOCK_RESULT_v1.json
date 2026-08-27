@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "F_has_no_shift_source": true,
+    "F_t_N_unitary_clock_explicit": true,
+    "c8_blob_sha_exact": true,
+    "deltaSigma_zero_locked": true,
+    "no_new_coefficient": true,
+    "no_soft_s_outcome_selected": true,
+    "parent_blocker_exact": true,
+    "parent_reason_exact": true,
+    "scalar_variables_locked": true,
+    "target_frozen": true,
+    "threshold_unchanged": true,
+    "unitary_gauge_explicit": true
+  },
+  "classification": "C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_PASS_SCOPED",
+  "gate": "C10.65s6fL1",
+  "interpretation": "The inherited C8 scalar action is explicitly already in comoving/unitary gauge. Therefore the finite-k clock fluctuation is removed by the slicing choice and deltaSigma_k=0 is source-locked before rerunning s6fL; imposing it is not a post-hoc cancellation condition.",
+  "next": "Rerun the unchanged C10.65s6fL hard-hard -> homogeneous source derivation with the now source-locked unitary reduction deltaSigma_k=0; do not change its outcome semantics.",
+  "non_claims": [
+    "not a final soft-s ZERO/NONZERO classification",
+    "not k=0.03 production permission",
+    "not all-sector unitarity",
+    "not radiative-naturalness closure",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33055170798,
+    "repo_head_at_job_start": "1a8533b6061fcc6302a989ca7f0eafb017f3efbc",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fl1-unitary-clock-reduction-source-lock.yml"
+  },
+  "result": {
+    "direct_F_shift_source": "0",
+    "finite_k_clock_reduction": "deltaSigma_k=0",
+    "new_free_parameters": 0,
+    "soft_s_outcome_selected": false,
+    "status": "SOURCE_LOCKED_UNITARY_GAUGE_REDUCTION"
+  },
+  "schema": "RTK_C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_RESULT_v1",
+  "source_lock": {
+    "c8_appendix_blob_sha": "4bdd9b4f4b199432c9401df0e8b3757d5a6f1402",
+    "c8_statement": "F(t,N) is the unitary-gauge form of the fixed Khronon/P(X)-type clock background after unitary gauge fixing",
+    "candidate_action": "S = integral N sqrt(gamma) [ Mpl^2/2 (R3 + Kij Kij - K^2) + F(t,N) + C_acc a_i a^i ]",
+    "gauge": "comoving/unitary gauge",
+    "scalar_variables": "N=1+n; N_i=partial_i psi; gamma_ij=a^2 exp(2 zeta) delta_ij"
+  },
+  "target": "research/theory_targets/RTK_C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_TARGET_v1.json",
+  "threshold_changed": false
+}
