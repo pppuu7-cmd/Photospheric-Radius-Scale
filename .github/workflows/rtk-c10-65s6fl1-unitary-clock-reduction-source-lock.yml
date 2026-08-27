@@ -1,0 +1,60 @@
+name: RTK C10.65s6fL1 unitary clock reduction source lock
+
+on:
+  push:
+    branches: [ rtk-class-build ]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fl1_unitary_clock_reduction_source_lock.py'
+      - '.github/workflows/rtk-c10-65s6fl1-unitary-clock-reduction-source-lock.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute frozen source-lock gate
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6fl1_unitary_clock_reduction_source_lock.py | tee /tmp/s6fl1.log
+      - name: Add immutable provenance
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_RESULT_v1.json')
+          x=json.loads(p.read_text())
+          x['provenance']={
+            'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'repo_head_at_job_start': os.environ['GITHUB_SHA'],
+            'workflow':'rtk-c10-65s6fl1-unitary-clock-reduction-source-lock.yml',
+            'threshold_changed':False
+          }
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          ts=$(date -u +%Y-%m-%dT%H%MZ)
+          cpfile="research/checkpoints/RTK_C10_65S6FL1_UNITARY_CLOCK_SOURCE_LOCK_${ts}.md"
+          cat > "$cpfile" <<'EOF'
+          # RTK C10.65s6fL1 unitary clock reduction source lock
+
+          C10.65s6fL was blocked because the hard finite-k clock/Stueckelberg reduction was not source-locked. The inherited C8 action appendix is explicitly written in comoving/unitary gauge with F(t,N) the unitary-gauge clock action, so finite-k deltaSigma is removed by the slicing: deltaSigma_k=0. No free coefficient and no soft-s outcome is chosen here.
+
+          If the persisted JSON classification is PASS_SCOPED, rerun the unchanged s6fL hard-hard -> homogeneous source derivation using this source-locked unitary reduction. k=0.03 production remains blocked.
+          EOF
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_RESULT_v1.json "$cpfile"
+          git commit -m "Record C10.65s6fL1 unitary clock reduction source lock" || exit 0
+          git push origin HEAD:rtk-class-build
