@@ -1,0 +1,51 @@
+{
+  "checks": {
+    "F_has_no_Ni_argument": true,
+    "action_identifies_F_as_clock_background": true,
+    "archived_action_exactly_identified": true,
+    "cubic_F_shift_source_zero_exactly": true,
+    "functional_shift_derivative_zero_exactly": true,
+    "k003_production_remains_blocked": true,
+    "no_new_action_coefficient_introduced": true,
+    "quadratic_shift_constraint_present": true,
+    "s6fE_parent": true,
+    "s6fF_parent": true,
+    "target_frozen": true,
+    "threshold_changed": false,
+    "unitary_action_present": true
+  },
+  "classification": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED",
+  "decision": "INHERITED_SCALAR_SECTOR_SHIFT_SOURCE_EXACTLY_ZERO_SOURCE_LOCKED",
+  "derivation": {
+    "cubic_scalar_shift_source_from_inherited_F": "0 exactly",
+    "exact_identity": "partial F(t,N)/partial N_i = 0",
+    "functional_identity": "delta S_F/delta N_i = 0",
+    "order_statement": "because the absence of N_i is exact in the nonlinear unitary-gauge function F(t,N), its direct scalar-shift source vanishes at linear, quadratic, cubic and higher orders",
+    "scalar_sector": "F(t,N)",
+    "shift_variable": "N_i=partial_i psi"
+  },
+  "gate": "C10.65s6fG",
+  "interpretation": "The archived action-level benchmark resolves the scalar-sector ambiguity identified by s6fF: the inherited clock/Khronon unitary-gauge sector is F(t,N), not a function of N_i, so it cannot contribute a direct scalar-shift constraint source. The remaining conditional cubic reduction is confined to the explicit gravitational kinetic/geometry and alpha6 carrier sectors.",
+  "next_gate": "C10.65s6fH: derive the cubic scalar-shift source and reduced q_s->0 limit from the explicit MINIMAL_PROJECTABLE_N2_S1HALF_v1 gravitational kinetic/geometry sector; then rerun unchanged s6fF ZERO/NONZERO classification.",
+  "non_claims": [
+    "not a ZERO/NONZERO soft-s classification",
+    "not proof the candidate branch is unique",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "provenance": {
+    "archived_action_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "github_actions_run_id": 33049850559,
+    "repo_head_at_job_start": "aed9bab8fd823a2366c529fb8d4d1887be8713b9",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fg-inherited-scalar-shift-source-lock.yml"
+  },
+  "schema": "RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_RESULT_v1",
+  "source_lock": {
+    "archived_action": "S = integral N sqrt(gamma) [Mpl^2/2 (R3 + Kij Kij - K^2) + F(t,N) + C_acc a_i a^i]",
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md"
+  },
+  "target": "research/theory_targets/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_TARGET_v1.json",
+  "threshold_changed": false
+}
