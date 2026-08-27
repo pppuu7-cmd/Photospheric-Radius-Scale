@@ -1,0 +1,63 @@
+{
+  "checks": {
+    "exact_same_pole_different_residue_witness": true,
+    "no_old_kernel_matching": true,
+    "no_representative_point_selected": true,
+    "no_soft_s_or_k003": true,
+    "threshold_unchanged": true,
+    "z12_full_quadratic_not_source_locked": true,
+    "z12_parent_exact": true,
+    "z15_intrinsic_G_over_K_exact": true,
+    "z15_intrinsic_temporal_spatial_coefficients_fixed": true,
+    "z15_parent_exact": true,
+    "z16_parent_exact": true,
+    "z16_source_interface_unfixed": true,
+    "z17_continuous_family": true,
+    "z17_parent_exact": true,
+    "z18_no_unique_selector": true,
+    "z18_parent_exact": true
+  },
+  "classification": "C10_65S6FZ19_INTRINSIC_SECTOR_FIXED_FULL_RESPONSE_INTERFACE_DEPENDENT_PASS_SCOPED",
+  "exact_witness": {
+    "c1": 1,
+    "c2": 2,
+    "residue_ratio_c2_over_c1": 4.0,
+    "response": "R_c(z)=c^2/D(z)",
+    "same_denominator": true
+  },
+  "gate": "C10.65s6fZ19",
+  "interface_dependent_or_open": [
+    "scalar-response source/numerator",
+    "physical-metric universal-coupling parameters",
+    "carrier A/prepotential auxiliary interface",
+    "full pole/residue/remainder equivalence"
+  ],
+  "interpretation": "The independently selected production P(X)-type carrier identities remain source-locked: the intrinsic temporal/spatial quadratic coefficients satisfy G/K=c_a^2 along the certified background. However the universal HMT matter interface still contains free coupling data and does not uniquely fix the scalar response source/numerator. This is already sufficient to obstruct the old RTK pole+residue+remainder certificate: even holding a denominator D(z) fixed, R_c(z)=c^2/D(z) has the same pole for every nonzero c but residue proportional to c^2; choosing c=1 and c=2 gives an exact residue ratio 4. Therefore intrinsic carrier selection cannot be promoted to full response equivalence over the continuous interface family. No representative coupling point is selected.",
+  "invariants": {
+    "intrinsic_G_over_K": "c_a^2",
+    "intrinsic_spatial_coefficient": "G_phys",
+    "intrinsic_temporal_coefficient": "K_phys",
+    "representation": "Z7/HMT invariant carrier architecture"
+  },
+  "next_gate": "C10.65s6fZ20: freeze an independent microscopic-matter-completion source-lock audit. Search pre-soft-s or externally motivated matter microphysics for one explicit universal physical-metric coupling that fixes the remaining HMT matter-interface parameters before any RTK response comparison. If none is source-locked, keep the completion branch scientifically blocked rather than fitting pole/residue/remainder; if one is found, preregister that full matter interface and only then reopen the unchanged background/quadratic equivalence audit.",
+  "nonclaims": [
+    "not a no-go for all HMT matter completions",
+    "not full RTK quadratic equivalence",
+    "not same-action primordial/background closure",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33119389204,
+    "threshold_changed": false,
+    "trigger_head_sha": "d84caaf3fef7440195a8236670bc8af0a823ddcd",
+    "workflow": "rtk-c10-65s6fz19-unresolved-interface-consequence-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ19_UNRESOLVED_INTERFACE_CONSEQUENCE_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
