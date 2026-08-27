@@ -1,0 +1,37 @@
+{
+  "checks": {
+    "formula_bible_final_carrier_not_fixed": true,
+    "k003_production_remains_blocked": true,
+    "no_existing_rule_identified_that_sets_nu_X": true,
+    "no_phenomenological_nu_X_fit": true,
+    "s6fb_missing_complete_shift_action": true,
+    "s6fc_linear_invisible_witness_exists": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_PASS_SCOPED",
+  "decision": "NO_SOURCE_LOCKED_NONLINEAR_RULE_FIXES_CUBIC_SHIFT_AMBIGUITY",
+  "evidence": {
+    "formula_bible": "final covariant completion not yet fixed",
+    "s6fB": "complete shift-dependent ADM Lagrangian absent",
+    "s6fC": "nu(X) Sigma_ij Sigma^ij witness invisible through quadratic order but active at cubic order"
+  },
+  "gate": "C10.65s6fD",
+  "interpretation": "The current RTK repository contains no source-locked nonlinear principle that fixes the cubic scalar-shift ambiguity while preserving the already-certified lower-order stack. The next step must be an explicitly labeled new nonlinear completion hypothesis/covariant carrier branch, not an inference from existing linear data.",
+  "next_gate": "Freeze C10.65s6fE candidate-completion branch contract: define one explicit complete nonlinear projectable ADM/covariant action with all shift-dependent operators and no coefficient chosen from the desired soft-s outcome; then rerun the unchanged s6fB reduction on that branch and keep the result conditional on the new hypothesis.",
+  "non_claims": [
+    "not proof that no UV principle exists in nature",
+    "not permission to set nu_X=0 by convenience",
+    "not a soft-s zero/nonzero classification",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33043604623,
+    "repo_head_at_job_start": "72bfbf189a86c6c975097b5b0c91d4bdf28b17ae",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fd-nonlinear-completion-principle-audit.yml"
+  },
+  "schema": "RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FD_NONLINEAR_COMPLETION_PRINCIPLE_AUDIT_TARGET_v1.json",
+  "threshold_changed": false
+}
