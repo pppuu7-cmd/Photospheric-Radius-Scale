@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_OBSTRUCTION_TARGET_v1",
+  "gate": "C10.65s6fN",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Determine whether merely raising the spatial derivative order in the pure projectable curvature-carrier family O_n=sqrt(gamma)[D^(n-1) R^(3)]^2 can structurally remove the exact homogeneous hard-hard-soft cubic vertex found nonzero for the frozen n=2 candidate. This is a symbolic conformal-weight theorem; no coefficient or scale is fitted.",
+  "parent": "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_NONZERO_PASS_SCOPED",
+  "operator_family": {
+    "definition": "O_n = sqrt(gamma) times a rotational scalar formed by contracting two copies of D^(n-1) R^(3), with all derivative indices contracted by gamma^ij",
+    "domain": "integer n>=1; flat hard background spatial slice; exact homogeneous conformal mode zeta0 plus finite-k hard modes",
+    "homogeneous_rescaling": "gamma_ij -> exp(2 zeta0) gamma_ij with spatially constant zeta0",
+    "expected_weight": "O_n -> exp[(1-2n) zeta0] O_n(hard)",
+    "cubic_to_quadratic_soft_ratio": "for one homogeneous soft leg and two hard legs, V3_soft/Q2_cross = 1-2n in the action-density conformal expansion; Fourier symmetrization is checked explicitly for n=2 against K3_s=-96 k^6"
+  },
+  "frozen_checks": {
+    "derive_weight_from_volume_R_and_inverse_metric_factors": true,
+    "integer_n_ge_1_has_no_zero_weight": true,
+    "n2_normalization_matches_archived_K3_s": true,
+    "no_parameter_fit": true,
+    "no_new_operator_coefficient": true,
+    "no_punctured_q_limit": true,
+    "no_k003_production_output": true,
+    "threshold_changed": false
+  },
+  "outcome_semantics": {
+    "OBSTRUCTION": "For every integer n>=1 in the pure family, 1-2n is nonzero, so increasing n alone cannot make the exact homogeneous soft cubic coupling vanish structurally.",
+    "ESCAPE": "At least one allowed integer n has zero homogeneous conformal weight and therefore removes this coupling without coefficient tuning.",
+    "INCOMPLETE": "The conformal weight or n=2 source-lock cannot be established from the frozen operator definition."
+  },
+  "pass_classifications": [
+    "C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_OBSTRUCTION_PASS_SCOPED",
+    "C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_ESCAPE_PASS_SCOPED",
+    "C10_65S6FN_PURE_HIGHER_SPATIAL_CARRIER_HOMOGENEOUS_SOFT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "non_claims": [
+    "not a no-go for linear combinations of independent nonlinear operators",
+    "not a no-go for symmetry-protected or additional-field completions",
+    "not radiative-naturalness closure",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ]
+}
