@@ -1,0 +1,56 @@
+{
+  "schema": "RTK_C10_65S5G_AXIS_DECISION_TARGET_v1",
+  "gate": "C10.65s5g",
+  "created_utc": "2026-08-27T00:55:00Z",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "parents": {
+    "C10.65s5f": "C10_65S5F_NEXT_K_MULTIBRANCH_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+    "C10.65s5c": "C10_65S5C_NEXT_K_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
+    "C10.65s5a": "C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_PASS_SCOPED",
+    "C10.65s4g_method": "C10_65S4G_MODERATE_K_LONGER_TIME_TRAJECTORY_PASS_SCOPED"
+  },
+  "purpose": "Choose exactly one next extrapolation axis after s5f, before executing either: (A) extend elapsed time at the already-tested k=0.01 Mpc^-1 across the same three preregistered omitted-order branches using the already-certified s4g time points; or (B) widen k to 0.03 Mpc^-1, which would simultaneously increase k/H and the inherited omitted-order matching sensitivity. This is a sequencing/experimental-design decision, not a physical pass for either future domain.",
+  "candidates": {
+    "A_longer_time_same_k": {
+      "k_Mpc_inv": 0.01,
+      "branches_unchanged": true,
+      "sample_elapsed_tau_Mpc_inherited_from_s4g": [0.0003, 0.001, 0.003, 0.01],
+      "changes_one_axis_only": true
+    },
+    "B_next_k_onset_preflight": {
+      "k_Mpc_inv": 0.03,
+      "requires_new_onset_domain_preflight": true,
+      "changes_k_axis": true
+    }
+  },
+  "frozen_decision_rule": {
+    "s5f_constraint_headroom_required": 10000.0,
+    "headroom_definition": "1e-10 / max(s5f max_abs_normalized_constraint, s5f max_abs_normalized_constraint_change)",
+    "k003_omitted_order_proxy_definition": "abs(A2*k^2/J_ad0) using the same inherited C10.65m phenomenological O(k^2) control",
+    "k003_omitted_order_proxy_large_if_ge": 0.1,
+    "k003_horizon_ratio_definition": "k/Hc_on using the source-locked onset Hc",
+    "k003_horizon_ratio_large_if_ge": 1.0,
+    "choose_A_if": "s5f headroom >= 1e4 AND (k003 omitted-order proxy >= 0.1 OR k003/Hc_on >= 1)",
+    "otherwise": "choose B only if the above A condition is false; do not inspect future production outputs because neither candidate has been executed yet"
+  },
+  "frozen_constants": {
+    "A2": -1120.906563855608,
+    "J_ad0": -3.0,
+    "Hc_on_Mpc_inv": 0.0129629303512,
+    "constraint_bound": 1e-10
+  },
+  "pass_classification": "C10_65S5G_AXIS_DECISION_PASS_SCOPED",
+  "fail_classification": "C10_65S5G_AXIS_DECISION_FAIL_SCOPED",
+  "decision_A_label": "LONGER_TIME_AT_K0P01_FIRST",
+  "decision_B_label": "K0P03_ONSET_PREFLIGHT_FIRST",
+  "next_if_A": "Freeze C10.65s5h multibranch longer-time production trajectory at k=0.01 using exactly the s4g elapsed times 3e-4,1e-3,3e-3,1e-2 Mpc, the same three s5d/s5e branches and unchanged 1e-10 constraint bound.",
+  "next_if_B": "Freeze C10.65s6a k=0.03 onset-domain preflight before any production feedback at k=0.03.",
+  "non_claims": [
+    "not validation of the selected future domain",
+    "not rejection of the unselected future domain",
+    "not a probability statement about omitted-order coefficients",
+    "not a UV matching derivation",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
