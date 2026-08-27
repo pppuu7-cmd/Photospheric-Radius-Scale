@@ -1,0 +1,446 @@
+{
+  "branches": [
+    "baseline",
+    "joint_extremum",
+    "phi_extremum"
+  ],
+  "checks": {
+    "all_endpoint_A_H_M_T_constraints_finite": true,
+    "all_endpoint_approximation_states": true,
+    "all_endpoint_normalized_constraints_within_1e-10": true,
+    "all_endpoint_states_finite": true,
+    "all_endpoint_widths_within_absolute_tolerance": true,
+    "all_normalized_constraint_changes_within_1e-10": true,
+    "before_rows_exact_s5d_before_all_samples": true,
+    "boundary_higher_ur_exact_s5d": true,
+    "branch_count": true,
+    "endpoint_dy_intentionally_unmaterialized_no_extra_rhs": true,
+    "first_rhs_bound_inherited": true,
+    "no_branch_widening": true,
+    "no_double_gauge_transform": true,
+    "no_k_widening": true,
+    "no_legacy_nlde_physical_role": true,
+    "off_identity": true,
+    "record_count": true,
+    "s2e_failed_parent_preserved": true,
+    "s5c_envelope_nonprobabilistic": true,
+    "same_kernel_and_single_seed_static_guard": true,
+    "sample_manifest_shape": true,
+    "sample_patch_static_guard": true,
+    "sample_times_exact_s4f": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S5F_NEXT_K_MULTIBRANCH_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+  "endpoint_rhs_policy": "No extra endpoint RHS callback; AFTER dy columns intentionally unmaterialized. First-RHS finiteness/parity inherited through exact s5d BEFORE identity, preserving certified s5e endpoint semantics.",
+  "frozen_bound": 1e-10,
+  "gate": "C10.65s5f",
+  "interpretation": "At k=0.01 Mpc^-1, each of the three prospectively fixed omitted-order branches remains finite and on the completed-U1 A/H/M/T constraint manifold within the unchanged 1e-10 normalized bound at four independently restarted elapsed conformal times from 3e-6 through 1e-4 Mpc. This widens sampled time evidence by two decades beyond C10.65s5e without widening k or the branch envelope.",
+  "max_abs_normalized_constraint": 5.997415051283867e-16,
+  "max_abs_normalized_constraint_change": 6.219257359949102e-16,
+  "max_first_rhs_relative_inherited_from_s5d": 4.441607914714873e-12,
+  "next_gate": "Freeze a separate C10.65s5g decision gate comparing an s4g-style materially longer-time test at the same k=0.01 against a separately preregistered k=0.03 onset-domain preflight. Do not execute either widening before that decision is frozen.",
+  "non_claims": [
+    "not a continuous-time supremum theorem between endpoints",
+    "not long-time or cosmological-time stability at k=0.01",
+    "not proof that true omitted O(k^4) matching terms lie in the s5c envelope",
+    "not a UV-derived probability or uncertainty distribution",
+    "not validation of k=0.03 Mpc^-1",
+    "not broad-k stability",
+    "not microscopic UV/pre-EFT matching of higher-order coefficients or higher-UR hierarchy",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence",
+    "not a reclassification of C10.65s2e"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s5f_multibranch_time_widened_analyzer.py",
+    "base_production_patch": "rtk/apply_rtk_c10_65s2_production_canary_patch_v3.py",
+    "branch_patch": "rtk/apply_rtk_c10_65s5d_branch_seed_patch.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "github_actions_run_id": 33028106359,
+    "observer_hashes": [
+      "b66291ce67f0da4c92c1d991e3296f661973c4bfee5e0ee046dfe499e2bbf00a",
+      "5ddf3e538d16f67987c6e3cbb7a4286c35ad8f6c761a8056d02caec3feaab6f5",
+      "95fa8a7aae08b939aa96e842bc98cc8a4be3a5f9cfc3ebdce806be65409a83ab",
+      "8b3c4fe048370d6ab7edc91aba61645fef024fcbab2a1972d6d3ae5086354454",
+      "d1a7bdff7f25e6aa0b1800da268cf2f48405ea5a08dd3373638df580fbf09fd4",
+      "3293c87f3c7325798a811b26d6c3645148beb0a3507e4a01787644031eca1f56",
+      "e54631c940d625cfa7a52e6f59b077d21d449d5ca7a668c370182d86fd64c21e",
+      "d924e6e1ff2887bac4e2bdb2d516e3beb99bdff7cd78e993eb28633a46b40d42",
+      "70f922962a6f72e2517403c0597ab9a766dc4dd8bd7614fe660bcbdbde000a6d",
+      "d4d66ea5b2fdc29448909723c1bf03a7c7a033fb2706b938bda02cac0eb2b92f",
+      "71ff062fcb819c6879be658351e7e969031735ad16e587ff109a3c82445ffb34",
+      "a1c72231153d63e20c104efd3f7a3573463b09a0634ccae81d288935b1160dfa"
+    ],
+    "repo_head_at_job_start": "b821e3148733dc2d9f6ed05dd62f642e7865110c",
+    "s4f_method_run_id": 33020187027,
+    "s5d_parent_run_id": 33023782012,
+    "sample_interval_patch": "rtk/apply_rtk_c10_65s5f_sample_interval_patch.py",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s5f-next-k-multibranch-time-widening-v2.yml"
+  },
+  "record_count": 12,
+  "records": [
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 6.219257359949102e-16,
+          "after": 0.0,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 68
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 6.219257359949102e-16,
+          "after": 0.0,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 1.8707943806893435e-16,
+          "after": 1.8707943806893435e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 84
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 3.1096277970905195e-16,
+          "after": 3.1096295628585825e-16,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 85
+    },
+    {
+      "branch": "baseline",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 6.219257359949102e-16,
+          "after": 0.0,
+          "before": 6.219257359949102e-16
+        },
+        "T": {
+          "abs_change": 1.8707985827454794e-16,
+          "after": 1.8707985827454794e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 95
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 73
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998706988941111e-16,
+          "after": 2.998706988941111e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 84
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.998707503656567e-16,
+          "after": 2.998707503656567e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 100
+    },
+    {
+      "branch": "joint_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 85
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-06,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 3.000000006636583e-06,
+      "rhs_calls_after": 68
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 2.9987069962695665e-16,
+          "after": 2.9987069962695665e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 1.247193387168089e-16,
+          "after": 1.247193387168089e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 1e-05,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 1.0000000003174137e-05,
+      "rhs_calls_after": 63
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 5.997415051283867e-16,
+          "after": 5.997415051283867e-16,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 1.2471938886766863e-16,
+          "after": 1.2471938886766863e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 3e-05,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 2.9999999995311555e-05,
+      "rhs_calls_after": 79
+    },
+    {
+      "branch": "phi_extremum",
+      "constraints": {
+        "A": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "H": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "M": {
+          "abs_change": 0.0,
+          "after": 0.0,
+          "before": 0.0
+        },
+        "T": {
+          "abs_change": 1.247195643956133e-16,
+          "after": 1.247195643956133e-16,
+          "before": 0.0
+        }
+      },
+      "elapsed_tau_Mpc": 0.0001,
+      "k": 0.01,
+      "observed_elapsed_tau_Mpc": 0.00010000000000331966,
+      "rhs_calls_after": 85
+    }
+  ],
+  "s2e_classification_preserved": "C10_65S2E_CURRENT_STATE_DERIVATIVE_SLIP_CLOSURE_FAIL_SCOPED",
+  "s4f_method_parent_preserved": "C10_65S4F_MODERATE_K_TIME_WIDENED_TRAJECTORY_PASS_SCOPED",
+  "s5c_envelope_interpretation": "NONPROBABILISTIC_POINTWISE_STRESS_ENVELOPE",
+  "s5e_parent_preserved": "C10_65S5E_NEXT_K_MULTIBRANCH_TRAJECTORY_SAMPLED_CONSTRAINT_PASS_SCOPED",
+  "sample_elapsed_tau_Mpc": [
+    3e-06,
+    1e-05,
+    3e-05,
+    0.0001
+  ],
+  "schema": "RTK_C10_65S5F_NEXT_K_MULTIBRANCH_TIME_WIDENED_TRAJECTORY_RESULT_v1",
+  "threshold_changed": false
+}
