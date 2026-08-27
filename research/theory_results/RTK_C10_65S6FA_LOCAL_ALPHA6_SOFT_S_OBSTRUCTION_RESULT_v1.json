@@ -1,0 +1,44 @@
+{
+  "archived_source": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "nonlinear_completion_workflow_blob": "e495c43d52652bc8de19e415451b3b31335661eb",
+    "soft_s_cancellation_workflow_blob": "ffa9f577ef4b8a0301edab16f7a5c5149691d709"
+  },
+  "checks": {
+    "archived_contracts_source_locked": true,
+    "k003_production_remains_blocked": true,
+    "no_M_U_or_M_K_fit": true,
+    "required_cancellation_positive_for_k_gt_0": true,
+    "required_cancellation_strictly_k_dependent": true,
+    "s6e_parent_pass": true,
+    "special_s1_half_cannot_cancel": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_PASS_SCOPED",
+  "decision": "LOCAL_ALPHA6_STATE_FUNCTION_CANNOT_BY_ITSELF_CANCEL_SOFT_S_OVER_FINITE_K_INTERVAL",
+  "gate": "C10.65s6fA",
+  "interpretation": "A local nonlinear alpha6(X) state-function with one background slope s1 cannot cancel the archived soft-s cubic vertex over any finite k interval: the required magnitude 3H/(2 omega(k)) is strictly k-dependent for positive finite scales, while |1-2s1| is k-independent on a fixed background. The archived special completion s1=1/2 also cannot cancel because the required magnitude is positive. This does not yet include the full reduced shift-exchange contribution.",
+  "next_gate": "C10.65s6fB: derive/source-lock the full scalar shift constraint at cubic order and compute its q_s=0 exchange contribution before deciding whether the total reduced soft-s vertex survives.",
+  "non_claims": [
+    "not the full lapse/shift cubic reduction",
+    "not a no-go for all nonlinear or nonlocal carriers",
+    "not a derivation of O(k^4) matching coefficients",
+    "not a numerical choice of M_U or M_K",
+    "not k=0.03 production feedback"
+  ],
+  "provenance": {
+    "repo_head_at_job_start": "a7365273fc94d17339f8ec0682dcf148345559bd",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fa-local-alpha6-soft-s-obstruction.yml"
+  },
+  "schema": "RTK_C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_TARGET_v1.json",
+  "theorem": {
+    "consequence": "No fixed local-background s1 can satisfy |1-2s1|=F(k) on more than one k value; s1=1/2 gives zero while F(k)>0.",
+    "dlogF_dlogk": "-M_K^2/(M_K^2+k^2)-2*k^4/(M_U^4+k^4)",
+    "omega": "c_a*k*sqrt((1+k^4/M_U^4)/(1+k^2/M_K^2))",
+    "required_magnitude": "F(k)=3H/(2 omega(k))",
+    "sign": "strictly negative for k>0, M_K^2>0, M_U^4>0"
+  },
+  "threshold_changed": false
+}
