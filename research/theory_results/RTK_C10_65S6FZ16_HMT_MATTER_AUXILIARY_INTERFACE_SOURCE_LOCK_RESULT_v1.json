@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "arxiv_coupling_constants_explicit": true,
+    "arxiv_projectable_case_explicit": true,
+    "arxiv_universal_coupling_explicit": true,
+    "cpc_auxiliary_fields_explicit": true,
+    "cpc_physical_adm_matter_action_explicit": true,
+    "cpc_projectability_explicit": true,
+    "independent_sources_predate_softs": true,
+    "no_old_kernel_matching": true,
+    "no_soft_s_or_k003": true,
+    "threshold_unchanged": true,
+    "z15_parent_exact": true
+  },
+  "classification": "C10_65S6FZ16_HMT_UNIVERSAL_MATTER_INTERFACE_CLASS_FOUND_COEFFICIENTS_UNFIXED_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ16",
+  "interpretation": "An independently published projectable U(1)/HMT gravity-matter coupling class exists and explicitly places matter on physical ADM variables in a theory containing the U(1) gauge field and Newtonian prepotential. However the source literature itself describes PPN observables in terms of coupling constants, so the interface is a continuous coupling class rather than a unique RTK matter/source map. Thus Z15 intrinsic P(X) coefficients can be retained, but the response numerator and detailed A/prepotential carrier couplings cannot yet be chosen without an independent coefficient-selection principle.",
+  "next_gate": "C10.65s6fZ17: freeze an independent coefficient-selection/IR-equivalence audit for the published universal HMT matter-coupling family (e.g. GR/PPN limit or equivalence-principle conditions that predate RTK soft-s). Determine whether those conditions uniquely fix the scalar-response-relevant physical-metric parameters. If a continuous family remains, preserve the source-interface blocker rather than fitting RTK pole/residue/remainder.",
+  "nonclaims": [
+    "not a unique HMT+Z7 action",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33117924898,
+    "threshold_changed": false,
+    "trigger_head_sha": "1a535895e0471a5770fae03bf570fd75d7c98688",
+    "workflow": "rtk-c10-65s6fz16-hmt-matter-auxiliary-interface-source-lock.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ16_HMT_MATTER_AUXILIARY_INTERFACE_SOURCE_LOCK_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_hashes": {
+    "arxiv_1310_6666_sha256": "e6a2aca43a3480dca653217fcbf81f2c3156e3907882607fa0de7079168cd42d",
+    "cpc_ad873d_sha256": "62a9ee0ef44748a5569701a6081381e9b8ac5b095a82f98c2611d59bb821546a"
+  },
+  "source_lock": {
+    "A_and_Newtonian_prepotential_are_part_of_published_gravity_matter_context": true,
+    "physical_ADM_matter_variables_are_part_of_published_interface": true,
+    "published_interface_has_free_coupling_constants": true,
+    "unique_RTK_response_numerator_fixed": false,
+    "universal_projectable_u1_matter_coupling_class_exists": true
+  },
+  "threshold_changed": false
+}
