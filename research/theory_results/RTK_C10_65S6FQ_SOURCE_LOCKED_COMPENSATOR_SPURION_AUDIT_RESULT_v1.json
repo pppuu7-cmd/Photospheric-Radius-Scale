@@ -1,0 +1,54 @@
+{
+  "checks": {
+    "explicit_spatial_conformal_rule_audited": true,
+    "k003_production_not_used": true,
+    "no_new_transformation_law_assigned": true,
+    "no_soft_cancellation_coefficient_selected": true,
+    "no_source_locked_compensator_rule": true,
+    "parent_s6fP_pass": true,
+    "source_commit_resolved": true,
+    "target_frozen": true,
+    "threshold_changed": false,
+    "u1_rules_reproduced": true
+  },
+  "classification": "C10_65S6FQ_NO_SOURCE_LOCKED_COMPENSATOR_PASS_SCOPED",
+  "decision": "NO_SOURCE_LOCKED_COMPENSATOR",
+  "evidence": {
+    "canonical_stack_mentions_prepotential_velocity": true,
+    "conformal_word_present": false,
+    "invariant_shift_defined": true,
+    "lapse_u1_neutral": true,
+    "prepotential_u1_rule": true,
+    "sigma_u1_neutral": true,
+    "theta_u1_invariant": true,
+    "u1_shift_rule": true,
+    "weyl_word_present": false
+  },
+  "explicit_spatial_conformal_rule_hits": [],
+  "gate": "C10.65s6fQ",
+  "important_distinction": "Existence of nu or A as U(1) gauge variables is not evidence that either is a spatial-conformal compensator. Mere mentions of Weyl/conformal language are also insufficient; the frozen decision rule requires an explicit transformation/weight assignment. Reinterpreting delta_alpha nu=alpha as a Weyl transformation would change the frozen symmetry and is forbidden.",
+  "next_gate": "Keep k=0.03 production blocked. Freeze an architecture decision between (i) introducing a genuinely new compensator/spurion or symmetry completion and restarting background/quadratic/DOF certification, and (ii) retaining the present field content and accepting the current soft-s obstruction as a scoped rejection of the minimal nonlinear branch.",
+  "nonclaims": [
+    "not a no-go for an enlarged extra-field UV completion",
+    "not a radiative-naturalness theorem",
+    "not same-full-action primordial/background closure",
+    "does not unblock k=0.03 Mpc^-1 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33067352802,
+    "repo_head_at_job_start": "ad40819b88b37ae9e1ae5604656dec2f6f4809e1",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fq-source-locked-compensator-audit.yml"
+  },
+  "schema": "RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_SPURION_AUDIT_RESULT_v1",
+  "scientific_statement": "The source-locked RTK/U(1) stack contains the Newtonian prepotential nu, gauge field A, lapse/shift variables and the neutral RTK scalar Sigma, but the cited frozen transformation rules are U(1)xDiff rules. The audit finds no explicit independently specified homogeneous spatial-conformal/Weyl transformation law that would make an existing field a compensator/spurion for the s6fO/s6fP homogeneous-weight obstruction. Assigning such a law would define a genuinely new nonlinear completion rather than recover a hidden rule from the frozen stack.",
+  "source_lock": {
+    "archive_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "canonical_narrowing": "research/RTK_C8_U1_CANONICAL_NARROWING_2026-08-22.md",
+    "u1_appendix": "research/methods/RTK_FORMULA_BIBLE_C8_U1_COMPLETION_APPENDIX.md"
+  },
+  "target_path": "research/theory_targets/RTK_C10_65S6FQ_SOURCE_LOCKED_COMPENSATOR_SPURION_AUDIT_TARGET_v1.json",
+  "threshold_changed": false
+}
