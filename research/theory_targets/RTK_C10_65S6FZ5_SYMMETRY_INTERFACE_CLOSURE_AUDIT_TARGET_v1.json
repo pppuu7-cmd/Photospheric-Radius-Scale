@@ -1,0 +1,20 @@
+{
+  "schema":"RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_TARGET_v1",
+  "gate":"C10.65s6fZ5",
+  "parent":"C10_65S6FZ4_PROJECTABLE_GRAVITY_PARTIAL_PARENT_PASS_SCOPED",
+  "question":"Are the action-level interface data already source-locked well enough to combine the s6fZ2 field-space gauge template with the independent projectable gravitational parent before a full coupled Dirac count?",
+  "required_interface_data":[
+    "projectable lapse convention shared by both sectors",
+    "representation/charge assignment of phi and chi under every gravitational-parent local gauge symmetry",
+    "definition of D_perp Phi using the same lapse/shift variables or invariant shift used by the gravitational parent",
+    "closure/commutator of field-space and gravitational gauge transformations on all shared variables",
+    "same-action lapse and shift dependence of the scalar sector",
+    "no coefficient selected from soft-s or k=0.03 outputs"
+  ],
+  "decision_rule":{
+    "INTERFACE_READY_PASS_SCOPED":"All required representation and shared lapse/shift data are explicitly source-locked.",
+    "INTERFACE_UNDERDETERMINED_PASS_SCOPED":"The parent sectors are independently motivated but at least one representation/shared-variable datum required for a combined action is not source-locked; identify it explicitly without inventing a choice.",
+    "FAIL_SCOPED":"Frozen source assertions are inconsistent."
+  },
+  "guards":{"no_soft_s_retest":true,"no_k003_production":true,"no_new_charge_assignment":true,"no_new_parameter":true,"no_claim_full_dirac_count":true,"threshold_changed":false}
+}
