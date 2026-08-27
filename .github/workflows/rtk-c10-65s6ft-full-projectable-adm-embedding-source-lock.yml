@@ -1,0 +1,52 @@
+name: RTK C10.65s6fT full projectable ADM embedding source lock
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c10-65s6ft-full-projectable-adm-embedding-source-lock-trigger.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute frozen C10.65s6fT audit
+        run: |
+          set -euo pipefail
+          python research/shadow/rtk_c10_65s6ft_full_projectable_adm_embedding_source_lock.py | tee /tmp/s6ft.log
+      - name: Add provenance and checkpoint
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          HEAD_AT_JOB_START: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          rp=Path('research/theory_results/RTK_C10_65S6FT_FULL_PROJECTABLE_ADM_EMBEDDING_SOURCE_LOCK_RESULT_v1.json')
+          d=json.loads(rp.read_text())
+          d['provenance']={'workflow':'rtk-c10-65s6ft-full-projectable-adm-embedding-source-lock.yml','github_actions_run_id':int(os.environ['RUN_ID']),'github_actions_run_attempt':int(os.environ['RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['HEAD_AT_JOB_START'],'threshold_changed':False}
+          rp.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          cp=Path('research/checkpoints/RTK_C10_65S6FT_ADM_EMBEDDING_SOURCE_LOCK_2026-08-27T1224Z.md')
+          cp.write_text('''# RTK C10.65s6fT full projectable ADM embedding source lock\n\nThe independent rank-one Dirac-degenerate C8 candidate is source-locked only as a quadratic two-coordinate mechanical system. The historical appendix explicitly says it is quadratic/scoped and not a final covariant completion; s6fS likewise labels it `not a full RTK action`.\n\nFrozen s6fT therefore fails closed as `BLOCKED_NO_FULL_PROJECTABLE_ADM_EMBEDDING_SCOPED`: no single projectable ADM action currently fixes the X,y-to-ADM/clock map, lapse/shift dependence, action-derived source direction, background coefficient functions and nonlinear constraint algebra simultaneously.\n\nNo coefficient was fitted to the failed soft-s observable. No soft-s retest was performed. `k=0.03 Mpc^-1` production remains blocked.\n\nNext frontier: only if an independently motivated explicit projectable ADM embedding is proposed, freeze that construction contract first and rerun this unchanged source-lock before background/Dirac/quadratic/C9 restart gates.\n''')
+          PY
+      - name: Commit result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FT_FULL_PROJECTABLE_ADM_EMBEDDING_SOURCE_LOCK_RESULT_v1.json research/checkpoints/RTK_C10_65S6FT_ADM_EMBEDDING_SOURCE_LOCK_2026-08-27T1224Z.md
+          git commit -m 'Record C10.65s6fT ADM embedding source-lock blocker'
+          git push origin HEAD:rtk-class-build
