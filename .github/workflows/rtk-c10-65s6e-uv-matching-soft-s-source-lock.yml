@@ -1,4 +1,5 @@
 name: RTK C10.65s6e UV matching soft-s source-lock
+# execution trigger only; frozen theorem and criteria unchanged
 
 on:
   push:
