@@ -1,0 +1,49 @@
+{
+  "schema": "RTK_C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fL1",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Freeze the finite-k clock/gauge reduction required by C10.65s6fL from the already-existing C8 unitary-gauge action appendix, without selecting any soft-s outcome. Establish whether deltaSigma_k=0 is part of the inherited action-level perturbation convention rather than a post-hoc assumption.",
+  "parents": {
+    "C10.65s6fL": "C10_65S6FL_HOMOGENEOUS_CUBIC_SOURCE_INCOMPLETE_BLOCKED_SCOPED",
+    "C8_source": "research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md"
+  },
+  "source_lock": {
+    "c8_appendix_blob_sha": "4bdd9b4f4b199432c9401df0e8b3757d5a6f1402",
+    "candidate_action": "S = integral N sqrt(gamma) [ Mpl^2/2 (R3 + Kij Kij - K^2) + F(t,N) + C_acc a_i a^i ]",
+    "c8_statement": "F(t,N) is the unitary-gauge form of the fixed Khronon/P(X)-type clock background after unitary gauge fixing",
+    "scalar_variables": "N=1+n; N_i=partial_i psi; gamma_ij=a^2 exp(2 zeta) delta_ij",
+    "gauge": "comoving/unitary gauge"
+  },
+  "frozen_derivation": {
+    "clock_field_condition": "deltaSigma_k = 0 for finite-k scalar perturbations in the inherited unitary-gauge representation",
+    "reason": "the clock fluctuation is removed by the unitary time slicing; clock dynamics is carried by metric/lapse variables and F(t,N)",
+    "direct_shift_source_from_F": "delta S_F / delta N_i = 0 because F depends only on t and N",
+    "allowed_hard_clock_reduction": "unitary deltaSigma_k=0 only",
+    "forbidden": [
+      "choosing a nonzero finite-k deltaSigma after inspecting s6fL source outputs",
+      "fitting a clock elimination coefficient to cancel the soft-s channel",
+      "altering the candidate nonlinear action",
+      "claiming ZERO or NONZERO for the final soft-s vertex in this gate"
+    ]
+  },
+  "frozen_checks": {
+    "s6fL_parent_blocker_exact": true,
+    "c8_blob_sha_exact": true,
+    "unitary_gauge_explicit": true,
+    "F_t_N_unitary_clock_explicit": true,
+    "deltaSigma_k_zero_follows_from_gauge_definition": true,
+    "no_new_coefficient": true,
+    "no_soft_s_outcome_selected": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_PASS_SCOPED",
+  "fail_classification": "C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_FAIL_SCOPED",
+  "next_if_pass": "Rerun the unchanged C10.65s6fL hard-hard -> homogeneous source derivation with the now source-locked unitary reduction deltaSigma_k=0; do not change its outcome semantics.",
+  "non_claims": [
+    "not a final soft-s ZERO/NONZERO classification",
+    "not k=0.03 production permission",
+    "not all-sector unitarity",
+    "not radiative-naturalness closure",
+    "not spectra or likelihood evidence"
+  ]
+}
