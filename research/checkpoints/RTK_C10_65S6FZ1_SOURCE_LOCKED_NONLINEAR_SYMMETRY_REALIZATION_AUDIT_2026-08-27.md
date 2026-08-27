@@ -8,4 +8,4 @@ Therefore the mathematical symmetry-protected class from s6fZ has no already-cer
 
 Next gate: C10.65s6fZ2: derive a minimal action-level projectable gauge realization template (field content and transformation law first, coefficients unfitted), then test whether it can embed the rank-one class while preserving one scalar DOF. Do not evaluate soft-s in that gate.
 
-Provenance: run `33089338197`, attempt `1`, start SHA `21ef78428779bd6c00cc813a68ffc7e291d179cd`. Thresholds changed: false.
+Provenance: run `33089358310`, attempt `1`, start SHA `aaceb4c73ad39a5fbea2f5195f2f9f3463d19178`. Thresholds changed: false.
