@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "cross_commutator_zero": true,
+    "gravity_carrier_invariant": true,
+    "internal_carrier_invariant": true,
+    "invariant_shift_exact": true,
+    "no_coefficients_selected": true,
+    "no_k003": true,
+    "no_soft_s": true,
+    "parent_exact": true,
+    "shared_normal_derivative_invariant": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FZ7_REPRESENTATION_CLASS_EXISTS_PASS_SCOPED",
+  "gate": "C10.65s6fZ7",
+  "interpretation": "A nonempty compatible representation class exists. This is a prospective representation choice, not an archival inheritance and not a full nonlinear action or full Dirac-count certificate.",
+  "next_gate": "C10.65s6fZ8: preregister a minimal full projectable action template realizing the Z7 representation, then audit same-action constraints/DOF before any soft-s retest.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33099766751,
+    "threshold_changed": false,
+    "trigger_head_sha": "e662dfca2d9fb4a197eb6d123b46d1d837aee292",
+    "workflow": "rtk-c10-65s6fz7-symmetry-first-representation-class.yml"
+  },
+  "schema": "RTK_C10_65S6FZ7_SYMMETRY_FIRST_REPRESENTATION_CLASS_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "theorem": {
+    "cross_commutator": "0 because gravitational U(1) is inert on phi,chi and internal-null symmetry is inert on N,N_i,nu",
+    "gravity_variation_Nbar_i": "N D_i alpha - N D_i alpha = 0",
+    "internal_variation_Phi": "u1*(-u2*epsilon)+u2*(u1*epsilon)=0",
+    "normal_derivative": "DperpPhi=(dot(Phi)-Nbar^i D_i Phi)/N is invariant under both symmetries"
+  },
+  "threshold_changed": false
+}
