@@ -1,0 +1,39 @@
+{
+  "schema": "RTK_C10_65S6FZ21_HMT_MATTER_INTERFACE_TECHNICAL_NATURALNESS_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s6fZ21",
+  "parent_required": "C10_65S6FZ20_PUBLISHED_HMT_MICROSCOPIC_ORIGIN_UNFIXED_FINE_TUNED_IR_PARTIAL_PASS_SCOPED",
+  "question": "Do independently published pre-soft-s sources provide a symmetry-protected or RG-fixed relation that uniquely selects the surviving universal-HMT physical-metric matter-interface couplings before any RTK response comparison?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/html/1310.6666v4",
+      "role": "source-lock that the universal physical-ADM interface retains two arbitrary constants and lacks an obvious UV action-principle origin"
+    },
+    {
+      "id": "arxiv:1805.10299v2",
+      "url": "https://arxiv.org/abs/1805.10299",
+      "role": "independent projectable-Horava radiative-stability audit for matter Lorentz restoration and fine tuning"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ21_PROTECTED_UNIQUE_HMT_MATTER_INTERFACE_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ21_NO_PROTECTED_UNIQUE_SELECTOR_IN_AUDITED_SOURCES_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ21_TECHNICAL_NATURALNESS_SOURCE_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "PROTECTED_UNIQUE requires an audited source to derive a definite symmetry- or RG-protected relation that fixes every scalar-response-relevant universal-HMT interface parameter without using RTK pole/residue/remainder or the later soft-s obstruction. NO_PROTECTED_UNIQUE_SELECTOR applies if the HMT universal-coupling source keeps the interface constants arbitrary while the independent projectable-Horava radiative analysis identifies fine-tuning and only candidate mechanisms such as RG flow or supersymmetry rather than deriving a unique fixed relation for the HMT interface. INCOMPLETE applies if these source statements cannot be locked. The result is scoped to the audited sources and is not a literature-wide no-go or a C9 closure.",
+  "required_guards": [
+    "Z20 parent exact",
+    "sources independent of current RTK soft-s obstruction",
+    "do not infer technical naturalness from classical U(1) invariance alone",
+    "do not choose a1 or a2 from RTK pole/residue/remainder",
+    "do not choose a1 or a2 from soft-s data",
+    "do not promote proposed RG or supersymmetry scenarios to a derived fixed relation",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "do not claim C9 naturalness closure",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
