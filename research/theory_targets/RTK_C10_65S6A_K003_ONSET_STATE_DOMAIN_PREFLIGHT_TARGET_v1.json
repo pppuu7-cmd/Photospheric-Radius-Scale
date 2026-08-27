@@ -1,0 +1,54 @@
+{
+  "schema": "RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s6a",
+  "created_utc": "2026-08-27T01:40:59Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "C10.65s5h": "C10_65S5H_NEXT_K_MULTIBRANCH_LONGER_TIME_TRAJECTORY_PASS_SCOPED",
+    "C10.65s5a": "C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_PASS_SCOPED"
+  },
+  "purpose": "Widen only the k axis by one prospectively selected next anchor, k=0.03 Mpc^-1. First test exact-onset state materialization, approximation-branch availability, inherited matching-order diagnostic ratios, and finite algebraic state conditioning. Do not construct a completed-U1 production seed or enable production feedback at k=0.03 in this gate.",
+  "domain": {
+    "a_on": 0.0002203229136467,
+    "Hc_on_Mpc_inv": 0.0129629303512,
+    "regression_k_Mpc_inv": [0.01],
+    "new_k_Mpc_inv": [0.03],
+    "all_k_Mpc_inv": [0.01, 0.03],
+    "inherited_matching_J": -3.0,
+    "inherited_matching_A2_Mpc2": -1120.906563855608
+  },
+  "prospective_checks": {
+    "exact_onset_relative_a_tolerance": 1e-12,
+    "require_TCA_enum": 0,
+    "require_RSA_enum": 0,
+    "require_UFA_enum": 0,
+    "require_l_max_ur": 17,
+    "regression_relative_tolerance": 1e-12,
+    "off_numeric_text_sha256_identical_both": true,
+    "all_state_coordinates_finite": true,
+    "all_active_UR_higher_coordinates_finite": true,
+    "observer_read_only_static_guard": true,
+    "threshold_changed": false
+  },
+  "measurement_only": {
+    "k_over_Hc": "record without pass/fail threshold; earlier superhorizon guard is intentionally not relaxed",
+    "abs_A2_k2_over_J": "record without pass/fail threshold; earlier matching-order guard is intentionally not relaxed"
+  },
+  "pass_classification": "C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED",
+  "fail_classification": "C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_FAIL_SCOPED",
+  "interpretation_if_pass": "Pinned CLASS can materialize a finite exact-onset scalar state at k=0.03 Mpc^-1 in the same TCA/RSA/UFA branch while exact OFF rollback and the certified k=0.01 onset regression control are preserved. This is only an onset-state/domain preflight and does not certify the inherited matching expansion or production feedback at k=0.03.",
+  "next_if_pass": "Freeze C10.65s6b completed-U1 onset seed/domain audit at k=0.03 Mpc^-1. Explicitly test projector conditioning and inherited matching-order sensitivity before any one-step production feedback.",
+  "non_claims": [
+    "not certification of the inherited matching polynomial at k=0.03",
+    "not completed-U1 seed certification at k=0.03",
+    "not production feedback at k=0.03",
+    "not finite-time stability at k=0.03",
+    "not broad-k stability",
+    "not continuous-time stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
