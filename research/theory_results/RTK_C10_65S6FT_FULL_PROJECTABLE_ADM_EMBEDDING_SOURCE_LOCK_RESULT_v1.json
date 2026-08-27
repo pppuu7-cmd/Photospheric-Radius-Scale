@@ -1,0 +1,51 @@
+{
+  "checks": {
+    "historical_appendix_embedding_still_next": true,
+    "historical_appendix_pinned_commit": true,
+    "historical_appendix_quadratic_scoped": true,
+    "historical_appendix_source_direction_still_next": true,
+    "k003_still_blocked": true,
+    "no_soft_s_retest": true,
+    "parent_exact_classification": true,
+    "parent_explicitly_not_full_action": true,
+    "parent_requires_source_alignment_derived": true,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FT_BLOCKED_NO_FULL_PROJECTABLE_ADM_EMBEDDING_SCOPED",
+  "decision": "BLOCKED_NO_FULL_PROJECTABLE_ADM_EMBEDDING_SCOPED",
+  "evidence": {
+    "historical_appendix_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "historical_appendix_path": "research/methods/RTK_FORMULA_BIBLE_C8_DEGENERATE_AUXILIARY_APPENDIX.md",
+    "historical_scope": "quadratic/scoped; not a final covariant completion",
+    "parent_candidate_lagrangian": "L=kappa/2*(dotX+a*doty)^2-[Omega2*X^2/2+g*X*y+m2*y^2/2]",
+    "parent_nonclaim": "not a full RTK action"
+  },
+  "gate": "C10.65s6fT",
+  "missing_source_locked_inputs": [
+    "one explicit projectable ADM action containing the rank-one kinetic pair",
+    "explicit map from toy variables X,y to ADM/clock fields",
+    "lapse and scalar-shift dependence fixed by the same action",
+    "source direction derived from the action rather than imposed",
+    "background coefficient functions fixed without using the failed soft-s observable",
+    "nonlinear action sufficient for a full Dirac constraint count"
+  ],
+  "next_gate": "Freeze a separately motivated fixed-action construction gate only when an explicit projectable ADM embedding is proposed independently of the failed soft-s observable; then rerun this source-lock unchanged.",
+  "nonclaims": [
+    "not a no-go for Dirac-degenerate completions",
+    "not a soft-s calculation",
+    "not radiative naturalness",
+    "not k=0.03 production permission"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33073157140,
+    "repo_head_at_job_start": "7e271dd60cb7b1eb7e2a4175673ac369c86b6cf5",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6ft-full-projectable-adm-embedding-source-lock.yml"
+  },
+  "schema": "RTK_C10_65S6FT_FULL_PROJECTABLE_ADM_EMBEDDING_SOURCE_LOCK_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
