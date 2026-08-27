@@ -1,0 +1,46 @@
+{
+  "schema": "RTK_C10_65S6FH_SOFT_SHIFT_REGULARITY_TARGET_v1",
+  "gate": "C10.65s6fH",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Derive the scalar-shift soft-q scaling of the frozen projectable ADM kinetic sector after s6fG has source-locked the inherited F(t,N) direct shift source to zero. This gate is deliberately narrower than the final ZERO/NONZERO soft-s classification: prove whether the q->0 constraint reduction is regular/finite and identify every term that must be retained before taking q_s=0.",
+  "parents": {
+    "s6fF": "C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_BLOCKED_ACTION_SOURCE_LOCK_INCOMPLETE_SCOPED",
+    "s6fG": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED"
+  },
+  "frozen_action_sector": {
+    "lapse": "projectable N=N(t); no local finite-k lapse mode",
+    "metric": "gamma_ij=a^2 exp(2 zeta) delta_ij",
+    "shift": "N_i=partial_i beta",
+    "kinetic": "(Mstar^2/2) N sqrt(gamma) [K_ij K^ij-lambda_HL K^2]",
+    "inherited_scalar_direct_shift_source": "0 exactly from F(t,N)",
+    "additional_shift_operators": "none in MINIMAL_PROJECTABLE_N2_S1HALF_v1"
+  },
+  "required_symbolic_checks": [
+    "derive TrS=-Delta beta-grad(zeta).grad(beta) for S_ij=-beta_ij+Gamma^k_ij beta_k",
+    "derive quadratic scalar-shift kernel proportional to (1-lambda_HL) q^4",
+    "derive quadratic zeta-beta mixing proportional to -(1-3 lambda_HL) dot(zeta) Delta beta after spatial integration by parts",
+    "derive the cubic beta-linear source identity proportional to zeta grad(dot(zeta)).grad(beta)",
+    "for hard-hard -> soft kinematics p=-k-q, derive J2(q)=O(q^2), not O(q^0)",
+    "derive lim_{q->0} J2/q^2 proportional to -[omega(k)+k v_g(k) mu^2]",
+    "show J1=O(q^2), K_beta=O(q^4), hence J1 J2/K_beta=O(q^0) is finite rather than automatically zero",
+    "confirm q_s=0 substitution before reduction would erase this finite candidate exchange term"
+  ],
+  "outcome_policy": "PASS is a scoped derivation if the scaling and finite-limit statements are established. This gate must not classify the complete reduced cubic vertex as ZERO or NONZERO because cubic beta^2*zeta kernel-variation terms and the explicit alpha6 state-function contribution must still be combined in the next gate.",
+  "forbidden": [
+    "setting q_s=0 before solving the shift constraint",
+    "introducing a local finite-k lapse mode",
+    "fitting lambda_HL, M_U, M_K or any nonlinear coefficient to obtain cancellation",
+    "using k=0.03 production output",
+    "claiming radiative-naturalness closure"
+  ],
+  "pass_classification": "C10_65S6FH_SOFT_SHIFT_REGULARITY_PASS_SCOPED",
+  "fail_classification": "C10_65S6FH_SOFT_SHIFT_REGULARITY_FAIL_SCOPED",
+  "next_if_pass": "C10.65s6fI: derive the complete cubic reduced scalar vertex of MINIMAL_PROJECTABLE_N2_S1HALF_v1 by including the beta^2*zeta kernel variation and alpha6(X) contribution, then evaluate q_s->0 and rerun the unchanged s6fF ZERO/NONZERO semantics.",
+  "non_claims": [
+    "not final soft-s cancellation or survival",
+    "not proof the candidate nonlinear branch is unique",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ]
+}
