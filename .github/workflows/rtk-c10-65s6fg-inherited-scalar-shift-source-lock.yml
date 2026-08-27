@@ -1,0 +1,58 @@
+name: RTK C10.65s6fG inherited scalar shift source lock
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-c10-65s6fg-inherited-scalar-shift-source-lock.yml'
+      - '.github/rtk-c10-65s6fg-inherited-scalar-shift-source-lock-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Execute frozen s6fG source-lock theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s6fg_inherited_scalar_shift_source_lock.py
+          python3 research/shadow/rtk_c10_65s6fg_inherited_scalar_shift_source_lock.py | tee /tmp/s6fg.log
+          grep -q '^C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED$' /tmp/s6fg.log
+      - name: Add immutable provenance
+        run: |
+          python3 - <<'PY'
+          import json, os
+          p='research/theory_results/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_RESULT_v1.json'
+          r=json.load(open(p))
+          r['provenance']={'workflow':'rtk-c10-65s6fg-inherited-scalar-shift-source-lock.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'repo_head_at_job_start':os.environ['GITHUB_SHA'],'threshold_changed':False}
+          open(p,'w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          stamp=$(date -u +%Y-%m-%dT%H%MZ)
+          cpfile="research/checkpoints/RTK_C10_65S6FG_PASS_TO_S6FH_CUBIC_SHIFT_FRONTIER_${stamp}.md"
+          cat > "$cpfile" <<'EOF'
+          # RTK C10.65s6fG inherited scalar shift source-lock checkpoint
+
+          C10.65s6fG source-locks the archived unitary-gauge clock/Khronon sector as F(t,N). Since the scalar shift is N_i=partial_i psi and F has no N_i argument, delta S_F / delta N_i = 0 exactly. Therefore the inherited F(t,N) sector contributes no direct cubic scalar-shift source.
+
+          This resolves the scalar-sector portion of the s6fF blocker without adding a coefficient or changing the s6fE candidate branch. k=0.03 production remains blocked.
+
+          Next gate: C10.65s6fH derive the cubic scalar-shift source and q_s->0 reduced limit from the explicit candidate gravitational kinetic/geometry plus alpha6 carrier sector, then rerun unchanged s6fF ZERO/NONZERO semantics.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_RESULT_v1.json "$cpfile"
+          git commit -m 'Record C10.65s6fG inherited scalar shift source lock'
+          git push origin HEAD:rtk-class-build
