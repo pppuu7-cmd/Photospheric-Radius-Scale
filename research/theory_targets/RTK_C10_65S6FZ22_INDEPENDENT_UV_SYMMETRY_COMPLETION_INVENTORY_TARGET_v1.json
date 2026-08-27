@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S6FZ22_INDEPENDENT_UV_SYMMETRY_COMPLETION_INVENTORY_TARGET_v1",
+  "gate": "C10.65s6fZ22",
+  "parent_required": "C10_65S6FZ21_NO_PROTECTED_UNIQUE_SELECTOR_IN_AUDITED_SOURCES_PARTIAL_PASS_SCOPED",
+  "question": "Do independently published UV/symmetry mechanisms proposed before the current RTK soft-s obstruction provide an explicit action-level low-energy matching map that uniquely fixes the universal-HMT matter-interface relation relevant to RTK response?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1309.5569",
+      "url": "https://arxiv.org/abs/1309.5569",
+      "role": "supersymmetric-matter/Lifshitz-gravity protection candidate; audit whether it derives the HMT universal-interface constants or an equivalent physical-ADM matching map"
+    },
+    {
+      "id": "arxiv:1305.0011",
+      "url": "https://arxiv.org/abs/1305.0011",
+      "role": "strong-dynamics emergent-Lorentz-invariance candidate; audit whether it derives the HMT universal-interface constants or an equivalent physical-ADM matching map"
+    },
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/html/1310.6666v4",
+      "role": "reference definition of the universal HMT physical-ADM interface and its arbitrary constants a1,a2"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ22_EXPLICIT_INDEPENDENT_HMT_INTERFACE_UV_MATCH_FOUND_PASS_SCOPED",
+    "C10_65S6FZ22_CANDIDATE_PROTECTION_MECHANISMS_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ22_UV_SYMMETRY_COMPLETION_INVENTORY_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "MATCH_FOUND requires at least one audited independent completion to provide an explicit action-level map into the universal-HMT physical matter interface that fixes every scalar-response-relevant interface parameter without using RTK pole/residue/remainder, soft-s data, or k=0.03 production. CANDIDATE_PROTECTION_NO_MATCH applies when the audited sources establish concrete supersymmetric and/or strong-dynamics protection mechanisms for Lorentz restoration but do not formulate the universal HMT physical-ADM interface and do not derive a1,a2 or an equivalent unique matching relation. INCOMPLETE applies if the source statements cannot be locked. This is an audited-source inventory, not a literature-wide no-go and not C9 closure.",
+  "required_guards": [
+    "Z21 parent exact",
+    "sources predate the current RTK soft-s obstruction",
+    "do not infer HMT matching from generic suppression of Lorentz violation",
+    "do not identify a Lifshitz scalar-gravity toy model with HMT without an explicit map",
+    "do not identify generic holographic strong dynamics with the HMT matter interface without an explicit map",
+    "do not choose a1 or a2 from RTK response",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "do not claim C9 naturalness closure",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
