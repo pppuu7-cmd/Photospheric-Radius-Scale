@@ -1,0 +1,61 @@
+{
+  "schema": "RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_TARGET_v1",
+  "gate": "C10.65s6fL",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Derive the exact hard-hard -> homogeneous (spatial q=0, nonzero frequency) cubic sources for the global variables zeta_0 and n_0 from the same fixed candidate action. Reduce the finite-k hard scalar shift first, then couple the two hard modes to the independently certified homogeneous/global block of s6fK. Determine whether a genuine homogeneous virtual exchange exists or whether the global Hamiltonian constraint projects it out. This gate is outcome-neutral and precedes any rerun of the s6fF ZERO/NONZERO soft-s classification.",
+  "parents": {
+    "s6fK": "C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_PASS_SCOPED",
+    "s6fI": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED",
+    "s6fG": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED"
+  },
+  "frozen_action": {
+    "gravity": "(Mstar^2/2) N sqrt(gamma) [R3+K_ij K^ij-lambda_HL K^2-2Lambda]",
+    "clock": "fixed C8 shift-symmetric P(X_U) action from research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "mixed_clock_gradient": "C(X_U) D_iTheta_U D^iTheta_U with C=Mstar^2/(2X_U)",
+    "uv_carrier": "alpha6(X_U) D_iR3 D^iR3 with alpha6(X)=alpha6_0 (X/X0)^(1/2)",
+    "extra_shift_operators": "none",
+    "projectability": "N=N(t)"
+  },
+  "homogeneous_quadratic_parent": {
+    "A": "(3/2)Mstar^2(1-3lambda_HL)",
+    "D": "K_phys/2=Mstar^2 M_K^2",
+    "Delta_N": "A H^2+D",
+    "Q_hom": "A D/Delta_N"
+  },
+  "required_derivation": [
+    "expand the full fixed action to terms linear in one homogeneous field (zeta_0 or n_0) and quadratic in two finite-k hard scalar fields",
+    "include gravitational kinetic, R3, P(X_U), C(X_U)(DTheta_U)^2 and alpha6(X_U) D_iR3D^iR3 pieces from the same action",
+    "use the exact finite-k hard lapse/shift solution appropriate to the candidate branch before forming the hard-hard homogeneous source",
+    "do not use a punctured q->0 beta solution for the homogeneous leg",
+    "derive source vector S_hom=(S_zeta0,S_n0) for equal-|k| COM hard modes",
+    "invert only the s6fK homogeneous/global quadratic block, exposing Delta_N and any frequency-dependent homogeneous denominator",
+    "classify exactly whether the homogeneous virtual exchange is absent/projected, finite nonzero, or singular on an explicit denominator surface",
+    "keep bare n=2 and alpha6 state-function contact pieces separate from homogeneous exchange until the final sum"
+  ],
+  "outcome_policy": {
+    "projected": "scientific PASS if the exact global constraint removes the homogeneous virtual channel",
+    "finite": "scientific PASS if a finite source and exchange are derived",
+    "singular": "scientific PASS_SCOPED if an explicit fixed-action degeneracy surface is derived; do not tune parameters away from it",
+    "incomplete": "BLOCKED if any same-action cubic source is not source-locked; missing terms may not be silently set to zero"
+  },
+  "forbidden": [
+    "using any special mu direction or angular average from the punctured limit",
+    "using k=0.03 production output",
+    "fitting M_U, M_K, lambda_HL or alpha6 to force cancellation",
+    "dropping P(X_U) or C(X_U) cubic terms because their quadratic spatial gradients vanish on the homogeneous leg",
+    "claiming final soft-s cancellation before bare+alpha6+homogeneous pieces are explicitly summed"
+  ],
+  "pass_projected_classification": "C10_65S6FL_HOMOGENEOUS_VIRTUAL_CHANNEL_PROJECTED_PASS_SCOPED",
+  "pass_finite_classification": "C10_65S6FL_HOMOGENEOUS_VIRTUAL_CHANNEL_FINITE_PASS_SCOPED",
+  "pass_singular_classification": "C10_65S6FL_HOMOGENEOUS_VIRTUAL_CHANNEL_SINGULAR_SURFACE_PASS_SCOPED",
+  "blocked_classification": "C10_65S6FL_HOMOGENEOUS_CUBIC_SOURCE_INCOMPLETE_BLOCKED_SCOPED",
+  "next_if_complete": "Combine the archived bare n=2 cubic vertex, alpha6(X) state-function contribution, and the exact homogeneous/global exchange from s6fL, then rerun the unchanged s6fF ZERO/NONZERO semantics on the frozen candidate branch.",
+  "non_claims": [
+    "not all-sector unitarity",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ]
+}
