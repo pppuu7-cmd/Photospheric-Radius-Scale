@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "no_k003": true,
+    "no_soft_s": true,
+    "parent_exact": true,
+    "shared_projectability_explicit": true,
+    "target_exact": true,
+    "threshold_unchanged": true,
+    "z2_adm_inert_under_field_space_symmetry": true,
+    "z2_field_space_symmetry_explicit": true,
+    "z2_uses_Dperp_Phi": true,
+    "z4_requires_new_same_action_interface": true
+  },
+  "classification": "C10_65S6FZ5_SYMMETRY_INTERFACE_UNDERDETERMINED_PASS_SCOPED",
+  "finding": "The two parent sectors share projectability, and the s6fZ2 null redundancy is explicit, but the newly introduced fields phi,chi have no source-locked representation under the gravitational parent gauge symmetry and D_perp Phi is not tied to the same invariant lapse/shift variables. Therefore the cross-symmetry algebra and same-action lapse/shift source cannot yet be derived rather than chosen.",
+  "gate": "C10.65s6fZ5",
+  "missing_interface_data": {
+    "Dperp_shared_shift_definition_not_source_locked": true,
+    "cross_symmetry_commutator_not_source_locked": true,
+    "phi_chi_gravity_gauge_representation_not_source_locked": true,
+    "same_action_scalar_lapse_shift_interface_not_source_locked": true
+  },
+  "next_gate": "C10.65s6fZ6: source-lock audit for a pre-soft-s representation of the new scalar carrier under the projectable gravitational gauge symmetry. If none exists, freeze a symmetry-first representation theorem/class before writing any combined action.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "frozen_target_commit": "953d37a2c7a28b9530e738368282eeea8382b2ff",
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33096035335,
+    "repo_head_at_job_start": "5d5a790a11fa1f1ed403677282a6b469b5d9231e",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz5-symmetry-interface-closure-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false,
+  "what_is_not_claimed": "This is not a conflict between the symmetries and not a no-go. It is an identifiability/interface blocker: neutrality, charge assignments or an invariant-shift coupling must not be invented after the soft-s result."
+}
