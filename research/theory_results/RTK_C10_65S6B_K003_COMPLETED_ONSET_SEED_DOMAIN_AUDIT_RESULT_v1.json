@@ -1,0 +1,212 @@
+{
+  "checks": {
+    "all_projector_and_carrier_values_finite": true,
+    "all_projector_denominators_nonzero": true,
+    "higher_ur_controls_explicitly_labeled": true,
+    "historical_metric_not_consumed": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "new_anchor_count": true,
+    "physical_traceless_normalized_residual_max": true,
+    "preferred_A_Hamiltonian_momentum_normalized_residual_max": true,
+    "regression_relative_max": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED",
+  "completed_carrier_vs_legacy_observer_measurement_only": {
+    "delta_b": {
+      "completed": 1.5682839556342525,
+      "legacy_observer": -2.0950502361255054,
+      "relative_difference": 1.7485662771192392
+    },
+    "delta_g": {
+      "completed": 2.0910452741790033,
+      "legacy_observer": -2.7932527849855986,
+      "relative_difference": 1.7486058137734155
+    },
+    "delta_ur": {
+      "completed": 2.0910452741790033,
+      "legacy_observer": -2.6097634574115696,
+      "relative_difference": 1.801239387516352
+    },
+    "shear_ur": {
+      "completed": 0.2690175742932727,
+      "legacy_observer": 0.12423821501440595,
+      "relative_difference": 0.538178071299661
+    },
+    "theta_b": {
+      "completed": -0.08192345383896382,
+      "legacy_observer": 0.010256262253307051,
+      "relative_difference": 1.125193235547267
+    },
+    "theta_g": {
+      "completed": -0.08192345383896382,
+      "legacy_observer": 0.010248807679494461,
+      "relative_difference": 1.1251022411682061
+    },
+    "theta_ur": {
+      "completed": -0.08192345383896382,
+      "legacy_observer": 0.0047699755924211365,
+      "relative_difference": 1.0582247862962106
+    }
+  },
+  "gate": "C10.65s6b",
+  "interpretation": "The inherited phenomenological O(k^2) matching polynomial can be algebraically propagated through the completed-U1 onset projector at k=0.03 Mpc^-1 without a pole or numerical inconsistency, producing a finite carrier while preserving the certified k=0.01 regression. This is an algebraic/extrapolation usability result only, not evidence that omitted higher-order matching terms are small.",
+  "matching_polynomial_status": "INHERITED_PRE_EFT_PHENOMENOLOGICAL_EXTRAPOLATION_UNCERTIFIED_OMITTED_ORDER",
+  "maxima": {
+    "abs_A2_k2_over_J": 0.33627196915668245,
+    "k_over_Hc": 2.3142915364983696,
+    "min_abs_denominator": 1.503340107253028e-06,
+    "projector_constraint_normalized": 7.642416325772759e-90,
+    "regression_relative": 9.692272409004475e-17,
+    "traceless_normalized": 0.0
+  },
+  "next_gate": "Freeze C10.65s6c omitted-order/sensitivity gate before any k=0.03 production feedback: propagate the same prospectively specified 27-point dimensionless higher-order matching stress envelope used at k=0.01 and quantify its effect on the completed onset carrier/projector without tuning to the outcome.",
+  "non_claims": [
+    "not a derivation of the pre-EFT matching polynomial at k=0.03",
+    "not proof that omitted higher-order terms are negligible",
+    "not production feedback at k=0.03",
+    "not finite-time stability at k=0.03",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s6b_k003_completed_onset_seed_domain_audit.py",
+    "github_actions_run_id": 33034239784,
+    "repo_head_at_job_start": "f5d0d394154377fbb3e63f4c333a1f85cfbc4bb0",
+    "s6a_parent_run_id": 33031013387,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6b-k003-completed-onset-seed-domain-audit.yml"
+  },
+  "record": {
+    "carrier": {
+      "delta_b": 1.5682839556342525,
+      "delta_cdm_khr": 1.5682839556342525,
+      "delta_g": 2.0910452741790033,
+      "delta_ur": 2.0910452741790033,
+      "phi_CLASS_equals_Psi_N": 1.8590332877014333,
+      "shear_ur": 0.2690175742932727,
+      "theta_b": -0.08192345383896382,
+      "theta_cdm_khr": -0.08192345383896382,
+      "theta_g": -0.08192345383896382,
+      "theta_ur": -0.08192345383896382
+    },
+    "historical_CLASS_metric_consumed": false,
+    "k": 0.03,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "projector": {
+      "A_residual_normalized": 0.0,
+      "B_denominator": -1.503340107253028e-06,
+      "B_pref": -143.39532870130935,
+      "D_A": 1.0001569006569815,
+      "Hamiltonian_residual_normalized": 0.0,
+      "Phi_N": 1.7899820483698026,
+      "Psi_N": 1.8590332877014333,
+      "V_N": -91.02605982107092,
+      "lapse_denominator": -0.000676842359057893,
+      "momentum_residual_normalized": 7.642416325772759e-90,
+      "phi_pref": 1.2018205462264173,
+      "psi_pref": 0.00020962905892966691,
+      "psi_pref_prime": -1.493022420888127e-05,
+      "shear_feedback_denominator": 0.9999970315069496,
+      "traceless_residual_normalized": 0.0
+    },
+    "ur_l_ge_3": [
+      {
+        "F_l": 1.187607978221342e-06,
+        "F_l_over_k_pow_l": 2011224539.317079,
+        "l": 10,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 1.3824272479346982e-07,
+        "F_l_over_k_pow_l": 7803842277.513581,
+        "l": 11,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 1.4766186708322112e-08,
+        "F_l_over_k_pow_l": 27785185389.01235,
+        "l": 12,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 1.4574203999633109e-09,
+        "F_l_over_k_pow_l": 91413120174.72688,
+        "l": 13,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 1.3370805498797912e-10,
+        "F_l_over_k_pow_l": 279550327397.0187,
+        "l": 14,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 1.1460066467720557e-11,
+        "F_l_over_k_pow_l": 798671736301.6261,
+        "l": 15,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 9.21685671940896e-13,
+        "F_l_over_k_pow_l": 2141128640067.3726,
+        "l": 16,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 6.982306391469876e-14,
+        "F_l_over_k_pow_l": 5406765973703.995,
+        "l": 17,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 0.1205949493496475,
+        "F_l_over_k_pow_l": 4466.4796055425,
+        "l": 3,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 0.040235773027971725,
+        "F_l_over_k_pow_l": 49673.793861693484,
+        "l": 4,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 0.01044697777114776,
+        "F_l_over_k_pow_l": 429916.78070566914,
+        "l": 5,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 0.002237114802363738,
+        "F_l_over_k_pow_l": 3068744.584861095,
+        "l": 6,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 0.00040901307191874294,
+        "F_l_over_k_pow_l": 18702015.176897254,
+        "l": 7,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 6.535582144274291e-05,
+        "F_l_over_k_pow_l": 99612591.74324481,
+        "l": 8,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      },
+      {
+        "F_l": 9.283533723006011e-06,
+        "F_l_over_k_pow_l": 471652376.3148916,
+        "l": 9,
+        "status": "HIGHER_ORDER_HISTORICAL_CONTROL_FROM_S6A_ONLY"
+      }
+    ]
+  },
+  "schema": "RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_TARGET_v1.json",
+  "threshold_changed": false
+}

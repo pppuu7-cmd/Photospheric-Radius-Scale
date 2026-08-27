@@ -1,0 +1,3 @@
+# RTK C10.65s6b k=0.03 completed onset seed audit
+
+Classification: `C10_65S6B_K003_COMPLETED_ONSET_SEED_DOMAIN_AUDIT_PASS_SCOPED`. Anchor `k=0.03 Mpc^-1` uses the inherited pre-EFT phenomenological O(k^2) matching polynomial only as an explicitly uncertified extrapolation. Max normalized A/H/M residual: `7.64241632577275889e-90`; traceless residual: `0.00000000000000000e+00`; regression error at k=0.01: `9.69227240900447502e-17`; minimum absolute algebraic denominator: `1.50334010725302799e-06`. `|A2 k^2/J|=3.36271969156682449e-01` and `k/Hc=2.31429153649836961e+00` remain measurement-only. No production feedback is certified by this gate.
