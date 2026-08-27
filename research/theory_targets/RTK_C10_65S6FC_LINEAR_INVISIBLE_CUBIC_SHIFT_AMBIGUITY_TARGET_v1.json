@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_TARGET_v1",
+  "gate": "C10.65s6fC",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "purpose": "Determine whether the already-certified background/linear RTK stack can uniquely fix the nonlinear scalar-shift action required by C10.65s6fB, without inventing a UV coefficient. Exhibit or exclude a projectable local ADM deformation that vanishes on the FLRW background and through quadratic order but changes the cubic scalar-shift source.",
+  "parents": {
+    "C10.65s6fB": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_BLOCKED_INCOMPLETE_FIXED_ACTION_SCOPED",
+    "C10.65s6fA": "LOCAL_ALPHA6_STATE_FUNCTION_CANNOT_BY_ITSELF_CANCEL_SOFT_S_OVER_FINITE_K_INTERVAL"
+  },
+  "candidate_deformation": {
+    "operator": "DeltaS_nu = integral N sqrt(gamma) nu(X) Sigma_ij Sigma^ij",
+    "Sigma_ij": "K_ij-(1/3)K gamma_ij",
+    "background_conditions": ["Sigma_ij[FLRW]=0", "nu(X0)=0"],
+    "allowed_nonlinear_slope": "nu_X(X0) arbitrary unless independently fixed by the full UV action or a symmetry"
+  },
+  "frozen_checks": {
+    "projectability_preserved": true,
+    "background_deformation_zero": true,
+    "quadratic_deformation_zero_when_nu_X0_value_zero": true,
+    "cubic_term_contains_nu_X_times_deltaX_times_deltaSigma_squared": true,
+    "scalar_shift_tensor_norm_nonzero_for_finite_k": true,
+    "existing_background_linear_certificates_cannot_fix_nu_X": true,
+    "no_new_coefficient_fit_to_soft_s_output": true,
+    "threshold_changed": false
+  },
+  "classification_if_witness_exists": "C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_PASS_SCOPED",
+  "classification_if_excluded": "C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_EXCLUDED_SCOPED",
+  "interpretation_if_witness_exists": "The nonlinear scalar-shift action is not identifiable from the already-certified FLRW and linear/quadratic stack alone. A state-dependent shear operator can be tuned to vanish through quadratic order while changing the cubic shift source. Therefore rerunning s6fB requires an additional nonlinear UV/symmetry principle, not a coefficient inferred from existing linear data.",
+  "next_if_witness_exists": "Freeze C10.65s6fD nonlinear completion principle audit: search the existing RTK construction for a symmetry, degeneracy condition, covariant carrier, or UV matching rule that fixes/forbids nu_X(X0) and the analogous cubic shift operators. Do not choose nu_X phenomenologically from the desired cancellation.",
+  "non_claims": [
+    "not proof that the soft-s vertex is nonzero in every completion",
+    "not proof that cancellation is impossible after a complete UV action is specified",
+    "not a measurement or fit of nu_X",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ]
+}
