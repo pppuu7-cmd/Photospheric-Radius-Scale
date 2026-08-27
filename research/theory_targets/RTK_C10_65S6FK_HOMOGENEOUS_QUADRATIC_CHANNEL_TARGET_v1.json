@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_TARGET_v1",
+  "gate": "C10.65s6fK",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Source-lock and derive the exact homogeneous q=0 quadratic scalar/global-lapse block on the frozen candidate using the fixed C8 P(X_U) action. Determine the homogeneous lapse denominator and reduced kinetic coefficient before any hard-hard-homogeneous cubic vertex calculation.",
+  "parents": {
+    "s6fJ": "C10_65S6FJ_EXACT_HOMOGENEOUS_CHANNEL_SEPARATE_PASS_SCOPED",
+    "fixed_scalar_action": "RTK_C8_U1_FIXED_SHIFT_SYMMETRIC_SCALAR_ACTION_V1"
+  },
+  "source_lock": {
+    "scalar_action_path": "research/RTK_C8_U1_FIXED_SCALAR_ACTION_v1.json",
+    "gravity_kinetic": "(Mstar^2/2)(K_ij K^ij-lambda_HL K^2)",
+    "homogeneous_metric": "gamma_ij=a^2 exp(2 zeta_0(t)) delta_ij",
+    "homogeneous_lapse": "N=1+n_0(t)",
+    "homogeneous_shift": "N_i=0",
+    "homogeneous_spatial_operators": "R3=0, D_i R3=0, D_i Theta_U=0; alpha6 and mixed spatial-gradient carriers vanish in the homogeneous quadratic block"
+  },
+  "required_derivation": [
+    "write A=(3/2)Mstar^2(1-3lambda_HL) for the homogeneous gravitational kinetic coefficient",
+    "expand N P(X0/N^2) through n_0^2 and derive D=X P_X+2X^2 P_XX",
+    "use K_phys=2X(P_X+2XP_XX)=2D and the fixed-action identity K_phys=2Mstar^2 M_K^2",
+    "use only background Hamiltonian/tadpole equations to cancel zeta_0 n_0 and zeta_0^2 mass terms",
+    "derive L2_hom/a^3=A dot(zeta_0)^2-2AH n_0 dot(zeta_0)+(AH^2+D)n_0^2",
+    "expose Delta_N=AH^2+D as the exact global-lapse algebraic denominator",
+    "when Delta_N is nonzero derive n_0=AH dot(zeta_0)/Delta_N and Q_hom=A D/Delta_N",
+    "compare symbolically with the punctured finite-y kinetic coefficient D/H^2 and do not assume equality"
+  ],
+  "outcome_policy": "PASS if the homogeneous quadratic block and denominator are derived exactly. A zero Delta_N is a scientifically valid singular-branch result, not a reason to alter the action. This gate does not yet interpret Q_hom as a local particle ghost/no-ghost criterion because s6fJ classified q=0 as a background/global sector.",
+  "forbidden": [
+    "using the finite-y momentum constraint n=dot(zeta)/H at exact q=0",
+    "adding a homogeneous scalar shift",
+    "choosing M_K or lambda_HL to force a desired sign",
+    "using k=0.03 production output"
+  ],
+  "pass_classification": "C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_PASS_SCOPED",
+  "fail_classification": "C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_FAIL_SCOPED",
+  "next_if_pass": "C10.65s6fL: derive the hard-hard-homogeneous cubic source for (zeta_0,n_0) from the same fixed action, including the n=2 alpha6(X) carrier and hard-mode shift already reduced at finite k, then compute the exact q=0 virtual exchange or prove the global constraint removes it.",
+  "non_claims": [
+    "not final soft-s cancellation/survival",
+    "not a local homogeneous ghost theorem",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ]
+}
