@@ -1,0 +1,47 @@
+{
+  "checks": {
+    "algebraic_hessian_rank_one_exact": true,
+    "delta_Phi_zero": true,
+    "kinetic_hessian_rank_one_exact": true,
+    "no_k003_production": true,
+    "no_soft_s_input_used": true,
+    "null_coordinate_absent_from_action": true,
+    "parent_exact": true,
+    "primary_null_constraint_exact": true,
+    "reduced_response_affine_in_omega2": true,
+    "source_parallel_exact": true,
+    "target_gate_exact": true,
+    "threshold_changed_false": true,
+    "two_field_subsystem_dof_one": true,
+    "u_dot_n_zero": true
+  },
+  "classification": "C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_CLASS_PASS_SCOPED",
+  "exact_theorem": {
+    "algebraic_matrix": "M = m*u*u^T",
+    "finite_pole_bound": "at most one finite dynamical pole in the two-field quotient sector",
+    "gauge_invariant_field": "Phi = u1*phi + u2*chi",
+    "kinetic_matrix": "K = kappa*u*u^T",
+    "null_generator": "n = (-u2,u1)",
+    "omega2_polynomial_degree": 1,
+    "primary_constraint": "n.p = 0",
+    "reduced_inverse_response": "-kappa*u1**4*z - 2*kappa*u1**2*u2**2*z - kappa*u2**4*z + m*u1**4 + 2*m*u1**2*u2**2 + m*u2**4",
+    "source_vector": "s = sigma*u",
+    "two_field_subsystem_physical_scalar_dof": 1
+  },
+  "finding": "An explicit local field-space gauge template exists: make the two scalars enter a projectable ADM action only through Phi=u.phi_vec, with local redundancy delta(phi,chi)=epsilon*(-u2,u1). This symmetry enforces the s6fZ rank-one kinetic/algebraic/source structure and leaves exactly one physical scalar in the two-field subsystem. It does not fix the gravitational ADM sector, background functions, matter coupling, or the full coupled ADM degree-of-freedom count.",
+  "gate": "C10.65s6fZ2",
+  "next_gate": "C10.65s6fZ3: freeze a full-coupled-constraint identifiability/preflight for this symmetry template. Test whether a projectable ADM gravitational sector can be specified independently of soft-s so that the combined lapse/shift plus field-space gauge constraint algebra closes and the total scalar DOF count is explicit. Do not evaluate soft-s or k=0.03 production.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "frozen_target_commit": "5c8a2566447b76c06267ad8af9b46fa031896456",
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33093369577,
+    "repo_head_at_job_start": "823c6407c37a9edcf29439d4a2a6aace1b761b23",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz2-projectable-gauge-realization-template.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
