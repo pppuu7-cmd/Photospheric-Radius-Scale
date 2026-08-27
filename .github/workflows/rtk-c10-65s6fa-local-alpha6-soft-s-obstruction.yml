@@ -1,0 +1,77 @@
+name: RTK C10.65s6fA local alpha6 soft-s obstruction
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/rtk-c10-65s6fa-local-alpha6-soft-s-obstruction-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Verify frozen target and parent
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_TARGET_v1.json'))
+          p=json.load(open('research/theory_results/RTK_C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_RESULT_v1.json'))
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          assert p['classification']==t['parent']
+          assert p['decision']=='K003_PRODUCTION_REMAINS_BLOCKED_PENDING_FULL_CUBIC_CONSTRAINT_REDUCTION'
+          print('C10_65S6FA_FROZEN_PARENT_PASS')
+          PY
+      - name: Execute obstruction theorem
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s6fa_local_alpha6_soft_s_obstruction.py
+          python3 research/shadow/rtk_c10_65s6fa_local_alpha6_soft_s_obstruction.py | tee s6fa.log
+          grep -q '^C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_PASS_SCOPED ' s6fa.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, subprocess
+          p='research/theory_results/RTK_C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_RESULT_v1.json'
+          r=json.load(open(p))
+          r['provenance']={'repo_head_at_job_start':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'workflow':'rtk-c10-65s6fa-local-alpha6-soft-s-obstruction.yml','threshold_changed':False}
+          open(p,'w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          cat > research/checkpoints/RTK_C10_65S6FA_LOCAL_ALPHA6_OBSTRUCTION_RESULT_2026-08-27T0445Z.md <<'EOF'
+          # RTK C10.65s6fA local alpha6 soft-s obstruction
+
+          Classification: `C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_PASS_SCOPED`.
+
+          The archived nonlinear-alpha6 and soft-s cancellation contracts were source-locked from commit `13acfdbc16d2f3117f1299b8552bcf7b1f996bd1`.
+
+          The archived necessary condition is
+          `|1-2s1| = 3H/[2 omega(k)]` with
+          `omega(k)=c_a k sqrt[(1+k^4/M_U^4)/(1+k^2/M_K^2)]`.
+
+          For fixed positive background scales,
+          `d ln[3H/(2omega)]/d ln k = -M_K^2/(M_K^2+k^2)-2k^4/(M_U^4+k^4) < 0`.
+
+          Hence one local background state-function slope `s1` cannot cancel the soft-s vertex over a finite k interval. The archived special completion `s1=1/2` gives a zero left side while the required magnitude is positive.
+
+          This does not yet include the full scalar-shift exchange contribution. `k=0.03 Mpc^-1` production remains blocked. Next gate: C10.65s6fB full scalar-shift cubic reduction/source lock and q_s=0 exchange test.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_RESULT_v1.json research/checkpoints/RTK_C10_65S6FA_LOCAL_ALPHA6_OBSTRUCTION_RESULT_2026-08-27T0445Z.md
+          git commit -m 'Record C10.65s6fA local alpha6 soft-s obstruction'
+          git push origin HEAD:rtk-class-build
