@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65S6FV_RANK_ONE_EMBEDDING_IDENTIFIABILITY_TARGET_v1",
+  "gate": "C10.65s6fV",
+  "title": "Rank-one projectable embedding identifiability theorem",
+  "parent": {
+    "gate": "C10.65s6fU",
+    "required_classification": "C10_65S6FU_PROJECTABLE_RANK_ONE_KINEMATIC_EMBEDDING_CLASS_PASS_SCOPED"
+  },
+  "question": "Do the rank-one kinetic condition and the existence of at most one finite pole uniquely determine the algebraic/potential matrix and action-derived source direction needed for a full projectable ADM embedding?",
+  "frozen_setup": {
+    "kinetic_matrix": "K=kappa*v*v^T with v=(1,a)^T and kappa nonzero",
+    "potential_matrix": "M=[[m11,m12],[m12,m22]] symmetric and invertible",
+    "source_vector": "s=(s1,s2)^T independent of v unless an action principle fixes it",
+    "frequency_variable": "z=omega^2",
+    "response": "R_s(z)=s^T (M-z K)^(-1) s"
+  },
+  "required_exact_checks": [
+    "det(M-zK) is affine in z",
+    "finite pole location depends on M and v but not on source vector s",
+    "response numerator/residue depends on source vector s",
+    "two non-collinear source vectors can share the same pole denominator but have different static responses",
+    "there exists a continuous family of symmetric invertible M with the same chosen finite pole for fixed rank-one K",
+    "therefore rank-one plus one-pole data do not uniquely source-lock the full embedding"
+  ],
+  "decision_rule": {
+    "IDENTIFIABLE": "Only if both M and s are uniquely determined by the frozen information.",
+    "NON_IDENTIFIABLE_PASS_SCOPED": "If exact algebra exhibits at least one continuous ambiguity in M or s while preserving the same rank-one/one-pole structure."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_parameter_fit_to_failed_cubic_observable": true,
+    "no_new_numeric_threshold": true,
+    "threshold_changed": false
+  },
+  "scope": "Structural identifiability only. A NON_IDENTIFIABLE result is not a no-go for rank-one completion; it means an additional independently motivated action principle is required before rerunning s6fT."
+}
