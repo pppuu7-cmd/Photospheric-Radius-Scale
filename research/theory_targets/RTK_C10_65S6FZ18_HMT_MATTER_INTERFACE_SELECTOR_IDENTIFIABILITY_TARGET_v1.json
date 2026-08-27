@@ -1,0 +1,38 @@
+{
+  "schema": "RTK_C10_65S6FZ18_HMT_MATTER_INTERFACE_SELECTOR_IDENTIFIABILITY_TARGET_v1",
+  "gate": "C10.65s6fZ18",
+  "parent_required": "C10_65S6FZ17_PPN_GR_LIMIT_LEAVES_CONTINUOUS_HMT_MATTER_FAMILY_PARTIAL_PASS_SCOPED",
+  "question": "Within the independently published pre-soft-s projectable HMT/U(1) matter-coupling sources, is there a symmetry/equivalence/microscopic selection rule that uniquely fixes the remaining physical-metric matter-interface parameters without using RTK response or soft-s data?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1009.4885v3",
+      "url": "https://arxiv.org/abs/1009.4885",
+      "role": "pre-soft-s manifestly gauge-invariant minimal-substitution matter-coupling principle"
+    },
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/abs/1310.6666",
+      "role": "pre-soft-s universal HMT/U(1) matter coupling and full PPN continuous-family result"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ18_UNIQUE_PRE_SOFT_MATTER_INTERFACE_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ18_SOURCE_LOCKED_PRE_SOFT_SET_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PASS_SCOPED",
+    "C10_65S6FZ18_SELECTOR_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "UNIQUE requires an explicit pre-soft-s source rule that maps the published universal matter-coupling family to a single scalar-response-relevant physical ADM interface. CONTINUOUS_FAMILY_PASS applies when the independent gauge principle is compatible with matter coupling but does not uniquely determine the later universal-coupling constants, while the universal source itself explicitly retains a large phenomenologically allowed parameter region. INCOMPLETE applies if the source-lock assertions cannot be established. Absence is scoped only to the audited pre-soft-s source set; it is not a literature-wide no-go.",
+  "required_guards": [
+    "Z17 parent exact",
+    "all selector sources predate current RTK soft-s obstruction",
+    "do not use RTK pole/residue/remainder to choose coupling constants",
+    "do not use the observed soft-s obstruction to choose coupling constants",
+    "do not infer a unique action from gauge invariance alone",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "no C9 naturalness claim",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
