@@ -1,0 +1,37 @@
+{
+  "schema": "RTK_C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_TARGET_v1",
+  "gate": "C10.65s6fA",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parent": "C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_PASS_SCOPED",
+  "archived_source_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+  "archived_workflows": {
+    "nonlinear_completion": ".github/workflows/rtk-c9-scalar-n2-alpha6-nonlinear-completion.yml",
+    "soft_s_cancellation": ".github/workflows/rtk-c9-scalar-n2-alpha6-soft-s-cancellation.yml"
+  },
+  "frozen_claims_to_test": {
+    "archived_special_completion_s1": "1/2",
+    "archived_necessary_cancellation_magnitude": "|1-2s1|=3H/[2 omega(k)]",
+    "dispersion": "omega(k)=c_a*k*sqrt((1+k^4/M_U^4)/(1+k^2/M_K^2))",
+    "local_state_function_rule": "s1 is a local background state-function slope and cannot be chosen separately for each Fourier k"
+  },
+  "frozen_checks": {
+    "s6e_parent_pass": true,
+    "archived_contracts_source_locked": true,
+    "required_cancellation_positive_for_k_gt_0": true,
+    "required_cancellation_strictly_k_dependent": true,
+    "special_s1_half_cannot_cancel": true,
+    "no_M_U_or_M_K_fit": true,
+    "k003_production_remains_blocked": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_PASS_SCOPED",
+  "interpretation_if_pass": "A local nonlinear alpha6(X) state-function with one background slope s1 cannot cancel the archived soft-s cubic vertex over any finite k interval: the required magnitude 3H/(2 omega(k)) is strictly k-dependent for positive finite scales, while |1-2s1| is k-independent on a fixed background. The archived special completion s1=1/2 also cannot cancel because the required magnitude is positive. This does not yet include the full reduced shift-exchange contribution.",
+  "next_if_pass": "C10.65s6fB: derive/source-lock the full scalar shift constraint at cubic order and compute its q_s=0 exchange contribution before deciding whether the total reduced soft-s vertex survives.",
+  "non_claims": [
+    "not the full lapse/shift cubic reduction",
+    "not a no-go for all nonlinear or nonlocal carriers",
+    "not a derivation of O(k^4) matching coefficients",
+    "not a numerical choice of M_U or M_K",
+    "not k=0.03 production feedback"
+  ]
+}
