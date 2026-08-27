@@ -1,0 +1,41 @@
+name: RTK C10.65s5g widening-axis decision
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['research/triggers/RTK_C10_65S5G_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  decide:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - name: Evaluate frozen decision rule
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > s5g_head.txt
+          python3 research/shadow/rtk_c10_65s5g_axis_decision.py | tee s5g.log
+      - name: Add immutable provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S5G_AXIS_DECISION_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s5g_head.txt').read_text().strip(),'workflow':'rtk-c10-65s5g-axis-decision.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'evaluator':'research/shadow/rtk_c10_65s5g_axis_decision.py','threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          p=research/theory_results/RTK_C10_65S5G_AXIS_DECISION_RESULT_v1.json
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S5G_AXIS_DECISION_RESULT_v1.json');d=json.loads(p.read_text());m=d['metrics'];c=pathlib.Path('research/checkpoints/RTK_C10_65S5G_AXIS_DECISION_2026-08-27T0100Z.md');c.write_text(f"# RTK C10.65s5g widening-axis decision\n\nClassification: `{d['classification']}`.\nDecision: `{d['decision']}`.\n\nFrozen diagnostics: s5f constraint headroom `{m['s5f_constraint_headroom']:.17e}`; k=0.03 omitted-order proxy |A2 k^2/J| `{m['k003_omitted_order_proxy_abs_A2k2_over_J']:.17e}`; k/Hc_on `{m['k003_over_Hc_on']:.17e}`. The decision was evaluated before either candidate future production domain was executed. Thresholds were not changed.\n\nThis gate chooses sequencing only; it does not validate or reject either future domain.\n")
+          PY
+          cp "$p" /tmp/s5g_r.json;cp research/checkpoints/RTK_C10_65S5G_AXIS_DECISION_2026-08-27T0100Z.md /tmp/s5g_c.md
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/s5g_r.json "$p";cp /tmp/s5g_c.md research/checkpoints/RTK_C10_65S5G_AXIS_DECISION_2026-08-27T0100Z.md;git config user.name 'github-actions[bot]';git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S5G_AXIS_DECISION_2026-08-27T0100Z.md;git commit -m 'Record C10.65s5g widening-axis decision' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - name: Enforce decision classification
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S5G_AXIS_DECISION_RESULT_v1.json'));assert d['classification']=='C10_65S5G_AXIS_DECISION_PASS_SCOPED';assert d['checks']['threshold_changed'] is False;print(d['decision'])
+          PY
