@@ -38,9 +38,9 @@
   "next_gate": "Audit the pre-soft-s C8/C9 archive for an independent principle that fixes source alignment and potential data inside the rank-one class. If none exists, keep s6fT blocked rather than fitting these ambiguities to soft-s.",
   "production_k003_unblocked": false,
   "provenance": {
-    "github_actions_run_attempt": 1,
-    "github_actions_run_id": 33078801540,
-    "repo_head_at_job_start": "6efe12b9dd632d86e92688b2a9ef26d354d89581",
+    "github_actions_run_attempt": 2,
+    "github_actions_run_id": 33078679198,
+    "repo_head_at_job_start": "2ffba7640b9e5b6f186eb55f00dc86a8f5718195",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s6fv-rank-one-embedding-identifiability.yml"
   },
