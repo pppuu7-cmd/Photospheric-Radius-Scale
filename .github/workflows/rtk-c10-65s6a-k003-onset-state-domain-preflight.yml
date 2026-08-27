@@ -1,0 +1,83 @@
+name: RTK C10.65s6a k=0.03 onset-domain preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths: ['.github/workflows/rtk-c10-65s6a-k003-onset-state-domain-preflight.yml','research/triggers/RTK_C10_65S6A_TRIGGER_v1.txt']
+permissions: {contents: write}
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      RTK_CLASS_UPSTREAM_SHA: '36cf283628c4a3330ec9fd3d84239bf775f77317'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: rtk-class-build, fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.3'}
+      - name: Verify frozen parents and domain
+        run: |
+          set -euo pipefail; git rev-parse HEAD > s6a_head.txt
+          python3 - <<'PY'
+          import json
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1.json');h=L('research/theory_results/RTK_C10_65S5H_NEXT_K_MULTIBRANCH_LONGER_TIME_TRAJECTORY_RESULT_v1.json');a=L('research/theory_results/RTK_C10_65S5A_NEXT_K_NEAR_HORIZON_ONSET_STATE_PREFLIGHT_RESULT_v1.json')
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION';assert t['domain']['new_k_Mpc_inv']==[0.03];assert t['domain']['all_k_Mpc_inv']==[0.01,0.03];assert t['threshold_changed'] is False
+          assert h['classification']==t['parents']['C10.65s5h'];assert a['classification']==t['parents']['C10.65s5a'];print('C10_65S6A_FROZEN_PARENTS_VERIFIED')
+          PY
+      - name: Prepare pinned control and read-only observer trees
+        run: |
+          set -euo pipefail
+          git clone --branch nonlocal https://github.com/dirian/class_public.git class_control; git -C class_control reset --hard "$RTK_CLASS_UPSTREAM_SHA"
+          cp rtk/khronon_background.c rtk/khronon_perturbations.c class_control/source/; cp rtk/khronon_background.h rtk/khronon_perturbations.h class_control/include/
+          for s in apply_rtk_class_patch.py upgrade_rtk_inputs.py upgrade_rtk_nonlocal_initial_conditions.py upgrade_rtk_initial_conditions.py upgrade_rtk_matter_sources.py upgrade_rtk_gamma_root.py upgrade_rtk_spectra_endpoint.py apply_rtk_c10_source_export_patch.py apply_rtk_c10_65a_species_control_patch.py apply_rtk_c10_65e_tca_coefficient_export_patch.py apply_rtk_c10_65r0_opt_in_local_environment_export_patch.py apply_rtk_c10_65r1_in_class_completed_projector_parity_patch.py stabilize_rtk_c10_65r1_conditioned_projector.py;do python3 "rtk/$s" class_control;done
+          make -C class_control -j2 class
+          cp -a class_control class_s6a; python3 rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py class_s6a; python3 rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py class_s6a; python3 rtk/apply_rtk_c10_65s6a_k003_endpoint_adapter.py class_s6a; make -C class_s6a clean; make -C class_s6a -j2 class
+      - name: Write frozen two-anchor inputs
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          L=lambda p:json.load(open(p));t=L('research/theory_targets/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1.json');n=L('research/theory_results/RTK_C10_65N_CONDITIONAL_COMPLETED_U1_ONSET_SEED_PREFLIGHT_RESULT_v1.json');p=L('research/state/current.json')['final_replay_result']['rtk']['params'];q=n['points'][0];ks=', '.join(format(float(x),'.17g') for x in t['domain']['all_k_Mpc_inv'])
+          common=f'''h = {p['h']!r}\nT_cmb = 2.7255\nOmega_b = {p['Ob']!r}\nOmega_khronon = {p['Om']!r}\nlambda_D = {p['lam']!r}\nOmega_Lambda = 0.\nmodel = 2.\nN_ur = 3.046\nN_ncdm = 0\nOmega_k = 0.\nOmega_fld = 0.\nOmega_scf = 0.\nrecombination = RECFAST\nreio_parametrization = reio_camb\nz_reio = {p['zre']!r}\noutput = mPk,dTk,vTk\ngauge = newtonian\nA_s = {p['As']!r}\nn_s = {p['ns']!r}\nP_k_max_h/Mpc = 1.0\nz_pk = 0\nk_output_values = {ks}\nwrite parameters = no\nbackground_verbose = 0\nperturbations_verbose = 0\nspectra_verbose = 0\nl_max_ur = 17\nc10_65r0_diag = 1\nc10_65r1_diag = 1\nc10_65r1_lambda_HL = {float(q['lambda_HL']):.17g}\nc10_65r1_Mc = {float(q['M_c_Mpc_inv']):.17g}\n'''
+          for d in ('class_control/output','class_s6a/output'):pathlib.Path(d).mkdir(exist_ok=True)
+          pathlib.Path('class_control/control.ini').write_text(common+'root = output/control_\n');pathlib.Path('class_s6a/off.ini').write_text(common+'root = output/off_\n');pathlib.Path('class_s6a/on.ini').write_text(common+'root = output/on_\n')
+          PY
+      - name: Verify exact dormant OFF identity
+        run: |
+          set -euo pipefail;(cd class_control && ./class control.ini)>s6a_control.log 2>&1;(cd class_s6a && env -u RTK_C10_65S1_OBSERVER_FILE -u RTK_C10_65S4A3_TARGETED_ONSET ./class off.ini)>s6a_off.log 2>&1
+          python3 - <<'PY'
+          import glob,hashlib,json,pathlib
+          def d(p):return hashlib.sha256(('\n'.join(x.strip() for x in pathlib.Path(p).read_text().splitlines() if x.strip() and not x.lstrip().startswith('#'))+'\n').encode()).hexdigest()
+          A=sorted(glob.glob('class_control/output/control_*perturbations*'));B=sorted(glob.glob('class_s6a/output/off_*perturbations*'));assert len(A)==len(B)==2;R=[];ok=True
+          for x,y in zip(A,B):a,b=d(x),d(y);z=a==b;ok &= z;R.append({'control':x,'off':y,'identical':z})
+          pathlib.Path('s6a_off_identity.json').write_text(json.dumps({'all_two_numeric_rows_sha256_identical':bool(ok),'records':R},indent=2)+'\n');assert ok
+          PY
+      - name: Run read-only exact-onset observer
+        run: |
+          set -euo pipefail;rm -f s6a_observer.csv;(cd class_s6a && RTK_C10_65S1_OBSERVER_FILE="$(pwd)/../s6a_observer.csv" RTK_C10_65S4A3_TARGETED_ONSET=1 ./class on.ini)>s6a_on.log 2>&1;test -s s6a_observer.csv
+      - name: Analyze frozen s6a
+        run: |
+          set -euo pipefail
+          python3 research/shadow/rtk_c10_65s6a_k003_onset_state_domain_preflight.py --observer s6a_observer.csv --off-identity s6a_off_identity.json --patch rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py --output research/theory_results/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json | tee s6a.log
+      - name: Add provenance and persist
+        if: always()
+        run: |
+          set -euo pipefail;p=research/theory_results/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json;[ -f "$p" ] || exit 0
+          python3 - <<'PY'
+          import json,os,pathlib,datetime
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json');d=json.loads(p.read_text());d['provenance']={'repo_head_at_job_start':pathlib.Path('s6a_head.txt').read_text().strip(),'class_upstream_sha':os.environ['RTK_CLASS_UPSTREAM_SHA'],'workflow':'rtk-c10-65s6a-k003-onset-state-domain-preflight.yml','observer_patch':'rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py','endpoint_materializer':'rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py','k003_adapter':'rtk/apply_rtk_c10_65s6a_k003_endpoint_adapter.py','analyzer':'research/shadow/rtk_c10_65s6a_k003_onset_state_domain_preflight.py','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'threshold_changed':False};p.write_text(json.dumps(d,indent=2,sort_keys=True,allow_nan=False)+'\n')
+          r=d['domain_ratio_measurement_only'];c=pathlib.Path('research/checkpoints/RTK_C10_65S6A_K003_ONSET_PREFLIGHT_RESULT_2026-08-27T0141Z.md');c.write_text(f"# RTK C10.65s6a k=0.03 onset preflight\n\nClassification: `{d['classification']}`. New anchor: `k=0.03 Mpc^-1`. Measured `k/Hc={r['k_over_Hc']:.17e}` and `|A2 k^2/J|={r['abs_A2_k2_over_J']:.17e}` are diagnostic only; no earlier superhorizon or matching-order bound was relaxed. Exact OFF rollback and read-only observer guards are retained. This gate does not enable production feedback.\n")
+          PY
+          cp "$p" /tmp/r;cp research/checkpoints/RTK_C10_65S6A_K003_ONSET_PREFLIGHT_RESULT_2026-08-27T0141Z.md /tmp/c
+          for n in 1 2 3 4 5;do git fetch origin rtk-class-build;git reset --hard origin/rtk-class-build;cp /tmp/r "$p";cp /tmp/c research/checkpoints/RTK_C10_65S6A_K003_ONSET_PREFLIGHT_RESULT_2026-08-27T0141Z.md;git config user.name github-actions[bot];git config user.email '41898282+github-actions[bot]@users.noreply.github.com';git add "$p" research/checkpoints/RTK_C10_65S6A_K003_ONSET_PREFLIGHT_RESULT_2026-08-27T0141Z.md;git commit -m 'Record C10.65s6a k=0.03 onset preflight' || exit 0;git push origin HEAD:rtk-class-build && exit 0;done;exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: rtk-c10-65s6a-k003-onset-preflight, path: "s6a_observer.csv\ns6a_off_identity.json\ns6a_on.log\ns6a.log\nresearch/theory_results/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json"}
+      - name: Enforce classification
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('research/theory_results/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1.json'));assert d['classification']=='C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED';assert d['checks']['threshold_changed'] is False;print(d['classification'])
+          PY
