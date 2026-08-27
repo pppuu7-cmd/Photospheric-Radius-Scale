@@ -1,0 +1,40 @@
+{
+  "archived_rtk_source": {
+    "blob_sha": "1a72ffd7fd30068ae40ad2e45443c35773f922de",
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C9_N2_SOFT_S_O4_CORRECTION_2026-08-23T2205Z.md"
+  },
+  "checks": {
+    "K3_s_exact": true,
+    "deep_soft_s_limit_exact": true,
+    "intermediate_soft_s_limit_exact": true,
+    "no_eta_D_C_S_mapping_claimed": true,
+    "no_numeric_M_U_selected": true,
+    "s6d_parent_pass": true,
+    "s6d_production_k003_allowed_false": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_PASS_SCOPED",
+  "decision": "K003_PRODUCTION_REMAINS_BLOCKED_PENDING_FULL_CUBIC_CONSTRAINT_REDUCTION",
+  "derived": {
+    "K3_s": "-96*k**6",
+    "K3_s_over_k6": "-96",
+    "deep_soft_s_limit_per_k": "-9*H**2*M_U**2/(256*pi*K*M_K*c_a)",
+    "intermediate_soft_s_limit": "-3*H**2*M_U**2/(128*pi*K*c_a)"
+  },
+  "gate": "C10.65s6e",
+  "interpretation": "The corrected bare n=2 intrinsic-curvature theorem is independently reproduced at its decisive soft-spatial s-channel. Because the bare q_s=0 cubic vertex is nonzero and becomes marginal/growing rather than automatically UV-soft, this carrier cannot presently be promoted into the missing k=0.03 pre-EFT matching coefficients. Full cubic lapse/shift reduction and the state-dependent coefficient perturbation are required first.",
+  "next_gate": "C10.65s6f: derive the full cubic lapse/shift constraint reduction including perturbations of the state-dependent n=2 carrier coefficient, then test whether the reduced elastic q_s=0 cubic vertex cancels. Do not use the bare carrier to choose eta_D, eta_C, eta_S or M_U.",
+  "non_claims": [
+    "not a derivation of the true O(k^4) matching coefficients",
+    "not a numerical choice of M_U",
+    "not proof that the n=2 carrier is a viable UV completion",
+    "not k=0.03 production feedback",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "schema": "RTK_C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_TARGET_v1.json",
+  "threshold_changed": false
+}
