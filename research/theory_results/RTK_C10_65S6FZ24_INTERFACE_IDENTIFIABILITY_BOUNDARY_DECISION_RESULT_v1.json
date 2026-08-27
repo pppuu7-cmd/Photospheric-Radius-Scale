@@ -1,0 +1,55 @@
+{
+  "checks": {
+    "no_representative_point_selected": true,
+    "no_rtk_response_or_softs_selection": true,
+    "soft_s_and_k003_stay_blocked": true,
+    "threshold_unchanged": true,
+    "z18_continuous_family": true,
+    "z18_z23_classifications_exact": true,
+    "z19_full_response_interface_dependent": true,
+    "z20_microscopic_selector_unfixed": true,
+    "z21_no_protected_unique_relation": true,
+    "z22_no_hmt_matching_map": true,
+    "z23_no_exact_internal_selector": true
+  },
+  "classification": "C10_65S6FZ24_PARAMETER_UNDERDETERMINED_STOP_DECISION_PASS_SCOPED",
+  "decision": {
+    "coefficient_selection_iterations_authorized": false,
+    "current_hmt_z7_interface_parameter_underdetermined": true,
+    "intrinsic_px_carrier_result_preserved": true,
+    "new_independent_microscopic_input_required": true,
+    "source_locked_exact_selector_found": false
+  },
+  "gate": "C10.65s6fZ24",
+  "interpretation": "The source-locked chain Z18-Z23 is internally consistent: the pre-soft-s gauge/matter architecture leaves a continuous interface family; the intrinsic P(X) carrier sector can remain fixed while the full response residue/source is interface-dependent; the published microscopic origin leaves a1,a2 unfixed and fine-tuned in the IR; the audited radiative analysis supplies no protected unique relation; independently motivated SUSY/strong-dynamics mechanisms have no explicit HMT matching map; and HMT U(1)+PPN recovery leaves a continuous allowed region rather than an exact action-level selector. Therefore the current HMT+Z7 completion route is parameter-underdetermined at the physical matter interface. Further coefficient-selection iterations are scientifically stopped until genuinely new independently motivated microscopic/action input is preregistered. This is a scoped identifiability boundary, not a literature-wide no-go.",
+  "next_gate": "No coefficient-selection successor is authorized from the current source set. A future C10.65s6fZ25 may be frozen only after genuinely new microscopic/action input is independently identified and preregistered before any RTK pole/residue/remainder or soft-s comparison. Until then preserve the Z12/Z19 completion blocker, C9-open status, soft-s block, and k=0.03 production block.",
+  "nonclaims": [
+    "not a literature-wide HMT no-go",
+    "not C9 radiative-naturalness closure",
+    "not a unique nonlinear RTK completion",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "parent_classifications": [
+    "C10_65S6FZ18_SOURCE_LOCKED_PRE_SOFT_SET_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PASS_SCOPED",
+    "C10_65S6FZ19_INTRINSIC_SECTOR_FIXED_FULL_RESPONSE_INTERFACE_DEPENDENT_PASS_SCOPED",
+    "C10_65S6FZ20_PUBLISHED_HMT_MICROSCOPIC_ORIGIN_UNFIXED_FINE_TUNED_IR_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ21_NO_PROTECTED_UNIQUE_SELECTOR_IN_AUDITED_SOURCES_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ22_CANDIDATE_PROTECTION_MECHANISMS_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ23_HMT_SYMMETRY_PPN_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PARTIAL_PASS_SCOPED"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33127438215,
+    "threshold_changed": false,
+    "trigger_head_sha": "1eb5e57705a178e68e0137543b3e3861a1d2020b",
+    "workflow": "rtk-c10-65s6fz24-interface-identifiability-boundary-decision.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ24_INTERFACE_IDENTIFIABILITY_BOUNDARY_DECISION_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
