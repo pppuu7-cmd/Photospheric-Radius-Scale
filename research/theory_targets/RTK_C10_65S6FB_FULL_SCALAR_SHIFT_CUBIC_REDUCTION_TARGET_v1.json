@@ -1,0 +1,53 @@
+{
+  "schema": "RTK_C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_TARGET_v1",
+  "gate": "C10.65s6fB",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {
+    "s6e": "C10_65S6E_UV_MATCHING_SOFT_S_SOURCE_LOCK_PASS_SCOPED",
+    "s6fA": "C10_65S6FA_LOCAL_ALPHA6_SOFT_S_OBSTRUCTION_PASS_SCOPED"
+  },
+  "purpose": "Derive the full reduced q_s=0 cubic scalar vertex after eliminating the projectable scalar shift at cubic order, including the n=2 intrinsic-curvature carrier and the already-source-locked nonlinear alpha6 state-function contribution. Test whether shift exchange cancels the surviving soft-s vertex without selecting M_U, M_K, eta_D, eta_C or eta_S from the result.",
+  "frozen_scope": {
+    "background": "flat rolling/projectable branch used by the archived C9 n=2 theorem",
+    "carrier": "alpha6(X) D_i R3 D^i R3",
+    "kinematics": "equal-|k| elastic COM, internal s-channel spatial momentum q_s=0",
+    "lapse_rule": "projectable finite-k lapse perturbation is not an independent local Fourier mode; do not invent one",
+    "shift_rule": "solve the scalar shift constraint from the same fixed action and substitute it before classifying the reduced cubic vertex",
+    "state_function_rule": "use the s6fA source-locked local alpha6 contribution; do not refit s1(k)",
+    "production_rule": "k=0.03 Mpc^-1 production remains blocked throughout this gate"
+  },
+  "required_outputs": [
+    "explicit quadratic scalar shift kernel and source on the frozen background",
+    "explicit cubic shift source terms relevant to q_s=0",
+    "algebraic shift solution through the order required for the cubic reduced action",
+    "bare carrier contribution to the q_s=0 cubic vertex",
+    "alpha6 state-function contribution",
+    "shift-exchange/reduction contribution",
+    "total reduced q_s=0 cubic vertex and exact cancellation residual",
+    "denominator/nondegeneracy guards for every shift solve"
+  ],
+  "frozen_checks": {
+    "all_terms_derived_from_one_fixed_action": true,
+    "no_k_dependent_refit_of_alpha6_state_function": true,
+    "no_numeric_M_U_or_M_K_selection": true,
+    "no_eta_mapping_or_matching_fit": true,
+    "all_shift_denominators_symbolically_exposed": true,
+    "q_s_zero_limit_taken_after_constraint_reduction": true,
+    "bare_plus_state_plus_shift_sum_explicit": true,
+    "cancellation_classified_exactly_not_by_numeric_tolerance": true,
+    "k003_production_remains_blocked": true,
+    "threshold_changed": false
+  },
+  "pass_classification_if_zero": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_EXACT_CANCELLATION_PASS_SCOPED",
+  "pass_classification_if_nonzero": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_SURVIVING_VERTEX_PASS_SCOPED",
+  "interpretation_rule": "Both exact-zero and exact-nonzero outcomes are valid scientific PASS classifications if the fixed-action reduction is complete and audited; the gate tests which outcome holds and must not encode a preferred answer.",
+  "next_if_zero": "Reassess n=2 UV viability and only then derive O(k^4) pre-EFT matching coefficients before reopening k=0.03 production.",
+  "next_if_nonzero": "Do not force n=2. Compare a higher-spatial or symmetry-protected carrier that forbids/suppresses the soft-s vertex, while keeping k=0.03 production blocked.",
+  "non_claims": [
+    "not an all-sector unitarity theorem",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not a strong-field or compact-object result",
+    "not spectra or likelihood evidence"
+  ]
+}
