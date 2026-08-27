@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 import json
+import subprocess
 from pathlib import Path
 
 TARGET=Path('research/theory_targets/RTK_C10_65S6FT_FULL_PROJECTABLE_ADM_EMBEDDING_SOURCE_LOCK_TARGET_v1.json')
 PARENT=Path('research/theory_results/RTK_C10_65S6FS_DIRAC_DEGENERATE_CANDIDATE_RESTART_RESULT_v1.json')
-APP=Path('research/methods/RTK_FORMULA_BIBLE_C8_DEGENERATE_AUXILIARY_APPENDIX.md')
+APP_COMMIT='13acfdbc16d2f3117f1299b8552bcf7b1f996bd1'
+APP_PATH='research/methods/RTK_FORMULA_BIBLE_C8_DEGENERATE_AUXILIARY_APPENDIX.md'
 OUT=Path('research/theory_results/RTK_C10_65S6FT_FULL_PROJECTABLE_ADM_EMBEDDING_SOURCE_LOCK_RESULT_v1.json')
 
 t=json.loads(TARGET.read_text())
 p=json.loads(PARENT.read_text())
-a=APP.read_text()
+# The C8 appendix is a source-locked historical parent that is not present in the
+# current branch tip. Read the exact pinned blob from repository history rather
+# than silently substituting a reconstructed/current document.
+a=subprocess.check_output(['git','show',f'{APP_COMMIT}:{APP_PATH}'], text=True)
 
 checks={
  'target_frozen_before_execution': t['status']=='FROZEN_BEFORE_EXECUTION',
@@ -19,6 +24,7 @@ checks={
  'historical_appendix_quadratic_scoped': 'The statements here are quadratic and scoped. They do not constitute a final covariant completion.' in a,
  'historical_appendix_embedding_still_next': 'embed the rank-one kinetic pair into the full FLRW lapse/shift scalar constraint block' in a,
  'historical_appendix_source_direction_still_next': 'derive the source direction from the same action' in a,
+ 'historical_appendix_pinned_commit': APP_COMMIT=='13acfdbc16d2f3117f1299b8552bcf7b1f996bd1',
  'no_soft_s_retest': p.get('soft_s_retest_allowed') is False,
  'k003_still_blocked': p.get('production_k003_unblocked') is False,
  'threshold_changed': False
@@ -45,7 +51,9 @@ result={
  'evidence':{
    'parent_candidate_lagrangian':p['candidate']['lagrangian'],
    'parent_nonclaim':'not a full RTK action',
-   'historical_scope':'quadratic/scoped; not a final covariant completion'
+   'historical_scope':'quadratic/scoped; not a final covariant completion',
+   'historical_appendix_commit':APP_COMMIT,
+   'historical_appendix_path':APP_PATH
  },
  'soft_s_retest_allowed':False,
  'production_k003_unblocked':False,
