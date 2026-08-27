@@ -1,0 +1,817 @@
+{
+  "checks": {
+    "all_27_points_finite": true,
+    "all_four_algebraic_denominators_nonzero": true,
+    "baseline_reproduces_s6b_relative_max": true,
+    "historical_metric_not_consumed": true,
+    "legacy_nlde_auxiliaries_excluded": true,
+    "no_algebraic_denominator_sign_flip_relative_to_baseline": true,
+    "physical_traceless_normalized_residual_max": true,
+    "point_count": true,
+    "projector_constraint_normalized_residual_max": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED",
+  "gate": "C10.65s6c",
+  "interpretation": "Across the inherited preregistered 27-point order-unity pointwise omitted-order stress envelope at k=0.03, the completed onset algebraic system remains finite and does not cross an algebraic denominator sign change. The measured response magnitudes quantify sensitivity but are not themselves a validation threshold or UV uncertainty distribution.",
+  "maxima": {
+    "baseline_reproduction_relative": 6.955619505354678e-17,
+    "min_abs_denominator": 1.503340107253028e-06,
+    "projector_constraint_normalized": 4.8418026550183865e-89,
+    "traceless_normalized": 1.943964435067924e-91
+  },
+  "next_gate": "Use only the completed s6c response map to freeze a separate prospective C10.65s6d branch-selection/architecture gate before any k=0.03 production feedback. If key metric/carrier responses are order-unity or larger, do not promote k=0.03 to production without stronger UV/pre-EFT matching input. If a bounded multibranch canary remains scientifically defensible, freeze its branches before production execution.",
+  "non_claims": [
+    "not a probability distribution for omitted terms",
+    "not a UV-derived error bar",
+    "not proof that true higher-order matching terms lie in this envelope",
+    "not proof that omitted higher-order terms are negligible",
+    "not production feedback at k=0.03",
+    "not finite-time stability at k=0.03",
+    "not broad-k stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s6c_k003_omitted_order_sensitivity.py",
+    "github_actions_run_id": 33037402981,
+    "repo_head_at_job_start": "de469114ab9d13275fec558ae31edda89dda4f69",
+    "s6b_parent_run_id": 33034239784,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6c-k003-omitted-order-sensitivity.yml"
+  },
+  "records": [
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": -1.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 1.3108480059432557e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.04597847250433361,
+        "Phi_N": 0.00873162009317589,
+        "Psi_N": 0.04600166444622375,
+        "V_N": 0.34445936338811983,
+        "delta_b": 0.3241740020108707,
+        "delta_g": 0.3241740020108707,
+        "phi_pref": 0.32235093859818087,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 1.0,
+        "theta_b": 0.34445936338811983
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": -1.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 1.3108480059432557e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.04597847250433361,
+        "Phi_N": 0.04801987811879447,
+        "Psi_N": 0.04600166444622375,
+        "V_N": 0.34445936338811983,
+        "delta_b": 0.3241740020108707,
+        "delta_g": 0.3241740020108707,
+        "phi_pref": 0.32235093859818087,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 0.0,
+        "theta_b": 0.34445936338811983
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": -1.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 1.3108480059432557e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.04597847250433361,
+        "Phi_N": 0.08730813614441305,
+        "Psi_N": 0.04600166444622375,
+        "V_N": 0.34445936338811983,
+        "delta_b": 0.3241740020108707,
+        "delta_g": 0.3241740020108707,
+        "phi_pref": 0.32235093859818087,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 0.5,
+        "theta_b": 0.34445936338811983
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": -1.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 2.2504525025767823e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.32081069766883374,
+        "Phi_N": 0.2940475120484035,
+        "Psi_N": 0.3208028988688658,
+        "V_N": 0.2204399407357021,
+        "delta_b": 0.49757181605507184,
+        "delta_g": 0.49757181605507184,
+        "phi_pref": 0.49623321024167466,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 1.0,
+        "theta_b": 0.2204399407357021
+      },
+      "traceless_normalized": 1.942437959422511e-91
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": -1.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 2.2504525025767823e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.32081069766883374,
+        "Phi_N": 0.3333357700740221,
+        "Psi_N": 0.3208028988688658,
+        "V_N": 0.2204399407357021,
+        "delta_b": 0.49757181605507184,
+        "delta_g": 0.49757181605507184,
+        "phi_pref": 0.49623321024167466,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 0.0,
+        "theta_b": 0.2204399407357021
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": -1.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 2.2504525025767823e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.32081069766883374,
+        "Phi_N": 0.3726240280996407,
+        "Psi_N": 0.3208028988688658,
+        "V_N": 0.2204399407357021,
+        "delta_b": 0.49757181605507184,
+        "delta_g": 0.49757181605507184,
+        "phi_pref": 0.49623321024167466,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 0.5,
+        "theta_b": 0.2204399407357021
+      },
+      "traceless_normalized": 1.943964435067924e-91
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": -1.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 1.0309182053540729e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.5956429228333339,
+        "Phi_N": 0.5793634040036312,
+        "Psi_N": 0.5956041332915079,
+        "V_N": 0.09642051808328438,
+        "delta_b": 1.4748144393525797,
+        "delta_g": 1.4748144393525797,
+        "phi_pref": 1.4681565039778197,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 1.0,
+        "theta_b": 0.09642051808328438
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": -1.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 1.0309182053540729e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.5956429228333339,
+        "Phi_N": 0.6186516620292497,
+        "Psi_N": 0.5956041332915079,
+        "V_N": 0.09642051808328438,
+        "delta_b": 1.4748144393525797,
+        "delta_g": 1.4748144393525797,
+        "phi_pref": 1.4681565039778197,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 0.0,
+        "theta_b": 0.09642051808328438
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": -1.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 1.0309182053540729e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.5956429228333339,
+        "Phi_N": 0.6579399200548682,
+        "Psi_N": 0.5956041332915079,
+        "V_N": 0.09642051808328438,
+        "delta_b": 1.4748144393525797,
+        "delta_g": 1.4748144393525797,
+        "phi_pref": 1.4681565039778197,
+        "psi_pref": 0.2516493475268382,
+        "shear_ur": 0.5,
+        "theta_b": 0.09642051808328438
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": 0.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 2.550532297406024e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.21558305456942517,
+        "Phi_N": 0.24505747621698148,
+        "Psi_N": 0.21556398519420922,
+        "V_N": 0.12401942265241774,
+        "delta_b": 0.49424517344650937,
+        "delta_g": 0.49424517344650937,
+        "phi_pref": 0.492880882752123,
+        "psi_pref": 0.0,
+        "shear_ur": 1.0,
+        "theta_b": 0.12401942265241774
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": 0.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 2.550532297406024e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.21558305456942517,
+        "Phi_N": 0.22198114388923018,
+        "Psi_N": 0.21556398519420922,
+        "V_N": 0.12401942265241774,
+        "delta_b": 0.49424517344650937,
+        "delta_g": 0.49424517344650937,
+        "phi_pref": 0.492880882752123,
+        "psi_pref": 0.0,
+        "shear_ur": 0.0,
+        "theta_b": 0.12401942265241774
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": 0.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 2.550532297406024e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.21558305456942517,
+        "Phi_N": 0.1974495807558532,
+        "Psi_N": 0.21556398519420922,
+        "V_N": 0.12401942265241774,
+        "delta_b": 0.49424517344650937,
+        "delta_g": 0.49424517344650937,
+        "phi_pref": 0.492880882752123,
+        "psi_pref": 0.0,
+        "shear_ur": 0.5,
+        "theta_b": 0.12401942265241774
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": 0.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 7.642416325772759e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.0,
+        "Phi_N": 0.03780304234385964,
+        "Psi_N": 0.0,
+        "V_N": 0.0,
+        "delta_b": 0.0,
+        "delta_g": 0.0,
+        "phi_pref": 0.0,
+        "psi_pref": 0.0,
+        "shear_ur": 1.0,
+        "theta_b": 0.0
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": 0.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 7.642416325772759e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.0,
+        "Phi_N": 0.0,
+        "Psi_N": 0.0,
+        "V_N": 0.0,
+        "delta_b": 0.0,
+        "delta_g": 0.0,
+        "phi_pref": 0.0,
+        "psi_pref": 0.0,
+        "shear_ur": 0.0,
+        "theta_b": 0.0
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": 0.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 7.642416325772759e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.0,
+        "Phi_N": 0.039288258025618576,
+        "Psi_N": 0.0,
+        "V_N": 0.0,
+        "delta_b": 0.0,
+        "delta_g": 0.0,
+        "phi_pref": 0.0,
+        "psi_pref": 0.0,
+        "shear_ur": 0.5,
+        "theta_b": 0.0
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": 0.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 3.8323000256452363e-91,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.2748322251645001,
+        "Phi_N": 0.24602763392960905,
+        "Psi_N": 0.27480123442264204,
+        "V_N": 0.11033565804384543,
+        "delta_b": 0.977242623297508,
+        "delta_g": 0.977242623297508,
+        "phi_pref": 0.9719232937361452,
+        "psi_pref": 0.0,
+        "shear_ur": 1.0,
+        "theta_b": 0.11033565804384543
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": 0.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 3.8323000256452363e-91,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.2748322251645001,
+        "Phi_N": 0.2853158919552276,
+        "Psi_N": 0.27480123442264204,
+        "V_N": 0.11033565804384543,
+        "delta_b": 0.977242623297508,
+        "delta_g": 0.977242623297508,
+        "phi_pref": 0.9719232937361452,
+        "psi_pref": 0.0,
+        "shear_ur": 0.0,
+        "theta_b": 0.11033565804384543
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": 0.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 3.8323000256452363e-91,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.2748322251645001,
+        "Phi_N": 0.3246041499808462,
+        "Psi_N": 0.27480123442264204,
+        "V_N": 0.11033565804384543,
+        "delta_b": 0.977242623297508,
+        "delta_g": 0.977242623297508,
+        "phi_pref": 0.9719232937361452,
+        "psi_pref": 0.0,
+        "shear_ur": 0.5,
+        "theta_b": 0.11033565804384543
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": 1.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 4.8418026550183865e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.37329336928068413,
+        "Phi_N": 0.3968418349158842,
+        "Psi_N": 0.3732781338832834,
+        "V_N": 0.0879411835997402,
+        "delta_b": 0.5959293011634426,
+        "delta_g": 0.5959293011634426,
+        "phi_pref": 0.594839306831498,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 1.0,
+        "theta_b": 0.0879411835997402
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": 1.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 4.8418026550183865e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.37329336928068413,
+        "Phi_N": 0.3822018514185237,
+        "Psi_N": 0.3732781338832834,
+        "V_N": 0.0879411835997402,
+        "delta_b": 0.5959293011634426,
+        "delta_g": 0.5959293011634426,
+        "phi_pref": 0.594839306831498,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 0.0,
+        "theta_b": 0.0879411835997402
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": -1.0,
+      "eta_D": 1.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 4.8418026550183865e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.37329336928068413,
+        "Phi_N": 0.3668334992028846,
+        "Psi_N": 0.3732781338832834,
+        "V_N": 0.0879411835997402,
+        "delta_b": 0.5959293011634426,
+        "delta_g": 0.5959293011634426,
+        "phi_pref": 0.594839306831498,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 0.5,
+        "theta_b": 0.0879411835997402
+      },
+      "traceless_normalized": 1.6549656414796203e-91
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": 1.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 2.6300707654436123e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.2428892332830503,
+        "Phi_N": 0.2714683849848732,
+        "Psi_N": 0.2428847628541708,
+        "V_N": 0.18062334194242868,
+        "delta_b": 0.33225239065047557,
+        "delta_g": 0.33225239065047557,
+        "phi_pref": 0.3316549899073033,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 1.0,
+        "theta_b": 0.18062334194242868
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": 1.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 2.6300707654436123e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.2428892332830503,
+        "Phi_N": 0.25000137066413247,
+        "Psi_N": 0.2428847628541708,
+        "V_N": 0.18062334194242868,
+        "delta_b": 0.33225239065047557,
+        "delta_g": 0.33225239065047557,
+        "phi_pref": 0.3316549899073033,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 0.0,
+        "theta_b": 0.18062334194242868
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 0.0,
+      "eta_D": 1.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 2.6300707654436123e-89,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.2428892332830503,
+        "Phi_N": 0.22723084686662165,
+        "Psi_N": 0.2428847628541708,
+        "V_N": 0.18062334194242868,
+        "delta_b": 0.33225239065047557,
+        "delta_g": 0.33225239065047557,
+        "phi_pref": 0.3316549899073033,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 0.5,
+        "theta_b": 0.18062334194242868
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": 1.0,
+      "eta_S": -1.0,
+      "projector_constraint_normalized": 7.439320745528517e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.04395737934667973,
+        "Phi_N": 0.08029751019247136,
+        "Psi_N": 0.04397857671725412,
+        "V_N": 0.25620660078565793,
+        "delta_b": 0.47967080724243616,
+        "delta_g": 0.47967080724243616,
+        "phi_pref": 0.4756900834944705,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 1.0,
+        "theta_b": 0.25620660078565793
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": 1.0,
+      "eta_S": 0.0,
+      "projector_constraint_normalized": 7.439320745528517e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.04395737934667973,
+        "Phi_N": 0.04581962529660277,
+        "Psi_N": 0.04397857671725412,
+        "V_N": 0.25620660078565793,
+        "delta_b": 0.47967080724243616,
+        "delta_g": 0.47967080724243616,
+        "phi_pref": 0.4756900834944705,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 0.0,
+        "theta_b": 0.25620660078565793
+      },
+      "traceless_normalized": 0.0
+    },
+    {
+      "denominators": [
+        1.0001569006569815,
+        -0.000676842359057893,
+        -1.503340107253028e-06,
+        0.9999970315069496
+      ],
+      "eta_C": 1.0,
+      "eta_D": 1.0,
+      "eta_S": 1.0,
+      "projector_constraint_normalized": 7.439320745528517e-90,
+      "responses_relative_to_baseline": {
+        "B_pref": 0.04395737934667973,
+        "Phi_N": 0.008656038850422232,
+        "Psi_N": 0.04397857671725412,
+        "V_N": 0.25620660078565793,
+        "delta_b": 0.47967080724243616,
+        "delta_g": 0.47967080724243616,
+        "phi_pref": 0.4756900834944705,
+        "psi_pref": 0.20105419143474787,
+        "shear_ur": 0.5,
+        "theta_b": 0.25620660078565793
+      },
+      "traceless_normalized": 1.2622685545143672e-91
+    }
+  ],
+  "response_map_measurement_only": {
+    "B_pref": {
+      "eta": [
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "max_relative": 0.5956429228333339,
+      "value": -57.9829159930148
+    },
+    "Phi_N": {
+      "eta": [
+        -1.0,
+        1.0,
+        1.0
+      ],
+      "max_relative": 0.6579399200548682,
+      "value": 0.6122814025657253
+    },
+    "Psi_N": {
+      "eta": [
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "max_relative": 0.5956041332915079,
+      "value": 0.7517853776199588
+    },
+    "V_N": {
+      "eta": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "max_relative": 0.34445936338811983,
+      "value": -59.67128120337592
+    },
+    "delta_b": {
+      "eta": [
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "max_relative": 1.4748144393525797,
+      "value": -0.7446438671401238
+    },
+    "delta_g": {
+      "eta": [
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "max_relative": 1.4748144393525797,
+      "value": -0.992858489520165
+    },
+    "phi_pref": {
+      "eta": [
+        -1.0,
+        1.0,
+        -1.0
+      ],
+      "max_relative": 1.4681565039778197,
+      "value": -0.5626401053300732
+    },
+    "psi_pref": {
+      "eta": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "max_relative": 0.2516493475268382,
+      "value": 0.00015687604302735113
+    },
+    "shear_ur": {
+      "eta": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "max_relative": 1.0,
+      "value": 0.0
+    },
+    "theta_b": {
+      "eta": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "max_relative": 0.34445936338811983,
+      "value": -0.053704153083038324
+    }
+  },
+  "schema": "RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_TARGET_v1.json",
+  "threshold_changed": false
+}
