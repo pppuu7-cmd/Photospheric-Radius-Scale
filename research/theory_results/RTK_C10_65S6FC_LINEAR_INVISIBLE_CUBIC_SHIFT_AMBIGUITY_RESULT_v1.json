@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "background_deformation_zero": true,
+    "cubic_term_contains_nu_X_times_deltaX_times_deltaSigma_squared": true,
+    "existing_background_linear_certificates_cannot_fix_nu_X": true,
+    "no_new_coefficient_fit_to_soft_s_output": true,
+    "projectability_preserved": true,
+    "quadratic_deformation_zero_when_nu_X0_value_zero": true,
+    "scalar_shift_tensor_norm_nonzero_for_finite_k": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_PASS_SCOPED",
+  "decision": "ADDITIONAL_NONLINEAR_UV_OR_SYMMETRY_INPUT_REQUIRED_BEFORE_S6FB_CAN_BE_CLASSIFIED",
+  "exact_scalar_shift_algebra": {
+    "deltaSigma_eigenvalues_over_k2_beta": [
+      "-1/3",
+      "-1/3",
+      "2/3"
+    ],
+    "deltaSigma_ij_deltaSigma_ij_over_k4_beta2": "2/3",
+    "leading_cubic_deformation": "(2/3) nu_X(X0) deltaX k^4 beta^2 (up to the common ADM measure/sign convention)",
+    "leading_cubic_shift_source": "(4/3) nu_X(X0) deltaX k^4 beta (up to the same common convention)"
+  },
+  "gate": "C10.65s6fC",
+  "identifiability_consequence": "Existing FLRW and linear/quadratic certificates cannot determine nu_X(X0), because the witness deformation is invisible to all of them while modifying the cubic scalar-shift source at finite k.",
+  "next_gate": "Freeze C10.65s6fD nonlinear completion principle audit: search the existing RTK construction for a symmetry, degeneracy condition, covariant carrier, or UV matching rule that fixes/forbids nu_X(X0) and the analogous cubic shift operators. Do not choose nu_X phenomenologically from the desired cancellation.",
+  "non_claims": [
+    "not proof that the soft-s vertex is nonzero in every completion",
+    "not proof that cancellation is impossible after a complete UV action is specified",
+    "not a measurement or fit of nu_X",
+    "not permission for k=0.03 production",
+    "not radiative-naturalness closure"
+  ],
+  "order_counting": {
+    "DeltaS_nu": "O(epsilon^3)",
+    "Sigma_background": "0 on isotropic FLRW",
+    "background_and_quadratic_effect": "exactly absent for this witness",
+    "deltaSigma": "O(epsilon)",
+    "nu_X0_value": "nu(X0)=0 by the witness construction",
+    "nu_expansion": "nu(X)=nu_X(X0) deltaX+O(epsilon^2)"
+  },
+  "parent": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_BLOCKED_INCOMPLETE_FIXED_ACTION_SCOPED",
+  "provenance": {
+    "github_actions_run_id": 33043528202,
+    "repo_head_at_job_start": "80d6b631ecdb978fbcecf045cf552780d0d39b2a",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fc-linear-invisible-cubic-shift-ambiguity.yml"
+  },
+  "schema": "RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FC_LINEAR_INVISIBLE_CUBIC_SHIFT_AMBIGUITY_TARGET_v1.json",
+  "threshold_changed": false
+}
