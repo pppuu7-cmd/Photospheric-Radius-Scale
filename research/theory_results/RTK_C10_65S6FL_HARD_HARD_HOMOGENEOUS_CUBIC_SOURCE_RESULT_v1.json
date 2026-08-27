@@ -1,0 +1,43 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "candidate_branch_present": true,
+    "fixed_C8_action_present": true,
+    "hard_clock_gauge_or_elimination_locked": false,
+    "k003_production_remains_blocked": true,
+    "s6fK_parent_required": true,
+    "target_frozen": true,
+    "threshold_changed": false,
+    "two_admissible_clock_reductions_change_source": true
+  },
+  "classification": "C10_65S6FL_HOMOGENEOUS_CUBIC_SOURCE_INCOMPLETE_BLOCKED_SCOPED",
+  "decision": "HARD_CLOCK_STUECKELBERG_GAUGE_ELIMINATION_NOT_SOURCE_LOCKED",
+  "gate": "C10.65s6fL",
+  "identifiability_witness": {
+    "Kclock": "P_X+2 X P_XX",
+    "X0": "q^2/2",
+    "conclusion": "The fixed action alone does not select between these perturbative reductions unless deltaSigma_k=0 (unitary gauge) or an equivalent gauge-invariant elimination equation is explicitly frozen.",
+    "dKclock_dX": "3 P_XX+2 X P_XXX",
+    "deltaX_from_homogeneous_lapse": "-2 X n0",
+    "generic_hard_clock_source_modulation": "-P_XXX*dsdot**2*n0*q**4 - 3*X_PP*dsdot**2*n0*q**2",
+    "unitary_deltaSigma_zero_value": "0"
+  },
+  "interpretation": "s6fL cannot yet assign a unique hard-hard -> homogeneous source vector S_hom from the same action because the clock sector is written in terms of Sigma, while neither the candidate-branch contract nor the s6fL target fixes the finite-k deltaSigma prescription. Since P(X_U) is explicitly required in s6fL, silently imposing deltaSigma_k=0 would add a new assumption after freezing. The gate therefore fails closed as INCOMPLETE/BLOCKED; no ZERO/NONZERO soft-s conclusion follows.",
+  "next_gate": "C10.65s6fL1: freeze the scalar perturbation/gauge reduction for the same candidate action (prefer an explicit unitary-gauge deltaSigma_k=0 contract or a gauge-invariant elimination derived from the action), then rerun the unchanged s6fL source derivation.",
+  "non_claims": [
+    "not all-sector unitarity",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "github_actions_run_id": 33054240680,
+    "repo_head_at_job_start": "8379b5e1dac824d9af3848baf024706954288d5d",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fl-hard-hard-homogeneous-cubic-source.yml"
+  },
+  "schema": "RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FL_HARD_HARD_HOMOGENEOUS_CUBIC_SOURCE_TARGET_v1.json",
+  "threshold_changed": false
+}
