@@ -1,0 +1,41 @@
+{
+  "schema": "RTK_C10_65S6FZ3_FULL_COUPLED_CONSTRAINT_IDENTIFIABILITY_PREFLIGHT_TARGET_v1",
+  "gate": "C10.65s6fZ3",
+  "title": "Full-coupled projectable-ADM constraint identifiability preflight",
+  "parent": "C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_CLASS_PASS_SCOPED",
+  "question": "Does the frozen s6fZ2 field-space gauge template by itself determine a unique full coupled ADM scalar constraint rank/DOF count, or is an independently selected gravitational ADM sector still required before a full-action embedding can be certified?",
+  "frozen_witness_class": {
+    "scalar_sector": "Exactly the s6fZ2 two-field action depending only on Phi=u1*phi+u2*chi; its local null redundancy is held fixed.",
+    "gravity_family": "S_g(lambda)=integral N sqrt(gamma) (M2/2)[K_ij K^ij - lambda K^2 + R^(3)] with projectable N=N(t).",
+    "extrinsic_curvature_decomposition": "K_ij = Sigma_ij + (K/3) gamma_ij, with Sigma_i^i=0",
+    "exact_identity": "K_ij K^ij - lambda K^2 = Sigma_ij Sigma^ij + (1/3-lambda) K^2",
+    "comparison_points": ["lambda=1/3", "lambda=1"],
+    "coefficient_policy": "lambda is not fitted or selected; the two values are only an exact non-identifiability witness inside the otherwise-unfixed L_ADM slot of s6fZ2."
+  },
+  "required_exact_checks": [
+    "parent classification is exact",
+    "the s6fZ2 field-space null symmetry is unchanged throughout the gravity witness family",
+    "the trace-K kinetic coefficient is exactly 1/3-lambda",
+    "at lambda=1/3 the trace-K quadratic coefficient vanishes",
+    "at lambda=1 the trace-K quadratic coefficient is nonzero",
+    "therefore the gravitational kinetic/constraint structure is not fixed by the s6fZ2 scalar symmetry alone",
+    "no unique total scalar DOF count is claimed without choosing and fully reducing a gravitational sector"
+  ],
+  "decision_rule": {
+    "NON_IDENTIFIABLE_PASS_SCOPED": "All exact witness checks pass, proving that s6fZ2 alone does not determine the full coupled ADM constraint rank/DOF count.",
+    "IDENTIFIABLE_PASS_SCOPED": "A unique coupled constraint structure follows from the frozen parent without any extra gravitational-sector choice.",
+    "FAIL_SCOPED": "The exact witness algebra fails.",
+    "INCOMPLETE_BLOCKED_SCOPED": "The frozen parent/target cannot be verified."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_failed_observable_fitting": true,
+    "no_choice_of_lambda_as_rtk_value": true,
+    "no_claim_lambda_one_third_viable": true,
+    "no_claim_lambda_one_viable": true,
+    "no_claim_full_dirac_count": true,
+    "threshold_changed": false
+  },
+  "scope": "Identifiability theorem only. A NON_IDENTIFIABLE result means the s6fZ2 symmetry template is insufficient to certify a full projectable RTK action; it is not a no-go for any independently specified gravitational completion."
+}
