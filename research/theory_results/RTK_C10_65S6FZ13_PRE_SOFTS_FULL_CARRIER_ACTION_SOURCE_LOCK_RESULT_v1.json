@@ -1,0 +1,63 @@
+{
+  "checks": {
+    "no_new_carrier_data_selected": true,
+    "no_posthoc_old_kernel_matching": true,
+    "no_soft_s_or_k003": true,
+    "pinned_historical_source_read": true,
+    "projectability_guard_applied": true,
+    "source_contains_acceleration_bridge": true,
+    "source_contains_independent_DBI_background_bridge": true,
+    "threshold_unchanged": true,
+    "z12_five_missing_inputs_reproduced": true,
+    "z12_parent_exact": true
+  },
+  "classification": "C10_65S6FZ13_NO_COMPLETE_PRE_SOFT_PROJECTABLE_CARRIER_ACTION_BLOCKED_SCOPED",
+  "exact_projectability_observation": "N=N(t) => D_i ln N = 0 => a_i=0, so C_acc a_i a^i cannot furnish the projectable finite-k carrier gradient sector.",
+  "gate": "C10.65s6fZ13",
+  "interpretation": "The pre-soft-s C8 source independently fixes useful production DBI/P(X) background information and a nonprojectable spatial-covariant acceleration bridge, but it is not a complete projectable HMT+Z7 carrier action. Its explicit C_acc a_i a^i finite-k mechanism vanishes identically when the HMT lapse is projectable, and the same source does not fix the Z7 field map together with HMT A/prepotential couplings and an action-derived matter/source map. Therefore no complete pre-soft-s projectable carrier action is source-locked by this parent, and the missing data cannot be selected from the already observed RTK kernel.",
+  "next_gate": "C10.65s6fZ14: formulate an independently motivated projectable carrier-action principle before choosing coefficients/functions; audit candidate operator classes for a finite-k spatial sector compatible with HMT local U(1) and the Z7 null symmetry, while keeping the old RTK pole/residue/remainder and soft-s observable hidden from action selection.",
+  "nonclaims": [
+    "not a no-go for HMT+Z7 completions",
+    "not a rejection of the C8 nonprojectable spatial-covariant benchmark in its own scope",
+    "not RTK background equivalence",
+    "not RTK quadratic equivalence",
+    "not C9 radiative naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "pinned_source": {
+    "commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "path": "research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md",
+    "role": "independent C8 production-DBI/spatial-covariant carrier source predating the present soft-s completion line"
+  },
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33114727230,
+    "threshold_changed": false,
+    "trigger_head_sha": "71f60b2cd3235e1e15f4f30e8a606799569b8e4d",
+    "workflow": "rtk-c10-65s6fz13-pre-softs-full-carrier-action-source-lock.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ13_PRE_SOFTS_FULL_CARRIER_ACTION_SOURCE_LOCK_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_lock": {
+    "C8_acceleration_bridge_admissible_projectably": false,
+    "C8_acceleration_bridge_present": true,
+    "C8_candidate_action_present": true,
+    "C8_claims_final_full_completion": false,
+    "C8_contains_Z7_pair_representation": false,
+    "C8_contains_action_derived_matter_source_map": false,
+    "C8_contains_same_action_HMT_auxiliary_carrier_interface": false,
+    "C8_production_DBI_background_present": true,
+    "projectable_N_implies_a_i_zero": true
+  },
+  "threshold_changed": false,
+  "z12_missing_inputs_confirmed": {
+    "action_derived_matter_source_coupling": true,
+    "background_solution_or_boundary_prescription": true,
+    "carrier_couplings_to_HMT_A_and_prepotential_or_explicit_zero_by_same_action": true,
+    "finite_k_spatial_gradient_operator_and_coefficient": true,
+    "full_local_potential_or_background_function": true
+  }
+}
