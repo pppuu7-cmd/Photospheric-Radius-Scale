@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "generic_rank_two": true,
+    "gravity_u1_invariance_by_construction": true,
+    "hypothesis_explicit": true,
+    "internal_null_invariance_by_construction": true,
+    "internal_orthogonal_direction_is_gauge_null": true,
+    "no_extra_constraint_multiplier": true,
+    "no_soft_s_or_k003": true,
+    "parent_exact": true,
+    "reduced_gravity_kinetic_exact": true,
+    "shift_solution_exact": true,
+    "velocity_hessian_exact": true
+  },
+  "classification": "C10_65S6FZ8_MINIMAL_FULL_ACTION_EXTRA_SCALAR_OBSTRUCTION_PASS_SCOPED",
+  "exact_symbolics": {
+    "L_gravity_scalar_before_shift": "-M2*(lambda*q**2 - 6*lambda*q*zdot + 9*lambda*zdot**2 - q**2 + 2*q*zdot - 3*zdot**2)/2",
+    "L_gravity_scalar_reduced": "M2*zdot**2*(3*lambda - 1)/(lambda - 1)",
+    "generic_velocity_rank": 2,
+    "q_solution": "zdot*(3*lambda - 1)/(lambda - 1)",
+    "velocity_hessian": "Matrix([[2*M2*(3*lambda - 1)/(lambda - 1), 0], [0, kappa]])",
+    "velocity_hessian_determinant": "2*M2*kappa*(3*lambda - 1)/(lambda - 1)"
+  },
+  "gate": "C10.65s6fZ8",
+  "interpretation": "The minimal Z7-invariant full local template is symmetry-consistent but generically carries two physical scalar velocities after the finite-k shift constraint: the usual projectable-gravity scalar zeta plus the invariant carrier Phi. The internal orthogonal phi-chi direction is gauge/null, so it does not create a third scalar. Thus this minimal template does not realize the desired one-scalar rank-one architecture without an independently preregistered additional gravitational constraint mechanism.",
+  "next_gate": "C10.65s6fZ9: preregister, independently of soft-s, a projectable gravitational local-constraint mechanism (for example an A-like multiplier only if source-motivated), then derive its full same-action constraint algebra and scalar DOF count before revisiting s6fT.",
+  "nonclaims": [
+    "not a no-go for projectable RTK completions with an independently motivated additional constraint",
+    "not a full cosmological background-equivalence result",
+    "not a radiative-naturalness result",
+    "not a soft-s result"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "frozen_target_commit": "921b071920e7626a36827c5eb7300a7de99bf4c7",
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33103776862,
+    "threshold_changed": false,
+    "trigger_head_sha": "9a9d80f9bb5107f52de7c532228178f72f94a587",
+    "workflow": "rtk-c10-65s6fz8-minimal-full-projectable-action-dof-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ8_MINIMAL_FULL_PROJECTABLE_ACTION_DOF_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
