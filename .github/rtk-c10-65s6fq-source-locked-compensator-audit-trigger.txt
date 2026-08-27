@@ -1,2 +1,3 @@
 Trigger frozen C10.65s6fQ source-locked compensator/spurion audit.
 Rerun after analyzer audit-logic fix; frozen target and criteria unchanged.
+Rerun after threshold-metadata assertion fix; scientific decision rule unchanged.
