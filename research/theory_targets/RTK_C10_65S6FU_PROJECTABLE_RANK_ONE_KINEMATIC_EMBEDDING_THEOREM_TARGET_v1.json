@@ -1,0 +1,47 @@
+{
+  "schema": "RTK_C10_65S6FU_PROJECTABLE_RANK_ONE_KINEMATIC_EMBEDDING_THEOREM_TARGET_v1",
+  "gate": "C10.65s6fU",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "parent": "C10_65S6FT_BLOCKED_NO_FULL_PROJECTABLE_ADM_EMBEDDING_SCOPED",
+  "purpose": "Derive, without choosing a new RTK completion or fitting the failed soft-s observable, the exact kinematic conditions under which the historical rank-one two-coordinate architecture can occur inside a local projectable-ADM two-scalar kinetic sector. This is a necessary-structure theorem, not a full-action construction.",
+  "frozen_ansatz": {
+    "projectability": "N=N(t)",
+    "normal_velocities": [
+      "v_phi=(dot(phi)-N^i partial_i phi)/N",
+      "v_chi=(dot(chi)-N^i partial_i chi)/N"
+    ],
+    "quadratic_kinetic_density": "L_kin=N*sqrt(gamma)/2*(A*v_phi^2+2*B*v_phi*v_chi+C*v_chi^2)",
+    "assumption": "A,B,C may depend on fields/background scalars but not on velocities"
+  },
+  "required_exact_checks": [
+    "velocity Hessian is proportional to K=[[A,B],[B,C]]",
+    "rank one iff A*C-B^2=0 with K nonzero",
+    "on the A!=0 patch define a=B/A and derive C=a^2*A",
+    "kinetic density becomes proportional to (v_phi+a*v_chi)^2",
+    "canonical momenta satisfy the primary constraint p_chi-a*p_phi=0",
+    "for an arbitrary symmetric algebraic/potential matrix M, det(M-z*K) is affine in z=omega^2 and its z^2 coefficient vanishes identically under rank one",
+    "there is therefore at most one finite dynamical pole unless the remaining affine coefficient also degenerates",
+    "the theorem reproduces the historical toy kinetic structure kappa/2*(dotX+a*doty)^2 at the kinematic level"
+  ],
+  "frozen_classification_rule": {
+    "if_all_exact_checks_pass": "PROJECTABLE_RANK_ONE_KINEMATIC_EMBEDDING_CLASS_PASS_SCOPED",
+    "otherwise": "PROJECTABLE_RANK_ONE_KINEMATIC_THEOREM_FAIL_SCOPED"
+  },
+  "guards": [
+    "do not choose phi or chi to be a specific RTK field after seeing the result",
+    "do not infer the source direction from the toy aligned-source identity",
+    "do not specify potential/background coefficient functions",
+    "do not claim a full nonlinear Dirac closure",
+    "do not retest soft-s",
+    "do not unblock k=0.03 Mpc^-1 production"
+  ],
+  "next_if_pass": "Use the theorem only as a construction constraint. The next fixed-action gate must independently choose/source-lock the field map, algebraic/potential sector, source couplings and background coefficient functions, then rerun C10.65s6fT unchanged.",
+  "nonclaims": [
+    "not a full projectable ADM action",
+    "not uniqueness of an embedding",
+    "not background equivalence",
+    "not radiative naturalness",
+    "not soft-s cancellation",
+    "not k=0.03 production permission"
+  ]
+}
