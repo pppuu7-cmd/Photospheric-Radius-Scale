@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "da_silva_gauge_recipe_independent": true,
+    "da_silva_not_unique_parameter_witness": true,
+    "hmt_a1_a2_arbitrary_explicit": true,
+    "hmt_ir_fine_tuning_explicit": true,
+    "hmt_ir_scalar_tensor_emergence_explicit": true,
+    "hmt_physical_adm_interface_explicit": true,
+    "hmt_uv_action_origin_not_obvious_explicit": true,
+    "independent_sources_predate_softs": true,
+    "no_rtk_response_selection": true,
+    "no_soft_s_or_k003": true,
+    "threshold_unchanged": true,
+    "z19_parent_exact": true
+  },
+  "classification": "C10_65S6FZ20_PUBLISHED_HMT_MICROSCOPIC_ORIGIN_UNFIXED_FINE_TUNED_IR_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ20",
+  "interpretation": "The audited pre-soft-s universal HMT/U(1) matter-coupling source does not supply a unique microscopic selector for the surviving physical-metric interface. It explicitly states that from the UV viewpoint the action-principle origin of the prescription is not obvious; Appendix C offers an IR scalar-tensor route only at the expense of IR fine-tuning; and the physical-metric functions retain two arbitrary coupling constants a1 and a2. The independent da Silva gauge-invariant matter recipe supplies symmetry structure but is itself not a unique parameter-selection mechanism. Therefore Z19 cannot be reopened by choosing a1,a2 from RTK response data. This conclusion is scoped to the audited published sources, not a literature-wide no-go.",
+  "microscopic_audit": {
+    "a1_a2_fixed": false,
+    "published_ir_emergence_requires_fine_tuning": true,
+    "published_uv_origin_not_obvious": true,
+    "scope": "audited pre-soft-s sources only",
+    "unique_uv_action_selector_found": false
+  },
+  "next_gate": "C10.65s6fZ21: freeze a radiative/technical-naturalness preflight for the unresolved HMT universal-matter interface family before attempting any coefficient choice. Ask whether a symmetry or RG fixed structure protects a unique relation among the surviving matter-interface couplings; do not use RTK response or soft-s data. If no protected selector exists, preserve the completion blocker and record that a genuinely new microscopic matter completion must be independently proposed before background/quadratic equivalence can be reopened.",
+  "nonclaims": [
+    "not a literature-wide no-microphysics theorem",
+    "not a unique HMT+Z7 action",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33119548903,
+    "threshold_changed": false,
+    "trigger_head_sha": "d27d91aaa8036ab6100a28e71446af95693b94d4",
+    "workflow": "rtk-c10-65s6fz20-hmt-microscopic-matter-completion-source-lock.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ20_HMT_MICROSCOPIC_MATTER_COMPLETION_SOURCE_LOCK_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_hashes": {
+    "arxiv_1009_4885_sha256": "450e97204d94f8a08e36057f04756cf080e8bc57fadfd6f3d8d4a762b540f263",
+    "arxiv_1310_6666_html_sha256": "b5c64f0f18f29c0c43983aa58a0508c4c71f6e478240146a49ffe74a323683cc"
+  },
+  "threshold_changed": false
+}
