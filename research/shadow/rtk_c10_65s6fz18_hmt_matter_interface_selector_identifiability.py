@@ -28,7 +28,7 @@ checks['da_silva_manifest_gauge_invariant_recipe_explicit']='manifestly gauge in
 checks['da_silva_matter_coupling_explicit']='coupling of gravity with scalar and vector fields' in d
 checks['da_silva_gauge_invariance_not_parameter_unique_witness']=('does not force the value' in d and 'lambda' in d)
 checks['ppn_universal_coupling_explicit']='universal coupling' in q and 'gravity and matter' in q
-checks['ppn_parameters_depend_on_couplings']='ppn parameters in terms of the coupling constants' in q
+checks['ppn_parameters_depend_on_couplings']='parameters in terms of the coupling constants of the theory' in q
 checks['ppn_large_allowed_region_explicit']=('large region of the parameters space' in q or 'large region of the parameter space' in q)
 checks['ppn_gr_limit_realisable_explicit']=('same results obtained in general relativity can be easily realized' in q or 'same results obtained in general relativity can be easily realised' in q)
 checks['independent_sources_predate_softs']=True
@@ -37,8 +37,6 @@ checks['no_soft_s_or_k003']=True
 checks['threshold_unchanged']=t['threshold_changed'] is False
 
 source_lock_complete=all(checks.values())
-# The audited symmetry principle is demonstrably non-unique in theory-parameter space,
-# while the later universal matter interface explicitly retains a nontrivial allowed family.
 continuous_family=(checks['da_silva_gauge_invariance_not_parameter_unique_witness'] and
                    checks['ppn_parameters_depend_on_couplings'] and
                    checks['ppn_large_allowed_region_explicit'])
