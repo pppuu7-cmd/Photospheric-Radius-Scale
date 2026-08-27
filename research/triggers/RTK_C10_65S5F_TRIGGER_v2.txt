@@ -1,0 +1,8 @@
+C10.65s5f retry after infrastructure-only mpmath dependency repair
+created_utc=2026-08-27T00:52:00Z
+parent_failed_run=33027979055
+repair=install_mpmath_1.3.0_only
+target_changed=false
+branches_changed=false
+times_changed=false
+threshold_changed=false
