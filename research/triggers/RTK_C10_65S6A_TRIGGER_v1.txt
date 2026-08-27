@@ -1,0 +1,1 @@
+Trigger frozen C10.65s6a k=0.03 onset-state/domain preflight. Do not widen scientific criteria or enable production feedback.
