@@ -1,0 +1,34 @@
+{
+  "schema": "RTK_C10_65S6FZ24_INTERFACE_IDENTIFIABILITY_BOUNDARY_DECISION_TARGET_v1",
+  "gate": "C10.65s6fZ24",
+  "parent_required": "C10_65S6FZ23_HMT_SYMMETRY_PPN_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PARTIAL_PASS_SCOPED",
+  "question": "Do the already source-locked, pre-soft-s and independently motivated project criteria audited through Z18-Z23 contain any exact selector that uniquely fixes the surviving HMT physical-metric matter-interface coefficients before RTK response comparison? If not, freeze the identifiability boundary and stop coefficient-selection iterations until genuinely new microscopic input is independently supplied.",
+  "required_parent_results": [
+    "C10_65S6FZ18_SOURCE_LOCKED_PRE_SOFT_SET_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PASS_SCOPED",
+    "C10_65S6FZ19_INTRINSIC_SECTOR_FIXED_FULL_RESPONSE_INTERFACE_DEPENDENT_PASS_SCOPED",
+    "C10_65S6FZ20_PUBLISHED_HMT_MICROSCOPIC_ORIGIN_UNFIXED_FINE_TUNED_IR_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ21_NO_PROTECTED_UNIQUE_SELECTOR_IN_AUDITED_SOURCES_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ22_CANDIDATE_PROTECTION_MECHANISMS_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ23_HMT_SYMMETRY_PPN_LEAVES_CONTINUOUS_INTERFACE_FAMILY_PARTIAL_PASS_SCOPED"
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ24_SOURCE_LOCKED_INTERFACE_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ24_PARAMETER_UNDERDETERMINED_STOP_DECISION_PASS_SCOPED",
+    "C10_65S6FZ24_IDENTIFIABILITY_BOUNDARY_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "SELECTOR_FOUND is allowed only if an already-audited pre-soft-s project source provides an exact action-level identity fixing every scalar-response-relevant surviving HMT physical-metric interface coefficient before any RTK response comparison. PARAMETER_UNDERDETERMINED applies if the audited chain consistently retains a continuous family, leaves microscopic origin unresolved or fine-tuned, finds no protected unique relation, finds no HMT matching map from candidate UV mechanisms, and finds no unique PPN/symmetry selector. In that case stop coefficient-selection iterations; a future successor may start only from genuinely new independently motivated microscopic/action input preregistered before RTK response or soft-s evaluation.",
+  "required_guards": [
+    "Z18-Z23 classifications exact",
+    "do not select representative a1,a2",
+    "do not fit pole residue remainder",
+    "do not use soft-s failure as selector",
+    "do not use k=0.03 production",
+    "do not claim literature-wide no-go",
+    "do not claim C9 closure",
+    "preserve intrinsic P(X) carrier result separately from full response interface",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
