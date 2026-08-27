@@ -1,0 +1,57 @@
+name: RTK C10.65s6fY symmetry-first candidate-space audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fy_symmetry_first_candidate_space_audit.py'
+      - '.github/workflows/rtk-c10-65s6fy-symmetry-first-candidate-space-audit.yml'
+      - '.github/rtk-c10-65s6fy-symmetry-first-candidate-space-audit-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_TARGET_v1.json'))
+          assert t['gate']=='C10.65s6fY'
+          assert t['guards']['threshold_changed'] is False
+          assert t['guards']['no_soft_s_retest'] is True
+          assert t['guards']['no_k003_production'] is True
+          PY
+      - name: Run frozen candidate-space audit
+        run: python research/shadow/rtk_c10_65s6fy_symmetry_first_candidate_space_audit.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA']})
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          Path('research/checkpoints/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_2026-08-27.md').write_text(f'''# RTK C10.65s6fY — symmetry-first candidate-space audit\n\nClassification: **{r['classification']}**\n\nThe pre-soft-s archive contains two relevant independently motivated directions, but neither is a ready projectable full nonlinear completion: the Dirac rank-one construction is explicitly quadratic/scoped, while the U(1) route is explicitly nonprojectable and retains an open coupled constraint rank.\n\nTherefore s6fT and s6fX remain blocked; no soft-s retest or k=0.03 production is authorized. This is not a no-go for a future symmetry-first projectable completion.\n\nNext gate: {r['next_gate']}\n\nProvenance: run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.\n''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_RESULT_v1.json research/checkpoints/RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fY symmetry-first candidate-space audit'
+            git push origin HEAD:rtk-class-build
+          fi
