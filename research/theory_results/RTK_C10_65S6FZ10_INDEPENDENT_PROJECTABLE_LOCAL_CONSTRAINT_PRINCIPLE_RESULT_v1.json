@@ -11,14 +11,14 @@
     "parent_exact": true,
     "target_frozen_semantics": true,
     "ww_constraint_equations_explicit": true,
-    "ww_local_u1_gauge_field_A_explicit": false,
+    "ww_local_u1_gauge_field_A_explicit": true,
     "ww_prepotential_explicit": true,
     "ww_title_exact": true
   },
-  "classification": "C10_65S6FZ10_NO_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_FOUND_PASS_SCOPED",
+  "classification": "C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_U1_PRINCIPLE_FOUND_PASS_SCOPED",
   "gate": "C10.65s6fZ10",
-  "interpretation": "The frozen external literature audit did not establish every required projectable local-constraint fact. No new RTK multiplier action is licensed by this gate.",
-  "next_gate": "Keep s6fT blocked; improve or replace the independent projectable constraint principle without using soft-s.",
+  "interpretation": "An independently motivated projectable local-U1 gravitational constraint/gauge principle exists in pre-existing literature: projectable N=N(t), local U(1), auxiliary/prepotential structure, and scalar-graviton elimination are source-locked. This licenses only a separate fixed-action RTK embedding audit; it does not license borrowing the literature action as RTK or retesting soft-s.",
+  "next_gate": "C10.65s6fZ11: freeze one explicit projectable local-U1 ADM action/interface from the independently motivated literature principle, couple only the predeclared Z7 gauge-invariant carrier representation, and perform a same-action full scalar constraint-rank/DOF preflight before any background or soft-s matching.",
   "nonclaims": [
     "not a full RTK completion",
     "not full coupled Dirac closure",
@@ -30,9 +30,9 @@
   "production_k003_unblocked": false,
   "provenance": {
     "github_actions_run_attempt": 1,
-    "github_actions_run_id": 33108711781,
+    "github_actions_run_id": 33108807726,
     "threshold_changed": false,
-    "trigger_head_sha": "a21fc57cb8c0a8fe67bff826cb85ebcda1c4ce34",
+    "trigger_head_sha": "d9af9d158ccfa45c85f1796d1ec898586cd05a74",
     "workflow": "rtk-c10-65s6fz10-independent-projectable-local-constraint-principle.yml"
   },
   "s6ft_embedding_ready": false,
