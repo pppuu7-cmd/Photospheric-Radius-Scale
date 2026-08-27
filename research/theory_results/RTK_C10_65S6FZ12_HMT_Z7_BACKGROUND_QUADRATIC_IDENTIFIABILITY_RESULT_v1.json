@@ -1,0 +1,85 @@
+{
+  "checks": {
+    "background_equations_differ": true,
+    "finite_k_quadratic_kernels_differ": true,
+    "hmt_gravity_fixed_from_z11": true,
+    "missing_same_action_inputs_detected": true,
+    "no_posthoc_matching_performed": true,
+    "no_soft_s_or_k003": true,
+    "regular_kappa_interface_present": true,
+    "threshold_unchanged": true,
+    "two_z11_compatible_completions_constructed": true,
+    "z11_parent_exact": true,
+    "z7_interface_fixed_from_z11": true
+  },
+  "classification": "C10_65S6FZ12_BACKGROUND_QUADRATIC_UNDERSPECIFIED_BLOCKED_SCOPED",
+  "constructive_nonidentifiability_witness": {
+    "completion_A": {
+      "D": "-omega^2",
+      "U_double_prime": 0,
+      "U_prime_background": 0,
+      "c_s_squared": 0
+    },
+    "completion_B": {
+      "D": "-omega^2 + 3*k^2 + 2",
+      "U_double_prime": 2,
+      "U_prime_background": 1,
+      "c_s_squared": 3
+    },
+    "shared": {
+      "HMT_gravity": true,
+      "Z7_interface": true,
+      "kappa": 1
+    }
+  },
+  "gate": "C10.65s6fZ12",
+  "interpretation": "The HMT Eq.104 + Z7 interface fixes the scalar DOF architecture but does not yet fix a unique same-action FLRW carrier background or finite-k quadratic response. At least the carrier potential/background data, spatial-gradient coefficient, and matter/source map remain unfrozen. Two completions consistent with every Z11 interface statement therefore yield inequivalent background equations and finite-k inverse kernels. The old RTK pole/residue/remainder must not be used to choose these missing functions after the fact.",
+  "next_gate": "C10.65s6fZ13: independently preregister one full local HMT+Z7 carrier action (potential/background prescription, spatial-gradient sector, source/matter coupling, and any HMT-auxiliary couplings) from a pre-soft-s physical principle; only then rerun the unchanged Z12 match-ready audit and proceed to background/quadratic RTK equivalence.",
+  "nonclaims": [
+    "not a no-go for HMT+Z7 completions",
+    "not RTK background equivalence",
+    "not RTK pole/residue/remainder equivalence",
+    "not C9 radiative naturalness",
+    "not same-full-action primordial/background closure",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33113301949,
+    "threshold_changed": false,
+    "trigger_head_sha": "40653b0647835408e5418fac69235e9df3e43c5d",
+    "workflow": "rtk-c10-65s6fz12-hmt-z7-background-quadratic-identifiability.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ12_HMT_Z7_BACKGROUND_QUADRATIC_IDENTIFIABILITY_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_lock": {
+    "locked_input_audit": {
+      "background_Phi_bar_or_boundary_data": false,
+      "carrier_HMT_auxiliary_couplings": false,
+      "carrier_kinetic_kappa_nonzero": true,
+      "finite_k_spatial_gradient_coefficient": false,
+      "full_local_potential_U_Phi": false,
+      "matter_source_coupling": false
+    },
+    "missing_required_inputs": [
+      "full_local_potential_U_Phi",
+      "background_Phi_bar_or_boundary_data",
+      "finite_k_spatial_gradient_coefficient",
+      "matter_source_coupling",
+      "carrier_HMT_auxiliary_couplings"
+    ],
+    "z11_fixed_carrier_interface": {
+      "Phi": "u1*phi+u2*chi",
+      "carrier_kinetic_assumption": "regular nonzero coefficient kappa multiplying (DperpPhi)^2/2; no coefficient value selected",
+      "gravity_U1_charge_of_phi_chi": "neutral",
+      "internal_null_symmetry": "delta(phi,chi)=epsilon*(-u2,u1)",
+      "invariant_shift": "Nbar_i=N_i-N D_i nu",
+      "normal_derivative": "DperpPhi=(dot(Phi)-Nbar^i D_i Phi)/N",
+      "representation_parent": "C10.65s6fZ7"
+    }
+  },
+  "threshold_changed": false
+}
