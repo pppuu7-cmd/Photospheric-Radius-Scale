@@ -1,0 +1,34 @@
+{
+  "checks": {
+    "historical_parent_has_open_full_program": true,
+    "historical_projectable_dof_certificate_exists": true,
+    "historical_projectable_parent_exists": true,
+    "no_k003_production": true,
+    "no_parameter_fit": true,
+    "no_soft_s_retest": true,
+    "parent_exact": true,
+    "projectability_explicit": true,
+    "s6ft_says_no_single_full_embedding": true,
+    "target_exact": true,
+    "threshold_changed_false": true,
+    "z1_says_no_ready_s6fz_symmetry_realization": true
+  },
+  "classification": "C10_65S6FZ4_PROJECTABLE_GRAVITY_PARTIAL_PARENT_PASS_SCOPED",
+  "finding": "A genuine independently motivated projectable-U(1) gravitational architecture predates the present soft-s problem and has scoped C9 projectability/DOF certificates. However the audited archive does not provide a single full nonlinear projectable ADM embedding that simultaneously realizes the new s6fZ2 field-space gauge template and fixes the same-action lapse/shift/source/constraint interface. It is therefore a partial parent, not an embedding-ready combined action.",
+  "gate": "C10.65s6fZ4",
+  "historical_parent": "RTK projectable-U(1) C9 architecture checkpoint 2026-08-23",
+  "next_gate": "C10.65s6fZ5: freeze the exact interface requirements for combining the independently motivated projectable-U(1) gravitational parent with the s6fZ2 gauge-invariant scalar template, without choosing new coefficients; derive whether the symmetries commute/close and what lapse/shift couplings are forced before a full coupled Dirac count.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "frozen_target_commit": "f2fd6ddb55058d3ab768d0dc948c693e4e736737",
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33095639996,
+    "repo_head_at_job_start": "ba0efa2d0cef8550a0664de0261ca17418be4f96",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fz4-projectable-gravity-source-lock-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ4_PROJECTABLE_GRAVITY_SOURCE_LOCK_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
