@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "k003_production_remains_blocked": true,
+    "minimal_branch_rejection_scoped_not_global": true,
+    "no_new_field_or_coefficient_selected": true,
+    "p_exact_quadratic_preserving_escape_obstructed": true,
+    "parent_s6fP_exact_match": true,
+    "parent_s6fQ_exact_match": true,
+    "q_did_not_assign_new_transformation": true,
+    "q_no_source_locked_compensator": true,
+    "radiative_naturalness_left_open": true,
+    "same_full_action_closure_left_open": true,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FR_REJECT_MINIMAL_BRANCH_REQUIRE_INDEPENDENT_NEW_COMPLETION_PASS_SCOPED",
+  "decision": "REJECT_MINIMAL_BRANCH_PENDING_INDEPENDENT_NEW_COMPLETION",
+  "gate": "C10.65s6fR",
+  "next_gate": "Return to fixed-action fundamental closure. Before introducing any enlarged nonlinear completion, source-lock one independently motivated candidate action/symmetry and freeze a restart contract requiring background equivalence, quadratic/linear phenomenology, degree-of-freedom count and radiative-naturalness checks before any renewed k=0.03 production or soft-s cancellation test.",
+  "nonclaims": [
+    "not a theorem excluding extra-field UV completions",
+    "not a theorem excluding nonlocal completions",
+    "not a theorem excluding a new independently motivated symmetry",
+    "not a radiative-naturalness proof",
+    "not same-full-action primordial/background closure",
+    "not spectra/likelihood validation"
+  ],
+  "open_physical_gates": [
+    "C9 radiative naturalness",
+    "same-full-action primordial/background closure",
+    "microscopic omitted-order/higher-UR derivation",
+    "massive-neutrino completion",
+    "spectra/likelihood validation"
+  ],
+  "parents": {
+    "C10.65s6fP": "C10_65S6FP_MIXED_TIME_SPACE_OFFSHELL_OPERATOR_OBSTRUCTION_PASS_SCOPED",
+    "C10.65s6fQ": "C10_65S6FQ_NO_SOURCE_LOCKED_COMPENSATOR_PASS_SCOPED"
+  },
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33067475046,
+    "repo_head_at_job_start": "452faa83b20fecd476b6e3e0ebf148337d1f2400",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fr-post-obstruction-architecture-decision.yml"
+  },
+  "schema": "RTK_C10_65S6FR_POST_OBSTRUCTION_ARCHITECTURE_DECISION_RESULT_v1",
+  "scientific_statement": "The tested minimal nonlinear branch has a nonzero soft-s obstruction and the subsequent local exact-off-shell-quadratic-preserving metric/operator audits do not supply an independent cancellation handle. The source-locked RTK/U(1) stack also contains no pre-existing spatial-conformal compensator/spurion rule. Therefore the scientifically controlled architecture choice is not to fit a new compensator to the failed cubic observable: reject this minimal nonlinear branch at scoped cubic order, keep k=0.03 Mpc^-1 production blocked, and require any enlarged completion to be specified for independent reasons and to restart background, quadratic and degree-of-freedom certification before the soft channel is re-tested.",
+  "scope": "Architecture/methodology decision conditioned on the frozen s6fP and s6fQ results; not an RTK-wide no-go.",
+  "target_path": "research/theory_targets/RTK_C10_65S6FR_POST_OBSTRUCTION_ARCHITECTURE_DECISION_TARGET_v1.json",
+  "threshold_changed": false
+}
