@@ -1,0 +1,6 @@
+C10.65s5f frozen multibranch time-widening execution trigger
+created_utc=2026-08-27T00:46:00Z
+k_Mpc_inv=0.01
+branches=baseline,joint_extremum,phi_extremum
+sample_elapsed_tau_Mpc=3e-6,1e-5,3e-5,1e-4
+threshold_changed=false
