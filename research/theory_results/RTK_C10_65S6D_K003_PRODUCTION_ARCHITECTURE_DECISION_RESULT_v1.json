@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "all_key_responses_present_and_finite": true,
+    "decision_uses_no_production_output": true,
+    "s6c_parent_pass": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_PASS_SCOPED",
+  "decision": "REQUIRE_STRONGER_UV_PRE_EFT_MATCHING_BEFORE_K003_PRODUCTION",
+  "gate": "C10.65s6d",
+  "interpretation": "The k=0.03 production architecture has been decided prospectively from the detached s6c sensitivity map, without consuming production output or changing the inherited s6c envelope. If the decision requires stronger UV/pre-EFT matching, k=0.03 production widening is blocked rather than tuned around the observed sensitivity.",
+  "key_response_maxima": {
+    "B_pref": 0.5956429228333339,
+    "Phi_N": 0.6579399200548682,
+    "Psi_N": 0.5956041332915079,
+    "V_N": 0.34445936338811983,
+    "delta_b": 1.4748144393525797,
+    "theta_b": 0.34445936338811983
+  },
+  "key_responses_at_or_above_order_unity": {
+    "delta_b": 1.4748144393525797
+  },
+  "max_key_response_relative": 1.4748144393525797,
+  "next_gate": "Return to the pre-EFT/UV matching interface and strengthen or derive the omitted higher-order matching input before any k=0.03 production canary.",
+  "non_claims": [
+    "not a UV matching derivation",
+    "not a probability statement",
+    "not production feedback",
+    "not a rejection of the completed-U1 low-energy algebraic closure",
+    "not broad-k stability",
+    "not spectra or likelihood evidence"
+  ],
+  "order_unity_boundary_relative": 1.0,
+  "production_k003_allowed": false,
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s6d_k003_production_architecture_decision.py",
+    "github_actions_run_id": 33037491001,
+    "repo_head_at_job_start": "a436e0601fe6630551b17a121ab93fdb5438b733",
+    "s6c_parent_run_id": 33037402981,
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6d-k003-production-architecture-decision.yml"
+  },
+  "schema": "RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_TARGET_v1.json",
+  "threshold_changed": false
+}
