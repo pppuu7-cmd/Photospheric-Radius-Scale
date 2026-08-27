@@ -1,0 +1,64 @@
+{
+  "schema": "RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_TARGET_v1",
+  "gate": "C10.65s6fL2",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "purpose": "Repeat the outcome-neutral hard-hard -> exact homogeneous q=0 cubic source derivation after the finite-k clock reduction has been independently source-locked by C10.65s6fL1. Derive S_hom=(S_zeta0,S_n0) from the same frozen action, reduce the hard finite-k shift first, then invert only the C10.65s6fK global homogeneous block. Preserve the original C10.65s6fL projected/finite/singular/incomplete semantics.",
+  "parents": {
+    "s6fL_blocker": "C10_65S6FL_HOMOGENEOUS_CUBIC_SOURCE_INCOMPLETE_BLOCKED_SCOPED",
+    "s6fL1": "C10_65S6FL1_UNITARY_CLOCK_REDUCTION_SOURCE_LOCK_PASS_SCOPED",
+    "s6fK": "C10_65S6FK_HOMOGENEOUS_QUADRATIC_CHANNEL_PASS_SCOPED",
+    "s6fI": "C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED",
+    "s6fG": "C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED"
+  },
+  "frozen_action": {
+    "gravity": "(Mstar^2/2) N sqrt(gamma) [R3+K_ij K^ij-lambda_HL K^2-2Lambda]",
+    "clock": "fixed C8 P(X_U) action with finite-k unitary reduction deltaSigma_k=0",
+    "mixed_clock_gradient": "C(X_U) D_iTheta_U D^iTheta_U with C=Mstar^2/(2X_U)",
+    "uv_carrier": "alpha6(X_U) D_iR3 D^iR3 with alpha6(X)=alpha6_0 (X/X0)^(1/2)",
+    "extra_shift_operators": "none",
+    "projectability": "N=N(t)",
+    "hard_clock_reduction": "deltaSigma_k=0"
+  },
+  "source_lock_consequences": {
+    "Theta_U_hard_clock_piece": "no independent deltaSigma_k contribution",
+    "direct_P_shift_source": "zero in unitary gauge because P(X_U) has no N_i dependence when D_i Sigma=0",
+    "direct_C_DTheta_piece": "must be derived from the frozen unitary variables and may be set to zero only if D_i Theta_U vanishes identically after the same reduction",
+    "no_posthoc_clock_choice": true
+  },
+  "required_derivation": [
+    "derive the finite-k hard lapse/shift solution for the frozen projectable candidate action in unitary gauge",
+    "expand gravity, R3, P(X_U), C(X_U)(DTheta_U)^2, and alpha6(X_U)D_iR3D^iR3 to one homogeneous field times two hard scalar fields",
+    "keep S_zeta0 and S_n0 separately before applying the global constraint",
+    "do not replace exact q=0 by any punctured q->0 beta propagator or angular prescription",
+    "invert only the s6fK homogeneous block with Delta_N=A H^2+D",
+    "classify homogeneous exchange as PROJECTED, FINITE, SINGULAR-SURFACE, or INCOMPLETE",
+    "if complete, preserve bare n=2, alpha6 contact, and homogeneous exchange as separate terms for the later final soft-s sum"
+  ],
+  "outcome_policy": {
+    "projected": "scientific PASS if the exact global constraint removes the homogeneous virtual channel",
+    "finite": "scientific PASS if a finite nonzero source/exchange is derived",
+    "singular": "scientific PASS_SCOPED if an explicit fixed-action degeneracy surface is derived",
+    "incomplete": "BLOCKED if any same-action cubic term remains unidentifiable; no missing term may be silently zeroed"
+  },
+  "forbidden": [
+    "using k=0.03 production output",
+    "fitting lambda_HL, M_U, M_K, alpha6_0, or any new coefficient to force cancellation",
+    "reintroducing a finite-k deltaSigma degree of freedom on this unitary branch",
+    "using a special mu direction or angular average",
+    "claiming final soft-s ZERO/NONZERO before the separate final-sum gate"
+  ],
+  "pass_projected_classification": "C10_65S6FL2_HOMOGENEOUS_VIRTUAL_CHANNEL_PROJECTED_PASS_SCOPED",
+  "pass_finite_classification": "C10_65S6FL2_HOMOGENEOUS_VIRTUAL_CHANNEL_FINITE_PASS_SCOPED",
+  "pass_singular_classification": "C10_65S6FL2_HOMOGENEOUS_VIRTUAL_CHANNEL_SINGULAR_SURFACE_PASS_SCOPED",
+  "blocked_classification": "C10_65S6FL2_HOMOGENEOUS_CUBIC_SOURCE_INCOMPLETE_BLOCKED_SCOPED",
+  "next_if_complete": "Freeze the final bare+alpha6+exact-homogeneous sum gate and rerun the original ZERO/NONZERO soft-s semantics without parameter fitting.",
+  "non_claims": [
+    "not permission for k=0.03 production",
+    "not a unique nonlinear completion",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "threshold_changed": false
+}
