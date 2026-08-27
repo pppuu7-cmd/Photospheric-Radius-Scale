@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "hmt_reference_two_arbitrary_constants": true,
+    "no_rtk_response_or_softs_selection": true,
+    "no_soft_s_or_k003": true,
+    "strong_dynamics_emergent_li_concrete": true,
+    "strong_dynamics_no_explicit_hmt_interface_map": true,
+    "strong_dynamics_suppression_statement": true,
+    "susy_lifshitz_protection_concrete": true,
+    "susy_model_is_scalar_gravity_example": true,
+    "susy_no_explicit_hmt_interface_map": true,
+    "threshold_unchanged": true,
+    "z21_parent_exact": true
+  },
+  "classification": "C10_65S6FZ22_CANDIDATE_PROTECTION_MECHANISMS_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ22",
+  "interpretation": "Two independent pre-soft-s protection mechanisms are source-locked: Lifshitz-sector suppression with supersymmetric matter, and emergent Lorentz invariance from strong dynamics. The supersymmetric paper illustrates the mechanism with a scalar-gravity plus Wess-Zumino model; the strong-dynamics paper studies generic holographic RG flow. Neither audited source formulates the universal HMT physical-ADM matter interface or supplies an action-level map fixing its surviving a1,a2-equivalent response parameters. Therefore these mechanisms are legitimate protection candidates but do not yet remove the Z18/Z19 interface non-identifiability. This is scoped to the audited inventory, not a literature-wide no-go and not C9 closure.",
+  "inventory": {
+    "explicit_low_energy_hmt_matching_map_found": false,
+    "hmt_interface_unique_selector_found": false,
+    "scope": "three audited pre-soft-s sources",
+    "strong_dynamics_candidate_present": true,
+    "supersymmetry_lifshitz_candidate_present": true
+  },
+  "next_gate": "C10.65s6fZ23: audit whether a symmetry principle inside the fixed projectable HMT action can reduce the physical matter-interface family before radiative analysis\u2014for example whether equivalence-principle/universal-metric normalization plus GR/PPN recovery imposes an exact relation rather than a finite allowed region. Require an action-level identity independent of RTK response. If only phenomenological bounds or a continuous allowed region result, preserve the completion blocker and do not select a representative point.",
+  "nonclaims": [
+    "not a literature-wide UV-completion no-go",
+    "not C9 radiative-naturalness closure",
+    "not a unique HMT+Z7 action",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33123476321,
+    "threshold_changed": false,
+    "trigger_head_sha": "8ea10bd40c7afb9f06624ce23ef11642a784e352",
+    "workflow": "rtk-c10-65s6fz22-independent-uv-symmetry-completion-inventory.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ22_INDEPENDENT_UV_SYMMETRY_COMPLETION_INVENTORY_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_hashes": {
+    "arxiv_1305_0011_abs_sha256": "e100b24446aa9493d8439b23aaee9c0f70f33a40c76689618c9d94f6ec6f3f95",
+    "arxiv_1309_5569_abs_sha256": "037d4a3083a94401099f650f015a0469db0acbab2e7b084a3f500913b4ca77e9",
+    "arxiv_1310_6666_html_sha256": "b5c64f0f18f29c0c43983aa58a0508c4c71f6e478240146a49ffe74a323683cc"
+  },
+  "threshold_changed": false
+}
