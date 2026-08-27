@@ -1,0 +1,65 @@
+name: RTK C10.65s6fJ homogeneous-vs-punctured channel theorem
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fj_homogeneous_vs_punctured_channel.py'
+      - '.github/workflows/rtk-c10-65s6fj-homogeneous-vs-punctured-channel.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Install symbolic runtime
+        run: python -m pip install --disable-pip-version-check 'sympy==1.14.0'
+      - name: Verify parents and execute frozen theorem
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          i=json.load(open('research/theory_results/RTK_C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_RESULT_v1.json'))
+          g=json.load(open('research/theory_results/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_RESULT_v1.json'))
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_TARGET_v1.json'))
+          assert i['classification']=='C10_65S6FI_PUNCTURED_SOFT_SHIFT_DIRECTION_DEPENDENT_PASS_SCOPED'
+          assert g['classification']=='C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_PASS_SCOPED'
+          assert t['status']=='FROZEN_BEFORE_IMPLEMENTATION'
+          PY
+          python3 -m py_compile research/shadow/rtk_c10_65s6fj_homogeneous_vs_punctured_channel.py
+          python3 research/shadow/rtk_c10_65s6fj_homogeneous_vs_punctured_channel.py | tee /tmp/s6fj.log
+          grep -q '^C10_65S6FJ_EXACT_HOMOGENEOUS_CHANNEL_SEPARATE_PASS_SCOPED$' /tmp/s6fj.log
+      - name: Add provenance and checkpoint
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,datetime,pathlib
+          p=pathlib.Path('research/theory_results/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance']={'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'repo_head_at_job_start':os.environ['GITHUB_SHA'],'workflow':'rtk-c10-65s6fj-homogeneous-vs-punctured-channel.yml','threshold_changed':False}
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H%MZ')
+          cp=pathlib.Path(f'research/checkpoints/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_{stamp}.md')
+          cp.write_text(f'''# C10.65s6fJ homogeneous-vs-punctured channel checkpoint\n\nClassification: `{r["classification"]}`.\n\nExact spatial q=0 is a separate projectable homogeneous/global sector, not the punctured finite-q scalar-shift limit. The finite-q shift is `N_i=i q_i beta`, with `K_beta~q^4`, `J_beta~q^2`, and `beta~dot(zeta)/q^2`; at exact q=0 the physical gradient shift vanishes and the local beta equation degenerates rather than continuing the finite-q elliptic solve.\n\nBecause s6fI independently proved a direction-dependent punctured q->0 result, no special mu or angular average can be promoted to the exact homogeneous channel.\n\nNext: C10.65s6fK source-lock the homogeneous scalar action/global Hamiltonian constraint and compute the spatial-q=0, nonzero-frequency virtual channel. k=0.03 production remains blocked.\n''')
+          print(cp)
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_RESULT_v1.json research/checkpoints/RTK_C10_65S6FJ_HOMOGENEOUS_VS_PUNCTURED_CHANNEL_*.md
+          git commit -m 'Record C10.65s6fJ homogeneous-vs-punctured channel theorem'
+          git push origin HEAD:rtk-class-build
