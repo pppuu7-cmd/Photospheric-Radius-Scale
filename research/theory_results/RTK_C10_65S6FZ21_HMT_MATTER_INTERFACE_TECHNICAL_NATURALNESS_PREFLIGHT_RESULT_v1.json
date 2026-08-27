@@ -1,0 +1,51 @@
+{
+  "checks": {
+    "hmt_two_arbitrary_constants_explicit": true,
+    "hmt_uv_action_origin_unfixed_explicit": true,
+    "matter_fine_tuning_explicit": true,
+    "no_rtk_response_or_softs_selection": true,
+    "no_soft_s_or_k003": true,
+    "no_unique_hmt_interface_fixed_relation_in_audited_sources": true,
+    "projectable_radiative_problem_explicit": true,
+    "rg_presented_as_candidate_scenario": true,
+    "supersymmetry_presented_as_candidate_scenario": true,
+    "threshold_unchanged": true,
+    "z20_parent_exact": true
+  },
+  "classification": "C10_65S6FZ21_NO_PROTECTED_UNIQUE_SELECTOR_IN_AUDITED_SOURCES_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ21",
+  "interpretation": "The audited universal-HMT matter interface remains a continuous two-constant family and the same source does not provide an obvious UV action-principle origin for that prescription. An independent projectable-Horava radiative analysis finds that matter-sector Lorentz restoration suffers power-law radiative sensitivity/fine tuning and discusses RG-flow or supersymmetry only as candidate protection mechanisms, not as a derived fixed relation selecting the HMT interface constants. Therefore the audited sources do not supply a technically-natural unique selector for the surviving HMT matter-interface family. This is a scoped source result, not a literature-wide impossibility theorem and not closure of RTK C9.",
+  "naturalness_audit": {
+    "hmt_interface_parameters_remain_arbitrary": true,
+    "projectable_radiative_fine_tuning_problem_present": true,
+    "rg_or_supersymmetry_only_candidate_mechanisms_in_audited_source": true,
+    "scope": "audited sources only",
+    "unique_protected_interface_relation_found": false
+  },
+  "next_gate": "C10.65s6fZ22: freeze an independent symmetry/UV-completion inventory restricted to mechanisms that can protect the physical matter-interface relation itself (for example a concrete supersymmetric or strong-dynamics completion with an explicit low-energy HMT matching map). Require an action-level derivation of the relation before any RTK response comparison. If no such source-locked completion is found, preserve the Z12/Z19 completion blocker rather than choosing a1,a2 phenomenologically.",
+  "nonclaims": [
+    "not a literature-wide no-naturalness theorem",
+    "not C9 radiative-naturalness closure",
+    "not a unique HMT+Z7 action",
+    "not RTK pole/residue/remainder equivalence",
+    "not same-action primordial/background closure",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33122620906,
+    "threshold_changed": false,
+    "trigger_head_sha": "9d6b131a69fe41a3a4edb69e227e22ab5315aa32",
+    "workflow": "rtk-c10-65s6fz21-hmt-matter-interface-technical-naturalness-preflight.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ21_HMT_MATTER_INTERFACE_TECHNICAL_NATURALNESS_PREFLIGHT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source_hashes": {
+    "arxiv_1310_6666_html_sha256": "b5c64f0f18f29c0c43983aa58a0508c4c71f6e478240146a49ffe74a323683cc",
+    "arxiv_1805_10299_abs_sha256": "032a92d26eb6078ef7e4eba6608994324096c4d3e25ab7d886e9e543a4cc3418"
+  },
+  "threshold_changed": false
+}
