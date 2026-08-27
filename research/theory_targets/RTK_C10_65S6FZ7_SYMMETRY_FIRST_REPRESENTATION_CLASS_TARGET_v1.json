@@ -1,0 +1,35 @@
+{
+  "schema": "RTK_C10_65S6FZ7_SYMMETRY_FIRST_REPRESENTATION_CLASS_TARGET_v1",
+  "gate": "C10.65s6fZ7",
+  "parent": "C10_65S6FZ6_NO_PRE_SOFTS_REPRESENTATION_FOUND_PASS_SCOPED",
+  "question": "Does there exist a prospectively declared projectable-gravity x internal-null representation class that closes algebraically and gives an invariant scalar carrier/normal derivative, without using the soft-s observable or choosing a full action?",
+  "frozen_representation_class": {
+    "gravity_symmetry": "projectable local U(1) with delta_alpha N_i = N D_i alpha and delta_alpha nu = alpha",
+    "gravity_invariant_shift": "Nbar_i = N_i - N D_i nu",
+    "new_scalar_gravity_charge": "phi and chi are U(1)-neutral in this candidate representation class",
+    "internal_null_symmetry": "delta_epsilon(phi,chi)=epsilon(x,t)*(-u2,u1)",
+    "carrier": "Phi=u1*phi+u2*chi",
+    "normal_derivative": "DperpPhi=(dot(Phi)-Nbar^i D_i Phi)/N"
+  },
+  "required_theorems": [
+    "delta_epsilon Phi = 0",
+    "delta_alpha Phi = 0",
+    "delta_alpha Nbar_i = 0",
+    "[delta_alpha,delta_epsilon] phi = [delta_alpha,delta_epsilon] chi = 0",
+    "DperpPhi is invariant under both symmetries for inert u1,u2",
+    "the class introduces no soft-s-derived coefficient or fitted parameter"
+  ],
+  "allowed_outcomes": [
+    "REPRESENTATION_CLASS_EXISTS_PASS_SCOPED",
+    "REPRESENTATION_CLASS_INCONSISTENT_PASS_SCOPED"
+  ],
+  "forbidden": [
+    "soft-s evaluation or cancellation condition",
+    "k=0.03 production",
+    "choice of nonlinear potential or Wilson coefficients",
+    "claim of full coupled Dirac closure",
+    "claim that neutrality was inherited from the pre-soft-s archive"
+  ],
+  "successor_if_exists": "C10.65s6fZ8: preregister a minimal full projectable action template realizing this representation, then perform same-action constraint/DOF audit before any soft-s retest.",
+  "threshold_changed": false
+}
