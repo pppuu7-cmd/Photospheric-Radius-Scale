@@ -1,0 +1,33 @@
+{
+  "schema": "RTK_C10_65S6FZ23_HMT_PPN_INTERFACE_SELECTOR_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ23",
+  "parent_required": "C10_65S6FZ22_CANDIDATE_PROTECTION_MECHANISMS_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "question": "Does the fixed universal-HMT matter coupling plus equivalence/GR/PPN recovery impose an exact action-level relation that uniquely selects the scalar-response-relevant matter interface, or only phenomenological constraints with a continuous allowed parameter region?",
+  "independent_sources": [
+    {
+      "id": "arxiv:1310.6666v4",
+      "url": "https://arxiv.org/html/1310.6666v4",
+      "role": "universal HMT coupling and projectable/nonprojectable PPN analysis"
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ23_EXACT_PPN_INTERFACE_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ23_PPN_ALLOWS_CONTINUOUS_INTERFACE_REGION_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ23_HMT_PPN_INTERFACE_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "EXACT_SELECTOR requires the audited action/PPN source to derive a unique equality fixing every scalar-response-relevant universal-HMT matter-interface parameter independently of RTK response. CONTINUOUS_REGION applies when the source instead states that all solar-system tests are satisfied in a large parameter region and GR PPN values can be realized by choosing constants, leaving a continuous family. INCOMPLETE applies if those source statements cannot be locked.",
+  "required_guards": [
+    "Z22 parent exact",
+    "do not convert observational inequalities into equalities",
+    "do not choose a representative point from the allowed PPN region",
+    "do not use RTK pole/residue/remainder",
+    "do not use soft-s data",
+    "no soft-s retest",
+    "no k=0.03 production",
+    "do not claim C9 naturalness closure",
+    "threshold unchanged"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
