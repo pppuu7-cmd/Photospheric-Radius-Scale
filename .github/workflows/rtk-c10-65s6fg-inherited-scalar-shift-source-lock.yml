@@ -22,6 +22,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12.3'
+      - name: Fetch frozen archived action source
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin 13acfdbc16d2f3117f1299b8552bcf7b1f996bd1
+          git cat-file -e 13acfdbc16d2f3117f1299b8552bcf7b1f996bd1:research/methods/RTK_FORMULA_BIBLE_C8_SPATIAL_COVARIANT_FLRW_APPENDIX.md
       - name: Execute frozen s6fG source-lock theorem
         run: |
           set -euo pipefail
@@ -34,7 +39,7 @@ jobs:
           import json, os
           p='research/theory_results/RTK_C10_65S6FG_INHERITED_SCALAR_SHIFT_SOURCE_LOCK_RESULT_v1.json'
           r=json.load(open(p))
-          r['provenance']={'workflow':'rtk-c10-65s6fg-inherited-scalar-shift-source-lock.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'repo_head_at_job_start':os.environ['GITHUB_SHA'],'threshold_changed':False}
+          r['provenance']={'workflow':'rtk-c10-65s6fg-inherited-scalar-shift-source-lock.yml','github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'repo_head_at_job_start':os.environ['GITHUB_SHA'],'archived_action_commit':'13acfdbc16d2f3117f1299b8552bcf7b1f996bd1','threshold_changed':False}
           open(p,'w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
           PY
       - name: Persist result and checkpoint
@@ -47,7 +52,7 @@ jobs:
 
           C10.65s6fG source-locks the archived unitary-gauge clock/Khronon sector as F(t,N). Since the scalar shift is N_i=partial_i psi and F has no N_i argument, delta S_F / delta N_i = 0 exactly. Therefore the inherited F(t,N) sector contributes no direct cubic scalar-shift source.
 
-          This resolves the scalar-sector portion of the s6fF blocker without adding a coefficient or changing the s6fE candidate branch. k=0.03 production remains blocked.
+          The analyzer reads the frozen archived action directly from commit 13acfdbc16d2f3117f1299b8552bcf7b1f996bd1; the current branch need not retain that historical file. This resolves the scalar-sector portion of the s6fF blocker without adding a coefficient or changing the s6fE candidate branch. k=0.03 production remains blocked.
 
           Next gate: C10.65s6fH derive the cubic scalar-shift source and q_s->0 reduced limit from the explicit candidate gravitational kinetic/geometry plus alpha6 carrier sector, then rerun unchanged s6fF ZERO/NONZERO semantics.
           EOF
