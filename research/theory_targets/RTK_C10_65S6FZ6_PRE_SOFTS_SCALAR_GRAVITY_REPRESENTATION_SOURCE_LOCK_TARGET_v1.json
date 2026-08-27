@@ -1,0 +1,31 @@
+{
+  "schema": "RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_TARGET_v1",
+  "gate": "C10.65s6fZ6",
+  "parent": "C10_65S6FZ5_SYMMETRY_INTERFACE_UNDERDETERMINED_PASS_SCOPED",
+  "question": "Does the pre-soft-s RTK archive already source-lock a representation of the new rank-one scalar carrier under the projectable gravitational gauge symmetry strongly enough to remove the s6fZ5 interface ambiguity without a post-hoc charge assignment?",
+  "source_scope": {
+    "pre_soft_s_archive_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "current_parent_result": "research/theory_results/RTK_C10_65S6FZ5_SYMMETRY_INTERFACE_CLOSURE_AUDIT_RESULT_v1.json",
+    "current_scalar_template_result": "research/theory_results/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_RESULT_v1.json"
+  },
+  "required_representation_data": [
+    "an explicit pre-soft-s identification of the two scalar carrier fields or an equivalent physical/null pair",
+    "their transformation law under every local gauge symmetry of the projectable gravitational parent",
+    "a source-locked shared normal derivative or invariant-shift prescription using the same lapse/shift variables",
+    "a source-locked cross-symmetry closure statement sufficient to derive rather than choose the combined scalar lapse/shift source"
+  ],
+  "decision_rule": {
+    "REPRESENTATION_SOURCE_LOCKED_PASS_SCOPED": "All required representation/interface data are explicit in pre-soft-s sources and require no new charge assignment.",
+    "NO_PRE_SOFTS_REPRESENTATION_FOUND_PASS_SCOPED": "At least one required datum is absent; record the missing items and keep the interface blocked without inventing a representation.",
+    "FAIL_SCOPED": "Frozen source assertions are internally inconsistent."
+  },
+  "guards": {
+    "no_soft_s_retest": true,
+    "no_k003_production": true,
+    "no_new_charge_assignment": true,
+    "no_new_field_identification": true,
+    "no_new_parameter": true,
+    "no_claim_full_dirac_count": true,
+    "threshold_changed": false
+  }
+}
