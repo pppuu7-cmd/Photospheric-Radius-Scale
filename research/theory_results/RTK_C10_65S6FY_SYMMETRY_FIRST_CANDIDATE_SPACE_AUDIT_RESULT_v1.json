@@ -1,0 +1,30 @@
+{
+  "archived_source_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+  "checks": {
+    "dirac_explicitly_quadratic_scoped": true,
+    "parent_exact": true,
+    "target_present": true,
+    "u1_next_candidate_explicitly_nonprojectable": true,
+    "u1_requires_full_constrained_action": true,
+    "u1_route_not_asserted_solution": true,
+    "u1n_next_gate_still_constraint_rank": true,
+    "u1n_route_explicitly_nonprojectable": true,
+    "u1n_status_full_coupled_dof_open": true
+  },
+  "classification": "C10_65S6FY_NO_SOURCE_LOCKED_PROJECTABLE_CANDIDATE_FOUND_PASS_SCOPED",
+  "finding": "The pre-soft-s archive contains independently motivated degeneracy/U(1) directions, but none is already a source-locked projectable full nonlinear completion. The Dirac rank-one construction is explicitly quadratic/scoped; the U(1) action route is explicitly nonprojectable and still has an open coupled constraint rank. Therefore neither can be promoted into s6fT without new action-level work.",
+  "gate": "C10.65s6fY",
+  "next_gate": "C10.65s6fZ: derive a symmetry-first projectable completion requirement/class theorem rather than selecting coefficients from the failed soft-s channel. Any new candidate must be action-complete and preregistered before soft-s evaluation.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33084154491,
+    "repo_head_at_job_start": "261e1acb53aac1e8e5cfa739829a920c4f352b4e",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fy-symmetry-first-candidate-space-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FY_SYMMETRY_FIRST_CANDIDATE_SPACE_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
