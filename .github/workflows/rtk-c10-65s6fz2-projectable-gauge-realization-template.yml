@@ -1,0 +1,68 @@
+name: RTK C10.65s6fZ2 projectable gauge realization template theorem
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_TARGET_v1.json'
+      - 'research/shadow/rtk_c10_65s6fz2_projectable_gauge_realization_template.py'
+      - '.github/workflows/rtk-c10-65s6fz2-projectable-gauge-realization-template.yml'
+      - '.github/rtk-c10-65s6fz2-projectable-gauge-realization-template-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  theorem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact-symbolic dependency
+        run: python -m pip install --disable-pip-version-check sympy==1.13.3
+      - name: Verify frozen target
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          t=json.load(open('research/theory_targets/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_TARGET_v1.json'))
+          assert t['gate']=='C10.65s6fZ2'
+          assert t['parent']=='C10_65S6FZ1_NO_SOURCE_LOCKED_NONLINEAR_SYMMETRY_REALIZATION_FOUND_PASS_SCOPED'
+          g=t['guards']
+          assert g['no_soft_s_retest'] is True
+          assert g['no_k003_production'] is True
+          assert g['no_failed_observable_fitting'] is True
+          assert g['no_claim_unique_full_rtk_action'] is True
+          assert g['no_claim_full_coupled_adm_dof_count'] is True
+          assert g['threshold_changed'] is False
+          PY
+      - name: Run exact frozen theorem
+        run: python research/shadow/rtk_c10_65s6fz2_projectable_gauge_realization_template.py
+      - name: Add provenance and checkpoint
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('research/theory_results/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_RESULT_v1.json')
+          r=json.loads(p.read_text())
+          r['provenance'].update({'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),'github_actions_run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'repo_head_at_job_start':os.environ['GITHUB_SHA'],'frozen_target_commit':'5c8a2566447b76c06267ad8af9b46fa031896456'})
+          p.write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          Path('research/checkpoints/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_2026-08-27.md').write_text(f'''# RTK C10.65s6fZ2 — projectable gauge realization template theorem\n\nClassification: **{r['classification']}**\n\nAn explicit local symmetry template exists for the two-scalar rank-one class: define `Phi=u1*phi+u2*chi` and a local redundancy `delta(phi,chi)=epsilon(x,t)*(-u2,u1)`, while allowing the scalar action to depend only on `Phi` and its projectable-ADM normal derivative. The exact theorem gives `K=kappa*u*u^T`, `M=m*u*u^T`, `s=sigma*u`, the primary null constraint `n.p=0`, one physical scalar in the two-field subsystem, and an inverse quotient response affine in omega^2.\n\nThis is a constructive class theorem, not a unique RTK completion. The gravitational ADM sector, full coupled lapse/shift constraint algebra, background functions, background equivalence, radiative naturalness and matter embedding remain unfixed. Therefore s6fT is not yet reopened; no soft-s retest or k=0.03 production is authorized.\n\nNext gate: {r['next_gate']}\n\nProvenance: frozen target commit `5c8a2566447b76c06267ad8af9b46fa031896456`; run `{os.environ['GITHUB_RUN_ID']}`, attempt `{os.environ['GITHUB_RUN_ATTEMPT']}`, start SHA `{os.environ['GITHUB_SHA']}`. Thresholds changed: false.\n''')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_RESULT_v1.json research/checkpoints/RTK_C10_65S6FZ2_PROJECTABLE_GAUGE_REALIZATION_TEMPLATE_2026-08-27.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C10.65s6fZ2 projectable gauge realization template theorem'
+            git pull --rebase origin rtk-class-build
+            git push origin HEAD:rtk-class-build
+          fi
