@@ -1,0 +1,1 @@
+trigger frozen C10.65s6fB full scalar-shift cubic reduction audit
