@@ -1,0 +1,26 @@
+{
+  "schema": "RTK_C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_TARGET_v1",
+  "gate": "C10.65s6d",
+  "created_utc": "2026-08-27T03:55:00Z",
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "parents": {"C10.65s6c": "C10_65S6C_K003_OMITTED_ORDER_SENSITIVITY_MAP_PASS_SCOPED"},
+  "purpose": "Make the production-widening decision for k=0.03 using only the already-completed s6c response map, before any k=0.03 production feedback. Implement the successor rule stated in the frozen s6c target: if any key metric/carrier response is order unity or larger, do not promote k=0.03 and require stronger UV/pre-EFT matching input. Otherwise only a separately frozen bounded multibranch canary may be considered.",
+  "decision_inputs": {
+    "key_metric_carrier_responses": ["Psi_N", "Phi_N", "B_pref", "V_N", "delta_b", "theta_b"],
+    "order_unity_boundary_relative": 1.0,
+    "source": "C10.65s6c response_map_measurement_only only"
+  },
+  "prospective_checks": {
+    "s6c_parent_pass": true,
+    "all_key_responses_present_and_finite": true,
+    "decision_uses_no_production_output": true,
+    "threshold_changed": false
+  },
+  "decision_if_any_key_ge_1": "REQUIRE_STRONGER_UV_PRE_EFT_MATCHING_BEFORE_K003_PRODUCTION",
+  "decision_if_all_key_lt_1": "ALLOW_ONLY_SEPARATELY_FROZEN_BOUNDED_MULTIBRANCH_K003_CANARY",
+  "pass_classification": "C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_PASS_SCOPED",
+  "fail_classification": "C10_65S6D_K003_PRODUCTION_ARCHITECTURE_DECISION_FAIL_SCOPED",
+  "interpretation_if_pass": "The k=0.03 production architecture has been decided prospectively from the detached s6c sensitivity map, without consuming production output or changing the inherited s6c envelope. If the decision requires stronger UV/pre-EFT matching, k=0.03 production widening is blocked rather than tuned around the observed sensitivity.",
+  "non_claims": ["not a UV matching derivation", "not a probability statement", "not production feedback", "not a rejection of the completed-U1 low-energy algebraic closure", "not broad-k stability", "not spectra or likelihood evidence"],
+  "threshold_changed": false
+}
