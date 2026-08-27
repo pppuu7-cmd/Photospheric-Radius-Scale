@@ -1,0 +1,66 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "alpha6_coefficient_exact": true,
+    "bare_n2_alpha6_contact_counted_exactly_once": true,
+    "candidate_branch_exact": true,
+    "hard4_exchange_not_added_to_cubic_vertex": true,
+    "lapse_elimination_identity": true,
+    "no_k003_production_output_used": true,
+    "no_parameter_fit_or_soft_cancellation_tuning": true,
+    "no_punctured_q_limit_or_mu_prescription": true,
+    "parents_exact": true,
+    "physical_cubic_vertex_identically_zero": false,
+    "s6fL2_source_expressions_reproduced_symbolically": true,
+    "target_frozen": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_NONZERO_PASS_SCOPED",
+  "decision": "NONZERO",
+  "gate": "C10.65s6fM",
+  "global_block": {
+    "A": "3*Mstar**2*(1 - 3*lambda_HL)/2",
+    "D": "M_K**2*Mstar**2",
+    "Delta_N": "-9*H**2*Mstar**2*lambda_HL/2 + 3*H**2*Mstar**2/2 + M_K**2*Mstar**2",
+    "Omega": "2*omega",
+    "singular_surfaces": [
+      "A=0 (lambda_HL=1/3)",
+      "D=0",
+      "Omega=0",
+      "Delta_N=0 makes lapse-only elimination singular even though the full 2x2 determinant is A D Omega^2"
+    ]
+  },
+  "interpretation": "The frozen minimal projectable n=2,s1=1/2 candidate does not cancel the exact homogeneous soft-s cubic vertex. The exact-global lapse reduction changes the physical source through S_n0 but cannot remove the alpha6_0 coefficient because the s1=1/2 state-function rule gives no alpha6 lapse source. This is a scoped rejection of this specific nonlinear candidate as a soft-s cure, not a no-go for every possible RTK nonlinear completion.",
+  "next_gate": "Keep k=0.03 production blocked. Freeze a successor operator/symmetry-completion gate that changes the nonlinear completion prospectively (not by fitting the present candidate) and requires any new structure to preserve the already-certified background/linear sector before rerunning the exact homogeneous cubic test.",
+  "non_claims": [
+    "not a theorem excluding all nonlinear RTK completions",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not permission for k=0.03 production",
+    "not spectra or likelihood evidence"
+  ],
+  "order_bookkeeping": {
+    "bare_alpha6_double_counted": false,
+    "cubic_object": "linear homogeneous physical-mode source after eliminating n0 only",
+    "exchange_added_to_cubic_vertex": false,
+    "s6fL2_exchange_order": "quadratic in hard-hard sources; effective hard^4 object"
+  },
+  "proof_of_nonzero": "d V_hom^(3) / d alpha6_0 = -96 k^6/a^3, which is nonzero for the frozen finite-hard-k domain k>0 and finite nonzero a. Therefore the exact lapse-reduced homogeneous physical cubic vertex is not an identically vanishing symbolic function on the frozen candidate branch; no parameter value was selected or fitted.",
+  "provenance": {
+    "frozen_target_commit": "6f18eba3355291c4e912184e7efdd291e6a24810",
+    "github_actions_run_id": 33060474803,
+    "repo_head_at_job_start": "d6022a9cd1d8df1f0821502a80227173c6d8825b",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fm-exact-homogeneous-physical-cubic-vertex.yml"
+  },
+  "schema": "RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_RESULT_v1",
+  "sources": {
+    "S_n0": "2*Mstar**2*a*(27*H*a**2*lambda_HL**2*omega - 36*H*a**2*lambda_HL*omega + 9*H*a**2*omega - 3*a**2*lambda_HL*omega**2 + a**2*omega**2 + k**2*lambda_HL - k**2)/(lambda_HL - 1)",
+    "S_zeta0": "(-243*H**2*Mstar**2*a**6*lambda_HL**2 + 324*H**2*Mstar**2*a**6*lambda_HL - 81*H**2*Mstar**2*a**6 - 324*H*Mstar**2*a**6*lambda_HL**2*omega + 432*H*Mstar**2*a**6*lambda_HL*omega - 108*H*Mstar**2*a**6*omega - 81*Hdot*Mstar**2*a**6*lambda_HL**2 + 108*Hdot*Mstar**2*a**6*lambda_HL - 27*Hdot*Mstar**2*a**6 - 108*Mstar**2*a**6*lambda_HL**2*omega**2 + 162*Mstar**2*a**6*lambda_HL*omega**2 - 42*Mstar**2*a**6*omega**2 + 2*Mstar**2*a**4*k**2*lambda_HL - 2*Mstar**2*a**4*k**2 - 96*alpha6_0*k**6*lambda_HL + 96*alpha6_0*k**6)/(a**3*(lambda_HL - 1))",
+    "V_hom_cubic": "-(2187*H**4*Mstar**2*a**6*lambda_HL**3 - 3645*H**4*Mstar**2*a**6*lambda_HL**2 + 1701*H**4*Mstar**2*a**6*lambda_HL - 243*H**4*Mstar**2*a**6 + 2916*H**3*Mstar**2*a**6*lambda_HL**3*omega - 4860*H**3*Mstar**2*a**6*lambda_HL**2*omega + 2268*H**3*Mstar**2*a**6*lambda_HL*omega - 324*H**3*Mstar**2*a**6*omega + 729*H**2*Hdot*Mstar**2*a**6*lambda_HL**3 - 1215*H**2*Hdot*Mstar**2*a**6*lambda_HL**2 + 567*H**2*Hdot*Mstar**2*a**6*lambda_HL - 81*H**2*Hdot*Mstar**2*a**6 - 486*H**2*M_K**2*Mstar**2*a**6*lambda_HL**2 + 648*H**2*M_K**2*Mstar**2*a**6*lambda_HL - 162*H**2*M_K**2*Mstar**2*a**6 - 162*H**2*Mstar**2*a**6*lambda_HL**2*omega**2 + 108*H**2*Mstar**2*a**6*lambda_HL*omega**2 - 18*H**2*Mstar**2*a**6*omega**2 - 18*H**2*Mstar**2*a**4*k**2*lambda_HL**2 + 24*H**2*Mstar**2*a**4*k**2*lambda_HL - 6*H**2*Mstar**2*a**4*k**2 + 864*H**2*alpha6_0*k**6*lambda_HL**2 - 1152*H**2*alpha6_0*k**6*lambda_HL + 288*H**2*alpha6_0*k**6 - 648*H*M_K**2*Mstar**2*a**6*lambda_HL**2*omega + 864*H*M_K**2*Mstar**2*a**6*lambda_HL*omega - 216*H*M_K**2*Mstar**2*a**6*omega + 108*H*Mstar**2*a**6*lambda_HL**2*omega**3 - 72*H*Mstar**2*a**6*lambda_HL*omega**3 + 12*H*Mstar**2*a**6*omega**3 - 36*H*Mstar**2*a**4*k**2*lambda_HL**2*omega + 48*H*Mstar**2*a**4*k**2*lambda_HL*omega - 12*H*Mstar**2*a**4*k**2*omega - 162*Hdot*M_K**2*Mstar**2*a**6*lambda_HL**2 + 216*Hdot*M_K**2*Mstar**2*a**6*lambda_HL - 54*Hdot*M_K**2*Mstar**2*a**6 - 216*M_K**2*Mstar**2*a**6*lambda_HL**2*omega**2 + 324*M_K**2*Mstar**2*a**6*lambda_HL*omega**2 - 84*M_K**2*Mstar**2*a**6*omega**2 + 4*M_K**2*Mstar**2*a**4*k**2*lambda_HL - 4*M_K**2*Mstar**2*a**4*k**2 - 192*M_K**2*alpha6_0*k**6*lambda_HL + 192*M_K**2*alpha6_0*k**6)/(a**3*(lambda_HL - 1)*(9*H**2*lambda_HL - 3*H**2 - 2*M_K**2))",
+    "alpha6_coefficient_in_V": "-96*k**6/a**3",
+    "expected_alpha6_coefficient": "-96*k**6/a**3"
+  },
+  "target": "research/theory_targets/RTK_C10_65S6FM_EXACT_HOMOGENEOUS_PHYSICAL_CUBIC_VERTEX_TARGET_v1.json",
+  "threshold_changed": false
+}
