@@ -1,0 +1,2 @@
+gate=C10.65s6fZ7
+reason=Run prospectively frozen symmetry-first representation-class theorem after s6fZ6 source-lock audit.
