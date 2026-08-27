@@ -1,1 +1,1 @@
-trigger frozen C10.65s6fT source-lock audit
+trigger frozen C10.65s6fT source-lock audit rerun after pinned historical appendix lookup fix
