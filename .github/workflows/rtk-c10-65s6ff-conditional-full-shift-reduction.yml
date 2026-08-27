@@ -1,0 +1,67 @@
+name: RTK C10.65s6fF conditional full shift reduction
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/rtk-c10-65s6ff-conditional-full-shift-reduction.yml'
+      - '.github/rtk-c10-65s6ff-conditional-full-shift-reduction-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+      - name: Execute frozen s6fF reduction/source-lock audit
+        run: |
+          set -euo pipefail
+          python3 -m py_compile research/shadow/rtk_c10_65s6ff_conditional_full_shift_reduction.py
+          python3 research/shadow/rtk_c10_65s6ff_conditional_full_shift_reduction.py | tee /tmp/s6ff.log
+          grep -q '^C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_BLOCKED_ACTION_SOURCE_LOCK_INCOMPLETE_SCOPED$' /tmp/s6ff.log
+      - name: Add immutable provenance
+        run: |
+          python3 - <<'PY'
+          import json, os
+          p='research/theory_results/RTK_C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_RESULT_v1.json'
+          r=json.load(open(p))
+          r['provenance']={
+            'workflow':'rtk-c10-65s6ff-conditional-full-shift-reduction.yml',
+            'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),
+            'repo_head_at_job_start':os.environ['GITHUB_SHA'],
+            'threshold_changed':False,
+          }
+          open(p,'w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Persist result and checkpoint
+        run: |
+          set -euo pipefail
+          stamp=$(date -u +%Y-%m-%dT%H%MZ)
+          cpfile="research/checkpoints/RTK_C10_65S6FF_BLOCKED_TO_S6FG_SOURCE_LOCK_FRONTIER_${stamp}.md"
+          cat > "$cpfile" <<'EOF'
+          # RTK C10.65s6fF conditional shift reduction checkpoint
+
+          C10.65s6fF classified the MINIMAL_PROJECTABLE_N2_S1HALF_v1 reduction as scientifically blocked at a narrower source-lock boundary.
+
+          The s6fE branch explicitly fixes the projectable gravitational kinetic sector, alpha6(X)=alpha6_0 (X/X0)^(1/2), nu(X)=0, and absence of new mixed/shift-dependent operators. From the ADM kinetic term the scalar-shift quadratic kernel is explicitly proportional to (1-lambda_HL) q^4.
+
+          However, the inherited matter/existing-scalar sector is only declared as inherited from the lower-order stack. The candidate contract contains neither an explicit nonlinear scalar/P(X) action nor an immutable source reference for its cubic N_i dependence. Therefore the full cubic scalar-shift source cannot be set to zero or reconstructed without adding action data.
+
+          No ZERO/NONZERO soft-s classification was made. k=0.03 production remains blocked.
+
+          Next gate: C10.65s6fG source-lock the exact inherited nonlinear scalar/P(X) action and derive/prove its cubic scalar-shift source. Then rerun the unchanged s6fF target.
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C10_65S6FF_CONDITIONAL_FULL_SHIFT_REDUCTION_RESULT_v1.json "$cpfile"
+          git commit -m 'Record C10.65s6fF conditional shift reduction blocker'
+          git push origin HEAD:rtk-class-build
