@@ -1,0 +1,86 @@
+{
+  "candidate_branch": "MINIMAL_PROJECTABLE_N2_S1HALF_v1",
+  "checks": {
+    "Jn_source_closed": true,
+    "Jz_source_closed": true,
+    "S_zeta0_and_S_n0_kept_separate": true,
+    "alpha6_lapse_prefactor_cancels_for_s1_half": true,
+    "background_tadpoles_same_as_s6fK": true,
+    "bare_n2_soft_kernel_preserved": true,
+    "candidate_branch_exact": true,
+    "exchange_formula_exact": true,
+    "fixed_C_rule_present": true,
+    "hard_shift_solution_same_action": true,
+    "homogeneous_determinant_exact": true,
+    "k003_production_remains_blocked": true,
+    "mixed_C_DTheta_term_zero_after_same_reduction": true,
+    "no_mu_or_angular_prescription": true,
+    "no_parameter_fit": true,
+    "parents_exact": true,
+    "projectable_hard_lapse_absent": true,
+    "punctured_q_limit_not_used": true,
+    "target_frozen": true,
+    "threshold_changed": false,
+    "unitary_hard_clock_absent": true
+  },
+  "classification": "C10_65S6FL2_HOMOGENEOUS_VIRTUAL_CHANNEL_FINITE_PASS_SCOPED",
+  "decision": "FINITE_EXACT_HOMOGENEOUS_VIRTUAL_CHANNEL_DERIVED_AWAY_FROM_EXPLICIT_GLOBAL_DEGENERACY_SURFACES",
+  "gate": "C10.65s6fL2",
+  "global_block": {
+    "A": "(3/2) Mstar^2(1-3lambda_HL)",
+    "D": "X P_X+2X^2 P_XX = Mstar^2 M_K^2 (s6fK source lock)",
+    "Delta_N": "A H^2 + D",
+    "Omega": "2 omega",
+    "determinant": "A D Omega^2",
+    "exchange": "-[Delta_N S_zeta0^2 +2 A H Omega S_zeta0 S_n0 +A Omega^2 S_n0^2]/(4 A D Omega^2)",
+    "singular_surfaces": [
+      "A=0 (lambda_HL=1/3)",
+      "D=0",
+      "Omega=0",
+      "Delta_N=0 makes lapse-only elimination singular even though the full 2x2 determinant is A D Omega^2"
+    ]
+  },
+  "hard_constraint_reduction": {
+    "hard_clock": "deltaSigma_k=0 by s6fL1",
+    "hard_lapse": "absent for finite k by projectability N=N(t)",
+    "hard_shift": "beta_k=-b^2(1-3lambda_HL) dot(zeta_k)/[(1-lambda_HL)k^2]",
+    "mixed_C_DTheta": "zero because Theta_U=dot(Sigma)/N is spatially homogeneous on this same reduction"
+  },
+  "homogeneous_sources": {
+    "S_n0_parts": {
+      "P_and_Lambda_volume": "-27*H**2*Mstar**2*a**3*(3*lambda_HL - 1)/2",
+      "R3": "2*Mstar**2*a*k**2",
+      "alpha6_state_prefactor": "0",
+      "gravity_kinetic": "Mstar**2*a**3*(3*lambda_HL - 1)*(27*H**2*lambda_HL - 27*H**2 + 36*H*lambda_HL*omega - 36*H*omega - 4*omega**2)/(2*(lambda_HL - 1))"
+    },
+    "S_n0_total": "2*Mstar**2*a*(27*H*a**2*lambda_HL**2*omega - 36*H*a**2*lambda_HL*omega + 9*H*a**2*omega - 3*a**2*lambda_HL*omega**2 + a**2*omega**2 + k**2*lambda_HL - k**2)/(lambda_HL - 1)",
+    "S_zeta0_parts": {
+      "P_and_Lambda_volume": "-27*Mstar**2*a**3*(3*H**2 + 2*Hdot)*(3*lambda_HL - 1)/2",
+      "R3": "2*Mstar**2*a*k**2",
+      "bare_n2_alpha6_soft_kernel": "-96*alpha6_0*k**6/a**3",
+      "gravity_kinetic": "-3*Mstar**2*a**3*(3*lambda_HL - 1)*(27*H**2*lambda_HL - 27*H**2 + 72*H*lambda_HL*omega - 72*H*omega + 24*lambda_HL*omega**2 - 28*omega**2)/(2*(lambda_HL - 1))"
+    },
+    "S_zeta0_total": "-(243*H**2*Mstar**2*a**6*lambda_HL**2 - 324*H**2*Mstar**2*a**6*lambda_HL + 81*H**2*Mstar**2*a**6 + 324*H*Mstar**2*a**6*lambda_HL**2*omega - 432*H*Mstar**2*a**6*lambda_HL*omega + 108*H*Mstar**2*a**6*omega + 81*Hdot*Mstar**2*a**6*lambda_HL**2 - 108*Hdot*Mstar**2*a**6*lambda_HL + 27*Hdot*Mstar**2*a**6 + 108*Mstar**2*a**6*lambda_HL**2*omega**2 - 162*Mstar**2*a**6*lambda_HL*omega**2 + 42*Mstar**2*a**6*omega**2 - 2*Mstar**2*a**4*k**2*lambda_HL + 2*Mstar**2*a**4*k**2 + 96*alpha6_0*k**6*lambda_HL - 96*alpha6_0*k**6)/(a**3*(lambda_HL - 1))",
+    "alpha6_state_rule_consequence": "N*alpha6(X0/N^2)=alpha6_0 exactly for alpha6 proportional sqrt(X), so there is no separate n0 coefficient-perturbation source.",
+    "frequency_convention": "equal hard pair omega,omega; homogeneous Omega=2 omega, matching the algebraic time-frequency convention of s6fI"
+  },
+  "interpretation": "After the independently frozen unitary clock reduction, every same-action hard-hard homogeneous source term required by s6fL2 is identifiable. The projectable hard lapse is absent, the finite-k shift is reduced before q=0, the mixed C(DTheta)^2 carrier vanishes on this same unitary/projectable reduction, and the s1=1/2 alpha6 lapse prefactor cancels exactly. The remaining gravity, R3, P/Lambda-volume and bare n=2 alpha6 sources give a finite exact global exchange away from the exposed homogeneous degeneracy surfaces. This is not yet the final bare+contact+exchange soft-s ZERO/NONZERO sum.",
+  "next_gate": "Freeze the final bare+alpha6+exact-homogeneous sum gate and rerun the original ZERO/NONZERO soft-s semantics without parameter fitting.",
+  "non_claims": [
+    "not permission for k=0.03 production",
+    "not a unique nonlinear completion",
+    "not radiative-naturalness closure",
+    "not same-full-action primordial/background closure",
+    "not spectra or likelihood evidence"
+  ],
+  "provenance": {
+    "frozen_target_commit": "968487c5cafdc303c0a365d446b2cc76cf011f7a",
+    "github_actions_run_id": 33059456877,
+    "repo_head_at_job_start": "f1d33f54716cd23b3be797f6432b87aeabf2d15a",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fl2-unitary-hard-hard-homogeneous-source.yml"
+  },
+  "schema": "RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_RESULT_v1",
+  "target": "research/theory_targets/RTK_C10_65S6FL2_UNITARY_HARD_HARD_HOMOGENEOUS_SOURCE_TARGET_v1.json",
+  "threshold_changed": false
+}
