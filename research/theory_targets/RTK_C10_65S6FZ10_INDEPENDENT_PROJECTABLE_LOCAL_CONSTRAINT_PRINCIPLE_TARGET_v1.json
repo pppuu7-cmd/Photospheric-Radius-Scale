@@ -1,0 +1,52 @@
+{
+  "schema": "RTK_C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_TARGET_v1",
+  "gate": "C10.65s6fZ10",
+  "parent_required": "C10_65S6FZ9_NO_PRE_SOFTS_LOCAL_CONSTRAINT_PARENT_FOUND_PASS_SCOPED",
+  "question": "Does an independently motivated projectable local gravitational constraint/gauge principle exist in the external pre-existing literature, without choosing coefficients from the RTK soft-s failure, that can justify a future same-action projectable completion attempt?",
+  "source_lock": [
+    {
+      "id": "HMT_2010",
+      "arxiv": "1007.2410",
+      "title": "General Covariance in Quantum Gravity at a Lifshitz Point",
+      "required_facts": [
+        "minimal lapse is projectable: N=N(t)",
+        "gauge group is extended by a local U(1)",
+        "extended U(1) eliminates the scalar graviton"
+      ]
+    },
+    {
+      "id": "WANG_WU_2010",
+      "arxiv": "1009.2089",
+      "title": "Cosmology in nonrelativistic general covariant theory of gravity",
+      "required_facts": [
+        "the same general-covariant Hořava architecture introduces a Newtonian prepotential",
+        "the architecture introduces a local U(1) gauge field A",
+        "Hamiltonian/super-momentum and A/prepotential equations are explicitly derived"
+      ]
+    }
+  ],
+  "allowed_classifications": [
+    "C10_65S6FZ10_INDEPENDENT_PROJECTABLE_LOCAL_U1_PRINCIPLE_FOUND_PASS_SCOPED",
+    "C10_65S6FZ10_NO_INDEPENDENT_PROJECTABLE_LOCAL_CONSTRAINT_PRINCIPLE_FOUND_PASS_SCOPED",
+    "C10_65S6FZ10_EXTERNAL_SOURCE_LOCK_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "required_guards": [
+    "parent classification exact",
+    "projectability must be explicit, not inferred from nonprojectable literature",
+    "local U1 and scalar-graviton elimination must be source-locked",
+    "auxiliary/gauge-field structure must be source-locked independently",
+    "no RTK soft-s observable or k=0.03 result may enter the selection",
+    "no coefficient tuple or new RTK action is chosen by this gate"
+  ],
+  "forbidden": [
+    "reinterpreting nonprojectable U1 as projectable",
+    "claiming the external architecture is already an RTK completion",
+    "claiming radiative naturalness",
+    "claiming full coupled RTK Dirac closure",
+    "soft-s retest",
+    "k=0.03 production"
+  ],
+  "threshold_changed": false,
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false
+}
