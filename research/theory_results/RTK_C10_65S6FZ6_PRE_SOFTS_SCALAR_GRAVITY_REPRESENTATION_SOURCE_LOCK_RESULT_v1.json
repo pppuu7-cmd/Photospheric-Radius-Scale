@@ -49,8 +49,8 @@
     "target_gate_exact": true,
     "threshold_unchanged": true
   },
-  "classification": "C10_65S6FZ6_REPRESENTATION_SOURCE_LOCKED_PASS_SCOPED",
-  "finding": "At least one explicit joint representation marker exists in the frozen archive and requires dedicated follow-up before any new representation theorem is introduced.",
+  "classification": "C10_65S6FZ6_NO_PRE_SOFTS_REPRESENTATION_FOUND_PASS_SCOPED",
+  "finding": "The frozen pre-soft-s archive contains both rank-one/Dirac-degenerate material and gravitational gauge/projectability material, but at least one required joint-representation datum is absent. In particular the explicit rank-one/projectable field identification, shared invariant-shift normal derivative and cross-symmetry closure are not source-locked, so the s6fZ5 interface ambiguity cannot be removed without a new predeclared representation choice.",
   "gate": "C10.65s6fZ6",
   "missing_representation_data": {
     "cross_symmetry_closure_absent": true,
@@ -58,14 +58,14 @@
     "explicit_joint_field_identification_absent": true,
     "shared_normal_derivative_or_invariant_shift_absent": true
   },
-  "next_gate": "C10.65s6fZ6a: inspect the explicit archival joint-representation candidates before any new theorem.",
+  "next_gate": "C10.65s6fZ7: freeze a symmetry-first representation theorem/class for the new scalar carrier under the projectable gravitational gauge symmetry, outcome-neutral and without using the soft-s observable, before writing any combined action.",
   "production_k003_unblocked": false,
   "provenance": {
     "archive_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
     "frozen_target_commit": "5313cc814314c2f2fb9a45c84b8a8b6145f53f9e",
     "github_actions_run_attempt": 1,
-    "github_actions_run_id": 33098567798,
-    "repo_head_at_job_start": "a9d4cf1828012c892d19b371c11c252fb03b0d62",
+    "github_actions_run_id": 33098648327,
+    "repo_head_at_job_start": "10890d7ab07e79371583b64fc5f0bece2859e092",
     "threshold_changed": false,
     "workflow": "rtk-c10-65s6fz6-pre-softs-scalar-gravity-representation-source-lock.yml"
   },
@@ -73,5 +73,5 @@
   "schema": "RTK_C10_65S6FZ6_PRE_SOFTS_SCALAR_GRAVITY_REPRESENTATION_SOURCE_LOCK_RESULT_v1",
   "soft_s_retest_allowed": false,
   "threshold_changed": false,
-  "what_is_not_claimed": "Absence of a source-locked archival representation is not a no-go for a compatible representation. It forbids only treating an unrecorded neutrality/charge/invariant-shift choice as inherited physics."
+  "what_is_not_claimed": "Absence of a complete source-locked archival representation is not a no-go for a compatible representation. It forbids only treating an unrecorded neutrality/charge/invariant-shift choice as inherited physics."
 }
