@@ -1,0 +1,157 @@
+{
+  "checks": {
+    "all_active_UR_higher_coordinates_finite": true,
+    "all_approximation_states_tca_rsa_ufa_lmax": true,
+    "all_exact_onset_rows_present": true,
+    "all_state_coordinates_finite": true,
+    "new_anchor_count": true,
+    "observer_anchor_count": true,
+    "observer_read_only_static_guard": true,
+    "off_numeric_text_sha256_identical_both": true,
+    "regression_onset_row_matches_s5a": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_PASS_SCOPED",
+  "domain_ratio_measurement_only": {
+    "abs_A2_k2_over_J": 0.33627196915668245,
+    "k": 0.03,
+    "k_over_Hc": 2.3142915364983696
+  },
+  "gate": "C10.65s6a",
+  "interpretation": "Pinned CLASS can materialize a finite exact-onset scalar state at k=0.03 Mpc^-1 in the same TCA/RSA/UFA branch while exact OFF rollback and the certified k=0.01 onset regression control are preserved. This is only an onset-state/domain preflight and does not certify the inherited matching expansion or production feedback at k=0.03.",
+  "next_gate": "Freeze C10.65s6b completed-U1 onset seed/domain audit at k=0.03 Mpc^-1. Explicitly test projector conditioning and inherited matching-order sensitivity before any one-step production feedback.",
+  "non_claims": [
+    "not certification of the inherited matching polynomial at k=0.03",
+    "not completed-U1 seed certification at k=0.03",
+    "not production feedback at k=0.03",
+    "not finite-time stability at k=0.03",
+    "not broad-k stability",
+    "not continuous-time stability",
+    "not same-full-action primordial/background closure",
+    "not radiative-naturalness closure",
+    "not massive-neutrino completion",
+    "not spectra or likelihood evidence"
+  ],
+  "off_path": {
+    "all_two_numeric_rows_sha256_identical": true,
+    "records": [
+      {
+        "control": "class_control/output/control_perturbations_k0_s.dat",
+        "identical": true,
+        "off": "class_s6a/output/off_perturbations_k0_s.dat"
+      },
+      {
+        "control": "class_control/output/control_perturbations_k1_s.dat",
+        "identical": true,
+        "off": "class_s6a/output/off_perturbations_k1_s.dat"
+      }
+    ]
+  },
+  "onset_rows": [
+    {
+      "F_over_kpow": {
+        "10": 2284443030.5544367,
+        "11": 8683532378.048927,
+        "12": 30318801630.46453,
+        "13": 97869022427.91237,
+        "14": 293704223946.5057,
+        "15": 823377912474.181,
+        "16": 2165418007524.9404,
+        "17": 5405360591413.81,
+        "3": 7183.514641118566,
+        "4": 71251.49014787111,
+        "5": 574636.8937579751,
+        "6": 3905932.7287766486,
+        "7": 22943423.70162967,
+        "8": 118639402.51589431,
+        "9": 547808247.2635765
+      },
+      "a": 0.00022032291364671716,
+      "dU": 0.14045602189439338,
+      "dUprime": 0.0005662796651014315,
+      "dV": 2.905007854239698e-07,
+      "dVprime": 1.3133915409731975e-08,
+      "dZ": 7.401621991507181e-06,
+      "dZprime": 4.1820200976525743e-07,
+      "delta_b": -1.1386501425437017,
+      "delta_cdm": -1.142073122810851,
+      "delta_g": -1.5181980652566391,
+      "delta_ur": -1.5151705149680557,
+      "k": 0.01,
+      "l_max_ur": 17,
+      "phi_CLASS": 0.6566042304673116,
+      "rsa": 0,
+      "shear_ur": 0.027833355185213703,
+      "tau": 87.89051579644268,
+      "tca": 0,
+      "theta_b": 0.0023488884996089596,
+      "theta_cdm": 0.00249685301086217,
+      "theta_g": 0.0023487755999474034,
+      "theta_ur": 0.002243507945792523,
+      "ufa": 0
+    },
+    {
+      "F_over_kpow": {
+        "10": 2011224539.317079,
+        "11": 7803842277.513581,
+        "12": 27785185389.01235,
+        "13": 91413120174.72688,
+        "14": 279550327397.0187,
+        "15": 798671736301.6261,
+        "16": 2141128640067.3726,
+        "17": 5406765973703.995,
+        "3": 4466.4796055425,
+        "4": 49673.793861693484,
+        "5": 429916.78070566914,
+        "6": 3068744.584861095,
+        "7": 18702015.176897254,
+        "8": 99612591.74324481,
+        "9": 471652376.3148916
+      },
+      "a": 0.00022032291364671716,
+      "dU": -0.12791516464622532,
+      "dUprime": -0.0067341817989717894,
+      "dV": 1.376108664790374e-07,
+      "dVprime": 3.5592269119443836e-09,
+      "dZ": 3.203834377420726e-06,
+      "dZprime": 8.814554045840291e-08,
+      "delta_b": -2.0950502361255054,
+      "delta_cdm": -2.3487286012380992,
+      "delta_g": -2.7932527849855986,
+      "delta_ur": -2.6097634574115696,
+      "k": 0.03,
+      "l_max_ur": 17,
+      "phi_CLASS": 0.53915541364528,
+      "rsa": 0,
+      "shear_ur": 0.12423821501440595,
+      "tau": 87.89051579644268,
+      "tca": 0,
+      "theta_b": 0.010256262253307051,
+      "theta_cdm": 0.020727761557507555,
+      "theta_g": 0.010248807679494461,
+      "theta_ur": 0.0047699755924211365,
+      "ufa": 0
+    }
+  ],
+  "provenance": {
+    "analyzer": "research/shadow/rtk_c10_65s6a_k003_onset_state_domain_preflight.py",
+    "class_upstream_sha": "36cf283628c4a3330ec9fd3d84239bf775f77317",
+    "endpoint_materializer": "rtk/apply_rtk_c10_65s4a3_targeted_endpoint_materialization_patch.py",
+    "github_actions_run_id": 33031007355,
+    "k003_adapter": "rtk/apply_rtk_c10_65s6a_k003_endpoint_adapter.py",
+    "observer_patch": "rtk/apply_rtk_c10_65s1_readonly_state_observer_patch.py",
+    "repo_head_at_job_start": "855dc08b734b48d35d56b975b22884853980740e",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6a-k003-onset-state-domain-preflight.yml"
+  },
+  "regression_max_relative_error": 0.0,
+  "schema": "RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_RESULT_v1",
+  "static_observer_guards": {
+    "no_dy_assignment": true,
+    "no_metric_assignment": true,
+    "noinline_noclone": true,
+    "separate_translation_unit": true
+  },
+  "target": "research/theory_targets/RTK_C10_65S6A_K003_ONSET_STATE_DOMAIN_PREFLIGHT_TARGET_v1.json",
+  "threshold_changed": false
+}
