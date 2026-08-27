@@ -1,0 +1,48 @@
+{
+  "checks": {
+    "coefficient_not_fixed_by_symmetry": true,
+    "continuous_coefficient_family_exists": true,
+    "finite_k_quadratic_term_nonzero_for_k_positive": true,
+    "hmt_u1_invariance_exact": true,
+    "internal_null_invariance_exact": true,
+    "no_background_potential_source_or_auxiliary_data_selected": true,
+    "no_coefficient_selected": true,
+    "no_old_kernel_matching": true,
+    "no_soft_s_or_k003": true,
+    "projectability_does_not_kill_spatial_carrier_gradient": true,
+    "threshold_unchanged": true,
+    "z13_parent_exact": true
+  },
+  "classification": "C10_65S6FZ14_PROJECTABLE_SPATIAL_OPERATOR_EXISTS_COEFFICIENT_UNFIXED_PASS_SCOPED",
+  "exact_theorem": {
+    "Y_Phi_quadratic_finite_k_coefficient": "k**2/(2*a**2)",
+    "delta_alpha_Y_Phi": "0",
+    "delta_epsilon_Phi": "0",
+    "delta_epsilon_Y_Phi": "0",
+    "kernel_difference": "k**2*(c1 - c2)/a**2",
+    "kernel_family": "D_c(omega,k)=D_0(omega)+c_Y*k^2/a^2"
+  },
+  "gate": "C10.65s6fZ14",
+  "interpretation": "The frozen HMT+Z7 representation admits the local parity-even two-spatial-derivative operator Y_Phi=gamma^{ij}D_iPhi D_jPhi/2. Unlike the C8 lapse-acceleration term, it survives projectability because projectability constrains N rather than the spatial variation of Phi. Y_Phi is invariant under both the HMT local U(1) and the internal Z7 null symmetry. However those symmetries leave its coefficient free: a continuous c_Y family has identical symmetry/DOF representation but inequivalent finite-k kernels. Therefore the missing spatial operator class exists, while its coefficient still requires an independent pre-kernel physical principle.",
+  "next_gate": "C10.65s6fZ15: audit the pre-soft-s production DBI/P(X) clock principle as a prospective action-selection rule for tying the temporal and spatial carrier derivatives in one state function. Determine whether that principle fixes c_Y and the background function without using the old RTK pole/residue/remainder; keep matter/source and HMT-auxiliary interfaces explicit rather than assumed.",
+  "nonclaims": [
+    "not a full carrier action",
+    "not coefficient determination",
+    "not RTK quadratic equivalence",
+    "not C9 naturalness",
+    "not a soft-s result",
+    "not k=0.03 production"
+  ],
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33114869723,
+    "threshold_changed": false,
+    "trigger_head_sha": "ef646be11ac53cb9642a685083195e1585a63f5c",
+    "workflow": "rtk-c10-65s6fz14-projectable-carrier-spatial-operator-class.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ14_PROJECTABLE_CARRIER_SPATIAL_OPERATOR_CLASS_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "threshold_changed": false
+}
