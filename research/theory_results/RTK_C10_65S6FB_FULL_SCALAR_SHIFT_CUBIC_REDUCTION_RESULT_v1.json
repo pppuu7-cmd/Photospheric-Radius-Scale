@@ -1,0 +1,59 @@
+{
+  "alpha6_state_function_parent": {
+    "decision": "LOCAL_ALPHA6_STATE_FUNCTION_CANNOT_BY_ITSELF_CANCEL_SOFT_S_OVER_FINITE_K_INTERVAL",
+    "source": "C10.65s6fA"
+  },
+  "bare_carrier_parent": {
+    "K3_s": "-96 k^6",
+    "source": "C10.65s6e"
+  },
+  "checks": {
+    "archived_bible_source_locked": true,
+    "final_covariant_action_explicitly_not_fixed": true,
+    "k003_production_remains_blocked": true,
+    "s6e_parent_pass": true,
+    "s6fa_parent_pass": true,
+    "target_frozen": true,
+    "threshold_changed": false
+  },
+  "classification": "C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_BLOCKED_INCOMPLETE_FIXED_ACTION_SCOPED",
+  "decision": "DO_NOT_CLASSIFY_ZERO_OR_NONZERO_UNTIL_FULL_SHIFT_DEPENDENT_ACTION_IS_SOURCE_LOCKED",
+  "gate": "C10.65s6fB",
+  "interpretation": "The frozen s6fB ZERO/NONZERO alternatives cannot yet be evaluated without inventing missing action data. The repository's canonical archived Formula Bible explicitly states that the final covariant completion is not fixed. Because scalar-shift elimination depends on all shift-dependent kinetic/mixed operators, the exchange contribution is underdetermined by the carrier and local alpha6 information alone. This is a scoped scientific blocker, not evidence for or against cancellation.",
+  "next_gate": "C10.65s6fC fixed-action closure: source-lock one complete nonlinear projectable scalar action, including every shift-dependent ADM operator and the full alpha6(X) rule, while preserving already certified IR/linear constraints; only then rerun the unchanged s6fB reduction target.",
+  "non_claims": [
+    "not an exact-zero result",
+    "not an exact-nonzero result",
+    "not a no-go for n=2 after a fully specified constraint reduction",
+    "not radiative-naturalness closure",
+    "not permission for k=0.03 production"
+  ],
+  "provenance": {
+    "archived_formula_bible_commit": "13acfdbc16d2f3117f1299b8552bcf7b1f996bd1",
+    "repo_head_at_job_start": "3b67e4aa9811638ff1c2dc29a18f0f420426cc3e",
+    "threshold_changed": false,
+    "workflow": "rtk-c10-65s6fb-full-scalar-shift-cubic-reduction.yml"
+  },
+  "required_action_data": {
+    "all_extrinsic_curvature_coefficients_and_state_dependence": false,
+    "all_mixed_derivative_shift_couplings": false,
+    "complete_shift_dependent_ADM_Lagrangian": false,
+    "full_nonlinear_alpha6_state_function_not_just_local_slope_condition": false
+  },
+  "schema": "RTK_C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_RESULT_v1",
+  "shift_reduction": {
+    "cubic_source": "UNDEFINED_FROM_CURRENT_FIXED_INPUTS",
+    "exact_cancellation_residual": "NOT_DEFINED",
+    "exchange_contribution": "UNDEFINED_FROM_CURRENT_FIXED_INPUTS",
+    "quadratic_kernel": "UNDEFINED_FROM_CURRENT_FIXED_INPUTS",
+    "total_reduced_vertex": "NOT_CLASSIFIED"
+  },
+  "target": "research/theory_targets/RTK_C10_65S6FB_FULL_SCALAR_SHIFT_CUBIC_REDUCTION_TARGET_v1.json",
+  "threshold_changed": false,
+  "underdetermination_witness": {
+    "carrier_unchanged": "the explicitly stated alpha6(X) D_i R3 D^i R3 intrinsic-curvature carrier is unchanged by adding DeltaS_mu",
+    "consequence": "without a source-locked value/rule for mu (or an explicit prohibition from the full action), the reduced shift-exchange cubic vertex is not uniquely determined by the frozen s6fB inputs",
+    "operator": "DeltaS_mu = mu * integral N sqrt(gamma) (K_ij K^ij - K^2/3)",
+    "reason": "contains the scalar shift through K_ij and changes delta^2 S/dN_i dN_j and cubic shift sources at finite k"
+  }
+}
