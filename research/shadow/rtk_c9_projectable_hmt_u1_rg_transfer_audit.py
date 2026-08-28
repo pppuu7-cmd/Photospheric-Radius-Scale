@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Workflow trigger refresh only; frozen target and scientific criteria are unchanged.
 import json
 from pathlib import Path
 
