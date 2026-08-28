@@ -1,0 +1,74 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_JACOBIAN_ABSORBED_IN_ORTHONORMAL_VECTOR_BASIS_PASS_SCOPED",
+  "target_frozen_commit": "a93e8261e03f9f7503e685a46c537ddcb687ca46",
+  "scientific_parent_head": "c6c9e4062569fcbf94c8e1860f509cb39defd9a3",
+  "background": "round S3, lambda=1",
+  "hodge_split": "xi_i=xi_i^T+nabla_i sigma, div xi^T=0, l=0 scalar constant excluded",
+  "scalar_laplacian_spectrum": {
+    "dimensionless_operator": "Delta0_hat=-a^2 nabla^2",
+    "eigenvalue": "n^2-1, n>=2",
+    "degeneracy": "n^2",
+    "zeta_Delta0_hat_at_0": -1
+  },
+  "measure_relations": {
+    "commuting_vector_raw_scalar_coordinates": "Dxi = [det_prime(Delta0_hat)]^(1/2) Dxi_T Dsigma (dimensionless frozen normalization)",
+    "normalized_longitudinal_vector_basis": "Dxi = Dxi_T Dxi_L; Hodge coordinate Jacobian is absorbed into xi_L coefficients",
+    "single_Grassmann_vector_raw_scalar_coordinates": "Dc = [det_prime(Delta0_hat)]^(-1/2) Dc_T Dsigma",
+    "ghost_antighost_pair_raw_scalar_coordinates": "Dc Dbarc = [det_prime(Delta0_hat)]^(-1) Dc_T Dbarc_T Dsigma Dbar_sigma"
+  },
+  "longitudinal_ghost_action": {
+    "normalized_vector_basis_eigenvalue": "m_n=-(n^2-5)",
+    "raw_scalar_potential_basis_eigenvalue": "(n^2-1)*m_n",
+    "cancellation": "det[Delta0_hat*M_L] times det[Delta0_hat]^(-1) = det[M_L] mode-by-mode"
+  },
+  "finite_cutoff_crosschecks": [
+    {
+      "cutoff_n_max": 2,
+      "net_scalar_laplacian_power": 0.0
+    },
+    {
+      "cutoff_n_max": 3,
+      "net_scalar_laplacian_power": 0.0
+    },
+    {
+      "cutoff_n_max": 4,
+      "net_scalar_laplacian_power": 0.0
+    },
+    {
+      "cutoff_n_max": 6,
+      "net_scalar_laplacian_power": 0.0
+    },
+    {
+      "cutoff_n_max": 10,
+      "net_scalar_laplacian_power": 0.0
+    }
+  ],
+  "scientific_checks": {
+    "constant_scalar_zero_mode_excluded": true,
+    "transverse_longitudinal_L2_orthogonal": true,
+    "raw_commuting_hodge_jacobian_sqrt_det_delta0": true,
+    "normalized_vector_basis_has_unit_coordinate_jacobian": true,
+    "grassmann_pair_inverse_jacobian_identified": true,
+    "raw_scalar_ghost_action_extra_delta0_identified": true,
+    "grassmann_measure_cancels_extra_delta0_mode_by_mode": true,
+    "existing_orthonormal_vector_FP_determinant_requires_no_extra_hodge_factor": true,
+    "adding_extra_hodge_factor_to_existing_FP_would_double_count": true
+  },
+  "findings": {
+    "extra_Hodge_factor_to_multiply_existing_FP_determinant": false,
+    "decomposition_jacobian_is_coordinate_convention_dependent_but_path_integral_equivalent": true,
+    "complete_signed_spatial_FP_quotient_assembled": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
