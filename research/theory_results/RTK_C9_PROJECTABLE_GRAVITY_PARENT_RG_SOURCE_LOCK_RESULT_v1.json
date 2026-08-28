@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "af_flow_source_present": true,
+    "full_C9_not_claimed": true,
+    "full_beta_source_present": true,
+    "k003_blocked": true,
+    "matter_beta_not_claimed": true,
+    "parent_not_promoted_to_HMT": true,
+    "renormalizability_source_present": true,
+    "soft_s_blocked": true,
+    "target_schema_exact": true,
+    "threshold_unchanged": true
+  },
+  "classification": "RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_CONTROL_FOUND_PASS_SCOPED",
+  "decision": {
+    "HMT_U1_matter_completion_quantitative_RG_control_proven": false,
+    "full_C9_closed": false,
+    "production_k003_unblocked": false,
+    "pure_projectable_gravity_parent_has_quantitative_RG_control": true,
+    "soft_s_retest_allowed": false,
+    "unresolved_HMT_matter_interface_still_blocks_unique_same_action_full_loop": true
+  },
+  "interpretation": "Independent literature supplies genuine quantitative one-loop/RG control for the ordinary projectable Horava gravity parent. This narrows the remaining C9 obstruction: it is not absence of any projectable-gravity renormalization framework, but the unresolved extension to the specific HMT local-U(1)+matter RTK completion and its unfixed physical-matter interface.",
+  "nonclaims": [
+    "No identification of ordinary projectable Horava gravity with the full HMT local-U(1) RTK candidate.",
+    "No beta function is assigned to unresolved HMT physical-matter-interface coefficients.",
+    "No full radiative-naturalness closure for RTK is claimed.",
+    "No soft-s or k=0.03 production gate is reopened."
+  ],
+  "schema": "RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_RESULT_v1",
+  "source_locked_literature": {
+    "asymptotic_freedom_flow": "Barvinsky, Kurov, Sibiryakov, arXiv:2310.07841 / PRD 108 L121503",
+    "full_3p1_marginal_beta_functions": "Barvinsky, Kurov, Sibiryakov, arXiv:2110.14688 / PRD 105 044009",
+    "perturbative_renormalizability": "Barvinsky et al., arXiv:1512.02250"
+  },
+  "status": "PASS_SCOPED",
+  "threshold_changed": false
+}
