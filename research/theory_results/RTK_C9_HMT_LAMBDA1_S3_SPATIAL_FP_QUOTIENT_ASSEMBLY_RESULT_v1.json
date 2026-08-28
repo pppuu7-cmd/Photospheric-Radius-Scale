@@ -1,0 +1,80 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_QUOTIENT_ASSEMBLED_CONVENTION_BOUND_PASS_SCOPED",
+  "target_frozen_commit": "e24d6776fc068e65aeb4a0c838d21175a120a47f",
+  "scientific_parent_head": "99119e680a8bc57be9115ed07e851b7a16a3d0ea",
+  "background": "round S3, lambda=1",
+  "operator": "M^i_j=nabla^2 delta^i_j+R^i_j",
+  "frozen_conventions": {
+    "spectral_cut": "principal cut inherited from signed-phase gate",
+    "vector_coordinates": "L2-orthonormal transverse/longitudinal harmonics",
+    "residual_group": "SO(4)",
+    "generator_period": "2*pi",
+    "Lie_metric": "-1/2 Tr"
+  },
+  "inherited_inputs": {
+    "Det_prime_abs_T": "67.869342368305180409328005773658622338151596454315223519029011945298722091682815",
+    "Det_prime_abs_L": "2.1999085267023697422585361883960668683089207686293255795194962406150393938391081",
+    "Det_prime_abs_combined_certified": "149.30634497771697105893170945826130655341339602612728394167831214428717291534588",
+    "Det_prime_abs_combined_recomputed": "149.3063449777169710589317094582613065534133960261272839416783121442871729153458796034",
+    "relative_product_mismatch": "2.6561181e-81",
+    "combined_principal_cut_phase": "+1",
+    "extra_Hodge_factor": 1,
+    "residual_SO4_orbit_volume": "16*pi^10*a^15"
+  },
+  "assembled_scoped_quotient": {
+    "definition": "Q_FP_spatial(a)=Det_prime_zeta(a^2 M_FP)/Vol_L2(SO(4))",
+    "exact_form": "Q_FP_spatial(a)=Det_prime_zeta(a^2 M_FP)/(16*pi^10*a^15)",
+    "dimensionless_numerator": "149.3063449777169710589317094582613065534133960261272839416783121442871729153458796034",
+    "dimensionless_denominator_coefficient": "16*pi^10",
+    "C_FP": "0.00009964592762588606294505065311258148728847369130531221201092474351580618320764531248392",
+    "formula": "Q_FP_spatial(a)=C_FP*a^(-15)",
+    "phase": "+1",
+    "convention_bound": true
+  },
+  "scaling_crosschecks": [
+    {
+      "scale": "2",
+      "Q_ratio": "0.000030517578125",
+      "expected_s^-15": "0.000030517578125",
+      "abs_error": "0.0"
+    },
+    {
+      "scale": "1.5",
+      "Q_ratio": "0.002283658260521167222005132516365183773230950622232062692998149615158841",
+      "expected_s^-15": "0.002283658260521167222005132516365183773230950622232062692998149615158841",
+      "abs_error": "0.0"
+    },
+    {
+      "scale": "3.25",
+      "Q_ratio": "0.00000002097729981392361301200424797679724096620153602233351565992121809578189",
+      "expected_s^-15": "0.00000002097729981392361301200424797679724096620153602233351565992121809578189",
+      "abs_error": "0.0"
+    }
+  ],
+  "scientific_checks": {
+    "signed_nonzero_product_matches_certified_inputs": true,
+    "combined_phase_exactly_plus_one": true,
+    "no_extra_Hodge_factor": true,
+    "residual_orbit_volume_16pi10a15": true,
+    "quotient_scaling_a_minus15": true,
+    "quotient_is_convention_bound_not_observable": true
+  },
+  "findings": {
+    "complete_signed_spatial_FP_quotient_assembled_under_frozen_convention": true,
+    "spatial_FP_quotient_is_convention_independent_observable": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "The already-certified nonzero spatial FP determinant, trivial combined principal-cut phase, absence of an extra Hodge factor in orthonormal vector coordinates, and convention-fixed residual SO(4) orbit volume can be assembled consistently. The result is a scoped, convention-bound spatial FP quotient only; it is not the complete HMT FP/FS measure, one-loop determinant, or C9 closure.",
+  "next_gate": "Source-lock and derive the physical TT quadratic Hessian on the same frozen round-S3, lambda=1 background before attempting any broader one-loop assembly."
+}

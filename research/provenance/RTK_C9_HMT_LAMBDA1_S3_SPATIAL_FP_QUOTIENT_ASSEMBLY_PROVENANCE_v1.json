@@ -1,0 +1,15 @@
+{
+  "created_utc": "2026-08-28T21:32:29.736811+00:00",
+  "target_frozen_commit": "e24d6776fc068e65aeb4a0c838d21175a120a47f",
+  "scientific_parent_head": "99119e680a8bc57be9115ed07e851b7a16a3d0ea",
+  "source_result_commits": [
+    "c6c9e4062569fcbf94c8e1860f509cb39defd9a3",
+    "83ae30fee6d77a3ea42ede57823bedc2875abfdf",
+    "99119e680a8bc57be9115ed07e851b7a16a3d0ea"
+  ],
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_spatial_fp_quotient_assembly.py",
+  "method": "high-precision assembly of certified signed nonzero zeta determinant, unit Hodge factor, and convention-fixed SO(4) orbit quotient; exact scaling audit",
+  "regularization": "no new regularization; inherits zeta determinants and principal spectral cut from source-locked gates",
+  "no_DSIR": true,
+  "no_threshold_change": true
+}
