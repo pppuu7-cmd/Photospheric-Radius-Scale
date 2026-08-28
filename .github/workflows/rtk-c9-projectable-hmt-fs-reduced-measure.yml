@@ -1,0 +1,46 @@
+name: RTK C9 projectable HMT FS reduced measure
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/triggers/RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_TRIGGER_v1.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen target and run scientific audit
+        run: python research/shadow/rtk_c9_projectable_hmt_fs_reduced_measure.py
+      - name: Verify scoped semantics
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_RESULT_v1.json'
+          d=json.load(open(p))
+          c=d['checks']
+          assert d['pass_scoped'] is True
+          assert c['full_C9_closed'] is False
+          assert c['full_HMT_one_loop_evaluable'] is False
+          assert c['soft_s_retest_allowed'] is False
+          assert c['production_k003_unblocked'] is False
+          assert c['ordinary_projectable_parent_beta_functions_imported'] is False
+          assert c['threshold_changed'] is False
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'rtk-c9-actions'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_RESULT_v1.json research/checkpoints/RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_CHECKPOINT_v1.json research/provenance/RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT Faddeev-Senjanovic reduced-measure audit'
+            git push origin HEAD:rtk-class-build
+          fi
