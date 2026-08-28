@@ -1,0 +1,43 @@
+{
+  "gate": "RTK C9 HMT lambda=1 constant-curvature witness rank audit",
+  "version": 1,
+  "frozen_before_execution": true,
+  "parent_head": "cb09a8fcda23367ae5d64b40b19b0945e68e920d",
+  "scope": "projectable HMT gravitational constrained sector only; no DSIR, no matter-interface selection, no parent beta-function import",
+  "background": {
+    "spatial_dimension": 3,
+    "lambda": 1,
+    "geometry": "compact constant-positive-curvature S3 witness",
+    "Rij": "(R/3) g_ij",
+    "R": "6/a^2",
+    "background_momentum": 0,
+    "assumption": "background lies on Phi1 constraint surface by choosing the source-locked curvature constant accordingly"
+  },
+  "source_locked_constraint_inputs": {
+    "Phi1_linearized_variable": "delta R",
+    "Phi2_lambda1_D3": "-2 R_ij pi^ij + R pi"
+  },
+  "frozen_derivation_tests": [
+    "On constant curvature, Phi2 linearized in momentum equals (R/3) delta pi.",
+    "Use delta R under conformal metric variation delta g_ij=f g_ij: delta R=-R f-2 nabla^2 f in D=3.",
+    "Therefore the bracket block is proportional to (R/3)(-R-2 nabla^2).",
+    "On S3 scalar harmonics with -nabla^2 eigenvalue l(l+2)/a^2, classify mode rank without deleting zero modes.",
+    "Any l=1 kernel zero modes must be reported, not regularized away post hoc."
+  ],
+  "pass_semantics": "PASS_SCOPED only if a non-flat lambda=1 witness restores nonzero second-class bracket rank for at least a nonempty physical mode set while all exceptional/zero-mode sectors are explicitly retained.",
+  "forbidden_claims": [
+    "full FS determinant computed",
+    "full HMT one-loop evaluable",
+    "full C9 closed",
+    "new exact first-class symmetry disproven globally",
+    "soft-s retest allowed",
+    "k=0.03 Mpc^-1 production unblocked"
+  ],
+  "frozen_status": {
+    "full_C9_closed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false
+  }
+}
