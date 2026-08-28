@@ -1,0 +1,55 @@
+name: RTK C9 projectable radiative evaluability source-lock audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_TARGET_v1.json'
+      - 'research/shadow/rtk_c9_projectable_radiative_evaluability_source_lock_audit.py'
+      - '.github/rtk-c9-projectable-radiative-evaluability-source-lock-audit-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target
+        run: |
+          test -f research/theory_targets/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_TARGET_v1.json
+          git log -1 --format='%H %s' -- research/theory_targets/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_TARGET_v1.json
+      - name: Run source-lock audit
+        run: python research/shadow/rtk_c9_projectable_radiative_evaluability_source_lock_audit.py
+      - name: Persist checkpoint and provenance
+        env:
+          RUN_ID: ${{ github.run_id }}
+          EXECUTION_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path('.')
+          r=json.loads((root/'research/theory_results/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_RESULT_v1.json').read_text())
+          (root/'research/checkpoints/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_2026-08-28.md').write_text(f'''# RTK C9 projectable radiative-evaluability source-lock audit\n\nClassification: `{r["classification"]}`\n\nGitHub Actions run: `{os.environ["RUN_ID"]}`\nExecution SHA: `{os.environ["EXECUTION_SHA"]}`\nthreshold_changed: `false`\n\nThe old projectable acceleration pair remains structurally absent, but finite-k invariant carrier counterterm directions exist. Z24 independently establishes that the physical HMT matter interface is a continuous unresolved source family with no authorized representative point. Therefore the current full completion does not source-lock a unique quantitative same-action one-loop/RG calculation. No specific nonzero beta function is asserted and full C9 remains open.\n\nNext scientific dependency: genuinely new independently motivated same-action microscopic input fixing the HMT physical matter interface before any RTK comparison. Soft-s and k=0.03 production remain blocked.\n''')
+          (root/'research/theory_results/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_PROVENANCE_v1.json').write_text(json.dumps({'run_id':int(os.environ['RUN_ID']),'execution_sha':os.environ['EXECUTION_SHA'],'target_commit':'2a02de46f74aec0e4410a464ca395dee2b30a024','threshold_changed':False},indent=2)+'\n')
+          PY
+      - name: Commit result checkpoint and provenance
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_RESULT_v1.json \
+                  research/theory_results/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_PROVENANCE_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_2026-08-28.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Record C9 radiative evaluability source-lock audit'
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
