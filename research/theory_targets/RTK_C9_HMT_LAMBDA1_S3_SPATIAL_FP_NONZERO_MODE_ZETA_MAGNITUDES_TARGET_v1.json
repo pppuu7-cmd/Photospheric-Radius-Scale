@@ -1,0 +1,88 @@
+{
+  "gate": "RTK C9 HMT lambda=1 round-S3 spatial FP nonzero-mode zeta magnitudes",
+  "parent_head": "5ec5fdd787571764daf723122300a34da6e09b38",
+  "scope": "For the prospectively fixed spatial DeWitt/harmonic gauge and exact FP spectrum certified by the parent gate, freeze dimensionless positive-magnitude spectral operators for the transverse-vector and longitudinal-scalar-gradient nonzero sectors and compute their separate zeta-regularized determinant magnitudes. The six transverse l=1 Killing generators are spectrally primed out. This gate does not assign a Haar/group-volume normalization to those residual isometries, does not assign a signed/complex FP phase, does not multiply the spatial FP factors by the prior FS determinant or TT Hessian, and does not evaluate a one-loop effective action.",
+  "frozen_background": {
+    "spatial_manifold": "round S3",
+    "dimension": 3,
+    "radius": "a",
+    "Ricci_tensor": "R_ij=2/a^2 g_ij",
+    "scalar_curvature": "R=6/a^2",
+    "lambda": 1,
+    "background_momentum": 0,
+    "projectability": true
+  },
+  "frozen_parent_operator": {
+    "spatial_gauge": "F_i=nabla^j h_ij-(1/2)nabla_i h=0",
+    "FP_operator": "M_i^j=nabla^2 delta_i^j+R_i^j",
+    "transverse_eigenvalue": "[3-l(l+2)]/a^2",
+    "transverse_degeneracy": "d_l^T=2l(l+2)",
+    "transverse_domain_before_prime": "l>=1",
+    "transverse_zero_modes": "l=1 only, multiplicity 6, round-S3 Killing generators",
+    "longitudinal_eigenvalue": "[4-l(l+2)]/a^2 on normalized vector modes proportional to nabla_i Y_l",
+    "longitudinal_degeneracy": "d_l^L=(l+1)^2",
+    "longitudinal_domain": "l>=1; l=0 gradient identically absent",
+    "longitudinal_zero_modes": "none"
+  },
+  "frozen_positive_magnitude_spectra": {
+    "transverse_operator": "A_T=a^2 |M_T| on the primed transverse-vector domain",
+    "transverse_eigenvalue": "lambda_l^T=(l-1)(l+3) for l>=2",
+    "transverse_degeneracy": "d_l^T=2l(l+2)",
+    "transverse_n_form": "with n=l+1>=3: lambda_n^T=n^2-4, d_n^T=2(n^2-1)",
+    "longitudinal_operator": "A_L=a^2 |M_L| on the nontrivial longitudinal-vector domain",
+    "longitudinal_eigenvalue": "lambda_1^L=1; lambda_l^L=l(l+2)-4 for l>=2",
+    "longitudinal_degeneracy": "d_l^L=(l+1)^2",
+    "longitudinal_n_form": "with n=l+1: n=2 gives lambda=1,d=4; n>=3 gives lambda_n^L=n^2-5,d_n^L=n^2",
+    "signed_FP_phase": "not assigned in this gate; only determinant magnitudes of |M_T| and |M_L| are regularized",
+    "longitudinal_basis_semantics": "The spectrum is that of M restricted to the longitudinal vector subspace using normalized vector eigenmodes. No extra scalar-gradient field-decomposition Jacobian is inserted into these operator determinants."
+  },
+  "frozen_regularization": {
+    "transverse_zeta": "zeta_T(s)=sum_{n=3}^infinity 2(n^2-1)(n^2-4)^(-s)",
+    "longitudinal_zeta": "zeta_L(s)=4+sum_{n=3}^infinity n^2(n^2-5)^(-s)",
+    "initial_convergence_half_plane": "Re(s)>3/2 for both sectors",
+    "determinant_definition": "Det_zeta(A_X)=exp[-zeta_X'(0)] for X=T,L provided the analytic continuation is regular at s=0",
+    "normalization": "A_T=a^2|M_T| and A_L=a^2|M_L| are frozen independently; any rescaling c_X A_X must be tracked through Det_zeta(c_X A_X)=c_X^(zeta_X(0)) Det_zeta(A_X)",
+    "precedent": "Use the already-certified C9 reduced-scalar zeta method: explicit binomial/Riemann-zeta analytic continuation, a direct convergent-domain spectral-sum cross-check, and high-precision truncation convergence."
+  },
+  "required_checks": [
+    "Construct explicit analytic continuations for zeta_T(s) and zeta_L(s) around s=0 from the frozen n-spectra; finite-cutoff products alone are not sufficient.",
+    "Verify both continuations are regular at s=0 and compute zeta_T(0), zeta_T'(0), zeta_L(0), and zeta_L'(0) with the frozen convergence tolerance.",
+    "Cross-check each continuation against its directly convergent original spectral sum at at least one Re(s)>3/2 value within the frozen absolute tolerance.",
+    "Compute finite positive Det_zeta(A_T) and Det_zeta(A_L) only if all regularity and convergence checks pass.",
+    "Verify the transverse spectral prime removes exactly six l=1 Killing zero modes and no additional transverse harmonic level.",
+    "Verify the longitudinal spectrum contains no zero mode and retains the l=1 longitudinal level with eigenvalue magnitude 1 and multiplicity 4; do not confuse it with the transverse Killing kernel.",
+    "Explicitly report normalization dependence sector by sector through the computed zeta_X(0); do not claim normalization independence unless that sector has zeta_X(0)=0.",
+    "Do not assign a signed/complex FP phase, a residual-isometry group volume, or a scalar-gradient decomposition Jacobian in this gate.",
+    "Do not multiply the two spatial FP magnitude factors by the prior scalar FS determinant or any TT Hessian factor, and do not claim a complete FP determinant, complete zero-mode measure quotient, HMT one-loop evaluability, or full C9 closure.",
+    "Do not import ordinary projectable-Horava beta functions, choose unresolved HMT matter coefficients, change thresholds, allow soft-s retest, unblock k=0.03 production, or mix DSIR."
+  ],
+  "pass_condition": "Both frozen positive-magnitude spatial FP spectral zetas admit regular analytic continuation at s=0; convergent-domain cross-checks and derivative truncation checks satisfy the inherited tolerances; finite positive transverse and longitudinal zeta determinant magnitudes are obtained for the declared normalizations; exactly the six transverse l=1 Killing zero modes are primed out; and all signed-phase, group-volume, full-determinant, one-loop, and C9 claims remain open.",
+  "fail_condition": "Either continuation is singular or fails convergence/cross-check tolerances, an unexpected zero mode appears or a required nonzero mode is omitted, the six-Killing spectral prime is misclassified, or any frozen semantic restriction is weakened.",
+  "tolerances": {
+    "high_precision_decimal_digits": 50,
+    "convergent_domain_crosscheck_abs": 1e-30,
+    "zeta_prime_convergence_abs": 1e-30,
+    "provenance": "Inherited unchanged from RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_ZETA_DETERMINANT_TARGET_v1.json"
+  },
+  "frozen_semantics": {
+    "spatial_FP_nonzero_mode_magnitude_factors_computed_if_pass": true,
+    "six_Killing_zero_modes_spectrally_primed_if_pass": true,
+    "residual_isometry_group_volume_normalized": false,
+    "signed_or_complex_FP_phase_assigned": false,
+    "scalar_gradient_decomposition_jacobian_inserted": false,
+    "complete_zero_mode_measure_quotient_constructed": false,
+    "complete_signed_spatial_FP_determinant_computed": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
