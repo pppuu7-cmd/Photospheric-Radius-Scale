@@ -1,0 +1,3 @@
+triggered_utc=2026-08-28T02:24:00Z
+frozen_target_commit=49edda0431a5b1e479c838dce6b6282be3c3b900
+purpose=execute_frozen_C9_projectability_structural_protection_gate
