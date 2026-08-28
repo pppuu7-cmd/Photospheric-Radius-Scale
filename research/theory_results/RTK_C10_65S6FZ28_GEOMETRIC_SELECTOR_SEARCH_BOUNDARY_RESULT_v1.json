@@ -1,0 +1,30 @@
+{
+  "c9_naturalness_closed": false,
+  "checks": {
+    "hmt_u1_from_bargmann": true,
+    "no_explicit_physical_metric_selector": true,
+    "no_posthoc_coefficient_selection": true,
+    "no_same_principle_matter_coefficients": true,
+    "no_unique_a1_a2_relation": true,
+    "parent_exact": true,
+    "projectable_horava_from_tnc": true,
+    "soft_s_and_k003_stay_blocked": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FZ28_GEOMETRIC_SELECTOR_SEARCH_CLASS_STOP_PASS_SCOPED",
+  "gate": "C10.65s6fZ28",
+  "interpretation": "Z27 establishes a strong geometric origin for projectable Horava/HMT U(1) through torsionless Newton-Cartan/Bargmann structure, while the same audited source still does not derive the unresolved physical-matter interface or a unique a1,a2-equivalent relation. Therefore further geometric/covariant reformulations of the same structure are not admissible as coefficient selectors by themselves. This is a scoped identifiability boundary only; a genuinely new microscopic same-action matter derivation remains admissible.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33133616721,
+    "threshold_changed": false,
+    "trigger_head_sha": "8403e37afb035504eca4d3e8c6aeaa426fc77797",
+    "workflow": "rtk-c10-65s6fz28-geometric-selector-search-boundary.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ28_GEOMETRIC_SELECTOR_SEARCH_BOUNDARY_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "successor_requirement": "Only admit a successor after a genuinely new independently motivated microscopic/action principle is preregistered that derives, in one action, both the projectable HMT/Bargmann auxiliary structure and the physical matter-coupling coefficients. Mere geometric/covariant reformulation is insufficient.",
+  "threshold_changed": false
+}
