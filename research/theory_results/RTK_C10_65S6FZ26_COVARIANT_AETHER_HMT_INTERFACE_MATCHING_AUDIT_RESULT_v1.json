@@ -1,0 +1,51 @@
+{
+  "bridge_checks": {
+    "einstein_aether_is_metric_plus_unit_timelike_vector": true,
+    "generally_covariant_preferred_frame": true,
+    "hypersurface_orthogonal_bridge_to_ir_horava": true,
+    "sources_retrieved": true
+  },
+  "checks": {
+    "generic_covariance_not_reinterpreted_as_hmt_u1": true,
+    "new_input_preregistered": true,
+    "no_rtk_response_or_softs_selection": true,
+    "parent_exact": true,
+    "soft_s_and_k003_stay_blocked": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FZ26_COVARIANT_AETHER_BRIDGE_NO_HMT_U1_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ26",
+  "hmt_matching_checks": {
+    "explicit_HMT_gauge_field_A_or_equivalent": false,
+    "explicit_Newtonian_prepotential_or_equivalent": false,
+    "explicit_physical_metric_matter_interface_map": false,
+    "explicit_projectable_HMT_local_U1": false,
+    "unique_a1_a2_equivalent_relation": false
+  },
+  "interpretation": "The audited pre-soft-s sources independently source-lock the covariant Einstein-aether preferred-frame theory and the hypersurface-orthogonal bridge to the IR limit of Horava gravity. They do not, however, explicitly supply the projectable HMT local-U(1) auxiliary structure, Newtonian prepotential/gauge-field matter interface, or a unique a1,a2-equivalent physical-metric relation. Therefore covariance plus hypersurface orthogonality cannot be used as a hidden selector for the unresolved HMT matter interface. This is a scoped matching-map result, not a no-go for Einstein-aether, khronometric gravity, or HMT.",
+  "next_gate": "No HMT coefficient selection is authorized from Z26. Continue only with a genuinely independent action-level principle that explicitly derives the HMT auxiliary/physical-metric interface, or with a preregistered same-action derivation that does not use RTK response or soft-s cancellation as input.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33130726702,
+    "threshold_changed": false,
+    "trigger_head_sha": "359d0a9f65496b3813039da2826e0be4b438c064",
+    "workflow": "rtk-c10-65s6fz26-covariant-aether-hmt-interface-matching-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ26_COVARIANT_AETHER_HMT_INTERFACE_MATCHING_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "sources": [
+    {
+      "api_url": "https://export.arxiv.org/api/query?id_list=0801.1547",
+      "arxiv": "0801.1547",
+      "retrieved": true
+    },
+    {
+      "api_url": "https://export.arxiv.org/api/query?id_list=1001.4823",
+      "arxiv": "1001.4823",
+      "retrieved": true
+    }
+  ],
+  "threshold_changed": false
+}
