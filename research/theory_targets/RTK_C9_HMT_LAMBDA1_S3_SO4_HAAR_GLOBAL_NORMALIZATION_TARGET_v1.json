@@ -1,0 +1,51 @@
+{
+  "gate": "RTK C9 HMT lambda=1 round-S3 residual SO(4) Haar/global normalization audit",
+  "parent_head": "c3eb6d08fb60c19f54353b90da2f9194d45db71d",
+  "scope": "Resolve only the convention left open by the parent Killing-zero-mode audit. Freeze the actual residual group as SO(4), the embedding generators K_AB with 2*pi rotation period, and the canonical Lie-algebra metric <X,Y>_can=-1/2 Tr(XY), for which E_AB are orthonormal. Compute the dimensionless Haar/Riemannian volume by the global fibration SO(n)->S^(n-1), then combine it with the already certified L2 Gram scale q=pi^2 a^5. Test reciprocal basis/coordinate rescaling invariance. Do not assign signed FP phase, do not touch TT Hessian, and do not claim full one-loop closure.",
+  "frozen_global_convention": {
+    "group": "SO(4) (not Spin(4))",
+    "generator_basis": "E_AB corresponding to K_AB, A<B",
+    "generator_period": "exp(2*pi E_AB)=identity",
+    "canonical_lie_metric": "<X,Y>_can=-1/2 Tr(XY)",
+    "canonical_basis_norm": "<E_AB,E_CD>=delta_AC delta_BD-delta_AD delta_BC",
+    "global_topology": "SO(4)=(SU(2)xSU(2))/Z2",
+    "volume_recursion": "Vol(SO(n))=Vol(SO(n-1))*Vol(S^(n-1)) under the frozen canonical metric",
+    "base": "Vol(SO(2))=2*pi"
+  },
+  "parent_certified_local_metric": {
+    "L2_Gram": "G=pi^2 a^5 I_6",
+    "q": "pi^2 a^5",
+    "sqrt_det_Gram": "q^3=pi^6 a^15"
+  },
+  "required_checks": [
+    "Derive Vol_can(SO(3))=8*pi^2 and Vol_can(SO(4))=16*pi^4 from the frozen recursion and unit-sphere volumes.",
+    "Verify that scaling the six-dimensional Lie metric by q=pi^2 a^5 scales the group volume by q^(6/2)=q^3.",
+    "Derive the residual orbit volume Vol_L2(SO(4))=16*pi^10*a^15 under the frozen convention.",
+    "Verify equivalence with parent factorization sqrt(det G)*Vol_can(SO(4))=(pi^6 a^15)*(16*pi^4).",
+    "Verify reciprocal generator/coordinate basis rescaling leaves the combined orbit measure invariant.",
+    "Keep explicit that this is a convention-fixed residual-isometry quotient normalization, not a new physical observable and not the full FP determinant.",
+    "Do not assign signed/complex FP phase, multiply all one-loop sectors, evaluate TT Hessian, import ordinary projectable-Horava beta functions, choose unresolved HMT matter coefficients, change thresholds, allow soft-s retest, unblock k=0.03 production, or mix DSIR."
+  ],
+  "pass_condition": "Under the prospectively frozen SO(4) topology, generator periodicity, and canonical Lie metric, the exact dimensionless Haar volume and L2-scaled residual orbit volume are derived consistently and basis-rescaling invariance holds. Classification remains scoped/convention-fixed.",
+  "fail_condition": "The canonical SO(4) volume recursion is inconsistent, the L2 scaling exponent is not 3, basis-rescaling invariance fails, or the audit promotes this convention-fixed quotient to a full FP/FS/TT or C9 closure.",
+  "frozen_semantics": {
+    "SO4_Haar_global_convention_explicitly_frozen": true,
+    "dimensionless_SO4_volume_computed_if_pass": true,
+    "L2_scaled_residual_SO4_orbit_volume_computed_if_pass": true,
+    "residual_SO4_zero_mode_quotient_normalization_fixed_under_frozen_convention_if_pass": true,
+    "normalization_is_convention_independent_physical_observable": false,
+    "signed_or_complex_FP_phase_assigned": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
