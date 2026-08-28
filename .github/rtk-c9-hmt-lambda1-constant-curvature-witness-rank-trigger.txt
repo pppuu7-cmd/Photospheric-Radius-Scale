@@ -1,0 +1,1 @@
+Trigger RTK C9 HMT lambda=1 constant-curvature witness rank audit. Frozen target commit: 77ca3bec42e48be2df0888f65f9c725ef4ae5903.
