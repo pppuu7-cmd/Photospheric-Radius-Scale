@@ -1,0 +1,54 @@
+{
+  "gate": "RTK C9 HMT lambda=1 round-S3 Killing zero-mode measure quotient normalization audit",
+  "parent_head": "c74f6b03027e3fee4201211fa91d10f9eaca7dbf",
+  "scope": "For the parent-certified spatial FP operator on round S3, audit only the six l=1 transverse Killing zero modes removed by the primed determinant. Compute their L2 Gram matrix from an explicit embedding-space Killing basis, derive the induced collective-coordinate Jacobian scaling, and determine whether the absolute residual SO(4) gauge-group-volume normalization is fixed by the frozen field-space inner product alone. Do not assign a signed FP phase, do not touch the TT Hessian, and do not claim a complete one-loop measure if an independent Haar/group-volume convention remains necessary.",
+  "frozen_background": {
+    "spatial_manifold": "round S3 embedded as x_A x_A=a^2 in R4",
+    "dimension": 3,
+    "radius": "a>0",
+    "volume": "Vol(S3)=2*pi^2*a^3",
+    "lambda": 1,
+    "background_momentum": 0,
+    "projectability": true
+  },
+  "frozen_zero_mode_basis": {
+    "generators": "K_AB=x_A partial_B-x_B partial_A for 1<=A<B<=4",
+    "count": 6,
+    "field_space_inner_product": "<xi,eta>=integral_S3 sqrt(g) g_ij xi^i eta^j",
+    "sphere_moment": "integral_S3 sqrt(g) x_A x_B=(a^2/4) Vol(S3) delta_AB",
+    "expected_Gram_form_to_test": "<K_AB,K_CD>=pi^2*a^5*(delta_AC delta_BD-delta_AD delta_BC)",
+    "expected_basis_norm_squared_to_test": "pi^2*a^5",
+    "expected_sqrt_det_Gram_to_test": "(pi^2*a^5)^3=pi^6*a^15"
+  },
+  "required_checks": [
+    "Derive the six-by-six Gram matrix from the frozen embedding Killing basis and the S3 second moment; do not insert a numerical group volume by convention.",
+    "Verify all six basis generators are mutually orthogonal in the ordered A<B basis and have equal positive norm squared pi^2*a^5.",
+    "Verify sqrt(det Gram)=pi^6*a^15 for this basis and field-space inner product.",
+    "Construct the corresponding orthonormal zero-mode basis Khat_AB=K_AB/(pi*a^(5/2)).",
+    "Separate the induced zero-mode/collective-coordinate Jacobian from the dimensionless Haar coordinate volume of the residual SO(4) orbit.",
+    "Test invariance under reciprocal basis/coordinate rescaling K_AB->c K_AB, theta_AB->theta_AB/c and demonstrate that an absolute group-volume number requires a convention for Haar-coordinate normalization/global quotient rather than following from the local FP spectrum alone.",
+    "Do not assign a signed or complex FP phase, do not multiply by the prior FS determinant, and do not evaluate the TT Hessian.",
+    "Do not import ordinary projectable-Horava beta functions, choose unresolved HMT matter coefficients, change thresholds, allow soft-s retest, unblock k=0.03 production, or mix DSIR."
+  ],
+  "pass_condition": "The exact Killing Gram matrix, its determinant/Jacobian scaling, and an orthonormal zero-mode basis are derived consistently, while any independent Haar/global residual-isometry volume convention is explicitly left open rather than guessed. This is a scoped zero-mode-measure result only.",
+  "fail_condition": "The explicit S3 Gram identities fail, the six-dimensional zero-mode count changes, basis-rescaling consistency fails, or the audit claims a unique absolute SO(4) volume without a separately frozen Haar/global normalization convention.",
+  "frozen_semantics": {
+    "six_Killing_zero_mode_Gram_matrix_computed_if_pass": true,
+    "zero_mode_collective_coordinate_Jacobian_scaling_computed_if_pass": true,
+    "absolute_SO4_Haar_volume_uniquely_fixed": false,
+    "complete_zero_mode_measure_quotient_constructed": false,
+    "signed_or_complex_FP_phase_assigned": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
