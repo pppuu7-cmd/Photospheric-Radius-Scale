@@ -1,0 +1,6 @@
+{
+  "gate": "C9 projectable HMT U(1) Stueckelberg/FP gauge-sector audit",
+  "target": "research/theory_targets/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TARGET_v1.json",
+  "reason": "Execute the preregistered exact FP-kernel audit after freezing the target and analyzer/workflow.",
+  "branch": "rtk-class-build"
+}
