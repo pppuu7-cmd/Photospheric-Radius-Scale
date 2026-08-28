@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_TARGET_v1",
+  "status": "FROZEN_BEFORE_RADIATIVE_EVALUABILITY_AUDIT",
+  "classification": "RTK_C9_PROJECTABLE_RADIATIVE_EVALUABILITY_SOURCE_LOCK_AUDIT_TARGET_V1_FROZEN",
+  "question": "Is the current source-locked projectable HMT+carrier completion specified sufficiently to define a unique same-action one-loop effective action/counterterm calculation without choosing unresolved physical-matter-interface parameters after seeing RTK observables?",
+  "parents": {
+    "counterterm_basis": "research/theory_results/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_RESULT_v1.json",
+    "interface_identifiability": "research/theory_results/RTK_C10_65S6FZ24_INTERFACE_IDENTIFIABILITY_BOUNDARY_DECISION_RESULT_v1.json"
+  },
+  "decision_rule": {
+    "EVALUABLE_PASS_SCOPED": "only if the current source-locked action uniquely fixes the physical matter interface needed by the full fluctuation Hessian/vertices, so no unresolved representative coupling choice is required before a one-loop calculation",
+    "SOURCE_LOCK_INCOMPLETE_PASS_SCOPED": "if symmetry-allowed finite-k counterterm directions exist but the physical matter interface remains a continuous unresolved family, so the same-action one-loop functional is not uniquely source-locked",
+    "BLOCKED": "if either frozen parent is unavailable or its exact classification is not reproduced"
+  },
+  "frozen_checks": [
+    "counterterm-basis parent exact PASS_SCOPED classification",
+    "Z24 exact parameter-underdetermined stop classification",
+    "Z24 says no representative a1,a2 point was selected",
+    "Z24 says no source-locked exact selector was found",
+    "Z24 requires genuinely new independent microscopic input before coefficient selection",
+    "formal one-loop effective action depends on the full fixed quadratic fluctuation operator and ghost/operator content of the chosen action",
+    "a continuous unresolved physical-matter-interface family therefore prevents a unique source-locked one-loop functional for the full completion",
+    "no assertion that O2/O4 have nonzero beta functions",
+    "no representative interface parameters are chosen",
+    "no RTK pole/residue/remainder or soft-s observable is used for selection",
+    "thresholds are unchanged"
+  ],
+  "formal_identity": "Gamma_1[S] = (i/2) Tr log H_bos[S] - i Tr log H_ghost[S] + ... ; a unique Gamma_1 requires a uniquely fixed action/interface (up to legitimate gauge-equivalent descriptions)",
+  "non_claims": [
+    "does not compute any one-loop determinant",
+    "does not prove a nonzero beta function for a specific operator",
+    "does not close C9 naturalness",
+    "does not reject all projectable HMT completions",
+    "does not authorize a representative a1,a2 selection",
+    "does not unblock soft-s, k=0.03 production, spectra, or likelihood"
+  ],
+  "expected_classification_if_current_parents_hold": "RTK_C9_PROJECTABLE_ONE_LOOP_EVALUABILITY_BLOCKED_BY_UNRESOLVED_MATTER_INTERFACE_PASS_SCOPED",
+  "next_gate_if_source_lock_incomplete": "Only genuinely new independently motivated same-action microscopic input that fixes the physical HMT matter interface before RTK comparison can reopen a quantitative C9 one-loop/beta-function calculation.",
+  "threshold_changed": false
+}
