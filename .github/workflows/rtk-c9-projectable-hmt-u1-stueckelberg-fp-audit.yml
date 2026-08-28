@@ -1,0 +1,69 @@
+name: RTK C9 projectable HMT U1 Stueckelberg FP audit
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/triggers/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TRIGGER_v1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target exists
+        run: |
+          test -f research/theory_targets/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TARGET_v1.json
+          python - <<'PY'
+          import json
+          p='research/theory_targets/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TARGET_v1.json'
+          x=json.load(open(p))
+          assert x['status_before_execution']=='FROZEN_OPEN'
+          assert x['frozen_checks']['threshold_changed'] is False
+          assert x['frozen_checks']['do_not_claim_full_C9_closed'] is True
+          print('frozen target verified')
+          PY
+      - name: Run exact FP-kernel audit
+        run: python research/shadow/rtk_c9_projectable_hmt_u1_stueckelberg_fp_audit.py
+      - name: Verify scoped semantics
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_RESULT_v1.json'
+          x=json.load(open(p))
+          assert x['pass_scoped'] is True
+          assert x['classification']=='RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TRIVIALIZATION_PASS_SCOPED'
+          c=x['checks']
+          assert c['full_HMT_one_loop_evaluable'] is False
+          assert c['A_constraint_measure_remains_open'] is True
+          assert c['FDiff_gauge_transfer_remains_open'] is True
+          assert c['full_C9_closed'] is False
+          assert c['soft_s_retest_allowed'] is False
+          assert c['production_k003_unblocked'] is False
+          print('scoped semantics verified')
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'rtk-c9-actions'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_RESULT_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_CHECKPOINT_v1.json \
+                  research/provenance/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_PROVENANCE_v1.json
+          if git diff --cached --quiet; then
+            echo 'No persisted changes required'
+          else
+            git commit -m 'Record C9 HMT U1 Stueckelberg FP audit'
+            for i in 1 2 3 4 5; do
+              if git push origin HEAD:rtk-class-build; then exit 0; fi
+              git pull --rebase origin rtk-class-build
+              sleep 2
+            done
+            exit 1
+          fi
