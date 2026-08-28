@@ -1,0 +1,25 @@
+{
+  "gate_id": "RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_v1",
+  "target_path": "research/theory_targets/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_TARGET_v1.json",
+  "analyzer_path": "research/shadow/rtk_c9_projectable_hmt_second_class_kernel_source_lock.py",
+  "sources": [
+    {
+      "id": "Kluson_1012.0473",
+      "claim": "U(1)-invariant projectable F(R)-HL Hamiltonian analysis; special F(x)=x has Hamiltonian structure coinciding with non-relativistic covariant HL/HMT; identifies Phi_1^II and Phi_2^II as second-class and states their bracket is nonzero."
+    },
+    {
+      "id": "Kluson_1011.1857",
+      "claim": "Hamiltonian analysis of non-relativistic covariant Ho\u0159ava-Lifshitz gravity with first- and second-class constraints and correct physical degree count."
+    }
+  ],
+  "generated_at_utc": "20260828T092722Z",
+  "guardrails": {
+    "do_not_claim_HMT_nonrenormalizable": true,
+    "do_not_import_parent_projectable_beta_functions": true,
+    "do_not_close_full_C9": true,
+    "do_not_select_matter_interface_coefficients": true,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false
+  }
+}

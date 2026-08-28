@@ -1,0 +1,31 @@
+{
+  "gate_id": "RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_v1",
+  "classification": "RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_PAIR_IDENTIFIED_EXPLICIT_KERNEL_NOT_SOURCE_LOCKED_PASS_SCOPED",
+  "scope": "C9 quantum evaluability only; projectable HMT gravitational constrained sector",
+  "result_semantics": {
+    "technical_scoped_pass": true,
+    "physical_gate_closed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "statement": "A concrete HMT-equivalent second-class pair is source-locked and its mutual bracket is known to be nonzero, but the explicit background-dependent distributional kernel required for the Faddeev-Senjanovic determinant is not source-locked."
+  },
+  "checks": {
+    "HMT_equivalent_second_class_pair_identified": true,
+    "pair_noncommutativity_source_locked": true,
+    "explicit_background_distributional_kernel_source_locked": false,
+    "functional_determinant_computed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "matter_interface_coefficients_selected": false,
+    "threshold_changed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "full_C9_closed": false
+  },
+  "source_locked_observations": [
+    "Kluson arXiv:1012.0473 identifies Phi_1^II and Phi_2^II as a second-class pair and explicitly states {Phi_1^II(x), Phi_2^II(y)} != 0.",
+    "The same source states that the special case F(x)=x reproduces the Hamiltonian structure of non-relativistic covariant Ho\u0159ava-Lifshitz gravity.",
+    "The audited source material does not provide a ready-to-use explicit distributional bracket kernel on the preregistered RTK/HMT background, so det C is not yet quantitatively defined."
+  ],
+  "next_gate": "Derive the explicit Poisson-bracket operator from the source-locked definitions of the HMT-equivalent second-class pair on a preregistered flat/projectable background, including boundary/zero-mode assumptions, before attempting any determinant evaluation.",
+  "generated_at_utc": "20260828T092722Z"
+}
