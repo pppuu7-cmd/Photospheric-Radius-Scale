@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_TARGET_v1",
+  "gate": "C9 projectable gravity-parent RG source-lock",
+  "branch": "rtk-class-build",
+  "status_before_execution": "FROZEN_OPEN",
+  "question": "Does independent literature establish perturbative renormalizability and quantitative one-loop/RG control for the pure 3+1-dimensional projectable Horava gravity parent, while leaving the HMT U(1)+matter completion and full RTK C9 unresolved?",
+  "required_sources": [
+    {
+      "id": "BarvinskyEtAl_Renormalization_Horava_2016",
+      "arxiv": "1512.02250",
+      "required_claim": "perturbative renormalizability of projectable Horava gravity; local marginal/relevant gauge-invariant counterterms"
+    },
+    {
+      "id": "BarvinskyKurovSibiryakov_BetaFunctions_2022",
+      "arxiv": "2110.14688",
+      "doi": "10.1103/PhysRevD.105.044009",
+      "required_claim": "full beta functions for marginal essential couplings of 3+1-dimensional projectable Horava gravity"
+    },
+    {
+      "id": "BarvinskyKurovSibiryakov_AF_2023",
+      "arxiv": "2310.07841",
+      "doi": "10.1103/PhysRevD.108.L121503",
+      "required_claim": "asymptotically free fixed points and trajectories toward a region with GR-form kinetic term"
+    }
+  ],
+  "frozen_checks": {
+    "projectable_parent_renormalizability_source_locked": true,
+    "full_3p1_marginal_gravity_beta_functions_source_locked": true,
+    "asymptotically_free_rg_structure_source_locked": true,
+    "do_not_identify_plain_projectable_parent_with_HMT_U1_completion": true,
+    "do_not_claim_matter_interface_beta_functions": true,
+    "do_not_claim_full_C9_closed": true,
+    "do_not_unblock_soft_s": true,
+    "do_not_unblock_k003_production": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_CONTROL_FOUND_PASS_SCOPED",
+  "failure_classification": "RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_FAIL_SCOPED",
+  "nonclaims": [
+    "No identification of ordinary projectable Horava gravity with the full HMT local-U(1) RTK candidate.",
+    "No beta function is assigned to unresolved HMT physical-matter-interface coefficients.",
+    "No full radiative-naturalness closure for RTK is claimed.",
+    "No soft-s or k=0.03 production gate is reopened."
+  ]
+}
