@@ -1,0 +1,87 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_TT_BACKGROUND_ADMISSIBILITY_A_CONSTRAINT_SOURCE_LOCKED_PASS_SCOPED",
+  "exact_result": {
+    "A_constraint_required_Omega": "Omega = 3/a^2",
+    "A_constraint_residual_on_relation": "R - 2 Omega = 0 exactly",
+    "TT_delta_R": 0,
+    "TT_delta_sqrt_g": 0,
+    "delta_R_term_audit": {
+      "double_divergence_term": "nabla_i nabla_j h^ij = 0 by transversality (on the frozen covariant TT field)",
+      "ricci_trace_term": "-(R/3) g^ij h_ij = 0 by tracelessness",
+      "trace_laplacian_term": "-nabla^2 h = 0 by h=0"
+    },
+    "linear_TT_A_constraint_obstruction": false,
+    "sample_exact_family_checks": [
+      {
+        "Omega": "12",
+        "R": "24",
+        "R_minus_2Omega": "0",
+        "a2": "1/4"
+      },
+      {
+        "Omega": "3",
+        "R": "6",
+        "R_minus_2Omega": "0",
+        "a2": "1"
+      },
+      {
+        "Omega": "4/3",
+        "R": "8/3",
+        "R_minus_2Omega": "0",
+        "a2": "9/4"
+      },
+      {
+        "Omega": "9/7",
+        "R": "18/7",
+        "R_minus_2Omega": "0",
+        "a2": "7/3"
+      }
+    ]
+  },
+  "frozen_background": {
+    "D": 3,
+    "Kij": 0,
+    "R": "6 a^-2",
+    "Rij": "2 a^-2 g_ij",
+    "TT_conditions": [
+      "nabla^i h_ij = 0",
+      "g^ij h_ij = 0"
+    ],
+    "geometry": "round S3 radius a>0",
+    "lambda": 1,
+    "nu": 0
+  },
+  "frozen_nonclaims": {
+    "background_metric_stationarity_fully_checked": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_C9_closed": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_TT_hessian_derived": false,
+    "production_k003_unblocked": false,
+    "soft_s_retest_allowed": false,
+    "threshold_changed": false,
+    "tt_determinant_computed": false,
+    "tt_spectrum_computed": false
+  },
+  "interpretation": {
+    "background_A_equation_passes_conditionally": true,
+    "condition": "The round-S3 witness is compatible with the HMT A-equation iff Omega=3/a^2.",
+    "next_gate": "Source-lock the concrete HMT spatial potential convention and derive the static round-S3 metric stationarity equation, including A0; only then derive the TT quadratic operator.",
+    "what_this_does_not_establish": [
+      "full metric stationarity of the witness",
+      "the background value A0",
+      "a frozen numerical HMT potential V[g] or its couplings",
+      "the physical TT quadratic Hessian",
+      "the TT spectrum/determinant",
+      "one-loop evaluability or C9 closure"
+    ]
+  },
+  "scope": "C9 HMT lambda=1 round-S3 TT background prerequisite only",
+  "source_lock": {
+    "A_equation": "R = 2 Omega",
+    "action_A_term": "-A (R - 2 Omega)",
+    "primary": "Horava & Melby-Thompson, Phys.Rev.D82:064027 (2010), arXiv:1007.2410"
+  }
+}

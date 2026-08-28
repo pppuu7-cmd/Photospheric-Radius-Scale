@@ -1,0 +1,21 @@
+{
+  "branch": "rtk-class-build",
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_TT_BACKGROUND_ADMISSIBILITY_A_CONSTRAINT_SOURCE_LOCKED_PASS_SCOPED",
+  "computation": "exact rational/background tensor identity audit; no fitted or imported HMT potential couplings",
+  "executed_sha": "758ac42523c22715044a73a64a0d305f75a9a099",
+  "frozen_target_commit": "9be2c6693dd48d5279732a2be094af6a7d9c6a28",
+  "github_actions_run_attempt": "1",
+  "github_actions_run_id": "33220593726",
+  "parent_scientific_frontier": "1d4f3354ef43d38646da06fc2f98dd9656483e82",
+  "regularization": "none required for this gate",
+  "scope": "RTK C9 HMT TT-background prerequisite only; DSIR excluded",
+  "source_locked_formula": "S contains -A(R-2 Omega); varying A gives R=2 Omega",
+  "sources": [
+    {
+      "arxiv": "1007.2410",
+      "authors": "P. Horava; C. M. Melby-Thompson",
+      "doi": "10.1103/PhysRevD.82.064027",
+      "title": "General Covariance in Quantum Gravity at a Lifshitz Point"
+    }
+  ]
+}
