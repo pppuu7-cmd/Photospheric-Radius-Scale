@@ -1,0 +1,34 @@
+{
+  "target_id": "RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_MEASURE_JACOBIAN_v1",
+  "branch": "rtk-class-build",
+  "scientific_parent_head": "c6c9e4062569fcbf94c8e1860f509cb39defd9a3",
+  "repository_head_at_freeze": "c6c9e4062569fcbf94c8e1860f509cb39defd9a3",
+  "scope": "Round-S3 lambda=1 spatial-diffeomorphism FP sector only: audit the functional-measure Jacobian of the Hodge split xi_i=xi_i^T+nabla_i sigma and determine whether any extra determinant must multiply the already certified FP sector determinants computed in orthonormal vector harmonics.",
+  "frozen_vector_measure": "L2 metric ||xi||^2=int sqrt(g) g_ij xi^i xi^j",
+  "frozen_hodge_split": "xi_i=xi_i^T+nabla_i sigma, nabla^i xi_i^T=0, scalar constant mode excluded because its gradient vanishes",
+  "frozen_coordinate_conventions": {
+    "raw_scalar_potential": "sigma expanded in L2-orthonormal scalar harmonics; induced longitudinal vector norm contains lambda_l(-nabla^2)",
+    "normalized_longitudinal_vector": "e_i^(L,lm)=nabla_i Y_lm/sqrt(lambda_l), giving an L2-orthonormal vector basis"
+  },
+  "frozen_pass_criteria": {
+    "raw_bosonic_vector_hodge_jacobian": "[det_prime(-a^2 nabla^2)_0]^(1/2) per commuting vector field, up to the separately frozen dimensional normalization convention",
+    "normalized_vector_basis_jacobian": "1",
+    "already_certified_FP_spectral_products_basis": "orthonormal transverse and longitudinal vector harmonics",
+    "extra_Hodge_factor_to_multiply_existing_FP_determinant": false,
+    "double_counting_if_extra_factor_added": true,
+    "constant_scalar_zero_mode_excluded": true
+  },
+  "scope_guards": {
+    "complete_signed_spatial_FP_quotient_assembled": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
