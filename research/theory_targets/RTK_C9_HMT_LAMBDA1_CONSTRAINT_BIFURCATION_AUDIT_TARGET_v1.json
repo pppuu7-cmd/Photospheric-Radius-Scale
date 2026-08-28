@@ -1,0 +1,57 @@
+{
+  "gate": "RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT",
+  "version": 1,
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "scope": "projectable HMT gravitational constrained sector only; lambda=1 branch; no DSIR; no matter-interface coefficient selection",
+  "scientific_question": "Does the vanishing of the flat-linearized second-class kernel at lambda=1 imply a new first-class symmetry, or is it only a linearization/rank degeneracy of the exact source-locked constraint pair?",
+  "source_locked_input": {
+    "reference": "J. Kluson et al., U(1) Invariant F(R) Horava-Lifshitz Gravity, arXiv:1012.0473, Sec. 5",
+    "HMT_limit": "F'(A)=1 after auxiliary-field reduction, for which the remaining Hamiltonian structure is identified with non-relativistic covariant/projectable HMT Horava-Lifshitz gravity",
+    "Phi1II": "(1/kappa^2) sqrt(g) G(R); for the HMT curvature constraint take G'(R) nonzero and flat background obeying G(0)=0",
+    "Phi2II_exact_HMT_limit": "-2 R_ij pi^ij + [2 lambda/(D lambda-1)] R pi + [(1-lambda)/(lambda D-1)] nabla^2 pi",
+    "source_constraint_classification": "Phi1II and Phi2II are identified as second-class in the full Hamiltonian analysis; preservation fixes multipliers and no additional constraint is generated in the generic full phase-space analysis"
+  },
+  "frozen_branch": {
+    "spatial_dimension_D": 3,
+    "lambda": 1,
+    "background": "flat periodic T^3 with R_ij=0, R=0, pi^ij=0, N=N(t), A=0, nu=0 gauge",
+    "zero_mode_policy": "k=0 remains outside local invertibility claims",
+    "perturbation_order_policy": "track the first nonvanishing perturbative order of Phi2II and of the bracket; do not infer first-class status from a vanishing linearized bracket alone"
+  },
+  "frozen_derivation_checks": [
+    "substitute lambda=1 into the exact HMT-limit Phi2II and verify that the nabla^2 pi term vanishes exactly",
+    "derive Phi2II(lambda=1) = -2 R_ij pi^ij + 2/(D-1) R pi",
+    "on the frozen flat zero-momentum background classify Phi1II as starting at O(h) and Phi2II(lambda=1) as starting at O(h*pi), hence Phi2II has no nonzero linear perturbation",
+    "verify that the previously obtained flat-linearized C12 vanishes for lambda=1 because the only O(pi) term in Phi2II is absent",
+    "distinguish linearized rank loss from a proof of first-class closure",
+    "use the source-locked full Hamiltonian classification as evidence against promoting the pair to first-class without a dedicated exact lambda=1 closure theorem",
+    "classify the flat lambda=1 point as an irregular/linearization-degenerate constrained background if these checks hold"
+  ],
+  "pass_semantics": {
+    "allowed": [
+      "PASS_SCOPED if lambda=1 removes the linear O(pi) term while the exact constraint retains curvature-times-momentum terms, establishing that flat-linearized rank loss does not by itself prove a new gauge symmetry",
+      "report that the exact first nonzero Phi2II contribution is at least quadratic in perturbations around the frozen flat zero-momentum background",
+      "report that a nonflat or nonzero-background-momentum expansion is required to recover a nontrivial local bracket at leading order"
+    ],
+    "forbidden": [
+      "claim a new exact first-class symmetry at lambda=1 without computing exact closure",
+      "claim that lambda=1 HMT is inconsistent or ruled out",
+      "claim that the full Faddeev-Senjanovic determinant is computed",
+      "claim full HMT one-loop evaluability",
+      "close full C9 radiative naturalness",
+      "import ordinary projectable-Horava beta functions into HMT",
+      "select HMT matter-interface coefficients",
+      "allow soft-s retest",
+      "unblock k=0.03 Mpc^-1 production",
+      "change any previously frozen RTK threshold"
+    ]
+  },
+  "persistent_flags_required": {
+    "threshold_changed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false
+  }
+}
