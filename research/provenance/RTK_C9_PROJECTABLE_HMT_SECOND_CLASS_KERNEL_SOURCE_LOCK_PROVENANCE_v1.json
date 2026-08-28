@@ -12,7 +12,7 @@
       "claim": "Hamiltonian analysis of non-relativistic covariant Ho\u0159ava-Lifshitz gravity with first- and second-class constraints and correct physical degree count."
     }
   ],
-  "generated_at_utc": "20260828T092722Z",
+  "generated_at_utc": "20260828T092728Z",
   "guardrails": {
     "do_not_claim_HMT_nonrenormalizable": true,
     "do_not_import_parent_projectable_beta_functions": true,
