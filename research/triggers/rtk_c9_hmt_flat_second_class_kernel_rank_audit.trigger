@@ -1,0 +1,2 @@
+trigger: RTK_C9_HMT_FLAT_SECOND_CLASS_KERNEL_RANK_AUDIT_v1
+frozen_target_commit: e62ff6add973288f38ac8425d9aa0800be5db559
