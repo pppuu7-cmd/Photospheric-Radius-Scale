@@ -1,0 +1,50 @@
+{
+  "target_id": "RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_QUOTIENT_ASSEMBLY_v1",
+  "scope": "C9 HMT lambda=1 round-S3 spatial Faddeev-Popov quotient assembly only",
+  "scientific_parent_head": "99119e680a8bc57be9115ed07e851b7a16a3d0ea",
+  "source_locks": {
+    "signed_phase_result_commit": "c6c9e4062569fcbf94c8e1860f509cb39defd9a3",
+    "so4_normalization_result_commit": "83ae30fee6d77a3ea42ede57823bedc2875abfdf",
+    "hodge_measure_result_commit": "99119e680a8bc57be9115ed07e851b7a16a3d0ea",
+    "nonzero_transverse_abs_det": "67.869342368305180409328005773658622338151596454315223519029011945298722091682815",
+    "nonzero_longitudinal_abs_det": "2.1999085267023697422585361883960668683089207686293255795194962406150393938391081",
+    "nonzero_combined_abs_det": "149.30634497771697105893170945826130655341339602612728394167831214428717291534588",
+    "combined_principal_cut_phase": "+1",
+    "hodge_extra_factor_in_orthonormal_vector_basis": "1",
+    "residual_SO4_orbit_volume": "16*pi^10*a^15"
+  },
+  "prospectively_frozen_definition": {
+    "operator": "M^i_j=nabla^2 delta^i_j+R^i_j",
+    "background": "round S3, lambda=1",
+    "spectral_cut": "principal cut inherited from signed-phase gate",
+    "field_coordinates": "L2-orthonormal transverse/longitudinal vector harmonics",
+    "residual_group_convention": "SO(4), embedding generators period 2*pi, Lie metric -1/2 Tr",
+    "scoped_quotient": "Q_FP_spatial(a)=Det_prime_zeta(a^2 M_FP)/Vol_L2(SO(4))",
+    "expected_form": "Q_FP_spatial(a)=C_FP*a^(-15), C_FP=149.30634497771697105893170945826130655341339602612728394167831214428717291534588/(16*pi^10)"
+  },
+  "frozen_success_criteria": {
+    "verify_all_three_parent_inputs": true,
+    "combined_nonzero_phase_exactly_plus_one": true,
+    "no_additional_hodge_determinant": true,
+    "orbit_volume_exactly_16pi10a15_under_frozen_convention": true,
+    "compute_C_FP_high_precision": true,
+    "verify_a_scaling_power_minus15": true,
+    "verify_transverse_times_longitudinal_matches_inherited_product": true,
+    "classification_must_be": "RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_QUOTIENT_ASSEMBLED_CONVENTION_BOUND_PASS_SCOPED"
+  },
+  "failure_policy": "If any source-locked input fails to match, stop and diagnose; do not weaken criteria or silently alter normalization, spectral cut, basis, or quotient convention.",
+  "scope_exclusions": {
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
