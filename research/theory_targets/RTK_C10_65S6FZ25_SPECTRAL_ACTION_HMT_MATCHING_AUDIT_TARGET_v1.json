@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S6FZ25_SPECTRAL_ACTION_HMT_MATCHING_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ25",
+  "frozen_before_execution": true,
+  "parent_required": "C10_65S6FZ24_PARAMETER_UNDERDETERMINED_STOP_DECISION_PASS_SCOPED",
+  "new_independent_input": {
+    "kind": "spectral_action_principle",
+    "source": "D. V. Lopes, A. Mamiya, A. Pinzul, IR Horava-Lifshitz gravity coupled to Lorentz violating matter: A spectral action approach",
+    "arxiv": "1508.00137",
+    "pre_soft_s": true,
+    "reason_for_admission_after_z24": "The source supplies a genuinely independent action-level construction in which one generalized Dirac operator generates both gravity and matter and relates parameters across the two sectors. It was identified and preregistered before any renewed RTK pole/residue/remainder or soft-s comparison."
+  },
+  "frozen_question": "Does the independently motivated spectral-action construction provide an explicit projectable HMT local-U(1) / Newtonian-prepotential / gauge-field matching map that fixes the surviving physical-matter interface relation (a1,a2-equivalent data), rather than merely relating parameters in a foliation-preserving HL gravity+matter action?",
+  "required_source_claims": {
+    "spectral_action_principle": true,
+    "generalized_Dirac_operator": true,
+    "gravity_and_matter_generated_together": true,
+    "gravity_matter_parameters_related": true,
+    "foliation_preserving_diffeomorphisms": true
+  },
+  "hmt_matching_requirements": {
+    "explicit_projectable_HMT_U1": true,
+    "explicit_Newtonian_prepotential_or_equivalent": true,
+    "explicit_HMT_gauge_field_A_or_equivalent": true,
+    "explicit_map_to_HMT_physical_matter_interface": true,
+    "unique_a1_a2_equivalent_relation": true
+  },
+  "allowed_classifications": [
+    "C10_65S6FZ25_SPECTRAL_ACTION_HMT_MATCH_MAP_FOUND_PASS_SCOPED",
+    "C10_65S6FZ25_INDEPENDENT_SPECTRAL_ACTION_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ25_SOURCE_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "Return MATCH_MAP_FOUND only if every HMT matching requirement is explicitly source-locked in the audited spectral-action source. If the independent action principle and parameter relations are source-locked but one or more HMT matching requirements are absent, return NO_HMT_MATCH_MAP. If the primary source cannot be retrieved or its core action-principle claims cannot be verified, fail closed as SOURCE_AUDIT_INCOMPLETE.",
+  "forbidden": [
+    "selecting a1 or a2 from RTK pole/residue/remainder",
+    "using the failed soft-s observable to choose coefficients",
+    "treating generic foliation-preserving diffeomorphism invariance as HMT local U(1)",
+    "claiming C9 radiative-naturalness closure",
+    "unblocking k=0.03 production"
+  ],
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false,
+  "threshold_changed": false
+}
