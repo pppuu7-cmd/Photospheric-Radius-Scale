@@ -1,0 +1,6 @@
+{
+  "gate": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_v1",
+  "target_commit": "64cdeb52b6cf086ca834121d86d3a0388ae30e18",
+  "purpose": "Execute frozen A-constraint/reduced-measure audit after target, analyzer and workflow are committed.",
+  "posthoc_threshold_change": false
+}
