@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "new_input_preregistered": true,
+    "no_rtk_response_or_softs_selection": true,
+    "parent_exact": true,
+    "soft_s_and_k003_stay_blocked": true,
+    "threshold_unchanged": true,
+    "u1_origin_not_reinterpreted_as_interface_selector": true
+  },
+  "classification": "C10_65S6FZ27_TNC_BARGMANN_HMT_U1_ORIGIN_NO_UNIQUE_MATTER_INTERFACE_PARTIAL_PASS_SCOPED",
+  "gate": "C10.65s6fZ27",
+  "geometric_checks": {
+    "hmt_u1_from_bargmann_extension": true,
+    "precise_field_dictionary_including_khronon": true,
+    "projectable_horava_from_torsionless_newton_cartan": true,
+    "source_retrieved": true,
+    "tnc_is_matter_coupling_geometry": true
+  },
+  "interpretation": "The audited dynamical Newton-Cartan source is a materially stronger geometric bridge than Z26: it source-locks projectable Horava gravity as torsionless dynamical Newton-Cartan geometry, gives a field dictionary including the khronon, and identifies the HMT U(1) with the Bargmann extension. However, the audited source metadata does not derive the later HMT physical-metric matter interface or a unique a1,a2-equivalent coefficient relation. Therefore the geometric origin of HMT U(1) does not by itself resolve the matter-interface identifiability blocker.",
+  "next_gate": "If Z27 does not find a unique matter-interface selector, stop treating geometric/covariant reformulations as coefficient selectors. Continue only with a genuinely microscopic action that derives both the HMT/Bargmann auxiliary structure and matter coupling coefficients, or record a scoped identifiability stop for this search class.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33132766798,
+    "threshold_changed": false,
+    "trigger_head_sha": "56bfcbeb2dfc63f84c71b05e1d849e36825bb9c8",
+    "workflow": "rtk-c10-65s6fz27-tnc-bargmann-hmt-interface-selector-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ27_TNC_BARGMANN_HMT_INTERFACE_SELECTOR_AUDIT_RESULT_v1",
+  "selector_checks": {
+    "explicit_hmt_physical_metric_matter_interface": false,
+    "same_principle_derives_matter_coefficients": false,
+    "unique_a1_a2_equivalent_relation": false
+  },
+  "soft_s_retest_allowed": false,
+  "source": {
+    "api_url": "https://export.arxiv.org/api/query?id_list=1504.07461",
+    "arxiv": "1504.07461",
+    "retrieved": true
+  },
+  "threshold_changed": false
+}
