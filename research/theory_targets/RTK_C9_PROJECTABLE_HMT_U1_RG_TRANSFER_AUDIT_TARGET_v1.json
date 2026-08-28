@@ -1,0 +1,47 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_RG_TRANSFER_AUDIT_TARGET_v1",
+  "gate": "C9 projectable HMT U(1) RG-transfer audit",
+  "branch": "rtk-class-build",
+  "status_before_execution": "FROZEN_OPEN",
+  "question": "Do the currently source-locked quantitative one-loop/RG results for ordinary projectable Horava gravity already extend, without additional assumptions, to the projectable HMT local-U(1) theory containing the gauge field A and Newtonian prepotential nu?",
+  "required_sources": [
+    {
+      "id": "BarvinskyKurovSibiryakov_BetaFunctions_2022",
+      "arxiv": "2110.14688",
+      "doi": "10.1103/PhysRevD.105.044009",
+      "required_claim": "quantitative 3+1-dimensional beta functions are established for ordinary projectable Horava gravity"
+    },
+    {
+      "id": "BarvinskyKurovSibiryakov_RGFlow_2025",
+      "doi": "10.1103/PhysRevD.111.024030",
+      "required_claim": "quantitative RG flow is established for ordinary projectable Horava gravity"
+    },
+    {
+      "id": "MukohyamaNambaSaitouWatanabe_U1_Hamiltonian_2015",
+      "arxiv": "1504.07357",
+      "doi": "10.1103/PhysRevD.92.024005",
+      "required_claim": "the U(1)-extended theory contains the additional gauge field A and Newtonian prepotential nu; the projectable U(1) version has a distinct constrained field content"
+    }
+  ],
+  "frozen_checks": {
+    "ordinary_projectable_parent_quantitative_RG_source_locked": true,
+    "HMT_U1_has_additional_A_and_nu_field_content": true,
+    "do_not_infer_identical_gauge_fixed_Hessian_or_ghost_sector": true,
+    "do_not_transfer_parent_beta_functions_without_explicit_U1_quantization": true,
+    "do_not_claim_full_C9_closed": true,
+    "do_not_unblock_soft_s": true,
+    "do_not_unblock_k003_production": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "RTK_C9_PROJECTABLE_HMT_U1_RG_TRANSFER_NOT_SOURCE_LOCKED_PARTIAL_PASS_SCOPED",
+  "failure_classification": "RTK_C9_PROJECTABLE_HMT_U1_RG_TRANSFER_AUDIT_FAIL_SCOPED",
+  "decision_rule": "PASS_SCOPED means the audited source sets establish quantitative RG control for the ordinary projectable parent and a classically constrained projectable HMT U(1) extension with additional A,nu fields, but do not themselves provide an explicit one-loop equivalence/transfer theorem for the U(1)-extended gauge-fixed Hessian, ghost sector and beta functions. It is not a literature-wide no-go claim.",
+  "nonclaims": [
+    "No claim that a projectable HMT U(1) theory is nonrenormalizable.",
+    "No claim that an HMT U(1) one-loop calculation cannot be constructed.",
+    "No transfer of ordinary-projectable beta functions to the HMT U(1) completion without an explicit derivation.",
+    "No quantitative beta functions for the unresolved HMT physical-matter interface.",
+    "No closure of full C9 radiative naturalness.",
+    "No soft-s or k=0.03 production gate is reopened."
+  ]
+}
