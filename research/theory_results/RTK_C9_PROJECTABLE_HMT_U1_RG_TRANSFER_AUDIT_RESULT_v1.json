@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "additional_U1_fields_recognized": true,
+    "full_C9_not_claimed": true,
+    "k003_blocked": true,
+    "no_Hessian_ghost_equivalence_assumed": true,
+    "no_parent_beta_transfer_assumed": true,
+    "parent_beta_source_present": true,
+    "parent_rgflow_source_present": true,
+    "soft_s_blocked": true,
+    "target_schema_exact": true,
+    "threshold_unchanged": true,
+    "u1_hamiltonian_source_present": true
+  },
+  "classification": "RTK_C9_PROJECTABLE_HMT_U1_RG_TRANSFER_NOT_SOURCE_LOCKED_PARTIAL_PASS_SCOPED",
+  "decision": {
+    "HMT_U1_quantitative_RG_transfer_source_locked": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_RG_control_survives": true,
+    "production_k003_unblocked": false,
+    "reason": "Adding the local U(1) constrained sector changes field/gauge content. The audited parent beta-function calculations cannot be promoted to the HMT A,nu theory without an explicit gauge-fixed one-loop derivation or an equivalence theorem for the Hessian, constraints and ghosts.",
+    "soft_s_retest_allowed": false
+  },
+  "next_gate": "C9 projectable HMT U1 quantum-evaluability preflight: source-lock the complete fixed projectable HMT gravitational action and a BRST/gauge-fixing/ghost prescription sufficient to define its one-loop Hessian before any beta-function calculation; matter-interface beta functions remain separately blocked until that interface is fixed.",
+  "nonclaims": [
+    "No claim that a projectable HMT U(1) theory is nonrenormalizable.",
+    "No claim that an HMT U(1) one-loop calculation cannot be constructed.",
+    "No transfer of ordinary-projectable beta functions to the HMT U(1) completion without an explicit derivation.",
+    "No quantitative beta functions for the unresolved HMT physical-matter interface.",
+    "No closure of full C9 radiative naturalness.",
+    "No soft-s or k=0.03 production gate is reopened."
+  ],
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_RG_TRANSFER_AUDIT_RESULT_v1",
+  "source_locked_distinction": {
+    "HMT_local_U1_extension": {
+      "additional_fields": [
+        "A",
+        "nu"
+      ],
+      "classical_constraint_structure_source_locked": true,
+      "explicit_quantitative_one_loop_beta_functions_in_audited_sources": false,
+      "explicit_transfer_theorem_from_parent_beta_functions_in_audited_sources": false,
+      "source": "Mukohyama-Namba-Saitou-Watanabe, arXiv:1504.07357 / PRD 92 024005 (2015)"
+    },
+    "ordinary_projectable_parent": {
+      "quantitative_RG_flow": true,
+      "quantitative_one_loop_beta_functions": true,
+      "source": "Barvinsky-Kurov-Sibiryakov, PRD 105 044009 (2022); PRD 111 024030 (2025)"
+    }
+  },
+  "status": "PASS_SCOPED",
+  "threshold_changed": false
+}
