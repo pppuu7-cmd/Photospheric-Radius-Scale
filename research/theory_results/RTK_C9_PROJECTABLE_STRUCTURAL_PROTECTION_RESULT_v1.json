@@ -1,0 +1,33 @@
+{
+  "checks": {
+    "a_i_zero_identity": true,
+    "arbitrary_coefficients_drop_out": true,
+    "no_observable_fitting_in_analyzer": true,
+    "parent_operator_dictionary_locked": true,
+    "projectability_is_N_of_t_only": true,
+    "sigma1_operator_zero_identity": true,
+    "sigma2_operator_zero_identity": true,
+    "spatial_gradient_N_zero_identity": true,
+    "threshold_unchanged": true
+  },
+  "classification": "RTK_C9_PROJECTABILITY_STRUCTURALLY_ELIMINATES_SIGMA12_OPERATOR_PAIR_PASS_SCOPED",
+  "exact_identities": {
+    "D_i_a^i_sigma_projectable": "0",
+    "a_i_a^i_sigma_projectable": "0",
+    "a_i_projectable": "0",
+    "sigma1_O1_plus_sigma2_O2_projectable": "0"
+  },
+  "next_gate": "audit whether the projectable HMT candidate introduces other radiatively dangerous scalar-sector operators or matter Lorentz-violating couplings that replace the eliminated sigma1/sigma2 problem; keep full C9 open until a same-action counterterm/RG analysis exists",
+  "schema": "RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_RESULT_v1",
+  "scientific_consequence": "Within an exactly projectable completion, the specific C9 nonprojectable operator pair is absent as an identity of field space rather than by coefficient tuning. This is a structural protection result for that pair only.",
+  "scope_boundary": {
+    "full_radiative_naturalness_closed": false,
+    "original_nonprojectable_C9_closed": false,
+    "production_k003_unblocked": false,
+    "projectable_candidate_final_RTK_completion_proven": false,
+    "soft_s_retest_allowed": false
+  },
+  "status": "PASS_SCOPED",
+  "target": "research/theory_targets/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_v1.json",
+  "threshold_changed": false
+}
