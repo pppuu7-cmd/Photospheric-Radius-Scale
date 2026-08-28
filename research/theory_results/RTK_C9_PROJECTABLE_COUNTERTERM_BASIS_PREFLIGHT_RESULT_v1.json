@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "O2_coefficient_survives": true,
+    "O2_finite_k_nonzero": true,
+    "O4_coefficient_survives": true,
+    "O4_finite_k_nonzero": true,
+    "acceleration_operator_not_reintroduced": true,
+    "carrier_spatial_gradient_survives_projectability": true,
+    "independent_k_scalings": true,
+    "no_loop_generation_claim": true,
+    "no_observable_fitting": true,
+    "parent_projectability_result_locked": true,
+    "threshold_unchanged": true
+  },
+  "classification": "RTK_C9_PROJECTABLE_SYMMETRY_ALLOWS_NONVANISHING_FINITE_K_COUNTERTERM_DIRECTIONS_PASS_SCOPED",
+  "finite_k_witness": {
+    "O2": "dphi**2*k**2/a**2",
+    "O4": "dphi**2*k**4/a**4",
+    "O4_over_O2": "k**2/a**2",
+    "combined": "c2*dphi**2*k**2/a**2 + c4*dphi**2*k**4/a**4"
+  },
+  "next_gate": "same-action radiative-evaluability/source-lock audit: determine whether the frozen HMT+carrier action and matter interface are specified sufficiently to compute one-loop counterterms or beta functions without choosing unresolved interface parameters post hoc",
+  "schema": "RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_RESULT_v1",
+  "scientific_consequence": "Exact projectability structurally removes the old acceleration pair but does not by itself eliminate invariant finite-k carrier-gradient counterterm directions. Therefore projectability alone is not a full C9 radiative-naturalness theorem.",
+  "scope_boundary": {
+    "actual_loop_generation_proven": false,
+    "beta_functions_computed": false,
+    "full_C9_closed": false,
+    "production_k003_unblocked": false,
+    "projectable_candidate_invalidated": false,
+    "soft_s_retest_allowed": false
+  },
+  "status": "PASS_SCOPED",
+  "target": "research/theory_targets/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_TARGET_v1.json",
+  "threshold_changed": false
+}
