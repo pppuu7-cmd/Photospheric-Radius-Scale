@@ -1,0 +1,44 @@
+{
+  "schema": "RTK_C10_65S6FZ26_COVARIANT_AETHER_HMT_INTERFACE_MATCHING_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ26",
+  "frozen_before_execution": true,
+  "parent_required": "C10_65S6FZ25_INDEPENDENT_SPECTRAL_ACTION_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "new_independent_input": {
+    "kind": "covariant_einstein_aether_to_hypersurface_orthogonal_horava_bridge",
+    "sources": [
+      {"title": "Einstein-aether gravity: a status report", "arxiv": "0801.1547"},
+      {"title": "Extended Horava gravity and Einstein-aether theory", "arxiv": "1001.4823"}
+    ],
+    "pre_soft_s": true,
+    "reason_for_admission_after_z24": "The covariant Einstein-aether/khronometric route is an independently developed action-level preferred-foliation framework predating the present soft-s obstruction. It is admitted only to test whether its covariant/hypersurface-orthogonal structure itself supplies the missing projectable HMT local-U(1) physical-matter interface map."
+  },
+  "frozen_question": "Does the independently motivated covariant Einstein-aether -> hypersurface-orthogonal/IR-Horava bridge explicitly determine the projectable HMT local-U(1) auxiliary-field matter interface, including a unique a1,a2-equivalent relation, without fitting RTK response?",
+  "required_bridge_claims": {
+    "einstein_aether_is_metric_plus_unit_timelike_vector": true,
+    "generally_covariant_preferred_frame": true,
+    "hypersurface_orthogonal_bridge_to_ir_horava": true
+  },
+  "hmt_matching_requirements": {
+    "explicit_projectable_HMT_local_U1": true,
+    "explicit_Newtonian_prepotential_or_equivalent": true,
+    "explicit_HMT_gauge_field_A_or_equivalent": true,
+    "explicit_physical_metric_matter_interface_map": true,
+    "unique_a1_a2_equivalent_relation": true
+  },
+  "allowed_classifications": [
+    "C10_65S6FZ26_COVARIANT_AETHER_HMT_MATCH_MAP_FOUND_PASS_SCOPED",
+    "C10_65S6FZ26_COVARIANT_AETHER_BRIDGE_NO_HMT_U1_MATCH_MAP_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ26_SOURCE_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "Return MATCH_MAP_FOUND only if the audited pre-soft-s Einstein-aether/khronometric sources explicitly supply every HMT matching requirement. If the covariant preferred-frame and hypersurface-orthogonal IR-Horava bridge are source-locked but one or more HMT-specific requirements are absent, return NO_HMT_U1_MATCH_MAP. If the source metadata cannot establish the bridge claims, fail closed as SOURCE_AUDIT_INCOMPLETE.",
+  "forbidden": [
+    "identifying generic covariance or hypersurface orthogonality with HMT local U1",
+    "selecting a1 or a2 from RTK pole/residue/remainder",
+    "using the failed soft-s observable to choose a matter frame",
+    "claiming C9 radiative-naturalness closure",
+    "unblocking k=0.03 production"
+  ],
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false,
+  "threshold_changed": false
+}
