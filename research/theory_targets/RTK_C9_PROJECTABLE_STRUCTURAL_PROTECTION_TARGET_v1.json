@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_v1",
+  "status": "FROZEN_BEFORE_PROJECTABILITY_PROTECTION_RESULT",
+  "classification": "RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_V1_FROZEN",
+  "question": "Does exact projectability N=N(t), as used by the independently motivated projectable HMT candidate architecture, structurally eliminate the two nonprojectable marginal operators a_i a^i sigma and D_i a^i sigma that obstruct the C9 exceptional surface?",
+  "parents": {
+    "c9_existing_symmetry_result": "research/theory_results/RTK_C9_U1_EXISTING_SYMMETRY_PROTECTION_RESULT_v1.json",
+    "post_z28_rule": "research/theory_results/RTK_C10_65S6FZ28_GEOMETRIC_SELECTOR_SEARCH_BOUNDARY_RESULT_v1.json"
+  },
+  "frozen_definitions": {
+    "projectability": "N=N(t)",
+    "acceleration_one_form": "a_i = D_i ln N",
+    "operator_sigma1": "a_i a^i sigma",
+    "operator_sigma2": "D_i a^i sigma"
+  },
+  "decision_rule": {
+    "PASS_SCOPED": "if projectability implies a_i=0 identically for every configuration in the projectable field space, and therefore both obstructing operators and all coefficient dependence multiplying them vanish identically; classify projectability as a structural protection mechanism for this operator pair within a projectable completion",
+    "FAIL_SCOPED": "if either operator survives exact projectability or if the conclusion requires tuning its coefficient rather than an identity on projectable field space",
+    "BLOCKED": "if no source-locked projectable candidate architecture is available independently of the failed soft-s observable"
+  },
+  "frozen_checks": [
+    "parent C9 result identifies sigma1/sigma2 with a_i a^i sigma and D_i a^i sigma",
+    "projectability is imposed as N=N(t), not inferred by fitting RTK observables",
+    "D_i N=0 and hence a_i=0 identically",
+    "a_i a^i sigma=0 identically",
+    "D_i a^i sigma=0 identically",
+    "the conclusion is coefficient-independent",
+    "no soft-s, pole/residue/remainder, or k=0.03 result is used to choose projectability"
+  ],
+  "non_claims": [
+    "does not close C9 radiative naturalness for the original fixed nonprojectable U1+RTK action",
+    "does not prove the projectable HMT candidate is the final RTK completion",
+    "does not prove radiative stability of all other operators or matter Lorentz-violating couplings",
+    "does not establish same-full-action primordial/background closure",
+    "does not unblock the soft-s retest or k=0.03 production"
+  ],
+  "expected_classification_if_verified": "RTK_C9_PROJECTABILITY_STRUCTURALLY_ELIMINATES_SIGMA12_OPERATOR_PAIR_PASS_SCOPED",
+  "next_gate_if_pass": "audit whether the projectable HMT candidate introduces other radiatively dangerous scalar-sector operators or matter Lorentz-violating couplings that replace the eliminated sigma1/sigma2 problem; keep full C9 open until a same-action counterterm/RG analysis exists",
+  "threshold_changed": false
+}
