@@ -1,0 +1,60 @@
+name: RTK C9 HMT lambda1 S3 Killing zero-mode measure
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-hmt-lambda1-s3-killing-zero-mode-measure-trigger.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target ancestry and immutability
+        run: |
+          git cat-file -e e4e7e082b3a07aaecf3f00baee8bd1ac3394ef60^{commit}
+          git merge-base --is-ancestor e4e7e082b3a07aaecf3f00baee8bd1ac3394ef60 HEAD
+          python - <<'PY'
+          import json, subprocess
+          p='research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_MEASURE_TARGET_v1.json'
+          d=json.load(open(p)); assert d['parent_head']=='c74f6b03027e3fee4201211fa91d10f9eaca7dbf'
+          assert d['frozen_semantics']['absolute_SO4_Haar_volume_uniquely_fixed'] is False
+          assert d['frozen_semantics']['threshold_changed'] is False and d['frozen_semantics']['no_DSIR'] is True
+          frozen=json.loads(subprocess.check_output(['git','show','e4e7e082b3a07aaecf3f00baee8bd1ac3394ef60:'+p],text=True))
+          assert frozen==d
+          PY
+      - name: Run Killing zero-mode measure audit
+        run: |
+          python -m py_compile research/shadow/rtk_c9_hmt_lambda1_s3_killing_zero_mode_measure.py
+          python research/shadow/rtk_c9_hmt_lambda1_s3_killing_zero_mode_measure.py
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_MEASURE_RESULT_v1.json research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_MEASURE_2026-08-28.md research/provenance/RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_MEASURE_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT Killing zero-mode measure audit'
+            git push origin HEAD:rtk-class-build
+          fi
+      - name: Enforce scoped classification
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_MEASURE_RESULT_v1.json'
+          d=json.load(open(p)); c=d['scientific_checks']; f=d['findings']
+          assert d['classification']=='RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_GRAM_EXPLICIT_ABSOLUTE_GROUP_VOLUME_CONVENTION_OPEN_PASS_SCOPED'
+          assert c['six_modes'] and c['Gram_identity_after_pi2a5'] and c['sqrt_det_pi6a15'] and c['orthonormal_basis_exists'] and c['reciprocal_rescaling_invariant']
+          assert c['absolute_Haar_volume_fixed_by_local_FP'] is False and c['independent_Haar_convention_required'] is True
+          assert f['six_Killing_zero_mode_Gram_matrix_computed'] is True and f['zero_mode_collective_coordinate_Jacobian_scaling_computed'] is True
+          for k in ['absolute_SO4_Haar_volume_uniquely_fixed','complete_zero_mode_measure_quotient_constructed','signed_or_complex_FP_phase_assigned','full_FP_determinant_computed','full_FS_determinant_computed','full_gravitational_Hessian_determinant_computed','complete_HMT_gauge_fixed_constraint_matrix_constructed','full_HMT_one_loop_evaluable','full_C9_closed','ordinary_projectable_parent_beta_functions_imported','unresolved_HMT_matter_coefficients_chosen','soft_s_retest_allowed','production_k003_unblocked','threshold_changed']:
+            assert f[k] is False, k
+          assert f['no_DSIR'] is True
+          PY
