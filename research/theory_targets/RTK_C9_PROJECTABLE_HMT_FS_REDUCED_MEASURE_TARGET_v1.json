@@ -1,0 +1,24 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_TARGET_v1",
+  "parent_head": "584b767ccfcc44a59be0295dbb1c1bc3b863b22d",
+  "gate": "RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_v1",
+  "frozen_before_execution": true,
+  "question": "Does the source-locked projectable-HMT Hamiltonian information uniquely determine the full Faddeev-Senjanovic/reduced functional measure on a fixed background?",
+  "required_checks": [
+    "use the full identified second-class constraint set rather than A-multiplier reduction alone",
+    "require the field-dependent Poisson-bracket matrix C_ab(x,y)={Theta_a(x),Theta_b(y)}",
+    "require a source-locked or explicitly derived sqrt(det C) functional factor",
+    "keep first-class gauge-fixing determinant conceptually separate from the second-class determinant",
+    "do not import ordinary projectable-Horava beta functions",
+    "do not select HMT matter-interface coefficients",
+    "do not change frozen RTK thresholds",
+    "do not unblock soft-s or k=0.03 production"
+  ],
+  "pass_semantics": "PASS_SCOPED is allowed either if an explicit unique HMT second-class measure is obtained, or if the audit rigorously localizes the missing data and keeps full C9 open.",
+  "forbidden_overclaims": [
+    "full C9 closed",
+    "HMT proven nonrenormalizable",
+    "full HMT one-loop evaluable without FDiff gauge-fixed Hessian",
+    "matter quantum completion proven"
+  ]
+}
