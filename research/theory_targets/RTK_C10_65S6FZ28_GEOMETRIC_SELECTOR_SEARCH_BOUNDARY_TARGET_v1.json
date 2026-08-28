@@ -1,0 +1,31 @@
+{
+  "schema": "RTK_C10_65S6FZ28_GEOMETRIC_SELECTOR_SEARCH_BOUNDARY_TARGET_v1",
+  "gate": "C10.65s6fZ28",
+  "frozen_before_execution": true,
+  "parent_required": "C10_65S6FZ27_TNC_BARGMANN_HMT_U1_ORIGIN_NO_UNIQUE_MATTER_INTERFACE_PARTIAL_PASS_SCOPED",
+  "frozen_question": "Given the independently audited geometric/covariant routes through Z27, is there scientific justification to continue treating further reformulations of the same projectable-Horava/HMT geometry as candidate selectors for the unresolved physical-matter interface, or must that search class be stopped until a genuinely microscopic same-action matter derivation is introduced?",
+  "decision_rule": "Return GEOMETRIC_SEARCH_CLASS_STOP if the parent establishes the HMT/Bargmann geometric origin while failing all unique physical-matter-interface selector requirements. This is a scoped identifiability boundary, not a no-go theorem for microscopic completions. Do not invent or fit a1,a2-equivalent coefficients.",
+  "allowed_classifications": [
+    "C10_65S6FZ28_GEOMETRIC_SELECTOR_SEARCH_CLASS_STOP_PASS_SCOPED",
+    "C10_65S6FZ28_PARENT_INCONSISTENT_BLOCKED_SCOPED"
+  ],
+  "required_parent_facts": {
+    "projectable_horava_from_torsionless_newton_cartan": true,
+    "hmt_u1_from_bargmann_extension": true,
+    "explicit_hmt_physical_metric_matter_interface": false,
+    "unique_a1_a2_equivalent_relation": false,
+    "same_principle_derives_matter_coefficients": false
+  },
+  "successor_requirement": "Only admit a successor after a genuinely new independently motivated microscopic/action principle is preregistered that derives, in one action, both the projectable HMT/Bargmann auxiliary structure and the physical matter-coupling coefficients. Mere geometric/covariant reformulation is insufficient.",
+  "forbidden": [
+    "continuing coefficient selection by geometric reformulation alone",
+    "choosing representative a1 or a2 from RTK pole residue or remainder",
+    "using soft-s cancellation as an action-selection criterion",
+    "claiming C9 radiative-naturalness closure",
+    "unblocking k=0.03 production",
+    "claiming a literature-wide no-go"
+  ],
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false,
+  "threshold_changed": false
+}
