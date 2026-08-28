@@ -1,0 +1,94 @@
+name: RTK C9 HMT lambda1 S3 spatial diff FP operator zero modes
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-hmt-lambda1-s3-spatial-diff-fp-operator-zero-mode-trigger.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target ancestry and immutable parent
+        run: |
+          git cat-file -e 0afc88e5602b4d689e977fa5a6606771c1242088^{commit}
+          git merge-base --is-ancestor 0afc88e5602b4d689e977fa5a6606771c1242088 HEAD
+          python - <<'PY'
+          import json, subprocess
+          p='research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_TARGET_v1.json'
+          d=json.load(open(p))
+          assert d['parent_head']=='469fb4f1faba5facdd70be1cf4e70052c5644cda'
+          assert d['prospective_spatial_gauge']['choice_changed_after_evaluation'] is False
+          assert d['frozen_semantics']['threshold_changed'] is False
+          assert d['frozen_semantics']['no_DSIR'] is True
+          frozen=subprocess.check_output(['git','show','0afc88e5602b4d689e977fa5a6606771c1242088:'+p], text=True)
+          assert json.loads(frozen)==d
+          PY
+      - name: Syntax check analyzer
+        run: python -m py_compile research/shadow/rtk_c9_hmt_lambda1_s3_spatial_diff_fp_operator_zero_mode.py
+      - name: Run exact spatial FP operator zero-mode audit
+        run: python research/shadow/rtk_c9_hmt_lambda1_s3_spatial_diff_fp_operator_zero_mode.py
+      - name: Persist result checkpoint provenance before classification enforcement
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_RESULT_v1.json research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_2026-08-28.md research/provenance/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT spatial FP operator zero-mode audit'
+            git push origin HEAD:rtk-class-build
+          fi
+      - name: Enforce frozen scientific classification
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_RESULT_v1.json'
+          d=json.load(open(p)); c=d['scientific_checks']; f=d['findings']
+          required=[
+            'beta_half_cancels_mixed_grad_div_term_exactly',
+            'fp_operator_is_vector_laplace_plus_ricci',
+            'transverse_factorization_exact',
+            'transverse_only_ell1_zero_for_integer_ell_ge1',
+            'transverse_ell1_eigenvalue_zero',
+            'transverse_ell_ge2_nonzero',
+            'transverse_ell1_kernel_is_six_killing_generators',
+            'longitudinal_no_zero_for_integer_ell_ge1',
+            'longitudinal_ell1_nonzero',
+            'longitudinal_ell2_nonzero',
+            'ell0_longitudinal_generator_absent_not_ghost_zero_mode',
+            'prior_ell1_conformal_witness_consistent_with_longitudinal_fp_block',
+          ]
+          assert d['target_frozen_commit']=='0afc88e5602b4d689e977fa5a6606771c1242088'
+          assert all(c[k] is True for k in required), {k:c[k] for k in required}
+          assert d['classification']=='RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_EXACT_PASS_SCOPED'
+          assert f['transverse_ell1_zero_mode_multiplicity']==6
+          assert f['nontrivial_longitudinal_zero_modes']==0
+          assert f['projectable_time_sector_remains_global_separate'] is True
+          assert f['u1_nu_FP_factor_remains_separate_field_independent'] is True
+          assert f['TT_tensor_sector_remains_physical_Hessian'] is True
+          for k in [
+            'complete_zero_mode_measure_quotient_constructed',
+            'zeta_regularized_spatial_FP_determinant_computed',
+            'full_FP_determinant_computed',
+            'full_FS_determinant_computed',
+            'full_gravitational_Hessian_determinant_computed',
+            'complete_HMT_gauge_fixed_constraint_matrix_constructed',
+            'full_HMT_one_loop_evaluable',
+            'full_C9_closed',
+            'ordinary_projectable_parent_beta_functions_imported',
+            'unresolved_HMT_matter_coefficients_chosen',
+            'soft_s_retest_allowed',
+            'production_k003_unblocked',
+            'threshold_changed',
+          ]:
+            assert f[k] is False, k
+          assert f['no_DSIR'] is True
+          PY
