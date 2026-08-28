@@ -1,0 +1,11 @@
+{
+  "computation": "exact infinitesimal gauge-variation/FP-kernel identity audit",
+  "posthoc_RTK_fit_used": false,
+  "primary_equation": "Eq. (83): delta_alpha nu = alpha",
+  "primary_source": "P. Horava and C. M. Melby-Thompson, Phys. Rev. D 82, 064027 (2010), arXiv:1007.2410",
+  "primary_url": "https://arxiv.org/abs/1007.2410",
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_PROVENANCE_v1",
+  "target_path": "research/theory_targets/RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TARGET_v1.json",
+  "target_sha256": "9daf6edf9c53782a9552ce3ddaea77b25e386c75bfafc977e98a413c794f6570",
+  "timestamp_utc": "2026-08-28T06:29:47.770048+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "A_constraint_measure_remains_open": true,
+    "FDiff_gauge_transfer_remains_open": true,
+    "fp_kernel_is_field_independent_identity_distribution": true,
+    "full_C9_closed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "matter_interface_remains_open": true,
+    "nu_zero_gauge_preregistered_before_execution": true,
+    "parent_beta_functions_imported": false,
+    "production_k003_unblocked": false,
+    "soft_s_retest_allowed": false,
+    "source_locked_delta_nu_equals_alpha": true,
+    "threshold_changed": false,
+    "u1_fp_determinant_is_field_independent_constant_formally": true
+  },
+  "classification": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TRIVIALIZATION_PASS_SCOPED",
+  "derivation": {
+    "formal_consequence": "det M is a field-independent normalization factor for this local U(1) gauge sector, subject to boundary/global-mode treatment.",
+    "fp_kernel": "M(x,y) = delta chi_U1(x)/delta alpha(y) = delta(x-y)",
+    "fp_kernel_field_dependent": false,
+    "infinitesimal_transformed_gauge_function": "chi_U1[nu + eps alpha] = nu + eps alpha",
+    "preregistered_gauge_condition": "chi_U1 = nu = 0",
+    "source_locked_transformation": "delta_alpha nu = alpha"
+  },
+  "frozen_target_sha256": "9daf6edf9c53782a9552ce3ddaea77b25e386c75bfafc977e98a413c794f6570",
+  "gate": "C9 projectable HMT U(1) Stueckelberg/FP gauge-sector audit",
+  "interpretation": "Scoped structural simplification only: the Newton-prepotential shift symmetry makes the preregistered nu=0 local-U(1) FP kernel trivial/field-independent. It does not define the complete HMT one-loop determinant or close C9.",
+  "pass_scoped": true,
+  "remaining_blockers": [
+    "A remains a constrained/Lagrange-multiplier sector; its reduced measure/determinant treatment is not fixed by this gate.",
+    "A compatible full FDiff gauge fixing/ghost prescription for the HMT-extended Hessian remains to be demonstrated.",
+    "The unresolved physical matter interface and its radiative counterterms remain outside this gate.",
+    "Global/boundary zero modes, if present for a chosen background/boundary condition, require separate treatment."
+  ],
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_RESULT_v1",
+  "timestamp_utc": "2026-08-28T06:29:47.770048+00:00"
+}

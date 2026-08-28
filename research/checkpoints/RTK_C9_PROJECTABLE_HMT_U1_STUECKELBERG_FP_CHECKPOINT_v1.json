@@ -1,0 +1,10 @@
+{
+  "classification": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TRIVIALIZATION_PASS_SCOPED",
+  "confirmed_frontier": "Local HMT U(1) gauge ghost-interaction ambiguity is structurally removable in nu=0 gauge; A-constraint/reduced-measure plus HMT-compatible FDiff Hessian remain the next gravitational quantum-evaluability blockers.",
+  "full_C9_closed": false,
+  "next_scientific_gate": "Freeze and audit the A-constraint/reduced functional-measure problem on a fixed HMT background without importing parent beta functions.",
+  "production_k003_unblocked": false,
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_CHECKPOINT_v1",
+  "soft_s_retest_allowed": false,
+  "timestamp_utc": "2026-08-28T06:29:47.770048+00:00"
+}
