@@ -1,0 +1,70 @@
+name: RTK C9 HMT lambda1 constraint bifurcation audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - rtk-class-build
+    paths:
+      - 'research/triggers/rtk_c9_hmt_lambda1_constraint_bifurcation_audit.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frozen branch state
+        uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install exact symbolic dependency
+        run: python -m pip install --disable-pip-version-check sympy
+
+      - name: Verify frozen target and execute exact audit
+        run: python research/shadow/rtk_c9_hmt_lambda1_constraint_bifurcation_audit.py
+
+      - name: Verify scoped semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('research/theory_results/RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT_RESULT_v1.json')
+          r = json.loads(p.read_text())
+          assert r['classification'] == 'RTK_C9_HMT_LAMBDA1_FLAT_CONSTRAINT_LINEARIZATION_DEGENERATE_PASS_SCOPED'
+          c = r['checks']
+          assert c['lambda1_laplacian_pi_coefficient_vanishes_exactly'] is True
+          assert c['lambda1_exact_Phi2_retains_curvature_momentum_terms'] is True
+          assert c['flat_zero_momentum_Phi2_has_no_linear_term'] is True
+          assert c['new_first_class_symmetry_proven'] is False
+          assert c['source_full_analysis_keeps_pair_second_class'] is True
+          assert c['threshold_changed'] is False
+          assert c['full_FS_determinant_computed'] is False
+          assert c['full_HMT_one_loop_evaluable'] is False
+          assert c['full_C9_closed'] is False
+          assert c['soft_s_retest_allowed'] is False
+          assert c['production_k003_unblocked'] is False
+          PY
+
+      - name: Persist result checkpoint and provenance
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            research/theory_results/RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT_RESULT_v1.json \
+            research/checkpoints/RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT_CHECKPOINT_v1.md \
+            research/provenance/RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT_PROVENANCE_v1.json
+          if git diff --cached --quiet; then
+            echo 'No persisted changes to commit.'
+          else
+            git commit -m 'Record C9 HMT lambda=1 constraint-bifurcation audit'
+            git push origin HEAD:rtk-class-build
+          fi
