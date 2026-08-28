@@ -1,0 +1,10 @@
+{
+  "created_utc": "2026-08-28T17:27:19.876097+00:00",
+  "target_frozen_commit": "e4e7e082b3a07aaecf3f00baee8bd1ac3394ef60",
+  "parent_result_commit": "c74f6b03027e3fee4201211fa91d10f9eaca7dbf",
+  "script": "/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/research/shadow/rtk_c9_hmt_lambda1_s3_killing_zero_mode_measure.py",
+  "method": "exact S3 second moment and 6x6 Killing Gram algebra",
+  "regularization": "none",
+  "absolute_SO4_Haar_volume_assigned": false,
+  "no_DSIR": true
+}

@@ -1,0 +1,81 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_KILLING_ZERO_MODE_GRAM_EXPLICIT_ABSOLUTE_GROUP_VOLUME_CONVENTION_OPEN_PASS_SCOPED",
+  "frozen_target_commit": "e4e7e082b3a07aaecf3f00baee8bd1ac3394ef60",
+  "parent_result_commit": "c74f6b03027e3fee4201211fa91d10f9eaca7dbf",
+  "Gram_exact": "<K_AB,K_CD>=pi^2 a^5(delta_AC delta_BD-delta_AD delta_BC)",
+  "Gram_ordered_basis": "pi^2 a^5 I_6",
+  "single_mode_norm_squared": "pi^2 a^5",
+  "sqrt_det_Gram": "pi^6 a^15",
+  "orthonormal_basis": "Khat_AB=K_AB/(pi a^(5/2))",
+  "collective_coordinate_factor": "pi^6 a^15 product dtheta_AB",
+  "numerical_witnesses": [
+    [
+      0.5,
+      0.30842513753404244,
+      0.029339269823465096
+    ],
+    [
+      1.0,
+      9.869604401089358,
+      961.3891935753043
+    ],
+    [
+      2.0,
+      315.82734083485946,
+      31502801.09507557
+    ],
+    [
+      3.25,
+      3578.6279559508507,
+      45829978219.464905
+    ]
+  ],
+  "rescaling_witnesses": [
+    [
+      0.25,
+      1.0
+    ],
+    [
+      0.5,
+      1.0
+    ],
+    [
+      2.0,
+      1.0
+    ],
+    [
+      7.0,
+      1.0
+    ]
+  ],
+  "scientific_checks": {
+    "six_modes": true,
+    "Gram_identity_after_pi2a5": true,
+    "sqrt_det_pi6a15": true,
+    "orthonormal_basis_exists": true,
+    "reciprocal_rescaling_invariant": true,
+    "absolute_Haar_volume_fixed_by_local_FP": false,
+    "independent_Haar_convention_required": true
+  },
+  "findings": {
+    "six_Killing_zero_mode_Gram_matrix_computed": true,
+    "zero_mode_collective_coordinate_Jacobian_scaling_computed": true,
+    "absolute_SO4_Haar_volume_uniquely_fixed": false,
+    "complete_zero_mode_measure_quotient_constructed": false,
+    "signed_or_complex_FP_phase_assigned": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "The six primed Killing modes have an explicit positive L2 Gram matrix and local collective-coordinate Jacobian. A unique absolute residual SO(4) volume still requires an independently declared Haar/global normalization convention; it is not fixed by the local FP spectrum alone.",
+  "next_gate": "Freeze an explicit SO(4) Haar/global normalization convention compatible with the embedding-generator basis and test basis-invariant quotient normalization; signed FP phase and TT Hessian remain open."
+}
