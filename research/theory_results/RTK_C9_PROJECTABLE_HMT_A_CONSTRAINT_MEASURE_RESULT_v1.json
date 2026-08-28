@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "A_is_constrained_nonpropagating_sector_in_source_locked_total_Hamiltonian": true,
+    "classical_gauge_fixing_terms_present_in_source_locked_analysis": true,
+    "delta_functional_alone_proves_complete_reduced_quantum_measure": false,
+    "formal_linear_multiplier_integration_imposes_delta_constraint": true,
+    "full_C9_closed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "matter_interface_coefficients_selected": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "production_k003_unblocked": false,
+    "projectable_HMT_has_first_and_second_class_constraints": true,
+    "projectable_HMT_phase_space_contains_A_piA": true,
+    "soft_s_retest_allowed": false,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false,
+    "unique_full_second_class_functional_determinant_source_locked": false
+  },
+  "classification": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_FORMAL_DELTA_REDUCTION_PASS_SCOPED_REDUCED_MEASURE_OPEN",
+  "formal_derivation": {
+    "identity": "integral D A exp(i integral A C) proportional to delta[C]",
+    "multiplier_term": "S_A = integral A C",
+    "nonclaim": "This does not by itself supply the determinant/Jacobian associated with the full first/second-class constraint reduction."
+  },
+  "frozen_target_sha256": "7686282427e1a72f77817a93142325df8db48c879fa312ae233c62ea67f47a33",
+  "gate": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_v1",
+  "interpretation": "The A sector is formally reducible as a multiplier constraint, but the complete projectable-HMT one-loop measure remains underdetermined until the second-class/reduced determinant and compatible FDiff sector are fixed.",
+  "pass_scoped": true,
+  "remaining_blockers": [
+    "Explicit full reduced/Faddeev-Senjanovic functional measure for the projectable HMT constraint set.",
+    "Compatibility of the reduced measure with the chosen FDiff gauge fixing and quadratic Hessian.",
+    "Independent specification of the physical matter interface and its counterterm basis."
+  ],
+  "schema": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_RESULT_v1",
+  "timestamp_utc": "2026-08-28T07:25:07.988053+00:00"
+}

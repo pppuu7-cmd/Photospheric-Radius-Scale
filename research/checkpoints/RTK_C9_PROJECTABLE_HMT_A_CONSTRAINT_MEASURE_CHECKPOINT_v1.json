@@ -1,0 +1,10 @@
+{
+  "classification": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_FORMAL_DELTA_REDUCTION_PASS_SCOPED_REDUCED_MEASURE_OPEN",
+  "confirmed_frontier": "A can be treated formally as a multiplier imposing its constraint, but this does not complete the HMT quantum measure.",
+  "full_C9_closed": false,
+  "next_scientific_gate": "Freeze an explicit Faddeev-Senjanovic/reduced-measure construction for the source-locked projectable HMT constraint set and test whether its determinant is uniquely defined on a fixed background.",
+  "production_k003_unblocked": false,
+  "schema": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_CHECKPOINT_v1",
+  "soft_s_retest_allowed": false,
+  "timestamp_utc": "2026-08-28T07:25:07.988053+00:00"
+}

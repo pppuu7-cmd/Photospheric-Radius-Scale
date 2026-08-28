@@ -1,0 +1,9 @@
+{
+  "computation": "source-locked Hamiltonian-structure audit plus exact formal multiplier-to-delta-functional identity",
+  "posthoc_RTK_fit_used": false,
+  "primary_source": "Mukohyama, Namba, Saitou, Watanabe, arXiv:1504.07357, projectable appendix / Hamiltonian constraint analysis",
+  "schema": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_PROVENANCE_v1",
+  "target_path": "research/theory_targets/RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_TARGET_v1.json",
+  "target_sha256": "7686282427e1a72f77817a93142325df8db48c879fa312ae233c62ea67f47a33",
+  "timestamp_utc": "2026-08-28T07:25:07.988053+00:00"
+}
