@@ -1,0 +1,11 @@
+{
+  "created_utc": "2026-08-28T13:26:53.570413+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_ELL1_GAUGE_CLASSIFICATION_TARGET_v1.json",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_ell1_gauge_classification.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_S3_ELL1_GAUGE_CLASSIFICATION_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_ELL1_GAUGE_CLASSIFICATION_2026-08-28.md",
+  "method": "exact round-S3 ell=1 Hessian identity plus explicit spatial-diffeomorphism Lie-derivative construction and parent C12 spectral substitution",
+  "external_crosscheck": "standard S3 scalar/tensor harmonic geometry; no external numerical fit",
+  "no_DSIR": true,
+  "no_threshold_change": true
+}
