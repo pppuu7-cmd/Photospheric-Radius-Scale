@@ -1,0 +1,11 @@
+{
+  "created_utc": "2026-08-28T14:32:30.814161+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_FS_BLOCK_TARGET_v1.json",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_reduced_scalar_fs_block.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_FS_BLOCK_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_FS_BLOCK_2026-08-28.md",
+  "method": "exact round-S3 scalar-harmonic spectral factorization, explicit ell=1 gauge quotient inherited from the immediately preceding scoped gate, and 2x2 antisymmetric second-class determinant identity",
+  "regularization": "none; finite-cutoff log product is diagnostic only and is explicitly not interpreted as a functional determinant",
+  "no_DSIR": true,
+  "no_threshold_change": true
+}

@@ -1,0 +1,94 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_FS_BLOCK_NONDEGENERATE_PASS_SCOPED",
+  "frozen_target_parent_head": "9ccb2322a0aa9320886b25309cd2468975297e75",
+  "target_frozen_commit": "a2b81b7808cf4928bef5ae9e000d6c2b18a94adc",
+  "exact_spectrum": {
+    "operator": "C12=(R/3)(-R-2 nabla^2), R=6/a^2",
+    "scalar_laplacian": "-nabla^2 Y_l=l(l+2)/a^2 Y_l",
+    "mu_l_times_a4": "4[l(l+2)-3]=4(l-1)(l+3)",
+    "degeneracy": "d_l=(l+1)^2",
+    "ell0_mu_times_a4": -12,
+    "ell1_mu_times_a4": 0,
+    "ell1_degeneracy": 4,
+    "ell_ge2_sign": "positive",
+    "reduced_domain": "ell=0 and ell>=2"
+  },
+  "mode_checks": [
+    {
+      "ell": 0,
+      "degeneracy": 1,
+      "mu_times_a4": -12,
+      "FS_2x2_det_times_a8": 144
+    },
+    {
+      "ell": 2,
+      "degeneracy": 9,
+      "mu_times_a4": 20,
+      "FS_2x2_det_times_a8": 400
+    },
+    {
+      "ell": 3,
+      "degeneracy": 16,
+      "mu_times_a4": 48,
+      "FS_2x2_det_times_a8": 2304
+    },
+    {
+      "ell": 4,
+      "degeneracy": 25,
+      "mu_times_a4": 84,
+      "FS_2x2_det_times_a8": 7056
+    },
+    {
+      "ell": 5,
+      "degeneracy": 36,
+      "mu_times_a4": 128,
+      "FS_2x2_det_times_a8": 16384
+    },
+    {
+      "ell": 10,
+      "degeneracy": 121,
+      "mu_times_a4": 468,
+      "FS_2x2_det_times_a8": 219024
+    },
+    {
+      "ell": 32,
+      "degeneracy": 1089,
+      "mu_times_a4": 4340,
+      "FS_2x2_det_times_a8": 18835600
+    },
+    {
+      "ell": 127,
+      "degeneracy": 16384,
+      "mu_times_a4": 65520,
+      "FS_2x2_det_times_a8": 4292870400
+    }
+  ],
+  "diagnostic_only": {
+    "cutoff_L": 32,
+    "log_abs_product_of_dimensionless_mu_with_degeneracy": 96866.42938525716,
+    "is_regularized_determinant": false
+  },
+  "findings": {
+    "ell1_four_dimensional_gauge_sector_projected_out": true,
+    "reduced_scalar_C12_has_remaining_zero_modes": false,
+    "ell0_eigenvalue_negative_but_nonzero": true,
+    "ell_ge2_eigenvalues_positive": true,
+    "reduced_scalar_C12_block_nondegenerate": true,
+    "FS_2x2_mode_determinant_is_mu_squared": true,
+    "FS_2x2_mode_determinant_positive_on_reduced_domain": true,
+    "regularized_scalar_FS_determinant_computed": false,
+    "full_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "complete_zero_mode_quotient_constructed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "After explicitly quotienting the four ell=1 scalar/conformal modes already proven to be spatial-diffeomorphism gauge directions on round S3, the frozen lambda=1 scalar C12 spectrum has no remaining zero eigenvalues: ell=0 is negative but nonzero and every ell>=2 eigenvalue is positive. Hence each reduced 2x2 antisymmetric Faddeev-Senjanovic mode block is nondegenerate. This is only a scoped block-rank result; no regularized infinite product, complete HMT zero-mode quotient, full constraint determinant, one-loop evaluability, or C9 closure is claimed.",
+  "next_gate": "Freeze an explicit spectral regularization/normalization prescription for this reduced scalar block (preferably a dimensionless zeta or heat-kernel definition) and determine whether a finite reduced scalar determinant can be defined without conflating it with the still-open complete HMT gauge-fixed Faddeev-Senjanovic determinant."
+}
