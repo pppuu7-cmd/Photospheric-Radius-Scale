@@ -1,0 +1,2 @@
+trigger scoped spatial FP quotient assembly audit
+frozen target e24d6776fc068e65aeb4a0c838d21175a120a47f
