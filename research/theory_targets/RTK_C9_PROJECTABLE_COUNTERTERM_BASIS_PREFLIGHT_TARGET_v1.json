@@ -1,0 +1,40 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_TARGET_v1",
+  "status": "FROZEN_BEFORE_COUNTERTERM_BASIS_PREFLIGHT",
+  "classification": "RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_TARGET_V1_FROZEN",
+  "question": "After exact projectability removes the old acceleration-operator pair, does the projectable HMT+invariant-carrier symmetry class still admit independent local finite-k scalar counterterm directions that are not identically zero on projectable field space?",
+  "parents": {
+    "c9_projectability_result": "research/theory_results/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_RESULT_v1.json"
+  },
+  "frozen_definitions": {
+    "projectability": "N=N(t)",
+    "carrier": "Phi is invariant under the frozen HMT U(1) and internal null symmetry",
+    "O2": "gamma^{ij} D_i Phi D_j Phi",
+    "O4": "(Delta Phi)^2"
+  },
+  "decision_rule": {
+    "PASS_SCOPED": "if O2 and O4 are compatible with projectability/carrier invariance, remain nonzero for a finite-k carrier fluctuation, and arbitrary coefficients multiplying them do not drop out as projectability identities; conclude that projectability alone is not a complete radiative-naturalness theorem",
+    "FAIL_SCOPED": "if projectability or the frozen carrier symmetries identically eliminate both finite-k directions",
+    "BLOCKED": "if the parent projectable structural-protection result is unavailable"
+  },
+  "frozen_checks": [
+    "parent projectability result is exact and scoped",
+    "D_i N=0 is retained and no acceleration operator is reintroduced",
+    "spatial carrier gradients are not set to zero by projectability",
+    "for a finite Fourier mode k>0, O2 is proportional to k^2 |deltaPhi|^2/a^2",
+    "for a finite Fourier mode k>0, O4 is proportional to k^4 |deltaPhi|^2/a^4",
+    "independent coefficients multiplying O2 and O4 survive",
+    "no claim of actual loop generation or beta-function magnitude is made without a same-action RG calculation",
+    "no RTK observable, soft-s result, or k=0.03 production output is used to choose coefficients"
+  ],
+  "non_claims": [
+    "does not prove O2 or O4 are generated with nonzero beta functions",
+    "does not compute a counterterm coefficient or RG flow",
+    "does not close C9 radiative naturalness",
+    "does not invalidate the projectable completion",
+    "does not unblock soft-s, k=0.03 production, spectra, or likelihood"
+  ],
+  "expected_classification_if_verified": "RTK_C9_PROJECTABLE_SYMMETRY_ALLOWS_NONVANISHING_FINITE_K_COUNTERTERM_DIRECTIONS_PASS_SCOPED",
+  "next_gate_if_pass": "same-action radiative-evaluability/source-lock audit: determine whether the frozen HMT+carrier action and matter interface are specified sufficiently to compute one-loop counterterms or beta functions without choosing unresolved interface parameters post hoc",
+  "threshold_changed": false
+}
