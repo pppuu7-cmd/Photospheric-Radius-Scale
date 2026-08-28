@@ -1,0 +1,64 @@
+name: RTK C9 HMT lambda1 S3 spatial FP Hodge measure Jacobian
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-hmt-lambda1-s3-spatial-fp-hodge-measure-jacobian-trigger.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target ancestry and immutability
+        run: |
+          git cat-file -e a93e8261e03f9f7503e685a46c537ddcb687ca46^{commit}
+          git merge-base --is-ancestor a93e8261e03f9f7503e685a46c537ddcb687ca46 HEAD
+          python - <<'PY'
+          import json, subprocess
+          p='research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_MEASURE_JACOBIAN_TARGET_v1.json'
+          d=json.load(open(p))
+          assert d['scientific_parent_head']=='c6c9e4062569fcbf94c8e1860f509cb39defd9a3'
+          assert d['frozen_pass_criteria']['extra_Hodge_factor_to_multiply_existing_FP_determinant'] is False
+          assert d['frozen_pass_criteria']['double_counting_if_extra_factor_added'] is True
+          assert d['scope_guards']['threshold_changed'] is False
+          assert d['scope_guards']['no_DSIR'] is True
+          frozen=json.loads(subprocess.check_output(['git','show','a93e8261e03f9f7503e685a46c537ddcb687ca46:'+p],text=True))
+          assert frozen==d
+          PY
+      - name: Run Hodge measure Jacobian audit
+        run: |
+          python -m py_compile research/shadow/rtk_c9_hmt_lambda1_s3_spatial_fp_hodge_measure_jacobian.py
+          python research/shadow/rtk_c9_hmt_lambda1_s3_spatial_fp_hodge_measure_jacobian.py
+      - name: Enforce scoped classification
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_MEASURE_JACOBIAN_RESULT_v1.json'
+          d=json.load(open(p)); c=d['scientific_checks']; f=d['findings']
+          assert d['classification']=='RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_JACOBIAN_ABSORBED_IN_ORTHONORMAL_VECTOR_BASIS_PASS_SCOPED'
+          for k in ['constant_scalar_zero_mode_excluded','transverse_longitudinal_L2_orthogonal','raw_commuting_hodge_jacobian_sqrt_det_delta0','normalized_vector_basis_has_unit_coordinate_jacobian','grassmann_pair_inverse_jacobian_identified','raw_scalar_ghost_action_extra_delta0_identified','grassmann_measure_cancels_extra_delta0_mode_by_mode','existing_orthonormal_vector_FP_determinant_requires_no_extra_hodge_factor','adding_extra_hodge_factor_to_existing_FP_would_double_count']:
+            assert c[k] is True, k
+          assert f['extra_Hodge_factor_to_multiply_existing_FP_determinant'] is False
+          assert f['decomposition_jacobian_is_coordinate_convention_dependent_but_path_integral_equivalent'] is True
+          for k in ['complete_signed_spatial_FP_quotient_assembled','full_FP_determinant_computed','full_FS_determinant_computed','full_gravitational_Hessian_determinant_computed','complete_HMT_gauge_fixed_constraint_matrix_constructed','full_HMT_one_loop_evaluable','full_C9_closed','ordinary_projectable_parent_beta_functions_imported','unresolved_HMT_matter_coefficients_chosen','soft_s_retest_allowed','production_k003_unblocked','threshold_changed']:
+            assert f[k] is False, k
+          assert f['no_DSIR'] is True
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_MEASURE_JACOBIAN_RESULT_v1.json research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_MEASURE_JACOBIAN_2026-08-28.md research/provenance/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_HODGE_MEASURE_JACOBIAN_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT spatial FP Hodge measure Jacobian audit'
+            git push origin HEAD:rtk-class-build
+          fi
