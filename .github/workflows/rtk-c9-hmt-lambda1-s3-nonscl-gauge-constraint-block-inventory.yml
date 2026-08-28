@@ -1,0 +1,66 @@
+name: RTK C9 HMT lambda1 S3 nonscalar gauge constraint block inventory
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-hmt-lambda1-s3-nonscl-gauge-constraint-block-inventory-trigger.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target ancestry
+        run: |
+          git cat-file -e 56cda510fb03c455c76f35f4d1e1511bc06ce51d^{commit}
+          git merge-base --is-ancestor 56cda510fb03c455c76f35f4d1e1511bc06ce51d HEAD
+      - name: Run non-scalar gauge constraint block inventory
+        run: python research/shadow/rtk_c9_hmt_lambda1_s3_nonscl_gauge_constraint_block_inventory.py
+      - name: Verify scoped semantics
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_RESULT_v1.json'
+          d=json.load(open(p)); f=d['findings']
+          assert d['classification'].endswith('PASS_SCOPED')
+          assert d['target_frozen_commit']=='56cda510fb03c455c76f35f4d1e1511bc06ce51d'
+          assert f['known_second_class_FS_pair_is_scalar_block']
+          assert not f['independent_nonscalar_second_class_pair_source_locked']
+          assert not f['absence_of_nonscalar_second_class_pair_proves_trivial_full_measure']
+          assert f['spatial_diff_longitudinal_FP_operator_open']
+          assert f['spatial_diff_transverse_vector_FP_operator_open']
+          assert f['projectable_time_sector_is_global']
+          assert f['u1_nu_FP_field_independent_in_frozen_gauge']
+          assert f['TT_tensor_sector_is_physical_Hessian_not_FP_or_FS']
+          assert not f['complete_spatial_diffeomorphism_FP_operator_constructed']
+          assert not f['complete_HMT_gauge_fixed_constraint_matrix_constructed']
+          assert not f['complete_zero_mode_quotient_constructed']
+          assert not f['full_FP_determinant_computed']
+          assert not f['full_FS_determinant_computed']
+          assert not f['full_gravitational_Hessian_determinant_computed']
+          assert not f['full_HMT_one_loop_evaluable']
+          assert not f['full_C9_closed']
+          assert not f['ordinary_projectable_parent_beta_functions_imported']
+          assert not f['unresolved_HMT_matter_coefficients_chosen']
+          assert not f['soft_s_retest_allowed']
+          assert not f['production_k003_unblocked']
+          assert not f['threshold_changed']
+          assert f['no_DSIR']
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_RESULT_v1.json research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_2026-08-28.md research/provenance/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT non-scalar block inventory audit'
+            git push origin HEAD:rtk-class-build
+          fi
