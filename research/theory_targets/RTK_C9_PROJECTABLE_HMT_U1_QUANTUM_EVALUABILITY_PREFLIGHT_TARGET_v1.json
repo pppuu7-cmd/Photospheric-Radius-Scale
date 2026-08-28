@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_TARGET_v1",
+  "gate": "C9 projectable HMT U(1) quantum-evaluability preflight",
+  "branch": "rtk-class-build",
+  "status_before_execution": "FROZEN_OPEN",
+  "question": "Are the currently source-locked projectable HMT U(1) gravitational inputs sufficient to define a unique gauge-fixed quadratic one-loop problem (Hessian plus ghost/constraint measure) without importing the ordinary-projectable parent quantization or inventing a new gauge prescription?",
+  "parent_results": [
+    "RTK_C9_PROJECTABLE_HMT_U1_RG_TRANSFER_NOT_SOURCE_LOCKED_PARTIAL_PASS_SCOPED",
+    "RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_CONTROL_FOUND_PASS_SCOPED"
+  ],
+  "required_quantum_inputs": [
+    "one explicit projectable HMT U(1) gravitational action with A and Newtonian prepotential nu",
+    "complete gauge transformations for the fields retained in the quantum calculation",
+    "explicit gauge-fixing functional for foliation-preserving diffeomorphisms and local U(1)",
+    "corresponding Faddeev-Popov/BRST ghost operator or equivalent reduced-measure prescription",
+    "treatment of first-/second-class constraints sufficient to define the functional determinant",
+    "background about which the quadratic Hessian is taken"
+  ],
+  "frozen_checks": {
+    "ordinary_projectable_parent_RG_control_remains_true": true,
+    "HMT_U1_classical_A_nu_constraint_structure_source_locked": true,
+    "explicit_HMT_U1_quantum_gauge_fixing_source_locked": false,
+    "explicit_HMT_U1_ghost_or_BRST_operator_source_locked": false,
+    "unique_HMT_U1_one_loop_Hessian_determinant_defined_from_current_inputs": false,
+    "do_not_import_parent_beta_functions": true,
+    "do_not_claim_HMT_nonrenormalizable": true,
+    "do_not_claim_full_C9_closed": true,
+    "do_not_unblock_soft_s": true,
+    "do_not_unblock_k003_production": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_BLOCKED_MISSING_GAUGE_FIXED_QUANTUM_SPECIFICATION_PASS_SCOPED",
+  "failure_classification": "RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_FAIL_SCOPED",
+  "decision_rule": "PASS_SCOPED means the existing source lock is enough to identify the classical projectable HMT U(1) constrained field content, but not enough to define a unique one-loop functional determinant because an HMT-specific gauge-fixing/ghost-or-BRST prescription is not source-locked. This is an evaluability blocker, not a claim of nonrenormalizability.",
+  "nonclaims": [
+    "No literature-wide claim that no HMT U(1) BRST formulation exists.",
+    "No claim that projectable HMT U(1) gravity is nonrenormalizable.",
+    "No beta functions are assigned to A, nu, or the unresolved matter interface.",
+    "No closure of full C9 radiative naturalness.",
+    "No soft-s retest or k=0.03 production is enabled."
+  ]
+}
