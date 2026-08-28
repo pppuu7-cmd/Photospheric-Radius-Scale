@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "explicit_hmt_ghost_brst_not_source_locked": true,
+    "explicit_hmt_quantum_gauge_fixing_not_source_locked": true,
+    "full_c9_not_claimed": true,
+    "hmt_classical_constraint_structure_retained": true,
+    "k003_blocked": true,
+    "no_parent_beta_import": true,
+    "ordinary_projectable_parent_rg_control_retained": true,
+    "parent_rg_transfer_classification_exact": true,
+    "soft_s_blocked": true,
+    "target_schema_exact": true,
+    "threshold_unchanged": true,
+    "unique_one_loop_determinant_not_defined": true
+  },
+  "classification": "RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_BLOCKED_MISSING_GAUGE_FIXED_QUANTUM_SPECIFICATION_PASS_SCOPED",
+  "decision": {
+    "HMT_U1_classical_constraint_structure_source_locked": true,
+    "HMT_U1_unique_gauge_fixed_one_loop_problem_source_locked": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_RG_control_survives": true,
+    "production_k003_unblocked": false,
+    "reason": "The current source lock specifies the classical projectable HMT U(1) constrained field content, but not an HMT-specific quantum gauge-fixing plus ghost/BRST (or equivalent reduced-measure) prescription. Therefore a unique one-loop determinant is not yet defined and parent beta functions cannot be imported.",
+    "soft_s_retest_allowed": false
+  },
+  "missing_quantum_inputs": [
+    "explicit HMT-specific gauge-fixing functional for FDiff x local-U(1)",
+    "corresponding FP/BRST ghost operator or equivalent reduced functional measure",
+    "constraint treatment sufficient to define the one-loop determinant on a chosen background"
+  ],
+  "next_gate": "C9 projectable HMT U1 quantum-specification source-lock: find or independently preregister one complete gauge-fixing/BRST/ghost prescription for a fixed projectable HMT gravitational action before constructing any HMT beta functions; keep the unresolved matter interface separate.",
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_RESULT_v1",
+  "status": "PASS_SCOPED",
+  "threshold_changed": false
+}
