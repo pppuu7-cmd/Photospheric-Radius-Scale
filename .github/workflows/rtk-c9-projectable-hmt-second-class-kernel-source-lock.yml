@@ -1,0 +1,62 @@
+name: RTK C9 projectable HMT second-class kernel source lock
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-projectable-hmt-second-class-kernel-source-lock-trigger.txt'
+      - 'research/theory_targets/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_TARGET_v1.json'
+      - 'research/shadow/rtk_c9_projectable_hmt_second_class_kernel_source_lock.py'
+      - '.github/workflows/rtk-c9-projectable-hmt-second-class-kernel-source-lock.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - name: Verify frozen target
+        run: |
+          test -f research/theory_targets/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_TARGET_v1.json
+          python - <<'PY'
+          import json
+          p='research/theory_targets/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_TARGET_v1.json'
+          d=json.load(open(p))
+          assert d['guardrails']['threshold_changed'] is False
+          assert d['guardrails']['soft_s_retest_allowed'] is False
+          assert d['guardrails']['production_k003_unblocked'] is False
+          print(d['required_classification'])
+          PY
+      - name: Run source-lock analyzer
+        run: python research/shadow/rtk_c9_projectable_hmt_second_class_kernel_source_lock.py
+      - name: Verify scoped semantics
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_RESULT_v1.json'
+          d=json.load(open(p))
+          assert d['result_semantics']['technical_scoped_pass'] is True
+          assert d['result_semantics']['physical_gate_closed'] is False
+          assert d['result_semantics']['full_C9_closed'] is False
+          assert d['checks']['explicit_background_distributional_kernel_source_locked'] is False
+          assert d['checks']['functional_determinant_computed'] is False
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'rtk-c9-actions'
+          git config user.email 'actions@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_RESULT_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_CHECKPOINT_v1.md \
+                  research/provenance/RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_PROVENANCE_v1.json
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit'
+          else
+            git commit -m 'Record C9 HMT second-class kernel source-lock audit'
+            git push origin HEAD:rtk-class-build
+          fi
