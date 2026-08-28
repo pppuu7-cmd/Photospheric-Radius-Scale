@@ -1,0 +1,64 @@
+{
+  "gate": "RTK C9 HMT lambda=1 round-S3 non-scalar gauge/constraint block inventory",
+  "parent_head": "c12f490d29cf2908321aae3c29092f21b7005c00",
+  "scope": "On the same frozen round-S3, D=3, lambda=1, zero-background-momentum projectable HMT background, source-lock the remaining non-scalar gauge/constraint sectors that must be handled before combining determinant factors. This gate is an inventory/classification gate only: it does not compute the complete gauge-fixed operator, the full FP determinant, the full FS determinant, or a one-loop effective action.",
+  "frozen_background": {
+    "spatial_manifold": "round S3",
+    "dimension": 3,
+    "radius": "a",
+    "scalar_curvature": "R=6/a^2",
+    "lambda": 1,
+    "background_momentum": 0,
+    "projectability": true
+  },
+  "source_locks": [
+    {
+      "source": "Horava and Melby-Thompson, Phys. Rev. D 82, 064027 (2010), arXiv:1007.2410",
+      "locked_claim": "The projectable HMT construction enlarges foliation-preserving diffeomorphisms by a local U(1), removes the scalar graviton, and has lambda=1 in the original minimal construction."
+    },
+    {
+      "source": "J. Kluson, Phys. Rev. D 83, 044049 (2011)",
+      "locked_claim": "Hamiltonian analysis of nonrelativistic covariant/projectable Horava-Lifshitz gravity contains first- and second-class constraints yielding the correct gravitational physical degree-of-freedom count."
+    },
+    {
+      "source": "Kluson et al., Eur. Phys. J. C 71, 1690 (2011), arXiv:1012.0473",
+      "locked_claim": "The U(1)-invariant projectable F(R) construction has the same Hamiltonian structure as nonrelativistic covariant HMT gravity and only transverse graviton polarizations around flat background; its HMT limit source-locks the scalar second-class pair used in prior RTK gates."
+    }
+  ],
+  "frozen_prior_results": {
+    "u1_nu_shift_FP_kernel_field_independent": true,
+    "A_linear_multiplier_formal_delta_reduction": true,
+    "scalar_second_class_pair_source_locked": true,
+    "round_S3_scalar_conformal_FS_block_reduced_nondegenerate": true,
+    "round_S3_scalar_FS_zeta_determinant_for_frozen_normalization_computed": true,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false
+  },
+  "required_inventory": [
+    "Separate Faddeev-Senjanovic second-class factors from Faddeev-Popov first-class gauge factors and from physical Hessian sectors; do not combine these categories.",
+    "Classify the previously source-locked Phi1/Phi2 second-class pair as a scalar constraint block; do not invent an additional vector/tensor second-class determinant without an explicit source-locked constraint pair.",
+    "Retain local spatial-diffeomorphism gauge fixing as an OPEN operator problem with longitudinal-scalar and transverse-vector harmonic sectors on S3; the prior ell=1 scalar/conformal gauge classification does not constitute the full spatial FP determinant.",
+    "Retain the projectable time-reparametrization/lapse sector as a global (spatially homogeneous) gauge/constraint block rather than a local non-scalar determinant.",
+    "Retain the local HMT U(1) nu-shift FP factor as field-independent in the previously frozen nu=0 gauge, subject to global/boundary zero-mode qualifications.",
+    "Classify transverse-traceless tensor gravitons as physical Hessian modes, not FP or FS determinant factors. Their one-loop Hessian is not computed by this gate.",
+    "Do not infer that absence of an identified non-scalar second-class pair implies the complete non-scalar measure is trivial: unresolved spatial-diffeomorphism FP and physical Hessian operators remain.",
+    "Do not import ordinary projectable-Horava beta functions, choose unresolved HMT matter coefficients, change thresholds, allow soft-s retest, unblock k=0.03 production, or mix DSIR."
+  ],
+  "pass_condition": "A mutually exclusive source-consistent block inventory is produced in which the known FS second-class pair remains scalar, spatial-diffeomorphism FP sectors remain explicitly open in scalar-longitudinal and transverse-vector harmonics, the projectable time sector is global, the frozen U(1) nu FP factor remains field-independent, TT tensors are physical Hessian modes, and no full determinant/one-loop/C9 closure is claimed.",
+  "fail_condition": "The audit invents an unsourced non-scalar second-class determinant, conflates FP/FS/Hessian factors, treats the ell=1 scalar gauge witness as the complete spatial FP quotient, promotes the global projectable lapse mode to a local determinant, or weakens any frozen full-theory semantic restriction.",
+  "frozen_semantics": {
+    "complete_spatial_diffeomorphism_FP_operator_constructed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "complete_zero_mode_quotient_constructed": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "no_DSIR": true
+  }
+}
