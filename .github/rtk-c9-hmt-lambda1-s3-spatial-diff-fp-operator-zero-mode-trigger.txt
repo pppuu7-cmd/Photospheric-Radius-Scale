@@ -1,0 +1,1 @@
+trigger spatial FP operator zero-mode audit from frozen target 0afc88e5602b4d689e977fa5a6606771c1242088
