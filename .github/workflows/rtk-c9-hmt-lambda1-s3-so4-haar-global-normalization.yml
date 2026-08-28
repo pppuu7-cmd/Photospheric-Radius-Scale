@@ -1,0 +1,64 @@
+name: RTK C9 HMT lambda1 S3 SO4 Haar global normalization
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-hmt-lambda1-s3-so4-haar-global-normalization-trigger.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target ancestry and immutability
+        run: |
+          git cat-file -e 58e47520ca5f3ff3f5fc31b63b37a7b6d764d6d7^{commit}
+          git merge-base --is-ancestor 58e47520ca5f3ff3f5fc31b63b37a7b6d764d6d7 HEAD
+          python - <<'PY'
+          import json, subprocess
+          p='research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_TARGET_v1.json'
+          d=json.load(open(p)); assert d['parent_head']=='c3eb6d08fb60c19f54353b90da2f9194d45db71d'
+          assert d['frozen_semantics']['SO4_Haar_global_convention_explicitly_frozen'] is True
+          assert d['frozen_semantics']['normalization_is_convention_independent_physical_observable'] is False
+          assert d['frozen_semantics']['threshold_changed'] is False and d['frozen_semantics']['no_DSIR'] is True
+          frozen=json.loads(subprocess.check_output(['git','show','58e47520ca5f3ff3f5fc31b63b37a7b6d764d6d7:'+p],text=True))
+          assert frozen==d
+          PY
+      - name: Run SO4 Haar global normalization audit
+        run: |
+          python -m py_compile research/shadow/rtk_c9_hmt_lambda1_s3_so4_haar_global_normalization.py
+          python research/shadow/rtk_c9_hmt_lambda1_s3_so4_haar_global_normalization.py
+      - name: Enforce scoped classification
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_RESULT_v1.json'
+          d=json.load(open(p)); c=d['scientific_checks']; f=d['findings']
+          assert d['classification']=='RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_FIXED_BY_EXPLICIT_CONVENTION_PASS_SCOPED'
+          for k in ['canonical_SO3_volume_8pi2','canonical_SO4_volume_16pi4','metric_scaling_exponent_dim_over_2_is_3','L2_orbit_volume_16pi10a15','parent_factorization_equivalent','reciprocal_basis_coordinate_rescaling_invariant']:
+            assert c[k] is True, k
+          assert f['SO4_Haar_global_convention_explicitly_frozen'] is True
+          assert f['dimensionless_SO4_volume_computed'] is True
+          assert f['L2_scaled_residual_SO4_orbit_volume_computed'] is True
+          assert f['residual_SO4_zero_mode_quotient_normalization_fixed_under_frozen_convention'] is True
+          for k in ['normalization_is_convention_independent_physical_observable','signed_or_complex_FP_phase_assigned','full_FP_determinant_computed','full_FS_determinant_computed','full_gravitational_Hessian_determinant_computed','complete_HMT_gauge_fixed_constraint_matrix_constructed','full_HMT_one_loop_evaluable','full_C9_closed','ordinary_projectable_parent_beta_functions_imported','unresolved_HMT_matter_coefficients_chosen','soft_s_retest_allowed','production_k003_unblocked','threshold_changed']:
+            assert f[k] is False, k
+          assert f['no_DSIR'] is True
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_RESULT_v1.json research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_2026-08-28.md research/provenance/RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT SO4 Haar global normalization audit'
+            git push origin HEAD:rtk-class-build
+          fi
