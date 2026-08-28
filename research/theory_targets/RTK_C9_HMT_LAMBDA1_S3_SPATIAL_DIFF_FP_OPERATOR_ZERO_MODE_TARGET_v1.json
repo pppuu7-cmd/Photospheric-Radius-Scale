@@ -1,0 +1,59 @@
+{
+  "gate": "RTK C9 HMT lambda=1 round-S3 spatial-diffeomorphism FP operator and zero-mode audit",
+  "parent_head": "469fb4f1faba5facdd70be1cf4e70052c5644cda",
+  "scope": "On the same frozen round-S3, D=3, lambda=1, zero-background-momentum projectable HMT background, make one prospective explicit spatial gauge choice and derive the linearized spatial-diffeomorphism Faddeev-Popov operator. Separate transverse-vector and longitudinal-scalar harmonics and classify residual Killing/trivial global zero modes. This gate does not compute a zeta-regularized FP determinant, does not combine FP with the prior FS factor, does not construct the physical TT Hessian, and does not evaluate a one-loop effective action.",
+  "frozen_background": {
+    "spatial_manifold": "round S3",
+    "dimension": 3,
+    "radius": "a",
+    "Ricci_tensor": "R_ij=2/a^2 g_ij",
+    "scalar_curvature": "R=6/a^2",
+    "lambda": 1,
+    "background_momentum": 0,
+    "projectability": true
+  },
+  "prospective_spatial_gauge": {
+    "name": "spatial DeWitt/harmonic gauge",
+    "condition": "F_i[h]=nabla^j h_ij-(1/2)nabla_i h=0",
+    "metric_gauge_variation": "delta_xi h_ij=nabla_i xi_j+nabla_j xi_i",
+    "reason_for_beta_one_half": "The coefficient 1/2 is frozen before evaluation because it cancels the mixed nabla_i nabla_j xi^j term in delta F_i, giving a Laplace-type vector FP operator and an explicit residual-isometry kernel on the fixed round-S3 background.",
+    "choice_changed_after_evaluation": false
+  },
+  "frozen_harmonic_conventions": {
+    "scalar": "-nabla^2 Y_l=q_l^2/a^2 Y_l with q_l^2=l(l+2), l=0,1,...",
+    "transverse_vector": "nabla^i V_i^T=0 and -nabla^2 V_i^T=[q_l^2-1]/a^2 V_i^T, l=1,2,...",
+    "transverse_vector_degeneracy": "d_l^T=2 l(l+2), so d_1^T=6",
+    "scalar_gradient_generator": "xi_i^L=nabla_i Y_l; the l=0 gradient vanishes identically"
+  },
+  "required_exact_derivations": [
+    "Derive delta_xi F_i from the frozen gauge variation and the covariant-derivative commutator; the result must be M_i^j xi_j=(nabla^2 delta_i^j+R_i^j)xi_j on the fixed background.",
+    "For transverse vector harmonics, derive M V_i^T=[3-q_l^2]/a^2 V_i^T. Verify l=1 is the only transverse zero-eigenvalue harmonic level and l>=2 is nonzero.",
+    "Verify the l=1 transverse-vector multiplicity is six and classify this kernel as the six Killing-vector generators of round S3; these are residual spatial isometries, not physical TT modes and not a new FS second-class factor.",
+    "For longitudinal generators xi_i=nabla_i Y_l, derive M nabla_i Y_l=[4-q_l^2]/a^2 nabla_i Y_l. Verify every nontrivial l>=1 longitudinal harmonic is nonzero; l=0 is not a ghost zero mode because nabla_i Y_0=0 identically.",
+    "Connect to the certified l=1 conformal gauge witness: for h_ij=f g_ij with l=1 and xi_i=-(a^2/2)nabla_i f, verify delta_xi g_ij=f g_ij and F_i[f g]=M_i^j xi_j=-(1/2)nabla_i f. Therefore the prior l=1 conformal direction is gauge-fixed by the nonzero longitudinal FP block, not part of the residual Killing kernel.",
+    "Keep the projectable time-reparametrization/lapse sector global and outside this local spatial FP operator.",
+    "Keep the frozen local HMT U(1) nu=0 FP factor separate and field-independent; do not merge it with the spatial FP operator.",
+    "Keep TT tensor gravitons in the physical Hessian sector and do not compute their determinant in this gate."
+  ],
+  "pass_condition": "All frozen exact identities and harmonic classifications hold: the selected round-S3 spatial gauge gives M=nabla^2+Ricci, its transverse kernel consists exactly of the six l=1 Killing generators, its nontrivial longitudinal spectrum has no zero eigenvalue, the l=0 scalar gradient is identically absent rather than a ghost zero mode, and the earlier l=1 conformal witness is consistently gauge-fixed by the longitudinal block. No determinant product or one-loop closure may be claimed.",
+  "fail_condition": "Any frozen operator identity, harmonic eigenvalue, multiplicity, zero-mode classification, or l=1 conformal-witness consistency check fails; or the audit conflates residual Killing modes, projectable time gauge, HMT U(1), FS second-class factors, or physical TT Hessians.",
+  "frozen_semantics": {
+    "linearized_round_S3_spatial_FP_operator_constructed_if_pass": true,
+    "transverse_and_longitudinal_FP_blocks_separated_if_pass": true,
+    "residual_spatial_Killing_kernel_classified_if_pass": true,
+    "complete_zero_mode_measure_quotient_constructed": false,
+    "zeta_regularized_spatial_FP_determinant_computed": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  }
+}
