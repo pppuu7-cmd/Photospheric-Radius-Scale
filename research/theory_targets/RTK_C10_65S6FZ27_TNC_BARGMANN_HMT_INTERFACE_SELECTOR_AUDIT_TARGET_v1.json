@@ -1,0 +1,42 @@
+{
+  "schema": "RTK_C10_65S6FZ27_TNC_BARGMANN_HMT_INTERFACE_SELECTOR_AUDIT_TARGET_v1",
+  "gate": "C10.65s6fZ27",
+  "frozen_before_execution": true,
+  "parent_required": "C10_65S6FZ26_COVARIANT_AETHER_BRIDGE_NO_HMT_U1_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "new_independent_input": {
+    "kind": "dynamical_newton_cartan_bargmann_origin_of_hmt_u1",
+    "sources": [
+      {"title": "Horava-Lifshitz Gravity From Dynamical Newton-Cartan Geometry", "arxiv": "1504.07461"}
+    ],
+    "pre_soft_s": true,
+    "reason_for_admission_after_z24": "Dynamical Newton-Cartan/Bargmann geometry is an independently developed action/geometric principle that explicitly identifies the origin of the Horava-Melby-Thompson U(1), unlike the generic covariant-aether bridge tested in Z26. It is admitted only to test whether that stronger geometric origin also fixes the unresolved physical-matter interface without RTK-response fitting."
+  },
+  "frozen_question": "Does the independently motivated dynamical Newton-Cartan/Bargmann construction, which explicitly geometrizes projectable Horava gravity and the HMT U(1), also uniquely derive the HMT physical-matter interface or an a1,a2-equivalent relation without using RTK response or soft-s cancellation?",
+  "required_geometric_claims": {
+    "projectable_horava_from_torsionless_newton_cartan": true,
+    "precise_field_dictionary_including_khronon": true,
+    "hmt_u1_from_bargmann_extension": true,
+    "tnc_is_matter_coupling_geometry": true
+  },
+  "selector_requirements": {
+    "explicit_hmt_physical_metric_matter_interface": true,
+    "unique_a1_a2_equivalent_relation": true,
+    "same_principle_derives_matter_coefficients": true
+  },
+  "allowed_classifications": [
+    "C10_65S6FZ27_TNC_BARGMANN_HMT_INTERFACE_SELECTOR_FOUND_PASS_SCOPED",
+    "C10_65S6FZ27_TNC_BARGMANN_HMT_U1_ORIGIN_NO_UNIQUE_MATTER_INTERFACE_PARTIAL_PASS_SCOPED",
+    "C10_65S6FZ27_SOURCE_AUDIT_INCOMPLETE_BLOCKED_SCOPED"
+  ],
+  "decision_rule": "Return SELECTOR_FOUND only if the source independently establishes every geometric claim and explicitly derives all selector requirements. If it establishes the projectable Newton-Cartan/HMT-U1 geometry but one or more selector requirements are absent, return NO_UNIQUE_MATTER_INTERFACE. If the source metadata cannot establish the frozen geometric claims, fail closed as SOURCE_AUDIT_INCOMPLETE.",
+  "forbidden": [
+    "treating existence or geometric origin of HMT U1 as a unique matter-interface selector",
+    "selecting a1 or a2 from RTK pole/residue/remainder",
+    "using failed soft-s cancellation to choose Newton-Cartan matter couplings",
+    "claiming C9 radiative-naturalness closure",
+    "unblocking k=0.03 production"
+  ],
+  "soft_s_retest_allowed": false,
+  "production_k003_unblocked": false,
+  "threshold_changed": false
+}
