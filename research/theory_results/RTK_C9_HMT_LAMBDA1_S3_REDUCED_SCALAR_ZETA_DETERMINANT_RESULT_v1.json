@@ -1,0 +1,50 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_ZETA_DETERMINANT_FINITE_NORMALIZATION_DEPENDENT_PASS_SCOPED",
+  "frozen_target_parent_head": "ae2011561fee83c16c52d1f8d662f3d6e96e08d1",
+  "target_frozen_commit": "06ed86480e19a6b16d91307534bf1fe2d5b9d20c",
+  "spectral_problem": {
+    "operator": "A_hat=a^4|C12|",
+    "eigenvalues": "lambda_l=|4(l-1)(l+3)|",
+    "degeneracy": "d_l=(l+1)^2",
+    "domain": "l=0 and l>=2; l=1 gauge modes excluded",
+    "zeta_definition": "zeta_A(s)=sum d_l lambda_l^(-s)",
+    "n_form": "4^(-s)[3^(-s)+sum_{n=3}^infinity n^2(n^2-4)^(-s)]"
+  },
+  "analytic_continuation": {
+    "regular_at_s0": true,
+    "zeta_A_0_exact": -4,
+    "zeta_A_prime_0": "3.6779497092049564748725729911435744170228213935718663782245091749961236713919676",
+    "prime_K120_vs_K140_abs_diff": "3.2346276326929881254e-44",
+    "crosscheck_s": 5,
+    "crosscheck_direct_N": 20000,
+    "crosscheck_abs_diff": "1.0541805663798750312e-34"
+  },
+  "zeta_determinant": {
+    "dimensionless_Det_zeta_A_hat": "0.025274742319419109765101881172232968834960758539121127080028840313639999276588153",
+    "definition": "exp[-zeta_A_prime(0)]",
+    "positive_FS_factor_used": true,
+    "signed_C12_phase_assigned": false,
+    "normalization_rescaling_law": "Det_zeta(c A_hat)=c^(zeta_A(0)) Det_zeta(A_hat)=c^(-4) Det_zeta(A_hat)",
+    "c2_ratio": "0.0625",
+    "normalization_independent": false
+  },
+  "findings": {
+    "reduced_scalar_zeta_regular_at_zero": true,
+    "regularized_scalar_FS_determinant_computed_for_frozen_normalization": true,
+    "finite_positive_dimensionless_determinant": true,
+    "normalization_dependence_nonzero": true,
+    "full_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "complete_zero_mode_quotient_constructed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "The already-reduced round-S3 lambda=1 scalar/conformal Faddeev-Senjanovic factor has a well-defined finite zeta determinant after freezing the dimensionless normalization A_hat=a^4|C12|. The spectral zeta is regular at zero with zeta_A(0)=-4. Therefore the numerical determinant is normalization dependent: multiplying the normalized operator by c changes the determinant by c^-4. This is a scoped regularization result only and is not the complete HMT FS determinant, one-loop effective action, or C9 closure.",
+  "next_gate": "Freeze the remaining non-scalar HMT gauge/constraint sectors on the same round-S3 lambda=1 background and construct the complete gauge-fixed constraint-matrix block inventory before attempting any product of sector determinants; retain the scalar normalization dependence as an explicit counterterm/measure-normalization datum."
+}

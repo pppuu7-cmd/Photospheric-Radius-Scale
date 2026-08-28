@@ -1,0 +1,13 @@
+{
+  "created_utc": "2026-08-28T15:31:23.178451+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_ZETA_DETERMINANT_TARGET_v1.json",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_reduced_scalar_zeta_determinant.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_ZETA_DETERMINANT_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_REDUCED_SCALAR_ZETA_DETERMINANT_2026-08-28.md",
+  "method": "spectral-zeta analytic continuation using a convergent binomial/Riemann-zeta expansion; direct original-spectrum cross-check at s=5; high-precision K=120 versus K=140 derivative convergence check",
+  "precision_decimal_digits": 180,
+  "regularization": "dimensionless zeta determinant of positive FS factor A_hat=a^4|C12|",
+  "normalization_dependence_retained": true,
+  "no_DSIR": true,
+  "no_threshold_change": true
+}
