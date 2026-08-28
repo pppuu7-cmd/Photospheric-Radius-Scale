@@ -1,0 +1,51 @@
+{
+  "checks": {
+    "D3_bilaplacian_kernel_exact": true,
+    "deltaR_tracepi_coefficient_is_1_minus_D": true,
+    "full_C9_closed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "generic_nonzero_mode_local_nondegeneracy_scoped": true,
+    "k0_global_zero_mode_detected": true,
+    "lambda1_flat_linearized_rank_change_detected": true,
+    "lambda1over3_critical_denominator_detected": true,
+    "production_k003_unblocked": false,
+    "soft_s_retest_allowed": false,
+    "threshold_changed": false
+  },
+  "classification": "RTK_C9_HMT_FLAT_SECOND_CLASS_KERNEL_RANK_CLASSIFIED_PASS_SCOPED",
+  "exact_derivation": {
+    "C12_D3": "-2*(1-lambda)/(kappa^2*(3*lambda-1))*partial^4 delta(x-y)",
+    "C12_fourier_D3": "-2*(1-lambda)/(kappa^2*(3*lambda-1))*k^4",
+    "C12_general": "((1-D)/kappa^2)*((1-lambda)/(D*lambda-1))*partial^4 delta(x-y)",
+    "Phi2_flat_linear_coefficient": "(1-lambda)/(D*lambda-1)",
+    "delta_R": "partial_i partial_j h_ij - partial^2 h",
+    "poisson_deltaR_tracepi": "(1-D) partial^2 delta(x-y)"
+  },
+  "gate": "RTK_C9_HMT_FLAT_SECOND_CLASS_KERNEL_RANK_AUDIT",
+  "generic_witness_kernel_coefficients": {
+    "0": "2/kappa2",
+    "1/2": "-2/kappa2",
+    "2": "2/(5*kappa2)"
+  },
+  "interpretation_limits": [
+    "This is a scoped exact linearized bracket/rank audit, not a full quantum measure calculation.",
+    "The lambda=1 rank change does not establish inconsistency, nonrenormalizability, or exclusion of HMT.",
+    "No ordinary-projectable-Horava beta functions are imported.",
+    "No HMT matter-interface coefficients are selected."
+  ],
+  "next_gate": "If the RTK/HMT branch retains lambda=1, freeze a lambda=1 constraint-bifurcation audit using the full source-locked constraints (or a preregistered nonflat/background-momentum expansion) before any determinant claim.",
+  "provenance": {
+    "generated_utc": "2026-08-28T10:33:44.174124+00:00",
+    "github_run_id": "33163808342",
+    "github_sha": "93aa10745ed7d592473e1b1cc85969424885ba35"
+  },
+  "rank_classification": {
+    "generic_lambda_not_1_or_1over3_and_k_nonzero": "nonzero local Fourier symbol; this 2x2 second-class block is locally nondegenerate at frozen flat-linearized order",
+    "k_equals_0": "bi-Laplacian symbol vanishes; global/zero-mode sector remains separate",
+    "lambda_equals_1": "flat-linearized C12 symbol vanishes; rank changes at this order and requires a separate constraint-bifurcation/nonlinear or nonflat-background audit",
+    "lambda_equals_1_over_3": "generic formula singular because the DeWitt-metric denominator vanishes; separate critical-lambda constrained analysis required"
+  },
+  "scope": "flat T3, D=3, projectable HMT gravitational constrained sector, linearized about zero curvature/momenta",
+  "target_commit": "e62ff6add973288f38ac8425d9aa0800be5db559"
+}

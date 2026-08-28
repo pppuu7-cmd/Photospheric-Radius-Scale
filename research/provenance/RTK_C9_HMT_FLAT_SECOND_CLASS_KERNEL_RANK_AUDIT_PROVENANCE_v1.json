@@ -1,0 +1,19 @@
+{
+  "DSIR_mixed": false,
+  "classification": "RTK_C9_HMT_FLAT_SECOND_CLASS_KERNEL_RANK_CLASSIFIED_PASS_SCOPED",
+  "frozen_criteria_changed": false,
+  "frozen_target_commit": "e62ff6add973288f38ac8425d9aa0800be5db559",
+  "gate": "RTK_C9_HMT_FLAT_SECOND_CLASS_KERNEL_RANK_AUDIT",
+  "generated_utc": "2026-08-28T10:33:44.174124+00:00",
+  "github_run_id": "33163808342",
+  "github_sha": "93aa10745ed7d592473e1b1cc85969424885ba35",
+  "script": "research/shadow/rtk_c9_hmt_flat_second_class_kernel_rank_audit.py",
+  "source_lock": {
+    "constraints": {
+      "Phi1II": "(1/kappa^2) sqrt(g) G(R); for the flat audit take G'(0)=1 and choose the constant term so the flat background obeys G(0)=0",
+      "Phi2II_flat_linear_part": "c_lambda nabla^2 pi with c_lambda=(1-lambda)/(D*lambda-1); curvature-times-momentum terms vanish to first order about R_ij=0, pi^ij=0"
+    },
+    "linear_F_limit": "F'(A)=1 (equivalently F(x)=x after auxiliary-field reduction), whose remaining Hamiltonian structure is identified with non-relativistic covariant/projectable HMT Ho\u0159ava-Lifshitz gravity",
+    "reference": "J. Kluson, Hamiltonian Analysis of U(1) Invariant F(R) Horava-Lifshitz Gravity, arXiv:1012.0473"
+  }
+}
