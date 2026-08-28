@@ -1,0 +1,2 @@
+Trigger frozen RTK C9 HMT lambda=1 round-S3 reduced scalar spectral-zeta determinant audit.
+Frozen target commit: 06ed86480e19a6b16d91307534bf1fe2d5b9d20c
