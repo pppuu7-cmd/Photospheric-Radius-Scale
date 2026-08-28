@@ -1,0 +1,59 @@
+name: RTK C9 projectability structural protection
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_v1.json'
+      - 'research/shadow/rtk_c9_projectable_structural_protection.py'
+      - '.github/rtk-c9-projectable-structural-protection-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact-symbolic dependency
+        run: python -m pip install sympy==1.13.3
+      - name: Verify frozen target predates execution
+        run: |
+          test -f research/theory_targets/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_v1.json
+          git log -1 --format='%H %s' -- research/theory_targets/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_v1.json
+      - name: Run exact structural-protection audit
+        run: python research/shadow/rtk_c9_projectable_structural_protection.py
+      - name: Persist checkpoint and provenance
+        env:
+          RUN_ID: ${{ github.run_id }}
+          EXECUTION_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path('.')
+          r=json.loads((root/'research/theory_results/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_RESULT_v1.json').read_text())
+          cp=root/'research/checkpoints/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_PASS_2026-08-28.md'
+          cp.write_text(f'''# RTK C9 projectability structural-protection checkpoint\n\n- Classification: `{r["classification"]}`\n- Status: `{r["status"]}`\n- Frozen target: `research/theory_targets/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_TARGET_v1.json`\n- GitHub Actions run: `{os.environ["RUN_ID"]}`\n- Execution SHA: `{os.environ["EXECUTION_SHA"]}`\n- threshold_changed: `false`\n\n## Exact scoped result\n\nFor exact projectability `N=N(t)`, every spatial derivative `D_i N` vanishes. Hence `a_i=D_i ln N=0`, and both C9 obstruction operators `a_i a^i sigma` and `D_i a^i sigma` vanish identically for arbitrary coefficients. This is structural elimination of this operator pair on projectable field space, not coefficient tuning.\n\n## Scope boundary\n\nThis does **not** close C9 for the original nonprojectable fixed U1+RTK action and does not establish full radiative naturalness of the projectable HMT candidate. Other radiatively dangerous gravitational/matter operators remain to be audited. It does not unblock soft-s or `k=0.03 Mpc^-1` production.\n\n## Next gate\n\nAudit whether the projectable HMT candidate introduces other radiatively dangerous scalar-sector operators or matter Lorentz-violating couplings that replace the eliminated sigma1/sigma2 problem; require a same-action counterterm/RG argument before any full C9 closure.\n''')
+          prov=root/'research/theory_results/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_PROVENANCE_v1.json'
+          prov.write_text(json.dumps({'run_id':os.environ['RUN_ID'],'execution_sha':os.environ['EXECUTION_SHA'],'target_commit':'49edda0431a5b1e479c838dce6b6282be3c3b900','threshold_changed':False},indent=2)+'\n')
+          PY
+      - name: Commit result checkpoint and provenance
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_RESULT_v1.json \
+                  research/theory_results/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_PROVENANCE_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_STRUCTURAL_PROTECTION_PASS_2026-08-28.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Record C9 projectability structural-protection result'
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
