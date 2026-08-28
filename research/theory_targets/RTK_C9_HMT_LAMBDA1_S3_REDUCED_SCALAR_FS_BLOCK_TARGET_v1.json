@@ -1,0 +1,46 @@
+{
+  "gate": "RTK C9 HMT lambda=1 S3 reduced scalar Faddeev-Senjanovic block after ell=1 gauge quotient",
+  "parent_head": "9ccb2322a0aa9320886b25309cd2468975297e75",
+  "scope": "On the previously frozen round-S3 lambda=1 scalar/conformal second-class block, explicitly remove the four ell=1 spatial-diffeomorphism gauge modes and classify the remaining scalar C12 spectrum and corresponding 2x2 Faddeev-Senjanovic block rank. This is not a full HMT determinant calculation.",
+  "frozen_background": {
+    "spatial_manifold": "round S3",
+    "dimension": 3,
+    "radius": "a",
+    "scalar_curvature": "R=6/a^2",
+    "lambda": 1,
+    "background_momentum": 0
+  },
+  "frozen_inputs": {
+    "scalar_C12_operator": "C12=(R/3)(-R-2 nabla^2)",
+    "scalar_harmonic_eigenvalue": "-nabla^2 Y_l=l(l+2)/a^2 Y_l",
+    "scalar_harmonic_degeneracy": "d_l=(l+1)^2",
+    "ell1_classification": "the four ell=1 conformal zero modes are spatial-diffeomorphism gauge directions in this frozen block",
+    "reduced_scalar_domain": "ell=0 and ell>=2"
+  },
+  "required_checks": [
+    "Derive exactly mu_l a^4 = 4[l(l+2)-3] = 4(l-1)(l+3) for the scalar C12 eigenvalue.",
+    "Verify mu_1=0 with degeneracy four and remove exactly this ell=1 scalar/conformal gauge subspace from the reduced domain.",
+    "Prove mu_l is nonzero for every integer ell>=0 with ell!=1; do not infer positivity because ell=0 is negative.",
+    "Record mu_0 a^4=-12 and mu_l>0 for every ell>=2.",
+    "For the antisymmetric 2x2 second-class mode block [[0,mu_l],[-mu_l,0]], verify det=mu_l^2>0 on the reduced domain.",
+    "Do not report a finite functional determinant: the infinite product over harmonics requires an explicit regularization and normalization prescription not frozen in this gate.",
+    "Do not claim the complete HMT gauge-fixed constraint matrix, complete zero-mode quotient, full Faddeev-Senjanovic determinant, full one-loop evaluability, or C9 closure.",
+    "Do not import ordinary projectable-Horava beta functions, choose unresolved HMT matter-interface coefficients, change frozen thresholds, allow soft-s retest, or unblock k=0.03 production."
+  ],
+  "pass_condition": "Exact spectral factorization proves that after quotienting the already-classified four ell=1 spatial-diffeomorphism gauge modes, the frozen scalar/conformal C12 block has no remaining zero eigenvalues and every reduced 2x2 FS mode block is nondegenerate, while all full-theory determinant and C9 claims remain open.",
+  "fail_condition": "Any reduced scalar harmonic has mu_l=0, the ell=1 quotient does not match the prior four-dimensional gauge classification, the 2x2 block determinant is not mu_l^2, or the implementation weakens any frozen semantic restriction.",
+  "frozen_semantics": {
+    "regularized_scalar_FS_determinant_computed": false,
+    "full_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "complete_zero_mode_quotient_constructed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "no_DSIR": true
+  }
+}
