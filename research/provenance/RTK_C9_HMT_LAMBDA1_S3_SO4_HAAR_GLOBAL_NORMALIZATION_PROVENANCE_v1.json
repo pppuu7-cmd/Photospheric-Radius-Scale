@@ -1,0 +1,12 @@
+{
+  "created_utc": "2026-08-28T18:27:43.380626+00:00",
+  "target_frozen_commit": "58e47520ca5f3ff3f5fc31b63b37a7b6d764d6d7",
+  "parent_result_commit": "c3eb6d08fb60c19f54353b90da2f9194d45db71d",
+  "script": "/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/research/shadow/rtk_c9_hmt_lambda1_s3_so4_haar_global_normalization.py",
+  "method": "exact compact-group volume recursion plus six-dimensional metric scaling",
+  "regularization": "none",
+  "global_group": "SO(4)",
+  "canonical_metric": "-1/2 Tr",
+  "generator_period": "2*pi",
+  "no_DSIR": true
+}

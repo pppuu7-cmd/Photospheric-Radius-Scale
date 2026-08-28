@@ -1,0 +1,92 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_SO4_HAAR_GLOBAL_NORMALIZATION_FIXED_BY_EXPLICIT_CONVENTION_PASS_SCOPED",
+  "frozen_target_commit": "58e47520ca5f3ff3f5fc31b63b37a7b6d764d6d7",
+  "parent_result_commit": "c3eb6d08fb60c19f54353b90da2f9194d45db71d",
+  "canonical_metric": "<X,Y>=-1/2 Tr(XY)",
+  "global_group": "SO(4)",
+  "generator_period": "2*pi",
+  "volume_chain": {
+    "SO2": "2*pi",
+    "SO3": "8*pi^2",
+    "SO4": "16*pi^4"
+  },
+  "parent_L2_metric_scale": "q=pi^2*a^5",
+  "sqrt_det_Gram": "q^3=pi^6*a^15",
+  "residual_orbit_volume": "16*pi^10*a^15",
+  "numerical_witnesses": [
+    {
+      "a": 0.5,
+      "q": 0.30842513753404244,
+      "sqrt_det_Gram": 0.029339269823465096,
+      "SO4_orbit_volume_L2": 45.72658568168115
+    },
+    {
+      "a": 1.0,
+      "q": 9.869604401089358,
+      "sqrt_det_Gram": 961.3891935753043,
+      "SO4_orbit_volume_L2": 1498368.759617328
+    },
+    {
+      "a": 2.0,
+      "q": 315.82734083485946,
+      "sqrt_det_Gram": 31502801.09507557,
+      "SO4_orbit_volume_L2": 49098547515.1406
+    },
+    {
+      "a": 3.25,
+      "q": 3578.6279559508507,
+      "sqrt_det_Gram": 45829978219.464905,
+      "SO4_orbit_volume_L2": 71428104327459.28
+    }
+  ],
+  "rescaling_witnesses": [
+    {
+      "c": 0.25,
+      "combined_measure_ratio": 1.0
+    },
+    {
+      "c": 0.5,
+      "combined_measure_ratio": 1.0
+    },
+    {
+      "c": 2.0,
+      "combined_measure_ratio": 1.0
+    },
+    {
+      "c": 7.0,
+      "combined_measure_ratio": 1.0
+    }
+  ],
+  "scientific_checks": {
+    "canonical_SO3_volume_8pi2": true,
+    "canonical_SO4_volume_16pi4": true,
+    "metric_scaling_exponent_dim_over_2_is_3": true,
+    "L2_orbit_volume_16pi10a15": true,
+    "parent_factorization_equivalent": true,
+    "reciprocal_basis_coordinate_rescaling_invariant": true
+  },
+  "findings": {
+    "SO4_Haar_global_convention_explicitly_frozen": true,
+    "dimensionless_SO4_volume_computed": true,
+    "dimensionless_SO4_volume": "16*pi^4",
+    "L2_scaled_residual_SO4_orbit_volume_computed": true,
+    "L2_scaled_residual_SO4_orbit_volume": "16*pi^10*a^15",
+    "residual_SO4_zero_mode_quotient_normalization_fixed_under_frozen_convention": true,
+    "normalization_is_convention_independent_physical_observable": false,
+    "signed_or_complex_FP_phase_assigned": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "Once SO(4), the 2*pi embedding-generator periodicity, and the canonical -1/2 Tr Lie metric are prospectively frozen, the residual six-Killing-mode orbit has dimensionless Haar/Riemannian volume 16*pi^4 and L2-scaled volume 16*pi^10*a^15. This fixes the zero-mode quotient normalization only under that explicit convention; it is not a convention-independent observable and does not close the signed FP, TT Hessian, full one-loop, or C9 gates.",
+  "next_gate": "Audit the remaining spatial FP signed/phase information (or prove only absolute determinant is needed for the Euclidean measure) before combining with the already scoped FS scalar factor; TT Hessian remains separately open."
+}
