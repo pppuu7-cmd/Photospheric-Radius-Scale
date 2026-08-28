@@ -1,0 +1,124 @@
+name: RTK C9 HMT S3 TT background admissibility source lock
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock_target.md'
+      - 'research/scripts/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.py'
+      - '.github/workflows/rtk-c9-hmt-lambda1-s3-tt-background-admissibility-source-lock.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frozen branch
+        uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+
+      - name: Verify target was frozen before analyzer
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET_COMMIT='9be2c6693dd48d5279732a2be094af6a7d9c6a28'
+          TARGET='research/theory_targets/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock_target.md'
+          SCRIPT='research/scripts/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.py'
+          git merge-base --is-ancestor "$TARGET_COMMIT" HEAD
+          test "$(git log -1 --format=%H -- "$TARGET")" = "$TARGET_COMMIT"
+          if git cat-file -e "$TARGET_COMMIT:$SCRIPT" 2>/dev/null; then
+            echo 'Analyzer existed at target-freeze commit; prospective freeze violated.' >&2
+            exit 1
+          fi
+          grep -q 'Status: FROZEN BEFORE EXECUTION' "$TARGET"
+          grep -q 'full_TT_hessian_derived = false' "$TARGET"
+          grep -q 'full_C9_closed = false' "$TARGET"
+
+      - name: Run exact scoped analyzer
+        run: python research/scripts/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.py
+
+      - name: Enforce scientific scope and exact assertions
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/theory_results/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.json')
+          d=json.loads(p.read_text())
+          assert d['classification']=='RTK_C9_HMT_LAMBDA1_S3_TT_BACKGROUND_ADMISSIBILITY_A_CONSTRAINT_SOURCE_LOCKED_PASS_SCOPED'
+          r=d['exact_result']
+          assert r['A_constraint_required_Omega']=='Omega = 3/a^2'
+          assert r['TT_delta_R']==0
+          assert r['TT_delta_sqrt_g']==0
+          assert r['linear_TT_A_constraint_obstruction'] is False
+          for x in r['sample_exact_family_checks']:
+              assert x['R_minus_2Omega']=='0'
+          n=d['frozen_nonclaims']
+          required_false=[
+              'full_TT_hessian_derived','tt_spectrum_computed','tt_determinant_computed',
+              'background_metric_stationarity_fully_checked','full_FP_determinant_computed',
+              'full_FS_determinant_computed','complete_HMT_gauge_fixed_constraint_matrix_constructed',
+              'full_HMT_one_loop_evaluable','full_C9_closed','soft_s_retest_allowed',
+              'production_k003_unblocked','threshold_changed'
+          ]
+          assert all(n[k] is False for k in required_false)
+          print('Scoped scientific assertions: PASS')
+          PY
+
+      - name: Persist checkpoint and provenance
+        shell: bash
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          EXECUTED_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          result_path=Path('research/theory_results/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.json')
+          d=json.loads(result_path.read_text())
+          checkpoint=Path('research/checkpoints/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.md')
+          checkpoint.parent.mkdir(parents=True, exist_ok=True)
+          checkpoint.write_text(f'''# RTK C9 HMT λ=1 round-S3 TT background admissibility source-lock checkpoint\n\nClassification: `{d["classification"]}`\n\n## Exact scoped result\n\n- Source-locked HMT A term: `-A(R-2 Omega)`.\n- A equation: `R=2 Omega`.\n- Round S3 has `R=6/a^2`, hence admissibility requires `Omega=3/a^2`.\n- For TT `h_ij` on the frozen Einstein background, `delta R=0` and `delta sqrt(g)=0`.\n- Therefore there is no linear TT obstruction from the A constraint once the background A equation holds.\n\n## Boundary of the result\n\nThis is a prerequisite/source-lock pass, not a TT Hessian calculation. Background metric stationarity, A0, the concrete higher-spatial-derivative potential/couplings, the TT spectrum and determinant remain open. Full FP/FS, one-loop evaluability and full C9 remain open; soft-s and k=0.03 production remain blocked; thresholds are unchanged.\n\n## Next gate\n\nSource-lock the concrete HMT spatial-potential convention and derive the static round-S3 metric stationarity equation including A0. Only after that equation is satisfied may the physical TT quadratic Hessian be derived.\n''', encoding='utf-8')
+          prov={
+            'classification':d['classification'],
+            'branch':'rtk-class-build',
+            'parent_scientific_frontier':'1d4f3354ef43d38646da06fc2f98dd9656483e82',
+            'frozen_target_commit':'9be2c6693dd48d5279732a2be094af6a7d9c6a28',
+            'executed_sha':os.environ['EXECUTED_SHA'],
+            'github_actions_run_id':os.environ['RUN_ID'],
+            'github_actions_run_attempt':os.environ['RUN_ATTEMPT'],
+            'sources':[
+              {'title':'General Covariance in Quantum Gravity at a Lifshitz Point','authors':'P. Horava; C. M. Melby-Thompson','doi':'10.1103/PhysRevD.82.064027','arxiv':'1007.2410'},
+            ],
+            'source_locked_formula':'S contains -A(R-2 Omega); varying A gives R=2 Omega',
+            'computation':'exact rational/background tensor identity audit; no fitted or imported HMT potential couplings',
+            'scope':'RTK C9 HMT TT-background prerequisite only; DSIR excluded',
+            'regularization':'none required for this gate',
+          }
+          pp=Path('research/provenance/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.json')
+          pp.parent.mkdir(parents=True, exist_ok=True)
+          pp.write_text(json.dumps(prov,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+
+      - name: Commit persisted result checkpoint and provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            research/theory_results/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.json \
+            research/checkpoints/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.md \
+            research/provenance/rtk_c9_hmt_lambda1_s3_tt_background_admissibility_source_lock.json
+          if git diff --cached --quiet; then
+            echo 'No persistence changes.'
+            exit 0
+          fi
+          git commit -m 'Record C9 HMT S3 TT background admissibility source-lock audit'
+          git push origin HEAD:rtk-class-build
