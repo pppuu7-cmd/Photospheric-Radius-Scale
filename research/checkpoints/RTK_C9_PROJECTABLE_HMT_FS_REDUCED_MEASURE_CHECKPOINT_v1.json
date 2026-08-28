@@ -1,0 +1,10 @@
+{
+  "classification": "RTK_C9_PROJECTABLE_HMT_FS_MEASURE_FORM_KNOWN_BUT_EXPLICIT_HMT_DETERMINANT_NOT_SOURCE_LOCKED_PASS_SCOPED",
+  "confirmed_frontier": "Faddeev-Senjanovic measure structure is known, but the HMT-specific second-class determinant is not yet source-locked/instantiated.",
+  "full_C9_closed": false,
+  "next_scientific_gate": "Freeze a fixed projectable-HMT background and explicitly derive the relevant second-class Poisson-bracket kernel C_ab before attempting any determinant or one-loop Hessian calculation.",
+  "production_k003_unblocked": false,
+  "schema": "RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_CHECKPOINT_v1",
+  "soft_s_retest_allowed": false,
+  "timestamp_utc": "2026-08-28T08:27:34.497541+00:00"
+}

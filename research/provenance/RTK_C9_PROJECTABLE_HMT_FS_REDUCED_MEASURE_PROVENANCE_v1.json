@@ -1,0 +1,10 @@
+{
+  "method": "source-lock audit plus universal Faddeev-Senjanovic constrained-measure identity",
+  "posthoc_RTK_fit_used": false,
+  "primary_HMT_source": "Mukohyama, Namba, Saitou, Watanabe, arXiv:1504.07357 (Hamiltonian constraint analysis; projectable discussion/appendix)",
+  "quantization_crosscheck": "Bellorin & Droguett, arXiv:1912.06749 (second-class Horava quantization requires determinant/ghost measure; different theory used only as formal-method crosscheck)",
+  "schema": "RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_PROVENANCE_v1",
+  "target_path": "research/theory_targets/RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_TARGET_v1.json",
+  "target_sha256": "eb07a140216f93bbef3192df82639fe907e86142d1963acbbcd86c2bee8ae9cd",
+  "timestamp_utc": "2026-08-28T08:27:34.497541+00:00"
+}

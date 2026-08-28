@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "A_multiplier_delta_function_is_not_the_complete_FS_measure": true,
+    "FS_measure_requires_second_class_Poisson_bracket_matrix": true,
+    "first_class_FDiff_gauge_fixing_must_be_treated_separately": true,
+    "full_C9_closed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_field_dependent_second_class_Cab_kernel_source_locked_for_one_loop_background": false,
+    "matter_interface_coefficients_selected": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "production_k003_unblocked": false,
+    "projectable_HMT_constraint_structure_source_locked": true,
+    "soft_s_retest_allowed": false,
+    "target_frozen_before_execution": true,
+    "threshold_changed": false,
+    "unique_sqrt_det_Cab_functional_factor_source_locked": false
+  },
+  "classification": "RTK_C9_PROJECTABLE_HMT_FS_MEASURE_FORM_KNOWN_BUT_EXPLICIT_HMT_DETERMINANT_NOT_SOURCE_LOCKED_PASS_SCOPED",
+  "formal_measure_structure": {
+    "first_class_sector": "requires independent gauge conditions and associated FP/BRST determinant",
+    "nonclaim": "The universal Faddeev-Senjanovic formula does not by itself provide the HMT-specific functional determinant.",
+    "second_class_sector": "Dq Dp delta[Theta] sqrt(det C), with C_ab(x,y)={Theta_a(x),Theta_b(y)}"
+  },
+  "frozen_target_sha256": "eb07a140216f93bbef3192df82639fe907e86142d1963acbbcd86c2bee8ae9cd",
+  "gate": "RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_v1",
+  "interpretation": "The measure formula is structurally fixed, but the current HMT source lock is insufficient to instantiate a unique background-dependent second-class determinant for the one-loop problem.",
+  "pass_scoped": true,
+  "remaining_blockers": [
+    "Explicit HMT second-class Poisson-bracket kernel C_ab on a fixed background and its functional determinant.",
+    "Compatibility with a complete FDiff gauge fixing and quadratic HMT Hessian.",
+    "Independent physical-matter-interface specification and counterterm basis."
+  ],
+  "schema": "RTK_C9_PROJECTABLE_HMT_FS_REDUCED_MEASURE_RESULT_v1",
+  "timestamp_utc": "2026-08-28T08:27:34.497541+00:00"
+}
