@@ -1,0 +1,57 @@
+name: RTK C9 projectable gravity-parent RG source-lock
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_TARGET_v1.json'
+      - 'research/shadow/rtk_c9_projectable_gravity_parent_rg_source_lock.py'
+      - '.github/workflows/rtk-c9-projectable-gravity-parent-rg-source-lock.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  source-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: rtk-class-build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET_COMMIT=8f75f1249a38fa6871fb6a164800a1b2da55e932
+          PATH_TGT=research/theory_targets/RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_TARGET_v1.json
+          git cat-file -e "${TARGET_COMMIT}^{commit}"
+          git show "${TARGET_COMMIT}:${PATH_TGT}" > /tmp/frozen_target.json
+          cmp /tmp/frozen_target.json "${PATH_TGT}"
+      - name: Run scoped RG source-lock analyzer
+        run: python research/shadow/rtk_c9_projectable_gravity_parent_rg_source_lock.py
+      - name: Write provenance
+        shell: bash
+        run: |
+          cat > research/theory_results/RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_PROVENANCE_v1.json <<EOF
+          {
+            "run_id": ${{ github.run_id }},
+            "execution_sha": "${{ github.sha }}",
+            "target_commit": "8f75f1249a38fa6871fb6a164800a1b2da55e932",
+            "threshold_changed": false
+          }
+          EOF
+      - name: Persist result and checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_RESULT_v1.json \
+                  research/theory_results/RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_PROVENANCE_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_GRAVITY_PARENT_RG_SOURCE_LOCK_2026-08-28.md
+          git commit -m 'Record C9 projectable gravity-parent RG source-lock' || exit 0
+          git push origin HEAD:rtk-class-build
