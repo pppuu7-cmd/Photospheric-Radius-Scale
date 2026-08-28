@@ -1,0 +1,68 @@
+{
+  "gate": "RTK_C9_HMT_FLAT_SECOND_CLASS_KERNEL_RANK_AUDIT",
+  "version": 1,
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "scope": "projectable HMT gravitational constrained sector only; no DSIR; no matter-interface coefficient selection",
+  "scientific_question": "On a fixed flat projectable HMT background, what is the linearized distributional Poisson-bracket kernel C12(x,y)={Phi1II(x),Phi2II(y)}, and for which lambda and Fourier modes is that local kernel nondegenerate?",
+  "source_locked_input": {
+    "reference": "J. Kluson, Hamiltonian Analysis of U(1) Invariant F(R) Horava-Lifshitz Gravity, arXiv:1012.0473",
+    "linear_F_limit": "F'(A)=1 (equivalently F(x)=x after auxiliary-field reduction), whose remaining Hamiltonian structure is identified with non-relativistic covariant/projectable HMT Hořava-Lifshitz gravity",
+    "constraints": {
+      "Phi1II": "(1/kappa^2) sqrt(g) G(R); for the flat audit take G'(0)=1 and choose the constant term so the flat background obeys G(0)=0",
+      "Phi2II_flat_linear_part": "c_lambda nabla^2 pi with c_lambda=(1-lambda)/(D*lambda-1); curvature-times-momentum terms vanish to first order about R_ij=0, pi^ij=0"
+    }
+  },
+  "frozen_background": {
+    "spatial_dimension_D": 3,
+    "topology": "flat T^3 with periodic boundary conditions",
+    "metric": "g_ij=delta_ij+h_ij",
+    "projectable_lapse": "N=N(t)",
+    "background_shift": 0,
+    "background_A": 0,
+    "U1_gauge": "nu=0",
+    "background_momenta": 0,
+    "background_curvature": 0,
+    "flat_constraint_constant": "chosen so G(0)=0",
+    "zero_mode_policy": "k=0 is explicitly excluded from local invertibility claims and remains a separate global/zero-mode question"
+  },
+  "canonical_convention": "{h_ij(x),pi^{kl}(y)}=1/2(delta_i^k delta_j^l+delta_i^l delta_j^k) delta^(D)(x-y)",
+  "frozen_derivation_checks": [
+    "derive delta R = partial_i partial_j h_ij - partial^2 h on the frozen flat background",
+    "derive {delta R(x),pi(y)}=(1-D) partial^2 delta(x-y), pi=delta_ij pi^ij",
+    "derive C12(x,y)=((1-D)/kappa^2)*((1-lambda)/(D*lambda-1))*partial^4 delta(x-y) up to the explicitly tracked Poisson/Fourier sign convention",
+    "for D=3 derive the nonzero-mode Fourier symbol proportional to -2*(1-lambda)/(kappa^2*(3*lambda-1))*k^4 up to the same tracked sign convention",
+    "classify generic lambda != 1,1/3 and k!=0 separately from lambda=1, lambda=1/3, and k=0",
+    "do not hide or regularize a lambda=1 rank change by selecting a convenient lambda after seeing the result"
+  ],
+  "pass_semantics": {
+    "allowed": [
+      "PASS_SCOPED if the exact linearized algebra reproduces the frozen bi-Laplacian kernel and its rank classification",
+      "report that generic lambda != 1,1/3 has a nonzero local Fourier symbol for k!=0 if derived",
+      "report that lambda=1 makes this particular flat linearized kernel vanish if derived"
+    ],
+    "forbidden": [
+      "claim that lambda=1 HMT is inconsistent, nonrenormalizable, or ruled out",
+      "claim that the full Faddeev-Senjanovic determinant has been computed",
+      "claim that the full HMT one-loop problem is evaluable",
+      "close full C9 radiative naturalness",
+      "import ordinary projectable-Horava beta functions into HMT",
+      "select HMT matter-interface coefficients",
+      "allow soft-s retest",
+      "unblock k=0.03 Mpc^-1 production",
+      "change any previously frozen RTK threshold"
+    ]
+  },
+  "critical_cases": {
+    "lambda_equals_1": "must be reported independently; vanishing of the flat linearized Phi2II Laplacian coefficient is a rank/evaluability issue for this kernel only",
+    "lambda_equals_1_over_3": "critical DeWitt-metric denominator; excluded from the generic formula and requires a separate constrained analysis",
+    "k_equals_0": "global zero mode; no local invertibility claim"
+  },
+  "persistent_flags_required": {
+    "threshold_changed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false
+  }
+}
