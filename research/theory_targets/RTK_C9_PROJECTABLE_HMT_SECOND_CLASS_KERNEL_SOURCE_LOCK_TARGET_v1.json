@@ -1,0 +1,34 @@
+{
+  "gate_id": "RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_KERNEL_SOURCE_LOCK_v1",
+  "branch": "rtk-class-build",
+  "parent_frontier": "da17ca2421eb5f7e50f58ba5d77d8c50cde34df9",
+  "scope": "C9 quantum evaluability only; projectable HMT gravitational constrained sector",
+  "frozen_question": "Does the source-locked Hamiltonian literature identify a concrete HMT-equivalent second-class constraint pair and provide an explicit distributional Poisson-bracket kernel sufficient to define its Faddeev-Senjanovic determinant on a fixed background?",
+  "source_lock": [
+    {
+      "id": "Kluson_1012.0473",
+      "claim": "U(1)-invariant projectable F(R)-HL Hamiltonian analysis; special F(x)=x has Hamiltonian structure coinciding with non-relativistic covariant HL/HMT; identifies Phi_1^II and Phi_2^II as second-class and states their bracket is nonzero."
+    },
+    {
+      "id": "Kluson_1011.1857",
+      "claim": "Hamiltonian analysis of non-relativistic covariant Hořava-Lifshitz gravity with first- and second-class constraints and correct physical degree count."
+    }
+  ],
+  "frozen_pass_checks": {
+    "HMT_equivalent_second_class_pair_identified": true,
+    "pair_noncommutativity_source_locked": true,
+    "explicit_background_distributional_kernel_source_locked": false,
+    "functional_determinant_computed": false
+  },
+  "required_classification": "RTK_C9_PROJECTABLE_HMT_SECOND_CLASS_PAIR_IDENTIFIED_EXPLICIT_KERNEL_NOT_SOURCE_LOCKED_PASS_SCOPED",
+  "guardrails": {
+    "do_not_claim_HMT_nonrenormalizable": true,
+    "do_not_import_parent_projectable_beta_functions": true,
+    "do_not_close_full_C9": true,
+    "do_not_select_matter_interface_coefficients": true,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false
+  },
+  "next_if_pass": "Derive the explicit Poisson-bracket operator from the source-locked definitions of the HMT-equivalent second-class pair on a preregistered flat/projectable background, including boundary/zero-mode assumptions, before attempting any determinant evaluation."
+}
