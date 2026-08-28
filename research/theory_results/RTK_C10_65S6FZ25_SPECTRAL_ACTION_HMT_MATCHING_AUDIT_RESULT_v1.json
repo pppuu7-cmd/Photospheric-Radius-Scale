@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "generic_fpdiff_not_reinterpreted_as_hmt_u1": true,
+    "new_input_preregistered": true,
+    "no_rtk_response_or_softs_selection": true,
+    "parent_exact": true,
+    "soft_s_and_k003_stay_blocked": true,
+    "threshold_unchanged": true
+  },
+  "classification": "C10_65S6FZ25_INDEPENDENT_SPECTRAL_ACTION_NO_HMT_MATCH_MAP_PARTIAL_PASS_SCOPED",
+  "core_action_principle_checks": {
+    "foliation_preserving_diffeomorphisms": true,
+    "generalized_Dirac_operator": true,
+    "gravity_and_matter_generated_together": true,
+    "gravity_matter_parameters_related": true,
+    "source_retrieved": true,
+    "spectral_action_principle": true
+  },
+  "gate": "C10.65s6fZ25",
+  "hmt_matching_checks": {
+    "explicit_HMT_gauge_field_A_or_equivalent": false,
+    "explicit_Newtonian_prepotential_or_equivalent": false,
+    "explicit_map_to_HMT_physical_matter_interface": false,
+    "explicit_projectable_HMT_U1": false,
+    "unique_a1_a2_equivalent_relation": false
+  },
+  "interpretation": "The spectral-action source is a genuinely independent action-level input: one generalized Dirac operator constructs both gravity and matter sectors and relates their parameters. However, the audited primary-source metadata does not explicitly supply the projectable HMT local-U(1) structure, Newtonian prepotential/gauge-field interface, or a unique map to the HMT physical-matter coefficients. Therefore it cannot presently select the surviving a1,a2-equivalent interface without an additional explicit derivation. This is a scoped matching-map result, not a no-go for spectral geometry or HMT.",
+  "next_gate": "No HMT coefficient selection is authorized from Z25. A future gate may test another genuinely independent microscopic/action principle, or a full explicit derivation extending the spectral-action construction to projectable HMT U(1), but it must be preregistered before RTK response comparison.",
+  "production_k003_unblocked": false,
+  "provenance": {
+    "github_actions_run_attempt": 1,
+    "github_actions_run_id": 33129551943,
+    "threshold_changed": false,
+    "trigger_head_sha": "0b0c706f2a42c040f95a46d4c38e995df2eb33ff",
+    "workflow": "rtk-c10-65s6fz25-spectral-action-hmt-matching-audit.yml"
+  },
+  "s6ft_embedding_ready": false,
+  "schema": "RTK_C10_65S6FZ25_SPECTRAL_ACTION_HMT_MATCHING_AUDIT_RESULT_v1",
+  "soft_s_retest_allowed": false,
+  "source": {
+    "api_url": "https://export.arxiv.org/api/query?id_list=1508.00137",
+    "arxiv": "1508.00137",
+    "retrieved": true
+  },
+  "threshold_changed": false
+}
