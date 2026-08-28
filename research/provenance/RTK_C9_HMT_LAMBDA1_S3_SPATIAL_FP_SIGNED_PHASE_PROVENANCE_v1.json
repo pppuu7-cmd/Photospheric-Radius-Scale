@@ -1,0 +1,10 @@
+{
+  "created_utc": "2026-08-28T19:29:03.998042+00:00",
+  "target_frozen_commit": "de512708872f214afb26857bee4f707b03c3ea86",
+  "scientific_parent_head": "83ae30fee6d77a3ea42ede57823bedc2875abfdf",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_spatial_fp_signed_phase.py",
+  "method": "exact harmonic sign derivation plus zeta-regularized negative-mode phase under principal spectral cut; -M finite-negative-mode cross-check",
+  "regularization": "principal spectral cut with inherited zeta continuations at s=0",
+  "no_DSIR": true,
+  "no_threshold_change": true
+}
