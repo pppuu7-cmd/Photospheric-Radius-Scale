@@ -1,0 +1,43 @@
+{
+  "gate": "RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT",
+  "classification": "RTK_C9_HMT_LAMBDA1_FLAT_CONSTRAINT_LINEARIZATION_DEGENERATE_PASS_SCOPED",
+  "scope": "projectable HMT gravitational constrained sector only; lambda=1 branch; no DSIR; no matter-interface coefficient selection",
+  "checks": {
+    "lambda1_laplacian_pi_coefficient_vanishes_exactly": true,
+    "lambda1_exact_Phi2_retains_curvature_momentum_terms": true,
+    "flat_zero_momentum_Phi2_has_no_linear_term": true,
+    "flat_linearized_C12_rank_loss_explained_by_missing_Opi_term": true,
+    "new_first_class_symmetry_proven": false,
+    "source_full_analysis_keeps_pair_second_class": true,
+    "flat_lambda1_background_classified_linearization_degenerate_scoped": true,
+    "threshold_changed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false
+  },
+  "exact_lambda1_constraint": {
+    "general_D": "Phi2II = -2 R_ij pi^ij + 2/(D-1) R pi",
+    "D3": "Phi2II = -2 R_ij pi^ij + R pi",
+    "laplacian_pi_coefficient": "0",
+    "first_nonzero_order_about_flat_zero_momentum": "O(delta g * delta pi) = O(epsilon^2)"
+  },
+  "interpretation": {
+    "established": "At lambda=1 on the frozen flat zero-momentum background the exact HMT-limit secondary constraint survives nonlinearly but has no linear perturbation. Therefore the previously observed vanishing linearized bracket is a linearization/rank degeneracy and is not sufficient evidence for a new first-class gauge symmetry.",
+    "not_established": "No exact lambda=1 first-class closure theorem, full FS determinant, or full one-loop HMT quantization is established.",
+    "next_gate": "Freeze a minimally nonflat or nonzero-background-momentum lambda=1 witness background satisfying the constraint surface and compute the leading nonzero C12 operator/rank there; keep k=0/global sector separate."
+  },
+  "source_lock": {
+    "reference": "J. Kluson et al., U(1) Invariant F(R) Horava-Lifshitz Gravity, arXiv:1012.0473, Sec. 5",
+    "HMT_limit": "F'(A)=1 after auxiliary-field reduction, for which the remaining Hamiltonian structure is identified with non-relativistic covariant/projectable HMT Horava-Lifshitz gravity",
+    "Phi1II": "(1/kappa^2) sqrt(g) G(R); for the HMT curvature constraint take G'(R) nonzero and flat background obeying G(0)=0",
+    "Phi2II_exact_HMT_limit": "-2 R_ij pi^ij + [2 lambda/(D lambda-1)] R pi + [(1-lambda)/(lambda D-1)] nabla^2 pi",
+    "source_constraint_classification": "Phi1II and Phi2II are identified as second-class in the full Hamiltonian analysis; preservation fixes multipliers and no additional constraint is generated in the generic full phase-space analysis"
+  },
+  "provenance": {
+    "generated_utc": "2026-08-28T11:24:15.762674+00:00",
+    "github_run_id": "33167003454",
+    "github_sha": "87c39f20941e000cc0388165dbf7f33ed748855f"
+  }
+}

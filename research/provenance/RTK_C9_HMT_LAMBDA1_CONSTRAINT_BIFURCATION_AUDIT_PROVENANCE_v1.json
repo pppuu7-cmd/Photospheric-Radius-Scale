@@ -1,0 +1,18 @@
+{
+  "gate": "RTK_C9_HMT_LAMBDA1_CONSTRAINT_BIFURCATION_AUDIT",
+  "classification": "RTK_C9_HMT_LAMBDA1_FLAT_CONSTRAINT_LINEARIZATION_DEGENERATE_PASS_SCOPED",
+  "DSIR_mixed": false,
+  "frozen_target_commit": "a1d97b870d01de6da3ce4c62588791aa05bc90f3",
+  "script": "/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/research/shadow/rtk_c9_hmt_lambda1_constraint_bifurcation_audit.py",
+  "generated_utc": "2026-08-28T11:24:15.762674+00:00",
+  "github_run_id": "33167003454",
+  "github_sha": "87c39f20941e000cc0388165dbf7f33ed748855f",
+  "frozen_criteria_changed": false,
+  "source_lock": {
+    "reference": "J. Kluson et al., U(1) Invariant F(R) Horava-Lifshitz Gravity, arXiv:1012.0473, Sec. 5",
+    "HMT_limit": "F'(A)=1 after auxiliary-field reduction, for which the remaining Hamiltonian structure is identified with non-relativistic covariant/projectable HMT Horava-Lifshitz gravity",
+    "Phi1II": "(1/kappa^2) sqrt(g) G(R); for the HMT curvature constraint take G'(R) nonzero and flat background obeying G(0)=0",
+    "Phi2II_exact_HMT_limit": "-2 R_ij pi^ij + [2 lambda/(D lambda-1)] R pi + [(1-lambda)/(lambda D-1)] nabla^2 pi",
+    "source_constraint_classification": "Phi1II and Phi2II are identified as second-class in the full Hamiltonian analysis; preservation fixes multipliers and no additional constraint is generated in the generic full phase-space analysis"
+  }
+}
