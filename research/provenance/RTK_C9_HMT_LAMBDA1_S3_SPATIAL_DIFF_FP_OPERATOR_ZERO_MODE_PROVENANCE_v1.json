@@ -1,0 +1,13 @@
+{
+  "created_utc": "2026-08-28T16:49:12.485590+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_TARGET_v1.json",
+  "target_frozen_commit": "0afc88e5602b4d689e977fa5a6606771c1242088",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_spatial_diff_fp_operator_zero_mode.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_DIFF_FP_OPERATOR_ZERO_MODE_2026-08-28.md",
+  "method": "exact covariant FP variation plus round-S3 scalar/transverse-vector harmonic decomposition and exact integer zero-mode classification",
+  "prior_ell1_gauge_target_commit": "620982d5793c05f8da6095b5db21f9e399d9795a",
+  "no_DSIR": true,
+  "no_threshold_change": true,
+  "gauge_changed_after_evaluation": false
+}
