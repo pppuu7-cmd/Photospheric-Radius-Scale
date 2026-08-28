@@ -1,0 +1,59 @@
+{
+  "gate": "RTK C9 HMT lambda=1 S3 reduced scalar Faddeev-Senjanovic zeta determinant",
+  "parent_head": "ae2011561fee83c16c52d1f8d662f3d6e96e08d1",
+  "scope": "For the already-proven nondegenerate reduced scalar/conformal second-class block on round S3, freeze a dimensionless spectral-zeta prescription for the positive Faddeev-Senjanovic factor sqrt(det C)=|mu_l| and determine its zeta-regularized determinant. This gate does not construct the complete HMT constraint matrix or full HMT determinant.",
+  "frozen_background": {
+    "spatial_manifold": "round S3",
+    "dimension": 3,
+    "radius": "a",
+    "scalar_curvature": "R=6/a^2",
+    "lambda": 1,
+    "background_momentum": 0
+  },
+  "frozen_spectrum": {
+    "dimensionless_operator": "A_hat = a^4 |C12| on the reduced scalar domain",
+    "eigenvalue": "lambda_l = |4(l-1)(l+3)|",
+    "degeneracy": "d_l=(l+1)^2",
+    "domain": "l=0 and l>=2; l=1 gauge modes excluded",
+    "ell0_eigenvalue": 12,
+    "ell_ge2_eigenvalue": "4(l-1)(l+3)>0"
+  },
+  "frozen_regularization": {
+    "spectral_zeta": "zeta_A(s)=sum_{l in reduced domain} d_l lambda_l^(-s)",
+    "initial_convergence_half_plane": "Re(s)>3/2",
+    "determinant_definition": "Det_zeta(A_hat)=exp[-zeta_A'(0)] provided analytic continuation is regular at s=0",
+    "FS_interpretation": "This determinant is the regularized product of sqrt(det [[0,mu_l],[-mu_l,0]])=|mu_l| after multiplication by a^4 per eigenvalue.",
+    "signed_C12_phase": "not used; the ell=0 sign is removed by the positive FS square-root factor",
+    "normalization": "A_hat=a^4|C12| is frozen; any multiplicative rescaling c A_hat must be tracked through zeta_A(0) and is not silently identified with the same determinant"
+  },
+  "required_checks": [
+    "Rewrite with n=l+1 as zeta_A(s)=4^(-s)[3^(-s)+sum_{n=3}^infinity n^2(n^2-4)^(-s)].",
+    "Construct an explicit analytic continuation around s=0, not merely a finite cutoff product.",
+    "Verify the continuation is regular at s=0 and compute zeta_A(0) and zeta_A'(0) with controlled numerical convergence.",
+    "Cross-check the continuation against the directly convergent spectral sum at at least one Re(s)>3/2 value.",
+    "Compute the finite positive dimensionless Det_zeta(A_hat)=exp[-zeta_A'(0)] only if the above checks pass.",
+    "Explicitly test normalization dependence using Det_zeta(c A_hat)=c^(zeta_A(0)) Det_zeta(A_hat); do not claim normalization independence unless zeta_A(0)=0.",
+    "Do not treat this reduced scalar determinant as the complete HMT Faddeev-Senjanovic determinant, complete zero-mode quotient, or one-loop effective action.",
+    "Do not import ordinary projectable-Horava beta functions, choose unresolved HMT matter coefficients, change thresholds, allow soft-s retest, or unblock k=0.03 production."
+  ],
+  "pass_condition": "The frozen reduced scalar spectral zeta admits a regular analytic continuation at s=0, direct-sum cross-checks agree, a finite positive Det_zeta(A_hat) is computed for the frozen normalization, and any nonzero normalization dependence is explicitly retained while all full-HMT/C9 claims remain open.",
+  "fail_condition": "The analytic continuation is singular or numerically unstable at s=0, disagrees with convergent-domain direct sums beyond frozen tolerance, a remaining reduced zero mode appears, or any frozen full-theory semantic restriction is weakened.",
+  "tolerances": {
+    "high_precision_decimal_digits": 50,
+    "convergent_domain_crosscheck_abs": 1e-30,
+    "zeta_prime_convergence_abs": 1e-30
+  },
+  "frozen_semantics": {
+    "full_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "complete_zero_mode_quotient_constructed": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "no_DSIR": true
+  }
+}
