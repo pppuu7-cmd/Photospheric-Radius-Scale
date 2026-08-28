@@ -1,0 +1,48 @@
+name: RTK C9 HMT lambda1 constant-curvature witness rank
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - '.github/rtk-c9-hmt-lambda1-constant-curvature-witness-rank-trigger.txt'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target and run exact audit
+        run: python research/shadow/rtk_c9_hmt_lambda1_constant_curvature_witness_rank.py
+      - name: Verify scoped semantics
+        run: |
+          python - <<'PY'
+          import json
+          p='research/theory_results/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_RESULT_v1.json'
+          d=json.load(open(p))
+          f=d['findings']
+          assert d['classification'].endswith('PASS_SCOPED')
+          assert f['nonflat_lambda1_witness_restores_nonzero_rank_for_nonempty_modes']
+          assert f['ell1_zero_modes_present']
+          assert not f['full_FS_determinant_computed']
+          assert not f['full_HMT_one_loop_evaluable']
+          assert not f['full_C9_closed']
+          assert not f['soft_s_retest_allowed']
+          assert not f['production_k003_unblocked']
+          assert not f['threshold_changed']
+          PY
+      - name: Persist result checkpoint provenance
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_RESULT_v1.json research/checkpoints/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_2026-08-28.md research/provenance/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_PROVENANCE_v1.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Record C9 HMT lambda=1 constant-curvature witness rank audit'
+            git push origin HEAD:rtk-class-build
+          fi
