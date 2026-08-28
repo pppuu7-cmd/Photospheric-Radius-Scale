@@ -1,0 +1,59 @@
+name: RTK C9 projectable counterterm basis preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_TARGET_v1.json'
+      - 'research/shadow/rtk_c9_projectable_counterterm_basis_preflight.py'
+      - '.github/rtk-c9-projectable-counterterm-basis-preflight-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rtk-class-build
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact-symbolic dependency
+        run: python -m pip install sympy==1.13.3
+      - name: Verify frozen target predates execution
+        run: |
+          test -f research/theory_targets/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_TARGET_v1.json
+          git log -1 --format='%H %s' -- research/theory_targets/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_TARGET_v1.json
+      - name: Run counterterm-basis preflight
+        run: python research/shadow/rtk_c9_projectable_counterterm_basis_preflight.py
+      - name: Persist checkpoint and provenance
+        env:
+          RUN_ID: ${{ github.run_id }}
+          EXECUTION_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path('.')
+          r=json.loads((root/'research/theory_results/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_RESULT_v1.json').read_text())
+          cp=root/'research/checkpoints/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_PASS_2026-08-28.md'
+          cp.write_text(f'''# RTK C9 projectable counterterm-basis preflight\n\n- Classification: `{r["classification"]}`\n- Status: `{r["status"]}`\n- GitHub Actions run: `{os.environ["RUN_ID"]}`\n- Execution SHA: `{os.environ["EXECUTION_SHA"]}`\n- threshold_changed: `false`\n\n## Exact scoped result\n\nProjectability still gives `a_i=0`, but invariant carrier gradients need not vanish. For a finite Fourier mode, the symmetry-allowed representatives are `O2 = k^2 deltaPhi^2/a^2` and `O4 = k^4 deltaPhi^2/a^4`; independent coefficients multiplying them survive.\n\n## Scope boundary\n\nThis is a counterterm-basis/symmetry preflight only. It does not assert that either operator is generated with a nonzero beta function and does not compute loop coefficients. Full C9 remains open. Soft-s and `k=0.03 Mpc^-1` production remain blocked.\n\n## Next gate\n\nPerform a same-action radiative-evaluability/source-lock audit: determine whether the frozen HMT+carrier action and matter interface are sufficiently specified for a one-loop counterterm or beta-function calculation without post-hoc choices of unresolved interface parameters.\n''')
+          prov=root/'research/theory_results/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_PROVENANCE_v1.json'
+          prov.write_text(json.dumps({'run_id':os.environ['RUN_ID'],'execution_sha':os.environ['EXECUTION_SHA'],'target_commit':'5f33b533d6daf3084bdd6b36599c125da2ff67da','threshold_changed':False},indent=2)+'\n')
+          PY
+      - name: Commit result checkpoint and provenance
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add research/theory_results/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_RESULT_v1.json \
+                  research/theory_results/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_PROVENANCE_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_COUNTERTERM_BASIS_PREFLIGHT_PASS_2026-08-28.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Record C9 projectable counterterm-basis preflight'
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
