@@ -1,0 +1,10 @@
+{
+  "created_utc": "2026-08-28T12:27:17.728616+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_TARGET_v1.json",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_constant_curvature_witness_rank.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_2026-08-28.md",
+  "method": "exact symbolic background specialization plus S3 scalar-harmonic eigenvalue audit",
+  "no_DSIR": true,
+  "no_threshold_change": true
+}

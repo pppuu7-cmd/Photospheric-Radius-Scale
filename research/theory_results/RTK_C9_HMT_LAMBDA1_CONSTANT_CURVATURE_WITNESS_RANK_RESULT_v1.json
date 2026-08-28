@@ -1,0 +1,72 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_CONSTANT_CURVATURE_WITNESS_RANK_RESTORED_WITH_L1_ZERO_MODES_PASS_SCOPED",
+  "frozen_target_parent_head": "cb09a8fcda23367ae5d64b40b19b0945e68e920d",
+  "target_frozen_commit": "77ca3bec42e48be2df0888f65f9c725ef4ae5903",
+  "derivation": {
+    "Phi2_linearized_on_constant_curvature": "(R/3) delta pi",
+    "conformal_delta_R_D3": "-R f - 2 nabla^2 f",
+    "C12_operator": "(R/3)(-R - 2 nabla^2) delta(x,y)",
+    "S3_spectrum": "C12_l=(R/3)[2 l(l+2)/a^2 - R] with R=6/a^2",
+    "dimensionless_a4_spectrum": "4[l(l+2)-3]"
+  },
+  "mode_audit": [
+    {
+      "ell": 0,
+      "minus_laplacian_eigenvalue_times_a2": 0,
+      "C12_eigenvalue_times_a4": -12.0,
+      "zero": false
+    },
+    {
+      "ell": 1,
+      "minus_laplacian_eigenvalue_times_a2": 3,
+      "C12_eigenvalue_times_a4": 0.0,
+      "zero": true
+    },
+    {
+      "ell": 2,
+      "minus_laplacian_eigenvalue_times_a2": 8,
+      "C12_eigenvalue_times_a4": 20.0,
+      "zero": false
+    },
+    {
+      "ell": 3,
+      "minus_laplacian_eigenvalue_times_a2": 15,
+      "C12_eigenvalue_times_a4": 48.0,
+      "zero": false
+    },
+    {
+      "ell": 4,
+      "minus_laplacian_eigenvalue_times_a2": 24,
+      "C12_eigenvalue_times_a4": 84.0,
+      "zero": false
+    },
+    {
+      "ell": 5,
+      "minus_laplacian_eigenvalue_times_a2": 35,
+      "C12_eigenvalue_times_a4": 128.0,
+      "zero": false
+    },
+    {
+      "ell": 6,
+      "minus_laplacian_eigenvalue_times_a2": 48,
+      "C12_eigenvalue_times_a4": 180.0,
+      "zero": false
+    }
+  ],
+  "findings": {
+    "nonflat_lambda1_witness_restores_nonzero_rank_for_nonempty_modes": true,
+    "ell1_zero_modes_present": true,
+    "ell0_nonzero": true,
+    "ell_ge2_nonzero_checked_through_6_and_exact_formula_implies_all_ge2": true,
+    "flat_zero_momentum_linearization_degeneracy_is_not_generic_across_backgrounds": true,
+    "global_exact_constraint_classification_proven": false,
+    "full_FS_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false
+  },
+  "interpretation": "At lambda=1 the flat zero-momentum rank loss is background-dependent: a constant-positive-curvature witness gives a nonzero second-class bracket on ell=0 and all ell>=2 scalar harmonics, while ell=1 remains an exact kernel zero-mode of this linearized block. This is scoped rank restoration, not a full determinant or global constraint proof.",
+  "next_gate": "Classify the ell=1 zero modes against the full HMT gauge/constraint algebra (gauge, global/conformal, or genuine residual degeneracy) before forming a reduced determinant."
+}
