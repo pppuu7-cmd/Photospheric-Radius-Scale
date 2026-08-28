@@ -1,0 +1,94 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_SOURCE_LOCKED_PASS_SCOPED",
+  "frozen_target_parent_head": "c12f490d29cf2908321aae3c29092f21b7005c00",
+  "target_frozen_commit": "56cda510fb03c455c76f35f4d1e1511bc06ce51d",
+  "background": {
+    "spatial_manifold": "round S3",
+    "D": 3,
+    "lambda": 1,
+    "R": "6/a^2",
+    "background_momentum": 0,
+    "projectable": true
+  },
+  "block_inventory": [
+    {
+      "block": "Phi1/Phi2 scalar second-class block",
+      "category": "Faddeev-Senjanovic",
+      "harmonic_content": "scalar/conformal",
+      "status": "SCOPED FACTOR ALREADY REDUCED AND ZETA-REGULARIZED FOR FROZEN NORMALIZATION",
+      "new_determinant_in_this_gate": false,
+      "reason": "Prior RTK gates source-locked the second-class pair and computed only its reduced scalar/conformal S3 factor. No source-locked independent vector/tensor second-class pair is introduced here."
+    },
+    {
+      "block": "spatial diffeomorphism longitudinal sector",
+      "category": "Faddeev-Popov / first-class gauge fixing",
+      "harmonic_content": "scalar-longitudinal vector gauge parameter",
+      "status": "OPEN",
+      "new_determinant_in_this_gate": false,
+      "reason": "The previous ell=1 conformal witness identified specific gauge zero modes but did not construct the complete spatial-diffeomorphism FP operator over all harmonics."
+    },
+    {
+      "block": "spatial diffeomorphism transverse sector",
+      "category": "Faddeev-Popov / first-class gauge fixing",
+      "harmonic_content": "transverse vector harmonics",
+      "status": "OPEN",
+      "new_determinant_in_this_gate": false,
+      "reason": "A complete gauge condition and its vector FP kernel on round S3 have not yet been frozen and derived."
+    },
+    {
+      "block": "projectable lapse / time reparametrization",
+      "category": "global first-class gauge/constraint sector",
+      "harmonic_content": "spatially homogeneous only",
+      "status": "OPEN GLOBAL BLOCK",
+      "new_determinant_in_this_gate": false,
+      "reason": "Projectability N=N(t) makes this a global time-reparametrization sector, not a local non-scalar S3 determinant."
+    },
+    {
+      "block": "local HMT U(1) nu-shift gauge",
+      "category": "Faddeev-Popov / first-class gauge fixing",
+      "harmonic_content": "local scalar gauge parameter",
+      "status": "SCOPED FIELD-INDEPENDENT FACTOR IN FROZEN nu=0 GAUGE",
+      "new_determinant_in_this_gate": false,
+      "reason": "Prior RTK gate derived delta chi/delta alpha = identity distribution for chi=nu, with global/boundary zero-mode qualifications retained."
+    },
+    {
+      "block": "transverse-traceless tensor gravitons",
+      "category": "physical quadratic Hessian",
+      "harmonic_content": "TT tensor harmonics",
+      "status": "OPEN PHYSICAL HESSIAN",
+      "new_determinant_in_this_gate": false,
+      "reason": "These are physical graviton polarizations, not FP or FS ghosts. Their gauge-fixed one-loop Hessian determinant has not been computed."
+    }
+  ],
+  "source_locks": {
+    "HMT_original": "Horava & Melby-Thompson, Phys. Rev. D 82, 064027 (2010), arXiv:1007.2410: projectable foliation-preserving diffeomorphisms enlarged by local U(1); original minimal theory removes scalar graviton and fixes lambda=1.",
+    "Hamiltonian_analysis": "J. Kluson, Phys. Rev. D 83, 044049 (2011): nonrelativistic covariant/projectable HL Hamiltonian system has first- and second-class constraints with correct gravitational degree count.",
+    "HMT_limit_constraint_source": "Kluson et al., Eur. Phys. J. C 71, 1690 (2011), arXiv:1012.0473: U(1)-invariant projectable F(R) theory has HMT-equivalent Hamiltonian structure and only transverse graviton polarizations around flat background."
+  },
+  "findings": {
+    "known_second_class_FS_pair_is_scalar_block": true,
+    "independent_nonscalar_second_class_pair_source_locked": false,
+    "absence_of_nonscalar_second_class_pair_proves_trivial_full_measure": false,
+    "spatial_diff_longitudinal_FP_operator_open": true,
+    "spatial_diff_transverse_vector_FP_operator_open": true,
+    "projectable_time_sector_is_global": true,
+    "u1_nu_FP_field_independent_in_frozen_gauge": true,
+    "TT_tensor_sector_is_physical_Hessian_not_FP_or_FS": true,
+    "complete_spatial_diffeomorphism_FP_operator_constructed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "complete_zero_mode_quotient_constructed": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "The remaining quantum-measure problem is not an unidentified extra non-scalar second-class determinant. The source-locked FS pair is scalar. The unresolved non-scalar structures are primarily the transverse-vector part of spatial-diffeomorphism FP gauge fixing and the physical TT graviton Hessian; the longitudinal spatial FP block and global projectable time sector also remain open. Therefore the prior scalar FS determinant cannot yet be multiplied into a complete HMT one-loop measure.",
+  "next_gate": "Freeze an explicit spatial gauge condition on round S3 and derive the corresponding Faddeev-Popov operator, first separating transverse-vector and longitudinal-scalar vector harmonics and classifying Killing/global zero modes. Do not touch the physical TT Hessian until the spatial FP quotient is explicit."
+}

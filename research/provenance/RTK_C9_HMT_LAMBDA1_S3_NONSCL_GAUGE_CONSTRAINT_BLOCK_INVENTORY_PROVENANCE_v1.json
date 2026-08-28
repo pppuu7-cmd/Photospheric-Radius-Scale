@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-08-28T16:25:01.007754+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_TARGET_v1.json",
+  "target_frozen_commit": "56cda510fb03c455c76f35f4d1e1511bc06ce51d",
+  "script": "/home/runner/work/Photospheric-Radius-Scale/Photospheric-Radius-Scale/research/shadow/rtk_c9_hmt_lambda1_s3_nonscl_gauge_constraint_block_inventory.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_NONSCL_GAUGE_CONSTRAINT_BLOCK_INVENTORY_2026-08-28.md",
+  "method": "source-locked block classification with frozen semantic assertions; no determinant multiplication or new spectral regularization",
+  "source_lock_arxiv": [
+    "1007.2410",
+    "1012.0473"
+  ],
+  "source_lock_doi": [
+    "10.1103/PhysRevD.82.064027",
+    "10.1103/PhysRevD.83.044049",
+    "10.1140/epjc/s10052-011-1690-6"
+  ],
+  "no_DSIR": true,
+  "no_threshold_change": true
+}
