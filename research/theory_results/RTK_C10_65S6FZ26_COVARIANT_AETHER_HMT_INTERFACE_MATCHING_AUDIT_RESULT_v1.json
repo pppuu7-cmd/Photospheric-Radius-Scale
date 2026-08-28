@@ -27,9 +27,9 @@
   "production_k003_unblocked": false,
   "provenance": {
     "github_actions_run_attempt": 1,
-    "github_actions_run_id": 33130726702,
+    "github_actions_run_id": 33130739611,
     "threshold_changed": false,
-    "trigger_head_sha": "359d0a9f65496b3813039da2826e0be4b438c064",
+    "trigger_head_sha": "afc238ff88c2c606b4f0d0faa9254ea520dbb4d6",
     "workflow": "rtk-c10-65s6fz26-covariant-aether-hmt-interface-matching-audit.yml"
   },
   "s6ft_embedding_ready": false,
