@@ -1,0 +1,59 @@
+name: RTK C9 projectable HMT U1 quantum-evaluability preflight
+
+on:
+  push:
+    branches: [rtk-class-build]
+    paths:
+      - 'research/theory_targets/RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_TARGET_v1.json'
+      - 'research/shadow/rtk_c9_projectable_hmt_u1_quantum_evaluability_preflight.py'
+      - '.github/workflows/rtk-c9-projectable-hmt-u1-quantum-evaluability-preflight.yml'
+      - '.github/rtk-c9-projectable-hmt-u1-quantum-evaluability-preflight-trigger.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  quantum-evaluability-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: rtk-class-build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen target
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET_COMMIT=b4a4f4eb7e13d9573ab08949e4be9c88ac43d614
+          PATH_TGT=research/theory_targets/RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_TARGET_v1.json
+          git cat-file -e "${TARGET_COMMIT}^{commit}"
+          git show "${TARGET_COMMIT}:${PATH_TGT}" > /tmp/frozen_target.json
+          cmp /tmp/frozen_target.json "${PATH_TGT}"
+      - name: Run frozen quantum-evaluability preflight
+        run: python research/shadow/rtk_c9_projectable_hmt_u1_quantum_evaluability_preflight.py
+      - name: Write provenance
+        shell: bash
+        run: |
+          cat > research/theory_results/RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_PROVENANCE_v1.json <<EOF
+          {
+            "run_id": ${{ github.run_id }},
+            "execution_sha": "${{ github.sha }}",
+            "target_commit": "b4a4f4eb7e13d9573ab08949e4be9c88ac43d614",
+            "threshold_changed": false
+          }
+          EOF
+      - name: Persist result and checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/theory_results/RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_RESULT_v1.json \
+                  research/theory_results/RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_PROVENANCE_v1.json \
+                  research/checkpoints/RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_PREFLIGHT_2026-08-28.md
+          git commit -m 'Record C9 projectable HMT U1 quantum-evaluability preflight' || exit 0
+          git pull --rebase origin rtk-class-build
+          git push origin HEAD:rtk-class-build
