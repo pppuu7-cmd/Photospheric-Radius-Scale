@@ -1,0 +1,95 @@
+{
+  "classification": "RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_NONZERO_MODE_ZETA_MAGNITUDES_FINITE_PASS_SCOPED",
+  "frozen_target_parent_head": "5ec5fdd787571764daf723122300a34da6e09b38",
+  "target_frozen_commit": "4191e4dd12aff1c648af391755f3e169df33d378",
+  "spectral_problems": {
+    "transverse": {
+      "operator": "A_T=a^2|M_T|",
+      "domain": "l>=2 after priming out l=1 Killing kernel",
+      "n_form": "n=l+1>=3: lambda=n^2-4, d=2(n^2-1)",
+      "zeta": "zeta_T(s)=sum_{n=3}^infinity 2(n^2-1)(n^2-4)^(-s)"
+    },
+    "longitudinal": {
+      "operator": "A_L=a^2|M_L|",
+      "domain": "l>=1; l=0 gradient absent",
+      "n_form": "n=2: lambda=1,d=4; n>=3: lambda=n^2-5,d=n^2",
+      "zeta": "zeta_L(s)=4+sum_{n=3}^infinity n^2(n^2-5)^(-s)"
+    }
+  },
+  "analytic_continuation": {
+    "transverse_regular_at_s0": true,
+    "longitudinal_regular_at_s0": true,
+    "zeta_T_0_exact": -5,
+    "zeta_L_0_exact": -1,
+    "zeta_T_prime_0": "-4.2175844210901928903126417441702651041697702742307486245677323917495777619924868",
+    "zeta_L_prime_0": "-0.78841578072819896521199609779193130990423885117523249572857626159721218505299526",
+    "transverse_prime_K120_vs_K140_abs_diff": "5.75044912478753444512887375826e-44",
+    "longitudinal_prime_K120_vs_K140_abs_diff": "2.14427080137687681662722054376e-32",
+    "crosscheck_s": 5,
+    "crosscheck_direct_N": 20000,
+    "transverse_crosscheck_abs_diff": "2.23175234063124836262068151249e-31",
+    "longitudinal_crosscheck_abs_diff": "1.05214443013498469929325982294e-31"
+  },
+  "zeta_determinant_magnitudes": {
+    "Det_zeta_A_T": "67.869342368305180409328005773658622338151596454315223519029011945298722091682815",
+    "Det_zeta_A_L": "2.1999085267023697422585361883960668683089207686293255795194962406150393938391081",
+    "definition": "exp[-zeta_X_prime(0)] for X=T,L",
+    "signed_or_complex_FP_phase_assigned": false,
+    "transverse_rescaling_law": "Det_zeta(c A_T)=c^(-5) Det_zeta(A_T)",
+    "longitudinal_rescaling_law": "Det_zeta(c A_L)=c^(-1) Det_zeta(A_L)",
+    "transverse_c2_ratio": "0.03125",
+    "longitudinal_c2_ratio": "0.5",
+    "normalization_independent": false
+  },
+  "zero_mode_bookkeeping": {
+    "transverse_primed_levels": [
+      1
+    ],
+    "transverse_removed_multiplicity": 6,
+    "transverse_removed_classification": "six round-S3 Killing generators",
+    "longitudinal_zero_modes": 0,
+    "longitudinal_l1_eigenvalue_magnitude": 1,
+    "longitudinal_l1_multiplicity": 4,
+    "residual_isometry_group_volume_normalized": false
+  },
+  "scientific_checks": {
+    "transverse_zeta_regular_at_s0": true,
+    "longitudinal_zeta_regular_at_s0": true,
+    "transverse_zeta0_exact_minus5": true,
+    "longitudinal_zeta0_exact_minus1": true,
+    "transverse_prime_convergence_within_frozen_tolerance": true,
+    "longitudinal_prime_convergence_within_frozen_tolerance": true,
+    "transverse_convergent_domain_crosscheck_within_frozen_tolerance": true,
+    "longitudinal_convergent_domain_crosscheck_within_frozen_tolerance": true,
+    "transverse_determinant_magnitude_finite_positive": true,
+    "longitudinal_determinant_magnitude_finite_positive": true,
+    "transverse_spectral_prime_removes_exactly_l1_six_killing_modes": true,
+    "longitudinal_l1_retained_nonzero_with_multiplicity_four": true,
+    "transverse_normalization_scaling_witness_matches_zeta0": true,
+    "longitudinal_normalization_scaling_witness_matches_zeta0": true
+  },
+  "findings": {
+    "spatial_FP_nonzero_mode_magnitude_factors_computed": true,
+    "six_Killing_zero_modes_spectrally_primed": true,
+    "transverse_and_longitudinal_magnitude_factors_kept_separate": true,
+    "residual_isometry_group_volume_normalized": false,
+    "signed_or_complex_FP_phase_assigned": false,
+    "scalar_gradient_decomposition_jacobian_inserted": false,
+    "complete_zero_mode_measure_quotient_constructed": false,
+    "complete_signed_spatial_FP_determinant_computed": false,
+    "full_FP_determinant_computed": false,
+    "full_FS_determinant_computed": false,
+    "full_gravitational_Hessian_determinant_computed": false,
+    "complete_HMT_gauge_fixed_constraint_matrix_constructed": false,
+    "full_HMT_one_loop_evaluable": false,
+    "full_C9_closed": false,
+    "ordinary_projectable_parent_beta_functions_imported": false,
+    "unresolved_HMT_matter_coefficients_chosen": false,
+    "soft_s_retest_allowed": false,
+    "production_k003_unblocked": false,
+    "threshold_changed": false,
+    "no_DSIR": true
+  },
+  "interpretation": "For the frozen spatial DeWitt/harmonic gauge on round S3, the nonzero transverse-vector and longitudinal-vector FP magnitude spectra each admit a regular zeta continuation at s=0 and finite determinant magnitude for the declared dimensionless normalization. The transverse spectral prime removes exactly the six l=1 Killing generators; the longitudinal l=1 sector remains nonzero with multiplicity four. The resulting magnitude factors are normalization dependent. No signed FP phase, residual-isometry group volume, decomposition Jacobian, FS multiplication, TT Hessian, or one-loop determinant is assigned here.",
+  "next_gate": "Prospectively freeze the residual round-S3 spatial-isometry zero-mode measure quotient: specify the normalization of the six Killing generators and the associated gauge-group volume/collective-coordinate factor consistently with the frozen spatial gauge, while keeping the signed FP phase and physical TT Hessian separate and open."
+}

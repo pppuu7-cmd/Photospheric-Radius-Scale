@@ -1,0 +1,17 @@
+{
+  "created_utc": "2026-08-28T16:53:50.497011+00:00",
+  "target": "research/theory_targets/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_NONZERO_MODE_ZETA_MAGNITUDES_TARGET_v1.json",
+  "target_frozen_commit": "4191e4dd12aff1c648af391755f3e169df33d378",
+  "parent_result_commit": "5ec5fdd787571764daf723122300a34da6e09b38",
+  "script": "research/shadow/rtk_c9_hmt_lambda1_s3_spatial_fp_nonzero_mode_zeta_magnitudes.py",
+  "result": "research/theory_results/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_NONZERO_MODE_ZETA_MAGNITUDES_RESULT_v1.json",
+  "checkpoint": "research/checkpoints/RTK_C9_HMT_LAMBDA1_S3_SPATIAL_FP_NONZERO_MODE_ZETA_MAGNITUDES_2026-08-28.md",
+  "method": "two-sector spectral-zeta analytic continuation from the parent-certified round-S3 FP spectra using binomial/Riemann-zeta expansions; K=120 versus K=140 derivative convergence; direct original-spectrum cross-check at s=5",
+  "precision_decimal_digits": 200,
+  "frozen_tolerance_abs": "1e-30",
+  "regularization": "dimensionless positive-magnitude operators A_T=a^2|M_T| and A_L=a^2|M_L|",
+  "signed_FP_phase_assigned": false,
+  "residual_isometry_group_volume_normalized": false,
+  "no_DSIR": true,
+  "no_threshold_change": true
+}
