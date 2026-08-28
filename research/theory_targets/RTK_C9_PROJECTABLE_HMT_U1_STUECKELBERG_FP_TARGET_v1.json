@@ -1,0 +1,45 @@
+{
+  "schema": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TARGET_v1",
+  "gate": "C9 projectable HMT U(1) Stueckelberg/FP gauge-sector audit",
+  "branch": "rtk-class-build",
+  "status_before_execution": "FROZEN_OPEN",
+  "question": "Does the source-locked HMT local-U(1) transformation delta_alpha nu = alpha permit a pre-registered nu=0 gauge whose U(1) Faddeev-Popov kernel is field-independent, thereby removing the local-U(1) ghost-interaction ambiguity while leaving the A-constraint/reduced-measure and FDiff one-loop problems open?",
+  "parent_result": "RTK_C9_PROJECTABLE_HMT_U1_QUANTUM_EVALUABILITY_BLOCKED_MISSING_GAUGE_FIXED_QUANTUM_SPECIFICATION_PASS_SCOPED",
+  "source_lock": {
+    "primary": "P. Horava and C. M. Melby-Thompson, Phys. Rev. D 82, 064027 (2010), arXiv:1007.2410",
+    "equation": "Eq. (83): delta_alpha nu = alpha",
+    "source_url": "https://arxiv.org/abs/1007.2410"
+  },
+  "preregistered_gauge": {
+    "chi_U1": "nu",
+    "gauge_condition": "nu=0",
+    "fp_kernel_definition": "M(x,y)=delta chi_U1(x)/delta alpha(y)",
+    "expected_kernel_from_frozen_transformation": "delta(x-y)",
+    "boundary_caveat": "Any global/boundary zero-mode issue must be stated separately; no claim beyond local gauge-sector FP structure."
+  },
+  "frozen_checks": {
+    "source_locked_delta_nu_equals_alpha": true,
+    "nu_zero_gauge_preregistered_before_execution": true,
+    "fp_kernel_is_field_independent_identity_distribution": true,
+    "u1_fp_determinant_is_field_independent_constant_formally": true,
+    "do_not_claim_full_HMT_one_loop_evaluable": true,
+    "A_constraint_measure_remains_open": true,
+    "FDiff_gauge_transfer_remains_open": true,
+    "matter_interface_remains_open": true,
+    "do_not_import_parent_beta_functions": true,
+    "do_not_claim_full_C9_closed": true,
+    "do_not_unblock_soft_s": true,
+    "do_not_unblock_k003_production": true,
+    "threshold_changed": false
+  },
+  "pass_classification": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_TRIVIALIZATION_PASS_SCOPED",
+  "failure_classification": "RTK_C9_PROJECTABLE_HMT_U1_STUECKELBERG_FP_AUDIT_FAIL_SCOPED",
+  "decision_rule": "PASS_SCOPED only if the symbolic variation of chi_U1=nu under the source-locked local U(1) gives delta chi_U1=alpha, hence a field-independent identity FP kernel. This reduces one component of the quantum-evaluability blocker but does not define the complete HMT one-loop determinant.",
+  "nonclaims": [
+    "No claim that the complete HMT U(1) theory is one-loop renormalizable.",
+    "No claim that the A constraint or its determinant/measure is solved.",
+    "No automatic transfer of ordinary-projectable Hořava beta functions.",
+    "No closure of full C9 radiative naturalness.",
+    "No soft-s retest or k=0.03 production is enabled."
+  ]
+}
