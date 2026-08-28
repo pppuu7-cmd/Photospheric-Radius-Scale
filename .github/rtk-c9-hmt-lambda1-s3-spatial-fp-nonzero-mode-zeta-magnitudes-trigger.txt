@@ -1,0 +1,1 @@
+trigger spatial FP nonzero-mode zeta-magnitude audit from frozen target 4191e4dd12aff1c648af391755f3e169df33d378
