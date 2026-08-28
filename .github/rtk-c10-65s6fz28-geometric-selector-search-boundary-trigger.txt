@@ -1,0 +1,3 @@
+Trigger C10.65s6fZ28 geometric selector search boundary.
+Frozen target: research/theory_targets/RTK_C10_65S6FZ28_GEOMETRIC_SELECTOR_SEARCH_BOUNDARY_TARGET_v1.json
+No soft-s retest. No k=0.03 production. No coefficient fitting.
