@@ -1,0 +1,34 @@
+{
+  "gate": "RTK_C9_PROJECTABLE_HMT_A_CONSTRAINT_MEASURE_v1",
+  "parent_head": "fe70cac5bc1b8e7ddc40e770fa15840ad373b6f1",
+  "scope": "projectable HMT U(1) gravity A-field constraint and reduced-measure preflight",
+  "frozen_before_execution": true,
+  "source_lock": {
+    "primary": "Mukohyama, Namba, Saitou, Watanabe, arXiv:1504.07357, projectable appendix / Hamiltonian constraint analysis",
+    "required_claims": [
+      "projectable U(1) phase space contains A and pi_A",
+      "projectable theory has explicit first- and second-class constraints",
+      "A appears as a constrained/non-propagating sector in the total Hamiltonian",
+      "gauge-fixing terms are specified at the classical Hamiltonian level"
+    ]
+  },
+  "formal_check": {
+    "assumption": "for a linear multiplier term integral A*C, integrating over A formally imposes delta[C] up to normalization",
+    "must_not_infer": "that delta[C] alone is the complete reduced quantum measure"
+  },
+  "pass_requirements": [
+    "source-lock the A constraint role in the projectable HMT Hamiltonian structure",
+    "verify the formal multiplier-to-delta-functional identity only within its stated scope",
+    "separately audit whether a unique full second-class/reduced functional determinant is source-locked"
+  ],
+  "frozen_nonclaims": [
+    "do not import ordinary projectable Hořava beta functions",
+    "do not claim HMT renormalizability or nonrenormalizability",
+    "do not claim full one-loop evaluability unless the second-class/reduced measure is uniquely specified",
+    "do not select matter-interface coefficients",
+    "do not close full C9",
+    "do not allow soft-s retest",
+    "do not unblock k=0.03 Mpc^-1 production"
+  ],
+  "expected_semantics": "A scoped PASS may establish a formal constraint reduction while leaving the physical one-loop determinant OPEN. Missing determinant data is a scientific/evaluability blocker, not a failed frozen criterion."
+}
