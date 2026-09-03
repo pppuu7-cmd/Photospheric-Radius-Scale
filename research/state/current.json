@@ -150,8 +150,8 @@
     "do_not_claim_global_minimum_from_local_hessian",
     "do_not_claim_AIC_BIC_Bayes_significance_before_matched_minima_are_frozen"
   ],
-  "iteration": 433,
-  "last_iteration": "research/iterations/000433_20260903T010935Z.json",
+  "iteration": 434,
+  "last_iteration": "research/iterations/000434_20260903T054651Z.json",
   "lcdm": {
     "accepted_center": {
       "As": 2.1054040998203598e-09,
@@ -3085,5 +3085,5 @@
   "schema_version": 1,
   "stage": "matched_dense_replay_verified",
   "state_branch": "rtk-class-build",
-  "updated_at": "2026-09-03T01:09:35Z"
+  "updated_at": "2026-09-03T05:46:51Z"
 }
