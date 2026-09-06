@@ -5,9 +5,9 @@ Canonical state branch: `rtk-class-build`
 Repository: `pppuu7-cmd/Photospheric-Radius-Scale`
 
 <!-- AUTO-ITERATION-METADATA:BEGIN -->
-Last methodology synchronization: `2026-09-06T12:36:41Z` / `2026-09-06T15:36:41+03:00 Europe/Helsinki`  
-Last synchronized iteration: `459` (`research/iterations/000459_20260906T123641Z.json`)  
-Scientific source HEAD before iteration commit: `7ecb4a0afe0b20a4e25ed01d02c7ce628e600479`  
+Last methodology synchronization: `2026-09-06T15:44:45Z` / `2026-09-06T18:44:45+03:00 Europe/Helsinki`  
+Last synchronized iteration: `460` (`research/iterations/000460_20260906T154445Z.json`)  
+Scientific source HEAD before iteration commit: `9fca2120a8dab8d35b53257a165fdb64274f55ff`  
 Objective: `matched-ultra-linstep2+dense-BOSS`  
 Objective configuration SHA256: `754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666`  
 Explicit frozen objective fingerprint, if available: `754edb2ff5380eff314867b0ecb1a23a8b861a69f7e46070c4b8251c98573666`  
